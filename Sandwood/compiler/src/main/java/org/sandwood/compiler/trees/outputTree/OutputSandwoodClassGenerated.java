@@ -8,12 +8,17 @@
 
 package org.sandwood.compiler.trees.outputTree;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.sandwood.common.execution.ExecutionType;
+import org.sandwood.compiler.compilation.CompilationContext.AuxFunctionType;
 import org.sandwood.compiler.names.ClassName;
+import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.names.ModelClassName;
 import org.sandwood.compiler.names.PackageName;
 import org.sandwood.compiler.trees.Tree;
@@ -21,42 +26,56 @@ import org.sandwood.compiler.util.StringUtil;
 
 public class OutputSandwoodClassGenerated extends OutputSandwoodOuterClass {
 
-    public static OutputSandwoodClassGenerated getClass(ExecutionType target, ModelClassName name,
-            PackageName packageName, List<OutputFunction> functions, OutputTree fieldsTree, String modelCode,
-            List<OutputFunction> gettersAndSetters) {
-
-        Map<ClassName, List<ClassName>> extended = Map.of(ClassName.coreBase(target), List.of());
-        List<ClassName> interfaces = List.of(name.interfaceName());
-
-        return new OutputSandwoodClassGenerated(name.backendName(target), packageName, extended, interfaces, functions,
-                fieldsTree, modelCode, gettersAndSetters);
+    private static final class ScratchClass extends OutputSandwoodInnerClass {
+        public ScratchClass(OutputFunction allocator, OutputTree fieldsTree) {
+            super(ClassName.scratchClass, List.of(ClassName.scratchInterface), Collections.emptyList(), fieldsTree,
+                    List.of(allocator));
+        }
     }
 
+    public static OutputSandwoodClassGenerated getClass(ExecutionType target, ModelClassName name, PackageName packageName,
+            Map<FunctionName, OutputFunction> functions, OutputTree classFieldsTree,
+            OutputTree scratchFieldsTree, String modelCode, List<OutputFunction> gettersAndSetters) {
+
+        ClassName scratchName = ClassName.QualifiedName(packageName, name.backendName(target), ClassName.scratchClass);
+        ClassName stateName = ClassName.QualifiedName(packageName, name, ClassName.stateClass);
+        Map<ClassName, List<ClassName>> extended = Map.of(ClassName.coreBase(target), List.of(stateName, scratchName));
+        ScratchClass scratch = new ScratchClass(functions.get(AuxFunctionType.SCRATCH_ALLOCATOR.functionName), scratchFieldsTree);
+
+        return new OutputSandwoodClassGenerated(name.backendName(target), packageName, extended, functions, modelCode,
+                gettersAndSetters, classFieldsTree, stateName, scratch);
+    }
+
+    private final ClassName stateName;
     private final String modelCode;
     // Variable field name |-> Field Descriptor
-    private final List<OutputFunction> functions;
-    private final OutputTree fieldsTree;
+    private final Map<FunctionName, OutputFunction> functions;
+    private final OutputTree classFieldsTree;
     private final List<OutputFunction> gettersAndSetters;
 
     private OutputSandwoodClassGenerated(ClassName name, PackageName packageName,
-            Map<ClassName, List<ClassName>> extended, List<ClassName> interfaces,
-            List<OutputFunction> functions, OutputTree fieldsTree, String modelCode,
-            List<OutputFunction> gettersAndSetters) {
-        super(packageName, name, extended, interfaces, List.of());
+            Map<ClassName, List<ClassName>> extendedClass, Map<FunctionName, OutputFunction> functions,
+            String modelCode, List<OutputFunction> gettersAndSetters, OutputTree classFieldTree, ClassName stateName, ScratchClass scratch) {
+        super(packageName, name, extendedClass, Collections.emptyList(), List.of(scratch));
+        this.stateName = stateName;
+        this.classFieldsTree = classFieldTree;
         this.functions = functions;
         // Normalize newline characters
         this.modelCode = StringUtil.normalizeNewLines(modelCode);
-        this.fieldsTree = fieldsTree;
         this.gettersAndSetters = gettersAndSetters;
 
     }
 
-    public List<OutputFunction> getFunctions() {
+    public Map<FunctionName, OutputFunction> getFunctions() {
         return functions;
     }
 
     public List<OutputFunction> getGettersAndSetters() {
         return gettersAndSetters;
+    }
+    
+    public OutputTree getClassFields() {
+        return classFieldsTree;
     }
 
     @Override
@@ -66,16 +85,37 @@ public class OutputSandwoodClassGenerated extends OutputSandwoodOuterClass {
 
     @Override
     public void toJavaBody(StringBuilder sb, int indent, Set<String> requiredImports) {
-
-        fieldsTree.toJava(sb, indent, requiredImports);
-
         addConstructor(sb, indent, requiredImports);
 
-        for(OutputFunction f:gettersAndSetters)
-            f.toJava(sb, 1, MethodLocation.CLASS, requiredImports);
+        // Convert the functions.
+        PriorityQueue<FunctionName> samples = new PriorityQueue<>();
+        PriorityQueue<FunctionName> aux = new PriorityQueue<>();
 
-        for(OutputFunction f:functions)
+        Set<FunctionName> auxNames = new HashSet<>();
+        for(AuxFunctionType t:AuxFunctionType.values())
+            auxNames.add(t.functionName);
+
+        for(FunctionName name:functions.keySet()) {
+            if(auxNames.contains(name))
+                aux.add(name);
+            else
+                samples.add(name);
+        }
+
+        while(!samples.isEmpty()) {
+            FunctionName name = samples.poll();
+            OutputFunction f = functions.get(name);
             f.toJava(sb, 1, MethodLocation.CLASS, requiredImports);
+        }
+
+        while(!aux.isEmpty()) {
+            FunctionName name = aux.poll();
+            if(name != AuxFunctionType.SCRATCH_ALLOCATOR.functionName
+                    && name != AuxFunctionType.VAR_ALLOCATOR.functionName) {
+                OutputFunction f = functions.get(name);
+                f.toJava(sb, 1, MethodLocation.CLASS, requiredImports);
+            }
+        }
 
         sb.append("\n");
 
@@ -86,9 +126,11 @@ public class OutputSandwoodClassGenerated extends OutputSandwoodOuterClass {
         requiredImports.add("org.sandwood.runtime.model.ExecutionTarget");
         sb.append("\n");
         addIndent(sb, indent);
-        sb.append("public " + getName() + "(ExecutionTarget target) {\n");
+        sb.append("public " + getName() + "(" + processImport(stateName, requiredImports) + " state, ExecutionTarget target) {\n");
         addIndent(sb, indent + 1);
-        sb.append("super(target);\n");
+        sb.append("super(state, target);\n");
+        addIndent(sb, indent + 1);
+        sb.append("scratch = new " + ClassName.scratchClass + "();\n");
         addIndent(sb, indent);
         sb.append("}\n");
     }

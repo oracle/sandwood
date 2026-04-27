@@ -1,144 +1,26 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Conditional5$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Conditional5.State;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implements Conditional5$CoreInterface {
+final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-<<<<<<< Upstream, based on POW
-	private double a;
-	private double b;
-	private boolean fixedProbFlag$sample13 = false;
-	private boolean fixedProbFlag$sample5 = false;
-	private boolean fixedProbFlag$sample9 = false;
-	private boolean guard;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$a;
-	private double logProbability$b;
-	private double logProbability$bernoulli;
-	private double logProbability$guard;
-	private double logProbability$value;
-	private boolean observedGuard;
-	private double observedValue;
-	private boolean system$gibbsForward = true;
-	private double value;
-=======
-	double a;
-	double b;
-	boolean fixedProbFlag$sample13 = false;
-	boolean fixedProbFlag$sample5 = false;
-	boolean fixedProbFlag$sample9 = false;
-	boolean guard;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$a;
-	double logProbability$b;
-	double logProbability$bernoulli;
-	double logProbability$guard;
-	double logProbability$sample13;
-	double logProbability$sample9;
-	double logProbability$value;
-	boolean observedGuard;
-	double observedValue;
-	boolean system$gibbsForward = true;
-	double value;
->>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
-
-	public Conditional5$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	// Getter for a.
-	@Override
-	public final double get$a() {
-		return a;
-	}
 
-	// Getter for b.
-	@Override
-	public final double get$b() {
-		return b;
-	}
-
-	// Getter for guard.
-	@Override
-	public final boolean get$guard() {
-		return guard;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$a.
-	@Override
-	public final double get$logProbability$a() {
-		return logProbability$a;
-	}
-
-	// Getter for logProbability$b.
-	@Override
-	public final double get$logProbability$b() {
-		return logProbability$b;
-	}
-
-	// Getter for logProbability$bernoulli.
-	@Override
-	public final double get$logProbability$bernoulli() {
-		return logProbability$bernoulli;
-	}
-
-	// Getter for logProbability$guard.
-	@Override
-	public final double get$logProbability$guard() {
-		return logProbability$guard;
-	}
-
-	// Getter for logProbability$value.
-	@Override
-	public final double get$logProbability$value() {
-		return logProbability$value;
-	}
-
-	// Getter for observedGuard.
-	@Override
-	public final boolean get$observedGuard() {
-		return observedGuard;
-	}
-
-	// Setter for observedGuard.
-	@Override
-	public final void set$observedGuard(boolean cv$value, boolean allocated$) {
-		observedGuard = cv$value;
-	}
-
-	// Getter for observedValue.
-	@Override
-	public final double get$observedValue() {
-		return observedValue;
-	}
-
-	// Setter for observedValue.
-	@Override
-	public final void set$observedValue(double cv$value, boolean allocated$) {
-		observedValue = cv$value;
-	}
-
-	// Getter for value.
-	@Override
-	public final double get$value() {
-		return value;
+	public Conditional5$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Calculate the probability of the samples represented by sample13 using sampled
@@ -146,7 +28,7 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 	private final void logProbabilityValue$sample13() {
 		// Determine if we need to calculate the values for sample task 13 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample13) {
+		if(!state.fixedProbFlag$sample13) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -171,13 +53,13 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 			// Store the value of the function call, so the function call is only made once.
 			// 
 									// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((0.0 <= b) && (b < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((0.0 <= state.b) && (state.b < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$b = cv$distributionAccumulator;
+			state.logProbability$b = cv$distributionAccumulator;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!guard)
+			if(!state.guard)
 				// Update the variable probability
 				// 
 				// Variable declaration of cv$accumulator moved.
@@ -192,7 +74,7 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$value = (logProbability$value + cv$distributionAccumulator);
+				state.logProbability$value = (state.logProbability$value + cv$distributionAccumulator);
 			
 			// Add probability to model
 			// 
@@ -208,7 +90,7 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// Variable declaration of cv$accumulator moved.
 			// Declaration comment was:
@@ -222,30 +104,30 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample13 = true;
+			state.fixedProbFlag$sample13 = true;
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!guard)
+			if(!state.guard)
 				// Update the variable probability
 				// 
 				// Variable declaration of cv$accumulator moved.
-				logProbability$value = (logProbability$value + logProbability$b);
+				state.logProbability$value = (state.logProbability$value + state.logProbability$b);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$b);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$b);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$b);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$b);
 		}
 	}
 
@@ -253,7 +135,7 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 	private final void logProbabilityValue$sample5() {
 		// Determine if we need to calculate the values for sample task 5 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample5) {
+		if(!state.fixedProbFlag$sample5) {
 			// Generating probabilities for sample task
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -272,7 +154,7 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			logProbability$bernoulli = -0.6931471805599453;
+			state.logProbability$bernoulli = -0.6931471805599453;
 			
 			// Store the sample task probability
 			// 
@@ -289,7 +171,7 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			logProbability$guard = -0.6931471805599453;
+			state.logProbability$guard = -0.6931471805599453;
 			
 			// Add probability to model
 			// 
@@ -319,7 +201,7 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			logProbability$$model = (logProbability$$model - 0.6931471805599453);
+			state.logProbability$$model = (state.logProbability$$model - 0.6931471805599453);
 			
 			// Variable declaration of cv$accumulator moved.
 			// Declaration comment was:
@@ -347,25 +229,25 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			logProbability$$evidence = (logProbability$$evidence - 0.6931471805599453);
+			state.logProbability$$evidence = (state.logProbability$$evidence - 0.6931471805599453);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample5 = true;
+			state.fixedProbFlag$sample5 = true;
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli = logProbability$guard;
+			state.logProbability$bernoulli = state.logProbability$guard;
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$guard);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$guard);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$guard);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$guard);
 		}
 	}
 
@@ -373,7 +255,7 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 	private final void logProbabilityValue$sample9() {
 		// Determine if we need to calculate the values for sample task 9 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample9) {
+		if(!state.fixedProbFlag$sample9) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -398,13 +280,13 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 			// Store the value of the function call, so the function call is only made once.
 			// 
 									// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((0.0 <= a) && (a < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((0.0 <= state.a) && (state.a < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$a = cv$distributionAccumulator;
+			state.logProbability$a = cv$distributionAccumulator;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(guard)
+			if(state.guard)
 				// Update the variable probability
 				// 
 				// Variable declaration of cv$accumulator moved.
@@ -419,7 +301,7 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$value = (logProbability$value + cv$distributionAccumulator);
+				state.logProbability$value = (state.logProbability$value + cv$distributionAccumulator);
 			
 			// Add probability to model
 			// 
@@ -435,7 +317,7 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// Variable declaration of cv$accumulator moved.
 			// Declaration comment was:
@@ -449,53 +331,43 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample9 = true;
+			state.fixedProbFlag$sample9 = true;
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(guard)
+			if(state.guard)
 				// Update the variable probability
 				// 
 				// Variable declaration of cv$accumulator moved.
-				logProbability$value = (logProbability$value + logProbability$a);
+				state.logProbability$value = (state.logProbability$value + state.logProbability$a);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$a);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$a);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$a);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$a);
 		}
 	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		a = DistributionSampling.sampleUniform(RNG$);
-		b = DistributionSampling.sampleUniform(RNG$);
-		if(guard)
-			value = a;
+		state.guard = DistributionSampling.sampleBernoulli(state.RNG$, 0.5);
+		state.a = DistributionSampling.sampleUniform(state.RNG$);
+		state.b = DistributionSampling.sampleUniform(state.RNG$);
+		if(state.guard)
+			state.value = state.a;
 		else
-			value = b;
+			state.value = state.b;
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -508,13 +380,13 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		a = DistributionSampling.sampleUniform(RNG$);
-		b = DistributionSampling.sampleUniform(RNG$);
-		if(guard)
-			value = a;
+		state.guard = DistributionSampling.sampleBernoulli(state.RNG$, 0.5);
+		state.a = DistributionSampling.sampleUniform(state.RNG$);
+		state.b = DistributionSampling.sampleUniform(state.RNG$);
+		if(state.guard)
+			state.value = state.a;
 		else
-			value = b;
+			state.value = state.b;
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -532,7 +404,7 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 	@Override
 	public final void gibbsRound() {
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
+		state.system$gibbsForward = !state.system$gibbsForward;
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -543,16 +415,16 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$bernoulli = 0.0;
-		if(!fixedProbFlag$sample5)
-			logProbability$guard = Double.NaN;
-		logProbability$value = 0.0;
-		if(!fixedProbFlag$sample9)
-			logProbability$a = Double.NaN;
-		if(!fixedProbFlag$sample13)
-			logProbability$b = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$bernoulli = 0.0;
+		if(!state.fixedProbFlag$sample5)
+			state.logProbability$guard = Double.NaN;
+		state.logProbability$value = 0.0;
+		if(!state.fixedProbFlag$sample9)
+			state.logProbability$a = Double.NaN;
+		if(!state.fixedProbFlag$sample13)
+			state.logProbability$b = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
@@ -615,16 +487,16 @@ final class Conditional5$MultiThreadCPU extends CoreModelMultiThreadCPU implemen
 	@Override
 	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
-		guard = observedGuard;
-		value = observedValue;
+		state.guard = state.observedGuard;
+		state.value = state.observedValue;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(observedGuard)
-			a = observedValue;
+		if(state.observedGuard)
+			state.a = state.observedValue;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		else
-			b = observedValue;
+			state.b = state.observedValue;
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are

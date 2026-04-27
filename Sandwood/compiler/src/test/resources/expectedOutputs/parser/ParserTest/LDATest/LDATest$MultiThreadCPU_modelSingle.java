@@ -1,256 +1,103 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.LDATest$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.LDATest.State;
 import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LDATest$CoreInterface {
+final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double[] alpha;
-	double[] beta;
-	boolean[] constrainedFlag$sample42;
-	boolean[] constrainedFlag$sample58;
-	boolean[][] constrainedFlag$sample90;
-	int[][] documents;
-	boolean fixedFlag$sample42 = false;
-	boolean fixedFlag$sample58 = false;
-	boolean fixedProbFlag$sample42 = false;
-	boolean fixedProbFlag$sample58 = false;
-	int[] length$documents;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$phi;
-	double logProbability$theta;
-	double logProbability$var42;
-	double logProbability$var57;
-	double logProbability$var91;
-	double logProbability$w;
-	double logProbability$z;
-	int noTopics;
-	double[][] phi;
-	boolean system$gibbsForward = true;
-	double[][] theta;
-	int vocabSize;
-	int[][] w;
-	int[][] z;
-	double[][] cv$var42$countGlobal;
-	double[][] cv$var57$countGlobal;
-	double[][] cv$var88$stateProbabilityGlobal;
+		// Declare the scratch variables for the model.
+		double[][] cv$var42$countGlobal;
+		double[][] cv$var57$countGlobal;
+		double[][] cv$var88$stateProbabilityGlobal;
 
-	public LDATest$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for alpha.
-	@Override
-	public final double[] get$alpha() {
-		return alpha;
-	}
-
-	// Getter for beta.
-	@Override
-	public final double[] get$beta() {
-		return beta;
-	}
-
-	// Getter for documents.
-	@Override
-	public final int[][] get$documents() {
-		return documents;
-	}
-
-	// Setter for documents.
-	@Override
-	public final void set$documents(int[][] cv$value, boolean allocated$) {
-		documents = cv$value;
-	}
-
-	// Getter for fixedFlag$sample42.
-	@Override
-	public final boolean get$fixedFlag$sample42() {
-		return fixedFlag$sample42;
-	}
-
-	// Setter for fixedFlag$sample42.
-	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample42 including if probabilities
-		// need to be updated.
-		fixedFlag$sample42 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
-				constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for cv$var42$countGlobal
+			{
+				// Allocation of cv$var42$countGlobal for multithreaded execution
+				{
+					// Get the thread count.
+					int cv$threadCount = threadCount();
+					
+					// Allocate an array to hold a copy per thread
+					cv$var42$countGlobal = new double[cv$threadCount][];
+					
+					// Populate the array with a copy per thread
+					for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+						cv$var42$countGlobal[cv$index] = new double[state.vocabSize];
+				}
+			}
+			
+			// Constructor for cv$var57$countGlobal
+			{
+				// Allocation of cv$var57$countGlobal for multithreaded execution
+				{
+					// Get the thread count.
+					int cv$threadCount = threadCount();
+					
+					// Allocate an array to hold a copy per thread
+					cv$var57$countGlobal = new double[cv$threadCount][];
+					
+					// Populate the array with a copy per thread
+					for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+						cv$var57$countGlobal[cv$index] = new double[state.noTopics];
+				}
+			}
+			
+			// Constructor for cv$var88$stateProbabilityGlobal
+			{
+				// Variable to record the maximum value of Task Get 88. Initially set to the value
+				// of putTask 59.
+				int cv$var58$max = state.noTopics;
+				
+				// Allocation of cv$var88$stateProbabilityGlobal for multithreaded execution
+				{
+					// Get the thread count.
+					int cv$threadCount = threadCount();
+					
+					// Allocate an array to hold a copy per thread
+					cv$var88$stateProbabilityGlobal = new double[cv$threadCount][];
+					
+					// Populate the array with a copy per thread
+					for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+						cv$var88$stateProbabilityGlobal[cv$index] = new double[cv$var58$max];
+				}
+			}
 		}
-		
-		// Should the probability of sample 42 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample42 = (fixedFlag$sample42 && fixedProbFlag$sample42);
 	}
 
-	// Getter for fixedFlag$sample58.
-	@Override
-	public final boolean get$fixedFlag$sample58() {
-		return fixedFlag$sample58;
-	}
 
-	// Setter for fixedFlag$sample58.
-	@Override
-	public final void set$fixedFlag$sample58(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample58 including if probabilities
-		// need to be updated.
-		fixedFlag$sample58 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
-				constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
-		}
-		
-		// Should the probability of sample 58 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample58 = (fixedFlag$sample58 && fixedProbFlag$sample58);
-	}
-
-	// Getter for length$documents.
-	@Override
-	public final int[] get$length$documents() {
-		return length$documents;
-	}
-
-	// Setter for length$documents.
-	@Override
-	public final void set$length$documents(int[] cv$value, boolean allocated$) {
-		length$documents = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$phi.
-	@Override
-	public final double get$logProbability$phi() {
-		return logProbability$phi;
-	}
-
-	// Getter for logProbability$theta.
-	@Override
-	public final double get$logProbability$theta() {
-		return logProbability$theta;
-	}
-
-	// Getter for logProbability$w.
-	@Override
-	public final double get$logProbability$w() {
-		return logProbability$w;
-	}
-
-	// Getter for noTopics.
-	@Override
-	public final int get$noTopics() {
-		return noTopics;
-	}
-
-	// Setter for noTopics.
-	@Override
-	public final void set$noTopics(int cv$value, boolean allocated$) {
-		noTopics = cv$value;
-	}
-
-	// Getter for phi.
-	@Override
-	public final double[][] get$phi() {
-		return phi;
-	}
-
-	// Setter for phi.
-	@Override
-	public final void set$phi(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of phi including if probabilities need to be
-		// updated.
-		phi = cv$value;
-		
-		// Unset the fixed probability flag for sample 42 as it depends on phi.
-		fixedProbFlag$sample42 = false;
-	}
-
-	// Getter for theta.
-	@Override
-	public final double[][] get$theta() {
-		return theta;
-	}
-
-	// Setter for theta.
-	@Override
-	public final void set$theta(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of theta including if probabilities need to
-		// be updated.
-		theta = cv$value;
-		
-		// Unset the fixed probability flag for sample 58 as it depends on theta.
-		fixedProbFlag$sample58 = false;
-	}
-
-	// Getter for vocabSize.
-	@Override
-	public final int get$vocabSize() {
-		return vocabSize;
-	}
-
-	// Setter for vocabSize.
-	@Override
-	public final void set$vocabSize(int cv$value, boolean allocated$) {
-		vocabSize = cv$value;
-	}
-
-	// Getter for w.
-	@Override
-	public final int[][] get$w() {
-		return w;
-	}
-
-	// Getter for z.
-	@Override
-	public final int[][] get$z() {
-		return z;
-	}
-
-	// Setter for z.
-	@Override
-	public final void set$z(int[][] cv$value, boolean allocated$) {
-		z = cv$value;
+	public LDATest$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample42
 	private final void drawValueSample42(int var41, int threadID$cv$var41, Rng RNG$) {
-		double[] var42 = phi[var41];
-		DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, var42);
+		double[] var42 = state.phi[var41];
+		DistributionSampling.sampleDirichlet(RNG$, state.beta, state.vocabSize, var42);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample58
 	private final void drawValueSample58(int var56, int threadID$cv$var56, Rng RNG$) {
-		double[] var57 = theta[var56];
-		DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, var57);
+		double[] var57 = state.theta[var56];
+		DistributionSampling.sampleDirichlet(RNG$, state.alpha, state.noTopics, var57);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample90
 	private final void drawValueSample90(int i$var71, int j, int threadID$cv$j, Rng RNG$) {
-		z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+		state.z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, state.theta[i$var71], state.noTopics);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -258,16 +105,16 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 	// to Categorical conjugate prior.
 	private final void inferSample42(int var41, int threadID$cv$var41, Rng RNG$) {
 		if(true) {
-			constrainedFlag$sample42[((var41 - 0) / 1)] = false;
+			state.constrainedFlag$sample42[((var41 - 0) / 1)] = false;
 			
 			// A reference local to the function for the sample variable.
-			double[] cv$targetLocal = phi[var41];
+			double[] cv$targetLocal = state.phi[var41];
 			
 			// A local reference to the scratch space.
-			double[] cv$countLocal = cv$var42$countGlobal[threadID$cv$var41];
+			double[] cv$countLocal = scratch.cv$var42$countGlobal[threadID$cv$var41];
 			
 			// Get the length of the array
-			int cv$arrayLength = vocabSize;
+			int cv$arrayLength = state.vocabSize;
 			
 			// Initialize the array values to 0.
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
@@ -278,9 +125,9 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 					// Looking for a path between Sample 42 and consumer Categorical 90.
 					{
 						{
-							for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-								for(int j = 0; j < length$documents[i$var71]; j += 1) {
-									if((var41 == z[((i$var71 - 0) / 1)][((j - 0) / 1)])) {
+							for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+								for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
+									if((var41 == state.z[((i$var71 - 0) / 1)][((j - 0) / 1)])) {
 										// Processing sample task 93 of consumer random variable null.
 										{
 											{
@@ -288,7 +135,7 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 												boolean cv$sampleConstrained = true;
 												if(cv$sampleConstrained) {
 													// Mark that the sample has observed constrained data.
-													constrainedFlag$sample42[((var41 - 0) / 1)] = true;
+													state.constrainedFlag$sample42[((var41 - 0) / 1)] = true;
 													{
 														{
 															{
@@ -296,7 +143,7 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 																	{
 																		// Increment the sample counter with the value sampled by sample task 93 of random
 																		// variable var90
-																		cv$countLocal[w[i$var71][j]] = (cv$countLocal[w[i$var71][j]] + 1.0);
+																		cv$countLocal[state.w[i$var71][j]] = (cv$countLocal[state.w[i$var71][j]] + 1.0);
 																	}
 																}
 															}
@@ -312,11 +159,11 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 					}
 				}
 			}
-			if(constrainedFlag$sample42[((var41 - 0) / 1)])
+			if(state.constrainedFlag$sample42[((var41 - 0) / 1)])
 				// Calculate the new sample value
 				// 
 				// Calculate a new sample value and write it into cv$targetLocal.
-				Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$countLocal, cv$targetLocal, vocabSize);
+				Conjugates.sampleConjugateDirichletCategorical(RNG$, state.beta, cv$countLocal, cv$targetLocal, state.vocabSize);
 		}
 	}
 
@@ -325,16 +172,16 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 	// to Categorical conjugate prior.
 	private final void inferSample58(int var56, int threadID$cv$var56, Rng RNG$) {
 		if(true) {
-			constrainedFlag$sample58[((var56 - 0) / 1)] = false;
+			state.constrainedFlag$sample58[((var56 - 0) / 1)] = false;
 			
 			// A reference local to the function for the sample variable.
-			double[] cv$targetLocal = theta[var56];
+			double[] cv$targetLocal = state.theta[var56];
 			
 			// A local reference to the scratch space.
-			double[] cv$countLocal = cv$var57$countGlobal[threadID$cv$var56];
+			double[] cv$countLocal = scratch.cv$var57$countGlobal[threadID$cv$var56];
 			
 			// Get the length of the array
-			int cv$arrayLength = noTopics;
+			int cv$arrayLength = state.noTopics;
 			
 			// Initialize the array values to 0.
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
@@ -345,14 +192,14 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 					// Looking for a path between Sample 58 and consumer Categorical 87.
 					{
 						{
-							for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+							for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
 								if((var56 == i$var71)) {
-									for(int j = 0; j < length$documents[i$var71]; j += 1) {
+									for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
 										// Flag recording if this sample task of the consuming random variable is constrained.
-										boolean cv$sampleConstrained = constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)];
+										boolean cv$sampleConstrained = state.constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)];
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample58[((var56 - 0) / 1)] = true;
+											state.constrainedFlag$sample58[((var56 - 0) / 1)] = true;
 											{
 												{
 													{
@@ -360,7 +207,7 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 															{
 																// Increment the sample counter with the value sampled by sample task 90 of random
 																// variable var87
-																cv$countLocal[z[((i$var71 - 0) / 1)][((j - 0) / 1)]] = (cv$countLocal[z[((i$var71 - 0) / 1)][((j - 0) / 1)]] + 1.0);
+																cv$countLocal[state.z[((i$var71 - 0) / 1)][((j - 0) / 1)]] = (cv$countLocal[state.z[((i$var71 - 0) / 1)][((j - 0) / 1)]] + 1.0);
 															}
 														}
 													}
@@ -374,11 +221,11 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 					}
 				}
 			}
-			if(constrainedFlag$sample58[((var56 - 0) / 1)])
+			if(state.constrainedFlag$sample58[((var56 - 0) / 1)])
 				// Calculate the new sample value
 				// 
 				// Calculate a new sample value and write it into cv$targetLocal.
-				Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$countLocal, cv$targetLocal, noTopics);
+				Conjugates.sampleConjugateDirichletCategorical(RNG$, state.alpha, cv$countLocal, cv$targetLocal, state.noTopics);
 		}
 	}
 
@@ -387,17 +234,17 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 	// marginalization.
 	private final void inferSample90(int i$var71, int j, int threadID$cv$j, Rng RNG$) {
 		if(true) {
-			constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = false;
+			state.constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
 			{
 				// variable marginalization
-				cv$numStates = Math.max(cv$numStates, noTopics);
+				cv$numStates = Math.max(cv$numStates, state.noTopics);
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var88$stateProbabilityGlobal[threadID$cv$j];
+			double[] cv$stateProbabilityLocal = scratch.cv$var88$stateProbabilityGlobal[threadID$cv$j];
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -416,17 +263,17 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 				cv$currentValue = cv$valuePos;
 				
 				// Write out the new value of the sample.
-				z[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$currentValue;
+				state.z[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$currentValue;
 				{
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 					
 					// Constructing a random variable input for use later.
-					double[] var86 = theta[i$var71];
+					double[] var86 = state.theta[i$var71];
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < noTopics)) && (0 < noTopics)) && (0.0 <= var86[cv$currentValue])) && (var86[cv$currentValue] <= 1.0))?Math.log(var86[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < state.noTopics)) && (0 < state.noTopics)) && (0.0 <= var86[cv$currentValue])) && (var86[cv$currentValue] <= 1.0))?Math.log(var86[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 90.
 					{
@@ -439,7 +286,7 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 										boolean cv$sampleConstrained = true;
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = true;
+											state.constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = true;
 											
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -454,17 +301,17 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 														{
 															{
 																// Constructing a random variable input for use later.
-																double[] var89 = phi[cv$currentValue];
+																double[] var89 = state.phi[cv$currentValue];
 																
 																// Record the probability of sample task 93 generating output with current configuration.
-																if(((Math.log(1.0) + ((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + ((((((0.0 <= state.w[i$var71][j]) && (state.w[i$var71][j] < state.vocabSize)) && (0 < state.vocabSize)) && (0.0 <= var89[state.w[i$var71][j]])) && (var89[state.w[i$var71][j]] <= 1.0))?Math.log(var89[state.w[i$var71][j]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.w[i$var71][j]) && (state.w[i$var71][j] < state.vocabSize)) && (0 < state.vocabSize)) && (0.0 <= var89[state.w[i$var71][j]])) && (var89[state.w[i$var71][j]] <= 1.0))?Math.log(var89[state.w[i$var71][j]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.w[i$var71][j]) && (state.w[i$var71][j] < state.vocabSize)) && (0 < state.vocabSize)) && (0.0 <= var89[state.w[i$var71][j]])) && (var89[state.w[i$var71][j]] <= 1.0))?Math.log(var89[state.w[i$var71][j]]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.w[i$var71][j]) && (state.w[i$var71][j] < state.vocabSize)) && (0 < state.vocabSize)) && (0.0 <= var89[state.w[i$var71][j]])) && (var89[state.w[i$var71][j]] <= 1.0))?Math.log(var89[state.w[i$var71][j]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.w[i$var71][j]) && (state.w[i$var71][j] < state.vocabSize)) && (0 < state.vocabSize)) && (0.0 <= var89[state.w[i$var71][j]])) && (var89[state.w[i$var71][j]] <= 1.0))?Math.log(var89[state.w[i$var71][j]]):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 93 with the current configuration.
@@ -513,7 +360,7 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)]) {
+			if(state.constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)]) {
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
 				
@@ -563,7 +410,7 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 				
 				// Write out the new value of the sample.
-				z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
+				state.z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
 			}
 		}
 	}
@@ -573,7 +420,7 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 	private final void logProbabilityValue$sample42() {
 		// Determine if we need to calculate the values for sample task 42 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample42) {
+		if(!state.fixedProbFlag$sample42) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -583,7 +430,7 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var41 = 0; var41 < noTopics; var41 += 1) {
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -592,11 +439,11 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double[] cv$sampleValue = phi[var41];
+						double[] cv$sampleValue = state.phi[var41];
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, beta, vocabSize));
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, state.beta, state.vocabSize));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -638,22 +485,22 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var42 = cv$sampleAccumulator;
+				state.logProbability$var42 = cv$sampleAccumulator;
 			
 			// Update the variable probability
-			logProbability$phi = (logProbability$phi + cv$accumulator);
+			state.logProbability$phi = (state.logProbability$phi + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample42)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample42)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample42 = fixedFlag$sample42;
+			state.fixedProbFlag$sample42 = state.fixedFlag$sample42;
 		} else {
 			// Using cached values.
 			// 
@@ -664,23 +511,23 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1)
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var42;
+			double cv$sampleValue = state.logProbability$var42;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$phi = (logProbability$phi + cv$accumulator);
+			state.logProbability$phi = (state.logProbability$phi + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample42)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample42)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -689,7 +536,7 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 	private final void logProbabilityValue$sample58() {
 		// Determine if we need to calculate the values for sample task 58 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample58) {
+		if(!state.fixedProbFlag$sample58) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -699,7 +546,7 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1) {
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -708,11 +555,11 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double[] cv$sampleValue = theta[var56];
+						double[] cv$sampleValue = state.theta[var56];
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, alpha, noTopics));
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, state.alpha, state.noTopics));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -754,22 +601,22 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var57 = cv$sampleAccumulator;
+				state.logProbability$var57 = cv$sampleAccumulator;
 			
 			// Update the variable probability
-			logProbability$theta = (logProbability$theta + cv$accumulator);
+			state.logProbability$theta = (state.logProbability$theta + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample58)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample58)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample58 = fixedFlag$sample58;
+			state.fixedProbFlag$sample58 = state.fixedFlag$sample58;
 		} else {
 			// Using cached values.
 			// 
@@ -780,23 +627,23 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var57;
+			double cv$sampleValue = state.logProbability$var57;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$theta = (logProbability$theta + cv$accumulator);
+			state.logProbability$theta = (state.logProbability$theta + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample58)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample58)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -812,8 +659,8 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 		
 		// A guard to check if the sample value is ever reached.
 		boolean cv$sampleReached = false;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -822,13 +669,13 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 				{
 					{
 						// The sample value to calculate the probability of generating
-						int cv$sampleValue = z[((i$var71 - 0) / 1)][((j - 0) / 1)];
+						int cv$sampleValue = state.z[((i$var71 - 0) / 1)][((j - 0) / 1)];
 						{
 							{
-								double[] var86 = theta[i$var71];
+								double[] var86 = state.theta[i$var71];
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noTopics)) && (0 < noTopics)) && (0.0 <= var86[cv$sampleValue])) && (var86[cv$sampleValue] <= 1.0))?Math.log(var86[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noTopics)) && (0 < state.noTopics)) && (0.0 <= var86[cv$sampleValue])) && (var86[cv$sampleValue] <= 1.0))?Math.log(var86[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -871,10 +718,10 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 		// erroneously over written.
 		if(cv$sampleReached)
 			// Store the random variable instance probability
-			logProbability$z = cv$accumulator;
+			state.logProbability$z = cv$accumulator;
 		
 		// Add probability to model
-		logProbability$$model = (logProbability$$model + cv$accumulator);
+		state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 	}
 
 	// Calculate the probability of the samples represented by sample93 using sampled
@@ -889,8 +736,8 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 		
 		// A guard to check if the sample value is ever reached.
 		boolean cv$sampleReached = false;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -899,13 +746,13 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 				{
 					{
 						// The sample value to calculate the probability of generating
-						int cv$sampleValue = w[i$var71][j];
+						int cv$sampleValue = state.w[i$var71][j];
 						{
 							{
-								double[] var89 = phi[z[((i$var71 - 0) / 1)][((j - 0) / 1)]];
+								double[] var89 = state.phi[state.z[((i$var71 - 0) / 1)][((j - 0) / 1)]];
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[cv$sampleValue])) && (var89[cv$sampleValue] <= 1.0))?Math.log(var89[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.vocabSize)) && (0 < state.vocabSize)) && (0.0 <= var89[cv$sampleValue])) && (var89[cv$sampleValue] <= 1.0))?Math.log(var89[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -948,176 +795,49 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 		// erroneously over written.
 		if(cv$sampleReached)
 			// Store the random variable instance probability
-			logProbability$var91 = cv$accumulator;
+			state.logProbability$var91 = cv$accumulator;
 		
 		// Update the variable probability
-		logProbability$w = (logProbability$w + cv$accumulator);
+		state.logProbability$w = (state.logProbability$w + cv$accumulator);
 		
 		// Add probability to model
-		logProbability$$model = (logProbability$$model + cv$accumulator);
-		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for alpha
-		{
-			alpha = new double[noTopics];
-		}
-		
-		// Constructor for beta
-		{
-			beta = new double[vocabSize];
-		}
-		
-		// If phi has not been set already allocate space.
-		if(!fixedFlag$sample42) {
-			// Constructor for phi
-			{
-				phi = new double[noTopics][];
-				for(int var41 = 0; var41 < noTopics; var41 += 1)
-					phi[var41] = new double[vocabSize];
-			}
-		}
-		
-		// If theta has not been set already allocate space.
-		if(!fixedFlag$sample58) {
-			// Constructor for theta
-			{
-				theta = new double[length$documents.length][];
-				for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-					theta[var56] = new double[noTopics];
-			}
-		}
-		
-		// Constructor for w
-		{
-			w = new int[length$documents.length][];
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-				w[i$var71] = new int[length$documents[i$var71]];
-		}
-		
-		// Constructor for z
-		{
-			z = new int[((((length$documents.length - 1) - 0) / 1) + 1)][];
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-				z[((i$var71 - 0) / 1)] = new int[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample90
-		{
-			constrainedFlag$sample90 = new boolean[((((length$documents.length - 1) - 0) / 1) + 1)][];
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-				constrainedFlag$sample90[((i$var71 - 0) / 1)] = new boolean[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample42
-		{
-			constrainedFlag$sample42 = new boolean[((((noTopics - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample58
-		{
-			constrainedFlag$sample58 = new boolean[((((length$documents.length - 1) - 0) / 1) + 1)];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var42$countGlobal
-		{
-			// Allocation of cv$var42$countGlobal for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$var42$countGlobal = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var42$countGlobal[cv$index] = new double[vocabSize];
-			}
-		}
-		
-		// Constructor for cv$var57$countGlobal
-		{
-			// Allocation of cv$var57$countGlobal for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$var57$countGlobal = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var57$countGlobal[cv$index] = new double[noTopics];
-			}
-		}
-		
-		// Constructor for cv$var88$stateProbabilityGlobal
-		{
-			// Variable to record the maximum value of Task Get 88. Initially set to the value
-			// of putTask 59.
-			int cv$var58$max = noTopics;
-			
-			// Allocation of cv$var88$stateProbabilityGlobal for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$var88$stateProbabilityGlobal = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var88$stateProbabilityGlobal[cv$index] = new double[cv$var58$max];
-			}
-		}
+		state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+		state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noTopics, 1,
+		parallelFor(state.RNG$, 0, state.noTopics, 1,
 			(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
-						double[] var42 = phi[var41];
-						if(!fixedFlag$sample42)
-							DistributionSampling.sampleDirichlet(RNG$1, beta, vocabSize, var42);
+						double[] var42 = state.phi[var41];
+						if(!state.fixedFlag$sample42)
+							DistributionSampling.sampleDirichlet(RNG$1, state.beta, state.vocabSize, var42);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$documents.length, 1,
+		parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 			(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
-						double[] var57 = theta[var56];
-						if(!fixedFlag$sample58)
-							DistributionSampling.sampleDirichlet(RNG$1, alpha, noTopics, var57);
+						double[] var57 = state.theta[var56];
+						if(!state.fixedFlag$sample58)
+							DistributionSampling.sampleDirichlet(RNG$1, state.alpha, state.noTopics, var57);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$documents.length, 1,
+		parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 			(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -1125,17 +845,17 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 					for(int index$i$var71 = forStart$index$i$var71; index$i$var71 < forEnd$index$i$var71; index$i$var71 += 1) {
 						int i$var71 = index$i$var71;
 						int threadID$i$var71 = threadID$index$i$var71;
-						int[] t = w[i$var71];
+						int[] t = state.w[i$var71];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+						parallelFor(RNG$1, 0, state.length$documents[i$var71], 1,
 							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j = forStart$j; j < forEnd$j; j += 1) {
-										z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var71], noTopics);
-										t[j] = DistributionSampling.sampleCategorical(RNG$2, phi[z[((i$var71 - 0) / 1)][((j - 0) / 1)]], vocabSize);
+										state.z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, state.theta[i$var71], state.noTopics);
+										t[j] = DistributionSampling.sampleCategorical(RNG$2, state.phi[state.z[((i$var71 - 0) / 1)][((j - 0) / 1)]], state.vocabSize);
 									}
 							}
 						);
@@ -1150,35 +870,35 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noTopics, 1,
+		parallelFor(state.RNG$, 0, state.noTopics, 1,
 			(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
-						double[] var42 = phi[var41];
-						if(!fixedFlag$sample42)
-							DistributionSampling.sampleDirichlet(RNG$1, beta, vocabSize, var42);
+						double[] var42 = state.phi[var41];
+						if(!state.fixedFlag$sample42)
+							DistributionSampling.sampleDirichlet(RNG$1, state.beta, state.vocabSize, var42);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$documents.length, 1,
+		parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 			(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
-						double[] var57 = theta[var56];
-						if(!fixedFlag$sample58)
-							DistributionSampling.sampleDirichlet(RNG$1, alpha, noTopics, var57);
+						double[] var57 = state.theta[var56];
+						if(!state.fixedFlag$sample58)
+							DistributionSampling.sampleDirichlet(RNG$1, state.alpha, state.noTopics, var57);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$documents.length, 1,
+		parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 			(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -1188,13 +908,13 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 						int threadID$i$var71 = threadID$index$i$var71;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+						parallelFor(RNG$1, 0, state.length$documents[i$var71], 1,
 							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j = forStart$j; j < forEnd$j; j += 1)
-										z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var71], noTopics);
+										state.z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, state.theta[i$var71], state.noTopics);
 							}
 						);
 					}
@@ -1207,35 +927,35 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 	@Override
 	public final void forwardGenerationPrime() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noTopics, 1,
+		parallelFor(state.RNG$, 0, state.noTopics, 1,
 			(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
-						double[] var42 = phi[var41];
-						if(!fixedFlag$sample42)
-							DistributionSampling.sampleDirichlet(RNG$1, beta, vocabSize, var42);
+						double[] var42 = state.phi[var41];
+						if(!state.fixedFlag$sample42)
+							DistributionSampling.sampleDirichlet(RNG$1, state.beta, state.vocabSize, var42);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$documents.length, 1,
+		parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 			(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
-						double[] var57 = theta[var56];
-						if(!fixedFlag$sample58)
-							DistributionSampling.sampleDirichlet(RNG$1, alpha, noTopics, var57);
+						double[] var57 = state.theta[var56];
+						if(!state.fixedFlag$sample58)
+							DistributionSampling.sampleDirichlet(RNG$1, state.alpha, state.noTopics, var57);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$documents.length, 1,
+		parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 			(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -1243,17 +963,17 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 					for(int index$i$var71 = forStart$index$i$var71; index$i$var71 < forEnd$index$i$var71; index$i$var71 += 1) {
 						int i$var71 = index$i$var71;
 						int threadID$i$var71 = threadID$index$i$var71;
-						int[] t = w[i$var71];
+						int[] t = state.w[i$var71];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+						parallelFor(RNG$1, 0, state.length$documents[i$var71], 1,
 							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j = forStart$j; j < forEnd$j; j += 1) {
-										z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var71], noTopics);
-										t[j] = DistributionSampling.sampleCategorical(RNG$2, phi[z[((i$var71 - 0) / 1)][((j - 0) / 1)]], vocabSize);
+										state.z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, state.theta[i$var71], state.noTopics);
+										t[j] = DistributionSampling.sampleCategorical(RNG$2, state.phi[state.z[((i$var71 - 0) / 1)][((j - 0) / 1)]], state.vocabSize);
 									}
 							}
 						);
@@ -1267,35 +987,35 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noTopics, 1,
+		parallelFor(state.RNG$, 0, state.noTopics, 1,
 			(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
-						double[] var42 = phi[var41];
-						if(!fixedFlag$sample42)
-							DistributionSampling.sampleDirichlet(RNG$1, beta, vocabSize, var42);
+						double[] var42 = state.phi[var41];
+						if(!state.fixedFlag$sample42)
+							DistributionSampling.sampleDirichlet(RNG$1, state.beta, state.vocabSize, var42);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$documents.length, 1,
+		parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 			(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
-						double[] var57 = theta[var56];
-						if(!fixedFlag$sample58)
-							DistributionSampling.sampleDirichlet(RNG$1, alpha, noTopics, var57);
+						double[] var57 = state.theta[var56];
+						if(!state.fixedFlag$sample58)
+							DistributionSampling.sampleDirichlet(RNG$1, state.alpha, state.noTopics, var57);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$documents.length, 1,
+		parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 			(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -1305,13 +1025,13 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 						int threadID$i$var71 = threadID$index$i$var71;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+						parallelFor(RNG$1, 0, state.length$documents[i$var71], 1,
 							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j = forStart$j; j < forEnd$j; j += 1)
-										z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var71], noTopics);
+										state.z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, state.theta[i$var71], state.noTopics);
 							}
 						);
 					}
@@ -1325,35 +1045,35 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noTopics, 1,
+		parallelFor(state.RNG$, 0, state.noTopics, 1,
 			(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
-						double[] var42 = phi[var41];
-						if(!fixedFlag$sample42)
-							DistributionSampling.sampleDirichlet(RNG$1, beta, vocabSize, var42);
+						double[] var42 = state.phi[var41];
+						if(!state.fixedFlag$sample42)
+							DistributionSampling.sampleDirichlet(RNG$1, state.beta, state.vocabSize, var42);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$documents.length, 1,
+		parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 			(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
-						double[] var57 = theta[var56];
-						if(!fixedFlag$sample58)
-							DistributionSampling.sampleDirichlet(RNG$1, alpha, noTopics, var57);
+						double[] var57 = state.theta[var56];
+						if(!state.fixedFlag$sample58)
+							DistributionSampling.sampleDirichlet(RNG$1, state.alpha, state.noTopics, var57);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$documents.length, 1,
+		parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 			(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -1363,13 +1083,13 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 						int threadID$i$var71 = threadID$index$i$var71;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+						parallelFor(RNG$1, 0, state.length$documents[i$var71], 1,
 							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j = forStart$j; j < forEnd$j; j += 1)
-										z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, theta[i$var71], noTopics);
+										state.z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$2, state.theta[i$var71], state.noTopics);
 							}
 						);
 					}
@@ -1381,35 +1101,35 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
+		if(state.system$gibbsForward) {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noTopics, 1,
+			parallelFor(state.RNG$, 0, state.noTopics, 1,
 				(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
-							if(!fixedFlag$sample42)
+							if(!state.fixedFlag$sample42)
 								inferSample42(var41, threadID$var41, RNG$1);
 						}
 				}
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, length$documents.length, 1,
+			parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 				(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
-							if(!fixedFlag$sample58)
+							if(!state.fixedFlag$sample58)
 								inferSample58(var56, threadID$var56, RNG$1);
 						}
 				}
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, length$documents.length, 1,
+			parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 				(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
@@ -1419,7 +1139,7 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 							int threadID$i$var71 = threadID$index$i$var71;
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+							parallelFor(RNG$1, 0, state.length$documents[i$var71], 1,
 								(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
@@ -1435,7 +1155,7 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 		// Infer the samples in reverse chronological order.
 		else {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, length$documents.length, 1,
+			parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 				(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
@@ -1445,7 +1165,7 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 							int threadID$i$var71 = threadID$index$i$var71;
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+							parallelFor(RNG$1, 0, state.length$documents[i$var71], 1,
 								(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
@@ -1459,26 +1179,26 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, length$documents.length, 1,
+			parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 				(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
-							if(!fixedFlag$sample58)
+							if(!state.fixedFlag$sample58)
 								inferSample58(var56, threadID$var56, RNG$1);
 						}
 				}
 			);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noTopics, 1,
+			parallelFor(state.RNG$, 0, state.noTopics, 1,
 				(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
-							if(!fixedFlag$sample42)
+							if(!state.fixedFlag$sample42)
 								inferSample42(var41, threadID$var41, RNG$1);
 						}
 				}
@@ -1486,36 +1206,36 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
+		state.system$gibbsForward = !state.system$gibbsForward;
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noTopics, 1,
+		parallelFor(state.RNG$, 0, state.noTopics, 1,
 			(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
-						if(!constrainedFlag$sample42[((var41 - 0) / 1)])
+						if(!state.constrainedFlag$sample42[((var41 - 0) / 1)])
 							drawValueSample42(var41, threadID$var41, RNG$1);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$documents.length, 1,
+		parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 			(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
-						if(!constrainedFlag$sample58[((var56 - 0) / 1)])
+						if(!state.constrainedFlag$sample58[((var56 - 0) / 1)])
 							drawValueSample58(var56, threadID$var56, RNG$1);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$documents.length, 1,
+		parallelFor(state.RNG$, 0, state.length$documents.length, 1,
 			(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -1525,13 +1245,13 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 						int threadID$i$var71 = threadID$index$i$var71;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+						parallelFor(RNG$1, 0, state.length$documents[i$var71], 1,
 							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int j = forStart$j; j < forEnd$j; j += 1) {
-										if(!constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)])
+										if(!state.constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)])
 											drawValueSample90(i$var71, j, threadID$j, RNG$2);
 									}
 							}
@@ -1549,42 +1269,42 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$phi = 0.0;
-		if(!fixedProbFlag$sample42)
-			logProbability$var42 = Double.NaN;
-		logProbability$theta = 0.0;
-		if(!fixedProbFlag$sample58)
-			logProbability$var57 = Double.NaN;
-		logProbability$z = Double.NaN;
-		logProbability$w = 0.0;
-		logProbability$var91 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$phi = 0.0;
+		if(!state.fixedProbFlag$sample42)
+			state.logProbability$var42 = Double.NaN;
+		state.logProbability$theta = 0.0;
+		if(!state.fixedProbFlag$sample58)
+			state.logProbability$var57 = Double.NaN;
+		state.logProbability$z = Double.NaN;
+		state.logProbability$w = 0.0;
+		state.logProbability$var91 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		for(int i$var14 = 0; i$var14 < noTopics; i$var14 += 1)
-			alpha[i$var14] = 0.1;
-		for(int i$var27 = 0; i$var27 < vocabSize; i$var27 += 1)
-			beta[i$var27] = 0.1;
+		for(int i$var14 = 0; i$var14 < state.noTopics; i$var14 += 1)
+			state.alpha[i$var14] = 0.1;
+		for(int i$var27 = 0; i$var27 < state.vocabSize; i$var27 += 1)
+			state.beta[i$var27] = 0.1;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample90$1 = 0; index$constrainedFlag$sample90$1 < constrainedFlag$sample90.length; index$constrainedFlag$sample90$1 += 1) {
-			boolean[] cv$constrainedFlag$sample90$1 = constrainedFlag$sample90[index$constrainedFlag$sample90$1];
+		for(int index$constrainedFlag$sample90$1 = 0; index$constrainedFlag$sample90$1 < state.constrainedFlag$sample90.length; index$constrainedFlag$sample90$1 += 1) {
+			boolean[] cv$constrainedFlag$sample90$1 = state.constrainedFlag$sample90[index$constrainedFlag$sample90$1];
 			for(int index$constrainedFlag$sample90$2 = 0; index$constrainedFlag$sample90$2 < cv$constrainedFlag$sample90$1.length; index$constrainedFlag$sample90$2 += 1)
 				cv$constrainedFlag$sample90$1[index$constrainedFlag$sample90$2] = true;
 		}
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
-			constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
+		for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < state.constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
+			state.constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
-			constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
+		for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < state.constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
+			state.constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -1594,9 +1314,9 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample42)
+		if(state.fixedFlag$sample42)
 			logProbabilityValue$sample42();
-		if(fixedFlag$sample58)
+		if(state.fixedFlag$sample58)
 			logProbabilityValue$sample58();
 		logProbabilityValue$sample93();
 	}
@@ -1646,8 +1366,8 @@ final class LDATest$MultiThreadCPU extends CoreModelMultiThreadCPU implements LD
 	@Override
 	public final void propagateObservedValues() {
 		// Deep copy between arrays
-		int[][] cv$source1 = documents;
-		int[][] cv$target1 = w;
+		int[][] cv$source1 = state.documents;
+		int[][] cv$target1 = state.w;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			int[] cv$source2 = cv$source1[cv$index1];

@@ -1,270 +1,142 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Flip1CoinMK20$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Flip1CoinMK20.State;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK20$MultiThreadCPU extends CoreModelMultiThreadCPU implements Flip1CoinMK20$CoreInterface {
-double bias;
-	boolean constrainedFlag$sample8 = true;
-	int count1;
-	int count2;
-	boolean fixedFlag$sample11 = false;
-	boolean fixedFlag$sample12 = false;
-	boolean fixedFlag$sample8 = false;
-	boolean fixedProbFlag$sample11 = false;
-	boolean fixedProbFlag$sample12 = false;
-	boolean fixedProbFlag$sample8 = false;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bias;
-	double logProbability$binomial;
-	double logProbability$count1;
-	double logProbability$count2;
-	int obs1;
-	int obs2;
-	boolean system$gibbsForward = true;
-	int total;
+final class Flip1CoinMK20$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	public Flip1CoinMK20$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	@Override
-	public final double get$bias() {
-		return bias;
-	}
 
-	@Override
-	public final void set$bias(double cv$value, boolean allocated$) {
-		bias = cv$value;
-		fixedProbFlag$sample8 = false;
-		fixedProbFlag$sample11 = false;
-		fixedProbFlag$sample12 = false;
-	}
-
-	@Override
-	public final int get$count1() {
-		return count1;
-	}
-
-	@Override
-	public final int get$count2() {
-		return count2;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample11() {
-		return fixedFlag$sample11;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample11(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample11 = cv$value;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample12() {
-		return fixedFlag$sample12;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample12(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample12 = cv$value;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample8() {
-		return fixedFlag$sample8;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample8(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample8 = cv$value;
-		constrainedFlag$sample8 = (cv$value || constrainedFlag$sample8);
-		fixedProbFlag$sample8 = (cv$value && fixedProbFlag$sample8);
-		fixedProbFlag$sample11 = (cv$value && fixedProbFlag$sample11);
-		fixedProbFlag$sample12 = (cv$value && fixedProbFlag$sample12);
-	}
-
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	@Override
-	public final double get$logProbability$binomial() {
-		return logProbability$binomial;
-	}
-
-	@Override
-	public final double get$logProbability$count1() {
-		return logProbability$count1;
-	}
-
-	@Override
-	public final double get$logProbability$count2() {
-		return logProbability$count2;
-	}
-
-	@Override
-	public final int get$obs1() {
-		return obs1;
-	}
-
-	@Override
-	public final void set$obs1(int cv$value, boolean allocated$) {
-		obs1 = cv$value;
-	}
-
-	@Override
-	public final int get$obs2() {
-		return obs2;
-	}
-
-	@Override
-	public final void set$obs2(int cv$value, boolean allocated$) {
-		obs2 = cv$value;
-	}
-
-	@Override
-	public final int get$total() {
-		return total;
+	public Flip1CoinMK20$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	private final void drawValueSample8() {
-		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	private final void inferSample8() {
-		constrainedFlag$sample8 = false;
-		constrainedFlag$sample8 = true;
-		constrainedFlag$sample8 = true;
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, (count1 + count2), 200);
+		state.constrainedFlag$sample8 = false;
+		state.constrainedFlag$sample8 = true;
+		state.constrainedFlag$sample8 = true;
+		state.bias = Conjugates.sampleConjugateBetaBinomial(state.RNG$, 1.0, 1.0, (state.count1 + state.count2), 200);
 	}
 
 	private final void logProbabilityValue$sample11() {
-		if(!fixedProbFlag$sample11) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBinomial(count1, bias, 100);
-			logProbability$binomial = (logProbability$binomial + cv$distributionAccumulator);
-			logProbability$count1 = cv$distributionAccumulator;
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample11 = fixedFlag$sample8;
+		if(!state.fixedProbFlag$sample11) {
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityBinomial(state.count1, state.bias, 100);
+			state.logProbability$binomial = (state.logProbability$binomial + cv$distributionAccumulator);
+			state.logProbability$count1 = cv$distributionAccumulator;
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
+			state.fixedProbFlag$sample11 = state.fixedFlag$sample8;
 		} else {
-			logProbability$binomial = (logProbability$binomial + logProbability$count1);
-			logProbability$$model = (logProbability$$model + logProbability$count1);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$count1);
+			state.logProbability$binomial = (state.logProbability$binomial + state.logProbability$count1);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$count1);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$count1);
 		}
 	}
 
 	private final void logProbabilityValue$sample12() {
-		if(!fixedProbFlag$sample12) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBinomial(count2, bias, 100);
-			logProbability$binomial = (logProbability$binomial + cv$distributionAccumulator);
-			logProbability$count2 = cv$distributionAccumulator;
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample12 = fixedFlag$sample8;
+		if(!state.fixedProbFlag$sample12) {
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityBinomial(state.count2, state.bias, 100);
+			state.logProbability$binomial = (state.logProbability$binomial + cv$distributionAccumulator);
+			state.logProbability$count2 = cv$distributionAccumulator;
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
+			state.fixedProbFlag$sample12 = state.fixedFlag$sample8;
 		} else {
-			logProbability$binomial = (logProbability$binomial + logProbability$count2);
-			logProbability$$model = (logProbability$$model + logProbability$count2);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$count2);
+			state.logProbability$binomial = (state.logProbability$binomial + state.logProbability$count2);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$count2);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$count2);
 		}
 	}
 
 	private final void logProbabilityValue$sample8() {
-		if(!fixedProbFlag$sample8) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
-			logProbability$bias = cv$distributionAccumulator;
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			if(fixedFlag$sample8)
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample8 = fixedFlag$sample8;
+		if(!state.fixedProbFlag$sample8) {
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(state.bias, 1.0, 1.0);
+			state.logProbability$bias = cv$distributionAccumulator;
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
+			if(state.fixedFlag$sample8)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
+			state.fixedProbFlag$sample8 = state.fixedFlag$sample8;
 		} else {
-			logProbability$$model = (logProbability$$model + logProbability$bias);
-			if(fixedFlag$sample8)
-				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$bias);
+			if(state.fixedFlag$sample8)
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$bias);
 		}
 	}
 
 	@Override
-	public final void allocate() {}
-
-	@Override
-	public final void allocateScratch() {}
-
-	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample8)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample11)
-			count1 = DistributionSampling.sampleBinomial(RNG$, bias, 100);
-		if(!fixedFlag$sample12)
-			count2 = DistributionSampling.sampleBinomial(RNG$, bias, 100);
-		if((!fixedFlag$sample11 || !fixedFlag$sample12))
-			total = (count1 + count2);
+		if(!state.fixedFlag$sample8)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample11)
+			state.count1 = DistributionSampling.sampleBinomial(state.RNG$, state.bias, 100);
+		if(!state.fixedFlag$sample12)
+			state.count2 = DistributionSampling.sampleBinomial(state.RNG$, state.bias, 100);
+		if((!state.fixedFlag$sample11 || !state.fixedFlag$sample12))
+			state.total = (state.count1 + state.count2);
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample8)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample8)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample8)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(!fixedFlag$sample11)
-			count1 = DistributionSampling.sampleBinomial(RNG$, bias, 100);
-		if(!fixedFlag$sample12)
-			count2 = DistributionSampling.sampleBinomial(RNG$, bias, 100);
-		total = (count1 + count2);
+		if(!state.fixedFlag$sample8)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample11)
+			state.count1 = DistributionSampling.sampleBinomial(state.RNG$, state.bias, 100);
+		if(!state.fixedFlag$sample12)
+			state.count2 = DistributionSampling.sampleBinomial(state.RNG$, state.bias, 100);
+		state.total = (state.count1 + state.count2);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample8)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample8)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample8)
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(!state.fixedFlag$sample8)
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void gibbsRound() {
-		if(!fixedFlag$sample8)
+		if(!state.fixedFlag$sample8)
 			inferSample8();
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample8)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample8)
 			drawValueSample8();
 	}
 
 	private final void initializeLogProbabilityFields() {
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample8)
-			logProbability$bias = Double.NaN;
-		logProbability$binomial = 0.0;
-		if(!fixedProbFlag$sample11)
-			logProbability$count1 = Double.NaN;
-		if(!fixedProbFlag$sample12)
-			logProbability$count2 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample8)
+			state.logProbability$bias = Double.NaN;
+		state.logProbability$binomial = 0.0;
+		if(!state.fixedProbFlag$sample11)
+			state.logProbability$count1 = Double.NaN;
+		if(!state.fixedProbFlag$sample12)
+			state.logProbability$count2 = Double.NaN;
 	}
 
 	@Override
@@ -273,7 +145,7 @@ double bias;
 	@Override
 	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample8)
+		if(state.fixedFlag$sample8)
 			logProbabilityValue$sample8();
 		logProbabilityValue$sample11();
 		logProbabilityValue$sample12();
@@ -297,11 +169,11 @@ double bias;
 
 	@Override
 	public final void propagateObservedValues() {
-		fixedFlag$sample11 = false;
-		fixedFlag$sample12 = false;
-		count1 = obs1;
-		count2 = obs2;
-		total = (obs1 + obs2);
+		state.fixedFlag$sample11 = false;
+		state.fixedFlag$sample12 = false;
+		state.count1 = state.obs1;
+		state.count2 = state.obs2;
+		state.total = (state.obs1 + state.obs2);
 	}
 
 	@Override

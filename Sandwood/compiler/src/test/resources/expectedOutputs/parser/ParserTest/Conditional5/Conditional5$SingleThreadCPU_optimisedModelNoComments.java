@@ -1,193 +1,82 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Conditional5$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Conditional5.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-<<<<<<< Upstream, based on POW
-final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional5$CoreInterface {
-	private double a;
-	private double b;
-	private boolean fixedProbFlag$sample13 = false;
-	private boolean fixedProbFlag$sample5 = false;
-	private boolean fixedProbFlag$sample9 = false;
-	private boolean guard;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$a;
-	private double logProbability$b;
-	private double logProbability$bernoulli;
-	private double logProbability$guard;
-	private double logProbability$value;
-	private boolean observedGuard;
-	private double observedValue;
-	private boolean system$gibbsForward = true;
-	private double value;
-=======
-final class Conditional5$SingleThreadCPU extends CoreModelSingleThreadCPU implements Conditional5$CoreInterface {
-double a;
-	double b;
-	boolean fixedProbFlag$sample13 = false;
-	boolean fixedProbFlag$sample5 = false;
-	boolean fixedProbFlag$sample9 = false;
-	boolean guard;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$a;
-	double logProbability$b;
-	double logProbability$bernoulli;
-	double logProbability$guard;
-	double logProbability$sample13;
-	double logProbability$sample9;
-	double logProbability$value;
-	boolean observedGuard;
-	double observedValue;
-	boolean system$gibbsForward = true;
-	double value;
->>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
+final class Conditional5$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	public Conditional5$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	@Override
-	public final double get$a() {
-		return a;
-	}
 
-	@Override
-	public final double get$b() {
-		return b;
-	}
-
-	@Override
-	public final boolean get$guard() {
-		return guard;
-	}
-
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	@Override
-	public final double get$logProbability$a() {
-		return logProbability$a;
-	}
-
-	@Override
-	public final double get$logProbability$b() {
-		return logProbability$b;
-	}
-
-	@Override
-	public final double get$logProbability$bernoulli() {
-		return logProbability$bernoulli;
-	}
-
-	@Override
-	public final double get$logProbability$guard() {
-		return logProbability$guard;
-	}
-
-	@Override
-	public final double get$logProbability$value() {
-		return logProbability$value;
-	}
-
-	@Override
-	public final boolean get$observedGuard() {
-		return observedGuard;
-	}
-
-	@Override
-	public final void set$observedGuard(boolean cv$value, boolean allocated$) {
-		observedGuard = cv$value;
-	}
-
-	@Override
-	public final double get$observedValue() {
-		return observedValue;
-	}
-
-	@Override
-	public final void set$observedValue(double cv$value, boolean allocated$) {
-		observedValue = cv$value;
-	}
-
-	@Override
-	public final double get$value() {
-		return value;
+	public Conditional5$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	private final void logProbabilityValue$sample13() {
-		if(!fixedProbFlag$sample13) {
-			double cv$distributionAccumulator = (((0.0 <= b) && (b < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-			logProbability$b = cv$distributionAccumulator;
-			if(!guard)
-				logProbability$value = (logProbability$value + cv$distributionAccumulator);
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample13 = true;
+		if(!state.fixedProbFlag$sample13) {
+			double cv$distributionAccumulator = (((0.0 <= state.b) && (state.b < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			state.logProbability$b = cv$distributionAccumulator;
+			if(!state.guard)
+				state.logProbability$value = (state.logProbability$value + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
+			state.fixedProbFlag$sample13 = true;
 		} else {
-			if(!guard)
-				logProbability$value = (logProbability$value + logProbability$b);
-			logProbability$$model = (logProbability$$model + logProbability$b);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$b);
+			if(!state.guard)
+				state.logProbability$value = (state.logProbability$value + state.logProbability$b);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$b);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$b);
 		}
 	}
 
 	private final void logProbabilityValue$sample5() {
-		if(!fixedProbFlag$sample5) {
-			logProbability$bernoulli = -0.6931471805599453;
-			logProbability$guard = -0.6931471805599453;
-			logProbability$$model = (logProbability$$model - 0.6931471805599453);
-			logProbability$$evidence = (logProbability$$evidence - 0.6931471805599453);
-			fixedProbFlag$sample5 = true;
+		if(!state.fixedProbFlag$sample5) {
+			state.logProbability$bernoulli = -0.6931471805599453;
+			state.logProbability$guard = -0.6931471805599453;
+			state.logProbability$$model = (state.logProbability$$model - 0.6931471805599453);
+			state.logProbability$$evidence = (state.logProbability$$evidence - 0.6931471805599453);
+			state.fixedProbFlag$sample5 = true;
 		} else {
-			logProbability$bernoulli = logProbability$guard;
-			logProbability$$model = (logProbability$$model + logProbability$guard);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$guard);
+			state.logProbability$bernoulli = state.logProbability$guard;
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$guard);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$guard);
 		}
 	}
 
 	private final void logProbabilityValue$sample9() {
-		if(!fixedProbFlag$sample9) {
-			double cv$distributionAccumulator = (((0.0 <= a) && (a < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-			logProbability$a = cv$distributionAccumulator;
-			if(guard)
-				logProbability$value = (logProbability$value + cv$distributionAccumulator);
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
-			fixedProbFlag$sample9 = true;
+		if(!state.fixedProbFlag$sample9) {
+			double cv$distributionAccumulator = (((0.0 <= state.a) && (state.a < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			state.logProbability$a = cv$distributionAccumulator;
+			if(state.guard)
+				state.logProbability$value = (state.logProbability$value + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
+			state.fixedProbFlag$sample9 = true;
 		} else {
-			if(guard)
-				logProbability$value = (logProbability$value + logProbability$a);
-			logProbability$$model = (logProbability$$model + logProbability$a);
-			logProbability$$evidence = (logProbability$$evidence + logProbability$a);
+			if(state.guard)
+				state.logProbability$value = (state.logProbability$value + state.logProbability$a);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$a);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$a);
 		}
 	}
 
 	@Override
-	public final void allocate() {}
-
-	@Override
-	public final void allocateScratch() {}
-
-	@Override
 	public final void forwardGeneration() {
-		guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		a = DistributionSampling.sampleUniform(RNG$);
-		b = DistributionSampling.sampleUniform(RNG$);
-		if(guard)
-			value = a;
+		state.guard = DistributionSampling.sampleBernoulli(state.RNG$, 0.5);
+		state.a = DistributionSampling.sampleUniform(state.RNG$);
+		state.b = DistributionSampling.sampleUniform(state.RNG$);
+		if(state.guard)
+			state.value = state.a;
 		else
-			value = b;
+			state.value = state.b;
 	}
 
 	@Override
@@ -195,13 +84,13 @@ double a;
 
 	@Override
 	public final void forwardGenerationPrime() {
-		guard = DistributionSampling.sampleBernoulli(RNG$, 0.5);
-		a = DistributionSampling.sampleUniform(RNG$);
-		b = DistributionSampling.sampleUniform(RNG$);
-		if(guard)
-			value = a;
+		state.guard = DistributionSampling.sampleBernoulli(state.RNG$, 0.5);
+		state.a = DistributionSampling.sampleUniform(state.RNG$);
+		state.b = DistributionSampling.sampleUniform(state.RNG$);
+		if(state.guard)
+			state.value = state.a;
 		else
-			value = b;
+			state.value = state.b;
 	}
 
 	@Override
@@ -212,20 +101,20 @@ double a;
 
 	@Override
 	public final void gibbsRound() {
-		system$gibbsForward = !system$gibbsForward;
+		state.system$gibbsForward = !state.system$gibbsForward;
 	}
 
 	private final void initializeLogProbabilityFields() {
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$bernoulli = 0.0;
-		if(!fixedProbFlag$sample5)
-			logProbability$guard = Double.NaN;
-		logProbability$value = 0.0;
-		if(!fixedProbFlag$sample9)
-			logProbability$a = Double.NaN;
-		if(!fixedProbFlag$sample13)
-			logProbability$b = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$bernoulli = 0.0;
+		if(!state.fixedProbFlag$sample5)
+			state.logProbability$guard = Double.NaN;
+		state.logProbability$value = 0.0;
+		if(!state.fixedProbFlag$sample9)
+			state.logProbability$a = Double.NaN;
+		if(!state.fixedProbFlag$sample13)
+			state.logProbability$b = Double.NaN;
 	}
 
 	@Override
@@ -257,12 +146,12 @@ double a;
 
 	@Override
 	public final void propagateObservedValues() {
-		guard = observedGuard;
-		value = observedValue;
-		if(observedGuard)
-			a = observedValue;
+		state.guard = state.observedGuard;
+		state.value = state.observedValue;
+		if(state.observedGuard)
+			state.a = state.observedValue;
 		else
-			b = observedValue;
+			state.b = state.observedValue;
 	}
 
 	@Override

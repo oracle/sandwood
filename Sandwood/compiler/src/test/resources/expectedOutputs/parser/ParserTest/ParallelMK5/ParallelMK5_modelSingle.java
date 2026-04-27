@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,12 +16,177 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model ParallelMK5 This is the class that all user
  * interactions with the model should occur through.
  */
-public final class ParallelMK5 extends Model {
-    private ParallelMK5$CoreInterface system$c = new ParallelMK5$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class ParallelMK5 extends Model<ParallelMK5.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		boolean[][] constrainedFlag$sample61;
+		boolean fixedFlag$sample61 = false;
+		boolean fixedProbFlag$sample103 = false;
+		boolean fixedProbFlag$sample61 = false;
+		int[] generated;
+		double[][] indirection1;
+		double[][] indirection2;
+		int length$observed;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$generated;
+		double logProbability$indirection1;
+		double logProbability$indirection2;
+		double[][] logProbability$sample61;
+		double logProbability$var101;
+		int[] observed;
+		boolean system$gibbsForward = true;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// Constructor for generated
+			{
+				generated = new int[length$observed];
+			}
+			
+			// If indirection1 has not been set already allocate space.
+			if(!fixedFlag$sample61) {
+				// Constructor for indirection1
+				{
+					indirection1 = new double[10][];
+					for(int var16 = 0; var16 < 10; var16 += 1)
+						indirection1[var16] = new double[length$observed];
+				}
+			}
+			
+			// Constructor for indirection2
+			{
+				indirection2 = new double[length$observed][];
+				for(int var31 = 0; var31 < length$observed; var31 += 1)
+					indirection2[var31] = new double[10];
+			}
+			
+			// Constructor for constrainedFlag$sample61
+			{
+				constrainedFlag$sample61 = new boolean[((((10 - 1) - 0) / 1) + 1)][];
+				for(int i = 0; i < 10; i += 1)
+					constrainedFlag$sample61[((i - 0) / 1)] = new boolean[((((length$observed - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for logProbability$sample61
+			{
+				logProbability$sample61 = new double[((((10 - 1) - 0) / 1) + 1)][];
+				for(int i = 0; i < 10; i += 1)
+					logProbability$sample61[((i - 0) / 1)] = new double[((((length$observed - 1) - 0) / 1) + 1)];
+			}
+		}
+
+		// Getter for fixedFlag$sample61.
+		final boolean get$fixedFlag$sample61() {
+			return fixedFlag$sample61;
+		}
+
+		// Setter for fixedFlag$sample61.
+		final void set$fixedFlag$sample61(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample61 including if probabilities
+			// need to be updated.
+			fixedFlag$sample61 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample61$1 = 0; index$constrainedFlag$sample61$1 < constrainedFlag$sample61.length; index$constrainedFlag$sample61$1 += 1) {
+					boolean[] cv$constrainedFlag$sample61$1 = constrainedFlag$sample61[index$constrainedFlag$sample61$1];
+					for(int index$constrainedFlag$sample61$2 = 0; index$constrainedFlag$sample61$2 < cv$constrainedFlag$sample61$1.length; index$constrainedFlag$sample61$2 += 1)
+						cv$constrainedFlag$sample61$1[index$constrainedFlag$sample61$2] = true;
+				}
+			}
+			
+			// Should the probability of sample 61 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample61 = (fixedFlag$sample61 && fixedProbFlag$sample61);
+			
+			// Should the probability of sample 103 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample103 = (fixedFlag$sample61 && fixedProbFlag$sample103);
+		}
+
+		// Getter for generated.
+		final int[] get$generated() {
+			return generated;
+		}
+
+		// Getter for indirection1.
+		final double[][] get$indirection1() {
+			return indirection1;
+		}
+
+		// Setter for indirection1.
+		final void set$indirection1(double[][] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of indirection1 including if probabilities need
+			// to be updated.
+			indirection1 = cv$value;
+			
+			// Unset the fixed probability flag for sample 61 as it depends on indirection1.
+			fixedProbFlag$sample61 = false;
+			
+			// Unset the fixed probability flag for sample 103 as it depends on indirection1.
+			fixedProbFlag$sample103 = false;
+		}
+
+		// Getter for indirection2.
+		final double[][] get$indirection2() {
+			return indirection2;
+		}
+
+		// Getter for length$observed.
+		final int get$length$observed() {
+			return length$observed;
+		}
+
+		// Setter for length$observed.
+		final void set$length$observed(int cv$value, boolean allocated$) {
+			length$observed = cv$value;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$generated.
+		final double get$logProbability$generated() {
+			return logProbability$generated;
+		}
+
+		// Getter for logProbability$indirection1.
+		final double get$logProbability$indirection1() {
+			return logProbability$indirection1;
+		}
+
+		// Getter for logProbability$indirection2.
+		final double get$logProbability$indirection2() {
+			return logProbability$indirection2;
+		}
+
+		// Getter for observed.
+		final int[] get$observed() {
+			return observed;
+		}
+
+		// Setter for observed.
+		final void set$observed(int[] cv$value, boolean allocated$) {
+			observed = cv$value;
+		}
+	}
 
     private final ComputedIntegerArrayInternal $generated = new ComputedIntegerArrayInternal(this, "generated", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$generated(); }
+        public int[] getValue() { return state.get$generated(); }
 
         @Override
         protected void setValueInternal(int[] value) {}
@@ -30,7 +197,7 @@ public final class ParallelMK5 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$generated(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$generated(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -48,16 +215,16 @@ public final class ParallelMK5 extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $indirection1 = new ComputedObjectArrayInternal<double[]>(this, "indirection1", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$indirection1(); }
+        public double[][] getValue() { return state.get$indirection1(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$indirection1(value, allocated);
+            state.set$indirection1(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$indirection1(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$indirection1(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -67,13 +234,13 @@ public final class ParallelMK5 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample61(fixed, allocated);
+                state.set$fixedFlag$sample61(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample61())
+            if(state.get$fixedFlag$sample61())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -88,7 +255,7 @@ public final class ParallelMK5 extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $indirection2 = new ComputedObjectArrayInternal<double[]>(this, "indirection2", false, false, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$indirection2(); }
+        public double[][] getValue() { return state.get$indirection2(); }
 
         @Override
         protected void setValueInternal(double[][] value) {}
@@ -99,7 +266,7 @@ public final class ParallelMK5 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$indirection2(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$indirection2(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -109,13 +276,13 @@ public final class ParallelMK5 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample61(fixed, allocated);
+                state.set$fixedFlag$sample61(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample61())
+            if(state.get$fixedFlag$sample61())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -136,24 +303,24 @@ public final class ParallelMK5 extends Model {
         @Override
         public int[] getValue() {
             synchronized(model) {
-                return system$c.get$observed();
+                return state.get$observed();
             }
         }
 
         @Override
         public void setValueInternal(int[] value) {
-            system$c.set$observed(value, allocated);
-            system$c.set$length$observed(value.length, allocated);
+            state.set$observed(value, allocated);
+            state.set$length$observed(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$observed(shape, allocated);
+            state.set$length$observed(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$observed();
+            return state.get$length$observed();
         }
     };
 
@@ -168,6 +335,7 @@ public final class ParallelMK5 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public ParallelMK5() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("generated", $generated);
         $computedVariables.put("indirection1", $indirection1);
@@ -175,7 +343,9 @@ public final class ParallelMK5 extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("observed", $observed);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        ParallelMK5$SingleThreadCPU core = new ParallelMK5$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -201,39 +371,15 @@ public final class ParallelMK5 extends Model {
     }
     
     @Override
-    protected ParallelMK5$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        ParallelMK5$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new ParallelMK5$SingleThreadCPU(target);
-                break;
+                return new ParallelMK5$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new ParallelMK5$MultiThreadCPU(target);
-                break;
+                return new ParallelMK5$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(ParallelMK5$CoreInterface oldCore, ParallelMK5$CoreInterface newCore) {
-
-        //Observed arrays
-        if(observed.isSet()) {
-            newCore.set$observed(oldCore.get$observed(), false);
-            newCore.set$length$observed(oldCore.get$length$observed(), false);
-        }
-        else if(observed.shapeSet())
-            newCore.set$length$observed(oldCore.get$length$observed(), false);
-
-        //ComputedVariables
-        if($indirection1.isSet())
-            newCore.set$indirection1(oldCore.get$indirection1(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample61(oldCore.get$fixedFlag$sample61(), false);
     }
 
 	/**

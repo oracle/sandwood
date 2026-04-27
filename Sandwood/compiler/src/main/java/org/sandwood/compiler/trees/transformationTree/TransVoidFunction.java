@@ -17,6 +17,7 @@ import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Visibility;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
 import org.sandwood.compiler.trees.outputTree.OutputVoidFunction;
+import org.sandwood.compiler.trees.transformationTree.TransTree.TreeLocation;
 import org.sandwood.compiler.trees.transformationTree.transformers.Transformer;
 import org.sandwood.compiler.trees.transformationTree.util.KnownValuesTrans;
 
@@ -28,8 +29,9 @@ public class TransVoidFunction extends TransFunction<TransTreeVoid> {
     }
 
     @Override
-    public OutputVoidFunction toOutputTree(ExecutionType target) {
-        return OutputTree.voidFunction(visibility, name, args, body.toOutputTree(target), override, comment);
+    public OutputVoidFunction toOutputTree(TreeLocation treeLocation, ExecutionType target) {
+        return OutputTree.voidFunction(visibility, name, args, body.toOutputTree(localRng(args), treeLocation, target),
+                override, comment);
     }
 
     @Override
@@ -43,14 +45,12 @@ public class TransVoidFunction extends TransFunction<TransTreeVoid> {
     protected TransFunction<?> applyConstants(Map<VariableDescription<?>, TransTreeReturn<?>> constants) {
         KnownValuesTrans newKnownValues = knownValues.applyOptimisations(args, constants);
         TransTreeVoid newBody = body.applyConstants(constants);
-        return new TransVoidFunction(visibility, name, args, newBody, override, comment,
-                newKnownValues);
+        return new TransVoidFunction(visibility, name, args, newBody, override, comment, newKnownValues);
     }
 
     @Override
     protected TransFunction<?> applyTransformation(Transformer t) {
         TransTreeVoid newBody = t.transform(body);
-        return new TransVoidFunction(visibility, name, args, newBody, override, comment,
-                knownValues);
+        return new TransVoidFunction(visibility, name, args, newBody, override, comment, knownValues);
     }
 }

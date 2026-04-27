@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,12 +16,192 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model DistributionTest6 This is the class that
  * all user interactions with the model should occur through.
  */
-public final class DistributionTest6 extends Model {
-    private DistributionTest6$CoreInterface system$c = new DistributionTest6$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class DistributionTest6 extends Model<DistributionTest6.State> {
+	final class State extends CoreModelState {
+boolean constrainedFlag$sample11 = true;
+		boolean[] constrainedFlag$sample27;
+		boolean constrainedFlag$sample5 = true;
+		double[] distribution$sample11;
+		double[][] distribution$sample27;
+		double[] distribution$sample5;
+		boolean fixedFlag$sample11 = false;
+		boolean fixedFlag$sample27 = false;
+		boolean fixedFlag$sample5 = false;
+		boolean fixedProbFlag$sample11 = false;
+		boolean fixedProbFlag$sample27 = false;
+		boolean fixedProbFlag$sample49 = false;
+		boolean fixedProbFlag$sample5 = false;
+		int length$value;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double[] logProbability$sample27;
+		double[] logProbability$sample49;
+		double logProbability$v;
+		double logProbability$v1;
+		double logProbability$v2;
+		double logProbability$var11;
+		int size;
+		boolean system$gibbsForward = true;
+		boolean[] v;
+		int v1;
+		int[] v2;
+		boolean[] value;
+		double[] weightings;
+
+		@Override
+		public final void allocate() {
+			if((!fixedFlag$sample11 || !fixedFlag$sample27))
+				v2 = new int[(length$value + 1)];
+			v = new boolean[length$value];
+			distribution$sample5 = new double[weightings.length];
+			distribution$sample11 = new double[weightings.length];
+			distribution$sample27 = new double[length$value][];
+			for(int i = 0; i < length$value; i += 1)
+				distribution$sample27[i] = new double[weightings.length];
+			constrainedFlag$sample27 = new boolean[length$value];
+			logProbability$sample27 = new double[length$value];
+			logProbability$sample49 = new double[length$value];
+		}
+
+		final double[] get$distribution$sample11() {
+			return distribution$sample11;
+		}
+
+		final void set$distribution$sample11(double[] cv$value, boolean allocated$) {
+			distribution$sample11 = cv$value;
+		}
+
+		final double[][] get$distribution$sample27() {
+			return distribution$sample27;
+		}
+
+		final void set$distribution$sample27(double[][] cv$value, boolean allocated$) {
+			distribution$sample27 = cv$value;
+		}
+
+		final double[] get$distribution$sample5() {
+			return distribution$sample5;
+		}
+
+		final void set$distribution$sample5(double[] cv$value, boolean allocated$) {
+			distribution$sample5 = cv$value;
+		}
+
+		final boolean get$fixedFlag$sample11() {
+			return fixedFlag$sample11;
+		}
+
+		final void set$fixedFlag$sample11(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample11 = cv$value;
+			constrainedFlag$sample11 = (cv$value || constrainedFlag$sample11);
+			fixedProbFlag$sample11 = (cv$value && fixedProbFlag$sample11);
+			fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
+		}
+
+		final boolean get$fixedFlag$sample27() {
+			return fixedFlag$sample27;
+		}
+
+		final void set$fixedFlag$sample27(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample27 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample27$1 = 0; index$constrainedFlag$sample27$1 < constrainedFlag$sample27.length; index$constrainedFlag$sample27$1 += 1)
+					constrainedFlag$sample27[index$constrainedFlag$sample27$1] = true;
+			}
+			fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
+			fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
+		}
+
+		final boolean get$fixedFlag$sample5() {
+			return fixedFlag$sample5;
+		}
+
+		final void set$fixedFlag$sample5(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample5 = cv$value;
+			constrainedFlag$sample5 = (cv$value || constrainedFlag$sample5);
+			fixedProbFlag$sample5 = (cv$value && fixedProbFlag$sample5);
+			fixedProbFlag$sample49 = (cv$value && fixedProbFlag$sample49);
+		}
+
+		final int get$length$value() {
+			return length$value;
+		}
+
+		final void set$length$value(int cv$value, boolean allocated$) {
+			length$value = cv$value;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$v() {
+			return logProbability$v;
+		}
+
+		final double get$logProbability$v1() {
+			return logProbability$v1;
+		}
+
+		final double get$logProbability$v2() {
+			return logProbability$v2;
+		}
+
+		final int get$size() {
+			return size;
+		}
+
+		final boolean[] get$v() {
+			return v;
+		}
+
+		final int get$v1() {
+			return v1;
+		}
+
+		final void set$v1(int cv$value, boolean allocated$) {
+			v1 = cv$value;
+			fixedProbFlag$sample5 = false;
+			fixedProbFlag$sample49 = false;
+		}
+
+		final int[] get$v2() {
+			return v2;
+		}
+
+		final void set$v2(int[] cv$value, boolean allocated$) {
+			v2 = cv$value;
+			fixedProbFlag$sample11 = false;
+			fixedProbFlag$sample27 = false;
+			fixedProbFlag$sample49 = false;
+		}
+
+		final boolean[] get$value() {
+			return value;
+		}
+
+		final void set$value(boolean[] cv$value, boolean allocated$) {
+			value = cv$value;
+		}
+
+		final double[] get$weightings() {
+			return weightings;
+		}
+
+		final void set$weightings(double[] cv$value, boolean allocated$) {
+			weightings = cv$value;
+		}
+	}
 
     private final ComputedBooleanArrayInternal $v = new ComputedBooleanArrayInternal(this, "v", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$v(); }
+        public boolean[] getValue() { return state.get$v(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -30,7 +212,7 @@ public final class DistributionTest6 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$v(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$v(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -48,27 +230,27 @@ public final class DistributionTest6 extends Model {
 
     private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int getValue() { return system$c.get$v1(); }
+        public int getValue() { return state.get$v1(); }
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$v1(value, allocated);
+            state.set$v1(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$v1(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$v1(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample5(fixed, allocated);
+                state.set$fixedFlag$sample5(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample5())
+            if(state.get$fixedFlag$sample5())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -80,29 +262,29 @@ public final class DistributionTest6 extends Model {
 
     private final ComputedIntegerArrayInternal $v2 = new ComputedIntegerArrayInternal(this, "v2", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$v2(); }
+        public int[] getValue() { return state.get$v2(); }
 
         @Override
         protected void setValueInternal(int[] value) {
-            system$c.set$v2(value, allocated);
+            state.set$v2(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$v2(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$v2(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample11(fixed, allocated);
-                system$c.set$fixedFlag$sample27(fixed, allocated);
+                state.set$fixedFlag$sample11(fixed, allocated);
+                state.set$fixedFlag$sample27(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample11 = system$c.get$fixedFlag$sample11();
-            boolean fixedFlag$sample27 = system$c.get$fixedFlag$sample27();
+            boolean fixedFlag$sample11 = state.get$fixedFlag$sample11();
+            boolean fixedFlag$sample27 = state.get$fixedFlag$sample27();
             if(fixedFlag$sample11 && fixedFlag$sample27)
                 return Immutability.FIXED;
             else if(fixedFlag$sample11 || fixedFlag$sample27)
@@ -121,12 +303,12 @@ public final class DistributionTest6 extends Model {
         @Override
         public double[] getValue() {
             synchronized(model) {
-                return system$c.get$weightings();
+                return state.get$weightings();
             }
         }
 
         @Override
-        protected void setValueInternal(double[] value) { system$c.set$weightings(value, allocated); }
+        protected void setValueInternal(double[] value) { state.set$weightings(value, allocated); }
     };
 
 	/**
@@ -140,24 +322,24 @@ public final class DistributionTest6 extends Model {
         @Override
         public boolean[] getValue() {
             synchronized(model) {
-                return system$c.get$value();
+                return state.get$value();
             }
         }
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$value(value, allocated);
-            system$c.set$length$value(value.length, allocated);
+            state.set$value(value, allocated);
+            state.set$length$value(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$value(shape, allocated);
+            state.set$length$value(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$value();
+            return state.get$length$value();
         }
     };
 
@@ -172,6 +354,7 @@ public final class DistributionTest6 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public DistributionTest6() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("v", $v);
         $computedVariables.put("v1", $v1);
@@ -182,7 +365,9 @@ public final class DistributionTest6 extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("value", $value);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        DistributionTest6$SingleThreadCPU core = new DistributionTest6$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -212,46 +397,15 @@ public final class DistributionTest6 extends Model {
     }
     
     @Override
-    protected DistributionTest6$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        DistributionTest6$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new DistributionTest6$SingleThreadCPU(target);
-                break;
+                return new DistributionTest6$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new DistributionTest6$MultiThreadCPU(target);
-                break;
+                return new DistributionTest6$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(DistributionTest6$CoreInterface oldCore, DistributionTest6$CoreInterface newCore) {
-        //Model inputs
-        if(weightings.isSet())
-            newCore.set$weightings(oldCore.get$weightings(), false);
-
-        //Observed arrays
-        if(value.isSet()) {
-            newCore.set$value(oldCore.get$value(), false);
-            newCore.set$length$value(oldCore.get$length$value(), false);
-        }
-        else if(value.shapeSet())
-            newCore.set$length$value(oldCore.get$length$value(), false);
-
-        //ComputedVariables
-        if($v1.isSet())
-            newCore.set$v1(oldCore.get$v1(), false);
-        if($v2.isSet())
-            newCore.set$v2(oldCore.get$v2(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11(), false);
-        newCore.set$fixedFlag$sample27(oldCore.get$fixedFlag$sample27(), false);
-        newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5(), false);
     }
 
 	/**

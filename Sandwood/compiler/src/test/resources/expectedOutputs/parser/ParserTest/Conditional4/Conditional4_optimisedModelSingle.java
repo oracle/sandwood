@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,34 +16,220 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model Conditional4 This is the class that all user
  * interactions with the model should occur through.
  */
-public final class Conditional4 extends Model {
-    private Conditional4$CoreInterface system$c = new Conditional4$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class Conditional4 extends Model<Conditional4.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		double[] bias;
+		boolean constrainedFlag$sample21 = true;
+		boolean constrainedFlag$sample4 = true;
+		boolean fixedFlag$sample21 = false;
+		boolean fixedFlag$sample4 = false;
+		boolean fixedProbFlag$sample21 = false;
+		boolean fixedProbFlag$sample27 = false;
+		boolean fixedProbFlag$sample4 = false;
+		boolean guard;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$bernoulli;
+		double logProbability$bias;
+		double logProbability$guard;
+		double logProbability$value;
+		double logProbability$var19;
+		double observedValue;
+		boolean system$gibbsForward = true;
+		double value;
+		double var19;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// Constructor for bias
+			bias = new double[1];
+		}
+
+		// Getter for bias.
+		final double[] get$bias() {
+			return bias;
+		}
+
+		// Setter for bias.
+		final void set$bias(double[] cv$value, boolean allocated$) {
+			bias = cv$value;
+		}
+
+		// Getter for fixedFlag$sample21.
+		final boolean get$fixedFlag$sample21() {
+			return fixedFlag$sample21;
+		}
+
+		// Setter for fixedFlag$sample21.
+		final void set$fixedFlag$sample21(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample21 including if probabilities
+			// need to be updated.
+			fixedFlag$sample21 = cv$value;
+			
+			// Substituted "fixedFlag$sample21" with its value "cv$value".
+			constrainedFlag$sample21 = (cv$value || constrainedFlag$sample21);
+			
+			// Should the probability of sample 21 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample21" with its value "cv$value".
+			fixedProbFlag$sample21 = (cv$value && fixedProbFlag$sample21);
+			
+			// Should the probability of sample 27 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample21" with its value "cv$value".
+			fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
+		}
+
+		// Getter for fixedFlag$sample4.
+		final boolean get$fixedFlag$sample4() {
+			return fixedFlag$sample4;
+		}
+
+		// Setter for fixedFlag$sample4.
+		final void set$fixedFlag$sample4(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample4 including if probabilities
+			// need to be updated.
+			fixedFlag$sample4 = cv$value;
+			
+			// Substituted "fixedFlag$sample4" with its value "cv$value".
+			constrainedFlag$sample4 = (cv$value || constrainedFlag$sample4);
+			
+			// Should the probability of sample 4 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample4" with its value "cv$value".
+			fixedProbFlag$sample4 = (cv$value && fixedProbFlag$sample4);
+			
+			// Should the probability of sample 21 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample4" with its value "cv$value".
+			fixedProbFlag$sample21 = (cv$value && fixedProbFlag$sample21);
+			
+			// Should the probability of sample 27 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample4" with its value "cv$value".
+			fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
+		}
+
+		// Getter for guard.
+		final boolean get$guard() {
+			return guard;
+		}
+
+		// Setter for guard.
+		final void set$guard(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of guard including if probabilities need to
+			// be updated.
+			guard = cv$value;
+			
+			// Unset the fixed probability flag for sample 4 as it depends on guard.
+			fixedProbFlag$sample4 = false;
+			
+			// Unset the fixed probability flag for sample 21 as it depends on guard.
+			fixedProbFlag$sample21 = false;
+			
+			// Unset the fixed probability flag for sample 27 as it depends on guard.
+			fixedProbFlag$sample27 = false;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$bernoulli.
+		final double get$logProbability$bernoulli() {
+			return logProbability$bernoulli;
+		}
+
+		// Getter for logProbability$bias.
+		final double get$logProbability$bias() {
+			return logProbability$bias;
+		}
+
+		// Getter for logProbability$guard.
+		final double get$logProbability$guard() {
+			return logProbability$guard;
+		}
+
+		// Getter for logProbability$value.
+		final double get$logProbability$value() {
+			return logProbability$value;
+		}
+
+		// Getter for observedValue.
+		final double get$observedValue() {
+			return observedValue;
+		}
+
+		// Setter for observedValue.
+		final void set$observedValue(double cv$value, boolean allocated$) {
+			observedValue = cv$value;
+		}
+
+		// Getter for value.
+		final double get$value() {
+			return value;
+		}
+
+		// Getter for var19.
+		final double get$var19() {
+			return var19;
+		}
+
+		// Setter for var19.
+		final void set$var19(double cv$value, boolean allocated$) {
+			// Set flags for all the side effects of var19 including if probabilities need to
+			// be updated.
+			var19 = cv$value;
+			
+			// Unset the fixed probability flag for sample 21 as it depends on var19.
+			fixedProbFlag$sample21 = false;
+			
+			// Unset the fixed probability flag for sample 27 as it depends on var19.
+			fixedProbFlag$sample27 = false;
+		}
+	}
 
     private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$bias(); }
+        public double[] getValue() { return state.get$bias(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$bias(value, allocated);
+            state.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$bias(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$bias(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample21(fixed, allocated);
-                system$c.set$fixedFlag$sample4(fixed, allocated);
+                state.set$fixedFlag$sample21(fixed, allocated);
+                state.set$fixedFlag$sample4(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample21 = system$c.get$fixedFlag$sample21();
-            boolean fixedFlag$sample4 = system$c.get$fixedFlag$sample4();
+            boolean fixedFlag$sample21 = state.get$fixedFlag$sample21();
+            boolean fixedFlag$sample4 = state.get$fixedFlag$sample4();
             if(fixedFlag$sample21 && fixedFlag$sample4)
                 return Immutability.FIXED;
             else if(fixedFlag$sample21 || fixedFlag$sample4)
@@ -56,27 +244,27 @@ public final class Conditional4 extends Model {
 
     private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean getValue() { return system$c.get$guard(); }
+        public boolean getValue() { return state.get$guard(); }
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$guard(value, allocated);
+            state.set$guard(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$guard(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$guard(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample4(fixed, allocated);
+                state.set$fixedFlag$sample4(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample4())
+            if(state.get$fixedFlag$sample4())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -88,7 +276,7 @@ public final class Conditional4 extends Model {
 
     private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$value(); }
+        public double getValue() { return state.get$value(); }
 
         @Override
         protected void setValueInternal(double value) {}
@@ -99,7 +287,7 @@ public final class Conditional4 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$value(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$value(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -117,11 +305,11 @@ public final class Conditional4 extends Model {
 
     private final ComputedDoubleInternal $var19 = new ComputedDoubleInternal(this, "var19", true, true, true, ProbabilityType.SKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$var19(); }
+        public double getValue() { return state.get$var19(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$var19(value, allocated);
+            state.set$var19(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -147,12 +335,12 @@ public final class Conditional4 extends Model {
         @Override
         public double getValue() {
             synchronized(model) {
-                return system$c.get$observedValue();
+                return state.get$observedValue();
             }
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$observedValue(value, allocated); }
+        protected void setValueInternal(double value) { state.set$observedValue(value, allocated); }
     };
 
 	/**
@@ -165,7 +353,7 @@ public final class Conditional4 extends Model {
     private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$bernoulli();
+            return state.get$logProbability$bernoulli();
         }
     };
 
@@ -178,6 +366,7 @@ public final class Conditional4 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public Conditional4() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("bias", $bias);
         $computedVariables.put("guard", $guard);
@@ -186,7 +375,9 @@ public final class Conditional4 extends Model {
 
         //Observed scalar fields
         $regularObservedValues.put("observedValue", $observedValue);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        Conditional4$SingleThreadCPU core = new Conditional4$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -200,40 +391,15 @@ public final class Conditional4 extends Model {
     }
     
     @Override
-    protected Conditional4$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        Conditional4$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new Conditional4$SingleThreadCPU(target);
-                break;
+                return new Conditional4$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new Conditional4$MultiThreadCPU(target);
-                break;
+                return new Conditional4$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(Conditional4$CoreInterface oldCore, Conditional4$CoreInterface newCore) {
-
-        //Observed scalars
-        if(observedValue.isSet())
-            newCore.set$observedValue(oldCore.get$observedValue(), false);
-
-        //ComputedVariables
-        if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias(), false);
-        if($guard.isSet())
-            newCore.set$guard(oldCore.get$guard(), false);
-        if($var19.isSet())
-            newCore.set$var19(oldCore.get$var19(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21(), false);
-        newCore.set$fixedFlag$sample4(oldCore.get$fixedFlag$sample4(), false);
     }
 
 	/**

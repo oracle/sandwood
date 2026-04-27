@@ -1,507 +1,171 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.HMM_Paper$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.HMM_Paper.State;
 import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements HMM_Paper$CoreInterface {
+final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double[] bias;
-	boolean[] constrainedFlag$sample28;
-	boolean constrainedFlag$sample32 = true;
-	boolean[] constrainedFlag$sample47;
-	boolean constrainedFlag$sample53 = true;
-	boolean[] constrainedFlag$sample71;
-	boolean fixedFlag$sample28 = false;
-	boolean fixedFlag$sample32 = false;
-	boolean fixedFlag$sample47 = false;
-	boolean fixedFlag$sample53 = false;
-	boolean fixedFlag$sample71 = false;
-	boolean fixedProbFlag$sample28 = false;
-	boolean fixedProbFlag$sample32 = false;
-	boolean fixedProbFlag$sample47 = false;
-	boolean fixedProbFlag$sample53 = false;
-	boolean fixedProbFlag$sample71 = false;
-	boolean fixedProbFlag$sample87 = false;
-	boolean[] flips;
-	double[] initialCoin;
-	int length$measured;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bias;
-	double logProbability$flips;
-	double logProbability$initialCoin;
-	double logProbability$m;
-	double[] logProbability$sample71;
-	double[] logProbability$sample87;
-	double logProbability$st;
-	double logProbability$var28;
-	double logProbability$var46;
-	double logProbability$var52;
-	double[][] m;
-	boolean[] measured;
-	int nCoins;
-	int nFlips;
-	int[] st;
-	boolean system$gibbsForward = true;
-	double[] v;
-	double[][] cv$var28$countGlobal;
-	double[] cv$var31$countGlobal;
-	double[] cv$var52$stateProbabilityGlobal;
-	double[] cv$var70$stateProbabilityGlobal;
+		// Declare the scratch variables for the model.
+		double[][] cv$var28$countGlobal;
+		double[] cv$var31$countGlobal;
+		double[] cv$var52$stateProbabilityGlobal;
+		double[] cv$var70$stateProbabilityGlobal;
 
-	public HMM_Paper$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for bias.
-	@Override
-	public final double[] get$bias() {
-		return bias;
-	}
-
-	// Setter for bias.
-	@Override
-	public final void set$bias(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of bias including if probabilities need to be
-		// updated.
-		bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 47 as it depends on bias.
-		fixedProbFlag$sample47 = false;
-		
-		// Unset the fixed probability flag for sample 87 as it depends on bias.
-		fixedProbFlag$sample87 = false;
-	}
-
-	// Getter for fixedFlag$sample28.
-	@Override
-	public final boolean get$fixedFlag$sample28() {
-		return fixedFlag$sample28;
-	}
-
-	// Setter for fixedFlag$sample28.
-	@Override
-	public final void set$fixedFlag$sample28(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample28 including if probabilities
-		// need to be updated.
-		fixedFlag$sample28 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
-				constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for cv$var28$countGlobal
+			// 
+			// Allocation of cv$var28$countGlobal for multithreaded execution
+			// 
+			// Get the thread count.
+			int cv$threadCount = threadCount();
+			
+			// Allocate an array to hold a copy per thread
+			cv$var28$countGlobal = new double[cv$threadCount][];
+			
+			// Populate the array with a copy per thread
+			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+				cv$var28$countGlobal[cv$index] = new double[state.nCoins];
+			
+			// Constructor for cv$var31$countGlobal
+			// 
+			// Allocation of cv$var31$countGlobal for single threaded execution
+			cv$var31$countGlobal = new double[state.nCoins];
+			
+			// Constructor for cv$var52$stateProbabilityGlobal
+			// 
+			// Allocation of cv$var52$stateProbabilityGlobal for single threaded execution
+			cv$var52$stateProbabilityGlobal = new double[state.nCoins];
+			
+			// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
+			// 
+			// Variable to record the maximum value of Task Get 69. Initially set to the value
+			// of putTask 29.
+			cv$var70$stateProbabilityGlobal = new double[state.nCoins];
 		}
-		
-		// Should the probability of sample 28 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample28" with its value "cv$value".
-		fixedProbFlag$sample28 = (cv$value && fixedProbFlag$sample28);
-		
-		// Should the probability of sample 71 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample28" with its value "cv$value".
-		fixedProbFlag$sample71 = (cv$value && fixedProbFlag$sample71);
 	}
 
-	// Getter for fixedFlag$sample32.
-	@Override
-	public final boolean get$fixedFlag$sample32() {
-		return fixedFlag$sample32;
-	}
 
-	// Setter for fixedFlag$sample32.
-	@Override
-	public final void set$fixedFlag$sample32(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample32 including if probabilities
-		// need to be updated.
-		fixedFlag$sample32 = cv$value;
-		
-		// Substituted "fixedFlag$sample32" with its value "cv$value".
-		constrainedFlag$sample32 = (cv$value || constrainedFlag$sample32);
-		
-		// Should the probability of sample 32 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample32" with its value "cv$value".
-		fixedProbFlag$sample32 = (cv$value && fixedProbFlag$sample32);
-		
-		// Should the probability of sample 53 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample32" with its value "cv$value".
-		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
-	}
-
-	// Getter for fixedFlag$sample47.
-	@Override
-	public final boolean get$fixedFlag$sample47() {
-		return fixedFlag$sample47;
-	}
-
-	// Setter for fixedFlag$sample47.
-	@Override
-	public final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample47 including if probabilities
-		// need to be updated.
-		fixedFlag$sample47 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
-				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
-		}
-		
-		// Should the probability of sample 47 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample47" with its value "cv$value".
-		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
-		
-		// Should the probability of sample 87 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample47" with its value "cv$value".
-		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
-	}
-
-	// Getter for fixedFlag$sample53.
-	@Override
-	public final boolean get$fixedFlag$sample53() {
-		return fixedFlag$sample53;
-	}
-
-	// Setter for fixedFlag$sample53.
-	@Override
-	public final void set$fixedFlag$sample53(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample53 including if probabilities
-		// need to be updated.
-		fixedFlag$sample53 = cv$value;
-		
-		// Substituted "fixedFlag$sample53" with its value "cv$value".
-		constrainedFlag$sample53 = (cv$value || constrainedFlag$sample53);
-		
-		// Should the probability of sample 53 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample53" with its value "cv$value".
-		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
-		
-		// Should the probability of sample 71 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample53" with its value "cv$value".
-		fixedProbFlag$sample71 = (cv$value && fixedProbFlag$sample71);
-		
-		// Should the probability of sample 87 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample53" with its value "cv$value".
-		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
-	}
-
-	// Getter for fixedFlag$sample71.
-	@Override
-	public final boolean get$fixedFlag$sample71() {
-		return fixedFlag$sample71;
-	}
-
-	// Setter for fixedFlag$sample71.
-	@Override
-	public final void set$fixedFlag$sample71(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample71 including if probabilities
-		// need to be updated.
-		fixedFlag$sample71 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample71$1 = 0; index$constrainedFlag$sample71$1 < constrainedFlag$sample71.length; index$constrainedFlag$sample71$1 += 1)
-				constrainedFlag$sample71[index$constrainedFlag$sample71$1] = true;
-		}
-		
-		// Should the probability of sample 71 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample71" with its value "cv$value".
-		fixedProbFlag$sample71 = (cv$value && fixedProbFlag$sample71);
-		
-		// Should the probability of sample 87 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample71" with its value "cv$value".
-		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
-	}
-
-	// Getter for flips.
-	@Override
-	public final boolean[] get$flips() {
-		return flips;
-	}
-
-	// Getter for initialCoin.
-	@Override
-	public final double[] get$initialCoin() {
-		return initialCoin;
-	}
-
-	// Setter for initialCoin.
-	@Override
-	public final void set$initialCoin(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of initialCoin including if probabilities need
-		// to be updated.
-		initialCoin = cv$value;
-		
-		// Unset the fixed probability flag for sample 32 as it depends on initialCoin.
-		fixedProbFlag$sample32 = false;
-		
-		// Unset the fixed probability flag for sample 53 as it depends on initialCoin.
-		fixedProbFlag$sample53 = false;
-	}
-
-	// Getter for length$measured.
-	@Override
-	public final int get$length$measured() {
-		return length$measured;
-	}
-
-	// Setter for length$measured.
-	@Override
-	public final void set$length$measured(int cv$value, boolean allocated$) {
-		length$measured = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$flips.
-	@Override
-	public final double get$logProbability$flips() {
-		return logProbability$flips;
-	}
-
-	// Getter for logProbability$initialCoin.
-	@Override
-	public final double get$logProbability$initialCoin() {
-		return logProbability$initialCoin;
-	}
-
-	// Getter for logProbability$m.
-	@Override
-	public final double get$logProbability$m() {
-		return logProbability$m;
-	}
-
-	// Getter for logProbability$st.
-	@Override
-	public final double get$logProbability$st() {
-		return logProbability$st;
-	}
-
-	// Getter for m.
-	@Override
-	public final double[][] get$m() {
-		return m;
-	}
-
-	// Setter for m.
-	@Override
-	public final void set$m(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of m including if probabilities need to be updated.
-		m = cv$value;
-		
-		// Unset the fixed probability flag for sample 28 as it depends on m.
-		fixedProbFlag$sample28 = false;
-		
-		// Unset the fixed probability flag for sample 71 as it depends on m.
-		fixedProbFlag$sample71 = false;
-	}
-
-	// Getter for measured.
-	@Override
-	public final boolean[] get$measured() {
-		return measured;
-	}
-
-	// Setter for measured.
-	@Override
-	public final void set$measured(boolean[] cv$value, boolean allocated$) {
-		measured = cv$value;
-	}
-
-	// Getter for nCoins.
-	@Override
-	public final int get$nCoins() {
-		return nCoins;
-	}
-
-	// Setter for nCoins.
-	@Override
-	public final void set$nCoins(int cv$value, boolean allocated$) {
-		nCoins = cv$value;
-	}
-
-	// Getter for nFlips.
-	@Override
-	public final int get$nFlips() {
-		return nFlips;
-	}
-
-	// Getter for st.
-	@Override
-	public final int[] get$st() {
-		return st;
-	}
-
-	// Setter for st.
-	@Override
-	public final void set$st(int[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of st including if probabilities need to be
-		// updated.
-		st = cv$value;
-		
-		// Unset the fixed probability flag for sample 53 as it depends on st.
-		fixedProbFlag$sample53 = false;
-		
-		// Unset the fixed probability flag for sample 71 as it depends on st.
-		fixedProbFlag$sample71 = false;
-		
-		// Unset the fixed probability flag for sample 87 as it depends on st.
-		fixedProbFlag$sample87 = false;
-	}
-
-	// Getter for v.
-	@Override
-	public final double[] get$v() {
-		return v;
+	public HMM_Paper$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample28
 	private final void drawValueSample28(int var27, int threadID$cv$var27, Rng RNG$) {
-		DistributionSampling.sampleDirichlet(RNG$, v, nCoins, m[var27]);
+		DistributionSampling.sampleDirichlet(RNG$, state.v, state.nCoins, state.m[var27]);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample32
 	private final void drawValueSample32() {
-		DistributionSampling.sampleDirichlet(RNG$, v, nCoins, initialCoin);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.nCoins, state.initialCoin);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample47
 	private final void drawValueSample47(int var45, int threadID$cv$var45, Rng RNG$) {
-		bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		state.bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample53
 	private final void drawValueSample53() {
-		st[0] = DistributionSampling.sampleCategorical(RNG$, initialCoin, nCoins);
+		state.st[0] = DistributionSampling.sampleCategorical(state.RNG$, state.initialCoin, state.nCoins);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample71
 	private final void drawValueSample71(int i) {
-		st[i] = DistributionSampling.sampleCategorical(RNG$, m[st[(i - 1)]], nCoins);
+		state.st[i] = DistributionSampling.sampleCategorical(state.RNG$, state.m[state.st[(i - 1)]], state.nCoins);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 28 drawn from Dirichlet 16. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void inferSample28(int var27, int threadID$cv$var27, Rng RNG$) {
-		constrainedFlag$sample28[var27] = false;
+		state.constrainedFlag$sample28[var27] = false;
 		
 		// A local reference to the scratch space.
-		double[] cv$countLocal = cv$var28$countGlobal[threadID$cv$var27];
+		double[] cv$countLocal = scratch.cv$var28$countGlobal[threadID$cv$var27];
 		
 		// Initialize the array values to 0.
 		// 
 		// Get the length of the array
-		for(int cv$loopIndex = 0; cv$loopIndex < nCoins; cv$loopIndex += 1)
+		for(int cv$loopIndex = 0; cv$loopIndex < state.nCoins; cv$loopIndex += 1)
 			cv$countLocal[cv$loopIndex] = 0.0;
 		
 		// Processing random variable 69.
 		// 
 		// Looking for a path between Sample 28 and consumer Categorical 69.
-		for(int i = 1; i < nFlips; i += 1) {
-			if(((var27 == st[(i - 1)]) && (fixedFlag$sample71 || constrainedFlag$sample71[(i - 1)]))) {
+		for(int i = 1; i < state.nFlips; i += 1) {
+			if(((var27 == state.st[(i - 1)]) && (state.fixedFlag$sample71 || state.constrainedFlag$sample71[(i - 1)]))) {
 				// Processing sample task 71 of consumer random variable null.
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample28[var27] = true;
+				state.constrainedFlag$sample28[var27] = true;
 				
 				// Increment the sample counter with the value sampled by sample task 71 of random
 				// variable var69
-				cv$countLocal[st[i]] = (cv$countLocal[st[i]] + 1.0);
+				cv$countLocal[state.st[i]] = (cv$countLocal[state.st[i]] + 1.0);
 			}
 		}
-		if(constrainedFlag$sample28[var27])
+		if(state.constrainedFlag$sample28[var27])
 			// Calculate the new sample value
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
 			// A reference local to the function for the sample variable.
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var27], nCoins);
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, state.v, cv$countLocal, state.m[var27], state.nCoins);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 32 drawn from Dirichlet 30. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void inferSample32() {
-		constrainedFlag$sample32 = false;
+		state.constrainedFlag$sample32 = false;
 		
 		// Initialize the array values to 0.
 		// 
 		// Get the length of the array
-		for(int cv$loopIndex = 0; cv$loopIndex < nCoins; cv$loopIndex += 1)
+		for(int cv$loopIndex = 0; cv$loopIndex < state.nCoins; cv$loopIndex += 1)
 			// A local reference to the scratch space.
-			cv$var31$countGlobal[cv$loopIndex] = 0.0;
+			scratch.cv$var31$countGlobal[cv$loopIndex] = 0.0;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((fixedFlag$sample53 || constrainedFlag$sample53)) {
+		if((state.fixedFlag$sample53 || state.constrainedFlag$sample53)) {
 			// Processing random variable 51.
 			// 
 			// Processing sample task 53 of consumer random variable null.
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample32 = true;
+			state.constrainedFlag$sample32 = true;
 			
 			// Increment the sample counter with the value sampled by sample task 53 of random
 			// variable var51
 			// 
 									// A local reference to the scratch space.
-			cv$var31$countGlobal[st[0]] = (cv$var31$countGlobal[st[0]] + 1.0);
+			scratch.cv$var31$countGlobal[state.st[0]] = (scratch.cv$var31$countGlobal[state.st[0]] + 1.0);
 		}
-		if(constrainedFlag$sample32)
+		if(state.constrainedFlag$sample32)
 			// Calculate the new sample value
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
 									// A reference local to the function for the sample variable.
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var31$countGlobal, initialCoin, nCoins);
+			Conjugates.sampleConjugateDirichletCategorical(state.RNG$, state.v, scratch.cv$var31$countGlobal, state.initialCoin, state.nCoins);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 47 drawn from Beta 34. Inference was performed using a Beta to Bernoulli/Binomial
 	// conjugate prior.
 	private final void inferSample47(int var45, int threadID$cv$var45, Rng RNG$) {
-		constrainedFlag$sample47[var45] = false;
+		state.constrainedFlag$sample47[var45] = false;
 		
 		// Local variable to record the number of true samples.
 		int cv$sum = 0;
@@ -512,11 +176,11 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 		// Processing random variable 85.
 		// 
 		// Looking for a path between Sample 47 and consumer Bernoulli 85.
-		for(int j = 0; j < nFlips; j += 1) {
-			if((var45 == st[j])) {
+		for(int j = 0; j < state.nFlips; j += 1) {
+			if((var45 == state.st[j])) {
 				// Processing sample task 87 of consumer random variable null.
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample47[var45] = true;
+				state.constrainedFlag$sample47[var45] = true;
 				
 				// Include the value sampled by task 87 from random variable var85.
 				// 
@@ -524,23 +188,23 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				cv$count = (cv$count + 1);
 				
 				// If the sample value was positive increase the count
-				if(flips[j])
+				if(state.flips[j])
 					cv$sum = (cv$sum + 1);
 			}
 		}
-		if(constrainedFlag$sample47[var45])
+		if(state.constrainedFlag$sample47[var45])
 			// Guards to ensure that bias is only updated when there is a valid path.
 			// 
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
-			bias[var45] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			state.bias[var45] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 53 drawn from Categorical 51. Inference was performed using variable
 	// marginalization.
 	private final void inferSample53() {
-		constrainedFlag$sample53 = false;
+		state.constrainedFlag$sample53 = false;
 		
 		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
@@ -550,24 +214,24 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 		// 
 				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
-		int cv$numStates = Math.max(0, nCoins);
+		int cv$numStates = Math.max(0, state.nCoins);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// Guards to ensure that st is only updated when there is a valid path.
 			// 
 			// Value of the variable at this index
-			st[0] = cv$valuePos;
+			state.st[0] = cv$valuePos;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 									// Value of the variable at this index
-			double cv$accumulatedProbabilities = (((((cv$valuePos < nCoins) && (0 < nCoins)) && (0.0 <= initialCoin[cv$valuePos])) && (initialCoin[cv$valuePos] <= 1.0))?Math.log(initialCoin[cv$valuePos]):Double.NEGATIVE_INFINITY);
+			double cv$accumulatedProbabilities = (((((cv$valuePos < state.nCoins) && (0 < state.nCoins)) && (0.0 <= state.initialCoin[cv$valuePos])) && (state.initialCoin[cv$valuePos] <= 1.0))?Math.log(state.initialCoin[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Substituted "i" with its value "1".
-			if(((1 < nFlips) && (fixedFlag$sample71 || constrainedFlag$sample71[0]))) {
+			if(((1 < state.nFlips) && (state.fixedFlag$sample71 || state.constrainedFlag$sample71[0]))) {
 				// Processing sample task 71 of consumer random variable null.
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample53 = true;
+				state.constrainedFlag$sample53 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
@@ -576,7 +240,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// Looking for a path between Sample 53 and consumer Categorical 69.
 				// 
 				// Value of the variable at this index
-				double[] var68 = m[cv$valuePos];
+				double[] var68 = state.m[cv$valuePos];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -592,21 +256,21 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// inputs.
 				// 
 												// Substituted "i" with its value "1".
-				cv$accumulatedProbabilities = (((((((0.0 <= st[1]) && (st[1] < nCoins)) && (0 < nCoins)) && (0.0 <= var68[st[1]])) && (var68[st[1]] <= 1.0))?Math.log(var68[st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (((((((0.0 <= state.st[1]) && (state.st[1] < state.nCoins)) && (0 < state.nCoins)) && (0.0 <= var68[state.st[1]])) && (var68[state.st[1]] <= 1.0))?Math.log(var68[state.st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Substituted "j" with its value "0".
-			if((0 < nFlips)) {
+			if((0 < state.nFlips)) {
 				// Processing sample task 87 of consumer random variable null.
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample53 = true;
+				state.constrainedFlag$sample53 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
 				// Looking for a path between Sample 53 and consumer Bernoulli 85.
 				// 
 				// Value of the variable at this index
-				double var84 = bias[cv$valuePos];
+				double var84 = state.bias[cv$valuePos];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -622,7 +286,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// inputs.
 				// 
 				// Substituted "j" with its value "0".
-				cv$accumulatedProbabilities = ((((0.0 <= var84) && (var84 <= 1.0))?Math.log((flips[0]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((0.0 <= var84) && (var84 <= 1.0))?Math.log((state.flips[0]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
@@ -632,9 +296,9 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
-			cv$var52$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
+			scratch.cv$var52$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
-		if(constrainedFlag$sample53) {
+		if(state.constrainedFlag$sample53) {
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
@@ -645,12 +309,12 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// Initialise the max to the first element.
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseMax = cv$var52$stateProbabilityGlobal[0];
+			double cv$lseMax = scratch.cv$var52$stateProbabilityGlobal[0];
 			
 			// Find max value.
 			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 				// Get a local reference to the scratch space.
-				double cv$lseElementValue = cv$var52$stateProbabilityGlobal[cv$lseIndex];
+				double cv$lseElementValue = scratch.cv$var52$stateProbabilityGlobal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
 			}
@@ -667,7 +331,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// Offset values, move to normal space, and sum.
 				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 					// Get a local reference to the scratch space.
-					cv$lseSum = (cv$lseSum + Math.exp((cv$var52$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+					cv$lseSum = (cv$lseSum + Math.exp((scratch.cv$var52$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 				
 				// Increment the value of the target, moving the value back into log space.
 				// 
@@ -680,20 +344,20 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 					// Get a local reference to the scratch space.
-					cv$var52$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
+					scratch.cv$var52$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 															// Get a local reference to the scratch space.
-					cv$var52$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var52$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+					scratch.cv$var52$stateProbabilityGlobal[cv$indexName] = Math.exp((scratch.cv$var52$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
 			// Get a local reference to the scratch space.
-			for(int cv$indexName = cv$numStates; cv$indexName < cv$var52$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = cv$numStates; cv$indexName < scratch.cv$var52$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var52$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				scratch.cv$var52$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Guards to ensure that st is only updated when there is a valid path.
 			// 
@@ -701,7 +365,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// intermediate variables.
 			// 
 			// Get a local reference to the scratch space.
-			st[0] = DistributionSampling.sampleCategorical(RNG$, cv$var52$stateProbabilityGlobal, cv$numStates);
+			state.st[0] = DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var52$stateProbabilityGlobal, cv$numStates);
 		}
 	}
 
@@ -709,7 +373,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 	// by sample task 71 drawn from Categorical 69. Inference was performed using variable
 	// marginalization.
 	private final void inferSample71(int i) {
-		constrainedFlag$sample71[(i - 1)] = false;
+		state.constrainedFlag$sample71[(i - 1)] = false;
 		
 		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
@@ -719,23 +383,23 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 		// 
 				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
-		int cv$numStates = Math.max(0, nCoins);
+		int cv$numStates = Math.max(0, state.nCoins);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// Guards to ensure that st is only updated when there is a valid path.
 			// 
 			// Value of the variable at this index
-			st[i] = cv$valuePos;
+			state.st[i] = cv$valuePos;
 			
 			// Constructing a random variable input for use later.
-			double[] var68 = m[st[(i - 1)]];
+			double[] var68 = state.m[state.st[(i - 1)]];
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
 									// Value of the variable at this index
-			double cv$accumulatedProbabilities = (((((cv$valuePos < nCoins) && (0 < nCoins)) && (0.0 <= var68[cv$valuePos])) && (var68[cv$valuePos] <= 1.0))?Math.log(var68[cv$valuePos]):Double.NEGATIVE_INFINITY);
+			double cv$accumulatedProbabilities = (((((cv$valuePos < state.nCoins) && (0 < state.nCoins)) && (0.0 <= var68[cv$valuePos])) && (var68[cv$valuePos] <= 1.0))?Math.log(var68[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int index$i$2_2 = (i + 1);
-			if(((index$i$2_2 < nFlips) && (fixedFlag$sample71 || constrainedFlag$sample71[(index$i$2_2 - 1)]))) {
+			if(((index$i$2_2 < state.nFlips) && (state.fixedFlag$sample71 || state.constrainedFlag$sample71[(index$i$2_2 - 1)]))) {
 				// Processing sample task 71 of consumer random variable null.
 				// Constructing a random variable input for use later.
 				// 
@@ -744,7 +408,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// Looking for a path between Sample 71 and consumer Categorical 69.
 				// 
 				// Value of the variable at this index
-				double[] sc$var68$1 = m[cv$valuePos];
+				double[] sc$var68$1 = state.m[cv$valuePos];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -758,18 +422,18 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (((((((0.0 <= st[index$i$2_2]) && (st[index$i$2_2] < nCoins)) && (0 < nCoins)) && (0.0 <= sc$var68$1[st[index$i$2_2]])) && (sc$var68$1[st[index$i$2_2]] <= 1.0))?Math.log(sc$var68$1[st[index$i$2_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (((((((0.0 <= state.st[index$i$2_2]) && (state.st[index$i$2_2] < state.nCoins)) && (0 < state.nCoins)) && (0.0 <= sc$var68$1[state.st[index$i$2_2]])) && (sc$var68$1[state.st[index$i$2_2]] <= 1.0))?Math.log(sc$var68$1[state.st[index$i$2_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample71[(i - 1)] = true;
+			state.constrainedFlag$sample71[(i - 1)] = true;
 			
 			// Constructing a random variable input for use later.
 			// 
 			// Looking for a path between Sample 71 and consumer Bernoulli 85.
 			// 
 			// Value of the variable at this index
-			double var84 = bias[cv$valuePos];
+			double var84 = state.bias[cv$valuePos];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -785,7 +449,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// inputs.
 			// 
 			// Substituted "j" with its value "i".
-			cv$accumulatedProbabilities = ((((0.0 <= var84) && (var84 <= 1.0))?Math.log((flips[i]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = ((((0.0 <= var84) && (var84 <= 1.0))?Math.log((state.flips[i]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -794,9 +458,9 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
-			cv$var70$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
+			scratch.cv$var70$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
-		if(constrainedFlag$sample71[(i - 1)]) {
+		if(state.constrainedFlag$sample71[(i - 1)]) {
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
@@ -807,12 +471,12 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// Initialise the max to the first element.
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseMax = cv$var70$stateProbabilityGlobal[0];
+			double cv$lseMax = scratch.cv$var70$stateProbabilityGlobal[0];
 			
 			// Find max value.
 			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 				// Get a local reference to the scratch space.
-				double cv$lseElementValue = cv$var70$stateProbabilityGlobal[cv$lseIndex];
+				double cv$lseElementValue = scratch.cv$var70$stateProbabilityGlobal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
 			}
@@ -829,7 +493,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// Offset values, move to normal space, and sum.
 				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 					// Get a local reference to the scratch space.
-					cv$lseSum = (cv$lseSum + Math.exp((cv$var70$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+					cv$lseSum = (cv$lseSum + Math.exp((scratch.cv$var70$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 				
 				// Increment the value of the target, moving the value back into log space.
 				// 
@@ -842,20 +506,20 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 					// Get a local reference to the scratch space.
-					cv$var70$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
+					scratch.cv$var70$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 															// Get a local reference to the scratch space.
-					cv$var70$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var70$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+					scratch.cv$var70$stateProbabilityGlobal[cv$indexName] = Math.exp((scratch.cv$var70$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
 			// Get a local reference to the scratch space.
-			for(int cv$indexName = cv$numStates; cv$indexName < cv$var70$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = cv$numStates; cv$indexName < scratch.cv$var70$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var70$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				scratch.cv$var70$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Guards to ensure that st is only updated when there is a valid path.
 			// 
@@ -863,7 +527,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// intermediate variables.
 			// 
 			// Get a local reference to the scratch space.
-			st[i] = DistributionSampling.sampleCategorical(RNG$, cv$var70$stateProbabilityGlobal, cv$numStates);
+			state.st[i] = DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var70$stateProbabilityGlobal, cv$numStates);
 		}
 	}
 
@@ -872,11 +536,11 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 	private final void logProbabilityValue$sample28() {
 		// Determine if we need to calculate the values for sample task 28 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample28) {
+		if(!state.fixedProbFlag$sample28) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var27 = 0; var27 < nCoins; var27 += 1)
+			for(int var27 = 0; var27 < state.nCoins; var27 += 1)
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -892,10 +556,10 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var27], v, nCoins));
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(state.m[var27], state.v, state.nCoins));
 			
 			// Store the random variable instance probability
-			logProbability$var28 = cv$sampleAccumulator;
+			state.logProbability$var28 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -903,7 +567,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$m = (logProbability$m + cv$sampleAccumulator);
+			state.logProbability$m = (state.logProbability$m + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -911,20 +575,20 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample28)
+			if(state.fixedFlag$sample28)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample28 = fixedFlag$sample28;
+			state.fixedProbFlag$sample28 = state.fixedFlag$sample28;
 		} else {
 			// Using cached values.
 			// 
@@ -933,18 +597,18 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$m = (logProbability$m + logProbability$var28);
+			state.logProbability$m = (state.logProbability$m + state.logProbability$var28);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var28);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var28);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample28)
+			if(state.fixedFlag$sample28)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var28);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var28);
 		}
 	}
 
@@ -953,7 +617,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 	private final void logProbabilityValue$sample32() {
 		// Determine if we need to calculate the values for sample task 32 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample32) {
+		if(!state.fixedProbFlag$sample32) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -978,10 +642,10 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(initialCoin, v, nCoins);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(state.initialCoin, state.v, state.nCoins);
 			
 			// Store the sample task probability
-			logProbability$initialCoin = cv$distributionAccumulator;
+			state.logProbability$initialCoin = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -997,11 +661,11 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample32)
+			if(state.fixedFlag$sample32)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -1014,11 +678,11 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample32 = fixedFlag$sample32;
+			state.fixedProbFlag$sample32 = state.fixedFlag$sample32;
 		} else {
 			// Using cached values.
 			// 
@@ -1027,13 +691,13 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$initialCoin);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$initialCoin);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample32)
+			if(state.fixedFlag$sample32)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$initialCoin);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$initialCoin);
 		}
 	}
 
@@ -1042,11 +706,11 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 	private final void logProbabilityValue$sample47() {
 		// Determine if we need to calculate the values for sample task 47 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample47) {
+		if(!state.fixedProbFlag$sample47) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var45 = 0; var45 < nCoins; var45 += 1)
+			for(int var45 = 0; var45 < state.nCoins; var45 += 1)
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -1062,10 +726,10 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[var45], 1.0, 1.0));
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(state.bias[var45], 1.0, 1.0));
 			
 			// Store the random variable instance probability
-			logProbability$var46 = cv$sampleAccumulator;
+			state.logProbability$var46 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -1073,7 +737,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
+			state.logProbability$bias = (state.logProbability$bias + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -1081,20 +745,20 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample47)
+			if(state.fixedFlag$sample47)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample47 = fixedFlag$sample47;
+			state.fixedProbFlag$sample47 = state.fixedFlag$sample47;
 		} else {
 			// Using cached values.
 			// 
@@ -1103,18 +767,18 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$bias = (logProbability$bias + logProbability$var46);
+			state.logProbability$bias = (state.logProbability$bias + state.logProbability$var46);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var46);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var46);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample47)
+			if(state.fixedFlag$sample47)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var46);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var46);
 		}
 	}
 
@@ -1123,10 +787,10 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 	private final void logProbabilityValue$sample53() {
 		// Determine if we need to calculate the values for sample task 53 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample53) {
+		if(!state.fixedProbFlag$sample53) {
 			// Generating probabilities for sample task
 			// The sample value to calculate the probability of generating
-			int cv$sampleValue = st[0];
+			int cv$sampleValue = state.st[0];
 			
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -1147,10 +811,10 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// An accumulator for log probabilities.
 			// 
 			// Store the value of the function call, so the function call is only made once.
-			double cv$distributionAccumulator = ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < nCoins)) && (0 < nCoins)) && (0.0 <= initialCoin[cv$sampleValue])) && (initialCoin[cv$sampleValue] <= 1.0))?Math.log(initialCoin[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.nCoins)) && (0 < state.nCoins)) && (0.0 <= state.initialCoin[cv$sampleValue])) && (state.initialCoin[cv$sampleValue] <= 1.0))?Math.log(state.initialCoin[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$var52 = cv$distributionAccumulator;
+			state.logProbability$var52 = cv$distributionAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -1166,7 +830,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$st = (logProbability$st + cv$distributionAccumulator);
+			state.logProbability$st = (state.logProbability$st + cv$distributionAccumulator);
 			
 			// Add probability to model
 			// 
@@ -1182,11 +846,11 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample53)
+			if(state.fixedFlag$sample53)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -1199,11 +863,11 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample53 = (fixedFlag$sample53 && fixedFlag$sample32);
+			state.fixedProbFlag$sample53 = (state.fixedFlag$sample53 && state.fixedFlag$sample32);
 		} else {
 			// Using cached values.
 			// 
@@ -1212,18 +876,18 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$st = (logProbability$st + logProbability$var52);
+			state.logProbability$st = (state.logProbability$st + state.logProbability$var52);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var52);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var52);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample53)
+			if(state.fixedFlag$sample53)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var52);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var52);
 		}
 	}
 
@@ -1232,14 +896,14 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 	private final void logProbabilityValue$sample71() {
 		// Determine if we need to calculate the values for sample task 71 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample71) {
+		if(!state.fixedProbFlag$sample71) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
-			for(int i = 1; i < nFlips; i += 1) {
+			for(int i = 1; i < state.nFlips; i += 1) {
 				// The sample value to calculate the probability of generating
-				int cv$sampleValue = st[i];
-				double[] var68 = m[st[(i - 1)]];
+				int cv$sampleValue = state.st[i];
+				double[] var68 = state.m[state.st[(i - 1)]];
 				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -1260,7 +924,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				double cv$distributionAccumulator = ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < nCoins)) && (0 < nCoins)) && (0.0 <= var68[cv$sampleValue])) && (var68[cv$sampleValue] <= 1.0))?Math.log(var68[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+				double cv$distributionAccumulator = ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.nCoins)) && (0 < state.nCoins)) && (0.0 <= var68[cv$sampleValue])) && (var68[cv$sampleValue] <= 1.0))?Math.log(var68[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -1271,42 +935,42 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample71[(i - 1)] = cv$distributionAccumulator;
+				state.logProbability$sample71[(i - 1)] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
-			logProbability$st = (logProbability$st + cv$accumulator);
+			state.logProbability$st = (state.logProbability$st + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample71)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample71)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample71 = ((fixedFlag$sample71 && fixedFlag$sample28) && fixedFlag$sample53);
+			state.fixedProbFlag$sample71 = ((state.fixedFlag$sample71 && state.fixedFlag$sample28) && state.fixedFlag$sample53);
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i = 1; i < nFlips; i += 1)
-				cv$accumulator = (cv$accumulator + logProbability$sample71[(i - 1)]);
+			for(int i = 1; i < state.nFlips; i += 1)
+				cv$accumulator = (cv$accumulator + state.logProbability$sample71[(i - 1)]);
 			
 			// Update the variable probability
-			logProbability$st = (logProbability$st + cv$accumulator);
+			state.logProbability$st = (state.logProbability$st + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample71)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample71)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -1315,12 +979,12 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 	private final void logProbabilityValue$sample87() {
 		// Determine if we need to calculate the values for sample task 87 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample87) {
+		if(!state.fixedProbFlag$sample87) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
-			for(int j = 0; j < nFlips; j += 1) {
-				double var84 = bias[st[j]];
+			for(int j = 0; j < state.nFlips; j += 1) {
+				double var84 = state.bias[state.st[j]];
 				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -1345,7 +1009,7 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				double cv$distributionAccumulator = (((0.0 <= var84) && (var84 <= 1.0))?Math.log((flips[j]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY);
+				double cv$distributionAccumulator = (((0.0 <= var84) && (var84 <= 1.0))?Math.log((state.flips[j]?var84:(1.0 - var84))):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -1356,174 +1020,86 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample87[j] = cv$distributionAccumulator;
+				state.logProbability$sample87[j] = cv$distributionAccumulator;
 			}
 			
 			// Update the variable probability
-			logProbability$flips = (logProbability$flips + cv$accumulator);
+			state.logProbability$flips = (state.logProbability$flips + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample87 = ((fixedFlag$sample47 && fixedFlag$sample53) && fixedFlag$sample71);
+			state.fixedProbFlag$sample87 = ((state.fixedFlag$sample47 && state.fixedFlag$sample53) && state.fixedFlag$sample71);
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int j = 0; j < nFlips; j += 1)
-				cv$accumulator = (cv$accumulator + logProbability$sample87[j]);
+			for(int j = 0; j < state.nFlips; j += 1)
+				cv$accumulator = (cv$accumulator + state.logProbability$sample87[j]);
 			
 			// Update the variable probability
-			logProbability$flips = (logProbability$flips + cv$accumulator);
+			state.logProbability$flips = (state.logProbability$flips + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for v
-		v = new double[nCoins];
-		
-		// If m has not been set already allocate space.
-		if(!fixedFlag$sample28) {
-			// Constructor for m
-			m = new double[nCoins][];
-			for(int var27 = 0; var27 < nCoins; var27 += 1)
-				m[var27] = new double[nCoins];
-		}
-		
-		// If initialCoin has not been set already allocate space.
-		if(!fixedFlag$sample32)
-			// Constructor for initialCoin
-			initialCoin = new double[nCoins];
-		
-		// If bias has not been set already allocate space.
-		if(!fixedFlag$sample47)
-			// Constructor for bias
-			bias = new double[nCoins];
-		
-		// If st has not been set already allocate space.
-		if((!fixedFlag$sample53 || !fixedFlag$sample71))
-			// Constructor for st
-			st = new int[length$measured];
-		
-		// Constructor for flips
-		flips = new boolean[length$measured];
-		
-		// Constructor for constrainedFlag$sample47
-		constrainedFlag$sample47 = new boolean[nCoins];
-		
-		// Constructor for constrainedFlag$sample28
-		constrainedFlag$sample28 = new boolean[nCoins];
-		
-		// Constructor for constrainedFlag$sample71
-		constrainedFlag$sample71 = new boolean[(length$measured - 1)];
-		
-		// Constructor for logProbability$sample71
-		logProbability$sample71 = new double[(length$measured - 1)];
-		
-		// Constructor for logProbability$sample87
-		logProbability$sample87 = new double[length$measured];
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var28$countGlobal
-		// 
-		// Allocation of cv$var28$countGlobal for multithreaded execution
-		// 
-		// Get the thread count.
-		int cv$threadCount = threadCount();
-		
-		// Allocate an array to hold a copy per thread
-		cv$var28$countGlobal = new double[cv$threadCount][];
-		
-		// Populate the array with a copy per thread
-		for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-			cv$var28$countGlobal[cv$index] = new double[nCoins];
-		
-		// Constructor for cv$var31$countGlobal
-		// 
-		// Allocation of cv$var31$countGlobal for single threaded execution
-		cv$var31$countGlobal = new double[nCoins];
-		
-		// Constructor for cv$var52$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var52$stateProbabilityGlobal for single threaded execution
-		cv$var52$stateProbabilityGlobal = new double[nCoins];
-		
-		// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 69. Initially set to the value
-		// of putTask 29.
-		cv$var70$stateProbabilityGlobal = new double[nCoins];
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28)
+		if(!state.fixedFlag$sample28)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, nCoins, 1,
+			parallelFor(state.RNG$, 0, state.nCoins, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, nCoins, m[var27]);
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.nCoins, state.m[var27]);
 				}
 			);
 
-		if(!fixedFlag$sample32)
-			DistributionSampling.sampleDirichlet(RNG$, v, nCoins, initialCoin);
+		if(!state.fixedFlag$sample32)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.nCoins, state.initialCoin);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample47)
+		if(!state.fixedFlag$sample47)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, nCoins, 1,
+			parallelFor(state.RNG$, 0, state.nCoins, 1,
 				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
-							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+							state.bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
 				}
 			);
 
-		if(!fixedFlag$sample53)
-			st[0] = DistributionSampling.sampleCategorical(RNG$, initialCoin, nCoins);
+		if(!state.fixedFlag$sample53)
+			state.st[0] = DistributionSampling.sampleCategorical(state.RNG$, state.initialCoin, state.nCoins);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample71) {
-			for(int i = 1; i < nFlips; i += 1)
-				st[i] = DistributionSampling.sampleCategorical(RNG$, m[st[(i - 1)]], nCoins);
+		if(!state.fixedFlag$sample71) {
+			for(int i = 1; i < state.nFlips; i += 1)
+				state.st[i] = DistributionSampling.sampleCategorical(state.RNG$, state.m[state.st[(i - 1)]], state.nCoins);
 		}
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, nFlips, 1,
+		parallelFor(state.RNG$, 0, state.nFlips, 1,
 			(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int j = forStart$j; j < forEnd$j; j += 1)
-						flips[j] = DistributionSampling.sampleBernoulli(RNG$1, bias[st[j]]);
+						state.flips[j] = DistributionSampling.sampleBernoulli(RNG$1, state.bias[state.st[j]]);
 			}
 		);
 	}
@@ -1534,41 +1110,41 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28)
+		if(!state.fixedFlag$sample28)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, nCoins, 1,
+			parallelFor(state.RNG$, 0, state.nCoins, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, nCoins, m[var27]);
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.nCoins, state.m[var27]);
 				}
 			);
 
-		if(!fixedFlag$sample32)
-			DistributionSampling.sampleDirichlet(RNG$, v, nCoins, initialCoin);
+		if(!state.fixedFlag$sample32)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.nCoins, state.initialCoin);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample47)
+		if(!state.fixedFlag$sample47)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, nCoins, 1,
+			parallelFor(state.RNG$, 0, state.nCoins, 1,
 				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
-							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+							state.bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
 				}
 			);
 
-		if(!fixedFlag$sample53)
-			st[0] = DistributionSampling.sampleCategorical(RNG$, initialCoin, nCoins);
+		if(!state.fixedFlag$sample53)
+			state.st[0] = DistributionSampling.sampleCategorical(state.RNG$, state.initialCoin, state.nCoins);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample71) {
-			for(int i = 1; i < nFlips; i += 1)
-				st[i] = DistributionSampling.sampleCategorical(RNG$, m[st[(i - 1)]], nCoins);
+		if(!state.fixedFlag$sample71) {
+			for(int i = 1; i < state.nFlips; i += 1)
+				state.st[i] = DistributionSampling.sampleCategorical(state.RNG$, state.m[state.st[(i - 1)]], state.nCoins);
 		}
 	}
 
@@ -1577,51 +1153,51 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 	@Override
 	public final void forwardGenerationPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28)
+		if(!state.fixedFlag$sample28)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, nCoins, 1,
+			parallelFor(state.RNG$, 0, state.nCoins, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, nCoins, m[var27]);
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.nCoins, state.m[var27]);
 				}
 			);
 
-		if(!fixedFlag$sample32)
-			DistributionSampling.sampleDirichlet(RNG$, v, nCoins, initialCoin);
+		if(!state.fixedFlag$sample32)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.nCoins, state.initialCoin);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample47)
+		if(!state.fixedFlag$sample47)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, nCoins, 1,
+			parallelFor(state.RNG$, 0, state.nCoins, 1,
 				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
-							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+							state.bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
 				}
 			);
 
-		if(!fixedFlag$sample53)
-			st[0] = DistributionSampling.sampleCategorical(RNG$, initialCoin, nCoins);
+		if(!state.fixedFlag$sample53)
+			state.st[0] = DistributionSampling.sampleCategorical(state.RNG$, state.initialCoin, state.nCoins);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample71) {
-			for(int i = 1; i < nFlips; i += 1)
-				st[i] = DistributionSampling.sampleCategorical(RNG$, m[st[(i - 1)]], nCoins);
+		if(!state.fixedFlag$sample71) {
+			for(int i = 1; i < state.nFlips; i += 1)
+				state.st[i] = DistributionSampling.sampleCategorical(state.RNG$, state.m[state.st[(i - 1)]], state.nCoins);
 		}
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, nFlips, 1,
+		parallelFor(state.RNG$, 0, state.nFlips, 1,
 			(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int j = forStart$j; j < forEnd$j; j += 1)
-						flips[j] = DistributionSampling.sampleBernoulli(RNG$1, bias[st[j]]);
+						state.flips[j] = DistributionSampling.sampleBernoulli(RNG$1, state.bias[state.st[j]]);
 			}
 		);
 	}
@@ -1631,41 +1207,41 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28)
+		if(!state.fixedFlag$sample28)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, nCoins, 1,
+			parallelFor(state.RNG$, 0, state.nCoins, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, nCoins, m[var27]);
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.nCoins, state.m[var27]);
 				}
 			);
 
-		if(!fixedFlag$sample32)
-			DistributionSampling.sampleDirichlet(RNG$, v, nCoins, initialCoin);
+		if(!state.fixedFlag$sample32)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.nCoins, state.initialCoin);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample47)
+		if(!state.fixedFlag$sample47)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, nCoins, 1,
+			parallelFor(state.RNG$, 0, state.nCoins, 1,
 				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
-							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+							state.bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
 				}
 			);
 
-		if(!fixedFlag$sample53)
-			st[0] = DistributionSampling.sampleCategorical(RNG$, initialCoin, nCoins);
+		if(!state.fixedFlag$sample53)
+			state.st[0] = DistributionSampling.sampleCategorical(state.RNG$, state.initialCoin, state.nCoins);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample71) {
-			for(int i = 1; i < nFlips; i += 1)
-				st[i] = DistributionSampling.sampleCategorical(RNG$, m[st[(i - 1)]], nCoins);
+		if(!state.fixedFlag$sample71) {
+			for(int i = 1; i < state.nFlips; i += 1)
+				state.st[i] = DistributionSampling.sampleCategorical(state.RNG$, state.m[state.st[(i - 1)]], state.nCoins);
 		}
 	}
 
@@ -1675,41 +1251,41 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample28)
+		if(!state.fixedFlag$sample28)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, nCoins, 1,
+			parallelFor(state.RNG$, 0, state.nCoins, 1,
 				(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, nCoins, m[var27]);
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.nCoins, state.m[var27]);
 				}
 			);
 
-		if(!fixedFlag$sample32)
-			DistributionSampling.sampleDirichlet(RNG$, v, nCoins, initialCoin);
+		if(!state.fixedFlag$sample32)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.nCoins, state.initialCoin);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample47)
+		if(!state.fixedFlag$sample47)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, nCoins, 1,
+			parallelFor(state.RNG$, 0, state.nCoins, 1,
 				(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1)
-							bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
+							state.bias[var45] = DistributionSampling.sampleBeta(RNG$1, 1.0, 1.0);
 				}
 			);
 
-		if(!fixedFlag$sample53)
-			st[0] = DistributionSampling.sampleCategorical(RNG$, initialCoin, nCoins);
+		if(!state.fixedFlag$sample53)
+			state.st[0] = DistributionSampling.sampleCategorical(state.RNG$, state.initialCoin, state.nCoins);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample71) {
-			for(int i = 1; i < nFlips; i += 1)
-				st[i] = DistributionSampling.sampleCategorical(RNG$, m[st[(i - 1)]], nCoins);
+		if(!state.fixedFlag$sample71) {
+			for(int i = 1; i < state.nFlips; i += 1)
+				state.st[i] = DistributionSampling.sampleCategorical(state.RNG$, state.m[state.st[(i - 1)]], state.nCoins);
 		}
 	}
 
@@ -1717,11 +1293,11 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
+		if(state.system$gibbsForward) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample28)
+			if(!state.fixedFlag$sample28)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-				parallelFor(RNG$, 0, nCoins, 1,
+				parallelFor(state.RNG$, 0, state.nCoins, 1,
 					(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
 						
 							// Inner loop for running batches of iterations, each batch has its own random number
@@ -1731,13 +1307,13 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 					}
 				);
 
-			if(!fixedFlag$sample32)
+			if(!state.fixedFlag$sample32)
 				inferSample32();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample47)
+			if(!state.fixedFlag$sample47)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-				parallelFor(RNG$, 0, nCoins, 1,
+				parallelFor(state.RNG$, 0, state.nCoins, 1,
 					(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 						
 							// Inner loop for running batches of iterations, each batch has its own random number
@@ -1747,29 +1323,29 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 					}
 				);
 
-			if(!fixedFlag$sample53)
+			if(!state.fixedFlag$sample53)
 				inferSample53();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample71) {
-				for(int i = 1; i < nFlips; i += 1)
+			if(!state.fixedFlag$sample71) {
+				for(int i = 1; i < state.nFlips; i += 1)
 					inferSample71(i);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample71) {
-				for(int i = (nFlips - 1); i >= 1; i -= 1)
+			if(!state.fixedFlag$sample71) {
+				for(int i = (state.nFlips - 1); i >= 1; i -= 1)
 					inferSample71(i);
 			}
-			if(!fixedFlag$sample53)
+			if(!state.fixedFlag$sample53)
 				inferSample53();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample47)
+			if(!state.fixedFlag$sample47)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-				parallelFor(RNG$, 0, nCoins, 1,
+				parallelFor(state.RNG$, 0, state.nCoins, 1,
 					(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 						
 							// Inner loop for running batches of iterations, each batch has its own random number
@@ -1779,13 +1355,13 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 					}
 				);
 
-			if(!fixedFlag$sample32)
+			if(!state.fixedFlag$sample32)
 				inferSample32();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample28)
+			if(!state.fixedFlag$sample28)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-				parallelFor(RNG$, 0, nCoins, 1,
+				parallelFor(state.RNG$, 0, state.nCoins, 1,
 					(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
 						
 							// Inner loop for running batches of iterations, each batch has its own random number
@@ -1798,39 +1374,39 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
+		state.system$gibbsForward = !state.system$gibbsForward;
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, nCoins, 1,
+		parallelFor(state.RNG$, 0, state.nCoins, 1,
 			(int forStart$var27, int forEnd$var27, int threadID$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var27 = forStart$var27; var27 < forEnd$var27; var27 += 1) {
-						if(!constrainedFlag$sample28[var27])
+						if(!state.constrainedFlag$sample28[var27])
 							drawValueSample28(var27, threadID$var27, RNG$1);
 					}
 			}
 		);
-		if(!constrainedFlag$sample32)
+		if(!state.constrainedFlag$sample32)
 			drawValueSample32();
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, nCoins, 1,
+		parallelFor(state.RNG$, 0, state.nCoins, 1,
 			(int forStart$var45, int forEnd$var45, int threadID$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var45 = forStart$var45; var45 < forEnd$var45; var45 += 1) {
-						if(!constrainedFlag$sample47[var45])
+						if(!state.constrainedFlag$sample47[var45])
 							drawValueSample47(var45, threadID$var45, RNG$1);
 					}
 			}
 		);
-		if(!constrainedFlag$sample53)
+		if(!state.constrainedFlag$sample53)
 			drawValueSample53();
-		for(int i = 1; i < nFlips; i += 1) {
-			if(!constrainedFlag$sample71[(i - 1)])
+		for(int i = 1; i < state.nFlips; i += 1) {
+			if(!state.constrainedFlag$sample71[(i - 1)])
 				drawValueSample71(i);
 		}
 	}
@@ -1843,27 +1419,27 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$m = 0.0;
-		if(!fixedProbFlag$sample28)
-			logProbability$var28 = Double.NaN;
-		if(!fixedProbFlag$sample32)
-			logProbability$initialCoin = Double.NaN;
-		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample47)
-			logProbability$var46 = Double.NaN;
-		logProbability$st = 0.0;
-		if(!fixedProbFlag$sample53)
-			logProbability$var52 = Double.NaN;
-		if(!fixedProbFlag$sample71) {
-			for(int i = 1; i < nFlips; i += 1)
-				logProbability$sample71[(i - 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$m = 0.0;
+		if(!state.fixedProbFlag$sample28)
+			state.logProbability$var28 = Double.NaN;
+		if(!state.fixedProbFlag$sample32)
+			state.logProbability$initialCoin = Double.NaN;
+		state.logProbability$bias = 0.0;
+		if(!state.fixedProbFlag$sample47)
+			state.logProbability$var46 = Double.NaN;
+		state.logProbability$st = 0.0;
+		if(!state.fixedProbFlag$sample53)
+			state.logProbability$var52 = Double.NaN;
+		if(!state.fixedProbFlag$sample71) {
+			for(int i = 1; i < state.nFlips; i += 1)
+				state.logProbability$sample71[(i - 1)] = Double.NaN;
 		}
-		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample87) {
-			for(int j = 0; j < nFlips; j += 1)
-				logProbability$sample87[j] = Double.NaN;
+		state.logProbability$flips = 0.0;
+		if(!state.fixedProbFlag$sample87) {
+			for(int j = 0; j < state.nFlips; j += 1)
+				state.logProbability$sample87[j] = Double.NaN;
 		}
 	}
 
@@ -1871,21 +1447,21 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 	// etc.
 	@Override
 	public final void initializeModel() {
-		for(int var13 = 0; var13 < nCoins; var13 += 1)
-			v[var13] = 0.1;
-		nFlips = length$measured;
+		for(int var13 = 0; var13 < state.nCoins; var13 += 1)
+			state.v[var13] = 0.1;
+		state.nFlips = state.length$measured;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
-			constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+		for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < state.constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
+			state.constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
-			constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
+		for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < state.constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
+			state.constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample71$1 = 0; index$constrainedFlag$sample71$1 < constrainedFlag$sample71.length; index$constrainedFlag$sample71$1 += 1)
-			constrainedFlag$sample71[index$constrainedFlag$sample71$1] = true;
+		for(int index$constrainedFlag$sample71$1 = 0; index$constrainedFlag$sample71$1 < state.constrainedFlag$sample71.length; index$constrainedFlag$sample71$1 += 1)
+			state.constrainedFlag$sample71[index$constrainedFlag$sample71$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -1895,15 +1471,15 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample28)
+		if(state.fixedFlag$sample28)
 			logProbabilityValue$sample28();
-		if(fixedFlag$sample32)
+		if(state.fixedFlag$sample32)
 			logProbabilityValue$sample32();
-		if(fixedFlag$sample47)
+		if(state.fixedFlag$sample47)
 			logProbabilityValue$sample47();
-		if(fixedFlag$sample53)
+		if(state.fixedFlag$sample53)
 			logProbabilityValue$sample53();
-		if(fixedFlag$sample71)
+		if(state.fixedFlag$sample71)
 			logProbabilityValue$sample71();
 		logProbabilityValue$sample87();
 	}
@@ -1959,9 +1535,9 @@ final class HMM_Paper$MultiThreadCPU extends CoreModelMultiThreadCPU implements 
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
-		int cv$length1 = flips.length;
+		int cv$length1 = state.flips.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
-			flips[cv$index1] = measured[cv$index1];
+			state.flips[cv$index1] = state.measured[cv$index1];
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are

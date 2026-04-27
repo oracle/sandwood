@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,12 +16,206 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model DiscreteChoiceAlt This is the class that
  * all user interactions with the model should occur through.
  */
-public final class DiscreteChoiceAlt extends Model {
-    private DiscreteChoiceAlt$CoreInterface system$c = new DiscreteChoiceAlt$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class DiscreteChoiceAlt extends Model<DiscreteChoiceAlt.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		int[] ObsChoices;
+		int[] choices;
+		boolean[] constrainedFlag$sample24;
+		double[] exped;
+		boolean fixedFlag$sample24 = false;
+		boolean fixedProbFlag$sample24 = false;
+		boolean fixedProbFlag$sample78 = false;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$choices;
+		double logProbability$exped;
+		double logProbability$prob;
+		double[] logProbability$sample24;
+		double logProbability$sum;
+		double logProbability$ut;
+		double logProbability$var77;
+		int noObs;
+		int noProducts;
+		double[] prob;
+		double sum;
+		boolean system$gibbsForward = true;
+		double[] ut;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// If ut has not been set already allocate space.
+			if(!fixedFlag$sample24) {
+				// Constructor for ut
+				{
+					ut = new double[noProducts];
+				}
+			}
+			
+			// Constructor for exped
+			{
+				exped = new double[noProducts];
+			}
+			
+			// Constructor for prob
+			{
+				prob = new double[noProducts];
+			}
+			
+			// Constructor for choices
+			{
+				choices = new int[noObs];
+			}
+			
+			// Constructor for constrainedFlag$sample24
+			{
+				constrainedFlag$sample24 = new boolean[((((noProducts - 1) - 1) / 1) + 1)];
+			}
+			
+			// Constructor for logProbability$sample24
+			{
+				logProbability$sample24 = new double[((((noProducts - 1) - 1) / 1) + 1)];
+			}
+		}
+
+		// Getter for ObsChoices.
+		final int[] get$ObsChoices() {
+			return ObsChoices;
+		}
+
+		// Setter for ObsChoices.
+		final void set$ObsChoices(int[] cv$value, boolean allocated$) {
+			ObsChoices = cv$value;
+		}
+
+		// Getter for choices.
+		final int[] get$choices() {
+			return choices;
+		}
+
+		// Getter for exped.
+		final double[] get$exped() {
+			return exped;
+		}
+
+		// Getter for fixedFlag$sample24.
+		final boolean get$fixedFlag$sample24() {
+			return fixedFlag$sample24;
+		}
+
+		// Setter for fixedFlag$sample24.
+		final void set$fixedFlag$sample24(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample24 including if probabilities
+			// need to be updated.
+			fixedFlag$sample24 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
+					constrainedFlag$sample24[index$constrainedFlag$sample24$1] = true;
+			}
+			
+			// Should the probability of sample 24 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample24 = (fixedFlag$sample24 && fixedProbFlag$sample24);
+			
+			// Should the probability of sample 78 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample78 = (fixedFlag$sample24 && fixedProbFlag$sample78);
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$choices.
+		final double get$logProbability$choices() {
+			return logProbability$choices;
+		}
+
+		// Getter for logProbability$exped.
+		final double get$logProbability$exped() {
+			return logProbability$exped;
+		}
+
+		// Getter for logProbability$prob.
+		final double get$logProbability$prob() {
+			return logProbability$prob;
+		}
+
+		// Getter for logProbability$sum.
+		final double get$logProbability$sum() {
+			return logProbability$sum;
+		}
+
+		// Getter for logProbability$ut.
+		final double get$logProbability$ut() {
+			return logProbability$ut;
+		}
+
+		// Getter for noObs.
+		final int get$noObs() {
+			return noObs;
+		}
+
+		// Setter for noObs.
+		final void set$noObs(int cv$value, boolean allocated$) {
+			noObs = cv$value;
+		}
+
+		// Getter for noProducts.
+		final int get$noProducts() {
+			return noProducts;
+		}
+
+		// Setter for noProducts.
+		final void set$noProducts(int cv$value, boolean allocated$) {
+			noProducts = cv$value;
+		}
+
+		// Getter for prob.
+		final double[] get$prob() {
+			return prob;
+		}
+
+		// Getter for sum.
+		final double get$sum() {
+			return sum;
+		}
+
+		// Getter for ut.
+		final double[] get$ut() {
+			return ut;
+		}
+
+		// Setter for ut.
+		final void set$ut(double[] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of ut including if probabilities need to be
+			// updated.
+			ut = cv$value;
+			
+			// Unset the fixed probability flag for sample 24 as it depends on ut.
+			fixedProbFlag$sample24 = false;
+			
+			// Unset the fixed probability flag for sample 78 as it depends on ut.
+			fixedProbFlag$sample78 = false;
+		}
+	}
 
     private final ComputedIntegerArrayInternal $choices = new ComputedIntegerArrayInternal(this, "choices", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$choices(); }
+        public int[] getValue() { return state.get$choices(); }
 
         @Override
         protected void setValueInternal(int[] value) {}
@@ -30,7 +226,7 @@ public final class DiscreteChoiceAlt extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$choices(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$choices(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -48,7 +244,7 @@ public final class DiscreteChoiceAlt extends Model {
 
     private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$exped(); }
+        public double[] getValue() { return state.get$exped(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -59,18 +255,18 @@ public final class DiscreteChoiceAlt extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$exped(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$exped(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample24(fixed, allocated);
+                state.set$fixedFlag$sample24(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample24())
+            if(state.get$fixedFlag$sample24())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -82,7 +278,7 @@ public final class DiscreteChoiceAlt extends Model {
 
     private final ComputedDoubleArrayInternal $prob = new ComputedDoubleArrayInternal(this, "prob", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$prob(); }
+        public double[] getValue() { return state.get$prob(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -93,18 +289,18 @@ public final class DiscreteChoiceAlt extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$prob(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$prob(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample24(fixed, allocated);
+                state.set$fixedFlag$sample24(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample24())
+            if(state.get$fixedFlag$sample24())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -116,7 +312,7 @@ public final class DiscreteChoiceAlt extends Model {
 
     private final ComputedDoubleInternal $sum = new ComputedDoubleInternal(this, "sum", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$sum(); }
+        public double getValue() { return state.get$sum(); }
 
         @Override
         protected void setValueInternal(double value) {}
@@ -127,18 +323,18 @@ public final class DiscreteChoiceAlt extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$sum(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$sum(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample24(fixed, allocated);
+                state.set$fixedFlag$sample24(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample24())
+            if(state.get$fixedFlag$sample24())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -150,27 +346,27 @@ public final class DiscreteChoiceAlt extends Model {
 
     private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$ut(); }
+        public double[] getValue() { return state.get$ut(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$ut(value, allocated);
+            state.set$ut(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$ut(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$ut(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample24(fixed, allocated);
+                state.set$fixedFlag$sample24(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample24())
+            if(state.get$fixedFlag$sample24())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -186,12 +382,12 @@ public final class DiscreteChoiceAlt extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$noObs();
+                return state.get$noObs();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noObs(value, allocated); }
+        protected void setValueInternal(int value) { state.set$noObs(value, allocated); }
     };
 
 	/** Observed variable representing noObs of type int from the Sandwood model. */
@@ -201,12 +397,12 @@ public final class DiscreteChoiceAlt extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$noProducts();
+                return state.get$noProducts();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noProducts(value, allocated); }
+        protected void setValueInternal(int value) { state.set$noProducts(value, allocated); }
     };
 
 	/** Observed variable representing noProducts of type int from the Sandwood model. */
@@ -218,12 +414,12 @@ public final class DiscreteChoiceAlt extends Model {
         @Override
         public int[] getValue() {
             synchronized(model) {
-                return system$c.get$ObsChoices();
+                return state.get$ObsChoices();
             }
         }
 
         @Override
-        protected void setValueInternal(int[] value) { system$c.set$ObsChoices(value, allocated); }
+        protected void setValueInternal(int[] value) { state.set$ObsChoices(value, allocated); }
     };
 
 	/**
@@ -239,6 +435,7 @@ public final class DiscreteChoiceAlt extends Model {
 	/** A constructor for a model where no variable values are set. */
     public DiscreteChoiceAlt() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("choices", $choices);
         $computedVariables.put("exped", $exped);
@@ -252,7 +449,9 @@ public final class DiscreteChoiceAlt extends Model {
 
         //Observed scalar fields
         $regularObservedValues.put("ObsChoices", $ObsChoices);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        DiscreteChoiceAlt$SingleThreadCPU core = new DiscreteChoiceAlt$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -283,40 +482,15 @@ public final class DiscreteChoiceAlt extends Model {
     }
     
     @Override
-    protected DiscreteChoiceAlt$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        DiscreteChoiceAlt$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new DiscreteChoiceAlt$SingleThreadCPU(target);
-                break;
+                return new DiscreteChoiceAlt$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new DiscreteChoiceAlt$MultiThreadCPU(target);
-                break;
+                return new DiscreteChoiceAlt$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(DiscreteChoiceAlt$CoreInterface oldCore, DiscreteChoiceAlt$CoreInterface newCore) {
-        //Model inputs
-        if(noObs.isSet())
-            newCore.set$noObs(oldCore.get$noObs(), false);
-        if(noProducts.isSet())
-            newCore.set$noProducts(oldCore.get$noProducts(), false);
-
-        //Observed scalars
-        if(ObsChoices.isSet())
-            newCore.set$ObsChoices(oldCore.get$ObsChoices(), false);
-
-        //ComputedVariables
-        if($ut.isSet())
-            newCore.set$ut(oldCore.get$ut(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample24(oldCore.get$fixedFlag$sample24(), false);
     }
 
 	/**

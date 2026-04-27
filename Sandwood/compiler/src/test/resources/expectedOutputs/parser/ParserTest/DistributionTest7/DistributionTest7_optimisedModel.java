@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,32 +16,237 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model DistributionTest7 This is the class that
  * all user interactions with the model should occur through.
  */
-public final class DistributionTest7 extends Model {
-    private DistributionTest7$CoreInterface system$c = new DistributionTest7$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class DistributionTest7 extends Model<DistributionTest7.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		double[] bias;
+		int cat;
+		boolean constrainedFlag$sample31 = true;
+		boolean constrainedFlag$sample45 = true;
+		double data;
+		double[] distribution$sample31;
+		boolean fixedFlag$sample31 = false;
+		boolean fixedFlag$sample45 = false;
+		boolean fixedProbFlag$sample31 = false;
+		boolean fixedProbFlag$sample45 = false;
+		boolean fixedProbFlag$sample51 = false;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$cat;
+		double logProbability$data;
+		double logProbability$result;
+		double logProbability$sample45;
+		double logProbability$var43;
+		double observedData;
+		double[] prob;
+		int result;
+		boolean system$gibbsForward = true;
+		int var43;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// Constructor for bias
+			bias = new double[3];
+			
+			// Constructor for prob
+			prob = new double[3];
+			
+			// Constructor for distribution$sample31
+			distribution$sample31 = new double[3];
+		}
+
+		// Getter for bias.
+		final double[] get$bias() {
+			return bias;
+		}
+
+		// Getter for cat.
+		final int get$cat() {
+			return cat;
+		}
+
+		// Setter for cat.
+		final void set$cat(int cv$value, boolean allocated$) {
+			// Set flags for all the side effects of cat including if probabilities need to be
+			// updated.
+			cat = cv$value;
+			
+			// Unset the fixed probability flag for sample 31 as it depends on cat.
+			fixedProbFlag$sample31 = false;
+			
+			// Unset the fixed probability flag for sample 45 as it depends on cat.
+			fixedProbFlag$sample45 = false;
+			
+			// Unset the fixed probability flag for sample 51 as it depends on cat.
+			fixedProbFlag$sample51 = false;
+		}
+
+		// Getter for data.
+		final double get$data() {
+			return data;
+		}
+
+		// Getter for distribution$sample31.
+		final double[] get$distribution$sample31() {
+			return distribution$sample31;
+		}
+
+		// Setter for distribution$sample31.
+		final void set$distribution$sample31(double[] cv$value, boolean allocated$) {
+			distribution$sample31 = cv$value;
+		}
+
+		// Getter for fixedFlag$sample31.
+		final boolean get$fixedFlag$sample31() {
+			return fixedFlag$sample31;
+		}
+
+		// Setter for fixedFlag$sample31.
+		final void set$fixedFlag$sample31(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample31 including if probabilities
+			// need to be updated.
+			fixedFlag$sample31 = cv$value;
+			
+			// Substituted "fixedFlag$sample31" with its value "cv$value".
+			constrainedFlag$sample31 = (cv$value || constrainedFlag$sample31);
+			
+			// Should the probability of sample 31 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample31" with its value "cv$value".
+			fixedProbFlag$sample31 = (cv$value && fixedProbFlag$sample31);
+			
+			// Should the probability of sample 45 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample31" with its value "cv$value".
+			fixedProbFlag$sample45 = (cv$value && fixedProbFlag$sample45);
+			
+			// Should the probability of sample 51 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample31" with its value "cv$value".
+			fixedProbFlag$sample51 = (cv$value && fixedProbFlag$sample51);
+		}
+
+		// Getter for fixedFlag$sample45.
+		final boolean get$fixedFlag$sample45() {
+			return fixedFlag$sample45;
+		}
+
+		// Setter for fixedFlag$sample45.
+		final void set$fixedFlag$sample45(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample45 including if probabilities
+			// need to be updated.
+			fixedFlag$sample45 = cv$value;
+			
+			// Substituted "fixedFlag$sample45" with its value "cv$value".
+			constrainedFlag$sample45 = (cv$value || constrainedFlag$sample45);
+			
+			// Should the probability of sample 45 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample45" with its value "cv$value".
+			fixedProbFlag$sample45 = (cv$value && fixedProbFlag$sample45);
+			
+			// Should the probability of sample 51 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample45" with its value "cv$value".
+			fixedProbFlag$sample51 = (cv$value && fixedProbFlag$sample51);
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$cat.
+		final double get$logProbability$cat() {
+			return logProbability$cat;
+		}
+
+		// Getter for logProbability$data.
+		final double get$logProbability$data() {
+			return logProbability$data;
+		}
+
+		// Getter for logProbability$result.
+		final double get$logProbability$result() {
+			return logProbability$result;
+		}
+
+		// Getter for observedData.
+		final double get$observedData() {
+			return observedData;
+		}
+
+		// Setter for observedData.
+		final void set$observedData(double cv$value, boolean allocated$) {
+			observedData = cv$value;
+		}
+
+		// Getter for prob.
+		final double[] get$prob() {
+			return prob;
+		}
+
+		// Getter for result.
+		final int get$result() {
+			return result;
+		}
+
+		// Getter for var43.
+		final int get$var43() {
+			return var43;
+		}
+
+		// Setter for var43.
+		final void set$var43(int cv$value, boolean allocated$) {
+			// Set flags for all the side effects of var43 including if probabilities need to
+			// be updated.
+			var43 = cv$value;
+			
+			// Unset the fixed probability flag for sample 45 as it depends on var43.
+			fixedProbFlag$sample45 = false;
+			
+			// Unset the fixed probability flag for sample 51 as it depends on var43.
+			fixedProbFlag$sample51 = false;
+		}
+	}
 
     private final ComputedIntegerInternal $cat = new ComputedIntegerInternal(this, "cat", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int getValue() { return system$c.get$cat(); }
+        public int getValue() { return state.get$cat(); }
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$cat(value, allocated);
+            state.set$cat(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$cat(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$cat(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample31(fixed, allocated);
+                state.set$fixedFlag$sample31(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample31())
+            if(state.get$fixedFlag$sample31())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -51,7 +258,7 @@ public final class DistributionTest7 extends Model {
 
     private final ComputedDoubleInternal $data = new ComputedDoubleInternal(this, "data", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$data(); }
+        public double getValue() { return state.get$data(); }
 
         @Override
         protected void setValueInternal(double value) {}
@@ -62,7 +269,7 @@ public final class DistributionTest7 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$data(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$data(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -80,7 +287,7 @@ public final class DistributionTest7 extends Model {
 
     private final ComputedIntegerInternal $result = new ComputedIntegerInternal(this, "result", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int getValue() { return system$c.get$result(); }
+        public int getValue() { return state.get$result(); }
 
         @Override
         protected void setValueInternal(int value) {}
@@ -91,20 +298,20 @@ public final class DistributionTest7 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$result(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$result(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample31(fixed, allocated);
-                system$c.set$fixedFlag$sample45(fixed, allocated);
+                state.set$fixedFlag$sample31(fixed, allocated);
+                state.set$fixedFlag$sample45(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample31 = system$c.get$fixedFlag$sample31();
-            boolean fixedFlag$sample45 = system$c.get$fixedFlag$sample45();
+            boolean fixedFlag$sample31 = state.get$fixedFlag$sample31();
+            boolean fixedFlag$sample45 = state.get$fixedFlag$sample45();
             if(fixedFlag$sample31 && fixedFlag$sample45)
                 return Immutability.FIXED;
             else if(fixedFlag$sample31 || fixedFlag$sample45)
@@ -119,11 +326,11 @@ public final class DistributionTest7 extends Model {
 
     private final ComputedIntegerInternal $var43 = new ComputedIntegerInternal(this, "var43", true, true, true, ProbabilityType.SKIPPABLE) {
         @Override
-        public int getValue() { return system$c.get$var43(); }
+        public int getValue() { return state.get$var43(); }
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$var43(value, allocated);
+            state.set$var43(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -149,12 +356,12 @@ public final class DistributionTest7 extends Model {
         @Override
         public double getValue() {
             synchronized(model) {
-                return system$c.get$observedData();
+                return state.get$observedData();
             }
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$observedData(value, allocated); }
+        protected void setValueInternal(double value) { state.set$observedData(value, allocated); }
     };
 
 	/**
@@ -170,6 +377,7 @@ public final class DistributionTest7 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public DistributionTest7() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("cat", $cat);
         $computedVariables.put("data", $data);
@@ -178,7 +386,9 @@ public final class DistributionTest7 extends Model {
 
         //Observed scalar fields
         $regularObservedValues.put("observedData", $observedData);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        DistributionTest7$SingleThreadCPU core = new DistributionTest7$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -192,37 +402,15 @@ public final class DistributionTest7 extends Model {
     }
     
     @Override
-    protected DistributionTest7$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        DistributionTest7$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new DistributionTest7$SingleThreadCPU(target);
-                break;
+                return new DistributionTest7$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new DistributionTest7$MultiThreadCPU(target);
-                break;
+                return new DistributionTest7$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(DistributionTest7$CoreInterface oldCore, DistributionTest7$CoreInterface newCore) {
-
-        //Observed scalars
-        if(observedData.isSet())
-            newCore.set$observedData(oldCore.get$observedData(), false);
-
-        //ComputedVariables
-        if($cat.isSet())
-            newCore.set$cat(oldCore.get$cat(), false);
-        if($var43.isSet())
-            newCore.set$var43(oldCore.get$var43(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample31(oldCore.get$fixedFlag$sample31(), false);
     }
 
 	/**

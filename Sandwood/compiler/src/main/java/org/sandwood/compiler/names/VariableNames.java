@@ -22,6 +22,8 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.internal.RandomNumberGenerator;
+import org.sandwood.compiler.dataflowGraph.variables.internal.Scratch;
+import org.sandwood.compiler.dataflowGraph.variables.internal.State;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
@@ -52,9 +54,24 @@ public final class VariableNames {
         return new GlobalVariableDescription<>(rng, VariableType.RNG, false);
     }
 
-    public static LocalVariableDescription<RandomNumberGenerator> rngName(int depth) {
-        assert (depth > 0);
-        return new LocalVariableDescription<>(rng + depth, VariableType.RNG, false);
+    public static LocalVariableDescription<RandomNumberGenerator> localRngName(int depth) {
+        assert (depth >= 0);
+        if(depth == 0)
+            return new LocalVariableDescription<>(rng, VariableType.RNG, false);
+        else
+            return new LocalVariableDescription<>(rng + depth, VariableType.RNG, false);
+    }
+
+    private static final String state = "state";
+
+    public static GlobalVariableDescription<State> stateName() {
+        return new GlobalVariableDescription<>(state, State.stateType, false);
+    }
+
+    private static final String scratch = "scratch";
+
+    public static GlobalVariableDescription<Scratch> scratchName() {
+        return new GlobalVariableDescription<>(scratch, Scratch.scratchType, false);
     }
 
     private static final String threadId = "threadID" + Name.prefix;
@@ -142,8 +159,8 @@ public final class VariableNames {
         return new LocalVariableDescription<>(calcVar + varDesc + Name.prefix + postfix, type, varDesc.name.comment);
     }
 
-    public static <A extends Variable<A>> ScratchVariableDescription<A> globalScratchVarName(Variable<?> v, String postfix,
-            Type<A> type) {
+    public static <A extends Variable<A>> ScratchVariableDescription<A> globalScratchVarName(Variable<?> v,
+            String postfix, Type<A> type) {
         return globalScratchVarName("var" + v.getId() + Name.prefix + postfix, type, true);
     }
 

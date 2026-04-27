@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,32 +16,163 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model RaggedArray4 This is the class that all user
  * interactions with the model should occur through.
  */
-public final class RaggedArray4 extends Model {
-    private RaggedArray4$CoreInterface system$c = new RaggedArray4$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class RaggedArray4 extends Model<RaggedArray4.State> {
+	final class State extends CoreModelState {
+double[][] a;
+		double[] b;
+		boolean constrainedFlag$sample47 = true;
+		boolean constrainedFlag$sample50 = true;
+		double[] d;
+		boolean fixedFlag$sample47 = false;
+		boolean fixedFlag$sample50 = false;
+		boolean fixedProbFlag$sample47 = false;
+		boolean fixedProbFlag$sample50 = false;
+		boolean fixedProbFlag$sample64 = false;
+		int length$obs_measured;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$d;
+		double logProbability$obs;
+		double logProbability$var62;
+		double logProbability$y;
+		int[] obs;
+		int[] obs_measured;
+		boolean system$gibbsForward = true;
+		int y;
+
+		@Override
+		public final void allocate() {
+			a = new double[2][];
+			a[0] = new double[2];
+			a[1] = new double[3];
+			b = new double[2];
+			if(!fixedFlag$sample50) {
+				int lengthCV$a$48_0 = -1;
+				if((0 == y))
+					lengthCV$a$48_0 = 2;
+				if((1 == y))
+					lengthCV$a$48_0 = 3;
+				d = new double[lengthCV$a$48_0];
+			}
+			obs = new int[length$obs_measured];
+		}
+
+		final double[][] get$a() {
+			return a;
+		}
+
+		final double[] get$b() {
+			return b;
+		}
+
+		final double[] get$d() {
+			return d;
+		}
+
+		final void set$d(double[] cv$value, boolean allocated$) {
+			d = cv$value;
+			fixedProbFlag$sample50 = false;
+			fixedProbFlag$sample64 = false;
+		}
+
+		final boolean get$fixedFlag$sample47() {
+			return fixedFlag$sample47;
+		}
+
+		final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample47 = cv$value;
+			constrainedFlag$sample47 = (cv$value || constrainedFlag$sample47);
+			fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
+			fixedProbFlag$sample50 = (cv$value && fixedProbFlag$sample50);
+		}
+
+		final boolean get$fixedFlag$sample50() {
+			return fixedFlag$sample50;
+		}
+
+		final void set$fixedFlag$sample50(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample50 = cv$value;
+			constrainedFlag$sample50 = (cv$value || constrainedFlag$sample50);
+			fixedProbFlag$sample50 = (cv$value && fixedProbFlag$sample50);
+			fixedProbFlag$sample64 = (cv$value && fixedProbFlag$sample64);
+		}
+
+		final int get$length$obs_measured() {
+			return length$obs_measured;
+		}
+
+		final void set$length$obs_measured(int cv$value, boolean allocated$) {
+			length$obs_measured = cv$value;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$d() {
+			return logProbability$d;
+		}
+
+		final double get$logProbability$obs() {
+			return logProbability$obs;
+		}
+
+		final double get$logProbability$y() {
+			return logProbability$y;
+		}
+
+		final int[] get$obs() {
+			return obs;
+		}
+
+		final int[] get$obs_measured() {
+			return obs_measured;
+		}
+
+		final void set$obs_measured(int[] cv$value, boolean allocated$) {
+			obs_measured = cv$value;
+		}
+
+		final int get$y() {
+			return y;
+		}
+
+		final void set$y(int cv$value, boolean allocated$) {
+			y = cv$value;
+			fixedProbFlag$sample47 = false;
+			fixedProbFlag$sample50 = false;
+		}
+	}
 
     private final ComputedDoubleArrayInternal $d = new ComputedDoubleArrayInternal(this, "d", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$d(); }
+        public double[] getValue() { return state.get$d(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$d(value, allocated);
+            state.set$d(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$d(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$d(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample50(fixed, allocated);
+                state.set$fixedFlag$sample50(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample50())
+            if(state.get$fixedFlag$sample50())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -51,7 +184,7 @@ public final class RaggedArray4 extends Model {
 
     private final ComputedIntegerArrayInternal $obs = new ComputedIntegerArrayInternal(this, "obs", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$obs(); }
+        public int[] getValue() { return state.get$obs(); }
 
         @Override
         protected void setValueInternal(int[] value) {}
@@ -62,7 +195,7 @@ public final class RaggedArray4 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$obs(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$obs(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -80,27 +213,27 @@ public final class RaggedArray4 extends Model {
 
     private final ComputedIntegerInternal $y = new ComputedIntegerInternal(this, "y", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int getValue() { return system$c.get$y(); }
+        public int getValue() { return state.get$y(); }
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$y(value, allocated);
+            state.set$y(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$y(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$y(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample47(fixed, allocated);
+                state.set$fixedFlag$sample47(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample47())
+            if(state.get$fixedFlag$sample47())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -118,24 +251,24 @@ public final class RaggedArray4 extends Model {
         @Override
         public int[] getValue() {
             synchronized(model) {
-                return system$c.get$obs_measured();
+                return state.get$obs_measured();
             }
         }
 
         @Override
         public void setValueInternal(int[] value) {
-            system$c.set$obs_measured(value, allocated);
-            system$c.set$length$obs_measured(value.length, allocated);
+            state.set$obs_measured(value, allocated);
+            state.set$length$obs_measured(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$obs_measured(shape, allocated);
+            state.set$length$obs_measured(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$obs_measured();
+            return state.get$length$obs_measured();
         }
     };
 
@@ -152,6 +285,7 @@ public final class RaggedArray4 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public RaggedArray4() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("d", $d);
         $computedVariables.put("obs", $obs);
@@ -159,7 +293,9 @@ public final class RaggedArray4 extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("obs_measured", $obs_measured);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        RaggedArray4$SingleThreadCPU core = new RaggedArray4$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -185,42 +321,15 @@ public final class RaggedArray4 extends Model {
     }
     
     @Override
-    protected RaggedArray4$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        RaggedArray4$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new RaggedArray4$SingleThreadCPU(target);
-                break;
+                return new RaggedArray4$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new RaggedArray4$MultiThreadCPU(target);
-                break;
+                return new RaggedArray4$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(RaggedArray4$CoreInterface oldCore, RaggedArray4$CoreInterface newCore) {
-
-        //Observed arrays
-        if(obs_measured.isSet()) {
-            newCore.set$obs_measured(oldCore.get$obs_measured(), false);
-            newCore.set$length$obs_measured(oldCore.get$length$obs_measured(), false);
-        }
-        else if(obs_measured.shapeSet())
-            newCore.set$length$obs_measured(oldCore.get$length$obs_measured(), false);
-
-        //ComputedVariables
-        if($d.isSet())
-            newCore.set$d(oldCore.get$d(), false);
-        if($y.isSet())
-            newCore.set$y(oldCore.get$y(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47(), false);
-        newCore.set$fixedFlag$sample50(oldCore.get$fixedFlag$sample50(), false);
     }
 
 	/**

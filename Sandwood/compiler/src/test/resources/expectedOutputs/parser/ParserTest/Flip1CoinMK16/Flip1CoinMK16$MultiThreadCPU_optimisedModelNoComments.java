@@ -1,162 +1,110 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Flip1CoinMK16$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Flip1CoinMK16.State;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK16$MultiThreadCPU extends CoreModelMultiThreadCPU implements Flip1CoinMK16$CoreInterface {
-double bias;
-	boolean constrainedFlag$sample14 = true;
-	boolean flip;
-	boolean flipMeasured;
-	double guard;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bernoulli;
-	double logProbability$sample14;
-	double logProbability$sample16;
-	boolean system$gibbsForward = true;
+final class Flip1CoinMK16$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	public Flip1CoinMK16$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	@Override
-	public final double get$bias() {
-		return bias;
-	}
 
-	@Override
-	public final void set$bias(double cv$value, boolean allocated$) {
-		bias = cv$value;
-	}
-
-	@Override
-	public final boolean get$flipMeasured() {
-		return flipMeasured;
-	}
-
-	@Override
-	public final void set$flipMeasured(boolean cv$value, boolean allocated$) {
-		flipMeasured = cv$value;
-	}
-
-	@Override
-	public final double get$guard() {
-		return guard;
-	}
-
-	@Override
-	public final void set$guard(double cv$value, boolean allocated$) {
-		guard = cv$value;
-	}
-
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	@Override
-	public final double get$logProbability$bernoulli() {
-		return logProbability$bernoulli;
+	public Flip1CoinMK16$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	private final void drawValueSample14() {
-		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	private final void inferSample14() {
-		constrainedFlag$sample14 = false;
+		state.constrainedFlag$sample14 = false;
 		int cv$sum = 0;
-		constrainedFlag$sample14 = true;
-		if(flip)
+		state.constrainedFlag$sample14 = true;
+		if(state.flip)
 			cv$sum = 1;
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, 1);
+		state.bias = Conjugates.sampleConjugateBetaBinomial(state.RNG$, 1.0, 1.0, cv$sum, 1);
 	}
 
 	private final void logProbabilityValue$sample14() {
 		double cv$accumulator = 0.0;
-		if(Double.isNaN(guard)) {
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
+		if(Double.isNaN(state.guard)) {
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(state.bias, 1.0, 1.0);
 			cv$accumulator = cv$distributionAccumulator;
-			logProbability$sample14 = cv$distributionAccumulator;
+			state.logProbability$sample14 = cv$distributionAccumulator;
 		}
-		logProbability$$model = (logProbability$$model + cv$accumulator);
+		state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 	}
 
 	private final void logProbabilityValue$sample16() {
 		double cv$accumulator = 0.0;
-		if(Double.isNaN(guard)) {
-			double cv$distributionAccumulator = (((0.0 <= bias) && (bias <= 1.0))?Math.log((flip?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY);
+		if(Double.isNaN(state.guard)) {
+			double cv$distributionAccumulator = (((0.0 <= state.bias) && (state.bias <= 1.0))?Math.log((state.flip?state.bias:(1.0 - state.bias))):Double.NEGATIVE_INFINITY);
 			cv$accumulator = cv$distributionAccumulator;
-			logProbability$bernoulli = cv$distributionAccumulator;
-			logProbability$sample16 = cv$distributionAccumulator;
+			state.logProbability$bernoulli = cv$distributionAccumulator;
+			state.logProbability$sample16 = cv$distributionAccumulator;
 		}
-		logProbability$$model = (logProbability$$model + cv$accumulator);
-		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+		state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 	}
 
 	@Override
-	public final void allocate() {}
-
-	@Override
-	public final void allocateScratch() {}
-
-	@Override
 	public final void forwardGeneration() {
-		if(Double.isNaN(guard)) {
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
+		if(Double.isNaN(state.guard)) {
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+			state.flip = DistributionSampling.sampleBernoulli(state.RNG$, state.bias);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(Double.isNaN(guard))
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(Double.isNaN(state.guard))
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void forwardGenerationPrime() {
-		if(Double.isNaN(guard)) {
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			flip = DistributionSampling.sampleBernoulli(RNG$, bias);
+		if(Double.isNaN(state.guard)) {
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+			state.flip = DistributionSampling.sampleBernoulli(state.RNG$, state.bias);
 		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(Double.isNaN(guard))
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(Double.isNaN(state.guard))
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(Double.isNaN(guard))
-			bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		if(Double.isNaN(state.guard))
+			state.bias = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	@Override
 	public final void gibbsRound() {
-		if(Double.isNaN(guard))
+		if(Double.isNaN(state.guard))
 			inferSample14();
-		system$gibbsForward = !system$gibbsForward;
-		if((Double.isNaN(guard) && !constrainedFlag$sample14))
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if((Double.isNaN(state.guard) && !state.constrainedFlag$sample14))
 			drawValueSample14();
 	}
 
 	private final void initializeLogProbabilityFields() {
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$sample14 = Double.NaN;
-		logProbability$bernoulli = Double.NaN;
-		logProbability$sample16 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$sample14 = Double.NaN;
+		state.logProbability$bernoulli = Double.NaN;
+		state.logProbability$sample16 = Double.NaN;
 	}
 
 	@Override
@@ -184,8 +132,8 @@ double bias;
 
 	@Override
 	public final void propagateObservedValues() {
-		if(Double.isNaN(guard))
-			flip = flipMeasured;
+		if(Double.isNaN(state.guard))
+			state.flip = state.flipMeasured;
 	}
 
 	@Override

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,32 +16,187 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model LogitRegressionTest This is the class that
  * all user interactions with the model should occur through.
  */
-public final class LogitRegressionTest extends Model {
-    private LogitRegressionTest$CoreInterface system$c = new LogitRegressionTest$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class LogitRegressionTest extends Model<LogitRegressionTest.State> {
+	final class State extends CoreModelState {
+double bias;
+		boolean[] constrainedFlag$sample35;
+		boolean constrainedFlag$sample42 = true;
+		boolean fixedFlag$sample35 = false;
+		boolean fixedFlag$sample42 = false;
+		boolean fixedProbFlag$sample35 = false;
+		boolean fixedProbFlag$sample42 = false;
+		boolean fixedProbFlag$sample94 = false;
+		double[][] indicator;
+		int k;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$bias;
+		double[] logProbability$sample35;
+		double[][] logProbability$sample94;
+		double logProbability$weights;
+		double logProbability$y;
+		int n;
+		double[][] p;
+		boolean system$gibbsForward = true;
+		double[] weights;
+		double[][] x;
+		boolean[][] y;
+		boolean[][] yMeasured;
+
+		@Override
+		public final void allocate() {
+			{
+				y = new boolean[x.length][];
+				for(int var15 = 0; var15 < x.length; var15 += 1)
+					y[var15] = new boolean[3];
+			}
+			if(!fixedFlag$sample35) {
+				{
+					weights = new double[3];
+				}
+			}
+			{
+				indicator = new double[((((x.length - 1) - 0) / 1) + 1)][];
+				for(int i = 0; i < x.length; i += 1)
+					indicator[((i - 0) / 1)] = new double[3];
+			}
+			{
+				p = new double[((((x.length - 1) - 0) / 1) + 1)][];
+				for(int i = 0; i < x.length; i += 1)
+					p[((i - 0) / 1)] = new double[3];
+			}
+			{
+				constrainedFlag$sample35 = new boolean[((((3 - 1) - 0) / 1) + 1)];
+			}
+			{
+				logProbability$sample35 = new double[((((3 - 1) - 0) / 1) + 1)];
+			}
+			{
+				logProbability$sample94 = new double[((((x.length - 1) - 0) / 1) + 1)][];
+				for(int i = 0; i < x.length; i += 1)
+					logProbability$sample94[((i - 0) / 1)] = new double[((((3 - 1) - 0) / 1) + 1)];
+			}
+		}
+
+		final double get$bias() {
+			return bias;
+		}
+
+		final void set$bias(double cv$value, boolean allocated$) {
+			bias = cv$value;
+			fixedProbFlag$sample42 = false;
+			fixedProbFlag$sample94 = false;
+		}
+
+		final boolean get$fixedFlag$sample35() {
+			return fixedFlag$sample35;
+		}
+
+		final void set$fixedFlag$sample35(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample35 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample35$1 = 0; index$constrainedFlag$sample35$1 < constrainedFlag$sample35.length; index$constrainedFlag$sample35$1 += 1)
+					constrainedFlag$sample35[index$constrainedFlag$sample35$1] = true;
+			}
+			fixedProbFlag$sample35 = (fixedFlag$sample35 && fixedProbFlag$sample35);
+			fixedProbFlag$sample94 = (fixedFlag$sample35 && fixedProbFlag$sample94);
+		}
+
+		final boolean get$fixedFlag$sample42() {
+			return fixedFlag$sample42;
+		}
+
+		final void set$fixedFlag$sample42(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample42 = cv$value;
+			constrainedFlag$sample42 = (fixedFlag$sample42 || constrainedFlag$sample42);
+			fixedProbFlag$sample42 = (fixedFlag$sample42 && fixedProbFlag$sample42);
+			fixedProbFlag$sample94 = (fixedFlag$sample42 && fixedProbFlag$sample94);
+		}
+
+		final int get$k() {
+			return k;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$bias() {
+			return logProbability$bias;
+		}
+
+		final double get$logProbability$weights() {
+			return logProbability$weights;
+		}
+
+		final double get$logProbability$y() {
+			return logProbability$y;
+		}
+
+		final int get$n() {
+			return n;
+		}
+
+		final double[] get$weights() {
+			return weights;
+		}
+
+		final void set$weights(double[] cv$value, boolean allocated$) {
+			weights = cv$value;
+			fixedProbFlag$sample35 = false;
+			fixedProbFlag$sample94 = false;
+		}
+
+		final double[][] get$x() {
+			return x;
+		}
+
+		final void set$x(double[][] cv$value, boolean allocated$) {
+			x = cv$value;
+		}
+
+		final boolean[][] get$y() {
+			return y;
+		}
+
+		final boolean[][] get$yMeasured() {
+			return yMeasured;
+		}
+
+		final void set$yMeasured(boolean[][] cv$value, boolean allocated$) {
+			yMeasured = cv$value;
+		}
+	}
 
     private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$bias(); }
+        public double getValue() { return state.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$bias(value, allocated);
+            state.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$bias(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$bias(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample42(fixed, allocated);
+                state.set$fixedFlag$sample42(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample42())
+            if(state.get$fixedFlag$sample42())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -51,27 +208,27 @@ public final class LogitRegressionTest extends Model {
 
     private final ComputedDoubleArrayInternal $weights = new ComputedDoubleArrayInternal(this, "weights", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$weights(); }
+        public double[] getValue() { return state.get$weights(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$weights(value, allocated);
+            state.set$weights(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$weights(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$weights(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample35(fixed, allocated);
+                state.set$fixedFlag$sample35(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample35())
+            if(state.get$fixedFlag$sample35())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -85,7 +242,7 @@ public final class LogitRegressionTest extends Model {
 
     private final ComputedObjectArrayInternal<boolean[]> $y = new ComputedObjectArrayInternal<boolean[]>(this, "y", false, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
         @Override
-        public boolean[][] getValue() { return system$c.get$y(); }
+        public boolean[][] getValue() { return state.get$y(); }
 
         @Override
         protected void setValueInternal(boolean[][] value) {}
@@ -96,7 +253,7 @@ public final class LogitRegressionTest extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$y(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$y(); }
 
         @Override
         public boolean[][][] constructArray(int iterations) {
@@ -123,12 +280,12 @@ public final class LogitRegressionTest extends Model {
         @Override
         public double[][] getValue() {
             synchronized(model) {
-                return system$c.get$x();
+                return state.get$x();
             }
         }
 
         @Override
-        protected void setValueInternal(double[][] value) { system$c.set$x(value, allocated); }
+        protected void setValueInternal(double[][] value) { state.set$x(value, allocated); }
     };
 
 	/** Observed variable representing x of type double[][] from the Sandwood model. */
@@ -140,12 +297,12 @@ public final class LogitRegressionTest extends Model {
         @Override
         public boolean[][] getValue() {
             synchronized(model) {
-                return system$c.get$yMeasured();
+                return state.get$yMeasured();
             }
         }
 
         @Override
-        protected void setValueInternal(boolean[][] value) { system$c.set$yMeasured(value, allocated); }
+        protected void setValueInternal(boolean[][] value) { state.set$yMeasured(value, allocated); }
     };
 
 	/**
@@ -162,6 +319,7 @@ public final class LogitRegressionTest extends Model {
 	/** A constructor for a model where no variable values are set. */
     public LogitRegressionTest() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("bias", $bias);
         $computedVariables.put("weights", $weights);
@@ -172,7 +330,9 @@ public final class LogitRegressionTest extends Model {
 
         //Observed scalar fields
         $regularObservedValues.put("yMeasured", $yMeasured);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        LogitRegressionTest$SingleThreadCPU core = new LogitRegressionTest$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -199,41 +359,15 @@ public final class LogitRegressionTest extends Model {
     }
     
     @Override
-    protected LogitRegressionTest$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        LogitRegressionTest$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new LogitRegressionTest$SingleThreadCPU(target);
-                break;
+                return new LogitRegressionTest$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new LogitRegressionTest$MultiThreadCPU(target);
-                break;
+                return new LogitRegressionTest$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(LogitRegressionTest$CoreInterface oldCore, LogitRegressionTest$CoreInterface newCore) {
-        //Model inputs
-        if(x.isSet())
-            newCore.set$x(oldCore.get$x(), false);
-
-        //Observed scalars
-        if(yMeasured.isSet())
-            newCore.set$yMeasured(oldCore.get$yMeasured(), false);
-
-        //ComputedVariables
-        if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias(), false);
-        if($weights.isSet())
-            newCore.set$weights(oldCore.get$weights(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample35(oldCore.get$fixedFlag$sample35(), false);
-        newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42(), false);
     }
 
 	/**

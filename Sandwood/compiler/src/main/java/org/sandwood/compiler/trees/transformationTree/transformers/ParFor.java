@@ -50,6 +50,8 @@ public class ParFor extends Transformer {
 
     private VariableTracking varTracking;
     private Map<VariableDescription<?>, Stack<VariableDescription<?>>> substitutions = new HashMap<>();
+    
+    private static final VariableDescription<RandomNumberGenerator> rngName = VariableNames.rngName();
 
     public ParFor(VariableTracking varTracking) {
         this.varTracking = varTracking;
@@ -176,7 +178,7 @@ public class ParFor extends Transformer {
                             VariableNames.threadIdName(t.indexDesc.name), innerFor);
 
                     TransTreeVoid f = TransParFor.getParFor(
-                            depth == 0 ? load(VariableNames.rngName()) : load(VariableNames.rngName(depth)), start, end,
+                            depth == 0 ? load(VariableNames.rngName()) : load(VariableNames.localRngName(depth)), start, end,
                             step, l,
                             " Outer loop for dispatching multiple batches of iterations to execute in parallel");
 
@@ -223,11 +225,11 @@ public class ParFor extends Transformer {
         switch(tree.type) {
             case LOAD: {
                 TransLoad<X> l = (TransLoad<X>) tree;
-                VariableDescription<RandomNumberGenerator> rngName = VariableNames.rngName();
                 if(l.varDesc.equals(rngName)) {
-                    if(depth != 0)
-                        rngName = VariableNames.rngName(depth);
-                    return (TransTreeReturn<X>) load(rngName);
+                    if(depth > 0)
+                        return (TransTreeReturn<X>) load(VariableNames.localRngName(depth));
+                    else
+                        return tree.applyTransformation(this);
                 } else
                     return load(getSubstitution(l.varDesc));
             }

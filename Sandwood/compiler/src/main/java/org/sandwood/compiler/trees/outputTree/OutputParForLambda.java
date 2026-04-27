@@ -37,7 +37,7 @@ public class OutputParForLambda extends OutputTree {
     @Override
     protected void toJavaInternal(StringBuilder sb, int indent, Set<String> requiredImports) {
         sb.append("(int " + startDesc + ", int " + endDesc + ", int " + threadID + ", org.sandwood.random.internal.Rng "
-                + VariableNames.rngName(parDepth) + ") -> { \n");
+                + VariableNames.localRngName(parDepth) + ") -> { \n");
         addIndent(sb, indent + 1);
         body.toJava(sb, indent + 2, requiredImports);
         addIndent(sb, indent);

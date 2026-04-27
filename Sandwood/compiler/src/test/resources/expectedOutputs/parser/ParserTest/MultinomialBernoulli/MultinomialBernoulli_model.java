@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,12 +16,247 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model MultinomialBernoulli This is the class that
  * all user interactions with the model should occur through.
  */
-public final class MultinomialBernoulli extends Model {
-    private MultinomialBernoulli$CoreInterface system$c = new MultinomialBernoulli$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class MultinomialBernoulli extends Model<MultinomialBernoulli.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		double[] beta;
+		boolean constrainedFlag$sample17 = true;
+		boolean constrainedFlag$sample20 = true;
+		boolean fixedFlag$sample17 = false;
+		boolean fixedFlag$sample20 = false;
+		boolean fixedProbFlag$sample17 = false;
+		boolean fixedProbFlag$sample20 = false;
+		boolean fixedProbFlag$sample48 = false;
+		boolean fixedProbFlag$sample60 = false;
+		boolean fixedProbFlag$sample72 = false;
+		int length;
+		int length$observed;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$b1;
+		double logProbability$b2;
+		double logProbability$b3;
+		double logProbability$output;
+		double logProbability$p;
+		double logProbability$prior;
+		double logProbability$var48;
+		double logProbability$var60;
+		double logProbability$var72;
+		int n;
+		boolean[] observed;
+		boolean[] output;
+		double[] p;
+		int[] prior;
+		boolean system$gibbsForward = true;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// Constructor for beta
+			{
+				beta = new double[3];
+			}
+			
+			// If p has not been set already allocate space.
+			if(!fixedFlag$sample17) {
+				// Constructor for p
+				{
+					p = new double[3];
+				}
+			}
+			
+			// If prior has not been set already allocate space.
+			if(!fixedFlag$sample20) {
+				// Constructor for prior
+				{
+					prior = new int[3];
+				}
+			}
+			
+			// Constructor for output
+			{
+				output = new boolean[length$observed];
+			}
+		}
+
+		// Getter for beta.
+		final double[] get$beta() {
+			return beta;
+		}
+
+		// Getter for fixedFlag$sample17.
+		final boolean get$fixedFlag$sample17() {
+			return fixedFlag$sample17;
+		}
+
+		// Setter for fixedFlag$sample17.
+		final void set$fixedFlag$sample17(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample17 including if probabilities
+			// need to be updated.
+			fixedFlag$sample17 = cv$value;
+			constrainedFlag$sample17 = (fixedFlag$sample17 || constrainedFlag$sample17);
+			
+			// Should the probability of sample 17 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample17 = (fixedFlag$sample17 && fixedProbFlag$sample17);
+			
+			// Should the probability of sample 20 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample20 = (fixedFlag$sample17 && fixedProbFlag$sample20);
+		}
+
+		// Getter for fixedFlag$sample20.
+		final boolean get$fixedFlag$sample20() {
+			return fixedFlag$sample20;
+		}
+
+		// Setter for fixedFlag$sample20.
+		final void set$fixedFlag$sample20(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample20 including if probabilities
+			// need to be updated.
+			fixedFlag$sample20 = cv$value;
+			constrainedFlag$sample20 = (fixedFlag$sample20 || constrainedFlag$sample20);
+			
+			// Should the probability of sample 20 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample20 = (fixedFlag$sample20 && fixedProbFlag$sample20);
+			
+			// Should the probability of sample 48 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample48 = (fixedFlag$sample20 && fixedProbFlag$sample48);
+			
+			// Should the probability of sample 60 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample60 = (fixedFlag$sample20 && fixedProbFlag$sample60);
+			
+			// Should the probability of sample 72 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample72 = (fixedFlag$sample20 && fixedProbFlag$sample72);
+		}
+
+		// Getter for length.
+		final int get$length() {
+			return length;
+		}
+
+		// Getter for length$observed.
+		final int get$length$observed() {
+			return length$observed;
+		}
+
+		// Setter for length$observed.
+		final void set$length$observed(int cv$value, boolean allocated$) {
+			length$observed = cv$value;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$b1.
+		final double get$logProbability$b1() {
+			return logProbability$b1;
+		}
+
+		// Getter for logProbability$b2.
+		final double get$logProbability$b2() {
+			return logProbability$b2;
+		}
+
+		// Getter for logProbability$b3.
+		final double get$logProbability$b3() {
+			return logProbability$b3;
+		}
+
+		// Getter for logProbability$output.
+		final double get$logProbability$output() {
+			return logProbability$output;
+		}
+
+		// Getter for logProbability$p.
+		final double get$logProbability$p() {
+			return logProbability$p;
+		}
+
+		// Getter for logProbability$prior.
+		final double get$logProbability$prior() {
+			return logProbability$prior;
+		}
+
+		// Getter for n.
+		final int get$n() {
+			return n;
+		}
+
+		// Getter for observed.
+		final boolean[] get$observed() {
+			return observed;
+		}
+
+		// Setter for observed.
+		final void set$observed(boolean[] cv$value, boolean allocated$) {
+			observed = cv$value;
+		}
+
+		// Getter for output.
+		final boolean[] get$output() {
+			return output;
+		}
+
+		// Getter for p.
+		final double[] get$p() {
+			return p;
+		}
+
+		// Setter for p.
+		final void set$p(double[] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of p including if probabilities need to be updated.
+			p = cv$value;
+			
+			// Unset the fixed probability flag for sample 17 as it depends on p.
+			fixedProbFlag$sample17 = false;
+			
+			// Unset the fixed probability flag for sample 20 as it depends on p.
+			fixedProbFlag$sample20 = false;
+		}
+
+		// Getter for prior.
+		final int[] get$prior() {
+			return prior;
+		}
+
+		// Setter for prior.
+		final void set$prior(int[] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of prior including if probabilities need to
+			// be updated.
+			prior = cv$value;
+			
+			// Unset the fixed probability flag for sample 20 as it depends on prior.
+			fixedProbFlag$sample20 = false;
+			
+			// Unset the fixed probability flag for sample 48 as it depends on prior.
+			fixedProbFlag$sample48 = false;
+			
+			// Unset the fixed probability flag for sample 60 as it depends on prior.
+			fixedProbFlag$sample60 = false;
+			
+			// Unset the fixed probability flag for sample 72 as it depends on prior.
+			fixedProbFlag$sample72 = false;
+		}
+	}
 
     private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$output(); }
+        public boolean[] getValue() { return state.get$output(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -30,7 +267,7 @@ public final class MultinomialBernoulli extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$output(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$output(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -50,27 +287,27 @@ public final class MultinomialBernoulli extends Model {
 
     private final ComputedDoubleArrayInternal $p = new ComputedDoubleArrayInternal(this, "p", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$p(); }
+        public double[] getValue() { return state.get$p(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$p(value, allocated);
+            state.set$p(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$p(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$p(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample17(fixed, allocated);
+                state.set$fixedFlag$sample17(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample17())
+            if(state.get$fixedFlag$sample17())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -82,27 +319,27 @@ public final class MultinomialBernoulli extends Model {
 
     private final ComputedIntegerArrayInternal $prior = new ComputedIntegerArrayInternal(this, "prior", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$prior(); }
+        public int[] getValue() { return state.get$prior(); }
 
         @Override
         protected void setValueInternal(int[] value) {
-            system$c.set$prior(value, allocated);
+            state.set$prior(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$prior(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$prior(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample20(fixed, allocated);
+                state.set$fixedFlag$sample20(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample20())
+            if(state.get$fixedFlag$sample20())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -120,24 +357,24 @@ public final class MultinomialBernoulli extends Model {
         @Override
         public boolean[] getValue() {
             synchronized(model) {
-                return system$c.get$observed();
+                return state.get$observed();
             }
         }
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$observed(value, allocated);
-            system$c.set$length$observed(value.length, allocated);
+            state.set$observed(value, allocated);
+            state.set$length$observed(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$observed(shape, allocated);
+            state.set$length$observed(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$observed();
+            return state.get$length$observed();
         }
     };
 
@@ -151,7 +388,7 @@ public final class MultinomialBernoulli extends Model {
     private final RandomVariableInternal $b1 = new RandomVariableInternal(this, "b1", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$b1();
+            return state.get$logProbability$b1();
         }
     };
 
@@ -161,7 +398,7 @@ public final class MultinomialBernoulli extends Model {
     private final RandomVariableInternal $b2 = new RandomVariableInternal(this, "b2", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$b2();
+            return state.get$logProbability$b2();
         }
     };
 
@@ -171,7 +408,7 @@ public final class MultinomialBernoulli extends Model {
     private final RandomVariableInternal $b3 = new RandomVariableInternal(this, "b3", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$b3();
+            return state.get$logProbability$b3();
         }
     };
 
@@ -184,6 +421,7 @@ public final class MultinomialBernoulli extends Model {
 	/** A constructor for a model where no variable values are set. */
     public MultinomialBernoulli() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("output", $output);
         $computedVariables.put("p", $p);
@@ -191,7 +429,9 @@ public final class MultinomialBernoulli extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("observed", $observed);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        MultinomialBernoulli$SingleThreadCPU core = new MultinomialBernoulli$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -217,42 +457,15 @@ public final class MultinomialBernoulli extends Model {
     }
     
     @Override
-    protected MultinomialBernoulli$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        MultinomialBernoulli$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new MultinomialBernoulli$SingleThreadCPU(target);
-                break;
+                return new MultinomialBernoulli$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new MultinomialBernoulli$MultiThreadCPU(target);
-                break;
+                return new MultinomialBernoulli$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(MultinomialBernoulli$CoreInterface oldCore, MultinomialBernoulli$CoreInterface newCore) {
-
-        //Observed arrays
-        if(observed.isSet()) {
-            newCore.set$observed(oldCore.get$observed(), false);
-            newCore.set$length$observed(oldCore.get$length$observed(), false);
-        }
-        else if(observed.shapeSet())
-            newCore.set$length$observed(oldCore.get$length$observed(), false);
-
-        //ComputedVariables
-        if($p.isSet())
-            newCore.set$p(oldCore.get$p(), false);
-        if($prior.isSet())
-            newCore.set$prior(oldCore.get$prior(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17(), false);
-        newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20(), false);
     }
 
 	/**

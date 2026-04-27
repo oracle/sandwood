@@ -1484,7 +1484,7 @@ public class TreeUtils {
         // Pass in the threads random number generator.
         if(threadIdName != null) {
             args.add(new ArgDesc<>(threadIdName));
-            args.add(new ArgDesc<>(VariableNames.rngName()));
+            args.add(new ArgDesc<>(VariableNames.localRngName(0)));
         }
 
         return args.toArray(new ArgDesc[args.size()]);

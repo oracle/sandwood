@@ -37,7 +37,7 @@ public class OutputVoidFunction extends OutputFunction {
             } else if(loc == MethodLocation.CLASS)
                 sb.append("\n");
 
-            if(override || (loc == MethodLocation.CLASS && (visibility != Visibility.PRIVATE))) {
+            if(override) {
                 addIndent(sb, indent);
                 sb.append("@Override\n");
             }

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,21 +16,284 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model LDATest This is the class that all user interactions
  * with the model should occur through.
  */
-public final class LDATest extends Model {
-    private LDATest$CoreInterface system$c = new LDATest$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class LDATest extends Model<LDATest.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		double[] alpha;
+		double[] beta;
+		boolean[] constrainedFlag$sample42;
+		boolean[] constrainedFlag$sample58;
+		boolean[][] constrainedFlag$sample90;
+		int[][] documents;
+		boolean fixedFlag$sample42 = false;
+		boolean fixedFlag$sample58 = false;
+		boolean fixedProbFlag$sample42 = false;
+		boolean fixedProbFlag$sample58 = false;
+		int[] length$documents;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$phi;
+		double logProbability$theta;
+		double logProbability$var42;
+		double logProbability$var57;
+		double logProbability$var91;
+		double logProbability$w;
+		double logProbability$z;
+		int noTopics;
+		double[][] phi;
+		boolean system$gibbsForward = true;
+		double[][] theta;
+		int vocabSize;
+		int[][] w;
+		int[][] z;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// Constructor for alpha
+			{
+				alpha = new double[noTopics];
+			}
+			
+			// Constructor for beta
+			{
+				beta = new double[vocabSize];
+			}
+			
+			// If phi has not been set already allocate space.
+			if(!fixedFlag$sample42) {
+				// Constructor for phi
+				{
+					phi = new double[noTopics][];
+					for(int var41 = 0; var41 < noTopics; var41 += 1)
+						phi[var41] = new double[vocabSize];
+				}
+			}
+			
+			// If theta has not been set already allocate space.
+			if(!fixedFlag$sample58) {
+				// Constructor for theta
+				{
+					theta = new double[length$documents.length][];
+					for(int var56 = 0; var56 < length$documents.length; var56 += 1)
+						theta[var56] = new double[noTopics];
+				}
+			}
+			
+			// Constructor for w
+			{
+				w = new int[length$documents.length][];
+				for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+					w[i$var71] = new int[length$documents[i$var71]];
+			}
+			
+			// Constructor for z
+			{
+				z = new int[((((length$documents.length - 1) - 0) / 1) + 1)][];
+				for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+					z[((i$var71 - 0) / 1)] = new int[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for constrainedFlag$sample90
+			{
+				constrainedFlag$sample90 = new boolean[((((length$documents.length - 1) - 0) / 1) + 1)][];
+				for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+					constrainedFlag$sample90[((i$var71 - 0) / 1)] = new boolean[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for constrainedFlag$sample42
+			{
+				constrainedFlag$sample42 = new boolean[((((noTopics - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for constrainedFlag$sample58
+			{
+				constrainedFlag$sample58 = new boolean[((((length$documents.length - 1) - 0) / 1) + 1)];
+			}
+		}
+
+		// Getter for alpha.
+		final double[] get$alpha() {
+			return alpha;
+		}
+
+		// Getter for beta.
+		final double[] get$beta() {
+			return beta;
+		}
+
+		// Getter for documents.
+		final int[][] get$documents() {
+			return documents;
+		}
+
+		// Setter for documents.
+		final void set$documents(int[][] cv$value, boolean allocated$) {
+			documents = cv$value;
+		}
+
+		// Getter for fixedFlag$sample42.
+		final boolean get$fixedFlag$sample42() {
+			return fixedFlag$sample42;
+		}
+
+		// Setter for fixedFlag$sample42.
+		final void set$fixedFlag$sample42(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample42 including if probabilities
+			// need to be updated.
+			fixedFlag$sample42 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
+					constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
+			}
+			
+			// Should the probability of sample 42 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample42 = (fixedFlag$sample42 && fixedProbFlag$sample42);
+		}
+
+		// Getter for fixedFlag$sample58.
+		final boolean get$fixedFlag$sample58() {
+			return fixedFlag$sample58;
+		}
+
+		// Setter for fixedFlag$sample58.
+		final void set$fixedFlag$sample58(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample58 including if probabilities
+			// need to be updated.
+			fixedFlag$sample58 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
+					constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
+			}
+			
+			// Should the probability of sample 58 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample58 = (fixedFlag$sample58 && fixedProbFlag$sample58);
+		}
+
+		// Getter for length$documents.
+		final int[] get$length$documents() {
+			return length$documents;
+		}
+
+		// Setter for length$documents.
+		final void set$length$documents(int[] cv$value, boolean allocated$) {
+			length$documents = cv$value;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$phi.
+		final double get$logProbability$phi() {
+			return logProbability$phi;
+		}
+
+		// Getter for logProbability$theta.
+		final double get$logProbability$theta() {
+			return logProbability$theta;
+		}
+
+		// Getter for logProbability$w.
+		final double get$logProbability$w() {
+			return logProbability$w;
+		}
+
+		// Getter for noTopics.
+		final int get$noTopics() {
+			return noTopics;
+		}
+
+		// Setter for noTopics.
+		final void set$noTopics(int cv$value, boolean allocated$) {
+			noTopics = cv$value;
+		}
+
+		// Getter for phi.
+		final double[][] get$phi() {
+			return phi;
+		}
+
+		// Setter for phi.
+		final void set$phi(double[][] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of phi including if probabilities need to be
+			// updated.
+			phi = cv$value;
+			
+			// Unset the fixed probability flag for sample 42 as it depends on phi.
+			fixedProbFlag$sample42 = false;
+		}
+
+		// Getter for theta.
+		final double[][] get$theta() {
+			return theta;
+		}
+
+		// Setter for theta.
+		final void set$theta(double[][] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of theta including if probabilities need to
+			// be updated.
+			theta = cv$value;
+			
+			// Unset the fixed probability flag for sample 58 as it depends on theta.
+			fixedProbFlag$sample58 = false;
+		}
+
+		// Getter for vocabSize.
+		final int get$vocabSize() {
+			return vocabSize;
+		}
+
+		// Setter for vocabSize.
+		final void set$vocabSize(int cv$value, boolean allocated$) {
+			vocabSize = cv$value;
+		}
+
+		// Getter for w.
+		final int[][] get$w() {
+			return w;
+		}
+
+		// Getter for z.
+		final int[][] get$z() {
+			return z;
+		}
+
+		// Setter for z.
+		final void set$z(int[][] cv$value, boolean allocated$) {
+			z = cv$value;
+		}
+	}
 
     private final ComputedObjectArrayInternal<double[]> $phi = new ComputedObjectArrayInternal<double[]>(this, "phi", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$phi(); }
+        public double[][] getValue() { return state.get$phi(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$phi(value, allocated);
+            state.set$phi(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$phi(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$phi(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -38,13 +303,13 @@ public final class LDATest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample42(fixed, allocated);
+                state.set$fixedFlag$sample42(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample42())
+            if(state.get$fixedFlag$sample42())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -56,16 +321,16 @@ public final class LDATest extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $theta = new ComputedObjectArrayInternal<double[]>(this, "theta", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$theta(); }
+        public double[][] getValue() { return state.get$theta(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$theta(value, allocated);
+            state.set$theta(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$theta(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$theta(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -75,13 +340,13 @@ public final class LDATest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample58(fixed, allocated);
+                state.set$fixedFlag$sample58(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample58())
+            if(state.get$fixedFlag$sample58())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -95,7 +360,7 @@ public final class LDATest extends Model {
 
     private final ComputedObjectArrayInternal<int[]> $w = new ComputedObjectArrayInternal<int[]>(this, "w", false, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] getValue() { return system$c.get$w(); }
+        public int[][] getValue() { return state.get$w(); }
 
         @Override
         protected void setValueInternal(int[][] value) {}
@@ -106,7 +371,7 @@ public final class LDATest extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$w(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$w(); }
 
         @Override
         public int[][][] constructArray(int iterations) {
@@ -129,11 +394,11 @@ public final class LDATest extends Model {
 
     private final ComputedObjectArrayInternal<int[]> $z = new ComputedObjectArrayInternal<int[]>(this, "z", true, true, true, ProbabilityType.SKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] getValue() { return system$c.get$z(); }
+        public int[][] getValue() { return state.get$z(); }
 
         @Override
         protected void setValueInternal(int[][] value) {
-            system$c.set$z(value, allocated);
+            state.set$z(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -162,12 +427,12 @@ public final class LDATest extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$noTopics();
+                return state.get$noTopics();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noTopics(value, allocated); }
+        protected void setValueInternal(int value) { state.set$noTopics(value, allocated); }
     };
 
 	/** Observed variable representing noTopics of type int from the Sandwood model. */
@@ -177,12 +442,12 @@ public final class LDATest extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$vocabSize();
+                return state.get$vocabSize();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$vocabSize(value, allocated); }
+        protected void setValueInternal(int value) { state.set$vocabSize(value, allocated); }
     };
 
 	/** Observed variable representing vocabSize of type int from the Sandwood model. */
@@ -194,24 +459,24 @@ public final class LDATest extends Model {
         @Override
         public int[][] getValue() {
             synchronized(model) {
-                return system$c.get$documents();
+                return state.get$documents();
             }
         }
 
         @Override
         public void setValueInternal(int[][] value) {
-            system$c.set$documents(value, allocated);
-            system$c.set$length$documents(getDims(value), allocated);
+            state.set$documents(value, allocated);
+            state.set$length$documents(getDims(value), allocated);
         }
 
         @Override
         public void setShapeInternal(int[] shape) {
-            system$c.set$length$documents(shape, allocated);
+            state.set$length$documents(shape, allocated);
         }
 
         @Override
         public int[] getShape() {
-            return system$c.get$length$documents();
+            return state.get$length$documents();
         }
         private final int[] getDims(int[][] v1) {
             int[] s1 = new int[v1.length];
@@ -236,6 +501,7 @@ public final class LDATest extends Model {
 	/** A constructor for a model where no variable values are set. */
     public LDATest() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("phi", $phi);
         $computedVariables.put("theta", $theta);
@@ -248,7 +514,9 @@ public final class LDATest extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("documents", $documents);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        LDATest$SingleThreadCPU core = new LDATest$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -282,49 +550,15 @@ public final class LDATest extends Model {
     }
     
     @Override
-    protected LDATest$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        LDATest$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new LDATest$SingleThreadCPU(target);
-                break;
+                return new LDATest$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new LDATest$MultiThreadCPU(target);
-                break;
+                return new LDATest$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(LDATest$CoreInterface oldCore, LDATest$CoreInterface newCore) {
-        //Model inputs
-        if(noTopics.isSet())
-            newCore.set$noTopics(oldCore.get$noTopics(), false);
-        if(vocabSize.isSet())
-            newCore.set$vocabSize(oldCore.get$vocabSize(), false);
-
-        //Observed arrays
-        if(documents.isSet()) {
-            newCore.set$documents(oldCore.get$documents(), false);
-            newCore.set$length$documents(oldCore.get$length$documents(), false);
-        }
-        else if(documents.shapeSet())
-            newCore.set$length$documents(oldCore.get$length$documents(), false);
-
-        //ComputedVariables
-        if($phi.isSet())
-            newCore.set$phi(oldCore.get$phi(), false);
-        if($theta.isSet())
-            newCore.set$theta(oldCore.get$theta(), false);
-        if($z.isSet())
-            newCore.set$z(oldCore.get$z(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42(), false);
-        newCore.set$fixedFlag$sample58(oldCore.get$fixedFlag$sample58(), false);
     }
 
 	/**

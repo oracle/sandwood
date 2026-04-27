@@ -1,220 +1,80 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.LogitRegressionTest$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.LogitRegressionTest.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU implements LogitRegressionTest$CoreInterface {
+final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double bias;
-	boolean[] constrainedFlag$sample35;
-	boolean constrainedFlag$sample42 = true;
-	boolean fixedFlag$sample35 = false;
-	boolean fixedFlag$sample42 = false;
-	boolean fixedProbFlag$sample35 = false;
-	boolean fixedProbFlag$sample42 = false;
-	boolean fixedProbFlag$sample94 = false;
-	double[][] indicator;
-	int k;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$bias;
-	double[] logProbability$sample35;
-	double logProbability$var93;
-	double logProbability$weights;
-	double logProbability$y;
-	int n;
-	double[][] p;
-	boolean system$gibbsForward = true;
-	double[] weights;
-	double[][] x;
-	boolean[][] y;
-	boolean[][] yMeasured;
-	boolean[][] guard$sample35bernoulli93$global;
-	boolean[][] guard$sample35put89$global;
+		// Declare the scratch variables for the model.
+		boolean[][] guard$sample35bernoulli93$global;
+		boolean[][] guard$sample35put89$global;
 
-	public LogitRegressionTest$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for bias.
-	@Override
-	public final double get$bias() {
-		return bias;
-	}
-
-	// Setter for bias.
-	@Override
-	public final void set$bias(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of bias including if probabilities need to be
-		// updated.
-		bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 42 as it depends on bias.
-		fixedProbFlag$sample42 = false;
-		
-		// Unset the fixed probability flag for sample 94 as it depends on bias.
-		fixedProbFlag$sample94 = false;
-	}
-
-	// Getter for fixedFlag$sample35.
-	@Override
-	public final boolean get$fixedFlag$sample35() {
-		return fixedFlag$sample35;
-	}
-
-	// Setter for fixedFlag$sample35.
-	@Override
-	public final void set$fixedFlag$sample35(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample35 including if probabilities
-		// need to be updated.
-		fixedFlag$sample35 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample35$1 = 0; index$constrainedFlag$sample35$1 < constrainedFlag$sample35.length; index$constrainedFlag$sample35$1 += 1)
-				constrainedFlag$sample35[index$constrainedFlag$sample35$1] = true;
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for guard$sample35put89$global
+			{
+				// Calculate the largest index of i that is possible and allocate an array to hold
+				// the guard for each of these.
+				int cv$max_i = 0;
+				
+				// Calculate the largest index of j that is possible and allocate an array to hold
+				// the guard for each of these.
+				int cv$max_j$var85 = 0;
+				for(int i = 0; i < state.x.length; i += 1)
+					cv$max_j$var85 = Math.max(cv$max_j$var85, ((3 - 0) / 1));
+				cv$max_i = Math.max(cv$max_i, ((state.x.length - 0) / 1));
+				
+				// Allocation of guard$sample35put89$global for single threaded execution
+				guard$sample35put89$global = new boolean[cv$max_i][cv$max_j$var85];
+			}
+			
+			// Constructor for guard$sample35bernoulli93$global
+			{
+				// Calculate the largest index of i that is possible and allocate an array to hold
+				// the guard for each of these.
+				int cv$max_i = 0;
+				
+				// Calculate the largest index of j that is possible and allocate an array to hold
+				// the guard for each of these.
+				int cv$max_j$var85 = 0;
+				for(int i = 0; i < state.x.length; i += 1)
+					cv$max_j$var85 = Math.max(cv$max_j$var85, ((3 - 0) / 1));
+				cv$max_i = Math.max(cv$max_i, ((state.x.length - 0) / 1));
+				
+				// Allocation of guard$sample35bernoulli93$global for single threaded execution
+				guard$sample35bernoulli93$global = new boolean[cv$max_i][cv$max_j$var85];
+			}
 		}
-		
-		// Should the probability of sample 35 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample35 = (fixedFlag$sample35 && fixedProbFlag$sample35);
-		
-		// Should the probability of sample 94 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample94 = (fixedFlag$sample35 && fixedProbFlag$sample94);
 	}
 
-	// Getter for fixedFlag$sample42.
-	@Override
-	public final boolean get$fixedFlag$sample42() {
-		return fixedFlag$sample42;
-	}
 
-	// Setter for fixedFlag$sample42.
-	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample42 including if probabilities
-		// need to be updated.
-		fixedFlag$sample42 = cv$value;
-		constrainedFlag$sample42 = (fixedFlag$sample42 || constrainedFlag$sample42);
-		
-		// Should the probability of sample 42 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample42 = (fixedFlag$sample42 && fixedProbFlag$sample42);
-		
-		// Should the probability of sample 94 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample94 = (fixedFlag$sample42 && fixedProbFlag$sample94);
-	}
-
-	// Getter for k.
-	@Override
-	public final int get$k() {
-		return k;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$weights.
-	@Override
-	public final double get$logProbability$weights() {
-		return logProbability$weights;
-	}
-
-	// Getter for logProbability$y.
-	@Override
-	public final double get$logProbability$y() {
-		return logProbability$y;
-	}
-
-	// Getter for n.
-	@Override
-	public final int get$n() {
-		return n;
-	}
-
-	// Getter for weights.
-	@Override
-	public final double[] get$weights() {
-		return weights;
-	}
-
-	// Setter for weights.
-	@Override
-	public final void set$weights(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of weights including if probabilities need to
-		// be updated.
-		weights = cv$value;
-		
-		// Unset the fixed probability flag for sample 35 as it depends on weights.
-		fixedProbFlag$sample35 = false;
-		
-		// Unset the fixed probability flag for sample 94 as it depends on weights.
-		fixedProbFlag$sample94 = false;
-	}
-
-	// Getter for x.
-	@Override
-	public final double[][] get$x() {
-		return x;
-	}
-
-	// Setter for x.
-	@Override
-	public final void set$x(double[][] cv$value, boolean allocated$) {
-		x = cv$value;
-	}
-
-	// Getter for y.
-	@Override
-	public final boolean[][] get$y() {
-		return y;
-	}
-
-	// Getter for yMeasured.
-	@Override
-	public final boolean[][] get$yMeasured() {
-		return yMeasured;
-	}
-
-	// Setter for yMeasured.
-	@Override
-	public final void set$yMeasured(boolean[][] cv$value, boolean allocated$) {
-		yMeasured = cv$value;
+	public LogitRegressionTest$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample35
 	private final void drawValueSample35(int var33) {
-		weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		state.weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		
 		// Guards to ensure that indicator is only updated when there is a valid path.
 		// 
 		// Looking for a path between Sample 35 and consumer double[] 67.
 		{
 			{
-				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+				for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 					if((var33 == j$var61)) {
-						for(int i = 0; i < n; i += 1)
-							indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+						for(int i = 0; i < state.n; i += 1)
+							state.indicator[((i - 0) / 1)][j$var61] = Math.exp((state.weights[j$var61] * state.x[i][j$var61]));
 					}
 				}
 			}
@@ -226,13 +86,13 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		{
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
-			boolean[][] guard$sample35put89 = guard$sample35put89$global;
+			boolean[][] guard$sample35put89 = scratch.guard$sample35put89$global;
 			{
-				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+				for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 					if((var33 == j$var61)) {
 						if((j$var61 == 0)) {
-							for(int i = 0; i < n; i += 1) {
-								for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+							for(int i = 0; i < state.n; i += 1) {
+								for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1)
 									// Set the flags to false
 									guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 							}
@@ -241,11 +101,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				}
 			}
 			{
-				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+				for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 					if((var33 == j$var61)) {
 						if((j$var61 == 1)) {
-							for(int i = 0; i < n; i += 1) {
-								for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+							for(int i = 0; i < state.n; i += 1) {
+								for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1)
 									// Set the flags to false
 									guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 							}
@@ -254,11 +114,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				}
 			}
 			{
-				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+				for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 					if((var33 == j$var61)) {
 						if((j$var61 == 2)) {
-							for(int i = 0; i < n; i += 1) {
-								for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+							for(int i = 0; i < state.n; i += 1) {
+								for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1)
 									// Set the flags to false
 									guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 							}
@@ -267,11 +127,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				}
 			}
 			{
-				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+				for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 					if((var33 == j$var61)) {
-						for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+						for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 							if((j$var61 == j$var85)) {
-								for(int i = 0; i < n; i += 1)
+								for(int i = 0; i < state.n; i += 1)
 									// Set the flags to false
 									guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 							}
@@ -280,16 +140,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				}
 			}
 			{
-				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+				for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 					if((var33 == j$var61)) {
 						if((j$var61 == 0)) {
-							for(int i = 0; i < n; i += 1) {
-								for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+							for(int i = 0; i < state.n; i += 1) {
+								for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 									if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 										// The body will execute, so should not be executed again
 										guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
 										{
-											p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+											state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 										}
 									}
 								}
@@ -299,16 +159,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				}
 			}
 			{
-				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+				for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 					if((var33 == j$var61)) {
 						if((j$var61 == 1)) {
-							for(int i = 0; i < n; i += 1) {
-								for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+							for(int i = 0; i < state.n; i += 1) {
+								for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 									if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 										// The body will execute, so should not be executed again
 										guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
 										{
-											p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+											state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 										}
 									}
 								}
@@ -318,16 +178,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				}
 			}
 			{
-				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+				for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 					if((var33 == j$var61)) {
 						if((j$var61 == 2)) {
-							for(int i = 0; i < n; i += 1) {
-								for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+							for(int i = 0; i < state.n; i += 1) {
+								for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 									if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 										// The body will execute, so should not be executed again
 										guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
 										{
-											p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+											state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 										}
 									}
 								}
@@ -337,16 +197,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				}
 			}
 			{
-				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+				for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 					if((var33 == j$var61)) {
-						for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+						for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 							if((j$var61 == j$var85)) {
-								for(int i = 0; i < n; i += 1) {
+								for(int i = 0; i < state.n; i += 1) {
 									if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 										// The body will execute, so should not be executed again
 										guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
 										{
-											p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+											state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 										}
 									}
 								}
@@ -360,14 +220,14 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 
 	// Pick a value from the distribution for the unconditioned variable from sample42
 	private final void drawValueSample42() {
-		bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		state.bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 35 drawn from Gaussian 22. Inference was performed using Metropolis-Hastings.
 	private final void inferSample35(int var33) {
 		if(true) {
-			constrainedFlag$sample35[((var33 - 0) / 1)] = false;
+			state.constrainedFlag$sample35[((var33 - 0) / 1)] = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -377,7 +237,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			}
 			
 			// The original value of the sample
-			double cv$originalValue = weights[var33];
+			double cv$originalValue = state.weights[var33];
 			
 			// The probability of the random variable generating the originally sampled value
 			double cv$originalProbability = 0.0;
@@ -390,12 +250,12 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				cv$var = 0.01;
 			
 			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample35[((var33 - 0) / 1)] || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample35[((var33 - 0) / 1)] || (cv$valuePos == 0))) {
 					// Initialize the summed probabilities to 0.
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
@@ -424,7 +284,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						{
 							{
 								{
-									weights[var33] = cv$currentValue;
+									state.weights[var33] = cv$currentValue;
 								}
 							}
 						}
@@ -434,10 +294,10 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// Looking for a path between Sample 35 and consumer double[] 67.
 						{
 							{
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+								for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 									if((var33 == j$var61)) {
-										for(int i = 0; i < n; i += 1)
-											indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+										for(int i = 0; i < state.n; i += 1)
+											state.indicator[((i - 0) / 1)][j$var61] = Math.exp((state.weights[j$var61] * state.x[i][j$var61]));
 									}
 								}
 							}
@@ -449,13 +309,13 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						{
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							boolean[][] guard$sample35put89 = guard$sample35put89$global;
+							boolean[][] guard$sample35put89 = scratch.guard$sample35put89$global;
 							{
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+								for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 									if((var33 == j$var61)) {
 										if((j$var61 == 0)) {
-											for(int i = 0; i < n; i += 1) {
-												for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+											for(int i = 0; i < state.n; i += 1) {
+												for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1)
 													// Set the flags to false
 													guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 											}
@@ -464,11 +324,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 								}
 							}
 							{
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+								for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 									if((var33 == j$var61)) {
 										if((j$var61 == 1)) {
-											for(int i = 0; i < n; i += 1) {
-												for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+											for(int i = 0; i < state.n; i += 1) {
+												for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1)
 													// Set the flags to false
 													guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 											}
@@ -477,11 +337,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 								}
 							}
 							{
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+								for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 									if((var33 == j$var61)) {
 										if((j$var61 == 2)) {
-											for(int i = 0; i < n; i += 1) {
-												for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+											for(int i = 0; i < state.n; i += 1) {
+												for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1)
 													// Set the flags to false
 													guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 											}
@@ -490,11 +350,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 								}
 							}
 							{
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+								for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 									if((var33 == j$var61)) {
-										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+										for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 											if((j$var61 == j$var85)) {
-												for(int i = 0; i < n; i += 1)
+												for(int i = 0; i < state.n; i += 1)
 													// Set the flags to false
 													guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 											}
@@ -503,16 +363,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 								}
 							}
 							{
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+								for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 									if((var33 == j$var61)) {
 										if((j$var61 == 0)) {
-											for(int i = 0; i < n; i += 1) {
-												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+											for(int i = 0; i < state.n; i += 1) {
+												for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 													if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
 														{
-															p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+															state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 														}
 													}
 												}
@@ -522,16 +382,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 								}
 							}
 							{
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+								for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 									if((var33 == j$var61)) {
 										if((j$var61 == 1)) {
-											for(int i = 0; i < n; i += 1) {
-												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+											for(int i = 0; i < state.n; i += 1) {
+												for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 													if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
 														{
-															p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+															state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 														}
 													}
 												}
@@ -541,16 +401,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 								}
 							}
 							{
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+								for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 									if((var33 == j$var61)) {
 										if((j$var61 == 2)) {
-											for(int i = 0; i < n; i += 1) {
-												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+											for(int i = 0; i < state.n; i += 1) {
+												for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 													if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
 														{
-															p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+															state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 														}
 													}
 												}
@@ -560,16 +420,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 								}
 							}
 							{
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+								for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 									if((var33 == j$var61)) {
-										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+										for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 											if((j$var61 == j$var85)) {
-												for(int i = 0; i < n; i += 1) {
+												for(int i = 0; i < state.n; i += 1) {
 													if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
 														{
-															p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+															state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 														}
 													}
 												}
@@ -594,15 +454,15 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 							{
 								// Guard to check that at most one copy of the code is executed for a given random
 								// variable instance.
-								boolean[][] guard$sample35bernoulli93 = guard$sample35bernoulli93$global;
+								boolean[][] guard$sample35bernoulli93 = scratch.guard$sample35bernoulli93$global;
 								{
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
 											if((j$var61 == 0)) {
-												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-													for(int index$j$11_3 = 0; index$j$11_3 < k; index$j$11_3 += 1) {
+												for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
+													for(int index$j$11_3 = 0; index$j$11_3 < state.k; index$j$11_3 += 1) {
 														if((j$var85 == index$j$11_3)) {
-															for(int i = 0; i < n; i += 1)
+															for(int i = 0; i < state.n; i += 1)
 																// Set the flags to false
 																guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 														}
@@ -613,13 +473,13 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 									}
 								}
 								{
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
 											if((j$var61 == 1)) {
-												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-													for(int index$j$12_3 = 0; index$j$12_3 < k; index$j$12_3 += 1) {
+												for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
+													for(int index$j$12_3 = 0; index$j$12_3 < state.k; index$j$12_3 += 1) {
 														if((j$var85 == index$j$12_3)) {
-															for(int i = 0; i < n; i += 1)
+															for(int i = 0; i < state.n; i += 1)
 																// Set the flags to false
 																guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 														}
@@ -630,13 +490,13 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 									}
 								}
 								{
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
 											if((j$var61 == 2)) {
-												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-													for(int index$j$13_3 = 0; index$j$13_3 < k; index$j$13_3 += 1) {
+												for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
+													for(int index$j$13_3 = 0; index$j$13_3 < state.k; index$j$13_3 += 1) {
 														if((j$var85 == index$j$13_3)) {
-															for(int i = 0; i < n; i += 1)
+															for(int i = 0; i < state.n; i += 1)
 																// Set the flags to false
 																guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 														}
@@ -647,13 +507,13 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 									}
 								}
 								{
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
-											for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+											for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 												if((j$var61 == j$var85)) {
-													for(int index$j$14_3 = 0; index$j$14_3 < k; index$j$14_3 += 1) {
+													for(int index$j$14_3 = 0; index$j$14_3 < state.k; index$j$14_3 += 1) {
 														if((j$var85 == index$j$14_3)) {
-															for(int i = 0; i < n; i += 1)
+															for(int i = 0; i < state.n; i += 1)
 																// Set the flags to false
 																guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 														}
@@ -665,14 +525,14 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 								}
 								{
 									double traceTempVariable$var62$15_1 = cv$currentValue;
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
-											for(int i = 0; i < n; i += 1) {
-												double traceTempVariable$var69$15_4 = Math.exp((traceTempVariable$var62$15_1 * x[i][j$var61]));
+											for(int i = 0; i < state.n; i += 1) {
+												double traceTempVariable$var69$15_4 = Math.exp((traceTempVariable$var62$15_1 * state.x[i][j$var61]));
 												if((j$var61 == 0)) {
-													for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-														double traceTempVariable$var90$15_6 = (indicator[((i - 0) / 1)][j$var85] / ((traceTempVariable$var69$15_4 + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-														for(int index$j$15_7 = 0; index$j$15_7 < k; index$j$15_7 += 1) {
+													for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
+														double traceTempVariable$var90$15_6 = (state.indicator[((i - 0) / 1)][j$var85] / ((traceTempVariable$var69$15_4 + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
+														for(int index$j$15_7 = 0; index$j$15_7 < state.k; index$j$15_7 += 1) {
 															if((j$var85 == index$j$15_7)) {
 																if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 																	// The body will execute, so should not be executed again
@@ -685,7 +545,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 																			boolean cv$sampleConstrained = true;
 																			if(cv$sampleConstrained) {
 																				// Mark that the sample has observed constrained data.
-																				constrainedFlag$sample35[((var33 - 0) / 1)] = true;
+																				state.constrainedFlag$sample35[((var33 - 0) / 1)] = true;
 																				
 																				// Set an accumulator to sum the probabilities for each possible configuration of
 																				// inputs.
@@ -700,17 +560,17 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 																							{
 																								{
 																									// Constructing a random variable input for use later.
-																									double var91 = (traceTempVariable$var90$15_6 + bias);
+																									double var91 = (traceTempVariable$var90$15_6 + state.bias);
 																									
 																									// Record the probability of sample task 94 generating output with current configuration.
-																									if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																									if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																									else {
 																										// If the second value is -infinity.
 																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
 																										else
-																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
 																									}
 																									
 																									// Recorded the probability of reaching sample task 94 with the current configuration.
@@ -750,14 +610,14 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 								}
 								{
 									double traceTempVariable$var62$16_1 = cv$currentValue;
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
-											for(int i = 0; i < n; i += 1) {
-												double traceTempVariable$var71$16_4 = Math.exp((traceTempVariable$var62$16_1 * x[i][j$var61]));
+											for(int i = 0; i < state.n; i += 1) {
+												double traceTempVariable$var71$16_4 = Math.exp((traceTempVariable$var62$16_1 * state.x[i][j$var61]));
 												if((j$var61 == 1)) {
-													for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-														double traceTempVariable$var90$16_6 = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + traceTempVariable$var71$16_4) + indicator[((i - 0) / 1)][2]));
-														for(int index$j$16_7 = 0; index$j$16_7 < k; index$j$16_7 += 1) {
+													for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
+														double traceTempVariable$var90$16_6 = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + traceTempVariable$var71$16_4) + state.indicator[((i - 0) / 1)][2]));
+														for(int index$j$16_7 = 0; index$j$16_7 < state.k; index$j$16_7 += 1) {
 															if((j$var85 == index$j$16_7)) {
 																if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 																	// The body will execute, so should not be executed again
@@ -770,7 +630,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 																			boolean cv$sampleConstrained = true;
 																			if(cv$sampleConstrained) {
 																				// Mark that the sample has observed constrained data.
-																				constrainedFlag$sample35[((var33 - 0) / 1)] = true;
+																				state.constrainedFlag$sample35[((var33 - 0) / 1)] = true;
 																				
 																				// Set an accumulator to sum the probabilities for each possible configuration of
 																				// inputs.
@@ -785,17 +645,17 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 																							{
 																								{
 																									// Constructing a random variable input for use later.
-																									double var91 = (traceTempVariable$var90$16_6 + bias);
+																									double var91 = (traceTempVariable$var90$16_6 + state.bias);
 																									
 																									// Record the probability of sample task 94 generating output with current configuration.
-																									if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																									if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																									else {
 																										// If the second value is -infinity.
 																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
 																										else
-																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
 																									}
 																									
 																									// Recorded the probability of reaching sample task 94 with the current configuration.
@@ -835,14 +695,14 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 								}
 								{
 									double traceTempVariable$var62$17_1 = cv$currentValue;
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
-											for(int i = 0; i < n; i += 1) {
-												double traceTempVariable$var74$17_4 = Math.exp((traceTempVariable$var62$17_1 * x[i][j$var61]));
+											for(int i = 0; i < state.n; i += 1) {
+												double traceTempVariable$var74$17_4 = Math.exp((traceTempVariable$var62$17_1 * state.x[i][j$var61]));
 												if((j$var61 == 2)) {
-													for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-														double traceTempVariable$var90$17_6 = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + traceTempVariable$var74$17_4));
-														for(int index$j$17_7 = 0; index$j$17_7 < k; index$j$17_7 += 1) {
+													for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
+														double traceTempVariable$var90$17_6 = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + traceTempVariable$var74$17_4));
+														for(int index$j$17_7 = 0; index$j$17_7 < state.k; index$j$17_7 += 1) {
 															if((j$var85 == index$j$17_7)) {
 																if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 																	// The body will execute, so should not be executed again
@@ -855,7 +715,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 																			boolean cv$sampleConstrained = true;
 																			if(cv$sampleConstrained) {
 																				// Mark that the sample has observed constrained data.
-																				constrainedFlag$sample35[((var33 - 0) / 1)] = true;
+																				state.constrainedFlag$sample35[((var33 - 0) / 1)] = true;
 																				
 																				// Set an accumulator to sum the probabilities for each possible configuration of
 																				// inputs.
@@ -870,17 +730,17 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 																							{
 																								{
 																									// Constructing a random variable input for use later.
-																									double var91 = (traceTempVariable$var90$17_6 + bias);
+																									double var91 = (traceTempVariable$var90$17_6 + state.bias);
 																									
 																									// Record the probability of sample task 94 generating output with current configuration.
-																									if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																									if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																									else {
 																										// If the second value is -infinity.
 																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
 																										else
-																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
 																									}
 																									
 																									// Recorded the probability of reaching sample task 94 with the current configuration.
@@ -920,14 +780,14 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 								}
 								{
 									double traceTempVariable$var62$18_1 = cv$currentValue;
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
-											for(int i = 0; i < n; i += 1) {
-												double traceTempVariable$var86$18_4 = Math.exp((traceTempVariable$var62$18_1 * x[i][j$var61]));
-												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+											for(int i = 0; i < state.n; i += 1) {
+												double traceTempVariable$var86$18_4 = Math.exp((traceTempVariable$var62$18_1 * state.x[i][j$var61]));
+												for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 													if((j$var61 == j$var85)) {
-														double traceTempVariable$var90$18_6 = (traceTempVariable$var86$18_4 / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-														for(int index$j$18_7 = 0; index$j$18_7 < k; index$j$18_7 += 1) {
+														double traceTempVariable$var90$18_6 = (traceTempVariable$var86$18_4 / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
+														for(int index$j$18_7 = 0; index$j$18_7 < state.k; index$j$18_7 += 1) {
 															if((j$var85 == index$j$18_7)) {
 																if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 																	// The body will execute, so should not be executed again
@@ -940,7 +800,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 																			boolean cv$sampleConstrained = true;
 																			if(cv$sampleConstrained) {
 																				// Mark that the sample has observed constrained data.
-																				constrainedFlag$sample35[((var33 - 0) / 1)] = true;
+																				state.constrainedFlag$sample35[((var33 - 0) / 1)] = true;
 																				
 																				// Set an accumulator to sum the probabilities for each possible configuration of
 																				// inputs.
@@ -955,17 +815,17 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 																							{
 																								{
 																									// Constructing a random variable input for use later.
-																									double var91 = (traceTempVariable$var90$18_6 + bias);
+																									double var91 = (traceTempVariable$var90$18_6 + state.bias);
 																									
 																									// Record the probability of sample task 94 generating output with current configuration.
-																									if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																									if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																									else {
 																										// If the second value is -infinity.
 																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
 																										else
-																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
 																									}
 																									
 																									// Recorded the probability of reaching sample task 94 with the current configuration.
@@ -1034,7 +894,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 					// to be less than or equal as otherwise if the proposed value is not possible and
 					// the random value is 0 an impossible value will be accepted.
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio))) {
 							// If it is not revert the changes.
 							// 
 							// Set the sample value
@@ -1046,7 +906,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 							{
 								{
 									{
-										weights[var33] = var34;
+										state.weights[var33] = var34;
 									}
 								}
 							}
@@ -1056,10 +916,10 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 							// Looking for a path between Sample 35 and consumer double[] 67.
 							{
 								{
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
-											for(int i = 0; i < n; i += 1)
-												indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+											for(int i = 0; i < state.n; i += 1)
+												state.indicator[((i - 0) / 1)][j$var61] = Math.exp((state.weights[j$var61] * state.x[i][j$var61]));
 										}
 									}
 								}
@@ -1071,13 +931,13 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 							{
 								// Guard to check that at most one copy of the code is executed for a given random
 								// variable instance.
-								boolean[][] guard$sample35put89 = guard$sample35put89$global;
+								boolean[][] guard$sample35put89 = scratch.guard$sample35put89$global;
 								{
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
 											if((j$var61 == 0)) {
-												for(int i = 0; i < n; i += 1) {
-													for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+												for(int i = 0; i < state.n; i += 1) {
+													for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1)
 														// Set the flags to false
 														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 												}
@@ -1086,11 +946,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 									}
 								}
 								{
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
 											if((j$var61 == 1)) {
-												for(int i = 0; i < n; i += 1) {
-													for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+												for(int i = 0; i < state.n; i += 1) {
+													for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1)
 														// Set the flags to false
 														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 												}
@@ -1099,11 +959,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 									}
 								}
 								{
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
 											if((j$var61 == 2)) {
-												for(int i = 0; i < n; i += 1) {
-													for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+												for(int i = 0; i < state.n; i += 1) {
+													for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1)
 														// Set the flags to false
 														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 												}
@@ -1112,11 +972,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 									}
 								}
 								{
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
-											for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+											for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 												if((j$var61 == j$var85)) {
-													for(int i = 0; i < n; i += 1)
+													for(int i = 0; i < state.n; i += 1)
 														// Set the flags to false
 														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
 												}
@@ -1125,16 +985,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 									}
 								}
 								{
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
 											if((j$var61 == 0)) {
-												for(int i = 0; i < n; i += 1) {
-													for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+												for(int i = 0; i < state.n; i += 1) {
+													for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 														if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 															// The body will execute, so should not be executed again
 															guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
 															{
-																p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+																state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 															}
 														}
 													}
@@ -1144,16 +1004,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 									}
 								}
 								{
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
 											if((j$var61 == 1)) {
-												for(int i = 0; i < n; i += 1) {
-													for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+												for(int i = 0; i < state.n; i += 1) {
+													for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 														if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 															// The body will execute, so should not be executed again
 															guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
 															{
-																p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+																state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 															}
 														}
 													}
@@ -1163,16 +1023,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 									}
 								}
 								{
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
 											if((j$var61 == 2)) {
-												for(int i = 0; i < n; i += 1) {
-													for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+												for(int i = 0; i < state.n; i += 1) {
+													for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 														if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 															// The body will execute, so should not be executed again
 															guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
 															{
-																p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+																state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 															}
 														}
 													}
@@ -1182,16 +1042,16 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 									}
 								}
 								{
-									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
 										if((var33 == j$var61)) {
-											for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+											for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 												if((j$var61 == j$var85)) {
-													for(int i = 0; i < n; i += 1) {
+													for(int i = 0; i < state.n; i += 1) {
 														if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
 															// The body will execute, so should not be executed again
 															guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
 															{
-																p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+																state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 															}
 														}
 													}
@@ -1212,7 +1072,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	// by sample task 42 drawn from Gaussian 40. Inference was performed using Metropolis-Hastings.
 	private final void inferSample42() {
 		if(true) {
-			constrainedFlag$sample42 = false;
+			state.constrainedFlag$sample42 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -1222,7 +1082,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			}
 			
 			// The original value of the sample
-			double cv$originalValue = bias;
+			double cv$originalValue = state.bias;
 			
 			// The probability of the random variable generating the originally sampled value
 			double cv$originalProbability = 0.0;
@@ -1235,12 +1095,12 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				cv$var = 0.01;
 			
 			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample42 || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample42 || (cv$valuePos == 0))) {
 					// Initialize the summed probabilities to 0.
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
@@ -1262,7 +1122,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						// Update Sample and intermediate values
 						// 
 						// Write out the new value of the sample.
-						bias = cv$proposedValue;
+						state.bias = cv$proposedValue;
 					}
 					{
 						// Record the reached probability density.
@@ -1276,8 +1136,8 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 						{
 							{
 								{
-									for(int i = 0; i < n; i += 1) {
-										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+									for(int i = 0; i < state.n; i += 1) {
+										for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 											double traceTempVariable$bias$1_3 = cv$currentValue;
 											
 											// Processing sample task 94 of consumer random variable null.
@@ -1287,7 +1147,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 													boolean cv$sampleConstrained = true;
 													if(cv$sampleConstrained) {
 														// Mark that the sample has observed constrained data.
-														constrainedFlag$sample42 = true;
+														state.constrainedFlag$sample42 = true;
 														
 														// Set an accumulator to sum the probabilities for each possible configuration of
 														// inputs.
@@ -1302,17 +1162,17 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 																	{
 																		{
 																			// Constructing a random variable input for use later.
-																			double var91 = (p[((i - 0) / 1)][j$var85] + traceTempVariable$bias$1_3);
+																			double var91 = (state.p[((i - 0) / 1)][j$var85] + traceTempVariable$bias$1_3);
 																			
 																			// Record the probability of sample task 94 generating output with current configuration.
-																			if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((state.y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
 																			}
 																			
 																			// Recorded the probability of reaching sample task 94 with the current configuration.
@@ -1375,13 +1235,13 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 					// to be less than or equal as otherwise if the proposed value is not possible and
 					// the random value is 0 an impossible value will be accepted.
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio)))
 							// If it is not revert the changes.
 							// 
 							// Set the sample value
 							// 
 							// Write out the new value of the sample.
-							bias = cv$originalValue;
+							state.bias = cv$originalValue;
 					}
 				}
 			}
@@ -1393,7 +1253,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	private final void logProbabilityValue$sample35() {
 		// Determine if we need to calculate the values for sample task 35 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample35) {
+		if(!state.fixedProbFlag$sample35) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -1403,7 +1263,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var33 = 0; var33 < k; var33 += 1) {
+			for(int var33 = 0; var33 < state.k; var33 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -1412,7 +1272,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double cv$sampleValue = weights[var33];
+						double cv$sampleValue = state.weights[var33];
 						{
 							{
 								double var20 = 0.0;
@@ -1456,7 +1316,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 				// erroneously over written.
 				if(cv$sampleReached)
 					// Store the sample task probability
-					logProbability$sample35[((var33 - 0) / 1)] = cv$sampleProbability;
+					state.logProbability$sample35[((var33 - 0) / 1)] = cv$sampleProbability;
 			}
 			
 			// Add the probability of this instance of the random variable to the probability
@@ -1464,19 +1324,19 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Update the variable probability
-			logProbability$weights = (logProbability$weights + cv$accumulator);
+			state.logProbability$weights = (state.logProbability$weights + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample35)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample35 = fixedFlag$sample35;
+			state.fixedProbFlag$sample35 = state.fixedFlag$sample35;
 		} else {
 			// Using cached values.
 			// 
@@ -1487,8 +1347,8 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var33 = 0; var33 < k; var33 += 1) {
-				double cv$sampleValue = logProbability$sample35[((var33 - 0) / 1)];
+			for(int var33 = 0; var33 < state.k; var33 += 1) {
+				double cv$sampleValue = state.logProbability$sample35[((var33 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Record that the sample was reached.
@@ -1497,15 +1357,15 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$weights = (logProbability$weights + cv$accumulator);
+			state.logProbability$weights = (state.logProbability$weights + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample35)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample35)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -1514,7 +1374,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	private final void logProbabilityValue$sample42() {
 		// Determine if we need to calculate the values for sample task 42 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample42) {
+		if(!state.fixedProbFlag$sample42) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -1530,7 +1390,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = bias;
+					double cv$sampleValue = state.bias;
 					{
 						{
 							double var38 = 0.0;
@@ -1572,19 +1432,19 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$bias = cv$sampleProbability;
+			state.logProbability$bias = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample42)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample42)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample42 = fixedFlag$sample42;
+			state.fixedProbFlag$sample42 = state.fixedFlag$sample42;
 		} else {
 			// Using cached values.
 			// 
@@ -1592,17 +1452,17 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$bias;
+			double cv$sampleValue = state.logProbability$bias;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample42)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample42)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -1611,7 +1471,7 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	private final void logProbabilityValue$sample94() {
 		// Determine if we need to calculate the values for sample task 94 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample94) {
+		if(!state.fixedProbFlag$sample94) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -1621,8 +1481,8 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < n; i += 1) {
-				for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+			for(int i = 0; i < state.n; i += 1) {
+				for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
 					// An accumulator for log probabilities.
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					
@@ -1631,10 +1491,10 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 					{
 						{
 							// The sample value to calculate the probability of generating
-							boolean cv$sampleValue = y[i][j$var85];
+							boolean cv$sampleValue = state.y[i][j$var85];
 							{
 								{
-									double var91 = (p[((i - 0) / 1)][j$var85] + bias);
+									double var91 = (state.p[((i - 0) / 1)][j$var85] + state.bias);
 									
 									// Store the value of the function call, so the function call is only made once.
 									double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((cv$sampleValue?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
@@ -1680,18 +1540,18 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var93 = cv$accumulator;
+				state.logProbability$var93 = cv$accumulator;
 			
 			// Update the variable probability
-			logProbability$y = (logProbability$y + cv$accumulator);
+			state.logProbability$y = (state.logProbability$y + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample94 = (fixedFlag$sample35 && fixedFlag$sample42);
+			state.fixedProbFlag$sample94 = (state.fixedFlag$sample35 && state.fixedFlag$sample42);
 		} else {
 			// Using cached values.
 			// 
@@ -1702,130 +1562,43 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < n; i += 1) {
-				for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+			for(int i = 0; i < state.n; i += 1) {
+				for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1)
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 			}
-			double cv$sampleValue = logProbability$var93;
+			double cv$sampleValue = state.logProbability$var93;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$y = (logProbability$y + cv$accumulator);
+			state.logProbability$y = (state.logProbability$y + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for y
-		{
-			y = new boolean[x.length][];
-			for(int var15 = 0; var15 < x.length; var15 += 1)
-				y[var15] = new boolean[3];
-		}
-		
-		// If weights has not been set already allocate space.
-		if(!fixedFlag$sample35) {
-			// Constructor for weights
-			{
-				weights = new double[3];
-			}
-		}
-		
-		// Constructor for indicator
-		{
-			indicator = new double[((((x.length - 1) - 0) / 1) + 1)][];
-			for(int i = 0; i < x.length; i += 1)
-				indicator[((i - 0) / 1)] = new double[3];
-		}
-		
-		// Constructor for p
-		{
-			p = new double[((((x.length - 1) - 0) / 1) + 1)][];
-			for(int i = 0; i < x.length; i += 1)
-				p[((i - 0) / 1)] = new double[3];
-		}
-		
-		// Constructor for constrainedFlag$sample35
-		{
-			constrainedFlag$sample35 = new boolean[((((3 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample35
-		{
-			logProbability$sample35 = new double[((((3 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for guard$sample35put89$global
-		{
-			// Calculate the largest index of i that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_i = 0;
-			
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j$var85 = 0;
-			for(int i = 0; i < x.length; i += 1)
-				cv$max_j$var85 = Math.max(cv$max_j$var85, ((3 - 0) / 1));
-			cv$max_i = Math.max(cv$max_i, ((x.length - 0) / 1));
-			
-			// Allocation of guard$sample35put89$global for single threaded execution
-			guard$sample35put89$global = new boolean[cv$max_i][cv$max_j$var85];
-		}
-		
-		// Constructor for guard$sample35bernoulli93$global
-		{
-			// Calculate the largest index of i that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_i = 0;
-			
-			// Calculate the largest index of j that is possible and allocate an array to hold
-			// the guard for each of these.
-			int cv$max_j$var85 = 0;
-			for(int i = 0; i < x.length; i += 1)
-				cv$max_j$var85 = Math.max(cv$max_j$var85, ((3 - 0) / 1));
-			cv$max_i = Math.max(cv$max_i, ((x.length - 0) / 1));
-			
-			// Allocation of guard$sample35bernoulli93$global for single threaded execution
-			guard$sample35bernoulli93$global = new boolean[cv$max_i][cv$max_j$var85];
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		for(int var33 = 0; var33 < k; var33 += 1) {
-			if(!fixedFlag$sample35)
-				weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var33 = 0; var33 < state.k; var33 += 1) {
+			if(!state.fixedFlag$sample35)
+				state.weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample42)
-			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		for(int i = 0; i < n; i += 1) {
-			for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-				if(!fixedFlag$sample35)
-					indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+		if(!state.fixedFlag$sample42)
+			state.bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		for(int i = 0; i < state.n; i += 1) {
+			for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
+				if(!state.fixedFlag$sample35)
+					state.indicator[((i - 0) / 1)][j$var61] = Math.exp((state.weights[j$var61] * state.x[i][j$var61]));
 			}
-			boolean[] var89 = y[i];
-			for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-				if(!fixedFlag$sample35)
-					p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-				var89[j$var85] = DistributionSampling.sampleBernoulli(RNG$, (p[((i - 0) / 1)][j$var85] + bias));
+			boolean[] var89 = state.y[i];
+			for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
+				if(!state.fixedFlag$sample35)
+					state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
+				var89[j$var85] = DistributionSampling.sampleBernoulli(state.RNG$, (state.p[((i - 0) / 1)][j$var85] + state.bias));
 			}
 		}
 	}
@@ -1835,17 +1608,17 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		for(int var33 = 0; var33 < k; var33 += 1) {
-			if(!fixedFlag$sample35)
-				weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var33 = 0; var33 < state.k; var33 += 1) {
+			if(!state.fixedFlag$sample35)
+				state.weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample42)
-			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		for(int i = 0; i < n; i += 1) {
-			for(int j$var61 = 0; j$var61 < k; j$var61 += 1)
-				indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-			for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
-				p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+		if(!state.fixedFlag$sample42)
+			state.bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		for(int i = 0; i < state.n; i += 1) {
+			for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1)
+				state.indicator[((i - 0) / 1)][j$var61] = Math.exp((state.weights[j$var61] * state.x[i][j$var61]));
+			for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1)
+				state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 		}
 	}
 
@@ -1853,19 +1626,19 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		for(int var33 = 0; var33 < k; var33 += 1) {
-			if(!fixedFlag$sample35)
-				weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var33 = 0; var33 < state.k; var33 += 1) {
+			if(!state.fixedFlag$sample35)
+				state.weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample42)
-			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		for(int i = 0; i < n; i += 1) {
-			for(int j$var61 = 0; j$var61 < k; j$var61 += 1)
-				indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-			boolean[] var89 = y[i];
-			for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-				p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-				var89[j$var85] = DistributionSampling.sampleBernoulli(RNG$, (p[((i - 0) / 1)][j$var85] + bias));
+		if(!state.fixedFlag$sample42)
+			state.bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		for(int i = 0; i < state.n; i += 1) {
+			for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1)
+				state.indicator[((i - 0) / 1)][j$var61] = Math.exp((state.weights[j$var61] * state.x[i][j$var61]));
+			boolean[] var89 = state.y[i];
+			for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
+				state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
+				var89[j$var85] = DistributionSampling.sampleBernoulli(state.RNG$, (state.p[((i - 0) / 1)][j$var85] + state.bias));
 			}
 		}
 	}
@@ -1874,20 +1647,20 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		for(int var33 = 0; var33 < k; var33 += 1) {
-			if(!fixedFlag$sample35)
-				weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var33 = 0; var33 < state.k; var33 += 1) {
+			if(!state.fixedFlag$sample35)
+				state.weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample42)
-			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		for(int i = 0; i < n; i += 1) {
-			for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-				if(!fixedFlag$sample35)
-					indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+		if(!state.fixedFlag$sample42)
+			state.bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		for(int i = 0; i < state.n; i += 1) {
+			for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1) {
+				if(!state.fixedFlag$sample35)
+					state.indicator[((i - 0) / 1)][j$var61] = Math.exp((state.weights[j$var61] * state.x[i][j$var61]));
 			}
-			for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-				if(!fixedFlag$sample35)
-					p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+			for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1) {
+				if(!state.fixedFlag$sample35)
+					state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 			}
 		}
 	}
@@ -1897,17 +1670,17 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		for(int var33 = 0; var33 < k; var33 += 1) {
-			if(!fixedFlag$sample35)
-				weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int var33 = 0; var33 < state.k; var33 += 1) {
+			if(!state.fixedFlag$sample35)
+				state.weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		if(!fixedFlag$sample42)
-			bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
-		for(int i = 0; i < n; i += 1) {
-			for(int j$var61 = 0; j$var61 < k; j$var61 += 1)
-				indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-			for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
-				p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+		if(!state.fixedFlag$sample42)
+			state.bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
+		for(int i = 0; i < state.n; i += 1) {
+			for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1)
+				state.indicator[((i - 0) / 1)][j$var61] = Math.exp((state.weights[j$var61] * state.x[i][j$var61]));
+			for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1)
+				state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 		}
 	}
 
@@ -1915,31 +1688,31 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			for(int var33 = 0; var33 < k; var33 += 1) {
-				if(!fixedFlag$sample35)
+		if(state.system$gibbsForward) {
+			for(int var33 = 0; var33 < state.k; var33 += 1) {
+				if(!state.fixedFlag$sample35)
 					inferSample35(var33);
 			}
-			if(!fixedFlag$sample42)
+			if(!state.fixedFlag$sample42)
 				inferSample42();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample42)
+			if(!state.fixedFlag$sample42)
 				inferSample42();
-			for(int var33 = (k - ((((k - 1) - 0) % 1) + 1)); var33 >= ((0 - 1) + 1); var33 -= 1) {
-				if(!fixedFlag$sample35)
+			for(int var33 = (state.k - ((((state.k - 1) - 0) % 1) + 1)); var33 >= ((0 - 1) + 1); var33 -= 1) {
+				if(!state.fixedFlag$sample35)
 					inferSample35(var33);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		for(int var33 = 0; var33 < k; var33 += 1) {
-			if(!constrainedFlag$sample35[((var33 - 0) / 1)])
+		state.system$gibbsForward = !state.system$gibbsForward;
+		for(int var33 = 0; var33 < state.k; var33 += 1) {
+			if(!state.constrainedFlag$sample35[((var33 - 0) / 1)])
 				drawValueSample35(var33);
 		}
-		if(!constrainedFlag$sample42)
+		if(!state.constrainedFlag$sample42)
 			drawValueSample42();
 	}
 
@@ -1951,30 +1724,30 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$weights = 0.0;
-		if(!fixedProbFlag$sample35) {
-			for(int var33 = 0; var33 < k; var33 += 1)
-				logProbability$sample35[((var33 - 0) / 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$weights = 0.0;
+		if(!state.fixedProbFlag$sample35) {
+			for(int var33 = 0; var33 < state.k; var33 += 1)
+				state.logProbability$sample35[((var33 - 0) / 1)] = Double.NaN;
 		}
-		if(!fixedProbFlag$sample42)
-			logProbability$bias = Double.NaN;
-		logProbability$y = 0.0;
-		if(!fixedProbFlag$sample94)
-			logProbability$var93 = Double.NaN;
+		if(!state.fixedProbFlag$sample42)
+			state.logProbability$bias = Double.NaN;
+		state.logProbability$y = 0.0;
+		if(!state.fixedProbFlag$sample94)
+			state.logProbability$var93 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		k = 3;
-		n = x.length;
+		state.k = 3;
+		state.n = state.x.length;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample35$1 = 0; index$constrainedFlag$sample35$1 < constrainedFlag$sample35.length; index$constrainedFlag$sample35$1 += 1)
-			constrainedFlag$sample35[index$constrainedFlag$sample35$1] = true;
+		for(int index$constrainedFlag$sample35$1 = 0; index$constrainedFlag$sample35$1 < state.constrainedFlag$sample35.length; index$constrainedFlag$sample35$1 += 1)
+			state.constrainedFlag$sample35[index$constrainedFlag$sample35$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -1984,9 +1757,9 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample35)
+		if(state.fixedFlag$sample35)
 			logProbabilityValue$sample35();
-		if(fixedFlag$sample42)
+		if(state.fixedFlag$sample42)
 			logProbabilityValue$sample42();
 		logProbabilityValue$sample94();
 	}
@@ -2034,8 +1807,8 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	@Override
 	public final void propagateObservedValues() {
 		// Deep copy between arrays
-		boolean[][] cv$source1 = yMeasured;
-		boolean[][] cv$target1 = y;
+		boolean[][] cv$source1 = state.yMeasured;
+		boolean[][] cv$target1 = state.y;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			boolean[] cv$source2 = cv$source1[cv$index1];
@@ -2052,11 +1825,11 @@ final class LogitRegressionTest$SingleThreadCPU extends CoreModelSingleThreadCPU
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		for(int i = 0; i < n; i += 1) {
-			for(int j$var61 = 0; j$var61 < k; j$var61 += 1)
-				indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-			for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
-				p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+		for(int i = 0; i < state.n; i += 1) {
+			for(int j$var61 = 0; j$var61 < state.k; j$var61 += 1)
+				state.indicator[((i - 0) / 1)][j$var61] = Math.exp((state.weights[j$var61] * state.x[i][j$var61]));
+			for(int j$var85 = 0; j$var85 < state.k; j$var85 += 1)
+				state.p[((i - 0) / 1)][j$var85] = (state.indicator[((i - 0) / 1)][j$var85] / ((state.indicator[((i - 0) / 1)][0] + state.indicator[((i - 0) / 1)][1]) + state.indicator[((i - 0) / 1)][2]));
 		}
 	}
 

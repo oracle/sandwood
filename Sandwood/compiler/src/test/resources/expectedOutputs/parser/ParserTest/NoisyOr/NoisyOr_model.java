@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,32 +16,767 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model NoisyOr This is the class that all user interactions
  * with the model should occur through.
  */
-public final class NoisyOr extends Model {
-    private NoisyOr$CoreInterface system$c = new NoisyOr$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class NoisyOr extends Model<NoisyOr.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		boolean constrainedFlag$sample12 = true;
+		boolean constrainedFlag$sample15 = true;
+		boolean constrainedFlag$sample18 = true;
+		boolean[] constrainedFlag$sample233;
+		boolean[] constrainedFlag$sample248;
+		boolean[] constrainedFlag$sample263;
+		boolean[] constrainedFlag$sample278;
+		boolean[] constrainedFlag$sample293;
+		boolean constrainedFlag$sample3 = true;
+		boolean[] constrainedFlag$sample308;
+		boolean constrainedFlag$sample6 = true;
+		boolean constrainedFlag$sample9 = true;
+		boolean fixedFlag$sample12 = false;
+		boolean fixedFlag$sample15 = false;
+		boolean fixedFlag$sample18 = false;
+		boolean fixedFlag$sample233 = false;
+		boolean fixedFlag$sample248 = false;
+		boolean fixedFlag$sample263 = false;
+		boolean fixedFlag$sample278 = false;
+		boolean fixedFlag$sample293 = false;
+		boolean fixedFlag$sample3 = false;
+		boolean fixedFlag$sample308 = false;
+		boolean fixedFlag$sample430 = false;
+		boolean fixedFlag$sample6 = false;
+		boolean fixedFlag$sample9 = false;
+		boolean fixedProbFlag$sample12 = false;
+		boolean fixedProbFlag$sample15 = false;
+		boolean fixedProbFlag$sample18 = false;
+		boolean fixedProbFlag$sample233 = false;
+		boolean fixedProbFlag$sample248 = false;
+		boolean fixedProbFlag$sample263 = false;
+		boolean fixedProbFlag$sample278 = false;
+		boolean fixedProbFlag$sample293 = false;
+		boolean fixedProbFlag$sample3 = false;
+		boolean fixedProbFlag$sample308 = false;
+		boolean fixedProbFlag$sample430 = false;
+		boolean fixedProbFlag$sample6 = false;
+		boolean fixedProbFlag$sample9 = false;
+		boolean flag1;
+		boolean flag2;
+		boolean flag3;
+		boolean flag4;
+		boolean flag5;
+		boolean flag6;
+		boolean[][] issues$var213;
+		boolean[][] issues$var383;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$flag1;
+		double logProbability$flag2;
+		double logProbability$flag3;
+		double logProbability$flag4;
+		double logProbability$flag5;
+		double logProbability$flag6;
+		double logProbability$issues$var213;
+		double logProbability$issues$var383;
+		double logProbability$n13State;
+		double logProbability$noisyOr;
+		double[] logProbability$sample233;
+		double[] logProbability$sample248;
+		double[] logProbability$sample263;
+		double[] logProbability$sample278;
+		double[] logProbability$sample293;
+		double[] logProbability$sample308;
+		double[][] logProbability$sample430;
+		boolean[] n13State;
+		boolean[] noisyOr;
+		double[][] p;
+		double[][] p13;
+		double prior1;
+		double prior2;
+		double prior3;
+		double prior4;
+		double prior5;
+		double prior6;
+		boolean system$gibbsForward = true;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// Constructor for p
+			{
+				p = new double[6][];
+				p[0] = new double[5];
+				p[1] = new double[5];
+				p[2] = new double[5];
+				p[3] = new double[5];
+				p[4] = new double[5];
+				p[5] = new double[5];
+			}
+			
+			// Constructor for noisyOr
+			{
+				noisyOr = new boolean[5];
+			}
+			
+			// If issues$var213 has not been set already allocate space.
+			if((((((!fixedFlag$sample233 || !fixedFlag$sample248) || !fixedFlag$sample263) || !fixedFlag$sample278) || !fixedFlag$sample293) || !fixedFlag$sample308)) {
+				// Constructor for issues$var213
+				{
+					issues$var213 = new boolean[((((5 - 1) - 0) / 1) + 1)][];
+					for(int i$var211 = 0; i$var211 < 5; i$var211 += 1)
+						issues$var213[((i$var211 - 0) / 1)] = new boolean[6];
+				}
+			}
+			
+			// Constructor for p13
+			{
+				p13 = new double[5][];
+				p13[0] = new double[2];
+				p13[1] = new double[2];
+				p13[2] = new double[2];
+				p13[3] = new double[2];
+				p13[4] = new double[2];
+			}
+			
+			// Constructor for n13State
+			{
+				n13State = new boolean[2];
+			}
+			
+			// If issues$var383 has not been set already allocate space.
+			if(!fixedFlag$sample430) {
+				// Constructor for issues$var383
+				{
+					issues$var383 = new boolean[((((2 - 1) - 0) / 1) + 1)][];
+					for(int i$var381 = 0; i$var381 < 2; i$var381 += 1)
+						issues$var383[((i$var381 - 0) / 1)] = new boolean[5];
+				}
+			}
+			
+			// Constructor for constrainedFlag$sample233
+			{
+				constrainedFlag$sample233 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for constrainedFlag$sample248
+			{
+				constrainedFlag$sample248 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for constrainedFlag$sample263
+			{
+				constrainedFlag$sample263 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for constrainedFlag$sample278
+			{
+				constrainedFlag$sample278 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for constrainedFlag$sample293
+			{
+				constrainedFlag$sample293 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for constrainedFlag$sample308
+			{
+				constrainedFlag$sample308 = new boolean[((((5 - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for logProbability$sample233
+			{
+				logProbability$sample233 = new double[((((5 - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for logProbability$sample248
+			{
+				logProbability$sample248 = new double[((((5 - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for logProbability$sample263
+			{
+				logProbability$sample263 = new double[((((5 - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for logProbability$sample278
+			{
+				logProbability$sample278 = new double[((((5 - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for logProbability$sample293
+			{
+				logProbability$sample293 = new double[((((5 - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for logProbability$sample308
+			{
+				logProbability$sample308 = new double[((((5 - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for logProbability$sample430
+			{
+				logProbability$sample430 = new double[((((2 - 1) - 0) / 1) + 1)][];
+				for(int i$var381 = 0; i$var381 < 2; i$var381 += 1)
+					logProbability$sample430[((i$var381 - 0) / 1)] = new double[((((5 - 1) - 0) / 1) + 1)];
+			}
+		}
+
+		// Getter for fixedFlag$sample12.
+		final boolean get$fixedFlag$sample12() {
+			return fixedFlag$sample12;
+		}
+
+		// Setter for fixedFlag$sample12.
+		final void set$fixedFlag$sample12(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample12 including if probabilities
+			// need to be updated.
+			fixedFlag$sample12 = cv$value;
+			constrainedFlag$sample12 = (fixedFlag$sample12 || constrainedFlag$sample12);
+			
+			// Should the probability of sample 12 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample12 = (fixedFlag$sample12 && fixedProbFlag$sample12);
+			
+			// Should the probability of sample 278 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample278 = (fixedFlag$sample12 && fixedProbFlag$sample278);
+		}
+
+		// Getter for fixedFlag$sample15.
+		final boolean get$fixedFlag$sample15() {
+			return fixedFlag$sample15;
+		}
+
+		// Setter for fixedFlag$sample15.
+		final void set$fixedFlag$sample15(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample15 including if probabilities
+			// need to be updated.
+			fixedFlag$sample15 = cv$value;
+			constrainedFlag$sample15 = (fixedFlag$sample15 || constrainedFlag$sample15);
+			
+			// Should the probability of sample 15 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample15 = (fixedFlag$sample15 && fixedProbFlag$sample15);
+			
+			// Should the probability of sample 293 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample293 = (fixedFlag$sample15 && fixedProbFlag$sample293);
+		}
+
+		// Getter for fixedFlag$sample18.
+		final boolean get$fixedFlag$sample18() {
+			return fixedFlag$sample18;
+		}
+
+		// Setter for fixedFlag$sample18.
+		final void set$fixedFlag$sample18(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample18 including if probabilities
+			// need to be updated.
+			fixedFlag$sample18 = cv$value;
+			constrainedFlag$sample18 = (fixedFlag$sample18 || constrainedFlag$sample18);
+			
+			// Should the probability of sample 18 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample18 = (fixedFlag$sample18 && fixedProbFlag$sample18);
+			
+			// Should the probability of sample 308 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample308 = (fixedFlag$sample18 && fixedProbFlag$sample308);
+		}
+
+		// Getter for fixedFlag$sample233.
+		final boolean get$fixedFlag$sample233() {
+			return fixedFlag$sample233;
+		}
+
+		// Setter for fixedFlag$sample233.
+		final void set$fixedFlag$sample233(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample233 including if probabilities
+			// need to be updated.
+			fixedFlag$sample233 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample233$1 = 0; index$constrainedFlag$sample233$1 < constrainedFlag$sample233.length; index$constrainedFlag$sample233$1 += 1)
+					constrainedFlag$sample233[index$constrainedFlag$sample233$1] = true;
+			}
+			
+			// Should the probability of sample 233 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample233 = (fixedFlag$sample233 && fixedProbFlag$sample233);
+			
+			// Should the probability of sample 430 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample430 = (fixedFlag$sample233 && fixedProbFlag$sample430);
+		}
+
+		// Getter for fixedFlag$sample248.
+		final boolean get$fixedFlag$sample248() {
+			return fixedFlag$sample248;
+		}
+
+		// Setter for fixedFlag$sample248.
+		final void set$fixedFlag$sample248(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample248 including if probabilities
+			// need to be updated.
+			fixedFlag$sample248 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample248$1 = 0; index$constrainedFlag$sample248$1 < constrainedFlag$sample248.length; index$constrainedFlag$sample248$1 += 1)
+					constrainedFlag$sample248[index$constrainedFlag$sample248$1] = true;
+			}
+			
+			// Should the probability of sample 248 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample248 = (fixedFlag$sample248 && fixedProbFlag$sample248);
+			
+			// Should the probability of sample 430 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample430 = (fixedFlag$sample248 && fixedProbFlag$sample430);
+		}
+
+		// Getter for fixedFlag$sample263.
+		final boolean get$fixedFlag$sample263() {
+			return fixedFlag$sample263;
+		}
+
+		// Setter for fixedFlag$sample263.
+		final void set$fixedFlag$sample263(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample263 including if probabilities
+			// need to be updated.
+			fixedFlag$sample263 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample263$1 = 0; index$constrainedFlag$sample263$1 < constrainedFlag$sample263.length; index$constrainedFlag$sample263$1 += 1)
+					constrainedFlag$sample263[index$constrainedFlag$sample263$1] = true;
+			}
+			
+			// Should the probability of sample 263 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample263 = (fixedFlag$sample263 && fixedProbFlag$sample263);
+			
+			// Should the probability of sample 430 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample430 = (fixedFlag$sample263 && fixedProbFlag$sample430);
+		}
+
+		// Getter for fixedFlag$sample278.
+		final boolean get$fixedFlag$sample278() {
+			return fixedFlag$sample278;
+		}
+
+		// Setter for fixedFlag$sample278.
+		final void set$fixedFlag$sample278(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample278 including if probabilities
+			// need to be updated.
+			fixedFlag$sample278 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample278$1 = 0; index$constrainedFlag$sample278$1 < constrainedFlag$sample278.length; index$constrainedFlag$sample278$1 += 1)
+					constrainedFlag$sample278[index$constrainedFlag$sample278$1] = true;
+			}
+			
+			// Should the probability of sample 278 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample278 = (fixedFlag$sample278 && fixedProbFlag$sample278);
+			
+			// Should the probability of sample 430 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample430 = (fixedFlag$sample278 && fixedProbFlag$sample430);
+		}
+
+		// Getter for fixedFlag$sample293.
+		final boolean get$fixedFlag$sample293() {
+			return fixedFlag$sample293;
+		}
+
+		// Setter for fixedFlag$sample293.
+		final void set$fixedFlag$sample293(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample293 including if probabilities
+			// need to be updated.
+			fixedFlag$sample293 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample293$1 = 0; index$constrainedFlag$sample293$1 < constrainedFlag$sample293.length; index$constrainedFlag$sample293$1 += 1)
+					constrainedFlag$sample293[index$constrainedFlag$sample293$1] = true;
+			}
+			
+			// Should the probability of sample 293 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample293 = (fixedFlag$sample293 && fixedProbFlag$sample293);
+			
+			// Should the probability of sample 430 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample430 = (fixedFlag$sample293 && fixedProbFlag$sample430);
+		}
+
+		// Getter for fixedFlag$sample3.
+		final boolean get$fixedFlag$sample3() {
+			return fixedFlag$sample3;
+		}
+
+		// Setter for fixedFlag$sample3.
+		final void set$fixedFlag$sample3(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample3 including if probabilities
+			// need to be updated.
+			fixedFlag$sample3 = cv$value;
+			constrainedFlag$sample3 = (fixedFlag$sample3 || constrainedFlag$sample3);
+			
+			// Should the probability of sample 3 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample3 = (fixedFlag$sample3 && fixedProbFlag$sample3);
+			
+			// Should the probability of sample 233 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample233 = (fixedFlag$sample3 && fixedProbFlag$sample233);
+		}
+
+		// Getter for fixedFlag$sample308.
+		final boolean get$fixedFlag$sample308() {
+			return fixedFlag$sample308;
+		}
+
+		// Setter for fixedFlag$sample308.
+		final void set$fixedFlag$sample308(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample308 including if probabilities
+			// need to be updated.
+			fixedFlag$sample308 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample308$1 = 0; index$constrainedFlag$sample308$1 < constrainedFlag$sample308.length; index$constrainedFlag$sample308$1 += 1)
+					constrainedFlag$sample308[index$constrainedFlag$sample308$1] = true;
+			}
+			
+			// Should the probability of sample 308 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample308 = (fixedFlag$sample308 && fixedProbFlag$sample308);
+			
+			// Should the probability of sample 430 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample430 = (fixedFlag$sample308 && fixedProbFlag$sample430);
+		}
+
+		// Getter for fixedFlag$sample430.
+		final boolean get$fixedFlag$sample430() {
+			return fixedFlag$sample430;
+		}
+
+		// Setter for fixedFlag$sample430.
+		final void set$fixedFlag$sample430(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample430 including if probabilities
+			// need to be updated.
+			fixedFlag$sample430 = cv$value;
+			
+			// Should the probability of sample 430 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample430 = (fixedFlag$sample430 && fixedProbFlag$sample430);
+		}
+
+		// Getter for fixedFlag$sample6.
+		final boolean get$fixedFlag$sample6() {
+			return fixedFlag$sample6;
+		}
+
+		// Setter for fixedFlag$sample6.
+		final void set$fixedFlag$sample6(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample6 including if probabilities
+			// need to be updated.
+			fixedFlag$sample6 = cv$value;
+			constrainedFlag$sample6 = (fixedFlag$sample6 || constrainedFlag$sample6);
+			
+			// Should the probability of sample 6 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample6 = (fixedFlag$sample6 && fixedProbFlag$sample6);
+			
+			// Should the probability of sample 248 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample248 = (fixedFlag$sample6 && fixedProbFlag$sample248);
+		}
+
+		// Getter for fixedFlag$sample9.
+		final boolean get$fixedFlag$sample9() {
+			return fixedFlag$sample9;
+		}
+
+		// Setter for fixedFlag$sample9.
+		final void set$fixedFlag$sample9(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample9 including if probabilities
+			// need to be updated.
+			fixedFlag$sample9 = cv$value;
+			constrainedFlag$sample9 = (fixedFlag$sample9 || constrainedFlag$sample9);
+			
+			// Should the probability of sample 9 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample9 = (fixedFlag$sample9 && fixedProbFlag$sample9);
+			
+			// Should the probability of sample 263 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample263 = (fixedFlag$sample9 && fixedProbFlag$sample263);
+		}
+
+		// Getter for flag1.
+		final boolean get$flag1() {
+			return flag1;
+		}
+
+		// Setter for flag1.
+		final void set$flag1(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of flag1 including if probabilities need to
+			// be updated.
+			flag1 = cv$value;
+			
+			// Unset the fixed probability flag for sample 3 as it depends on flag1.
+			fixedProbFlag$sample3 = false;
+			
+			// Unset the fixed probability flag for sample 233 as it depends on flag1.
+			fixedProbFlag$sample233 = false;
+		}
+
+		// Getter for flag2.
+		final boolean get$flag2() {
+			return flag2;
+		}
+
+		// Setter for flag2.
+		final void set$flag2(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of flag2 including if probabilities need to
+			// be updated.
+			flag2 = cv$value;
+			
+			// Unset the fixed probability flag for sample 6 as it depends on flag2.
+			fixedProbFlag$sample6 = false;
+			
+			// Unset the fixed probability flag for sample 248 as it depends on flag2.
+			fixedProbFlag$sample248 = false;
+		}
+
+		// Getter for flag3.
+		final boolean get$flag3() {
+			return flag3;
+		}
+
+		// Setter for flag3.
+		final void set$flag3(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of flag3 including if probabilities need to
+			// be updated.
+			flag3 = cv$value;
+			
+			// Unset the fixed probability flag for sample 9 as it depends on flag3.
+			fixedProbFlag$sample9 = false;
+			
+			// Unset the fixed probability flag for sample 263 as it depends on flag3.
+			fixedProbFlag$sample263 = false;
+		}
+
+		// Getter for flag4.
+		final boolean get$flag4() {
+			return flag4;
+		}
+
+		// Setter for flag4.
+		final void set$flag4(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of flag4 including if probabilities need to
+			// be updated.
+			flag4 = cv$value;
+			
+			// Unset the fixed probability flag for sample 12 as it depends on flag4.
+			fixedProbFlag$sample12 = false;
+			
+			// Unset the fixed probability flag for sample 278 as it depends on flag4.
+			fixedProbFlag$sample278 = false;
+		}
+
+		// Getter for flag5.
+		final boolean get$flag5() {
+			return flag5;
+		}
+
+		// Setter for flag5.
+		final void set$flag5(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of flag5 including if probabilities need to
+			// be updated.
+			flag5 = cv$value;
+			
+			// Unset the fixed probability flag for sample 15 as it depends on flag5.
+			fixedProbFlag$sample15 = false;
+			
+			// Unset the fixed probability flag for sample 293 as it depends on flag5.
+			fixedProbFlag$sample293 = false;
+		}
+
+		// Getter for flag6.
+		final boolean get$flag6() {
+			return flag6;
+		}
+
+		// Setter for flag6.
+		final void set$flag6(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of flag6 including if probabilities need to
+			// be updated.
+			flag6 = cv$value;
+			
+			// Unset the fixed probability flag for sample 18 as it depends on flag6.
+			fixedProbFlag$sample18 = false;
+			
+			// Unset the fixed probability flag for sample 308 as it depends on flag6.
+			fixedProbFlag$sample308 = false;
+		}
+
+		// Getter for issues$var213.
+		final boolean[][] get$issues$var213() {
+			return issues$var213;
+		}
+
+		// Setter for issues$var213.
+		final void set$issues$var213(boolean[][] cv$value, boolean allocated$) {
+			issues$var213 = cv$value;
+		}
+
+		// Getter for issues$var383.
+		final boolean[][] get$issues$var383() {
+			return issues$var383;
+		}
+
+		// Setter for issues$var383.
+		final void set$issues$var383(boolean[][] cv$value, boolean allocated$) {
+			issues$var383 = cv$value;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$flag1.
+		final double get$logProbability$flag1() {
+			return logProbability$flag1;
+		}
+
+		// Getter for logProbability$flag2.
+		final double get$logProbability$flag2() {
+			return logProbability$flag2;
+		}
+
+		// Getter for logProbability$flag3.
+		final double get$logProbability$flag3() {
+			return logProbability$flag3;
+		}
+
+		// Getter for logProbability$flag4.
+		final double get$logProbability$flag4() {
+			return logProbability$flag4;
+		}
+
+		// Getter for logProbability$flag5.
+		final double get$logProbability$flag5() {
+			return logProbability$flag5;
+		}
+
+		// Getter for logProbability$flag6.
+		final double get$logProbability$flag6() {
+			return logProbability$flag6;
+		}
+
+		// Getter for logProbability$n13State.
+		final double get$logProbability$n13State() {
+			return logProbability$n13State;
+		}
+
+		// Getter for logProbability$noisyOr.
+		final double get$logProbability$noisyOr() {
+			return logProbability$noisyOr;
+		}
+
+		// Getter for n13State.
+		final boolean[] get$n13State() {
+			return n13State;
+		}
+
+		// Getter for noisyOr.
+		final boolean[] get$noisyOr() {
+			return noisyOr;
+		}
+
+		// Getter for p.
+		final double[][] get$p() {
+			return p;
+		}
+
+		// Getter for p13.
+		final double[][] get$p13() {
+			return p13;
+		}
+
+		// Getter for prior1.
+		final double get$prior1() {
+			return prior1;
+		}
+
+		// Getter for prior2.
+		final double get$prior2() {
+			return prior2;
+		}
+
+		// Getter for prior3.
+		final double get$prior3() {
+			return prior3;
+		}
+
+		// Getter for prior4.
+		final double get$prior4() {
+			return prior4;
+		}
+
+		// Getter for prior5.
+		final double get$prior5() {
+			return prior5;
+		}
+
+		// Getter for prior6.
+		final double get$prior6() {
+			return prior6;
+		}
+	}
 
     private final ComputedBooleanInternal $flag1 = new ComputedBooleanInternal(this, "flag1", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean getValue() { return system$c.get$flag1(); }
+        public boolean getValue() { return state.get$flag1(); }
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$flag1(value, allocated);
+            state.set$flag1(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flag1(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flag1(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample3(fixed, allocated);
+                state.set$fixedFlag$sample3(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample3())
+            if(state.get$fixedFlag$sample3())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -51,27 +788,27 @@ public final class NoisyOr extends Model {
 
     private final ComputedBooleanInternal $flag2 = new ComputedBooleanInternal(this, "flag2", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean getValue() { return system$c.get$flag2(); }
+        public boolean getValue() { return state.get$flag2(); }
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$flag2(value, allocated);
+            state.set$flag2(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flag2(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flag2(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample6(fixed, allocated);
+                state.set$fixedFlag$sample6(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample6())
+            if(state.get$fixedFlag$sample6())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -83,27 +820,27 @@ public final class NoisyOr extends Model {
 
     private final ComputedBooleanInternal $flag3 = new ComputedBooleanInternal(this, "flag3", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean getValue() { return system$c.get$flag3(); }
+        public boolean getValue() { return state.get$flag3(); }
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$flag3(value, allocated);
+            state.set$flag3(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flag3(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flag3(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample9(fixed, allocated);
+                state.set$fixedFlag$sample9(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample9())
+            if(state.get$fixedFlag$sample9())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -115,27 +852,27 @@ public final class NoisyOr extends Model {
 
     private final ComputedBooleanInternal $flag4 = new ComputedBooleanInternal(this, "flag4", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean getValue() { return system$c.get$flag4(); }
+        public boolean getValue() { return state.get$flag4(); }
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$flag4(value, allocated);
+            state.set$flag4(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flag4(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flag4(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample12(fixed, allocated);
+                state.set$fixedFlag$sample12(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample12())
+            if(state.get$fixedFlag$sample12())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -147,27 +884,27 @@ public final class NoisyOr extends Model {
 
     private final ComputedBooleanInternal $flag5 = new ComputedBooleanInternal(this, "flag5", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean getValue() { return system$c.get$flag5(); }
+        public boolean getValue() { return state.get$flag5(); }
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$flag5(value, allocated);
+            state.set$flag5(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flag5(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flag5(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample15(fixed, allocated);
+                state.set$fixedFlag$sample15(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample15())
+            if(state.get$fixedFlag$sample15())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -179,27 +916,27 @@ public final class NoisyOr extends Model {
 
     private final ComputedBooleanInternal $flag6 = new ComputedBooleanInternal(this, "flag6", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean getValue() { return system$c.get$flag6(); }
+        public boolean getValue() { return state.get$flag6(); }
 
         @Override
         protected void setValueInternal(boolean value) {
-            system$c.set$flag6(value, allocated);
+            state.set$flag6(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flag6(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flag6(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample18(fixed, allocated);
+                state.set$fixedFlag$sample18(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample18())
+            if(state.get$fixedFlag$sample18())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -211,11 +948,11 @@ public final class NoisyOr extends Model {
 
     private final ComputedObjectArrayInternal<boolean[]> $issues$var213 = new ComputedObjectArrayInternal<boolean[]>(this, "issues$var213", true, true, true, ProbabilityType.SKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
         @Override
-        public boolean[][] getValue() { return system$c.get$issues$var213(); }
+        public boolean[][] getValue() { return state.get$issues$var213(); }
 
         @Override
         protected void setValueInternal(boolean[][] value) {
-            system$c.set$issues$var213(value, allocated);
+            state.set$issues$var213(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -240,11 +977,11 @@ public final class NoisyOr extends Model {
 
     private final ComputedObjectArrayInternal<boolean[]> $issues$var383 = new ComputedObjectArrayInternal<boolean[]>(this, "issues$var383", true, true, true, ProbabilityType.SKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.BOOLEAN, 2) {
         @Override
-        public boolean[][] getValue() { return system$c.get$issues$var383(); }
+        public boolean[][] getValue() { return state.get$issues$var383(); }
 
         @Override
         protected void setValueInternal(boolean[][] value) {
-            system$c.set$issues$var383(value, allocated);
+            state.set$issues$var383(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -269,7 +1006,7 @@ public final class NoisyOr extends Model {
 
     private final ComputedBooleanArrayInternal $n13State = new ComputedBooleanArrayInternal(this, "n13State", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$n13State(); }
+        public boolean[] getValue() { return state.get$n13State(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -280,18 +1017,18 @@ public final class NoisyOr extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$n13State(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$n13State(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample430(fixed, allocated);
+                state.set$fixedFlag$sample430(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample430())
+            if(state.get$fixedFlag$sample430())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -305,7 +1042,7 @@ public final class NoisyOr extends Model {
 
     private final ComputedBooleanArrayInternal $noisyOr = new ComputedBooleanArrayInternal(this, "noisyOr", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$noisyOr(); }
+        public boolean[] getValue() { return state.get$noisyOr(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -316,28 +1053,28 @@ public final class NoisyOr extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$noisyOr(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$noisyOr(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample233(fixed, allocated);
-                system$c.set$fixedFlag$sample248(fixed, allocated);
-                system$c.set$fixedFlag$sample263(fixed, allocated);
-                system$c.set$fixedFlag$sample278(fixed, allocated);
-                system$c.set$fixedFlag$sample293(fixed, allocated);
-                system$c.set$fixedFlag$sample308(fixed, allocated);
+                state.set$fixedFlag$sample233(fixed, allocated);
+                state.set$fixedFlag$sample248(fixed, allocated);
+                state.set$fixedFlag$sample263(fixed, allocated);
+                state.set$fixedFlag$sample278(fixed, allocated);
+                state.set$fixedFlag$sample293(fixed, allocated);
+                state.set$fixedFlag$sample308(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample233 = system$c.get$fixedFlag$sample233();
-            boolean fixedFlag$sample248 = system$c.get$fixedFlag$sample248();
-            boolean fixedFlag$sample263 = system$c.get$fixedFlag$sample263();
-            boolean fixedFlag$sample278 = system$c.get$fixedFlag$sample278();
-            boolean fixedFlag$sample293 = system$c.get$fixedFlag$sample293();
-            boolean fixedFlag$sample308 = system$c.get$fixedFlag$sample308();
+            boolean fixedFlag$sample233 = state.get$fixedFlag$sample233();
+            boolean fixedFlag$sample248 = state.get$fixedFlag$sample248();
+            boolean fixedFlag$sample263 = state.get$fixedFlag$sample263();
+            boolean fixedFlag$sample278 = state.get$fixedFlag$sample278();
+            boolean fixedFlag$sample293 = state.get$fixedFlag$sample293();
+            boolean fixedFlag$sample308 = state.get$fixedFlag$sample308();
             if(fixedFlag$sample233 && fixedFlag$sample248 && fixedFlag$sample263 && fixedFlag$sample278 && fixedFlag$sample293 && fixedFlag$sample308)
                 return Immutability.FIXED;
             else if(fixedFlag$sample233 || fixedFlag$sample248 || fixedFlag$sample263 || fixedFlag$sample278 || fixedFlag$sample293 || fixedFlag$sample308)
@@ -364,6 +1101,7 @@ public final class NoisyOr extends Model {
 	/** A constructor for a model where no variable values are set. */
     public NoisyOr() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("flag1", $flag1);
         $computedVariables.put("flag2", $flag2);
@@ -375,54 +1113,21 @@ public final class NoisyOr extends Model {
         $computedVariables.put("issues$var383", $issues$var383);
         $computedVariables.put("n13State", $n13State);
         $computedVariables.put("noisyOr", $noisyOr);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        NoisyOr$SingleThreadCPU core = new NoisyOr$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
     
     @Override
-    protected NoisyOr$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        NoisyOr$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new NoisyOr$SingleThreadCPU(target);
-                break;
+                return new NoisyOr$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new NoisyOr$MultiThreadCPU(target);
-                break;
+                return new NoisyOr$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(NoisyOr$CoreInterface oldCore, NoisyOr$CoreInterface newCore) {
-
-        //ComputedVariables
-        if($flag1.isSet())
-            newCore.set$flag1(oldCore.get$flag1(), false);
-        if($flag2.isSet())
-            newCore.set$flag2(oldCore.get$flag2(), false);
-        if($flag3.isSet())
-            newCore.set$flag3(oldCore.get$flag3(), false);
-        if($flag4.isSet())
-            newCore.set$flag4(oldCore.get$flag4(), false);
-        if($flag5.isSet())
-            newCore.set$flag5(oldCore.get$flag5(), false);
-        if($flag6.isSet())
-            newCore.set$flag6(oldCore.get$flag6(), false);
-        if($issues$var213.isSet())
-            newCore.set$issues$var213(oldCore.get$issues$var213(), false);
-        if($issues$var383.isSet())
-            newCore.set$issues$var383(oldCore.get$issues$var383(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample12(oldCore.get$fixedFlag$sample12(), false);
-        newCore.set$fixedFlag$sample15(oldCore.get$fixedFlag$sample15(), false);
-        newCore.set$fixedFlag$sample18(oldCore.get$fixedFlag$sample18(), false);
-        newCore.set$fixedFlag$sample3(oldCore.get$fixedFlag$sample3(), false);
-        newCore.set$fixedFlag$sample6(oldCore.get$fixedFlag$sample6(), false);
-        newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9(), false);
     }
 
 	/**

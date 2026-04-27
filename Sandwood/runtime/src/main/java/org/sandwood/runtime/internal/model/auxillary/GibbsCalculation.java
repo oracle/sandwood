@@ -11,13 +11,13 @@ package org.sandwood.runtime.internal.model.auxillary;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.sandwood.runtime.internal.model.CoreModel;
+import org.sandwood.runtime.internal.model.CoreModelBase;
 import org.sandwood.runtime.internal.model.variables.ComputedVariableInternal;
 import org.sandwood.runtime.internal.model.variables.CurrentProbability;
 
 public class GibbsCalculation {
     public static void infer(int iterations, int burnin, int thinning,
-            Collection<ComputedVariableInternal> computedVariables, CoreModel core,
+            Collection<ComputedVariableInternal> computedVariables, CoreModelBase<?,?> core,
             final CurrentProbability[] currentProbabilities) {
         ArrayList<ComputedVariableInternal> map = new ArrayList<>();
         ArrayList<ComputedVariableInternal> sample = new ArrayList<>();
@@ -79,14 +79,14 @@ public class GibbsCalculation {
             c.computeComplete();
     }
 
-    private static <C extends CoreModel> void collectSamples(C core, ArrayList<ComputedVariableInternal> sample) {
+    private static void collectSamples(CoreModelBase<?,?> core, ArrayList<ComputedVariableInternal> sample) {
         core.gibbsRound();
 
         for(ComputedVariableInternal c:sample)
             c.ingestSample();
     }
 
-    private static <C extends CoreModel> double collectMap(C core, ArrayList<ComputedVariableInternal> map,
+    private static double collectMap(CoreModelBase<?,?> core, ArrayList<ComputedVariableInternal> map,
             double lastProbability, CurrentProbability[] currentProbabilities) {
         core.gibbsRound();
         core.logModelProbabilitiesDist();
@@ -106,12 +106,12 @@ public class GibbsCalculation {
         return lastProbability;
     }
 
-    private static void runThinning(CoreModel core, int thinning) {
+    private static void runThinning(CoreModelBase<?,?> core, int thinning) {
         for(int i = 0; i < thinning; i++)
             core.gibbsRound();
     }
 
-    private static double collectSampleAndMap(CoreModel core, ArrayList<ComputedVariableInternal> map,
+    private static double collectSampleAndMap(CoreModelBase<?,?> core, ArrayList<ComputedVariableInternal> map,
             ArrayList<ComputedVariableInternal> sample, double lastProbability,
             CurrentProbability[] currentProbabilities) {
         core.gibbsRound();

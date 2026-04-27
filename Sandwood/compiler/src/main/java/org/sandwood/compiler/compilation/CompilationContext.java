@@ -398,10 +398,6 @@ public class CompilationContext {
 
             trees.addAll(unorderedConstructors);
 
-            if(!scratchConstructors.isEmpty())
-                trees.add(
-                        IRTree.functionCall(AuxFunctionType.SCRATCH_ALLOCATOR.functionName, "Allocate scratch space"));
-
             return IRTree.sequential(trees, Tree.NoComment);
         }
 

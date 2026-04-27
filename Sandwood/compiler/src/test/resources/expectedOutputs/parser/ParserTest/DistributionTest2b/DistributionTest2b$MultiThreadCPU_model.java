@@ -1,306 +1,90 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.DistributionTest2b$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.DistributionTest2b.State;
 import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU implements DistributionTest2b$CoreInterface {
+final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	boolean[] constrainedFlag$sample23;
-	boolean[] constrainedFlag$sample36;
-	boolean constrainedFlag$sample5 = true;
-	boolean constrainedFlag$sample9 = true;
-	double[][] distribution$sample23;
-	double[] distribution$sample5;
-	double[] distribution$sample9;
-	boolean fixedFlag$sample23 = false;
-	boolean fixedFlag$sample5 = false;
-	boolean fixedFlag$sample9 = false;
-	boolean fixedProbFlag$sample23 = false;
-	boolean fixedProbFlag$sample5 = false;
-	boolean fixedProbFlag$sample9 = false;
-	int length$value;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$c;
-	double[] logProbability$sample23;
-	double[] logProbability$sample43;
-	double logProbability$v;
-	double logProbability$v1;
-	double logProbability$v2;
-	double logProbability$v3;
-	double logProbability$var9;
-	int size;
-	boolean system$gibbsForward = true;
-	boolean[] v;
-	int v1;
-	int[] v2;
-	int[] v3;
-	boolean[] value;
-	double[] weightings;
-	double[][] cv$var23$stateProbabilityGlobal;
-	double[] cv$var36$stateProbabilityGlobal;
-	double[] cv$var5$stateProbabilityGlobal;
-	double[] cv$var9$stateProbabilityGlobal;
+		// Declare the scratch variables for the model.
+		double[][] cv$var23$stateProbabilityGlobal;
+		double[] cv$var36$stateProbabilityGlobal;
+		double[] cv$var5$stateProbabilityGlobal;
+		double[] cv$var9$stateProbabilityGlobal;
 
-	public DistributionTest2b$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for distribution$sample23.
-	@Override
-	public final double[][] get$distribution$sample23() {
-		return distribution$sample23;
-	}
-
-	// Setter for distribution$sample23.
-	@Override
-	public final void set$distribution$sample23(double[][] cv$value, boolean allocated$) {
-		distribution$sample23 = cv$value;
-	}
-
-	// Getter for distribution$sample5.
-	@Override
-	public final double[] get$distribution$sample5() {
-		return distribution$sample5;
-	}
-
-	// Setter for distribution$sample5.
-	@Override
-	public final void set$distribution$sample5(double[] cv$value, boolean allocated$) {
-		distribution$sample5 = cv$value;
-	}
-
-	// Getter for distribution$sample9.
-	@Override
-	public final double[] get$distribution$sample9() {
-		return distribution$sample9;
-	}
-
-	// Setter for distribution$sample9.
-	@Override
-	public final void set$distribution$sample9(double[] cv$value, boolean allocated$) {
-		distribution$sample9 = cv$value;
-	}
-
-	// Getter for fixedFlag$sample23.
-	@Override
-	public final boolean get$fixedFlag$sample23() {
-		return fixedFlag$sample23;
-	}
-
-	// Setter for fixedFlag$sample23.
-	@Override
-	public final void set$fixedFlag$sample23(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample23 including if probabilities
-		// need to be updated.
-		fixedFlag$sample23 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample23$1 = 0; index$constrainedFlag$sample23$1 < constrainedFlag$sample23.length; index$constrainedFlag$sample23$1 += 1)
-				constrainedFlag$sample23[index$constrainedFlag$sample23$1] = true;
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for cv$var5$stateProbabilityGlobal
+			{
+				// Allocation of cv$var5$stateProbabilityGlobal for single threaded execution
+				cv$var5$stateProbabilityGlobal = new double[state.weightings.length];
+			}
+			
+			// Constructor for cv$var9$stateProbabilityGlobal
+			{
+				// Allocation of cv$var9$stateProbabilityGlobal for single threaded execution
+				cv$var9$stateProbabilityGlobal = new double[state.weightings.length];
+			}
+			
+			// Constructor for cv$var23$stateProbabilityGlobal
+			{
+				// Allocation of cv$var23$stateProbabilityGlobal for multithreaded execution
+				{
+					// Get the thread count.
+					int cv$threadCount = threadCount();
+					
+					// Allocate an array to hold a copy per thread
+					cv$var23$stateProbabilityGlobal = new double[cv$threadCount][];
+					
+					// Populate the array with a copy per thread
+					for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+						cv$var23$stateProbabilityGlobal[cv$index] = new double[state.weightings.length];
+				}
+			}
+			
+			// Constructor for cv$var36$stateProbabilityGlobal
+			{
+				// Allocation of cv$var36$stateProbabilityGlobal for single threaded execution
+				cv$var36$stateProbabilityGlobal = new double[state.weightings.length];
+			}
 		}
-		
-		// Should the probability of sample 23 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample23 = (fixedFlag$sample23 && fixedProbFlag$sample23);
 	}
 
-	// Getter for fixedFlag$sample5.
-	@Override
-	public final boolean get$fixedFlag$sample5() {
-		return fixedFlag$sample5;
-	}
 
-	// Setter for fixedFlag$sample5.
-	@Override
-	public final void set$fixedFlag$sample5(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample5 including if probabilities
-		// need to be updated.
-		fixedFlag$sample5 = cv$value;
-		constrainedFlag$sample5 = (fixedFlag$sample5 || constrainedFlag$sample5);
-		
-		// Should the probability of sample 5 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample5 = (fixedFlag$sample5 && fixedProbFlag$sample5);
-	}
-
-	// Getter for fixedFlag$sample9.
-	@Override
-	public final boolean get$fixedFlag$sample9() {
-		return fixedFlag$sample9;
-	}
-
-	// Setter for fixedFlag$sample9.
-	@Override
-	public final void set$fixedFlag$sample9(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample9 including if probabilities
-		// need to be updated.
-		fixedFlag$sample9 = cv$value;
-		constrainedFlag$sample9 = (fixedFlag$sample9 || constrainedFlag$sample9);
-		
-		// Should the probability of sample 9 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample9 = (fixedFlag$sample9 && fixedProbFlag$sample9);
-	}
-
-	// Getter for length$value.
-	@Override
-	public final int get$length$value() {
-		return length$value;
-	}
-
-	// Setter for length$value.
-	@Override
-	public final void set$length$value(int cv$value, boolean allocated$) {
-		length$value = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$c.
-	@Override
-	public final double get$logProbability$c() {
-		return logProbability$c;
-	}
-
-	// Getter for logProbability$v.
-	@Override
-	public final double get$logProbability$v() {
-		return logProbability$v;
-	}
-
-	// Getter for logProbability$v1.
-	@Override
-	public final double get$logProbability$v1() {
-		return logProbability$v1;
-	}
-
-	// Getter for logProbability$v2.
-	@Override
-	public final double get$logProbability$v2() {
-		return logProbability$v2;
-	}
-
-	// Getter for size.
-	@Override
-	public final int get$size() {
-		return size;
-	}
-
-	// Getter for v.
-	@Override
-	public final boolean[] get$v() {
-		return v;
-	}
-
-	// Getter for v1.
-	@Override
-	public final int get$v1() {
-		return v1;
-	}
-
-	// Setter for v1.
-	@Override
-	public final void set$v1(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of v1 including if probabilities need to be
-		// updated.
-		v1 = cv$value;
-		
-		// Unset the fixed probability flag for sample 5 as it depends on v1.
-		fixedProbFlag$sample5 = false;
-	}
-
-	// Getter for v2.
-	@Override
-	public final int[] get$v2() {
-		return v2;
-	}
-
-	// Setter for v2.
-	@Override
-	public final void set$v2(int[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of v2 including if probabilities need to be
-		// updated.
-		v2 = cv$value;
-		
-		// Unset the fixed probability flag for sample 9 as it depends on v2.
-		fixedProbFlag$sample9 = false;
-		
-		// Unset the fixed probability flag for sample 23 as it depends on v2.
-		fixedProbFlag$sample23 = false;
-	}
-
-	// Getter for v3.
-	@Override
-	public final int[] get$v3() {
-		return v3;
-	}
-
-	// Setter for v3.
-	@Override
-	public final void set$v3(int[] cv$value, boolean allocated$) {
-		v3 = cv$value;
-	}
-
-	// Getter for value.
-	@Override
-	public final boolean[] get$value() {
-		return value;
-	}
-
-	// Setter for value.
-	@Override
-	public final void set$value(boolean[] cv$value, boolean allocated$) {
-		value = cv$value;
-	}
-
-	// Getter for weightings.
-	@Override
-	public final double[] get$weightings() {
-		return weightings;
-	}
-
-	// Setter for weightings.
-	@Override
-	public final void set$weightings(double[] cv$value, boolean allocated$) {
-		weightings = cv$value;
+	public DistributionTest2b$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample23
 	private final void drawValueSample23(int i, int threadID$cv$i, Rng RNG$) {
 		// Copy of index so that its values can be safely substituted
 		int index$i$1 = i;
-		v2[i] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		state.v2[i] = DistributionSampling.sampleCategorical(RNG$, state.weightings, state.weightings.length);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample36
 	private final void drawValueSample36(int j) {
-		v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		state.v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample5
 	private final void drawValueSample5() {
-		v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		state.v1 = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample9
 	private final void drawValueSample9() {
-		v2[0] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		state.v2[0] = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -310,17 +94,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 		// Copy of index so that its values can be safely substituted
 		int index$i$1 = i;
 		if(true) {
-			constrainedFlag$sample23[((i - 1) / 1)] = false;
+			state.constrainedFlag$sample23[((i - 1) / 1)] = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
 			{
 				// variable marginalization
-				cv$numStates = Math.max(cv$numStates, weightings.length);
+				cv$numStates = Math.max(cv$numStates, state.weightings.length);
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var23$stateProbabilityGlobal[threadID$cv$i];
+			double[] cv$stateProbabilityLocal = scratch.cv$var23$stateProbabilityGlobal[threadID$cv$i];
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -342,11 +126,11 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 					
 					// Constructing a random variable input for use later.
-					int $var579 = weightings.length;
+					int $var579 = state.weightings.length;
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < $var579)) && (0 < $var579)) && (0.0 <= weightings[cv$currentValue])) && (weightings[cv$currentValue] <= 1.0))?Math.log(weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < $var579)) && (0 < $var579)) && (0.0 <= state.weightings[cv$currentValue])) && (state.weightings[cv$currentValue] <= 1.0))?Math.log(state.weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 42.
 					{
@@ -354,7 +138,7 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 						{
 							{
 								int traceTempVariable$var39$2_1 = cv$currentValue;
-								for(int j = 0; j < size; j += 1) {
+								for(int j = 0; j < state.size; j += 1) {
 									if((i == j)) {
 										// Processing sample task 43 of consumer random variable null.
 										{
@@ -363,7 +147,7 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 												boolean cv$sampleConstrained = true;
 												if(cv$sampleConstrained) {
 													// Mark that the sample has observed constrained data.
-													constrainedFlag$sample23[((i - 1) / 1)] = true;
+													state.constrainedFlag$sample23[((i - 1) / 1)] = true;
 													
 													// Set an accumulator to sum the probabilities for each possible configuration of
 													// inputs.
@@ -375,24 +159,24 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 													{
 														// Enumerating the possible arguments for the variable Bernoulli 42 which is consuming
 														// the output of Sample task 23.
-														if(fixedFlag$sample5) {
+														if(state.fixedFlag$sample5) {
 															{
 																{
 																	{
 																		{
 																			{
 																				// Constructing a random variable input for use later.
-																				double var41 = ((1.0 * v1) / (traceTempVariable$var39$2_1 + v3[((j - 0) / 1)]));
+																				double var41 = ((1.0 * state.v1) / (traceTempVariable$var39$2_1 + state.v3[((j - 0) / 1)]));
 																				
 																				// Record the probability of sample task 43 generating output with current configuration.
-																				if(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																				if(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																				else {
 																					// If the second value is -infinity.
 																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																					else
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																				}
 																				
 																				// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -405,28 +189,28 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 														} else {
 															if(true) {
 																// Enumerating the possible outputs of Categorical 4.
-																for(int index$sample5$5 = 0; index$sample5$5 < weightings.length; index$sample5$5 += 1) {
+																for(int index$sample5$5 = 0; index$sample5$5 < state.weightings.length; index$sample5$5 += 1) {
 																	int distributionTempVariable$v1$7 = index$sample5$5;
 																	
 																	// Update the probability of sampling this value from the distribution value.
-																	double cv$probabilitySample5Value6 = (1.0 * distribution$sample5[index$sample5$5]);
+																	double cv$probabilitySample5Value6 = (1.0 * state.distribution$sample5[index$sample5$5]);
 																	{
 																		{
 																			{
 																				{
 																					{
 																						// Constructing a random variable input for use later.
-																						double var41 = ((1.0 * distributionTempVariable$v1$7) / (traceTempVariable$var39$2_1 + v3[((j - 0) / 1)]));
+																						double var41 = ((1.0 * distributionTempVariable$v1$7) / (traceTempVariable$var39$2_1 + state.v3[((j - 0) / 1)]));
 																						
 																						// Record the probability of sample task 43 generating output with current configuration.
-																						if(((Math.log(cv$probabilitySample5Value6) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value6) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																						if(((Math.log(cv$probabilitySample5Value6) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value6) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																						else {
 																							// If the second value is -infinity.
 																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value6) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value6) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																							else
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value6) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample5Value6) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value6) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample5Value6) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																						}
 																						
 																						// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -481,10 +265,10 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample23[((i - 1) / 1)]) {
+			if(state.constrainedFlag$sample23[((i - 1) / 1)]) {
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// Local copy of the probability array
-				double[] cv$localProbability = distribution$sample23[((i - 1) / 1)];
+				double[] cv$localProbability = state.distribution$sample23[((i - 1) / 1)];
 				
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
@@ -541,17 +325,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 	// by sample task 36 drawn from c. Inference was performed using variable marginalization.
 	private final void inferSample36(int j) {
 		if(true) {
-			constrainedFlag$sample36[((j - 0) / 1)] = false;
+			state.constrainedFlag$sample36[((j - 0) / 1)] = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
 			{
 				// variable marginalization
-				cv$numStates = Math.max(cv$numStates, weightings.length);
+				cv$numStates = Math.max(cv$numStates, state.weightings.length);
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var36$stateProbabilityGlobal;
+			double[] cv$stateProbabilityLocal = scratch.cv$var36$stateProbabilityGlobal;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -570,17 +354,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 				cv$currentValue = cv$valuePos;
 				
 				// Write out the new value of the sample.
-				v3[((j - 0) / 1)] = cv$currentValue;
+				state.v3[((j - 0) / 1)] = cv$currentValue;
 				{
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 					
 					// Constructing a random variable input for use later.
-					int $var607 = weightings.length;
+					int $var607 = state.weightings.length;
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < $var607)) && (0 < $var607)) && (0.0 <= weightings[cv$currentValue])) && (weightings[cv$currentValue] <= 1.0))?Math.log(weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < $var607)) && (0 < $var607)) && (0.0 <= state.weightings[cv$currentValue])) && (state.weightings[cv$currentValue] <= 1.0))?Math.log(state.weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 42.
 					{
@@ -593,7 +377,7 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 										boolean cv$sampleConstrained = true;
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample36[((j - 0) / 1)] = true;
+											state.constrainedFlag$sample36[((j - 0) / 1)] = true;
 											
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -605,26 +389,26 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 											{
 												// Enumerating the possible arguments for the variable Bernoulli 42 which is consuming
 												// the output of Sample task 36.
-												if(fixedFlag$sample5) {
+												if(state.fixedFlag$sample5) {
 													{
-														if(fixedFlag$sample9) {
+														if(state.fixedFlag$sample9) {
 															{
 																if((0 == j)) {
 																	{
 																		{
 																			{
 																				// Constructing a random variable input for use later.
-																				double var41 = ((1.0 * v1) / (v2[j] + cv$currentValue));
+																				double var41 = ((1.0 * state.v1) / (state.v2[j] + cv$currentValue));
 																				
 																				// Record the probability of sample task 43 generating output with current configuration.
-																				if(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																				if(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																				else {
 																					// If the second value is -infinity.
 																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																					else
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																				}
 																				
 																				// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -637,11 +421,11 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 														} else {
 															if(true) {
 																// Enumerating the possible outputs of Categorical 8.
-																for(int index$sample9$9 = 0; index$sample9$9 < weightings.length; index$sample9$9 += 1) {
+																for(int index$sample9$9 = 0; index$sample9$9 < state.weightings.length; index$sample9$9 += 1) {
 																	int distributionTempVariable$var9$11 = index$sample9$9;
 																	
 																	// Update the probability of sampling this value from the distribution value.
-																	double cv$probabilitySample9Value10 = (1.0 * distribution$sample9[index$sample9$9]);
+																	double cv$probabilitySample9Value10 = (1.0 * state.distribution$sample9[index$sample9$9]);
 																	{
 																		int traceTempVariable$var39$12_1 = distributionTempVariable$var9$11;
 																		if((0 == j)) {
@@ -649,17 +433,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 																				{
 																					{
 																						// Constructing a random variable input for use later.
-																						double var41 = ((1.0 * v1) / (traceTempVariable$var39$12_1 + cv$currentValue));
+																						double var41 = ((1.0 * state.v1) / (traceTempVariable$var39$12_1 + cv$currentValue));
 																						
 																						// Record the probability of sample task 43 generating output with current configuration.
-																						if(((Math.log(cv$probabilitySample9Value10) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample9Value10) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																						if(((Math.log(cv$probabilitySample9Value10) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample9Value10) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																						else {
 																							// If the second value is -infinity.
 																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample9Value10) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample9Value10) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																							else
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample9Value10) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample9Value10) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample9Value10) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample9Value10) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																						}
 																						
 																						// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -676,30 +460,30 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 												} else {
 													if(true) {
 														// Enumerating the possible outputs of Categorical 4.
-														for(int index$sample5$4 = 0; index$sample5$4 < weightings.length; index$sample5$4 += 1) {
+														for(int index$sample5$4 = 0; index$sample5$4 < state.weightings.length; index$sample5$4 += 1) {
 															int distributionTempVariable$v1$6 = index$sample5$4;
 															
 															// Update the probability of sampling this value from the distribution value.
-															double cv$probabilitySample5Value5 = (1.0 * distribution$sample5[index$sample5$4]);
+															double cv$probabilitySample5Value5 = (1.0 * state.distribution$sample5[index$sample5$4]);
 															{
-																if(fixedFlag$sample9) {
+																if(state.fixedFlag$sample9) {
 																	{
 																		if((0 == j)) {
 																			{
 																				{
 																					{
 																						// Constructing a random variable input for use later.
-																						double var41 = ((1.0 * distributionTempVariable$v1$6) / (v2[j] + cv$currentValue));
+																						double var41 = ((1.0 * distributionTempVariable$v1$6) / (state.v2[j] + cv$currentValue));
 																						
 																						// Record the probability of sample task 43 generating output with current configuration.
-																						if(((Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																						if(((Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																						else {
 																							// If the second value is -infinity.
 																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																							else
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																						}
 																						
 																						// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -712,11 +496,11 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 																} else {
 																	if(true) {
 																		// Enumerating the possible outputs of Categorical 8.
-																		for(int index$sample9$14 = 0; index$sample9$14 < weightings.length; index$sample9$14 += 1) {
+																		for(int index$sample9$14 = 0; index$sample9$14 < state.weightings.length; index$sample9$14 += 1) {
 																			int distributionTempVariable$var9$16 = index$sample9$14;
 																			
 																			// Update the probability of sampling this value from the distribution value.
-																			double cv$probabilitySample9Value15 = (cv$probabilitySample5Value5 * distribution$sample9[index$sample9$14]);
+																			double cv$probabilitySample9Value15 = (cv$probabilitySample5Value5 * state.distribution$sample9[index$sample9$14]);
 																			{
 																				int traceTempVariable$var39$17_1 = distributionTempVariable$var9$16;
 																				if((0 == j)) {
@@ -727,14 +511,14 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 																								double var41 = ((1.0 * distributionTempVariable$v1$6) / (traceTempVariable$var39$17_1 + cv$currentValue));
 																								
 																								// Record the probability of sample task 43 generating output with current configuration.
-																								if(((Math.log(cv$probabilitySample9Value15) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample9Value15) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																								if(((Math.log(cv$probabilitySample9Value15) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample9Value15) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																								else {
 																									// If the second value is -infinity.
 																									if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample9Value15) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																										cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample9Value15) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																									else
-																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample9Value15) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample9Value15) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample9Value15) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample9Value15) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																								}
 																								
 																								// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -754,27 +538,27 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 												
 												// Enumerating the possible arguments for the variable Bernoulli 42 which is consuming
 												// the output of Sample task 36.
-												if(fixedFlag$sample5) {
+												if(state.fixedFlag$sample5) {
 													{
-														if(fixedFlag$sample23) {
+														if(state.fixedFlag$sample23) {
 															{
-																for(int i = 1; i < size; i += 1) {
+																for(int i = 1; i < state.size; i += 1) {
 																	if((i == j)) {
 																		{
 																			{
 																				{
 																					// Constructing a random variable input for use later.
-																					double var41 = ((1.0 * v1) / (v2[j] + cv$currentValue));
+																					double var41 = ((1.0 * state.v1) / (state.v2[j] + cv$currentValue));
 																					
 																					// Record the probability of sample task 43 generating output with current configuration.
-																					if(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																					if(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																					else {
 																						// If the second value is -infinity.
 																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																						else
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																					}
 																					
 																					// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -786,14 +570,14 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 																}
 															}
 														} else {
-															for(int i = 1; i < size; i += 1) {
+															for(int i = 1; i < state.size; i += 1) {
 																if(true) {
 																	// Enumerating the possible outputs of Categorical 22.
-																	for(int index$sample23$25 = 0; index$sample23$25 < weightings.length; index$sample23$25 += 1) {
+																	for(int index$sample23$25 = 0; index$sample23$25 < state.weightings.length; index$sample23$25 += 1) {
 																		int distributionTempVariable$var23$27 = index$sample23$25;
 																		
 																		// Update the probability of sampling this value from the distribution value.
-																		double cv$probabilitySample23Value26 = (1.0 * distribution$sample23[((i - 1) / 1)][index$sample23$25]);
+																		double cv$probabilitySample23Value26 = (1.0 * state.distribution$sample23[((i - 1) / 1)][index$sample23$25]);
 																		{
 																			int traceTempVariable$var39$28_1 = distributionTempVariable$var23$27;
 																			if((i == j)) {
@@ -801,17 +585,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 																					{
 																						{
 																							// Constructing a random variable input for use later.
-																							double var41 = ((1.0 * v1) / (traceTempVariable$var39$28_1 + cv$currentValue));
+																							double var41 = ((1.0 * state.v1) / (traceTempVariable$var39$28_1 + cv$currentValue));
 																							
 																							// Record the probability of sample task 43 generating output with current configuration.
-																							if(((Math.log(cv$probabilitySample23Value26) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample23Value26) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(cv$probabilitySample23Value26) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample23Value26) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								// If the second value is -infinity.
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample23Value26) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample23Value26) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample23Value26) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample23Value26) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample23Value26) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample23Value26) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																							}
 																							
 																							// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -829,31 +613,31 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 												} else {
 													if(true) {
 														// Enumerating the possible outputs of Categorical 4.
-														for(int index$sample5$19 = 0; index$sample5$19 < weightings.length; index$sample5$19 += 1) {
+														for(int index$sample5$19 = 0; index$sample5$19 < state.weightings.length; index$sample5$19 += 1) {
 															int distributionTempVariable$v1$21 = index$sample5$19;
 															
 															// Update the probability of sampling this value from the distribution value.
-															double cv$probabilitySample5Value20 = (1.0 * distribution$sample5[index$sample5$19]);
+															double cv$probabilitySample5Value20 = (1.0 * state.distribution$sample5[index$sample5$19]);
 															{
-																if(fixedFlag$sample23) {
+																if(state.fixedFlag$sample23) {
 																	{
-																		for(int i = 1; i < size; i += 1) {
+																		for(int i = 1; i < state.size; i += 1) {
 																			if((i == j)) {
 																				{
 																					{
 																						{
 																							// Constructing a random variable input for use later.
-																							double var41 = ((1.0 * distributionTempVariable$v1$21) / (v2[j] + cv$currentValue));
+																							double var41 = ((1.0 * distributionTempVariable$v1$21) / (state.v2[j] + cv$currentValue));
 																							
 																							// Record the probability of sample task 43 generating output with current configuration.
-																							if(((Math.log(cv$probabilitySample5Value20) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value20) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(cv$probabilitySample5Value20) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value20) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								// If the second value is -infinity.
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value20) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value20) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value20) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample5Value20) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value20) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample5Value20) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																							}
 																							
 																							// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -865,14 +649,14 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 																		}
 																	}
 																} else {
-																	for(int i = 1; i < size; i += 1) {
+																	for(int i = 1; i < state.size; i += 1) {
 																		if(true) {
 																			// Enumerating the possible outputs of Categorical 22.
-																			for(int index$sample23$31 = 0; index$sample23$31 < weightings.length; index$sample23$31 += 1) {
+																			for(int index$sample23$31 = 0; index$sample23$31 < state.weightings.length; index$sample23$31 += 1) {
 																				int distributionTempVariable$var23$33 = index$sample23$31;
 																				
 																				// Update the probability of sampling this value from the distribution value.
-																				double cv$probabilitySample23Value32 = (cv$probabilitySample5Value20 * distribution$sample23[((i - 1) / 1)][index$sample23$31]);
+																				double cv$probabilitySample23Value32 = (cv$probabilitySample5Value20 * state.distribution$sample23[((i - 1) / 1)][index$sample23$31]);
 																				{
 																					int traceTempVariable$var39$34_1 = distributionTempVariable$var23$33;
 																					if((i == j)) {
@@ -883,14 +667,14 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 																									double var41 = ((1.0 * distributionTempVariable$v1$21) / (traceTempVariable$var39$34_1 + cv$currentValue));
 																									
 																									// Record the probability of sample task 43 generating output with current configuration.
-																									if(((Math.log(cv$probabilitySample23Value32) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample23Value32) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																									if(((Math.log(cv$probabilitySample23Value32) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample23Value32) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																									else {
 																										// If the second value is -infinity.
 																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																											cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample23Value32) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																											cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample23Value32) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																										else
-																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample23Value32) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample23Value32) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample23Value32) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample23Value32) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																									}
 																									
 																									// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -948,7 +732,7 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample36[((j - 0) / 1)]) {
+			if(state.constrainedFlag$sample36[((j - 0) / 1)]) {
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
 				
@@ -998,7 +782,7 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 				
 				// Write out the new value of the sample.
-				v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
+				state.v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(state.RNG$, cv$stateProbabilityLocal, cv$numStates);
 			}
 		}
 	}
@@ -1007,17 +791,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 	// by sample task 5 drawn from c. Inference was performed using variable marginalization.
 	private final void inferSample5() {
 		if(true) {
-			constrainedFlag$sample5 = false;
+			state.constrainedFlag$sample5 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
 			{
 				// variable marginalization
-				cv$numStates = Math.max(cv$numStates, weightings.length);
+				cv$numStates = Math.max(cv$numStates, state.weightings.length);
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var5$stateProbabilityGlobal;
+			double[] cv$stateProbabilityLocal = scratch.cv$var5$stateProbabilityGlobal;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -1039,17 +823,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 					
 					// Constructing a random variable input for use later.
-					int $var525 = weightings.length;
+					int $var525 = state.weightings.length;
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < $var525)) && (0 < $var525)) && (0.0 <= weightings[cv$currentValue])) && (weightings[cv$currentValue] <= 1.0))?Math.log(weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < $var525)) && (0 < $var525)) && (0.0 <= state.weightings[cv$currentValue])) && (state.weightings[cv$currentValue] <= 1.0))?Math.log(state.weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 42.
 					{
 						{
 							{
-								for(int j = 0; j < size; j += 1) {
+								for(int j = 0; j < state.size; j += 1) {
 									int traceTempVariable$v1$1_2 = cv$currentValue;
 									
 									// Processing sample task 43 of consumer random variable null.
@@ -1059,7 +843,7 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 											boolean cv$sampleConstrained = true;
 											if(cv$sampleConstrained) {
 												// Mark that the sample has observed constrained data.
-												constrainedFlag$sample5 = true;
+												state.constrainedFlag$sample5 = true;
 												
 												// Set an accumulator to sum the probabilities for each possible configuration of
 												// inputs.
@@ -1071,7 +855,7 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 												{
 													// Enumerating the possible arguments for the variable Bernoulli 42 which is consuming
 													// the output of Sample task 5.
-													if(fixedFlag$sample9) {
+													if(state.fixedFlag$sample9) {
 														{
 															if((0 == j)) {
 																{
@@ -1079,17 +863,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 																		{
 																			{
 																				// Constructing a random variable input for use later.
-																				double var41 = ((1.0 * traceTempVariable$v1$1_2) / (v2[j] + v3[((j - 0) / 1)]));
+																				double var41 = ((1.0 * traceTempVariable$v1$1_2) / (state.v2[j] + state.v3[((j - 0) / 1)]));
 																				
 																				// Record the probability of sample task 43 generating output with current configuration.
-																				if(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																				if(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																				else {
 																					// If the second value is -infinity.
 																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																					else
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																				}
 																				
 																				// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -1103,11 +887,11 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 													} else {
 														if(true) {
 															// Enumerating the possible outputs of Categorical 8.
-															for(int index$sample9$4 = 0; index$sample9$4 < weightings.length; index$sample9$4 += 1) {
+															for(int index$sample9$4 = 0; index$sample9$4 < state.weightings.length; index$sample9$4 += 1) {
 																int distributionTempVariable$var9$6 = index$sample9$4;
 																
 																// Update the probability of sampling this value from the distribution value.
-																double cv$probabilitySample9Value5 = (1.0 * distribution$sample9[index$sample9$4]);
+																double cv$probabilitySample9Value5 = (1.0 * state.distribution$sample9[index$sample9$4]);
 																{
 																	int traceTempVariable$var39$7_1 = distributionTempVariable$var9$6;
 																	if((0 == j)) {
@@ -1116,17 +900,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 																				{
 																					{
 																						// Constructing a random variable input for use later.
-																						double var41 = ((1.0 * traceTempVariable$v1$1_2) / (traceTempVariable$var39$7_1 + v3[((j - 0) / 1)]));
+																						double var41 = ((1.0 * traceTempVariable$v1$1_2) / (traceTempVariable$var39$7_1 + state.v3[((j - 0) / 1)]));
 																						
 																						// Record the probability of sample task 43 generating output with current configuration.
-																						if(((Math.log(cv$probabilitySample9Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample9Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																						if(((Math.log(cv$probabilitySample9Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample9Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																						else {
 																							// If the second value is -infinity.
 																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample9Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample9Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																							else
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample9Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample9Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample9Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample9Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																						}
 																						
 																						// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -1143,26 +927,26 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 													
 													// Enumerating the possible arguments for the variable Bernoulli 42 which is consuming
 													// the output of Sample task 5.
-													if(fixedFlag$sample23) {
+													if(state.fixedFlag$sample23) {
 														{
-															for(int i = 1; i < size; i += 1) {
+															for(int i = 1; i < state.size; i += 1) {
 																if((i == j)) {
 																	{
 																		{
 																			{
 																				{
 																					// Constructing a random variable input for use later.
-																					double var41 = ((1.0 * traceTempVariable$v1$1_2) / (v2[j] + v3[((j - 0) / 1)]));
+																					double var41 = ((1.0 * traceTempVariable$v1$1_2) / (state.v2[j] + state.v3[((j - 0) / 1)]));
 																					
 																					// Record the probability of sample task 43 generating output with current configuration.
-																					if(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																					if(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																					else {
 																						// If the second value is -infinity.
 																						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																							cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																						else
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																					}
 																					
 																					// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -1175,14 +959,14 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 															}
 														}
 													} else {
-														for(int i = 1; i < size; i += 1) {
+														for(int i = 1; i < state.size; i += 1) {
 															if(true) {
 																// Enumerating the possible outputs of Categorical 22.
-																for(int index$sample23$12 = 0; index$sample23$12 < weightings.length; index$sample23$12 += 1) {
+																for(int index$sample23$12 = 0; index$sample23$12 < state.weightings.length; index$sample23$12 += 1) {
 																	int distributionTempVariable$var23$14 = index$sample23$12;
 																	
 																	// Update the probability of sampling this value from the distribution value.
-																	double cv$probabilitySample23Value13 = (1.0 * distribution$sample23[((i - 1) / 1)][index$sample23$12]);
+																	double cv$probabilitySample23Value13 = (1.0 * state.distribution$sample23[((i - 1) / 1)][index$sample23$12]);
 																	{
 																		int traceTempVariable$var39$15_1 = distributionTempVariable$var23$14;
 																		if((i == j)) {
@@ -1191,17 +975,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 																					{
 																						{
 																							// Constructing a random variable input for use later.
-																							double var41 = ((1.0 * traceTempVariable$v1$1_2) / (traceTempVariable$var39$15_1 + v3[((j - 0) / 1)]));
+																							double var41 = ((1.0 * traceTempVariable$v1$1_2) / (traceTempVariable$var39$15_1 + state.v3[((j - 0) / 1)]));
 																							
 																							// Record the probability of sample task 43 generating output with current configuration.
-																							if(((Math.log(cv$probabilitySample23Value13) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample23Value13) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(cv$probabilitySample23Value13) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample23Value13) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								// If the second value is -infinity.
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample23Value13) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																									cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample23Value13) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample23Value13) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample23Value13) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample23Value13) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample23Value13) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																							}
 																							
 																							// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -1257,10 +1041,10 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample5) {
+			if(state.constrainedFlag$sample5) {
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// Local copy of the probability array
-				double[] cv$localProbability = distribution$sample5;
+				double[] cv$localProbability = state.distribution$sample5;
 				
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
@@ -1318,17 +1102,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 	// marginalization.
 	private final void inferSample9() {
 		if(true) {
-			constrainedFlag$sample9 = false;
+			state.constrainedFlag$sample9 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
 			{
 				// variable marginalization
-				cv$numStates = Math.max(cv$numStates, weightings.length);
+				cv$numStates = Math.max(cv$numStates, state.weightings.length);
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var9$stateProbabilityGlobal;
+			double[] cv$stateProbabilityLocal = scratch.cv$var9$stateProbabilityGlobal;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -1350,11 +1134,11 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 					
 					// Constructing a random variable input for use later.
-					int $var558 = weightings.length;
+					int $var558 = state.weightings.length;
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < $var558)) && (0 < $var558)) && (0.0 <= weightings[cv$currentValue])) && (weightings[cv$currentValue] <= 1.0))?Math.log(weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < $var558)) && (0 < $var558)) && (0.0 <= state.weightings[cv$currentValue])) && (state.weightings[cv$currentValue] <= 1.0))?Math.log(state.weightings[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 42.
 					{
@@ -1362,7 +1146,7 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 						{
 							{
 								int traceTempVariable$var39$1_1 = cv$currentValue;
-								for(int j = 0; j < size; j += 1) {
+								for(int j = 0; j < state.size; j += 1) {
 									if((0 == j)) {
 										// Processing sample task 43 of consumer random variable null.
 										{
@@ -1371,7 +1155,7 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 												boolean cv$sampleConstrained = true;
 												if(cv$sampleConstrained) {
 													// Mark that the sample has observed constrained data.
-													constrainedFlag$sample9 = true;
+													state.constrainedFlag$sample9 = true;
 													
 													// Set an accumulator to sum the probabilities for each possible configuration of
 													// inputs.
@@ -1383,24 +1167,24 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 													{
 														// Enumerating the possible arguments for the variable Bernoulli 42 which is consuming
 														// the output of Sample task 9.
-														if(fixedFlag$sample5) {
+														if(state.fixedFlag$sample5) {
 															{
 																{
 																	{
 																		{
 																			{
 																				// Constructing a random variable input for use later.
-																				double var41 = ((1.0 * v1) / (traceTempVariable$var39$1_1 + v3[((j - 0) / 1)]));
+																				double var41 = ((1.0 * state.v1) / (traceTempVariable$var39$1_1 + state.v3[((j - 0) / 1)]));
 																				
 																				// Record the probability of sample task 43 generating output with current configuration.
-																				if(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																				if(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																				else {
 																					// If the second value is -infinity.
 																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																					else
-																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																				}
 																				
 																				// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -1413,28 +1197,28 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 														} else {
 															if(true) {
 																// Enumerating the possible outputs of Categorical 4.
-																for(int index$sample5$4 = 0; index$sample5$4 < weightings.length; index$sample5$4 += 1) {
+																for(int index$sample5$4 = 0; index$sample5$4 < state.weightings.length; index$sample5$4 += 1) {
 																	int distributionTempVariable$v1$6 = index$sample5$4;
 																	
 																	// Update the probability of sampling this value from the distribution value.
-																	double cv$probabilitySample5Value5 = (1.0 * distribution$sample5[index$sample5$4]);
+																	double cv$probabilitySample5Value5 = (1.0 * state.distribution$sample5[index$sample5$4]);
 																	{
 																		{
 																			{
 																				{
 																					{
 																						// Constructing a random variable input for use later.
-																						double var41 = ((1.0 * distributionTempVariable$v1$6) / (traceTempVariable$var39$1_1 + v3[((j - 0) / 1)]));
+																						double var41 = ((1.0 * distributionTempVariable$v1$6) / (traceTempVariable$var39$1_1 + state.v3[((j - 0) / 1)]));
 																						
 																						// Record the probability of sample task 43 generating output with current configuration.
-																						if(((Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																						if(((Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																							cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																						else {
 																							// If the second value is -infinity.
 																							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
+																								cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
 																							else
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(cv$probabilitySample5Value5) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((state.v[j]?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY)));
 																						}
 																						
 																						// Recorded the probability of reaching sample task 43 with the current configuration.
@@ -1489,10 +1273,10 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample9) {
+			if(state.constrainedFlag$sample9) {
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// Local copy of the probability array
-				double[] cv$localProbability = distribution$sample9;
+				double[] cv$localProbability = state.distribution$sample9;
 				
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
@@ -1550,17 +1334,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 	private final void logProbabilityDistribution$sample23() {
 		// Determine if we need to calculate the values for sample task 23 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample23) {
+		if(!state.fixedProbFlag$sample23) {
 			// Update the probability if the distribution is fixed to a specific value. If it
 			// is not the value is implicitly log(1.0) so has no effect.
-			if(fixedFlag$sample23) {
+			if(state.fixedFlag$sample23) {
 				// Generating probabilities for sample task
 				// Accumulator for probabilities of instances of the random variable
 				double cv$accumulator = 0.0;
 				
 				// A guard to check if the sample value is ever reached.
 				boolean cv$sampleReached = false;
-				for(int i = 1; i < size; i += 1) {
+				for(int i = 1; i < state.size; i += 1) {
 					// Accumulator for sample probabilities for a specific instance of the random variable.
 					double cv$sampleAccumulator = 0.0;
 					
@@ -1575,11 +1359,11 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 					{
 						{
 							// The sample value to calculate the probability of generating
-							int cv$sampleValue = v2[i];
+							int cv$sampleValue = state.v2[i];
 							{
 								{
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[cv$sampleValue])) && (weightings[cv$sampleValue] <= 1.0))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+									double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.weightings.length)) && (0 < state.weightings.length)) && (0.0 <= state.weightings[cv$sampleValue])) && (state.weightings[cv$sampleValue] <= 1.0))?Math.log(state.weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1617,25 +1401,25 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 					
 					// Store the sample task probability
-					logProbability$sample23[((i - 1) / 1)] = cv$sampleProbability;
+					state.logProbability$sample23[((i - 1) / 1)] = cv$sampleProbability;
 				}
 				
 				// Make sure all the inputs have been fixed so the variable is not a distribution.
-				if(fixedFlag$sample23)
+				if(state.fixedFlag$sample23)
 					// Update the variable probability
-					logProbability$v2 = (logProbability$v2 + cv$accumulator);
+					state.logProbability$v2 = (state.logProbability$v2 + cv$accumulator);
 				
 				// Add probability to model
-				logProbability$$model = (logProbability$$model + cv$accumulator);
+				state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 				
 				// If this value is fixed, add it to the probability of this model producing the fixed
 				// values
-				if(fixedFlag$sample23)
-					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+				if(state.fixedFlag$sample23)
+					state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 				
 				// Now the probability is calculated store if it can be cached or if it needs to be
 				// recalculated next time.
-				fixedProbFlag$sample23 = fixedFlag$sample23;
+				state.fixedProbFlag$sample23 = state.fixedFlag$sample23;
 			}
 		} else {
 			// Using cached values.
@@ -1646,9 +1430,9 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 1; i < size; i += 1) {
+			for(int i = 1; i < state.size; i += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample23[((i - 1) / 1)];
+				double cv$sampleValue = state.logProbability$sample23[((i - 1) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Record that the sample was reached.
@@ -1657,17 +1441,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			}
 			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
-			if(fixedFlag$sample23)
+			if(state.fixedFlag$sample23)
 				// Update the variable probability
-				logProbability$v2 = (logProbability$v2 + cv$accumulator);
+				state.logProbability$v2 = (state.logProbability$v2 + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample23)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample23)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -1680,7 +1464,7 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 		
 		// A guard to check if the sample value is ever reached.
 		boolean cv$sampleReached = false;
-		for(int j = 0; j < size; j += 1) {
+		for(int j = 0; j < state.size; j += 1) {
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
@@ -1695,17 +1479,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			{
 				{
 					// The sample value to calculate the probability of generating
-					boolean cv$sampleValue = v[j];
+					boolean cv$sampleValue = state.v[j];
 					
 					// Enumerating the possible arguments for Bernoulli 42.
-					if(fixedFlag$sample5) {
+					if(state.fixedFlag$sample5) {
 						{
-							if(fixedFlag$sample9) {
+							if(state.fixedFlag$sample9) {
 								{
 									if((0 == j)) {
 										{
 											{
-												double var41 = ((1.0 * v1) / (v2[j] + v3[((j - 0) / 1)]));
+												double var41 = ((1.0 * state.v1) / (state.v2[j] + state.v3[((j - 0) / 1)]));
 												
 												// Store the value of the function call, so the function call is only made once.
 												double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((cv$sampleValue?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
@@ -1730,17 +1514,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 							} else {
 								if(true) {
 									// Enumerating the possible outputs of Categorical 8.
-									for(int index$sample9$8 = 0; index$sample9$8 < weightings.length; index$sample9$8 += 1) {
+									for(int index$sample9$8 = 0; index$sample9$8 < state.weightings.length; index$sample9$8 += 1) {
 										int distributionTempVariable$var9$10 = index$sample9$8;
 										
 										// Update the probability of sampling this value from the distribution value.
-										double cv$probabilitySample9Value9 = (1.0 * distribution$sample9[index$sample9$8]);
+										double cv$probabilitySample9Value9 = (1.0 * state.distribution$sample9[index$sample9$8]);
 										{
 											int traceTempVariable$var39$11_1 = distributionTempVariable$var9$10;
 											if((0 == j)) {
 												{
 													{
-														double var41 = ((1.0 * v1) / (traceTempVariable$var39$11_1 + v3[((j - 0) / 1)]));
+														double var41 = ((1.0 * state.v1) / (traceTempVariable$var39$11_1 + state.v3[((j - 0) / 1)]));
 														
 														// Store the value of the function call, so the function call is only made once.
 														double cv$weightedProbability = (Math.log(cv$probabilitySample9Value9) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((cv$sampleValue?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
@@ -1769,18 +1553,18 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 					} else {
 						if(true) {
 							// Enumerating the possible outputs of Categorical 4.
-							for(int index$sample5$3 = 0; index$sample5$3 < weightings.length; index$sample5$3 += 1) {
+							for(int index$sample5$3 = 0; index$sample5$3 < state.weightings.length; index$sample5$3 += 1) {
 								int distributionTempVariable$v1$5 = index$sample5$3;
 								
 								// Update the probability of sampling this value from the distribution value.
-								double cv$probabilitySample5Value4 = (1.0 * distribution$sample5[index$sample5$3]);
+								double cv$probabilitySample5Value4 = (1.0 * state.distribution$sample5[index$sample5$3]);
 								{
-									if(fixedFlag$sample9) {
+									if(state.fixedFlag$sample9) {
 										{
 											if((0 == j)) {
 												{
 													{
-														double var41 = ((1.0 * distributionTempVariable$v1$5) / (v2[j] + v3[((j - 0) / 1)]));
+														double var41 = ((1.0 * distributionTempVariable$v1$5) / (state.v2[j] + state.v3[((j - 0) / 1)]));
 														
 														// Store the value of the function call, so the function call is only made once.
 														double cv$weightedProbability = (Math.log(cv$probabilitySample5Value4) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((cv$sampleValue?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
@@ -1805,17 +1589,17 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 									} else {
 										if(true) {
 											// Enumerating the possible outputs of Categorical 8.
-											for(int index$sample9$13 = 0; index$sample9$13 < weightings.length; index$sample9$13 += 1) {
+											for(int index$sample9$13 = 0; index$sample9$13 < state.weightings.length; index$sample9$13 += 1) {
 												int distributionTempVariable$var9$15 = index$sample9$13;
 												
 												// Update the probability of sampling this value from the distribution value.
-												double cv$probabilitySample9Value14 = (cv$probabilitySample5Value4 * distribution$sample9[index$sample9$13]);
+												double cv$probabilitySample9Value14 = (cv$probabilitySample5Value4 * state.distribution$sample9[index$sample9$13]);
 												{
 													int traceTempVariable$var39$16_1 = distributionTempVariable$var9$15;
 													if((0 == j)) {
 														{
 															{
-																double var41 = ((1.0 * distributionTempVariable$v1$5) / (traceTempVariable$var39$16_1 + v3[((j - 0) / 1)]));
+																double var41 = ((1.0 * distributionTempVariable$v1$5) / (traceTempVariable$var39$16_1 + state.v3[((j - 0) / 1)]));
 																
 																// Store the value of the function call, so the function call is only made once.
 																double cv$weightedProbability = (Math.log(cv$probabilitySample9Value14) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((cv$sampleValue?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
@@ -1846,15 +1630,15 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 					}
 					
 					// Enumerating the possible arguments for Bernoulli 42.
-					if(fixedFlag$sample5) {
+					if(state.fixedFlag$sample5) {
 						{
-							if(fixedFlag$sample23) {
+							if(state.fixedFlag$sample23) {
 								{
-									for(int i = 1; i < size; i += 1) {
+									for(int i = 1; i < state.size; i += 1) {
 										if((i == j)) {
 											{
 												{
-													double var41 = ((1.0 * v1) / (v2[j] + v3[((j - 0) / 1)]));
+													double var41 = ((1.0 * state.v1) / (state.v2[j] + state.v3[((j - 0) / 1)]));
 													
 													// Store the value of the function call, so the function call is only made once.
 													double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((cv$sampleValue?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
@@ -1878,20 +1662,20 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 									}
 								}
 							} else {
-								for(int i = 1; i < size; i += 1) {
+								for(int i = 1; i < state.size; i += 1) {
 									if(true) {
 										// Enumerating the possible outputs of Categorical 22.
-										for(int index$sample23$28 = 0; index$sample23$28 < weightings.length; index$sample23$28 += 1) {
+										for(int index$sample23$28 = 0; index$sample23$28 < state.weightings.length; index$sample23$28 += 1) {
 											int distributionTempVariable$var23$30 = index$sample23$28;
 											
 											// Update the probability of sampling this value from the distribution value.
-											double cv$probabilitySample23Value29 = (1.0 * distribution$sample23[((i - 1) / 1)][index$sample23$28]);
+											double cv$probabilitySample23Value29 = (1.0 * state.distribution$sample23[((i - 1) / 1)][index$sample23$28]);
 											{
 												int traceTempVariable$var39$31_1 = distributionTempVariable$var23$30;
 												if((i == j)) {
 													{
 														{
-															double var41 = ((1.0 * v1) / (traceTempVariable$var39$31_1 + v3[((j - 0) / 1)]));
+															double var41 = ((1.0 * state.v1) / (traceTempVariable$var39$31_1 + state.v3[((j - 0) / 1)]));
 															
 															// Store the value of the function call, so the function call is only made once.
 															double cv$weightedProbability = (Math.log(cv$probabilitySample23Value29) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((cv$sampleValue?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
@@ -1921,19 +1705,19 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 					} else {
 						if(true) {
 							// Enumerating the possible outputs of Categorical 4.
-							for(int index$sample5$22 = 0; index$sample5$22 < weightings.length; index$sample5$22 += 1) {
+							for(int index$sample5$22 = 0; index$sample5$22 < state.weightings.length; index$sample5$22 += 1) {
 								int distributionTempVariable$v1$24 = index$sample5$22;
 								
 								// Update the probability of sampling this value from the distribution value.
-								double cv$probabilitySample5Value23 = (1.0 * distribution$sample5[index$sample5$22]);
+								double cv$probabilitySample5Value23 = (1.0 * state.distribution$sample5[index$sample5$22]);
 								{
-									if(fixedFlag$sample23) {
+									if(state.fixedFlag$sample23) {
 										{
-											for(int i = 1; i < size; i += 1) {
+											for(int i = 1; i < state.size; i += 1) {
 												if((i == j)) {
 													{
 														{
-															double var41 = ((1.0 * distributionTempVariable$v1$24) / (v2[j] + v3[((j - 0) / 1)]));
+															double var41 = ((1.0 * distributionTempVariable$v1$24) / (state.v2[j] + state.v3[((j - 0) / 1)]));
 															
 															// Store the value of the function call, so the function call is only made once.
 															double cv$weightedProbability = (Math.log(cv$probabilitySample5Value23) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((cv$sampleValue?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
@@ -1957,20 +1741,20 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 											}
 										}
 									} else {
-										for(int i = 1; i < size; i += 1) {
+										for(int i = 1; i < state.size; i += 1) {
 											if(true) {
 												// Enumerating the possible outputs of Categorical 22.
-												for(int index$sample23$34 = 0; index$sample23$34 < weightings.length; index$sample23$34 += 1) {
+												for(int index$sample23$34 = 0; index$sample23$34 < state.weightings.length; index$sample23$34 += 1) {
 													int distributionTempVariable$var23$36 = index$sample23$34;
 													
 													// Update the probability of sampling this value from the distribution value.
-													double cv$probabilitySample23Value35 = (cv$probabilitySample5Value23 * distribution$sample23[((i - 1) / 1)][index$sample23$34]);
+													double cv$probabilitySample23Value35 = (cv$probabilitySample5Value23 * state.distribution$sample23[((i - 1) / 1)][index$sample23$34]);
 													{
 														int traceTempVariable$var39$37_1 = distributionTempVariable$var23$36;
 														if((i == j)) {
 															{
 																{
-																	double var41 = ((1.0 * distributionTempVariable$v1$24) / (traceTempVariable$var39$37_1 + v3[((j - 0) / 1)]));
+																	double var41 = ((1.0 * distributionTempVariable$v1$24) / (traceTempVariable$var39$37_1 + state.v3[((j - 0) / 1)]));
 																	
 																	// Store the value of the function call, so the function call is only made once.
 																	double cv$weightedProbability = (Math.log(cv$probabilitySample23Value35) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((cv$sampleValue?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
@@ -2021,15 +1805,15 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$sample43[((j - 0) / 1)] = cv$sampleProbability;
+			state.logProbability$sample43[((j - 0) / 1)] = cv$sampleProbability;
 		}
 		
 		// Update the variable probability
-		logProbability$v = (logProbability$v + cv$accumulator);
+		state.logProbability$v = (state.logProbability$v + cv$accumulator);
 		
 		// Add probability to model
-		logProbability$$model = (logProbability$$model + cv$accumulator);
-		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+		state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 	}
 
 	// Calculate the probability of the samples represented by sample5 using probability
@@ -2037,10 +1821,10 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 	private final void logProbabilityDistribution$sample5() {
 		// Determine if we need to calculate the values for sample task 5 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample5) {
+		if(!state.fixedProbFlag$sample5) {
 			// Update the probability if the distribution is fixed to a specific value. If it
 			// is not the value is implicitly log(1.0) so has no effect.
-			if(fixedFlag$sample5) {
+			if(state.fixedFlag$sample5) {
 				// Generating probabilities for sample task
 				// Accumulator for probabilities of instances of the random variable
 				double cv$accumulator = 0.0;
@@ -2056,11 +1840,11 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 				{
 					{
 						// The sample value to calculate the probability of generating
-						int cv$sampleValue = v1;
+						int cv$sampleValue = state.v1;
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[cv$sampleValue])) && (weightings[cv$sampleValue] <= 1.0))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.weightings.length)) && (0 < state.weightings.length)) && (0.0 <= state.weightings[cv$sampleValue])) && (state.weightings[cv$sampleValue] <= 1.0))?Math.log(state.weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -2093,22 +1877,22 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$c = (logProbability$c + cv$sampleAccumulator);
+				state.logProbability$c = (state.logProbability$c + cv$sampleAccumulator);
 				
 				// Store the sample task probability
-				logProbability$v1 = cv$sampleProbability;
+				state.logProbability$v1 = cv$sampleProbability;
 				
 				// Add probability to model
-				logProbability$$model = (logProbability$$model + cv$accumulator);
+				state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 				
 				// If this value is fixed, add it to the probability of this model producing the fixed
 				// values
-				if(fixedFlag$sample5)
-					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+				if(state.fixedFlag$sample5)
+					state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 				
 				// Now the probability is calculated store if it can be cached or if it needs to be
 				// recalculated next time.
-				fixedProbFlag$sample5 = fixedFlag$sample5;
+				state.fixedProbFlag$sample5 = state.fixedFlag$sample5;
 			}
 		} else {
 			// Using cached values.
@@ -2117,18 +1901,18 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$v1;
+			double cv$sampleValue = state.logProbability$v1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$c = (logProbability$c + cv$rvAccumulator);
+			state.logProbability$c = (state.logProbability$c + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample5)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample5)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -2137,10 +1921,10 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 	private final void logProbabilityDistribution$sample9() {
 		// Determine if we need to calculate the values for sample task 9 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample9) {
+		if(!state.fixedProbFlag$sample9) {
 			// Update the probability if the distribution is fixed to a specific value. If it
 			// is not the value is implicitly log(1.0) so has no effect.
-			if(fixedFlag$sample9) {
+			if(state.fixedFlag$sample9) {
 				// Generating probabilities for sample task
 				// Accumulator for probabilities of instances of the random variable
 				double cv$accumulator = 0.0;
@@ -2156,11 +1940,11 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 				{
 					{
 						// The sample value to calculate the probability of generating
-						int cv$sampleValue = v2[0];
+						int cv$sampleValue = state.v2[0];
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[cv$sampleValue])) && (weightings[cv$sampleValue] <= 1.0))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.weightings.length)) && (0 < state.weightings.length)) && (0.0 <= state.weightings[cv$sampleValue])) && (state.weightings[cv$sampleValue] <= 1.0))?Math.log(state.weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -2195,24 +1979,24 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				
 				// Store the sample task probability
-				logProbability$var9 = cv$sampleProbability;
+				state.logProbability$var9 = cv$sampleProbability;
 				
 				// Make sure all the inputs have been fixed so the variable is not a distribution.
-				if(fixedFlag$sample9)
+				if(state.fixedFlag$sample9)
 					// Update the variable probability
-					logProbability$v2 = (logProbability$v2 + cv$accumulator);
+					state.logProbability$v2 = (state.logProbability$v2 + cv$accumulator);
 				
 				// Add probability to model
-				logProbability$$model = (logProbability$$model + cv$accumulator);
+				state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 				
 				// If this value is fixed, add it to the probability of this model producing the fixed
 				// values
-				if(fixedFlag$sample9)
-					logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+				if(state.fixedFlag$sample9)
+					state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 				
 				// Now the probability is calculated store if it can be cached or if it needs to be
 				// recalculated next time.
-				fixedProbFlag$sample9 = fixedFlag$sample9;
+				state.fixedProbFlag$sample9 = state.fixedFlag$sample9;
 			}
 		} else {
 			// Using cached values.
@@ -2221,22 +2005,22 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var9;
+			double cv$sampleValue = state.logProbability$var9;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
-			if(fixedFlag$sample9)
+			if(state.fixedFlag$sample9)
 				// Update the variable probability
-				logProbability$v2 = (logProbability$v2 + cv$accumulator);
+				state.logProbability$v2 = (state.logProbability$v2 + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample9)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample9)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -2245,14 +2029,14 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 	private final void logProbabilityValue$sample23() {
 		// Determine if we need to calculate the values for sample task 23 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample23) {
+		if(!state.fixedProbFlag$sample23) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 1; i < size; i += 1) {
+			for(int i = 1; i < state.size; i += 1) {
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
 				
@@ -2267,11 +2051,11 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 				{
 					{
 						// The sample value to calculate the probability of generating
-						int cv$sampleValue = v2[i];
+						int cv$sampleValue = state.v2[i];
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[cv$sampleValue])) && (weightings[cv$sampleValue] <= 1.0))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.weightings.length)) && (0 < state.weightings.length)) && (0.0 <= state.weightings[cv$sampleValue])) && (state.weightings[cv$sampleValue] <= 1.0))?Math.log(state.weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -2309,23 +2093,23 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample23[((i - 1) / 1)] = cv$sampleProbability;
+				state.logProbability$sample23[((i - 1) / 1)] = cv$sampleProbability;
 			}
 			
 			// Update the variable probability
-			logProbability$v2 = (logProbability$v2 + cv$accumulator);
+			state.logProbability$v2 = (state.logProbability$v2 + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample23)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample23)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample23 = fixedFlag$sample23;
+			state.fixedProbFlag$sample23 = state.fixedFlag$sample23;
 		} else {
 			// Using cached values.
 			// 
@@ -2335,9 +2119,9 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 1; i < size; i += 1) {
+			for(int i = 1; i < state.size; i += 1) {
 				double cv$rvAccumulator = 0.0;
-				double cv$sampleValue = logProbability$sample23[((i - 1) / 1)];
+				double cv$sampleValue = state.logProbability$sample23[((i - 1) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Record that the sample was reached.
@@ -2346,15 +2130,15 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			}
 			
 			// Update the variable probability
-			logProbability$v2 = (logProbability$v2 + cv$accumulator);
+			state.logProbability$v2 = (state.logProbability$v2 + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample23)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample23)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -2370,7 +2154,7 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 		
 		// A guard to check if the sample value is ever reached.
 		boolean cv$sampleReached = false;
-		for(int j = 0; j < size; j += 1) {
+		for(int j = 0; j < state.size; j += 1) {
 			// An accumulator for log probabilities.
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			
@@ -2379,11 +2163,11 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = v3[((j - 0) / 1)];
+					int cv$sampleValue = state.v3[((j - 0) / 1)];
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[cv$sampleValue])) && (weightings[cv$sampleValue] <= 1.0))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.weightings.length)) && (0 < state.weightings.length)) && (0.0 <= state.weightings[cv$sampleValue])) && (state.weightings[cv$sampleValue] <= 1.0))?Math.log(state.weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -2420,13 +2204,13 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 		// Add the probability of this instance of the random variable to the probability
 		// of all instances of the random variable.
 		cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-		logProbability$c = (logProbability$c + cv$sampleAccumulator);
+		state.logProbability$c = (state.logProbability$c + cv$sampleAccumulator);
 		
 		// Store the random variable instance probability
-		logProbability$v3 = cv$sampleAccumulator;
+		state.logProbability$v3 = cv$sampleAccumulator;
 		
 		// Add probability to model
-		logProbability$$model = (logProbability$$model + cv$accumulator);
+		state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 	}
 
 	// Calculate the probability of the samples represented by sample43 using sampled
@@ -2438,7 +2222,7 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 		
 		// A guard to check if the sample value is ever reached.
 		boolean cv$sampleReached = false;
-		for(int j = 0; j < size; j += 1) {
+		for(int j = 0; j < state.size; j += 1) {
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
@@ -2450,10 +2234,10 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			{
 				{
 					// The sample value to calculate the probability of generating
-					boolean cv$sampleValue = v[j];
+					boolean cv$sampleValue = state.v[j];
 					{
 						{
-							double var41 = ((1.0 * v1) / (v2[j] + v3[((j - 0) / 1)]));
+							double var41 = ((1.0 * state.v1) / (state.v2[j] + state.v3[((j - 0) / 1)]));
 							
 							// Store the value of the function call, so the function call is only made once.
 							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var41) && (var41 <= 1.0))?Math.log((cv$sampleValue?var41:(1.0 - var41))):Double.NEGATIVE_INFINITY));
@@ -2494,22 +2278,22 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$sample43[((j - 0) / 1)] = cv$sampleProbability;
+			state.logProbability$sample43[((j - 0) / 1)] = cv$sampleProbability;
 		}
 		
 		// Update the variable probability
-		logProbability$v = (logProbability$v + cv$accumulator);
+		state.logProbability$v = (state.logProbability$v + cv$accumulator);
 		
 		// Add probability to model
-		logProbability$$model = (logProbability$$model + cv$accumulator);
-		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+		state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+		state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 	}
 
 	// Calculate the probability of the samples represented by sample5 using sampled values.
 	private final void logProbabilityValue$sample5() {
 		// Determine if we need to calculate the values for sample task 5 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample5) {
+		if(!state.fixedProbFlag$sample5) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -2525,11 +2309,11 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = v1;
+					int cv$sampleValue = state.v1;
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[cv$sampleValue])) && (weightings[cv$sampleValue] <= 1.0))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.weightings.length)) && (0 < state.weightings.length)) && (0.0 <= state.weightings[cv$sampleValue])) && (state.weightings[cv$sampleValue] <= 1.0))?Math.log(state.weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -2562,22 +2346,22 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$c = (logProbability$c + cv$sampleAccumulator);
+			state.logProbability$c = (state.logProbability$c + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$v1 = cv$sampleProbability;
+			state.logProbability$v1 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample5)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample5)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample5 = fixedFlag$sample5;
+			state.fixedProbFlag$sample5 = state.fixedFlag$sample5;
 		} else {
 			// Using cached values.
 			// 
@@ -2585,18 +2369,18 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$v1;
+			double cv$sampleValue = state.logProbability$v1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$c = (logProbability$c + cv$rvAccumulator);
+			state.logProbability$c = (state.logProbability$c + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample5)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample5)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -2604,7 +2388,7 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 	private final void logProbabilityValue$sample9() {
 		// Determine if we need to calculate the values for sample task 9 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample9) {
+		if(!state.fixedProbFlag$sample9) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -2620,11 +2404,11 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = v2[0];
+					int cv$sampleValue = state.v2[0];
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[cv$sampleValue])) && (weightings[cv$sampleValue] <= 1.0))?Math.log(weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.weightings.length)) && (0 < state.weightings.length)) && (0.0 <= state.weightings[cv$sampleValue])) && (state.weightings[cv$sampleValue] <= 1.0))?Math.log(state.weightings[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -2659,22 +2443,22 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$var9 = cv$sampleProbability;
+			state.logProbability$var9 = cv$sampleProbability;
 			
 			// Update the variable probability
-			logProbability$v2 = (logProbability$v2 + cv$accumulator);
+			state.logProbability$v2 = (state.logProbability$v2 + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample9)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample9)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample9 = fixedFlag$sample9;
+			state.fixedProbFlag$sample9 = state.fixedFlag$sample9;
 		} else {
 			// Using cached values.
 			// 
@@ -2682,149 +2466,46 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var9;
+			double cv$sampleValue = state.logProbability$var9;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$v2 = (logProbability$v2 + cv$accumulator);
+			state.logProbability$v2 = (state.logProbability$v2 + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample9)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// If v2 has not been set already allocate space.
-		if((!fixedFlag$sample9 || !fixedFlag$sample23)) {
-			// Constructor for v2
-			{
-				v2 = new int[length$value];
-			}
-		}
-		
-		// Constructor for v
-		{
-			v = new boolean[length$value];
-		}
-		
-		// Constructor for v3
-		{
-			v3 = new int[((((length$value - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for distribution$sample5
-		{
-			distribution$sample5 = new double[weightings.length];
-		}
-		
-		// Constructor for distribution$sample9
-		{
-			distribution$sample9 = new double[weightings.length];
-		}
-		
-		// Constructor for distribution$sample23
-		{
-			distribution$sample23 = new double[((((length$value - 1) - 1) / 1) + 1)][];
-			for(int i = 1; i < length$value; i += 1)
-				distribution$sample23[((i - 1) / 1)] = new double[weightings.length];
-		}
-		
-		// Constructor for constrainedFlag$sample23
-		{
-			constrainedFlag$sample23 = new boolean[((((length$value - 1) - 1) / 1) + 1)];
-		}
-		
-		// Constructor for constrainedFlag$sample36
-		{
-			constrainedFlag$sample36 = new boolean[((((length$value - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample23
-		{
-			logProbability$sample23 = new double[((((length$value - 1) - 1) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample43
-		{
-			logProbability$sample43 = new double[((((length$value - 1) - 0) / 1) + 1)];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var5$stateProbabilityGlobal
-		{
-			// Allocation of cv$var5$stateProbabilityGlobal for single threaded execution
-			cv$var5$stateProbabilityGlobal = new double[weightings.length];
-		}
-		
-		// Constructor for cv$var9$stateProbabilityGlobal
-		{
-			// Allocation of cv$var9$stateProbabilityGlobal for single threaded execution
-			cv$var9$stateProbabilityGlobal = new double[weightings.length];
-		}
-		
-		// Constructor for cv$var23$stateProbabilityGlobal
-		{
-			// Allocation of cv$var23$stateProbabilityGlobal for multithreaded execution
-			{
-				// Get the thread count.
-				int cv$threadCount = threadCount();
-				
-				// Allocate an array to hold a copy per thread
-				cv$var23$stateProbabilityGlobal = new double[cv$threadCount][];
-				
-				// Populate the array with a copy per thread
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					cv$var23$stateProbabilityGlobal[cv$index] = new double[weightings.length];
-			}
-		}
-		
-		// Constructor for cv$var36$stateProbabilityGlobal
-		{
-			// Allocation of cv$var36$stateProbabilityGlobal for single threaded execution
-			cv$var36$stateProbabilityGlobal = new double[weightings.length];
+			if(state.fixedFlag$sample9)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample5)
-			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-		if(!fixedFlag$sample9)
-			v2[0] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!state.fixedFlag$sample5)
+			state.v1 = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
+		if(!state.fixedFlag$sample9)
+			state.v2[0] = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 1, size, 1,
+		parallelFor(state.RNG$, 1, state.size, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample23)
-							v2[i] = DistributionSampling.sampleCategorical(RNG$1, weightings, weightings.length);
+						if(!state.fixedFlag$sample23)
+							state.v2[i] = DistributionSampling.sampleCategorical(RNG$1, state.weightings, state.weightings.length);
 					}
 			}
 		);
-		for(int j = 0; j < size; j += 1) {
-			v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-			v[j] = DistributionSampling.sampleBernoulli(RNG$, ((1.0 * v1) / (v2[j] + v3[((j - 0) / 1)])));
+		for(int j = 0; j < state.size; j += 1) {
+			state.v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
+			state.v[j] = DistributionSampling.sampleBernoulli(state.RNG$, ((1.0 * state.v1) / (state.v2[j] + state.v3[((j - 0) / 1)])));
 		}
 	}
 
@@ -2834,72 +2515,72 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		// Create local copy of variable probabilities.
-		double[] cv$distribution$sample5 = distribution$sample5;
-		for(int index$c = 0; index$c < weightings.length; index$c += 1) {
+		double[] cv$distribution$sample5 = state.distribution$sample5;
+		for(int index$c = 0; index$c < state.weightings.length; index$c += 1) {
 			// Probability for this value
-			double cv$value = ((((((0.0 <= index$c) && (index$c < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[index$c])) && (weightings[index$c] <= 1.0))?weightings[index$c]:0.0);
+			double cv$value = ((((((0.0 <= index$c) && (index$c < state.weightings.length)) && (0 < state.weightings.length)) && (0.0 <= state.weightings[index$c])) && (state.weightings[index$c] <= 1.0))?state.weightings[index$c]:0.0);
 			
 			// Save the probability of each value
 			cv$distribution$sample5[index$c] = cv$value;
 		}
 		
 		// Create local copy of variable probabilities.
-		double[] cv$distribution$sample9 = distribution$sample9;
-		for(int index$var8 = 0; index$var8 < weightings.length; index$var8 += 1) {
+		double[] cv$distribution$sample9 = state.distribution$sample9;
+		for(int index$var8 = 0; index$var8 < state.weightings.length; index$var8 += 1) {
 			// Probability for this value
-			double cv$value = ((((((0.0 <= index$var8) && (index$var8 < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[index$var8])) && (weightings[index$var8] <= 1.0))?weightings[index$var8]:0.0);
-			if(!fixedFlag$sample9)
+			double cv$value = ((((((0.0 <= index$var8) && (index$var8 < state.weightings.length)) && (0 < state.weightings.length)) && (0.0 <= state.weightings[index$var8])) && (state.weightings[index$var8] <= 1.0))?state.weightings[index$var8]:0.0);
+			if(!state.fixedFlag$sample9)
 				// Save the probability of each value
 				cv$distribution$sample9[index$var8] = cv$value;
 		}
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 1, size, 1,
+		parallelFor(state.RNG$, 1, state.size, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1) {
 						// Create local copy of variable probabilities.
-						double[] cv$distribution$sample23 = distribution$sample23[((i - 1) / 1)];
-						for(int index$var22 = 0; index$var22 < weightings.length; index$var22 += 1) {
+						double[] cv$distribution$sample23 = state.distribution$sample23[((i - 1) / 1)];
+						for(int index$var22 = 0; index$var22 < state.weightings.length; index$var22 += 1) {
 							// Probability for this value
-							double cv$value = ((((((0.0 <= index$var22) && (index$var22 < weightings.length)) && (0 < weightings.length)) && (0.0 <= weightings[index$var22])) && (weightings[index$var22] <= 1.0))?weightings[index$var22]:0.0);
-							if(!fixedFlag$sample23)
+							double cv$value = ((((((0.0 <= index$var22) && (index$var22 < state.weightings.length)) && (0 < state.weightings.length)) && (0.0 <= state.weightings[index$var22])) && (state.weightings[index$var22] <= 1.0))?state.weightings[index$var22]:0.0);
+							if(!state.fixedFlag$sample23)
 								// Save the probability of each value
 								cv$distribution$sample23[index$var22] = cv$value;
 						}
 					}
 			}
 		);
-		for(int j = 0; j < size; j += 1)
-			v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		for(int j = 0; j < state.size; j += 1)
+			state.v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample5)
-			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-		if(!fixedFlag$sample9)
-			v2[0] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!state.fixedFlag$sample5)
+			state.v1 = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
+		if(!state.fixedFlag$sample9)
+			state.v2[0] = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 1, size, 1,
+		parallelFor(state.RNG$, 1, state.size, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample23)
-							v2[i] = DistributionSampling.sampleCategorical(RNG$1, weightings, weightings.length);
+						if(!state.fixedFlag$sample23)
+							state.v2[i] = DistributionSampling.sampleCategorical(RNG$1, state.weightings, state.weightings.length);
 					}
 			}
 		);
-		for(int j = 0; j < size; j += 1) {
-			v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-			v[j] = DistributionSampling.sampleBernoulli(RNG$, ((1.0 * v1) / (v2[j] + v3[((j - 0) / 1)])));
+		for(int j = 0; j < state.size; j += 1) {
+			state.v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
+			state.v[j] = DistributionSampling.sampleBernoulli(state.RNG$, ((1.0 * state.v1) / (state.v2[j] + state.v3[((j - 0) / 1)])));
 		}
 	}
 
@@ -2907,25 +2588,25 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample5)
-			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-		if(!fixedFlag$sample9)
-			v2[0] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!state.fixedFlag$sample5)
+			state.v1 = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
+		if(!state.fixedFlag$sample9)
+			state.v2[0] = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 1, size, 1,
+		parallelFor(state.RNG$, 1, state.size, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample23)
-							v2[i] = DistributionSampling.sampleCategorical(RNG$1, weightings, weightings.length);
+						if(!state.fixedFlag$sample23)
+							state.v2[i] = DistributionSampling.sampleCategorical(RNG$1, state.weightings, state.weightings.length);
 					}
 			}
 		);
-		for(int j = 0; j < size; j += 1)
-			v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		for(int j = 0; j < state.size; j += 1)
+			state.v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -2933,96 +2614,96 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample5)
-			v1 = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
-		if(!fixedFlag$sample9)
-			v2[0] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		if(!state.fixedFlag$sample5)
+			state.v1 = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
+		if(!state.fixedFlag$sample9)
+			state.v2[0] = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 1, size, 1,
+		parallelFor(state.RNG$, 1, state.size, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample23)
-							v2[i] = DistributionSampling.sampleCategorical(RNG$1, weightings, weightings.length);
+						if(!state.fixedFlag$sample23)
+							state.v2[i] = DistributionSampling.sampleCategorical(RNG$1, state.weightings, state.weightings.length);
 					}
 			}
 		);
-		for(int j = 0; j < size; j += 1)
-			v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, weightings, weightings.length);
+		for(int j = 0; j < state.size; j += 1)
+			state.v3[((j - 0) / 1)] = DistributionSampling.sampleCategorical(state.RNG$, state.weightings, state.weightings.length);
 	}
 
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample5)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample5)
 				inferSample5();
-			if(!fixedFlag$sample9)
+			if(!state.fixedFlag$sample9)
 				inferSample9();
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 1, size, 1,
+			parallelFor(state.RNG$, 1, state.size, 1,
 				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int i = forStart$i; i < forEnd$i; i += 1) {
-							if(!fixedFlag$sample23)
+							if(!state.fixedFlag$sample23)
 								inferSample23(i, threadID$i, RNG$1);
 						}
 				}
 			);
-			for(int j = 0; j < size; j += 1)
+			for(int j = 0; j < state.size; j += 1)
 				inferSample36(j);
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			for(int j = (size - ((((size - 1) - 0) % 1) + 1)); j >= ((0 - 1) + 1); j -= 1)
+			for(int j = (state.size - ((((state.size - 1) - 0) % 1) + 1)); j >= ((0 - 1) + 1); j -= 1)
 				inferSample36(j);
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 1, size, 1,
+			parallelFor(state.RNG$, 1, state.size, 1,
 				(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int i = forStart$i; i < forEnd$i; i += 1) {
-							if(!fixedFlag$sample23)
+							if(!state.fixedFlag$sample23)
 								inferSample23(i, threadID$i, RNG$1);
 						}
 				}
 			);
-			if(!fixedFlag$sample9)
+			if(!state.fixedFlag$sample9)
 				inferSample9();
-			if(!fixedFlag$sample5)
+			if(!state.fixedFlag$sample5)
 				inferSample5();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample5)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample5)
 			drawValueSample5();
-		if(!constrainedFlag$sample9)
+		if(!state.constrainedFlag$sample9)
 			drawValueSample9();
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 1, size, 1,
+		parallelFor(state.RNG$, 1, state.size, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!constrainedFlag$sample23[((i - 1) / 1)])
+						if(!state.constrainedFlag$sample23[((i - 1) / 1)])
 							drawValueSample23(i, threadID$i, RNG$1);
 					}
 			}
 		);
-		for(int j = 0; j < size; j += 1) {
-			if(!constrainedFlag$sample36[((j - 0) / 1)])
+		for(int j = 0; j < state.size; j += 1) {
+			if(!state.constrainedFlag$sample36[((j - 0) / 1)])
 				drawValueSample36(j);
 		}
 	}
@@ -3035,37 +2716,37 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$c = 0.0;
-		if(!fixedProbFlag$sample5)
-			logProbability$v1 = Double.NaN;
-		logProbability$v2 = 0.0;
-		if(!fixedProbFlag$sample9)
-			logProbability$var9 = Double.NaN;
-		if(!fixedProbFlag$sample23) {
-			for(int i = 1; i < size; i += 1)
-				logProbability$sample23[((i - 1) / 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$c = 0.0;
+		if(!state.fixedProbFlag$sample5)
+			state.logProbability$v1 = Double.NaN;
+		state.logProbability$v2 = 0.0;
+		if(!state.fixedProbFlag$sample9)
+			state.logProbability$var9 = Double.NaN;
+		if(!state.fixedProbFlag$sample23) {
+			for(int i = 1; i < state.size; i += 1)
+				state.logProbability$sample23[((i - 1) / 1)] = Double.NaN;
 		}
-		logProbability$v3 = Double.NaN;
-		logProbability$v = 0.0;
-		for(int j = 0; j < size; j += 1)
-			logProbability$sample43[((j - 0) / 1)] = Double.NaN;
+		state.logProbability$v3 = Double.NaN;
+		state.logProbability$v = 0.0;
+		for(int j = 0; j < state.size; j += 1)
+			state.logProbability$sample43[((j - 0) / 1)] = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		size = length$value;
+		state.size = state.length$value;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample23$1 = 0; index$constrainedFlag$sample23$1 < constrainedFlag$sample23.length; index$constrainedFlag$sample23$1 += 1)
-			constrainedFlag$sample23[index$constrainedFlag$sample23$1] = true;
+		for(int index$constrainedFlag$sample23$1 = 0; index$constrainedFlag$sample23$1 < state.constrainedFlag$sample23.length; index$constrainedFlag$sample23$1 += 1)
+			state.constrainedFlag$sample23[index$constrainedFlag$sample23$1] = true;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample36$1 = 0; index$constrainedFlag$sample36$1 < constrainedFlag$sample36.length; index$constrainedFlag$sample36$1 += 1)
-			constrainedFlag$sample36[index$constrainedFlag$sample36$1] = true;
+		for(int index$constrainedFlag$sample36$1 = 0; index$constrainedFlag$sample36$1 < state.constrainedFlag$sample36.length; index$constrainedFlag$sample36$1 += 1)
+			state.constrainedFlag$sample36[index$constrainedFlag$sample36$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -3118,8 +2799,8 @@ final class DistributionTest2b$MultiThreadCPU extends CoreModelMultiThreadCPU im
 	@Override
 	public final void propagateObservedValues() {
 		// Deep copy between arrays
-		boolean[] cv$source1 = value;
-		boolean[] cv$target1 = v;
+		boolean[] cv$source1 = state.value;
+		boolean[] cv$target1 = state.v;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			cv$target1[cv$index1] = cv$source1[cv$index1];

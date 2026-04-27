@@ -1,171 +1,38 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.ReductionTest1$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.ReductionTest1.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class ReductionTest1$SingleThreadCPU extends CoreModelSingleThreadCPU implements ReductionTest1$CoreInterface {
-int[][] ObsArr;
-	int T;
-	double[][] TimeFeat;
-	int[][] arr;
-	boolean[][] constrainedFlag$sample101;
-	boolean fixedFlag$sample101 = false;
-	boolean fixedProbFlag$sample101 = false;
-	boolean fixedProbFlag$sample165 = false;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$arr;
-	double[][] logProbability$sample101;
-	double[][] logProbability$sample165;
-	double logProbability$sum_t;
-	double logProbability$time_coeff;
-	double logProbability$time_impact;
-	int n_ac;
-	double[][] sum_t;
-	boolean system$gibbsForward = true;
-	double[][] time_coeff;
-	int time_dim;
-	double[][][] time_impact;
+final class ReductionTest1$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	public ReductionTest1$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	@Override
-	public final int[][] get$ObsArr() {
-		return ObsArr;
-	}
 
-	@Override
-	public final void set$ObsArr(int[][] cv$value, boolean allocated$) {
-		ObsArr = cv$value;
-	}
-
-	@Override
-	public final int get$T() {
-		return T;
-	}
-
-	@Override
-	public final void set$T(int cv$value, boolean allocated$) {
-		T = cv$value;
-	}
-
-	@Override
-	public final double[][] get$TimeFeat() {
-		return TimeFeat;
-	}
-
-	@Override
-	public final void set$TimeFeat(double[][] cv$value, boolean allocated$) {
-		TimeFeat = cv$value;
-	}
-
-	@Override
-	public final int[][] get$arr() {
-		return arr;
-	}
-
-	@Override
-	public final boolean get$fixedFlag$sample101() {
-		return fixedFlag$sample101;
-	}
-
-	@Override
-	public final void set$fixedFlag$sample101(boolean cv$value, boolean allocated$) {
-		fixedFlag$sample101 = cv$value;
-		if(allocated$) {
-			for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1) {
-				boolean[] cv$constrainedFlag$sample101$1 = constrainedFlag$sample101[index$constrainedFlag$sample101$1];
-				for(int index$constrainedFlag$sample101$2 = 0; index$constrainedFlag$sample101$2 < cv$constrainedFlag$sample101$1.length; index$constrainedFlag$sample101$2 += 1)
-					cv$constrainedFlag$sample101$1[index$constrainedFlag$sample101$2] = true;
-			}
-		}
-		fixedProbFlag$sample101 = (fixedFlag$sample101 && fixedProbFlag$sample101);
-		fixedProbFlag$sample165 = (fixedFlag$sample101 && fixedProbFlag$sample165);
-	}
-
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	@Override
-	public final double get$logProbability$arr() {
-		return logProbability$arr;
-	}
-
-	@Override
-	public final double get$logProbability$sum_t() {
-		return logProbability$sum_t;
-	}
-
-	@Override
-	public final double get$logProbability$time_coeff() {
-		return logProbability$time_coeff;
-	}
-
-	@Override
-	public final double get$logProbability$time_impact() {
-		return logProbability$time_impact;
-	}
-
-	@Override
-	public final int get$n_ac() {
-		return n_ac;
-	}
-
-	@Override
-	public final void set$n_ac(int cv$value, boolean allocated$) {
-		n_ac = cv$value;
-	}
-
-	@Override
-	public final double[][] get$sum_t() {
-		return sum_t;
-	}
-
-	@Override
-	public final double[][] get$time_coeff() {
-		return time_coeff;
-	}
-
-	@Override
-	public final void set$time_coeff(double[][] cv$value, boolean allocated$) {
-		time_coeff = cv$value;
-		fixedProbFlag$sample101 = false;
-		fixedProbFlag$sample165 = false;
-	}
-
-	@Override
-	public final int get$time_dim() {
-		return time_dim;
-	}
-
-	@Override
-	public final double[][][] get$time_impact() {
-		return time_impact;
+	public ReductionTest1$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	private final void drawValueSample101(int i$var80, int var95) {
-		double[] var86 = time_coeff[i$var80];
-		var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		double[] var86 = state.time_coeff[i$var80];
+		var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		{
 			{
-				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+				for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 					if((i$var80 == i$var119)) {
-						for(int j = 0; j < time_dim; j += 1) {
+						for(int j = 0; j < state.time_dim; j += 1) {
 							if((var95 == j)) {
-								for(int t = (0 + 1); t < T; t += 1) {
-									double[][] var129 = time_impact[t];
+								for(int t = (0 + 1); t < state.T; t += 1) {
+									double[][] var129 = state.time_impact[t];
 									double[] var130 = var129[i$var119];
-									var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+									var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 								}
 							}
 						}
@@ -175,22 +42,22 @@ int[][] ObsArr;
 		}
 		{
 			{
-				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+				for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 					if((i$var80 == i$var119)) {
-						for(int j = 0; j < time_dim; j += 1) {
+						for(int j = 0; j < state.time_dim; j += 1) {
 							if((var95 == j)) {
-								for(int t = (0 + 1); t < T; t += 1) {
-									for(int index$t$2_4 = (0 + 1); index$t$2_4 < T; index$t$2_4 += 1) {
+								for(int t = (0 + 1); t < state.T; t += 1) {
+									for(int index$t$2_4 = (0 + 1); index$t$2_4 < state.T; index$t$2_4 += 1) {
 										if((t == index$t$2_4)) {
-											for(int index$i$2_5 = 0; index$i$2_5 < n_ac; index$i$2_5 += 1) {
+											for(int index$i$2_5 = 0; index$i$2_5 < state.n_ac; index$i$2_5 += 1) {
 												if((i$var119 == index$i$2_5)) {
-													if(((0 <= j) && (j < time_dim))) {
+													if(((0 <= j) && (j < state.time_dim))) {
 														{
-															double[] var139 = sum_t[index$t$2_4];
+															double[] var139 = state.sum_t[index$t$2_4];
 															double reduceVar$var151$3 = 0.0;
-															for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+															for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 																double x = reduceVar$var151$3;
-																double y = time_impact[index$t$2_4][index$i$2_5][cv$reduction152Index];
+																double y = state.time_impact[index$t$2_4][index$i$2_5][cv$reduction152Index];
 																reduceVar$var151$3 = (x + y);
 															}
 															var139[index$i$2_5] = reduceVar$var151$3;
@@ -211,20 +78,20 @@ int[][] ObsArr;
 
 	private final void inferSample101(int i$var80, int var95) {
 		if(true) {
-			constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = false;
+			state.constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = false;
 			int cv$numStates = 0;
 			{
 				cv$numStates = Math.max(cv$numStates, 2);
 			}
-			double cv$originalValue = time_coeff[i$var80][var95];
+			double cv$originalValue = state.time_coeff[i$var80][var95];
 			double cv$originalProbability = 0.0;
 			double cv$var = (((cv$originalValue < 0)?(-cv$originalValue):cv$originalValue) * 40.0);
 			if((cv$var < 0.01))
 				cv$var = 0.01;
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] || (cv$valuePos == 0))) {
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					double cv$reachedDistributionSourceRV = 0.0;
 					double cv$accumulatedDistributionProbabilities = 0.0;
@@ -237,21 +104,21 @@ int[][] ObsArr;
 						{
 							{
 								{
-									double[] var86 = time_coeff[i$var80];
+									double[] var86 = state.time_coeff[i$var80];
 									var86[var95] = cv$currentValue;
 								}
 							}
 						}
 						{
 							{
-								for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+								for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 									if((i$var80 == i$var119)) {
-										for(int j = 0; j < time_dim; j += 1) {
+										for(int j = 0; j < state.time_dim; j += 1) {
 											if((var95 == j)) {
-												for(int t = (0 + 1); t < T; t += 1) {
-													double[][] var129 = time_impact[t];
+												for(int t = (0 + 1); t < state.T; t += 1) {
+													double[][] var129 = state.time_impact[t];
 													double[] var130 = var129[i$var119];
-													var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+													var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 												}
 											}
 										}
@@ -261,22 +128,22 @@ int[][] ObsArr;
 						}
 						{
 							{
-								for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+								for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 									if((i$var80 == i$var119)) {
-										for(int j = 0; j < time_dim; j += 1) {
+										for(int j = 0; j < state.time_dim; j += 1) {
 											if((var95 == j)) {
-												for(int t = (0 + 1); t < T; t += 1) {
-													for(int index$t$3_4 = (0 + 1); index$t$3_4 < T; index$t$3_4 += 1) {
+												for(int t = (0 + 1); t < state.T; t += 1) {
+													for(int index$t$3_4 = (0 + 1); index$t$3_4 < state.T; index$t$3_4 += 1) {
 														if((t == index$t$3_4)) {
-															for(int index$i$3_5 = 0; index$i$3_5 < n_ac; index$i$3_5 += 1) {
+															for(int index$i$3_5 = 0; index$i$3_5 < state.n_ac; index$i$3_5 += 1) {
 																if((i$var119 == index$i$3_5)) {
-																	if(((0 <= j) && (j < time_dim))) {
+																	if(((0 <= j) && (j < state.time_dim))) {
 																		{
-																			double[] var139 = sum_t[index$t$3_4];
+																			double[] var139 = state.sum_t[index$t$3_4];
 																			double reduceVar$var151$0 = 0.0;
-																			for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+																			for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 																				double x = reduceVar$var151$0;
-																				double y = time_impact[index$t$3_4][index$i$3_5][cv$reduction152Index];
+																				double y = state.time_impact[index$t$3_4][index$i$3_5][cv$reduction152Index];
 																				reduceVar$var151$0 = (x + y);
 																			}
 																			var139[index$i$3_5] = reduceVar$var151$0;
@@ -301,42 +168,42 @@ int[][] ObsArr;
 							{
 								{
 									double traceTempVariable$var134$4_1 = cv$currentValue;
-									for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+									for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 										if((i$var80 == i$var119)) {
-											for(int j = 0; j < time_dim; j += 1) {
+											for(int j = 0; j < state.time_dim; j += 1) {
 												if((var95 == j)) {
-													for(int t = (0 + 1); t < T; t += 1) {
-														double traceTempVariable$x$4_5 = (TimeFeat[t][j] * traceTempVariable$var134$4_1);
-														for(int index$t$4_6 = (0 + 1); index$t$4_6 < T; index$t$4_6 += 1) {
+													for(int t = (0 + 1); t < state.T; t += 1) {
+														double traceTempVariable$x$4_5 = (state.TimeFeat[t][j] * traceTempVariable$var134$4_1);
+														for(int index$t$4_6 = (0 + 1); index$t$4_6 < state.T; index$t$4_6 += 1) {
 															if((t == index$t$4_6)) {
-																for(int index$i$4_7 = 0; index$i$4_7 < n_ac; index$i$4_7 += 1) {
+																for(int index$i$4_7 = 0; index$i$4_7 < state.n_ac; index$i$4_7 += 1) {
 																	if((i$var119 == index$i$4_7)) {
-																		if(((0 <= j) && (j < time_dim))) {
-																			if((0 < time_dim)) {
+																		if(((0 <= j) && (j < state.time_dim))) {
+																			if((0 < state.time_dim)) {
 																				double reduceVar$var151$1 = 0.0;
 																				for(int cv$reduction332Index = 0; cv$reduction332Index < j; cv$reduction332Index += 1) {
 																					double x = reduceVar$var151$1;
-																					double y = time_impact[index$t$4_6][index$i$4_7][cv$reduction332Index];
+																					double y = state.time_impact[index$t$4_6][index$i$4_7][cv$reduction332Index];
 																					reduceVar$var151$1 = (x + y);
 																				}
-																				for(int cv$reduction332Index = (j + 1); cv$reduction332Index < time_dim; cv$reduction332Index += 1) {
+																				for(int cv$reduction332Index = (j + 1); cv$reduction332Index < state.time_dim; cv$reduction332Index += 1) {
 																					double x = reduceVar$var151$1;
-																					double y = time_impact[index$t$4_6][index$i$4_7][cv$reduction332Index];
+																					double y = state.time_impact[index$t$4_6][index$i$4_7][cv$reduction332Index];
 																					reduceVar$var151$1 = (x + y);
 																				}
 																				double cv$reduced152 = reduceVar$var151$1;
 																				reduceVar$var151$1 = (traceTempVariable$x$4_5 + cv$reduced152);
 																				double traceTempVariable$var151$4_8 = reduceVar$var151$1;
 																				double traceTempVariable$var156$4_9 = traceTempVariable$var151$4_8;
-																				for(int index$t$4_10 = (0 + 1); index$t$4_10 < T; index$t$4_10 += 1) {
+																				for(int index$t$4_10 = (0 + 1); index$t$4_10 < state.T; index$t$4_10 += 1) {
 																					if((index$t$4_6 == index$t$4_10)) {
-																						for(int index$i$4_11 = 0; index$i$4_11 < n_ac; index$i$4_11 += 1) {
+																						for(int index$i$4_11 = 0; index$i$4_11 < state.n_ac; index$i$4_11 += 1) {
 																							if((index$i$4_7 == index$i$4_11)) {
 																								{
 																									{
 																										boolean cv$sampleConstrained = true;
 																										if(cv$sampleConstrained) {
-																											constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = true;
+																											state.constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = true;
 																											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 																											double cv$consumerDistributionProbabilityAccumulator = 1.0;
 																											{
@@ -344,13 +211,13 @@ int[][] ObsArr;
 																													{
 																														{
 																															{
-																																if(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)) < cv$accumulatedConsumerProbabilities))
-																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																																if(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(state.arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)) < cv$accumulatedConsumerProbabilities))
+																																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(state.arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																																else {
 																																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9));
+																																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(state.arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9));
 																																	else
-																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)));
+																																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(state.arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(state.arr[index$t$4_10][index$i$4_11], traceTempVariable$var156$4_9)));
 																																}
 																																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																															}
@@ -403,26 +270,26 @@ int[][] ObsArr;
 						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio))) {
 							double var96 = cv$originalValue;
 							{
 								{
 									{
-										double[] var86 = time_coeff[i$var80];
+										double[] var86 = state.time_coeff[i$var80];
 										var86[var95] = var96;
 									}
 								}
 							}
 							{
 								{
-									for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+									for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 										if((i$var80 == i$var119)) {
-											for(int j = 0; j < time_dim; j += 1) {
+											for(int j = 0; j < state.time_dim; j += 1) {
 												if((var95 == j)) {
-													for(int t = (0 + 1); t < T; t += 1) {
-														double[][] var129 = time_impact[t];
+													for(int t = (0 + 1); t < state.T; t += 1) {
+														double[][] var129 = state.time_impact[t];
 														double[] var130 = var129[i$var119];
-														var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+														var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 													}
 												}
 											}
@@ -432,22 +299,22 @@ int[][] ObsArr;
 							}
 							{
 								{
-									for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+									for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 										if((i$var80 == i$var119)) {
-											for(int j = 0; j < time_dim; j += 1) {
+											for(int j = 0; j < state.time_dim; j += 1) {
 												if((var95 == j)) {
-													for(int t = (0 + 1); t < T; t += 1) {
-														for(int index$t$9_4 = (0 + 1); index$t$9_4 < T; index$t$9_4 += 1) {
+													for(int t = (0 + 1); t < state.T; t += 1) {
+														for(int index$t$9_4 = (0 + 1); index$t$9_4 < state.T; index$t$9_4 += 1) {
 															if((t == index$t$9_4)) {
-																for(int index$i$9_5 = 0; index$i$9_5 < n_ac; index$i$9_5 += 1) {
+																for(int index$i$9_5 = 0; index$i$9_5 < state.n_ac; index$i$9_5 += 1) {
 																	if((i$var119 == index$i$9_5)) {
-																		if(((0 <= j) && (j < time_dim))) {
+																		if(((0 <= j) && (j < state.time_dim))) {
 																			{
-																				double[] var139 = sum_t[index$t$9_4];
+																				double[] var139 = state.sum_t[index$t$9_4];
 																				double reduceVar$var151$2 = 0.0;
-																				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+																				for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 																					double x = reduceVar$var151$2;
-																					double y = time_impact[index$t$9_4][index$i$9_5][cv$reduction152Index];
+																					double y = state.time_impact[index$t$9_4][index$i$9_5][cv$reduction152Index];
 																					reduceVar$var151$2 = (x + y);
 																				}
 																				var139[index$i$9_5] = reduceVar$var151$2;
@@ -472,17 +339,17 @@ int[][] ObsArr;
 	}
 
 	private final void logProbabilityValue$sample101() {
-		if(!fixedProbFlag$sample101) {
+		if(!state.fixedProbFlag$sample101) {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+			for(int i$var80 = 0; i$var80 < state.n_ac; i$var80 += 1) {
 				double cv$sampleAccumulator = 0.0;
-				for(int var95 = 0; var95 < time_dim; var95 += 1) {
+				for(int var95 = 0; var95 < state.time_dim; var95 += 1) {
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					double cv$probabilityReached = 0.0;
 					{
 						{
-							double cv$sampleValue = time_coeff[i$var80][var95];
+							double cv$sampleValue = state.time_coeff[i$var80][var95];
 							{
 								{
 									double var83 = 0.0;
@@ -508,19 +375,19 @@ int[][] ObsArr;
 					double cv$sampleProbability = cv$distributionAccumulator;
 					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
-					logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = cv$sampleProbability;
+					state.logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = cv$sampleProbability;
 					boolean cv$guard$time_impact = false;
 					boolean cv$guard$sum_t = false;
 					{
 						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+							for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
+									for(int j = 0; j < state.time_dim; j += 1) {
 										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
+											for(int t = (0 + 1); t < state.T; t += 1) {
 												if(!cv$guard$time_impact) {
 													cv$guard$time_impact = true;
-													logProbability$time_impact = (logProbability$time_impact + cv$sampleProbability);
+													state.logProbability$time_impact = (state.logProbability$time_impact + cv$sampleProbability);
 												}
 											}
 										}
@@ -531,19 +398,19 @@ int[][] ObsArr;
 					}
 					{
 						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+							for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
+									for(int j = 0; j < state.time_dim; j += 1) {
 										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$3_4 = (0 + 1); index$t$3_4 < T; index$t$3_4 += 1) {
+											for(int t = (0 + 1); t < state.T; t += 1) {
+												for(int index$t$3_4 = (0 + 1); index$t$3_4 < state.T; index$t$3_4 += 1) {
 													if((t == index$t$3_4)) {
-														for(int index$i$3_5 = 0; index$i$3_5 < n_ac; index$i$3_5 += 1) {
+														for(int index$i$3_5 = 0; index$i$3_5 < state.n_ac; index$i$3_5 += 1) {
 															if((i$var119 == index$i$3_5)) {
-																if(((0 <= j) && (j < time_dim))) {
+																if(((0 <= j) && (j < state.time_dim))) {
 																	if(!cv$guard$sum_t) {
 																		cv$guard$sum_t = true;
-																		logProbability$sum_t = (logProbability$sum_t + cv$sampleProbability);
+																		state.logProbability$sum_t = (state.logProbability$sum_t + cv$sampleProbability);
 																	}
 																}
 															}
@@ -560,32 +427,32 @@ int[][] ObsArr;
 				}
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			}
-			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample101)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample101 = fixedFlag$sample101;
+			state.logProbability$time_coeff = (state.logProbability$time_coeff + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample101)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample101 = state.fixedFlag$sample101;
 		} else {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
+			for(int i$var80 = 0; i$var80 < state.n_ac; i$var80 += 1) {
 				double cv$rvAccumulator = 0.0;
-				for(int var95 = 0; var95 < time_dim; var95 += 1) {
-					double cv$sampleValue = logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)];
+				for(int var95 = 0; var95 < state.time_dim; var95 += 1) {
+					double cv$sampleValue = state.logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)];
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$sampleReached = true;
 					boolean cv$guard$time_impact = false;
 					boolean cv$guard$sum_t = false;
 					{
 						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+							for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
+									for(int j = 0; j < state.time_dim; j += 1) {
 										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
+											for(int t = (0 + 1); t < state.T; t += 1) {
 												if(!cv$guard$time_impact) {
 													cv$guard$time_impact = true;
-													logProbability$time_impact = (logProbability$time_impact + cv$sampleValue);
+													state.logProbability$time_impact = (state.logProbability$time_impact + cv$sampleValue);
 												}
 											}
 										}
@@ -596,19 +463,19 @@ int[][] ObsArr;
 					}
 					{
 						{
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+							for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
+									for(int j = 0; j < state.time_dim; j += 1) {
 										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$5_4 = (0 + 1); index$t$5_4 < T; index$t$5_4 += 1) {
+											for(int t = (0 + 1); t < state.T; t += 1) {
+												for(int index$t$5_4 = (0 + 1); index$t$5_4 < state.T; index$t$5_4 += 1) {
 													if((t == index$t$5_4)) {
-														for(int index$i$5_5 = 0; index$i$5_5 < n_ac; index$i$5_5 += 1) {
+														for(int index$i$5_5 = 0; index$i$5_5 < state.n_ac; index$i$5_5 += 1) {
 															if((i$var119 == index$i$5_5)) {
-																if(((0 <= j) && (j < time_dim))) {
+																if(((0 <= j) && (j < state.time_dim))) {
 																	if(!cv$guard$sum_t) {
 																		cv$guard$sum_t = true;
-																		logProbability$sum_t = (logProbability$sum_t + cv$sampleValue);
+																		state.logProbability$sum_t = (state.logProbability$sum_t + cv$sampleValue);
 																	}
 																}
 															}
@@ -625,28 +492,28 @@ int[][] ObsArr;
 				}
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			}
-			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			if(fixedFlag$sample101)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$time_coeff = (state.logProbability$time_coeff + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			if(state.fixedFlag$sample101)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	private final void logProbabilityValue$sample165() {
-		if(!fixedProbFlag$sample165) {
+		if(!state.fixedProbFlag$sample165) {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int t = (0 + 1); t < T; t += 1) {
-				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+			for(int t = (0 + 1); t < state.T; t += 1) {
+				for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 					double cv$sampleAccumulator = 0.0;
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					double cv$probabilityReached = 0.0;
 					{
 						{
-							int cv$sampleValue = arr[t][i$var119];
+							int cv$sampleValue = state.arr[t][i$var119];
 							{
 								{
-									double var156 = sum_t[t][i$var119];
+									double var156 = state.sum_t[t][i$var119];
 									double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(cv$sampleValue, var156));
 									if((cv$weightedProbability < cv$distributionAccumulator))
 										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
@@ -669,135 +536,85 @@ int[][] ObsArr;
 					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$sample165[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = cv$sampleProbability;
+					state.logProbability$sample165[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = cv$sampleProbability;
 				}
 			}
-			logProbability$arr = (logProbability$arr + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-			fixedProbFlag$sample165 = fixedFlag$sample101;
+			state.logProbability$arr = (state.logProbability$arr + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
+			state.fixedProbFlag$sample165 = state.fixedFlag$sample101;
 		} else {
 			double cv$accumulator = 0.0;
 			boolean cv$sampleReached = false;
-			for(int t = (0 + 1); t < T; t += 1) {
-				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
+			for(int t = (0 + 1); t < state.T; t += 1) {
+				for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
 					double cv$rvAccumulator = 0.0;
-					double cv$sampleValue = logProbability$sample165[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)];
+					double cv$sampleValue = state.logProbability$sample165[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)];
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				}
 			}
-			logProbability$arr = (logProbability$arr + cv$accumulator);
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$arr = (state.logProbability$arr + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
-
-	@Override
-	public final void allocate() {
-		if(!fixedFlag$sample101) {
-			{
-				time_coeff = new double[n_ac][];
-				for(int var18 = 0; var18 < n_ac; var18 += 1)
-					time_coeff[var18] = new double[TimeFeat[0].length];
-				for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
-					time_coeff[i$var80] = new double[TimeFeat[0].length];
-			}
-		}
-		{
-			sum_t = new double[T][];
-			for(int var31 = 0; var31 < T; var31 += 1)
-				sum_t[var31] = new double[n_ac];
-		}
-		{
-			time_impact = new double[T][][];
-			for(int var44 = 0; var44 < T; var44 += 1) {
-				double[][] subarray$0 = new double[n_ac][];
-				time_impact[var44] = subarray$0;
-				for(int var54 = 0; var54 < n_ac; var54 += 1)
-					subarray$0[var54] = new double[TimeFeat[0].length];
-			}
-		}
-		{
-			arr = new int[T][];
-			for(int var68 = 0; var68 < T; var68 += 1)
-				arr[var68] = new int[n_ac];
-		}
-		{
-			constrainedFlag$sample101 = new boolean[((((n_ac - 1) - 0) / 1) + 1)][];
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
-				constrainedFlag$sample101[((i$var80 - 0) / 1)] = new boolean[((((TimeFeat[0].length - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$sample101 = new double[((((n_ac - 1) - 0) / 1) + 1)][];
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
-				logProbability$sample101[((i$var80 - 0) / 1)] = new double[((((TimeFeat[0].length - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$sample165 = new double[((((T - 1) - (0 + 1)) / 1) + 1)][];
-			for(int t = (0 + 1); t < T; t += 1)
-				logProbability$sample165[((t - (0 + 1)) / 1)] = new double[((((n_ac - 1) - 0) / 1) + 1)];
-		}
-	}
-
-	@Override
-	public final void allocateScratch() {}
 
 	@Override
 	public final void forwardGeneration() {
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-			double[] var86 = time_coeff[i$var80];
-			for(int var95 = 0; var95 < time_dim; var95 += 1) {
-				if(!fixedFlag$sample101)
-					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int i$var80 = 0; i$var80 < state.n_ac; i$var80 += 1) {
+			double[] var86 = state.time_coeff[i$var80];
+			for(int var95 = 0; var95 < state.time_dim; var95 += 1) {
+				if(!state.fixedFlag$sample101)
+					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 			}
 		}
-		for(int t = (0 + 1); t < T; t += 1) {
-			double[][] var129 = time_impact[t];
-			double[] var139 = sum_t[t];
-			int[] var154 = arr[t];
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-				for(int j = 0; j < time_dim; j += 1) {
+		for(int t = (0 + 1); t < state.T; t += 1) {
+			double[][] var129 = state.time_impact[t];
+			double[] var139 = state.sum_t[t];
+			int[] var154 = state.arr[t];
+			for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
+				for(int j = 0; j < state.time_dim; j += 1) {
 					double[] var130 = var129[i$var119];
-					if(!fixedFlag$sample101)
-						var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+					if(!state.fixedFlag$sample101)
+						var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 				}
 				double reduceVar$var151$4 = 0.0;
-				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+				for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 					double x = reduceVar$var151$4;
-					double y = time_impact[t][i$var119][cv$reduction152Index];
-					if(!fixedFlag$sample101)
+					double y = state.time_impact[t][i$var119][cv$reduction152Index];
+					if(!state.fixedFlag$sample101)
 						reduceVar$var151$4 = (x + y);
 				}
-				if(!fixedFlag$sample101)
+				if(!state.fixedFlag$sample101)
 					var139[i$var119] = reduceVar$var151$4;
-				var154[i$var119] = DistributionSampling.samplePoisson(RNG$, sum_t[t][i$var119]);
+				var154[i$var119] = DistributionSampling.samplePoisson(state.RNG$, state.sum_t[t][i$var119]);
 			}
 		}
 	}
 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-			double[] var86 = time_coeff[i$var80];
-			for(int var95 = 0; var95 < time_dim; var95 += 1) {
-				if(!fixedFlag$sample101)
-					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int i$var80 = 0; i$var80 < state.n_ac; i$var80 += 1) {
+			double[] var86 = state.time_coeff[i$var80];
+			for(int var95 = 0; var95 < state.time_dim; var95 += 1) {
+				if(!state.fixedFlag$sample101)
+					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 			}
 		}
-		for(int t = (0 + 1); t < T; t += 1) {
-			double[][] var129 = time_impact[t];
-			double[] var139 = sum_t[t];
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-				for(int j = 0; j < time_dim; j += 1) {
+		for(int t = (0 + 1); t < state.T; t += 1) {
+			double[][] var129 = state.time_impact[t];
+			double[] var139 = state.sum_t[t];
+			for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
+				for(int j = 0; j < state.time_dim; j += 1) {
 					double[] var130 = var129[i$var119];
-					var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+					var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 				}
 				double reduceVar$var151$8 = 0.0;
-				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+				for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 					double x = reduceVar$var151$8;
-					double y = time_impact[t][i$var119][cv$reduction152Index];
+					double y = state.time_impact[t][i$var119][cv$reduction152Index];
 					reduceVar$var151$8 = (x + y);
 				}
 				var139[i$var119] = reduceVar$var151$8;
@@ -807,60 +624,60 @@ int[][] ObsArr;
 
 	@Override
 	public final void forwardGenerationPrime() {
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-			double[] var86 = time_coeff[i$var80];
-			for(int var95 = 0; var95 < time_dim; var95 += 1) {
-				if(!fixedFlag$sample101)
-					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int i$var80 = 0; i$var80 < state.n_ac; i$var80 += 1) {
+			double[] var86 = state.time_coeff[i$var80];
+			for(int var95 = 0; var95 < state.time_dim; var95 += 1) {
+				if(!state.fixedFlag$sample101)
+					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 			}
 		}
-		for(int t = (0 + 1); t < T; t += 1) {
-			double[][] var129 = time_impact[t];
-			double[] var139 = sum_t[t];
-			int[] var154 = arr[t];
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-				for(int j = 0; j < time_dim; j += 1) {
+		for(int t = (0 + 1); t < state.T; t += 1) {
+			double[][] var129 = state.time_impact[t];
+			double[] var139 = state.sum_t[t];
+			int[] var154 = state.arr[t];
+			for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
+				for(int j = 0; j < state.time_dim; j += 1) {
 					double[] var130 = var129[i$var119];
-					var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+					var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 				}
 				double reduceVar$var151$5 = 0.0;
-				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+				for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 					double x = reduceVar$var151$5;
-					double y = time_impact[t][i$var119][cv$reduction152Index];
+					double y = state.time_impact[t][i$var119][cv$reduction152Index];
 					reduceVar$var151$5 = (x + y);
 				}
 				var139[i$var119] = reduceVar$var151$5;
-				var154[i$var119] = DistributionSampling.samplePoisson(RNG$, sum_t[t][i$var119]);
+				var154[i$var119] = DistributionSampling.samplePoisson(state.RNG$, state.sum_t[t][i$var119]);
 			}
 		}
 	}
 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-			double[] var86 = time_coeff[i$var80];
-			for(int var95 = 0; var95 < time_dim; var95 += 1) {
-				if(!fixedFlag$sample101)
-					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int i$var80 = 0; i$var80 < state.n_ac; i$var80 += 1) {
+			double[] var86 = state.time_coeff[i$var80];
+			for(int var95 = 0; var95 < state.time_dim; var95 += 1) {
+				if(!state.fixedFlag$sample101)
+					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 			}
 		}
-		for(int t = (0 + 1); t < T; t += 1) {
-			double[][] var129 = time_impact[t];
-			double[] var139 = sum_t[t];
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-				for(int j = 0; j < time_dim; j += 1) {
+		for(int t = (0 + 1); t < state.T; t += 1) {
+			double[][] var129 = state.time_impact[t];
+			double[] var139 = state.sum_t[t];
+			for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
+				for(int j = 0; j < state.time_dim; j += 1) {
 					double[] var130 = var129[i$var119];
-					if(!fixedFlag$sample101)
-						var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+					if(!state.fixedFlag$sample101)
+						var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 				}
 				double reduceVar$var151$6 = 0.0;
-				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+				for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 					double x = reduceVar$var151$6;
-					double y = time_impact[t][i$var119][cv$reduction152Index];
-					if(!fixedFlag$sample101)
+					double y = state.time_impact[t][i$var119][cv$reduction152Index];
+					if(!state.fixedFlag$sample101)
 						reduceVar$var151$6 = (x + y);
 				}
-				if(!fixedFlag$sample101)
+				if(!state.fixedFlag$sample101)
 					var139[i$var119] = reduceVar$var151$6;
 			}
 		}
@@ -868,25 +685,25 @@ int[][] ObsArr;
 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-			double[] var86 = time_coeff[i$var80];
-			for(int var95 = 0; var95 < time_dim; var95 += 1) {
-				if(!fixedFlag$sample101)
-					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int i$var80 = 0; i$var80 < state.n_ac; i$var80 += 1) {
+			double[] var86 = state.time_coeff[i$var80];
+			for(int var95 = 0; var95 < state.time_dim; var95 += 1) {
+				if(!state.fixedFlag$sample101)
+					var86[var95] = ((Math.sqrt(1.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 			}
 		}
-		for(int t = (0 + 1); t < T; t += 1) {
-			double[][] var129 = time_impact[t];
-			double[] var139 = sum_t[t];
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-				for(int j = 0; j < time_dim; j += 1) {
+		for(int t = (0 + 1); t < state.T; t += 1) {
+			double[][] var129 = state.time_impact[t];
+			double[] var139 = state.sum_t[t];
+			for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
+				for(int j = 0; j < state.time_dim; j += 1) {
 					double[] var130 = var129[i$var119];
-					var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+					var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 				}
 				double reduceVar$var151$7 = 0.0;
-				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+				for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 					double x = reduceVar$var151$7;
-					double y = time_impact[t][i$var119][cv$reduction152Index];
+					double y = state.time_impact[t][i$var119][cv$reduction152Index];
 					reduceVar$var151$7 = (x + y);
 				}
 				var139[i$var119] = reduceVar$var151$7;
@@ -896,56 +713,56 @@ int[][] ObsArr;
 
 	@Override
 	public final void gibbsRound() {
-		if(system$gibbsForward) {
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-				for(int var95 = 0; var95 < time_dim; var95 += 1) {
-					if(!fixedFlag$sample101)
+		if(state.system$gibbsForward) {
+			for(int i$var80 = 0; i$var80 < state.n_ac; i$var80 += 1) {
+				for(int var95 = 0; var95 < state.time_dim; var95 += 1) {
+					if(!state.fixedFlag$sample101)
 						inferSample101(i$var80, var95);
 				}
 			}
 		} else {
-			for(int i$var80 = (n_ac - ((((n_ac - 1) - 0) % 1) + 1)); i$var80 >= ((0 - 1) + 1); i$var80 -= 1) {
-				for(int var95 = (time_dim - ((((time_dim - 1) - 0) % 1) + 1)); var95 >= ((0 - 1) + 1); var95 -= 1) {
-					if(!fixedFlag$sample101)
+			for(int i$var80 = (state.n_ac - ((((state.n_ac - 1) - 0) % 1) + 1)); i$var80 >= ((0 - 1) + 1); i$var80 -= 1) {
+				for(int var95 = (state.time_dim - ((((state.time_dim - 1) - 0) % 1) + 1)); var95 >= ((0 - 1) + 1); var95 -= 1) {
+					if(!state.fixedFlag$sample101)
 						inferSample101(i$var80, var95);
 				}
 			}
 		}
-		system$gibbsForward = !system$gibbsForward;
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-			for(int var95 = 0; var95 < time_dim; var95 += 1) {
-				if(!constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)])
+		state.system$gibbsForward = !state.system$gibbsForward;
+		for(int i$var80 = 0; i$var80 < state.n_ac; i$var80 += 1) {
+			for(int var95 = 0; var95 < state.time_dim; var95 += 1) {
+				if(!state.constrainedFlag$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)])
 					drawValueSample101(i$var80, var95);
 			}
 		}
 	}
 
 	private final void initializeLogProbabilityFields() {
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$time_coeff = 0.0;
-		logProbability$time_impact = 0.0;
-		logProbability$sum_t = 0.0;
-		if(!fixedProbFlag$sample101) {
-			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
-				for(int var95 = 0; var95 < time_dim; var95 += 1)
-					logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$time_coeff = 0.0;
+		state.logProbability$time_impact = 0.0;
+		state.logProbability$sum_t = 0.0;
+		if(!state.fixedProbFlag$sample101) {
+			for(int i$var80 = 0; i$var80 < state.n_ac; i$var80 += 1) {
+				for(int var95 = 0; var95 < state.time_dim; var95 += 1)
+					state.logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = Double.NaN;
 			}
 		}
-		logProbability$arr = 0.0;
-		if(!fixedProbFlag$sample165) {
-			for(int t = (0 + 1); t < T; t += 1) {
-				for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1)
-					logProbability$sample165[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = Double.NaN;
+		state.logProbability$arr = 0.0;
+		if(!state.fixedProbFlag$sample165) {
+			for(int t = (0 + 1); t < state.T; t += 1) {
+				for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1)
+					state.logProbability$sample165[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = Double.NaN;
 			}
 		}
 	}
 
 	@Override
 	public final void initializeModel() {
-		time_dim = TimeFeat[0].length;
-		for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1) {
-			boolean[] cv$constrainedFlag$sample101$1 = constrainedFlag$sample101[index$constrainedFlag$sample101$1];
+		state.time_dim = state.TimeFeat[0].length;
+		for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < state.constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1) {
+			boolean[] cv$constrainedFlag$sample101$1 = state.constrainedFlag$sample101[index$constrainedFlag$sample101$1];
 			for(int index$constrainedFlag$sample101$2 = 0; index$constrainedFlag$sample101$2 < cv$constrainedFlag$sample101$1.length; index$constrainedFlag$sample101$2 += 1)
 				cv$constrainedFlag$sample101$1[index$constrainedFlag$sample101$2] = true;
 		}
@@ -954,7 +771,7 @@ int[][] ObsArr;
 	@Override
 	public final void logEvidenceProbabilities() {
 		initializeLogProbabilityFields();
-		if(fixedFlag$sample101)
+		if(state.fixedFlag$sample101)
 			logProbabilityValue$sample101();
 		logProbabilityValue$sample165();
 	}
@@ -975,8 +792,8 @@ int[][] ObsArr;
 
 	@Override
 	public final void propagateObservedValues() {
-		int[][] cv$source1 = ObsArr;
-		int[][] cv$target1 = arr;
+		int[][] cv$source1 = state.ObsArr;
+		int[][] cv$target1 = state.arr;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
 			int[] cv$source2 = cv$source1[cv$index1];
@@ -989,18 +806,18 @@ int[][] ObsArr;
 
 	@Override
 	public final void setIntermediates() {
-		for(int t = (0 + 1); t < T; t += 1) {
-			double[][] var129 = time_impact[t];
-			double[] var139 = sum_t[t];
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-				for(int j = 0; j < time_dim; j += 1) {
+		for(int t = (0 + 1); t < state.T; t += 1) {
+			double[][] var129 = state.time_impact[t];
+			double[] var139 = state.sum_t[t];
+			for(int i$var119 = 0; i$var119 < state.n_ac; i$var119 += 1) {
+				for(int j = 0; j < state.time_dim; j += 1) {
 					double[] var130 = var129[i$var119];
-					var130[j] = (TimeFeat[t][j] * time_coeff[i$var119][j]);
+					var130[j] = (state.TimeFeat[t][j] * state.time_coeff[i$var119][j]);
 				}
 				double reduceVar$var151$9 = 0.0;
-				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
+				for(int cv$reduction152Index = 0; cv$reduction152Index < state.time_dim; cv$reduction152Index += 1) {
 					double x = reduceVar$var151$9;
-					double y = time_impact[t][i$var119][cv$reduction152Index];
+					double y = state.time_impact[t][i$var119][cv$reduction152Index];
 					reduceVar$var151$9 = (x + y);
 				}
 				var139[i$var119] = reduceVar$var151$9;

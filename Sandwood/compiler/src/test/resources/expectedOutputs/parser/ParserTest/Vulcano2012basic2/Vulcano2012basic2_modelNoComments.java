@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,12 +16,217 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model Vulcano2012basic2 This is the class that
  * all user interactions with the model should occur through.
  */
-public final class Vulcano2012basic2 extends Model {
-    private Vulcano2012basic2$CoreInterface system$c = new Vulcano2012basic2$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class Vulcano2012basic2 extends Model<Vulcano2012basic2.State> {
+	final class State extends CoreModelState {
+int[][] Avail;
+		int[][] ObsSales;
+		int[][] Sales;
+		int T;
+		boolean[] constrainedFlag$sample26;
+		double[] exped;
+		double[] expedNorm;
+		boolean fixedFlag$sample26 = false;
+		boolean fixedFlag$sample82 = false;
+		boolean fixedProbFlag$sample149 = false;
+		boolean fixedProbFlag$sample26 = false;
+		boolean fixedProbFlag$sample82 = false;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$Sales;
+		double logProbability$exped;
+		double logProbability$expedNorm;
+		double logProbability$sales_sum;
+		double[] logProbability$sample149;
+		double[] logProbability$sample26;
+		double[] logProbability$sample82;
+		double logProbability$sum;
+		double logProbability$ut;
+		int noProducts;
+		double r;
+		int[] sales_sum;
+		double sum;
+		boolean system$gibbsForward = true;
+		double[] ut;
+		double[][] weekly_rates;
+		double[][] weekly_ut;
+
+		@Override
+		public final void allocate() {
+			if(!fixedFlag$sample26) {
+				{
+					ut = new double[noProducts];
+				}
+			}
+			{
+				exped = new double[noProducts];
+			}
+			{
+				expedNorm = new double[noProducts];
+			}
+			{
+				sales_sum = new int[T];
+			}
+			{
+				Sales = new int[T][];
+				for(int var93 = 0; var93 < T; var93 += 1)
+					Sales[var93] = new int[noProducts];
+				for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+					Sales[t$var105] = new int[noProducts];
+			}
+			{
+				weekly_rates = new double[((((T - 1) - 0) / 1) + 1)][];
+				for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+					weekly_rates[((t$var105 - 0) / 1)] = new double[noProducts];
+			}
+			{
+				weekly_ut = new double[((((T - 1) - 0) / 1) + 1)][];
+				for(int t$var105 = 0; t$var105 < T; t$var105 += 1)
+					weekly_ut[((t$var105 - 0) / 1)] = new double[noProducts];
+			}
+			{
+				constrainedFlag$sample26 = new boolean[((((noProducts - 1) - 1) / 1) + 1)];
+			}
+			{
+				logProbability$sample26 = new double[((((noProducts - 1) - 1) / 1) + 1)];
+			}
+			{
+				logProbability$sample82 = new double[((((T - 1) - 0) / 1) + 1)];
+			}
+			{
+				logProbability$sample149 = new double[((((T - 1) - 0) / 1) + 1)];
+			}
+		}
+
+		final int[][] get$Avail() {
+			return Avail;
+		}
+
+		final void set$Avail(int[][] cv$value, boolean allocated$) {
+			Avail = cv$value;
+		}
+
+		final int[][] get$ObsSales() {
+			return ObsSales;
+		}
+
+		final void set$ObsSales(int[][] cv$value, boolean allocated$) {
+			ObsSales = cv$value;
+		}
+
+		final int[][] get$Sales() {
+			return Sales;
+		}
+
+		final int get$T() {
+			return T;
+		}
+
+		final void set$T(int cv$value, boolean allocated$) {
+			T = cv$value;
+		}
+
+		final double[] get$exped() {
+			return exped;
+		}
+
+		final double[] get$expedNorm() {
+			return expedNorm;
+		}
+
+		final boolean get$fixedFlag$sample26() {
+			return fixedFlag$sample26;
+		}
+
+		final void set$fixedFlag$sample26(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample26 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
+					constrainedFlag$sample26[index$constrainedFlag$sample26$1] = true;
+			}
+			fixedProbFlag$sample26 = (fixedFlag$sample26 && fixedProbFlag$sample26);
+			fixedProbFlag$sample149 = (fixedFlag$sample26 && fixedProbFlag$sample149);
+		}
+
+		final boolean get$fixedFlag$sample82() {
+			return fixedFlag$sample82;
+		}
+
+		final void set$fixedFlag$sample82(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample82 = cv$value;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$Sales() {
+			return logProbability$Sales;
+		}
+
+		final double get$logProbability$exped() {
+			return logProbability$exped;
+		}
+
+		final double get$logProbability$expedNorm() {
+			return logProbability$expedNorm;
+		}
+
+		final double get$logProbability$sales_sum() {
+			return logProbability$sales_sum;
+		}
+
+		final double get$logProbability$sum() {
+			return logProbability$sum;
+		}
+
+		final double get$logProbability$ut() {
+			return logProbability$ut;
+		}
+
+		final int get$noProducts() {
+			return noProducts;
+		}
+
+		final void set$noProducts(int cv$value, boolean allocated$) {
+			noProducts = cv$value;
+		}
+
+		final double get$r() {
+			return r;
+		}
+
+		final void set$r(double cv$value, boolean allocated$) {
+			r = cv$value;
+		}
+
+		final int[] get$sales_sum() {
+			return sales_sum;
+		}
+
+		final double get$sum() {
+			return sum;
+		}
+
+		final double[] get$ut() {
+			return ut;
+		}
+
+		final void set$ut(double[] cv$value, boolean allocated$) {
+			ut = cv$value;
+			fixedProbFlag$sample26 = false;
+			fixedProbFlag$sample149 = false;
+		}
+	}
 
     private final ComputedObjectArrayInternal<int[]> $Sales = new ComputedObjectArrayInternal<int[]>(this, "Sales", false, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] getValue() { return system$c.get$Sales(); }
+        public int[][] getValue() { return state.get$Sales(); }
 
         @Override
         protected void setValueInternal(int[][] value) {}
@@ -30,7 +237,7 @@ public final class Vulcano2012basic2 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$Sales(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$Sales(); }
 
         @Override
         public int[][][] constructArray(int iterations) {
@@ -53,7 +260,7 @@ public final class Vulcano2012basic2 extends Model {
 
     private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$exped(); }
+        public double[] getValue() { return state.get$exped(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -64,18 +271,18 @@ public final class Vulcano2012basic2 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$exped(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$exped(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample26(fixed, allocated);
+                state.set$fixedFlag$sample26(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample26())
+            if(state.get$fixedFlag$sample26())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -87,7 +294,7 @@ public final class Vulcano2012basic2 extends Model {
 
     private final ComputedDoubleArrayInternal $expedNorm = new ComputedDoubleArrayInternal(this, "expedNorm", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$expedNorm(); }
+        public double[] getValue() { return state.get$expedNorm(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -98,18 +305,18 @@ public final class Vulcano2012basic2 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$expedNorm(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$expedNorm(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample26(fixed, allocated);
+                state.set$fixedFlag$sample26(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample26())
+            if(state.get$fixedFlag$sample26())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -123,7 +330,7 @@ public final class Vulcano2012basic2 extends Model {
 
     private final ComputedIntegerArrayInternal $sales_sum = new ComputedIntegerArrayInternal(this, "sales_sum", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$sales_sum(); }
+        public int[] getValue() { return state.get$sales_sum(); }
 
         @Override
         protected void setValueInternal(int[] value) {}
@@ -134,7 +341,7 @@ public final class Vulcano2012basic2 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$sales_sum(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$sales_sum(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -152,7 +359,7 @@ public final class Vulcano2012basic2 extends Model {
 
     private final ComputedDoubleInternal $sum = new ComputedDoubleInternal(this, "sum", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$sum(); }
+        public double getValue() { return state.get$sum(); }
 
         @Override
         protected void setValueInternal(double value) {}
@@ -163,18 +370,18 @@ public final class Vulcano2012basic2 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$sum(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$sum(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample26(fixed, allocated);
+                state.set$fixedFlag$sample26(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample26())
+            if(state.get$fixedFlag$sample26())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -186,27 +393,27 @@ public final class Vulcano2012basic2 extends Model {
 
     private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$ut(); }
+        public double[] getValue() { return state.get$ut(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$ut(value, allocated);
+            state.set$ut(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$ut(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$ut(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample26(fixed, allocated);
+                state.set$fixedFlag$sample26(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample26())
+            if(state.get$fixedFlag$sample26())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -222,12 +429,12 @@ public final class Vulcano2012basic2 extends Model {
         @Override
         public int[][] getValue() {
             synchronized(model) {
-                return system$c.get$Avail();
+                return state.get$Avail();
             }
         }
 
         @Override
-        protected void setValueInternal(int[][] value) { system$c.set$Avail(value, allocated); }
+        protected void setValueInternal(int[][] value) { state.set$Avail(value, allocated); }
     };
 
 	/** Observed variable representing Avail of type int[][] from the Sandwood model. */
@@ -237,12 +444,12 @@ public final class Vulcano2012basic2 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$T();
+                return state.get$T();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$T(value, allocated); }
+        protected void setValueInternal(int value) { state.set$T(value, allocated); }
     };
 
 	/** Observed variable representing T of type int from the Sandwood model. */
@@ -252,12 +459,12 @@ public final class Vulcano2012basic2 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$noProducts();
+                return state.get$noProducts();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noProducts(value, allocated); }
+        protected void setValueInternal(int value) { state.set$noProducts(value, allocated); }
     };
 
 	/** Observed variable representing noProducts of type int from the Sandwood model. */
@@ -267,12 +474,12 @@ public final class Vulcano2012basic2 extends Model {
         @Override
         public double getValue() {
             synchronized(model) {
-                return system$c.get$r();
+                return state.get$r();
             }
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$r(value, allocated); }
+        protected void setValueInternal(double value) { state.set$r(value, allocated); }
     };
 
 	/** Observed variable representing r of type double from the Sandwood model. */
@@ -284,12 +491,12 @@ public final class Vulcano2012basic2 extends Model {
         @Override
         public int[][] getValue() {
             synchronized(model) {
-                return system$c.get$ObsSales();
+                return state.get$ObsSales();
             }
         }
 
         @Override
-        protected void setValueInternal(int[][] value) { system$c.set$ObsSales(value, allocated); }
+        protected void setValueInternal(int[][] value) { state.set$ObsSales(value, allocated); }
     };
 
 	/**
@@ -305,6 +512,7 @@ public final class Vulcano2012basic2 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public Vulcano2012basic2() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("Sales", $Sales);
         $computedVariables.put("exped", $exped);
@@ -321,7 +529,9 @@ public final class Vulcano2012basic2 extends Model {
 
         //Observed scalar fields
         $regularObservedValues.put("ObsSales", $ObsSales);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        Vulcano2012basic2$SingleThreadCPU core = new Vulcano2012basic2$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -360,44 +570,15 @@ public final class Vulcano2012basic2 extends Model {
     }
     
     @Override
-    protected Vulcano2012basic2$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        Vulcano2012basic2$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new Vulcano2012basic2$SingleThreadCPU(target);
-                break;
+                return new Vulcano2012basic2$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new Vulcano2012basic2$MultiThreadCPU(target);
-                break;
+                return new Vulcano2012basic2$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(Vulcano2012basic2$CoreInterface oldCore, Vulcano2012basic2$CoreInterface newCore) {
-        //Model inputs
-        if(Avail.isSet())
-            newCore.set$Avail(oldCore.get$Avail(), false);
-        if(T.isSet())
-            newCore.set$T(oldCore.get$T(), false);
-        if(noProducts.isSet())
-            newCore.set$noProducts(oldCore.get$noProducts(), false);
-        if(r.isSet())
-            newCore.set$r(oldCore.get$r(), false);
-
-        //Observed scalars
-        if(ObsSales.isSet())
-            newCore.set$ObsSales(oldCore.get$ObsSales(), false);
-
-        //ComputedVariables
-        if($ut.isSet())
-            newCore.set$ut(oldCore.get$ut(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample26(oldCore.get$fixedFlag$sample26(), false);
     }
 
 	/**

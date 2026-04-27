@@ -1,147 +1,40 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.RaggedArray3$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.RaggedArray3.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implements RaggedArray3$CoreInterface {
+final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double[][] a;
-	boolean constrainedFlag$sample39 = true;
-	double[] d;
-	boolean fixedFlag$sample39 = false;
-	boolean fixedProbFlag$sample39 = false;
-	boolean fixedProbFlag$sample53 = false;
-	int length$obs_measured;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$d;
-	double logProbability$obs;
-	double logProbability$var51;
-	int[] obs;
-	int[] obs_measured;
-	boolean system$gibbsForward = true;
-	int y;
-	double[] cv$var37$countGlobal;
+		// Declare the scratch variables for the model.
+		double[] cv$var37$countGlobal;
 
-	public RaggedArray3$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Variable to record the maximum value of Task Get 37. Initially set to the value
+			// of putTask 17.
+			int cv$var34$max = 2;
+			
+			// Test if the input to putTask 35 is larger than the current values.
+			cv$var34$max = Math.max(cv$var34$max, 3);
+			
+			// Allocation of cv$var37$countGlobal for single threaded execution
+			cv$var37$countGlobal = new double[cv$var34$max];
+		}
 	}
 
-	// Getter for a.
-	@Override
-	public final double[][] get$a() {
-		return a;
-	}
 
-	// Getter for d.
-	@Override
-	public final double[] get$d() {
-		return d;
-	}
-
-	// Setter for d.
-	@Override
-	public final void set$d(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of d including if probabilities need to be updated.
-		d = cv$value;
-		
-		// Unset the fixed probability flag for sample 39 as it depends on d.
-		fixedProbFlag$sample39 = false;
-		
-		// Unset the fixed probability flag for sample 53 as it depends on d.
-		fixedProbFlag$sample53 = false;
-	}
-
-	// Getter for fixedFlag$sample39.
-	@Override
-	public final boolean get$fixedFlag$sample39() {
-		return fixedFlag$sample39;
-	}
-
-	// Setter for fixedFlag$sample39.
-	@Override
-	public final void set$fixedFlag$sample39(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample39 including if probabilities
-		// need to be updated.
-		fixedFlag$sample39 = cv$value;
-		constrainedFlag$sample39 = (fixedFlag$sample39 || constrainedFlag$sample39);
-		
-		// Should the probability of sample 39 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample39 = (fixedFlag$sample39 && fixedProbFlag$sample39);
-		
-		// Should the probability of sample 53 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample53 = (fixedFlag$sample39 && fixedProbFlag$sample53);
-	}
-
-	// Getter for length$obs_measured.
-	@Override
-	public final int get$length$obs_measured() {
-		return length$obs_measured;
-	}
-
-	// Setter for length$obs_measured.
-	@Override
-	public final void set$length$obs_measured(int cv$value, boolean allocated$) {
-		length$obs_measured = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$d.
-	@Override
-	public final double get$logProbability$d() {
-		return logProbability$d;
-	}
-
-	// Getter for logProbability$obs.
-	@Override
-	public final double get$logProbability$obs() {
-		return logProbability$obs;
-	}
-
-	// Getter for obs.
-	@Override
-	public final int[] get$obs() {
-		return obs;
-	}
-
-	// Getter for obs_measured.
-	@Override
-	public final int[] get$obs_measured() {
-		return obs_measured;
-	}
-
-	// Setter for obs_measured.
-	@Override
-	public final void set$obs_measured(int[] cv$value, boolean allocated$) {
-		obs_measured = cv$value;
-	}
-
-	// Getter for y.
-	@Override
-	public final int get$y() {
-		return y;
-	}
-
-	// Setter for y.
-	@Override
-	public final void set$y(int cv$value, boolean allocated$) {
-		y = cv$value;
+	public RaggedArray3$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample39
@@ -154,7 +47,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
 			{
-				if((0 == y))
+				if((0 == state.y))
 					lengthCV$a$37_3 = 2;
 			}
 		}
@@ -162,11 +55,11 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
 			{
-				if((1 == y))
+				if((1 == state.y))
 					lengthCV$a$37_3 = 3;
 			}
 		}
-		DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_3, d);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.a[state.y], lengthCV$a$37_3, state.d);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -174,13 +67,13 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	// to Categorical conjugate prior.
 	private final void inferSample39() {
 		if(true) {
-			constrainedFlag$sample39 = false;
+			state.constrainedFlag$sample39 = false;
 			
 			// A reference local to the function for the sample variable.
-			double[] cv$targetLocal = d;
+			double[] cv$targetLocal = state.d;
 			
 			// A local reference to the scratch space.
-			double[] cv$countLocal = cv$var37$countGlobal;
+			double[] cv$countLocal = scratch.cv$var37$countGlobal;
 			
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$a$37_1 = -1;
@@ -190,7 +83,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Looking for a path between Put 17 and consumer double[] 35.
 			{
 				{
-					if((0 == y))
+					if((0 == state.y))
 						lengthCV$a$37_1 = 2;
 				}
 			}
@@ -198,7 +91,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// Looking for a path between Put 35 and consumer double[] 35.
 			{
 				{
-					if((1 == y))
+					if((1 == state.y))
 						lengthCV$a$37_1 = 3;
 				}
 			}
@@ -217,12 +110,12 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 							// Processing sample task 53 of consumer random variable null.
 							{
 								{
-									for(int var50 = 0; var50 < length$obs_measured; var50 += 1) {
+									for(int var50 = 0; var50 < state.length$obs_measured; var50 += 1) {
 										// Flag recording if this sample task of the consuming random variable is constrained.
 										boolean cv$sampleConstrained = true;
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample39 = true;
+											state.constrainedFlag$sample39 = true;
 											{
 												{
 													{
@@ -230,7 +123,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 															{
 																// Increment the sample counter with the value sampled by sample task 53 of random
 																// variable var38
-																cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+																cv$countLocal[state.obs[var50]] = (cv$countLocal[state.obs[var50]] + 1.0);
 															}
 														}
 													}
@@ -244,7 +137,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 					}
 				}
 			}
-			if(constrainedFlag$sample39) {
+			if(state.constrainedFlag$sample39) {
 				// Allocate a local variable to hold the length of the array.
 				int lengthCV$a$37_2 = -1;
 				
@@ -253,7 +146,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				// Looking for a path between Put 17 and consumer double[] 35.
 				{
 					{
-						if((0 == y))
+						if((0 == state.y))
 							lengthCV$a$37_2 = 2;
 					}
 				}
@@ -261,7 +154,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				// Looking for a path between Put 35 and consumer double[] 35.
 				{
 					{
-						if((1 == y))
+						if((1 == state.y))
 							lengthCV$a$37_2 = 3;
 					}
 				}
@@ -269,7 +162,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				// Calculate the new sample value
 				// 
 				// Calculate a new sample value and write it into cv$targetLocal.
-				Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal, lengthCV$a$37_2);
+				Conjugates.sampleConjugateDirichletCategorical(state.RNG$, state.a[state.y], cv$countLocal, cv$targetLocal, lengthCV$a$37_2);
 			}
 		}
 	}
@@ -279,7 +172,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	private final void logProbabilityValue$sample39() {
 		// Determine if we need to calculate the values for sample task 39 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample39) {
+		if(!state.fixedProbFlag$sample39) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -295,10 +188,10 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double[] cv$sampleValue = d;
+					double[] cv$sampleValue = state.d;
 					{
 						{
-							double[] var35 = a[y];
+							double[] var35 = state.a[state.y];
 							
 							// Allocate a local variable to hold the length of the array.
 							int lengthCV$a$37_4 = -1;
@@ -308,7 +201,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 							// Looking for a path between Put 17 and consumer double[] 35.
 							{
 								{
-									if((0 == y))
+									if((0 == state.y))
 										lengthCV$a$37_4 = 2;
 								}
 							}
@@ -316,7 +209,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 							// Looking for a path between Put 35 and consumer double[] 35.
 							{
 								{
-									if((1 == y))
+									if((1 == state.y))
 										lengthCV$a$37_4 = 3;
 								}
 							}
@@ -357,19 +250,19 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$d = cv$sampleProbability;
+			state.logProbability$d = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample39)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample39)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample39 = fixedFlag$sample39;
+			state.fixedProbFlag$sample39 = state.fixedFlag$sample39;
 		} else {
 			// Using cached values.
 			// 
@@ -377,17 +270,17 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$d;
+			double cv$sampleValue = state.logProbability$d;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample39)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample39)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -396,7 +289,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	private final void logProbabilityValue$sample53() {
 		// Determine if we need to calculate the values for sample task 53 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample53) {
+		if(!state.fixedProbFlag$sample53) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -406,7 +299,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var50 = 0; var50 < length$obs_measured; var50 += 1) {
+			for(int var50 = 0; var50 < state.length$obs_measured; var50 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -415,7 +308,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 				{
 					{
 						// The sample value to calculate the probability of generating
-						int cv$sampleValue = obs[var50];
+						int cv$sampleValue = state.obs[var50];
 						{
 							{
 								// Allocate a local variable to hold the length of the array.
@@ -426,7 +319,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 								// Looking for a path between Put 17 and consumer double[] 35.
 								{
 									{
-										if((0 == y))
+										if((0 == state.y))
 											lengthCV$a$37_5 = 2;
 									}
 								}
@@ -434,13 +327,13 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 								// Looking for a path between Put 35 and consumer double[] 35.
 								{
 									{
-										if((1 == y))
+										if((1 == state.y))
 											lengthCV$a$37_5 = 3;
 									}
 								}
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_5)) && (0 < lengthCV$a$37_5)) && (0.0 <= d[cv$sampleValue])) && (d[cv$sampleValue] <= 1.0))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_5)) && (0 < lengthCV$a$37_5)) && (0.0 <= state.d[cv$sampleValue])) && (state.d[cv$sampleValue] <= 1.0))?Math.log(state.d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -479,18 +372,18 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the random variable instance probability
-			logProbability$var51 = cv$sampleAccumulator;
+			state.logProbability$var51 = cv$sampleAccumulator;
 			
 			// Update the variable probability
-			logProbability$obs = (logProbability$obs + cv$accumulator);
+			state.logProbability$obs = (state.logProbability$obs + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample53 = fixedFlag$sample39;
+			state.fixedProbFlag$sample53 = state.fixedFlag$sample39;
 		} else {
 			// Using cached values.
 			// 
@@ -501,83 +394,20 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
+			for(int var50 = 0; var50 < state.length$obs_measured; var50 += 1)
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var51;
+			double cv$sampleValue = state.logProbability$var51;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$obs = (logProbability$obs + cv$accumulator);
+			state.logProbability$obs = (state.logProbability$obs + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for a
-		{
-			a = new double[2][];
-			a[0] = new double[2];
-			a[1] = new double[3];
-		}
-		
-		// If d has not been set already allocate space.
-		if(!fixedFlag$sample39) {
-			// Constructor for d
-			{
-				// Allocate a local variable to hold the length of the array.
-				int lengthCV$a$37_0 = -1;
-				
-				// calculate array length.
-				// 
-				// Looking for a path between Put 17 and consumer double[] 35.
-				{
-					{
-						if((0 == y))
-							lengthCV$a$37_0 = 2;
-					}
-				}
-				
-				// Looking for a path between Put 35 and consumer double[] 35.
-				{
-					{
-						if((1 == y))
-							lengthCV$a$37_0 = 3;
-					}
-				}
-				d = new double[lengthCV$a$37_0];
-			}
-		}
-		
-		// Constructor for obs
-		{
-			obs = new int[length$obs_measured];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Variable to record the maximum value of Task Get 37. Initially set to the value
-		// of putTask 17.
-		int cv$var34$max = 2;
-		
-		// Test if the input to putTask 35 is larger than the current values.
-		cv$var34$max = Math.max(cv$var34$max, 3);
-		
-		// Allocation of cv$var37$countGlobal for single threaded execution
-		cv$var37$countGlobal = new double[cv$var34$max];
 	}
 
 	// Method to execute the model code conventionally.
@@ -591,8 +421,8 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
 			{
-				if((0 == y)) {
-					if(!fixedFlag$sample39)
+				if((0 == state.y)) {
+					if(!state.fixedFlag$sample39)
 						lengthCV$a$37_6 = 2;
 				}
 			}
@@ -601,14 +431,14 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
 			{
-				if((1 == y)) {
-					if(!fixedFlag$sample39)
+				if((1 == state.y)) {
+					if(!state.fixedFlag$sample39)
 						lengthCV$a$37_6 = 3;
 				}
 			}
 		}
-		if(!fixedFlag$sample39)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_6, d);
+		if(!state.fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.a[state.y], lengthCV$a$37_6, state.d);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$a$37_7 = -1;
@@ -618,7 +448,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
 			{
-				if((0 == y))
+				if((0 == state.y))
 					lengthCV$a$37_7 = 2;
 			}
 		}
@@ -626,12 +456,12 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
 			{
-				if((1 == y))
+				if((1 == state.y))
 					lengthCV$a$37_7 = 3;
 			}
 		}
-		for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
-			obs[var50] = DistributionSampling.sampleCategorical(RNG$, d, lengthCV$a$37_7);
+		for(int var50 = 0; var50 < state.length$obs_measured; var50 += 1)
+			state.obs[var50] = DistributionSampling.sampleCategorical(state.RNG$, state.d, lengthCV$a$37_7);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -647,8 +477,8 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
 			{
-				if((0 == y)) {
-					if(!fixedFlag$sample39)
+				if((0 == state.y)) {
+					if(!state.fixedFlag$sample39)
 						lengthCV$a$37_12 = 2;
 				}
 			}
@@ -657,14 +487,14 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
 			{
-				if((1 == y)) {
-					if(!fixedFlag$sample39)
+				if((1 == state.y)) {
+					if(!state.fixedFlag$sample39)
 						lengthCV$a$37_12 = 3;
 				}
 			}
 		}
-		if(!fixedFlag$sample39)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_12, d);
+		if(!state.fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.a[state.y], lengthCV$a$37_12, state.d);
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
@@ -679,8 +509,8 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
 			{
-				if((0 == y)) {
-					if(!fixedFlag$sample39)
+				if((0 == state.y)) {
+					if(!state.fixedFlag$sample39)
 						lengthCV$a$37_8 = 2;
 				}
 			}
@@ -689,14 +519,14 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
 			{
-				if((1 == y)) {
-					if(!fixedFlag$sample39)
+				if((1 == state.y)) {
+					if(!state.fixedFlag$sample39)
 						lengthCV$a$37_8 = 3;
 				}
 			}
 		}
-		if(!fixedFlag$sample39)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_8, d);
+		if(!state.fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.a[state.y], lengthCV$a$37_8, state.d);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$a$37_9 = -1;
@@ -706,7 +536,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
 			{
-				if((0 == y))
+				if((0 == state.y))
 					lengthCV$a$37_9 = 2;
 			}
 		}
@@ -714,12 +544,12 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
 			{
-				if((1 == y))
+				if((1 == state.y))
 					lengthCV$a$37_9 = 3;
 			}
 		}
-		for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
-			obs[var50] = DistributionSampling.sampleCategorical(RNG$, d, lengthCV$a$37_9);
+		for(int var50 = 0; var50 < state.length$obs_measured; var50 += 1)
+			state.obs[var50] = DistributionSampling.sampleCategorical(state.RNG$, state.d, lengthCV$a$37_9);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -734,8 +564,8 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
 			{
-				if((0 == y)) {
-					if(!fixedFlag$sample39)
+				if((0 == state.y)) {
+					if(!state.fixedFlag$sample39)
 						lengthCV$a$37_10 = 2;
 				}
 			}
@@ -744,14 +574,14 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
 			{
-				if((1 == y)) {
-					if(!fixedFlag$sample39)
+				if((1 == state.y)) {
+					if(!state.fixedFlag$sample39)
 						lengthCV$a$37_10 = 3;
 				}
 			}
 		}
-		if(!fixedFlag$sample39)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_10, d);
+		if(!state.fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.a[state.y], lengthCV$a$37_10, state.d);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -767,8 +597,8 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
 			{
-				if((0 == y)) {
-					if(!fixedFlag$sample39)
+				if((0 == state.y)) {
+					if(!state.fixedFlag$sample39)
 						lengthCV$a$37_11 = 2;
 				}
 			}
@@ -777,33 +607,33 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
 			{
-				if((1 == y)) {
-					if(!fixedFlag$sample39)
+				if((1 == state.y)) {
+					if(!state.fixedFlag$sample39)
 						lengthCV$a$37_11 = 3;
 				}
 			}
 		}
-		if(!fixedFlag$sample39)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_11, d);
+		if(!state.fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.a[state.y], lengthCV$a$37_11, state.d);
 	}
 
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample39)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample39)
 				inferSample39();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample39)
+			if(!state.fixedFlag$sample39)
 				inferSample39();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample39)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample39)
 			drawValueSample39();
 	}
 
@@ -815,23 +645,23 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample39)
-			logProbability$d = Double.NaN;
-		logProbability$obs = 0.0;
-		if(!fixedProbFlag$sample53)
-			logProbability$var51 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample39)
+			state.logProbability$d = Double.NaN;
+		state.logProbability$obs = 0.0;
+		if(!state.fixedProbFlag$sample53)
+			state.logProbability$var51 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		double[] var6 = a[0];
+		double[] var6 = state.a[0];
 		var6[0] = 0.4;
 		var6[1] = 0.6;
-		double[] var19 = a[1];
+		double[] var19 = state.a[1];
 		var19[0] = 0.2;
 		var19[1] = 0.3;
 		var19[2] = 0.5;
@@ -844,7 +674,7 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample39)
+		if(state.fixedFlag$sample39)
 			logProbabilityValue$sample39();
 		logProbabilityValue$sample53();
 	}
@@ -890,8 +720,8 @@ final class RaggedArray3$SingleThreadCPU extends CoreModelSingleThreadCPU implem
 	@Override
 	public final void propagateObservedValues() {
 		// Deep copy between arrays
-		int[] cv$source1 = obs_measured;
-		int[] cv$target1 = obs;
+		int[] cv$source1 = state.obs_measured;
+		int[] cv$target1 = state.obs;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			cv$target1[cv$index1] = cv$source1[cv$index1];

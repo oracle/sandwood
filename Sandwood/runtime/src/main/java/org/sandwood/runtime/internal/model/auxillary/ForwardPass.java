@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.sandwood.runtime.internal.model.CoreModel;
+import org.sandwood.runtime.internal.model.CoreModelBase;
 import org.sandwood.runtime.internal.model.variables.ComputedVariableInternal;
 import org.sandwood.runtime.model.RetentionPolicy;
 
@@ -33,7 +33,7 @@ public class ForwardPass {
      *                          each iteration by this model.
      * @param core              The core that each iteration will be performed by and one.
      */
-    public static void forward(int iterations, Collection<ComputedVariableInternal> computedVariables, CoreModel core) {
+    public static void forward(int iterations, Collection<ComputedVariableInternal> computedVariables, CoreModelBase<?,?> core) {
         List<ComputedVariableInternal> toSample = new ArrayList<>();
         for(ComputedVariableInternal c:computedVariables) {
             RetentionPolicy r = c.getRetentionPolicy();

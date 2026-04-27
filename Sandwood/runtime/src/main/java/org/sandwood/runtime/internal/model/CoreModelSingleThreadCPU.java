@@ -10,14 +10,18 @@ package org.sandwood.runtime.internal.model;
 
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.model.ExecutionTarget;
 
 /**
  * A class to hold any boilerplate code associated with single threaded execution. This will probably end up being null
  * methods for setting thread counts etc.
  */
-public abstract class CoreModelSingleThreadCPU<S extends CoreModelScratch> extends CoreModelBase<S> {
-    protected CoreModelSingleThreadCPU(ExecutionTarget target) {
+public abstract class CoreModelSingleThreadCPU<STATE extends CoreModelState, SCRATCH extends CoreModelScratch>
+        extends CoreModelBase<STATE, SCRATCH> {
+    protected CoreModelSingleThreadCPU(STATE state, ExecutionTarget target) {
+        super(state);
         if(target != ExecutionTarget.singleThread)
             throw new SandwoodRuntimeException(
                     "Unexpected execution target for this backend. Target " + target + " was passed as an argument");

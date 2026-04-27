@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,32 +16,393 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model HMMTestPart3d This is the class that all
  * user interactions with the model should occur through.
  */
-public final class HMMTestPart3d extends Model {
-    private HMMTestPart3d$CoreInterface system$c = new HMMTestPart3d$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class HMMTestPart3d extends Model<HMMTestPart3d.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		double[] bias;
+		boolean[] constrainedFlag$sample28;
+		boolean[] constrainedFlag$sample45;
+		boolean constrainedFlag$sample54 = true;
+		boolean[] constrainedFlag$sample79;
+		boolean fixedFlag$sample28 = false;
+		boolean fixedFlag$sample45 = false;
+		boolean fixedFlag$sample54 = false;
+		boolean fixedFlag$sample79 = false;
+		boolean fixedProbFlag$sample119 = false;
+		boolean fixedProbFlag$sample28 = false;
+		boolean fixedProbFlag$sample45 = false;
+		boolean fixedProbFlag$sample54 = false;
+		boolean fixedProbFlag$sample79 = false;
+		boolean[] flips;
+		boolean[] flipsMeasured;
+		int[][] indirection;
+		int length$flipsMeasured;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$bias;
+		double logProbability$flips;
+		double logProbability$m;
+		double[] logProbability$sample79;
+		double logProbability$st;
+		double logProbability$st2;
+		double logProbability$var118;
+		double logProbability$var28;
+		double logProbability$var44;
+		double logProbability$var53;
+		double[][] m;
+		int samples;
+		int[] st;
+		int[] st2;
+		int states;
+		boolean system$gibbsForward = true;
+		double[] v;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// Constructor for v
+			v = new double[2];
+			
+			// If m has not been set already allocate space.
+			if(!fixedFlag$sample28) {
+				// Constructor for m
+				m = new double[2][];
+				m[0] = new double[2];
+				m[1] = new double[2];
+			}
+			
+			// If bias has not been set already allocate space.
+			if(!fixedFlag$sample45)
+				// Constructor for bias
+				bias = new double[2];
+			
+			// If st has not been set already allocate space.
+			if((!fixedFlag$sample54 || !fixedFlag$sample79))
+				// Constructor for st
+				st = new int[length$flipsMeasured];
+			
+			// Constructor for st2
+			st2 = new int[length$flipsMeasured];
+			
+			// Constructor for indirection
+			indirection = new int[(length$flipsMeasured - 1)][];
+			for(int i$var71 = 1; i$var71 < length$flipsMeasured; i$var71 += 1)
+				indirection[(i$var71 - 1)] = new int[(i$var71 + 1)];
+			
+			// Constructor for flips
+			flips = new boolean[length$flipsMeasured];
+			
+			// Constructor for constrainedFlag$sample79
+			constrainedFlag$sample79 = new boolean[(length$flipsMeasured - 1)];
+			
+			// Constructor for constrainedFlag$sample45
+			constrainedFlag$sample45 = new boolean[2];
+			
+			// Constructor for constrainedFlag$sample28
+			constrainedFlag$sample28 = new boolean[2];
+			
+			// Constructor for logProbability$sample79
+			logProbability$sample79 = new double[(length$flipsMeasured - 1)];
+		}
+
+		// Getter for bias.
+		final double[] get$bias() {
+			return bias;
+		}
+
+		// Setter for bias.
+		final void set$bias(double[] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of bias including if probabilities need to be
+			// updated.
+			bias = cv$value;
+			
+			// Unset the fixed probability flag for sample 45 as it depends on bias.
+			fixedProbFlag$sample45 = false;
+			
+			// Unset the fixed probability flag for sample 119 as it depends on bias.
+			fixedProbFlag$sample119 = false;
+		}
+
+		// Getter for fixedFlag$sample28.
+		final boolean get$fixedFlag$sample28() {
+			return fixedFlag$sample28;
+		}
+
+		// Setter for fixedFlag$sample28.
+		final void set$fixedFlag$sample28(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample28 including if probabilities
+			// need to be updated.
+			fixedFlag$sample28 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
+					constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
+			}
+			
+			// Should the probability of sample 28 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample28" with its value "cv$value".
+			fixedProbFlag$sample28 = (cv$value && fixedProbFlag$sample28);
+			
+			// Should the probability of sample 54 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample28" with its value "cv$value".
+			fixedProbFlag$sample54 = (cv$value && fixedProbFlag$sample54);
+			
+			// Should the probability of sample 79 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample28" with its value "cv$value".
+			fixedProbFlag$sample79 = (cv$value && fixedProbFlag$sample79);
+		}
+
+		// Getter for fixedFlag$sample45.
+		final boolean get$fixedFlag$sample45() {
+			return fixedFlag$sample45;
+		}
+
+		// Setter for fixedFlag$sample45.
+		final void set$fixedFlag$sample45(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample45 including if probabilities
+			// need to be updated.
+			fixedFlag$sample45 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample45$1 = 0; index$constrainedFlag$sample45$1 < constrainedFlag$sample45.length; index$constrainedFlag$sample45$1 += 1)
+					constrainedFlag$sample45[index$constrainedFlag$sample45$1] = true;
+			}
+			
+			// Should the probability of sample 45 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample45" with its value "cv$value".
+			fixedProbFlag$sample45 = (cv$value && fixedProbFlag$sample45);
+			
+			// Should the probability of sample 119 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample45" with its value "cv$value".
+			fixedProbFlag$sample119 = (cv$value && fixedProbFlag$sample119);
+		}
+
+		// Getter for fixedFlag$sample54.
+		final boolean get$fixedFlag$sample54() {
+			return fixedFlag$sample54;
+		}
+
+		// Setter for fixedFlag$sample54.
+		final void set$fixedFlag$sample54(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample54 including if probabilities
+			// need to be updated.
+			fixedFlag$sample54 = cv$value;
+			
+			// Substituted "fixedFlag$sample54" with its value "cv$value".
+			constrainedFlag$sample54 = (cv$value || constrainedFlag$sample54);
+			
+			// Should the probability of sample 54 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample54" with its value "cv$value".
+			fixedProbFlag$sample54 = (cv$value && fixedProbFlag$sample54);
+			
+			// Should the probability of sample 79 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample54" with its value "cv$value".
+			fixedProbFlag$sample79 = (cv$value && fixedProbFlag$sample79);
+			
+			// Should the probability of sample 119 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample54" with its value "cv$value".
+			fixedProbFlag$sample119 = (cv$value && fixedProbFlag$sample119);
+		}
+
+		// Getter for fixedFlag$sample79.
+		final boolean get$fixedFlag$sample79() {
+			return fixedFlag$sample79;
+		}
+
+		// Setter for fixedFlag$sample79.
+		final void set$fixedFlag$sample79(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample79 including if probabilities
+			// need to be updated.
+			fixedFlag$sample79 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample79$1 = 0; index$constrainedFlag$sample79$1 < constrainedFlag$sample79.length; index$constrainedFlag$sample79$1 += 1)
+					constrainedFlag$sample79[index$constrainedFlag$sample79$1] = true;
+			}
+			
+			// Should the probability of sample 79 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample79" with its value "cv$value".
+			fixedProbFlag$sample79 = (cv$value && fixedProbFlag$sample79);
+			
+			// Should the probability of sample 119 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample79" with its value "cv$value".
+			fixedProbFlag$sample119 = (cv$value && fixedProbFlag$sample119);
+		}
+
+		// Getter for flips.
+		final boolean[] get$flips() {
+			return flips;
+		}
+
+		// Getter for flipsMeasured.
+		final boolean[] get$flipsMeasured() {
+			return flipsMeasured;
+		}
+
+		// Setter for flipsMeasured.
+		final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
+			flipsMeasured = cv$value;
+		}
+
+		// Getter for length$flipsMeasured.
+		final int get$length$flipsMeasured() {
+			return length$flipsMeasured;
+		}
+
+		// Setter for length$flipsMeasured.
+		final void set$length$flipsMeasured(int cv$value, boolean allocated$) {
+			length$flipsMeasured = cv$value;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$bias.
+		final double get$logProbability$bias() {
+			return logProbability$bias;
+		}
+
+		// Getter for logProbability$flips.
+		final double get$logProbability$flips() {
+			return logProbability$flips;
+		}
+
+		// Getter for logProbability$m.
+		final double get$logProbability$m() {
+			return logProbability$m;
+		}
+
+		// Getter for logProbability$st.
+		final double get$logProbability$st() {
+			return logProbability$st;
+		}
+
+		// Getter for logProbability$st2.
+		final double get$logProbability$st2() {
+			return logProbability$st2;
+		}
+
+		// Getter for m.
+		final double[][] get$m() {
+			return m;
+		}
+
+		// Setter for m.
+		final void set$m(double[][] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of m including if probabilities need to be updated.
+			m = cv$value;
+			
+			// Unset the fixed probability flag for sample 28 as it depends on m.
+			fixedProbFlag$sample28 = false;
+			
+			// Unset the fixed probability flag for sample 54 as it depends on m.
+			fixedProbFlag$sample54 = false;
+			
+			// Unset the fixed probability flag for sample 79 as it depends on m.
+			fixedProbFlag$sample79 = false;
+		}
+
+		// Getter for samples.
+		final int get$samples() {
+			return samples;
+		}
+
+		// Getter for st.
+		final int[] get$st() {
+			return st;
+		}
+
+		// Setter for st.
+		final void set$st(int[] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of st including if probabilities need to be
+			// updated.
+			st = cv$value;
+			
+			// Unset the fixed probability flag for sample 54 as it depends on st.
+			fixedProbFlag$sample54 = false;
+			
+			// Unset the fixed probability flag for sample 79 as it depends on st.
+			fixedProbFlag$sample79 = false;
+			
+			// Unset the fixed probability flag for sample 119 as it depends on st.
+			fixedProbFlag$sample119 = false;
+		}
+
+		// Getter for st2.
+		final int[] get$st2() {
+			return st2;
+		}
+
+		// Getter for states.
+		final int get$states() {
+			return 2;
+		}
+
+		// Getter for v.
+		final double[] get$v() {
+			return v;
+		}
+	}
 
     private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$bias(); }
+        public double[] getValue() { return state.get$bias(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$bias(value, allocated);
+            state.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$bias(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$bias(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample45(fixed, allocated);
+                state.set$fixedFlag$sample45(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample45())
+            if(state.get$fixedFlag$sample45())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -51,7 +414,7 @@ public final class HMMTestPart3d extends Model {
 
     private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$flips(); }
+        public boolean[] getValue() { return state.get$flips(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -62,7 +425,7 @@ public final class HMMTestPart3d extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flips(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flips(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -80,16 +443,16 @@ public final class HMMTestPart3d extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$m(); }
+        public double[][] getValue() { return state.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$m(value, allocated);
+            state.set$m(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$m(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$m(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -99,13 +462,13 @@ public final class HMMTestPart3d extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample28(fixed, allocated);
+                state.set$fixedFlag$sample28(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample28())
+            if(state.get$fixedFlag$sample28())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -117,29 +480,29 @@ public final class HMMTestPart3d extends Model {
 
     private final ComputedIntegerArrayInternal $st = new ComputedIntegerArrayInternal(this, "st", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$st(); }
+        public int[] getValue() { return state.get$st(); }
 
         @Override
         protected void setValueInternal(int[] value) {
-            system$c.set$st(value, allocated);
+            state.set$st(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$st(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$st(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample54(fixed, allocated);
-                system$c.set$fixedFlag$sample79(fixed, allocated);
+                state.set$fixedFlag$sample54(fixed, allocated);
+                state.set$fixedFlag$sample79(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample54 = system$c.get$fixedFlag$sample54();
-            boolean fixedFlag$sample79 = system$c.get$fixedFlag$sample79();
+            boolean fixedFlag$sample54 = state.get$fixedFlag$sample54();
+            boolean fixedFlag$sample79 = state.get$fixedFlag$sample79();
             if(fixedFlag$sample54 && fixedFlag$sample79)
                 return Immutability.FIXED;
             else if(fixedFlag$sample54 || fixedFlag$sample79)
@@ -154,7 +517,7 @@ public final class HMMTestPart3d extends Model {
 
     private final ComputedIntegerArrayInternal $st2 = new ComputedIntegerArrayInternal(this, "st2", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$st2(); }
+        public int[] getValue() { return state.get$st2(); }
 
         @Override
         protected void setValueInternal(int[] value) {}
@@ -165,20 +528,20 @@ public final class HMMTestPart3d extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$st2(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$st2(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample54(fixed, allocated);
-                system$c.set$fixedFlag$sample79(fixed, allocated);
+                state.set$fixedFlag$sample54(fixed, allocated);
+                state.set$fixedFlag$sample79(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample54 = system$c.get$fixedFlag$sample54();
-            boolean fixedFlag$sample79 = system$c.get$fixedFlag$sample79();
+            boolean fixedFlag$sample54 = state.get$fixedFlag$sample54();
+            boolean fixedFlag$sample79 = state.get$fixedFlag$sample79();
             if(fixedFlag$sample54 && fixedFlag$sample79)
                 return Immutability.FIXED;
             else if(fixedFlag$sample54 || fixedFlag$sample79)
@@ -199,24 +562,24 @@ public final class HMMTestPart3d extends Model {
         @Override
         public boolean[] getValue() {
             synchronized(model) {
-                return system$c.get$flipsMeasured();
+                return state.get$flipsMeasured();
             }
         }
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$flipsMeasured(value, allocated);
-            system$c.set$length$flipsMeasured(value.length, allocated);
+            state.set$flipsMeasured(value, allocated);
+            state.set$length$flipsMeasured(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$flipsMeasured(shape, allocated);
+            state.set$length$flipsMeasured(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$flipsMeasured();
+            return state.get$length$flipsMeasured();
         }
     };
 
@@ -234,6 +597,7 @@ public final class HMMTestPart3d extends Model {
 	/** A constructor for a model where no variable values are set. */
     public HMMTestPart3d() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("bias", $bias);
         $computedVariables.put("flips", $flips);
@@ -243,7 +607,9 @@ public final class HMMTestPart3d extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("flipsMeasured", $flipsMeasured);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        HMMTestPart3d$SingleThreadCPU core = new HMMTestPart3d$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -269,46 +635,15 @@ public final class HMMTestPart3d extends Model {
     }
     
     @Override
-    protected HMMTestPart3d$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        HMMTestPart3d$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new HMMTestPart3d$SingleThreadCPU(target);
-                break;
+                return new HMMTestPart3d$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new HMMTestPart3d$MultiThreadCPU(target);
-                break;
+                return new HMMTestPart3d$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(HMMTestPart3d$CoreInterface oldCore, HMMTestPart3d$CoreInterface newCore) {
-
-        //Observed arrays
-        if(flipsMeasured.isSet()) {
-            newCore.set$flipsMeasured(oldCore.get$flipsMeasured(), false);
-            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured(), false);
-        }
-        else if(flipsMeasured.shapeSet())
-            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured(), false);
-
-        //ComputedVariables
-        if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias(), false);
-        if($m.isSet())
-            newCore.set$m(oldCore.get$m(), false);
-        if($st.isSet())
-            newCore.set$st(oldCore.get$st(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28(), false);
-        newCore.set$fixedFlag$sample45(oldCore.get$fixedFlag$sample45(), false);
-        newCore.set$fixedFlag$sample54(oldCore.get$fixedFlag$sample54(), false);
-        newCore.set$fixedFlag$sample79(oldCore.get$fixedFlag$sample79(), false);
     }
 
 	/**

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,32 +16,216 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model Flip1CoinMK5 This is the class that all user
  * interactions with the model should occur through.
  */
-public final class Flip1CoinMK5 extends Model {
-    private Flip1CoinMK5$CoreInterface system$c = new Flip1CoinMK5$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class Flip1CoinMK5 extends Model<Flip1CoinMK5.State> {
+	final class State extends CoreModelState {
+
+		// Declare the variables for the model.
+		double bias;
+		boolean constrainedFlag$sample9 = true;
+		boolean fixedFlag$sample9 = false;
+		boolean fixedProbFlag$sample22 = false;
+		boolean fixedProbFlag$sample36 = false;
+		boolean fixedProbFlag$sample9 = false;
+		boolean[] flips1;
+		boolean[] flips2;
+		boolean[] flipsMeasured1;
+		boolean[] flipsMeasured2;
+		int length$flipsMeasured1;
+		int length$flipsMeasured2;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$bernoulli1;
+		double logProbability$bernoulli2;
+		double logProbability$bias;
+		double logProbability$flips1;
+		double logProbability$flips2;
+		double logProbability$var22;
+		double logProbability$var36;
+		int samples1;
+		int samples2;
+		boolean system$gibbsForward = true;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// Constructor for flips1
+			{
+				flips1 = new boolean[length$flipsMeasured1];
+			}
+			
+			// Constructor for flips2
+			{
+				flips2 = new boolean[length$flipsMeasured2];
+			}
+		}
+
+		// Getter for bias.
+		final double get$bias() {
+			return bias;
+		}
+
+		// Setter for bias.
+		final void set$bias(double cv$value, boolean allocated$) {
+			// Set flags for all the side effects of bias including if probabilities need to be
+			// updated.
+			bias = cv$value;
+			
+			// Unset the fixed probability flag for sample 9 as it depends on bias.
+			fixedProbFlag$sample9 = false;
+			
+			// Unset the fixed probability flag for sample 22 as it depends on bias.
+			fixedProbFlag$sample22 = false;
+			
+			// Unset the fixed probability flag for sample 36 as it depends on bias.
+			fixedProbFlag$sample36 = false;
+		}
+
+		// Getter for fixedFlag$sample9.
+		final boolean get$fixedFlag$sample9() {
+			return fixedFlag$sample9;
+		}
+
+		// Setter for fixedFlag$sample9.
+		final void set$fixedFlag$sample9(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample9 including if probabilities
+			// need to be updated.
+			fixedFlag$sample9 = cv$value;
+			constrainedFlag$sample9 = (fixedFlag$sample9 || constrainedFlag$sample9);
+			
+			// Should the probability of sample 9 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample9 = (fixedFlag$sample9 && fixedProbFlag$sample9);
+			
+			// Should the probability of sample 22 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample22 = (fixedFlag$sample9 && fixedProbFlag$sample22);
+			
+			// Should the probability of sample 36 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample36 = (fixedFlag$sample9 && fixedProbFlag$sample36);
+		}
+
+		// Getter for flips1.
+		final boolean[] get$flips1() {
+			return flips1;
+		}
+
+		// Getter for flips2.
+		final boolean[] get$flips2() {
+			return flips2;
+		}
+
+		// Getter for flipsMeasured1.
+		final boolean[] get$flipsMeasured1() {
+			return flipsMeasured1;
+		}
+
+		// Setter for flipsMeasured1.
+		final void set$flipsMeasured1(boolean[] cv$value, boolean allocated$) {
+			flipsMeasured1 = cv$value;
+		}
+
+		// Getter for flipsMeasured2.
+		final boolean[] get$flipsMeasured2() {
+			return flipsMeasured2;
+		}
+
+		// Setter for flipsMeasured2.
+		final void set$flipsMeasured2(boolean[] cv$value, boolean allocated$) {
+			flipsMeasured2 = cv$value;
+		}
+
+		// Getter for length$flipsMeasured1.
+		final int get$length$flipsMeasured1() {
+			return length$flipsMeasured1;
+		}
+
+		// Setter for length$flipsMeasured1.
+		final void set$length$flipsMeasured1(int cv$value, boolean allocated$) {
+			length$flipsMeasured1 = cv$value;
+		}
+
+		// Getter for length$flipsMeasured2.
+		final int get$length$flipsMeasured2() {
+			return length$flipsMeasured2;
+		}
+
+		// Setter for length$flipsMeasured2.
+		final void set$length$flipsMeasured2(int cv$value, boolean allocated$) {
+			length$flipsMeasured2 = cv$value;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$bernoulli1.
+		final double get$logProbability$bernoulli1() {
+			return logProbability$bernoulli1;
+		}
+
+		// Getter for logProbability$bernoulli2.
+		final double get$logProbability$bernoulli2() {
+			return logProbability$bernoulli2;
+		}
+
+		// Getter for logProbability$bias.
+		final double get$logProbability$bias() {
+			return logProbability$bias;
+		}
+
+		// Getter for logProbability$flips1.
+		final double get$logProbability$flips1() {
+			return logProbability$flips1;
+		}
+
+		// Getter for logProbability$flips2.
+		final double get$logProbability$flips2() {
+			return logProbability$flips2;
+		}
+
+		// Getter for samples1.
+		final int get$samples1() {
+			return samples1;
+		}
+
+		// Getter for samples2.
+		final int get$samples2() {
+			return samples2;
+		}
+	}
 
     private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$bias(); }
+        public double getValue() { return state.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$bias(value, allocated);
+            state.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$bias(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$bias(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample9(fixed, allocated);
+                state.set$fixedFlag$sample9(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample9())
+            if(state.get$fixedFlag$sample9())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -51,7 +237,7 @@ public final class Flip1CoinMK5 extends Model {
 
     private final ComputedBooleanArrayInternal $flips1 = new ComputedBooleanArrayInternal(this, "flips1", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$flips1(); }
+        public boolean[] getValue() { return state.get$flips1(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -62,7 +248,7 @@ public final class Flip1CoinMK5 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flips1(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flips1(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -82,7 +268,7 @@ public final class Flip1CoinMK5 extends Model {
 
     private final ComputedBooleanArrayInternal $flips2 = new ComputedBooleanArrayInternal(this, "flips2", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$flips2(); }
+        public boolean[] getValue() { return state.get$flips2(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -93,7 +279,7 @@ public final class Flip1CoinMK5 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flips2(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flips2(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -119,24 +305,24 @@ public final class Flip1CoinMK5 extends Model {
         @Override
         public boolean[] getValue() {
             synchronized(model) {
-                return system$c.get$flipsMeasured1();
+                return state.get$flipsMeasured1();
             }
         }
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$flipsMeasured1(value, allocated);
-            system$c.set$length$flipsMeasured1(value.length, allocated);
+            state.set$flipsMeasured1(value, allocated);
+            state.set$length$flipsMeasured1(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$flipsMeasured1(shape, allocated);
+            state.set$length$flipsMeasured1(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$flipsMeasured1();
+            return state.get$length$flipsMeasured1();
         }
     };
 
@@ -150,24 +336,24 @@ public final class Flip1CoinMK5 extends Model {
         @Override
         public boolean[] getValue() {
             synchronized(model) {
-                return system$c.get$flipsMeasured2();
+                return state.get$flipsMeasured2();
             }
         }
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$flipsMeasured2(value, allocated);
-            system$c.set$length$flipsMeasured2(value.length, allocated);
+            state.set$flipsMeasured2(value, allocated);
+            state.set$length$flipsMeasured2(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$flipsMeasured2(shape, allocated);
+            state.set$length$flipsMeasured2(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$flipsMeasured2();
+            return state.get$length$flipsMeasured2();
         }
     };
 
@@ -182,7 +368,7 @@ public final class Flip1CoinMK5 extends Model {
     private final RandomVariableInternal $bernoulli1 = new RandomVariableInternal(this, "bernoulli1", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$bernoulli1();
+            return state.get$logProbability$bernoulli1();
         }
     };
 
@@ -192,7 +378,7 @@ public final class Flip1CoinMK5 extends Model {
     private final RandomVariableInternal $bernoulli2 = new RandomVariableInternal(this, "bernoulli2", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$bernoulli2();
+            return state.get$logProbability$bernoulli2();
         }
     };
 
@@ -205,6 +391,7 @@ public final class Flip1CoinMK5 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public Flip1CoinMK5() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("bias", $bias);
         $computedVariables.put("flips1", $flips1);
@@ -213,7 +400,9 @@ public final class Flip1CoinMK5 extends Model {
         //Observed array fields
         $shapedObservedValues.put("flipsMeasured1", $flipsMeasured1);
         $shapedObservedValues.put("flipsMeasured2", $flipsMeasured2);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        Flip1CoinMK5$SingleThreadCPU core = new Flip1CoinMK5$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -244,45 +433,15 @@ public final class Flip1CoinMK5 extends Model {
     }
     
     @Override
-    protected Flip1CoinMK5$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        Flip1CoinMK5$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new Flip1CoinMK5$SingleThreadCPU(target);
-                break;
+                return new Flip1CoinMK5$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new Flip1CoinMK5$MultiThreadCPU(target);
-                break;
+                return new Flip1CoinMK5$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(Flip1CoinMK5$CoreInterface oldCore, Flip1CoinMK5$CoreInterface newCore) {
-
-        //Observed arrays
-        if(flipsMeasured1.isSet()) {
-            newCore.set$flipsMeasured1(oldCore.get$flipsMeasured1(), false);
-            newCore.set$length$flipsMeasured1(oldCore.get$length$flipsMeasured1(), false);
-        }
-        else if(flipsMeasured1.shapeSet())
-            newCore.set$length$flipsMeasured1(oldCore.get$length$flipsMeasured1(), false);
-        if(flipsMeasured2.isSet()) {
-            newCore.set$flipsMeasured2(oldCore.get$flipsMeasured2(), false);
-            newCore.set$length$flipsMeasured2(oldCore.get$length$flipsMeasured2(), false);
-        }
-        else if(flipsMeasured2.shapeSet())
-            newCore.set$length$flipsMeasured2(oldCore.get$length$flipsMeasured2(), false);
-
-        //ComputedVariables
-        if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9(), false);
     }
 
 	/**

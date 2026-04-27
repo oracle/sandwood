@@ -36,12 +36,14 @@ class CompilerTest {
     @DisplayName("Compile model to class file")
     @Test
     void testFile() {
-        String[] expectedFiles = { "Flip1CoinMK1$CoreInterface.class", "Flip1CoinMK1$SingleThreadCPU.class",
-                "Flip1CoinMK1$MultiThreadCPU.class", "Flip1CoinMK1.class", "Flip1CoinMK1$1.class",
-                "Flip1CoinMK1$2.class", "Flip1CoinMK1$3.class", "Flip1CoinMK1$4.class", "Flip1CoinMK1$5.class",
-                "Flip1CoinMK1$6.class", "Flip1CoinMK1$AllInputs.class", "Flip1CoinMK1$InferValueInputs.class",
-                "Flip1CoinMK1$InferredValueOutputs.class", "Flip1CoinMK1$InferredModelOutputs.class",
-                "Flip1CoinMK1$LogProbabilities.class", "Flip1CoinMK1$Probabilities.class" };
+        String[] expectedFiles = { "Flip1CoinMK1$MultiThreadCPU.class", "Flip1CoinMK1$3.class", "Flip1CoinMK1$1.class",
+                "Flip1CoinMK1$SingleThreadCPU$Scratch.class", "Flip1CoinMK1$5.class",
+                "Flip1CoinMK1$InferValueInputs.class", "Flip1CoinMK1$2.class", "Flip1CoinMK1$6.class",
+                "Flip1CoinMK1$LogProbabilities.class", "Flip1CoinMK1$4.class",
+                "Flip1CoinMK1$InferredModelOutputs.class", "Flip1CoinMK1$InferredValueOutputs.class",
+                "Flip1CoinMK1$AllInputs.class", "Flip1CoinMK1.class", "Flip1CoinMK1$SingleThreadCPU.class",
+                "Flip1CoinMK1$Probabilities.class", "Flip1CoinMK1$State.class",
+                "Flip1CoinMK1$MultiThreadCPU$Scratch.class" };
         String[] inputFiles = { "Flip1CoinMK1.sandwood" };
         try {
             runCompilation(expectedFiles, inputFiles);
@@ -55,12 +57,14 @@ class CompilerTest {
     @DisplayName("Compile model plus additional functions to file")
     @Test
     void testMultipleFiles() {
-        String[] expectedFiles = { "Flip2CoinsMK3$CoreInterface.class", "Flip2CoinsMK3$SingleThreadCPU.class",
-                "Flip2CoinsMK3$MultiThreadCPU.class", "Flip2CoinsMK3.class", "Flip2CoinsMK3$1.class",
-                "Flip2CoinsMK3$2.class", "Flip2CoinsMK3$3.class", "Flip2CoinsMK3$4.class", "Flip2CoinsMK3$5.class",
-                "Flip2CoinsMK3$6.class", "Flip2CoinsMK3$AllInputs.class", "Flip2CoinsMK3$InferValueInputs.class",
-                "Flip2CoinsMK3$InferredValueOutputs.class", "Flip2CoinsMK3$Probabilities.class",
-                "Flip2CoinsMK3$LogProbabilities.class", "Flip2CoinsMK3$InferredModelOutputs.class" };
+        String[] expectedFiles = { "Flip2CoinsMK3$5.class", "Flip2CoinsMK3$3.class", "Flip2CoinsMK3$1.class",
+                "Flip2CoinsMK3.class", "Flip2CoinsMK3$6.class", "Flip2CoinsMK3$AllInputs.class",
+                "Flip2CoinsMK3$MultiThreadCPU.class", "Flip2CoinsMK3$Probabilities.class",
+                "Flip2CoinsMK3$SingleThreadCPU.class", "Flip2CoinsMK3$State.class", "Flip2CoinsMK3$4.class",
+                "Flip2CoinsMK3$InferredValueOutputs.class", "Flip2CoinsMK3$2.class",
+                "Flip2CoinsMK3$InferredModelOutputs.class", "Flip2CoinsMK3$MultiThreadCPU$Scratch.class",
+                "Flip2CoinsMK3$LogProbabilities.class", "Flip2CoinsMK3$InferValueInputs.class",
+                "Flip2CoinsMK3$SingleThreadCPU$Scratch.class" };
         String[] inputFiles = { "Flip2CoinsMK3.sandwood", "Functions.sandwood" };
         try {
             runCompilation(expectedFiles, inputFiles);

@@ -1,341 +1,148 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.LDATest$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.LDATest.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements LDATest$CoreInterface {
+final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-	double[] alpha;
-	double[] beta;
-	boolean[] constrainedFlag$sample42;
-	boolean[] constrainedFlag$sample58;
-	boolean[][] constrainedFlag$sample90;
-	int[][] documents;
-	boolean fixedFlag$sample42 = false;
-	boolean fixedFlag$sample58 = false;
-	boolean fixedProbFlag$sample42 = false;
-	boolean fixedProbFlag$sample58 = false;
-	int[] length$documents;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$phi;
-	double[][] logProbability$sample90;
-	double[][] logProbability$sample93;
-	double logProbability$theta;
-	double logProbability$var42;
-	double logProbability$var57;
-	double logProbability$w;
-	int noTopics;
-	double[][] phi;
-	boolean system$gibbsForward = true;
-	double[][] theta;
-	int vocabSize;
-	int[][] w;
-	int[][] z;
-	double[] cv$var42$countGlobal;
-	double[] cv$var57$countGlobal;
-	double[] cv$var88$stateProbabilityGlobal;
+		// Declare the scratch variables for the model.
+		double[] cv$var42$countGlobal;
+		double[] cv$var57$countGlobal;
+		double[] cv$var88$stateProbabilityGlobal;
 
-	public LDATest$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for alpha.
-	@Override
-	public final double[] get$alpha() {
-		return alpha;
-	}
-
-	// Getter for beta.
-	@Override
-	public final double[] get$beta() {
-		return beta;
-	}
-
-	// Getter for documents.
-	@Override
-	public final int[][] get$documents() {
-		return documents;
-	}
-
-	// Setter for documents.
-	@Override
-	public final void set$documents(int[][] cv$value, boolean allocated$) {
-		documents = cv$value;
-	}
-
-	// Getter for fixedFlag$sample42.
-	@Override
-	public final boolean get$fixedFlag$sample42() {
-		return fixedFlag$sample42;
-	}
-
-	// Setter for fixedFlag$sample42.
-	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample42 including if probabilities
-		// need to be updated.
-		fixedFlag$sample42 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
-				constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for cv$var42$countGlobal
+			// 
+			// Allocation of cv$var42$countGlobal for single threaded execution
+			cv$var42$countGlobal = new double[state.vocabSize];
+			
+			// Constructor for cv$var57$countGlobal
+			// 
+			// Allocation of cv$var57$countGlobal for single threaded execution
+			cv$var57$countGlobal = new double[state.noTopics];
+			
+			// Allocation of cv$var88$stateProbabilityGlobal for single threaded execution
+			// 
+			// Variable to record the maximum value of Task Get 88. Initially set to the value
+			// of putTask 59.
+			cv$var88$stateProbabilityGlobal = new double[state.noTopics];
 		}
-		
-		// Should the probability of sample 42 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample42" with its value "cv$value".
-		fixedProbFlag$sample42 = (cv$value && fixedProbFlag$sample42);
 	}
 
-	// Getter for fixedFlag$sample58.
-	@Override
-	public final boolean get$fixedFlag$sample58() {
-		return fixedFlag$sample58;
-	}
 
-	// Setter for fixedFlag$sample58.
-	@Override
-	public final void set$fixedFlag$sample58(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample58 including if probabilities
-		// need to be updated.
-		fixedFlag$sample58 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
-				constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
-		}
-		
-		// Should the probability of sample 58 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample58" with its value "cv$value".
-		fixedProbFlag$sample58 = (cv$value && fixedProbFlag$sample58);
-	}
-
-	// Getter for length$documents.
-	@Override
-	public final int[] get$length$documents() {
-		return length$documents;
-	}
-
-	// Setter for length$documents.
-	@Override
-	public final void set$length$documents(int[] cv$value, boolean allocated$) {
-		length$documents = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$phi.
-	@Override
-	public final double get$logProbability$phi() {
-		return logProbability$phi;
-	}
-
-	// Getter for logProbability$theta.
-	@Override
-	public final double get$logProbability$theta() {
-		return logProbability$theta;
-	}
-
-	// Getter for logProbability$w.
-	@Override
-	public final double get$logProbability$w() {
-		return logProbability$w;
-	}
-
-	// Getter for noTopics.
-	@Override
-	public final int get$noTopics() {
-		return noTopics;
-	}
-
-	// Setter for noTopics.
-	@Override
-	public final void set$noTopics(int cv$value, boolean allocated$) {
-		noTopics = cv$value;
-	}
-
-	// Getter for phi.
-	@Override
-	public final double[][] get$phi() {
-		return phi;
-	}
-
-	// Setter for phi.
-	@Override
-	public final void set$phi(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of phi including if probabilities need to be
-		// updated.
-		phi = cv$value;
-		
-		// Unset the fixed probability flag for sample 42 as it depends on phi.
-		fixedProbFlag$sample42 = false;
-	}
-
-	// Getter for theta.
-	@Override
-	public final double[][] get$theta() {
-		return theta;
-	}
-
-	// Setter for theta.
-	@Override
-	public final void set$theta(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of theta including if probabilities need to
-		// be updated.
-		theta = cv$value;
-		
-		// Unset the fixed probability flag for sample 58 as it depends on theta.
-		fixedProbFlag$sample58 = false;
-	}
-
-	// Getter for vocabSize.
-	@Override
-	public final int get$vocabSize() {
-		return vocabSize;
-	}
-
-	// Setter for vocabSize.
-	@Override
-	public final void set$vocabSize(int cv$value, boolean allocated$) {
-		vocabSize = cv$value;
-	}
-
-	// Getter for w.
-	@Override
-	public final int[][] get$w() {
-		return w;
-	}
-
-	// Getter for z.
-	@Override
-	public final int[][] get$z() {
-		return z;
-	}
-
-	// Setter for z.
-	@Override
-	public final void set$z(int[][] cv$value, boolean allocated$) {
-		z = cv$value;
+	public LDATest$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample42
 	private final void drawValueSample42(int var41) {
-		DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, phi[var41]);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.beta, state.vocabSize, state.phi[var41]);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample58
 	private final void drawValueSample58(int var56) {
-		DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.noTopics, state.theta[var56]);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample90
 	private final void drawValueSample90(int i$var71, int j) {
-		z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+		state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, state.theta[i$var71], state.noTopics);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 42 drawn from Dirichlet 30. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void inferSample42(int var41) {
-		constrainedFlag$sample42[var41] = false;
+		state.constrainedFlag$sample42[var41] = false;
 		
 		// Initialize the array values to 0.
 		// 
 		// Get the length of the array
-		for(int cv$loopIndex = 0; cv$loopIndex < vocabSize; cv$loopIndex += 1)
+		for(int cv$loopIndex = 0; cv$loopIndex < state.vocabSize; cv$loopIndex += 1)
 			// A local reference to the scratch space.
-			cv$var42$countGlobal[cv$loopIndex] = 0.0;
+			scratch.cv$var42$countGlobal[cv$loopIndex] = 0.0;
 		
 		// Processing random variable 90.
 		// 
 		// Looking for a path between Sample 42 and consumer Categorical 90.
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				if((var41 == z[i$var71][j])) {
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
+				if((var41 == state.z[i$var71][j])) {
 					// Processing sample task 93 of consumer random variable null.
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample42[var41] = true;
+					state.constrainedFlag$sample42[var41] = true;
 					
 					// Increment the sample counter with the value sampled by sample task 93 of random
 					// variable var90
 					// 
 															// A local reference to the scratch space.
-					cv$var42$countGlobal[w[i$var71][j]] = (cv$var42$countGlobal[w[i$var71][j]] + 1.0);
+					scratch.cv$var42$countGlobal[state.w[i$var71][j]] = (scratch.cv$var42$countGlobal[state.w[i$var71][j]] + 1.0);
 				}
 			}
 		}
-		if(constrainedFlag$sample42[var41])
+		if(state.constrainedFlag$sample42[var41])
 			// Calculate the new sample value
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
 									// A reference local to the function for the sample variable.
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$var42$countGlobal, phi[var41], vocabSize);
+			Conjugates.sampleConjugateDirichletCategorical(state.RNG$, state.beta, scratch.cv$var42$countGlobal, state.phi[var41], state.vocabSize);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 58 drawn from Dirichlet 44. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void inferSample58(int var56) {
-		constrainedFlag$sample58[var56] = false;
+		state.constrainedFlag$sample58[var56] = false;
 		
 		// Initialize the array values to 0.
 		// 
 		// Get the length of the array
-		for(int cv$loopIndex = 0; cv$loopIndex < noTopics; cv$loopIndex += 1)
+		for(int cv$loopIndex = 0; cv$loopIndex < state.noTopics; cv$loopIndex += 1)
 			// A local reference to the scratch space.
-			cv$var57$countGlobal[cv$loopIndex] = 0.0;
+			scratch.cv$var57$countGlobal[cv$loopIndex] = 0.0;
 		
 		// Substituted "i$var71" with its value "var56".
-		for(int j = 0; j < length$documents[var56]; j += 1) {
+		for(int j = 0; j < state.length$documents[var56]; j += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(constrainedFlag$sample90[var56][j]) {
+			if(state.constrainedFlag$sample90[var56][j]) {
 				// Processing sample task 90 of consumer random variable null.
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample58[var56] = true;
+				state.constrainedFlag$sample58[var56] = true;
 				
 				// Increment the sample counter with the value sampled by sample task 90 of random
 				// variable var87
 				// 
 												// A local reference to the scratch space.
-				cv$var57$countGlobal[z[var56][j]] = (cv$var57$countGlobal[z[var56][j]] + 1.0);
+				scratch.cv$var57$countGlobal[state.z[var56][j]] = (scratch.cv$var57$countGlobal[state.z[var56][j]] + 1.0);
 			}
 		}
-		if(constrainedFlag$sample58[var56])
+		if(state.constrainedFlag$sample58[var56])
 			// Calculate the new sample value
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
 									// A reference local to the function for the sample variable.
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$var57$countGlobal, theta[var56], noTopics);
+			Conjugates.sampleConjugateDirichletCategorical(state.RNG$, state.alpha, scratch.cv$var57$countGlobal, state.theta[var56], state.noTopics);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 90 drawn from Categorical 87. Inference was performed using variable
 	// marginalization.
 	private final void inferSample90(int i$var71, int j) {
-		constrainedFlag$sample90[i$var71][j] = false;
+		state.constrainedFlag$sample90[i$var71][j] = false;
 		
 		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
@@ -345,23 +152,23 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 		// 
 				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
-		int cv$numStates = Math.max(0, noTopics);
+		int cv$numStates = Math.max(0, state.noTopics);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// Write out the new value of the sample.
 			// 
 			// Value of the variable at this index
-			z[i$var71][j] = cv$valuePos;
+			state.z[i$var71][j] = cv$valuePos;
 			
 			// Constructing a random variable input for use later.
-			double[] var86 = theta[i$var71];
+			double[] var86 = state.theta[i$var71];
 			
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample90[i$var71][j] = true;
+			state.constrainedFlag$sample90[i$var71][j] = true;
 			
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
-			double[] var89 = phi[cv$valuePos];
+			double[] var89 = state.phi[cv$valuePos];
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -383,9 +190,9 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 			// it is added to the index probabilities.
 			// 
 									// Value of the variable at this index
-			cv$var88$stateProbabilityGlobal[cv$valuePos] = (((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY) + (((((cv$valuePos < noTopics) && (0 < noTopics)) && (0.0 <= var86[cv$valuePos])) && (var86[cv$valuePos] <= 1.0))?Math.log(var86[cv$valuePos]):Double.NEGATIVE_INFINITY));
+			scratch.cv$var88$stateProbabilityGlobal[cv$valuePos] = (((((((0.0 <= state.w[i$var71][j]) && (state.w[i$var71][j] < state.vocabSize)) && (0 < state.vocabSize)) && (0.0 <= var89[state.w[i$var71][j]])) && (var89[state.w[i$var71][j]] <= 1.0))?Math.log(var89[state.w[i$var71][j]]):Double.NEGATIVE_INFINITY) + (((((cv$valuePos < state.noTopics) && (0 < state.noTopics)) && (0.0 <= var86[cv$valuePos])) && (var86[cv$valuePos] <= 1.0))?Math.log(var86[cv$valuePos]):Double.NEGATIVE_INFINITY));
 		}
-		if(constrainedFlag$sample90[i$var71][j]) {
+		if(state.constrainedFlag$sample90[i$var71][j]) {
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
@@ -396,12 +203,12 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 			// Initialise the max to the first element.
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseMax = cv$var88$stateProbabilityGlobal[0];
+			double cv$lseMax = scratch.cv$var88$stateProbabilityGlobal[0];
 			
 			// Find max value.
 			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 				// Get a local reference to the scratch space.
-				double cv$lseElementValue = cv$var88$stateProbabilityGlobal[cv$lseIndex];
+				double cv$lseElementValue = scratch.cv$var88$stateProbabilityGlobal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
 			}
@@ -418,7 +225,7 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 				// Offset values, move to normal space, and sum.
 				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 					// Get a local reference to the scratch space.
-					cv$lseSum = (cv$lseSum + Math.exp((cv$var88$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+					cv$lseSum = (cv$lseSum + Math.exp((scratch.cv$var88$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 				
 				// Increment the value of the target, moving the value back into log space.
 				// 
@@ -431,25 +238,25 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 					// Get a local reference to the scratch space.
-					cv$var88$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
+					scratch.cv$var88$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 															// Get a local reference to the scratch space.
-					cv$var88$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var88$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+					scratch.cv$var88$stateProbabilityGlobal[cv$indexName] = Math.exp((scratch.cv$var88$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
 			// Get a local reference to the scratch space.
-			for(int cv$indexName = cv$numStates; cv$indexName < cv$var88$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = cv$numStates; cv$indexName < scratch.cv$var88$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var88$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				scratch.cv$var88$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
 			// Get a local reference to the scratch space.
-			z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, cv$var88$stateProbabilityGlobal, cv$numStates);
+			state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var88$stateProbabilityGlobal, cv$numStates);
 		}
 	}
 
@@ -458,11 +265,11 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 	private final void logProbabilityValue$sample42() {
 		// Determine if we need to calculate the values for sample task 42 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample42) {
+		if(!state.fixedProbFlag$sample42) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1)
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -478,10 +285,10 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(phi[var41], beta, vocabSize));
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(state.phi[var41], state.beta, state.vocabSize));
 			
 			// Store the random variable instance probability
-			logProbability$var42 = cv$sampleAccumulator;
+			state.logProbability$var42 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -489,7 +296,7 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$phi = (logProbability$phi + cv$sampleAccumulator);
+			state.logProbability$phi = (state.logProbability$phi + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -497,20 +304,20 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample42)
+			if(state.fixedFlag$sample42)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample42 = fixedFlag$sample42;
+			state.fixedProbFlag$sample42 = state.fixedFlag$sample42;
 		} else {
 			// Using cached values.
 			// 
@@ -519,18 +326,18 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$phi = (logProbability$phi + logProbability$var42);
+			state.logProbability$phi = (state.logProbability$phi + state.logProbability$var42);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var42);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var42);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample42)
+			if(state.fixedFlag$sample42)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var42);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var42);
 		}
 	}
 
@@ -539,11 +346,11 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 	private final void logProbabilityValue$sample58() {
 		// Determine if we need to calculate the values for sample task 58 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample58) {
+		if(!state.fixedProbFlag$sample58) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -559,10 +366,10 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(theta[var56], alpha, noTopics));
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(state.theta[var56], state.alpha, state.noTopics));
 			
 			// Store the random variable instance probability
-			logProbability$var57 = cv$sampleAccumulator;
+			state.logProbability$var57 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -570,7 +377,7 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$theta = (logProbability$theta + cv$sampleAccumulator);
+			state.logProbability$theta = (state.logProbability$theta + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -578,20 +385,20 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample58)
+			if(state.fixedFlag$sample58)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample58 = fixedFlag$sample58;
+			state.fixedProbFlag$sample58 = state.fixedFlag$sample58;
 		} else {
 			// Using cached values.
 			// 
@@ -600,18 +407,18 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$theta = (logProbability$theta + logProbability$var57);
+			state.logProbability$theta = (state.logProbability$theta + state.logProbability$var57);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var57);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var57);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample58)
+			if(state.fixedFlag$sample58)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var57);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var57);
 		}
 	}
 
@@ -621,11 +428,11 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 		// Generating probabilities for sample task
 		// Accumulator for probabilities of instances of the random variable
 		double cv$accumulator = 0.0;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
 				// The sample value to calculate the probability of generating
-				int cv$sampleValue = z[i$var71][j];
-				double[] var86 = theta[i$var71];
+				int cv$sampleValue = state.z[i$var71][j];
+				double[] var86 = state.theta[i$var71];
 				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -646,7 +453,7 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				double cv$distributionAccumulator = ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noTopics)) && (0 < noTopics)) && (0.0 <= var86[cv$sampleValue])) && (var86[cv$sampleValue] <= 1.0))?Math.log(var86[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+				double cv$distributionAccumulator = ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noTopics)) && (0 < state.noTopics)) && (0.0 <= var86[cv$sampleValue])) && (var86[cv$sampleValue] <= 1.0))?Math.log(var86[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -657,12 +464,12 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample90[i$var71][j] = cv$distributionAccumulator;
+				state.logProbability$sample90[i$var71][j] = cv$distributionAccumulator;
 			}
 		}
 		
 		// Add probability to model
-		logProbability$$model = (logProbability$$model + cv$accumulator);
+		state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 	}
 
 	// Calculate the probability of the samples represented by sample93 using sampled
@@ -671,11 +478,11 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 		// Generating probabilities for sample task
 		// Accumulator for probabilities of instances of the random variable
 		double cv$accumulator = 0.0;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
 				// The sample value to calculate the probability of generating
-				int cv$sampleValue = w[i$var71][j];
-				double[] var89 = phi[z[i$var71][j]];
+				int cv$sampleValue = state.w[i$var71][j];
+				double[] var89 = state.phi[state.z[i$var71][j]];
 				
 				// Variable declaration of cv$distributionAccumulator moved.
 				// Declaration comment was:
@@ -696,7 +503,7 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				double cv$distributionAccumulator = ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[cv$sampleValue])) && (var89[cv$sampleValue] <= 1.0))?Math.log(var89[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+				double cv$distributionAccumulator = ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.vocabSize)) && (0 < state.vocabSize)) && (0.0 <= var89[cv$sampleValue])) && (var89[cv$sampleValue] <= 1.0))?Math.log(var89[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
@@ -707,120 +514,37 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
 				// Store the sample task probability
-				logProbability$sample93[i$var71][j] = cv$distributionAccumulator;
+				state.logProbability$sample93[i$var71][j] = cv$distributionAccumulator;
 			}
 		}
 		
 		// Update the variable probability
-		logProbability$w = (logProbability$w + cv$accumulator);
+		state.logProbability$w = (state.logProbability$w + cv$accumulator);
 		
 		// Add probability to model
-		logProbability$$model = (logProbability$$model + cv$accumulator);
-		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constructor for alpha
-		alpha = new double[noTopics];
-		
-		// Constructor for beta
-		beta = new double[vocabSize];
-		
-		// If phi has not been set already allocate space.
-		if(!fixedFlag$sample42) {
-			// Constructor for phi
-			phi = new double[noTopics][];
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				phi[var41] = new double[vocabSize];
-		}
-		
-		// If theta has not been set already allocate space.
-		if(!fixedFlag$sample58) {
-			// Constructor for theta
-			theta = new double[length$documents.length][];
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				theta[var56] = new double[noTopics];
-		}
-		
-		// Constructor for w
-		w = new int[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			w[i$var71] = new int[length$documents[i$var71]];
-		
-		// Constructor for z
-		z = new int[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			z[i$var71] = new int[length$documents[i$var71]];
-		
-		// Constructor for constrainedFlag$sample90
-		constrainedFlag$sample90 = new boolean[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			constrainedFlag$sample90[i$var71] = new boolean[length$documents[i$var71]];
-		
-		// Constructor for constrainedFlag$sample42
-		constrainedFlag$sample42 = new boolean[noTopics];
-		
-		// Constructor for constrainedFlag$sample58
-		constrainedFlag$sample58 = new boolean[length$documents.length];
-		
-		// Constructor for logProbability$sample90
-		logProbability$sample90 = new double[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			logProbability$sample90[i$var71] = new double[length$documents[i$var71]];
-		
-		// Constructor for logProbability$sample93
-		logProbability$sample93 = new double[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			logProbability$sample93[i$var71] = new double[length$documents[i$var71]];
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var42$countGlobal
-		// 
-		// Allocation of cv$var42$countGlobal for single threaded execution
-		cv$var42$countGlobal = new double[vocabSize];
-		
-		// Constructor for cv$var57$countGlobal
-		// 
-		// Allocation of cv$var57$countGlobal for single threaded execution
-		cv$var57$countGlobal = new double[noTopics];
-		
-		// Allocation of cv$var88$stateProbabilityGlobal for single threaded execution
-		// 
-		// Variable to record the maximum value of Task Get 88. Initially set to the value
-		// of putTask 59.
-		cv$var88$stateProbabilityGlobal = new double[noTopics];
+		state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+		state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample42) {
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, phi[var41]);
+		if(!state.fixedFlag$sample42) {
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.beta, state.vocabSize, state.phi[var41]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample58) {
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
+		if(!state.fixedFlag$sample58) {
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.noTopics, state.theta[var56]);
 		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			int[] t = w[i$var71];
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
-				t[j] = DistributionSampling.sampleCategorical(RNG$, phi[z[i$var71][j]], vocabSize);
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			int[] t = state.w[i$var71];
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
+				state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, state.theta[i$var71], state.noTopics);
+				t[j] = DistributionSampling.sampleCategorical(state.RNG$, state.phi[state.z[i$var71][j]], state.vocabSize);
 			}
 		}
 	}
@@ -831,19 +555,19 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample42) {
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, phi[var41]);
+		if(!state.fixedFlag$sample42) {
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.beta, state.vocabSize, state.phi[var41]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample58) {
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
+		if(!state.fixedFlag$sample58) {
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.noTopics, state.theta[var56]);
 		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1)
+				state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, state.theta[i$var71], state.noTopics);
 		}
 	}
 
@@ -852,21 +576,21 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 	@Override
 	public final void forwardGenerationPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample42) {
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, phi[var41]);
+		if(!state.fixedFlag$sample42) {
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.beta, state.vocabSize, state.phi[var41]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample58) {
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
+		if(!state.fixedFlag$sample58) {
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.noTopics, state.theta[var56]);
 		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			int[] t = w[i$var71];
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
-				t[j] = DistributionSampling.sampleCategorical(RNG$, phi[z[i$var71][j]], vocabSize);
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			int[] t = state.w[i$var71];
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
+				state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, state.theta[i$var71], state.noTopics);
+				t[j] = DistributionSampling.sampleCategorical(state.RNG$, state.phi[state.z[i$var71][j]], state.vocabSize);
 			}
 		}
 	}
@@ -876,19 +600,19 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample42) {
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, phi[var41]);
+		if(!state.fixedFlag$sample42) {
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.beta, state.vocabSize, state.phi[var41]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample58) {
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
+		if(!state.fixedFlag$sample58) {
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.noTopics, state.theta[var56]);
 		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1)
+				state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, state.theta[i$var71], state.noTopics);
 		}
 	}
 
@@ -898,19 +622,19 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample42) {
-			for(int var41 = 0; var41 < noTopics; var41 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, phi[var41]);
+		if(!state.fixedFlag$sample42) {
+			for(int var41 = 0; var41 < state.noTopics; var41 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.beta, state.vocabSize, state.phi[var41]);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample58) {
-			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
-				DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, theta[var56]);
+		if(!state.fixedFlag$sample58) {
+			for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
+				DistributionSampling.sampleDirichlet(state.RNG$, state.alpha, state.noTopics, state.theta[var56]);
 		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1)
+				state.z[i$var71][j] = DistributionSampling.sampleCategorical(state.RNG$, state.theta[i$var71], state.noTopics);
 		}
 	}
 
@@ -918,56 +642,56 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
+		if(state.system$gibbsForward) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample42) {
-				for(int var41 = 0; var41 < noTopics; var41 += 1)
+			if(!state.fixedFlag$sample42) {
+				for(int var41 = 0; var41 < state.noTopics; var41 += 1)
 					inferSample42(var41);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample58) {
-				for(int var56 = 0; var56 < length$documents.length; var56 += 1)
+			if(!state.fixedFlag$sample58) {
+				for(int var56 = 0; var56 < state.length$documents.length; var56 += 1)
 					inferSample58(var56);
 			}
-			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-				for(int j = 0; j < length$documents[i$var71]; j += 1)
+			for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+				for(int j = 0; j < state.length$documents[i$var71]; j += 1)
 					inferSample90(i$var71, j);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			for(int i$var71 = (length$documents.length - 1); i$var71 >= 0; i$var71 -= 1) {
-				for(int j = (length$documents[i$var71] - 1); j >= 0; j -= 1)
+			for(int i$var71 = (state.length$documents.length - 1); i$var71 >= 0; i$var71 -= 1) {
+				for(int j = (state.length$documents[i$var71] - 1); j >= 0; j -= 1)
 					inferSample90(i$var71, j);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample58) {
-				for(int var56 = (length$documents.length - 1); var56 >= 0; var56 -= 1)
+			if(!state.fixedFlag$sample58) {
+				for(int var56 = (state.length$documents.length - 1); var56 >= 0; var56 -= 1)
 					inferSample58(var56);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample42) {
-				for(int var41 = (noTopics - 1); var41 >= 0; var41 -= 1)
+			if(!state.fixedFlag$sample42) {
+				for(int var41 = (state.noTopics - 1); var41 >= 0; var41 -= 1)
 					inferSample42(var41);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		for(int var41 = 0; var41 < noTopics; var41 += 1) {
-			if(!constrainedFlag$sample42[var41])
+		state.system$gibbsForward = !state.system$gibbsForward;
+		for(int var41 = 0; var41 < state.noTopics; var41 += 1) {
+			if(!state.constrainedFlag$sample42[var41])
 				drawValueSample42(var41);
 		}
-		for(int var56 = 0; var56 < length$documents.length; var56 += 1) {
-			if(!constrainedFlag$sample58[var56])
+		for(int var56 = 0; var56 < state.length$documents.length; var56 += 1) {
+			if(!state.constrainedFlag$sample58[var56])
 				drawValueSample58(var56);
 		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1) {
-				if(!constrainedFlag$sample90[i$var71][j])
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1) {
+				if(!state.constrainedFlag$sample90[i$var71][j])
 					drawValueSample90(i$var71, j);
 			}
 		}
@@ -981,22 +705,22 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$phi = 0.0;
-		if(!fixedProbFlag$sample42)
-			logProbability$var42 = Double.NaN;
-		logProbability$theta = 0.0;
-		if(!fixedProbFlag$sample58)
-			logProbability$var57 = Double.NaN;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$sample90[i$var71][j] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$phi = 0.0;
+		if(!state.fixedProbFlag$sample42)
+			state.logProbability$var42 = Double.NaN;
+		state.logProbability$theta = 0.0;
+		if(!state.fixedProbFlag$sample58)
+			state.logProbability$var57 = Double.NaN;
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1)
+				state.logProbability$sample90[i$var71][j] = Double.NaN;
 		}
-		logProbability$w = 0.0;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$sample93[i$var71][j] = Double.NaN;
+		state.logProbability$w = 0.0;
+		for(int i$var71 = 0; i$var71 < state.length$documents.length; i$var71 += 1) {
+			for(int j = 0; j < state.length$documents[i$var71]; j += 1)
+				state.logProbability$sample93[i$var71][j] = Double.NaN;
 		}
 	}
 
@@ -1004,25 +728,25 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 	// etc.
 	@Override
 	public final void initializeModel() {
-		for(int i$var14 = 0; i$var14 < noTopics; i$var14 += 1)
-			alpha[i$var14] = 0.1;
-		for(int i$var27 = 0; i$var27 < vocabSize; i$var27 += 1)
-			beta[i$var27] = 0.1;
+		for(int i$var14 = 0; i$var14 < state.noTopics; i$var14 += 1)
+			state.alpha[i$var14] = 0.1;
+		for(int i$var27 = 0; i$var27 < state.vocabSize; i$var27 += 1)
+			state.beta[i$var27] = 0.1;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample90$1 = 0; index$constrainedFlag$sample90$1 < constrainedFlag$sample90.length; index$constrainedFlag$sample90$1 += 1) {
-			boolean[] cv$constrainedFlag$sample90$1 = constrainedFlag$sample90[index$constrainedFlag$sample90$1];
+		for(int index$constrainedFlag$sample90$1 = 0; index$constrainedFlag$sample90$1 < state.constrainedFlag$sample90.length; index$constrainedFlag$sample90$1 += 1) {
+			boolean[] cv$constrainedFlag$sample90$1 = state.constrainedFlag$sample90[index$constrainedFlag$sample90$1];
 			for(int index$constrainedFlag$sample90$2 = 0; index$constrainedFlag$sample90$2 < cv$constrainedFlag$sample90$1.length; index$constrainedFlag$sample90$2 += 1)
 				cv$constrainedFlag$sample90$1[index$constrainedFlag$sample90$2] = true;
 		}
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
-			constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
+		for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < state.constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
+			state.constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
-			constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
+		for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < state.constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
+			state.constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -1032,9 +756,9 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample42)
+		if(state.fixedFlag$sample42)
 			logProbabilityValue$sample42();
-		if(fixedFlag$sample58)
+		if(state.fixedFlag$sample58)
 			logProbabilityValue$sample58();
 		logProbabilityValue$sample93();
 	}
@@ -1086,10 +810,10 @@ final class LDATest$SingleThreadCPU extends CoreModelSingleThreadCPU implements 
 		// Propagating values back from observations into the models intermediate variables.
 		// 
 		// Deep copy between arrays
-		int cv$length1 = w.length;
+		int cv$length1 = state.w.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
-			int[] cv$source2 = documents[cv$index1];
-			int[] cv$target2 = w[cv$index1];
+			int[] cv$source2 = state.documents[cv$index1];
+			int[] cv$target2 = state.w[cv$index1];
 			int cv$length2 = cv$target2.length;
 			for(int cv$index2 = 0; cv$index2 < cv$length2; cv$index2 += 1)
 				cv$target2[cv$index2] = cv$source2[cv$index2];

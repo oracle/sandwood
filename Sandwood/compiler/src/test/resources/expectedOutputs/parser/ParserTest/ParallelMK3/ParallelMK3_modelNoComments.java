@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,12 +16,122 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model ParallelMK3 This is the class that all user
  * interactions with the model should occur through.
  */
-public final class ParallelMK3 extends Model {
-    private ParallelMK3$CoreInterface system$c = new ParallelMK3$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class ParallelMK3 extends Model<ParallelMK3.State> {
+	final class State extends CoreModelState {
+boolean constrainedFlag$sample21 = true;
+		boolean fixedFlag$sample21 = false;
+		boolean fixedProbFlag$sample21 = false;
+		boolean fixedProbFlag$sample38 = false;
+		double[] generated;
+		double[] indirection;
+		int length$observed;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$generated;
+		double logProbability$indirection;
+		double logProbability$sample;
+		double[] logProbability$sample38;
+		double[] observed;
+		double[] sample;
+		boolean system$gibbsForward = true;
+		double[] v;
+
+		@Override
+		public final void allocate() {
+			{
+				generated = new double[length$observed];
+			}
+			{
+				indirection = new double[length$observed];
+			}
+			{
+				v = new double[10];
+			}
+			if(!fixedFlag$sample21) {
+				{
+					sample = new double[10];
+				}
+			}
+			{
+				logProbability$sample38 = new double[((((length$observed - 1) - 0) / 1) + 1)];
+			}
+		}
+
+		final boolean get$fixedFlag$sample21() {
+			return fixedFlag$sample21;
+		}
+
+		final void set$fixedFlag$sample21(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample21 = cv$value;
+			constrainedFlag$sample21 = (fixedFlag$sample21 || constrainedFlag$sample21);
+			fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedProbFlag$sample21);
+			fixedProbFlag$sample38 = (fixedFlag$sample21 && fixedProbFlag$sample38);
+		}
+
+		final double[] get$generated() {
+			return generated;
+		}
+
+		final double[] get$indirection() {
+			return indirection;
+		}
+
+		final int get$length$observed() {
+			return length$observed;
+		}
+
+		final void set$length$observed(int cv$value, boolean allocated$) {
+			length$observed = cv$value;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$generated() {
+			return logProbability$generated;
+		}
+
+		final double get$logProbability$indirection() {
+			return logProbability$indirection;
+		}
+
+		final double get$logProbability$sample() {
+			return logProbability$sample;
+		}
+
+		final double[] get$observed() {
+			return observed;
+		}
+
+		final void set$observed(double[] cv$value, boolean allocated$) {
+			observed = cv$value;
+		}
+
+		final double[] get$sample() {
+			return sample;
+		}
+
+		final void set$sample(double[] cv$value, boolean allocated$) {
+			sample = cv$value;
+			fixedProbFlag$sample21 = false;
+			fixedProbFlag$sample38 = false;
+		}
+
+		final double[] get$v() {
+			return v;
+		}
+	}
 
     private final ComputedDoubleArrayInternal $generated = new ComputedDoubleArrayInternal(this, "generated", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$generated(); }
+        public double[] getValue() { return state.get$generated(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -30,7 +142,7 @@ public final class ParallelMK3 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$generated(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$generated(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -50,7 +162,7 @@ public final class ParallelMK3 extends Model {
 
     private final ComputedDoubleArrayInternal $indirection = new ComputedDoubleArrayInternal(this, "indirection", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$indirection(); }
+        public double[] getValue() { return state.get$indirection(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -61,18 +173,18 @@ public final class ParallelMK3 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$indirection(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$indirection(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample21(fixed, allocated);
+                state.set$fixedFlag$sample21(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample21())
+            if(state.get$fixedFlag$sample21())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -86,27 +198,27 @@ public final class ParallelMK3 extends Model {
 
     private final ComputedDoubleArrayInternal $sample = new ComputedDoubleArrayInternal(this, "sample", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$sample(); }
+        public double[] getValue() { return state.get$sample(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$sample(value, allocated);
+            state.set$sample(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$sample(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$sample(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample21(fixed, allocated);
+                state.set$fixedFlag$sample21(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample21())
+            if(state.get$fixedFlag$sample21())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -124,24 +236,24 @@ public final class ParallelMK3 extends Model {
         @Override
         public double[] getValue() {
             synchronized(model) {
-                return system$c.get$observed();
+                return state.get$observed();
             }
         }
 
         @Override
         public void setValueInternal(double[] value) {
-            system$c.set$observed(value, allocated);
-            system$c.set$length$observed(value.length, allocated);
+            state.set$observed(value, allocated);
+            state.set$length$observed(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$observed(shape, allocated);
+            state.set$length$observed(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$observed();
+            return state.get$length$observed();
         }
     };
 
@@ -158,6 +270,7 @@ public final class ParallelMK3 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public ParallelMK3() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("generated", $generated);
         $computedVariables.put("indirection", $indirection);
@@ -165,7 +278,9 @@ public final class ParallelMK3 extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("observed", $observed);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        ParallelMK3$SingleThreadCPU core = new ParallelMK3$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -191,39 +306,15 @@ public final class ParallelMK3 extends Model {
     }
     
     @Override
-    protected ParallelMK3$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        ParallelMK3$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new ParallelMK3$SingleThreadCPU(target);
-                break;
+                return new ParallelMK3$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new ParallelMK3$MultiThreadCPU(target);
-                break;
+                return new ParallelMK3$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(ParallelMK3$CoreInterface oldCore, ParallelMK3$CoreInterface newCore) {
-
-        //Observed arrays
-        if(observed.isSet()) {
-            newCore.set$observed(oldCore.get$observed(), false);
-            newCore.set$length$observed(oldCore.get$length$observed(), false);
-        }
-        else if(observed.shapeSet())
-            newCore.set$length$observed(oldCore.get$length$observed(), false);
-
-        //ComputedVariables
-        if($sample.isSet())
-            newCore.set$sample(oldCore.get$sample(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21(), false);
     }
 
 	/**

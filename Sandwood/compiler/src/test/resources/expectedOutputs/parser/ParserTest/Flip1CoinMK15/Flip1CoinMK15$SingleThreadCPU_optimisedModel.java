@@ -1,216 +1,45 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Flip1CoinMK15$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Flip1CoinMK15.State;
 import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU implements Flip1CoinMK15$CoreInterface {
+final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	// Declare the variables for the model.
-<<<<<<< Upstream, based on POW
-	private double b;
-	private double bias;
-	private double[] c;
-	private boolean constrainedFlag$sample8 = true;
-	private boolean fixedFlag$sample8 = false;
-	private boolean fixedProbFlag$sample50 = false;
-	private boolean fixedProbFlag$sample8 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private boolean guard1;
-	private int length$flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$b;
-	private double logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$var47;
-	private int samples;
-	private boolean system$gibbsForward = true;
-=======
-	double b;
-	double bias;
-	double[] c;
-	boolean constrainedFlag$sample8 = true;
-	boolean fixedFlag$sample8 = false;
-	boolean fixedProbFlag$sample50 = false;
-	boolean fixedProbFlag$sample8 = false;
-	boolean[] flips;
-	boolean[] flipsMeasured;
-	boolean guard1;
-	int length$flipsMeasured;
-	double logProbability$$evidence;
-	double logProbability$$model;
-	double logProbability$b;
-	double logProbability$bernoulli;
-	double logProbability$bias;
-	double logProbability$flips;
-	double logProbability$sample8;
-	double logProbability$var47;
-	int samples;
-	boolean system$gibbsForward = true;
->>>>>>> daee89e Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
-
-	public Flip1CoinMK15$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	// Getter for b.
-	@Override
-	public final double get$b() {
-		return b;
-	}
 
-	// Setter for b.
-	@Override
-	public final void set$b(double cv$value, boolean allocated$) {
-		// Set flags for all the side effects of b including if probabilities need to be updated.
-		b = cv$value;
-		
-		// Unset the fixed probability flag for sample 8 as it depends on b.
-		fixedProbFlag$sample8 = false;
-		
-		// Unset the fixed probability flag for sample 50 as it depends on b.
-		fixedProbFlag$sample50 = false;
-	}
-
-	// Getter for bias.
-	@Override
-	public final double get$bias() {
-		return bias;
-	}
-
-	// Getter for fixedFlag$sample8.
-	@Override
-	public final boolean get$fixedFlag$sample8() {
-		return fixedFlag$sample8;
-	}
-
-	// Setter for fixedFlag$sample8.
-	@Override
-	public final void set$fixedFlag$sample8(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample8 including if probabilities
-		// need to be updated.
-		fixedFlag$sample8 = cv$value;
-		
-		// Substituted "fixedFlag$sample8" with its value "cv$value".
-		constrainedFlag$sample8 = (cv$value || constrainedFlag$sample8);
-		
-		// Should the probability of sample 8 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample8" with its value "cv$value".
-		fixedProbFlag$sample8 = (cv$value && fixedProbFlag$sample8);
-		
-		// Should the probability of sample 50 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample8" with its value "cv$value".
-		fixedProbFlag$sample50 = (cv$value && fixedProbFlag$sample50);
-	}
-
-	// Getter for flips.
-	@Override
-	public final boolean[] get$flips() {
-		return flips;
-	}
-
-	// Getter for flipsMeasured.
-	@Override
-	public final boolean[] get$flipsMeasured() {
-		return flipsMeasured;
-	}
-
-	// Setter for flipsMeasured.
-	@Override
-	public final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
-		flipsMeasured = cv$value;
-	}
-
-	// Getter for guard1.
-	@Override
-	public final boolean get$guard1() {
-		return guard1;
-	}
-
-	// Setter for guard1.
-	@Override
-	public final void set$guard1(boolean cv$value, boolean allocated$) {
-		guard1 = cv$value;
-	}
-
-	// Getter for length$flipsMeasured.
-	@Override
-	public final int get$length$flipsMeasured() {
-		return length$flipsMeasured;
-	}
-
-	// Setter for length$flipsMeasured.
-	@Override
-	public final void set$length$flipsMeasured(int cv$value, boolean allocated$) {
-		length$flipsMeasured = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$b.
-	@Override
-	public final double get$logProbability$b() {
-		return logProbability$b;
-	}
-
-	// Getter for logProbability$bernoulli.
-	@Override
-	public final double get$logProbability$bernoulli() {
-		return logProbability$bernoulli;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$flips.
-	@Override
-	public final double get$logProbability$flips() {
-		return logProbability$flips;
-	}
-
-	// Getter for samples.
-	@Override
-	public final int get$samples() {
-		return samples;
+	public Flip1CoinMK15$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample8
 	private final void drawValueSample8() {
-		b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		state.b = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(guard1)
-			bias = b;
+		if(state.guard1)
+			state.bias = state.b;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		// 
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		else {
 			// Guards to ensure that c is only updated when there is a valid path.
-			c[0] = (b / 2);
+			state.c[0] = (state.b / 2);
 			
 			// Guards to ensure that c is only updated when there is a valid path.
-			c[1] = (b / 2);
+			state.c[1] = (state.b / 2);
 			
 			// Execute the reduction function, saving the result into the return value.
 			// 
@@ -232,17 +61,17 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			// Set the right hand term to a value from the array c
 			// 
 			// Substituted "cv$reduction30Index" with its value "0".
-			bias = (c[0] + c[1]);
+			state.bias = (state.c[0] + state.c[1]);
 		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 8 drawn from Beta 7. Inference was performed using Metropolis-Hastings.
 	private final void inferSample8() {
-		constrainedFlag$sample8 = false;
+		state.constrainedFlag$sample8 = false;
 		
 		// The original value of the sample
-		double cv$originalValue = b;
+		double cv$originalValue = state.b;
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -252,7 +81,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 		// Calculate a proposed variance.
 		// 
 						// The original value of the sample
-		double cv$var = (((b < 0)?(-b):b) * 40.0);
+		double cv$var = (((state.b < 0)?(-state.b):state.b) * 40.0);
 		
 		// Ensure the variance is at least 0.01
 		if((cv$var < 0.01))
@@ -261,7 +90,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 		// The proposed new value for the sample
 		// 
 		// The original value of the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + state.b);
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
@@ -269,14 +98,14 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(state.b, 1.0, 1.0);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(guard1) {
+			if(state.guard1) {
 				// Processing sample task 50 of consumer random variable bernoulli.
-				for(int var46 = 0; var46 < samples; var46 += 1) {
+				for(int var46 = 0; var46 < state.samples; var46 += 1) {
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample8 = true;
+					state.constrainedFlag$sample8 = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -294,7 +123,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 															// Set the current value to the current state of the tree.
 					// 
 					// The original value of the sample
-					cv$accumulatedProbabilities = ((((0.0 <= b) && (b <= 1.0))?Math.log((flips[var46]?b:(1.0 - b))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= state.b) && (state.b <= 1.0))?Math.log((state.flips[var46]?state.b:(1.0 - state.b))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			
@@ -337,12 +166,12 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 				// Set the right hand term to a value from the array c
 				// 
 				// Substituted "cv$reduction171Index" with its value "1".
-				double reduceVar$var33$2 = ((b / 2) + c[1]);
+				double reduceVar$var33$2 = ((state.b / 2) + state.c[1]);
 				
 				// Processing sample task 50 of consumer random variable bernoulli.
-				for(int var46 = 0; var46 < samples; var46 += 1) {
+				for(int var46 = 0; var46 < state.samples; var46 += 1) {
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample8 = true;
+					state.constrainedFlag$sample8 = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -356,7 +185,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 					// Declaration comment was:
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					cv$accumulatedProbabilities = ((((0.0 <= reduceVar$var33$2) && (reduceVar$var33$2 <= 1.0))?Math.log((flips[var46]?reduceVar$var33$2:(1.0 - reduceVar$var33$2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= reduceVar$var33$2) && (reduceVar$var33$2 <= 1.0))?Math.log((state.flips[var46]?reduceVar$var33$2:(1.0 - reduceVar$var33$2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			
@@ -370,25 +199,25 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(constrainedFlag$sample8) {
+		if(state.constrainedFlag$sample8) {
 			// Update Sample and intermediate values
 			// 
 			// Write out the new value of the sample.
-			b = cv$proposedValue;
+			state.b = cv$proposedValue;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(guard1)
-				bias = cv$proposedValue;
+			if(state.guard1)
+				state.bias = cv$proposedValue;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			else {
 				// Guards to ensure that c is only updated when there is a valid path.
-				c[0] = (cv$proposedValue / 2);
+				state.c[0] = (cv$proposedValue / 2);
 				
 				// Guards to ensure that c is only updated when there is a valid path.
-				c[1] = (cv$proposedValue / 2);
+				state.c[1] = (cv$proposedValue / 2);
 				
 				// Execute the reduction function, saving the result into the return value.
 				// 
@@ -410,7 +239,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 				// Set the right hand term to a value from the array c
 				// 
 				// Substituted "cv$reduction30Index" with its value "0".
-				bias = (c[0] + c[1]);
+				state.bias = (state.c[0] + state.c[1]);
 			}
 			
 			// An accumulator to allow the value for each distribution to be constructed before
@@ -418,11 +247,11 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(guard1) {
+			if(state.guard1) {
 				// Processing sample task 50 of consumer random variable bernoulli.
-				for(int var46 = 0; var46 < samples; var46 += 1) {
+				for(int var46 = 0; var46 < state.samples; var46 += 1) {
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample8 = true;
+					state.constrainedFlag$sample8 = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -436,7 +265,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 					// Declaration comment was:
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					cv$accumulatedProbabilities = ((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((flips[var46]?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((state.flips[var46]?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			
@@ -479,12 +308,12 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 				// Set the right hand term to a value from the array c
 				// 
 				// Substituted "cv$reduction171Index" with its value "1".
-				double reduceVar$var33$2 = ((cv$proposedValue / 2) + c[1]);
+				double reduceVar$var33$2 = ((cv$proposedValue / 2) + state.c[1]);
 				
 				// Processing sample task 50 of consumer random variable bernoulli.
-				for(int var46 = 0; var46 < samples; var46 += 1) {
+				for(int var46 = 0; var46 < state.samples; var46 += 1) {
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample8 = true;
+					state.constrainedFlag$sample8 = true;
 					
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
@@ -498,7 +327,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 					// Declaration comment was:
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					cv$accumulatedProbabilities = ((((0.0 <= reduceVar$var33$2) && (reduceVar$var33$2 <= 1.0))?Math.log((flips[var46]?reduceVar$var33$2:(1.0 - reduceVar$var33$2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = ((((0.0 <= reduceVar$var33$2) && (reduceVar$var33$2 <= 1.0))?Math.log((state.flips[var46]?reduceVar$var33$2:(1.0 - reduceVar$var33$2))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 				}
 			}
 			
@@ -515,18 +344,18 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			// Test if the probability of the sample is sufficient to keep the value. This needs
 			// to be less than or equal as otherwise if the proposed value is not possible and
 			// the random value is 0 an impossible value will be accepted.
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(state.RNG$))) || Double.isNaN(cv$ratio))) {
 				// If it is not revert the changes.
 				// 
 				// Set the sample value
 				// Write out the new value of the sample.
-				b = cv$originalValue;
+				state.b = cv$originalValue;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(guard1)
+				if(state.guard1)
 										// b's comment
 					// Write out the new value of the sample.
-					bias = cv$originalValue;
+					state.bias = cv$originalValue;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				// 
@@ -536,13 +365,13 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 					// 
 										// b's comment
 					// Write out the new value of the sample.
-					c[0] = (cv$originalValue / 2);
+					state.c[0] = (cv$originalValue / 2);
 					
 					// Guards to ensure that c is only updated when there is a valid path.
 					// 
 										// b's comment
 					// Write out the new value of the sample.
-					c[1] = (cv$originalValue / 2);
+					state.c[1] = (cv$originalValue / 2);
 					
 					// Execute the reduction function, saving the result into the return value.
 					// 
@@ -564,7 +393,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 					// Set the right hand term to a value from the array c
 					// 
 					// Substituted "cv$reduction30Index" with its value "0".
-					bias = (c[0] + c[1]);
+					state.bias = (state.c[0] + state.c[1]);
 				}
 			}
 		}
@@ -575,11 +404,11 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 	private final void logProbabilityValue$sample50() {
 		// Determine if we need to calculate the values for sample task 50 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample50) {
+		if(!state.fixedProbFlag$sample50) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			for(int var46 = 0; var46 < samples; var46 += 1)
+			for(int var46 = 0; var46 < state.samples; var46 += 1)
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Scale the probability relative to the observed distribution space.
@@ -595,11 +424,11 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias) && (bias <= 1.0))?Math.log((flips[var46]?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
-			logProbability$bernoulli = cv$sampleAccumulator;
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= state.bias) && (state.bias <= 1.0))?Math.log((state.flips[var46]?state.bias:(1.0 - state.bias))):Double.NEGATIVE_INFINITY));
+			state.logProbability$bernoulli = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
-			logProbability$var47 = cv$sampleAccumulator;
+			state.logProbability$var47 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -607,7 +436,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$flips = (logProbability$flips + cv$sampleAccumulator);
+			state.logProbability$flips = (state.logProbability$flips + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -615,36 +444,36 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample50 = fixedFlag$sample8;
+			state.fixedProbFlag$sample50 = state.fixedFlag$sample8;
 		} else {
 			// Using cached values.
 			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$bernoulli = logProbability$var47;
+			state.logProbability$bernoulli = state.logProbability$var47;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$flips = (logProbability$flips + logProbability$var47);
+			state.logProbability$flips = (state.logProbability$flips + state.logProbability$var47);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var47);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var47);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var47);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var47);
 		}
 	}
 
@@ -652,7 +481,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 	private final void logProbabilityValue$sample8() {
 		// Determine if we need to calculate the values for sample task 8 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample8) {
+		if(!state.fixedProbFlag$sample8) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -677,10 +506,10 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(state.b, 1.0, 1.0);
 			
 			// Store the sample task probability
-			logProbability$b = cv$distributionAccumulator;
+			state.logProbability$b = cv$distributionAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -696,7 +525,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+			state.logProbability$bias = (state.logProbability$bias + cv$distributionAccumulator);
 			
 			// Add probability to model
 			// 
@@ -712,11 +541,11 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample8)
+			if(state.fixedFlag$sample8)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -729,11 +558,11 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample8 = fixedFlag$sample8;
+			state.fixedProbFlag$sample8 = state.fixedFlag$sample8;
 		} else {
 			// Using cached values.
 			// 
@@ -742,49 +571,32 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$bias = (logProbability$bias + logProbability$b);
+			state.logProbability$bias = (state.logProbability$bias + state.logProbability$b);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$b);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$b);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample8)
+			if(state.fixedFlag$sample8)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$b);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$b);
 		}
 	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocate() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!guard1)
-			c = new double[2];
-		
-		// Constructor for flips
-		flips = new boolean[length$flipsMeasured];
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample8) {
-			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(guard1)
-				bias = b;
+		if(!state.fixedFlag$sample8) {
+			state.b = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+			if(state.guard1)
+				state.bias = state.b;
 			else {
-				c[0] = (b / 2);
-				c[1] = (b / 2);
+				state.c[0] = (state.b / 2);
+				state.c[1] = (state.b / 2);
 				
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
@@ -802,11 +614,11 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 				// Set the right hand term to a value from the array c
 				// 
 				// Substituted "cv$reduction30Index" with its value "0".
-				bias = (c[0] + c[1]);
+				state.bias = (state.c[0] + state.c[1]);
 			}
 		}
-		for(int var46 = 0; var46 < samples; var46 += 1)
-			flips[var46] = DistributionSampling.sampleBernoulli(RNG$, bias);
+		for(int var46 = 0; var46 < state.samples; var46 += 1)
+			state.flips[var46] = DistributionSampling.sampleBernoulli(state.RNG$, state.bias);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -814,14 +626,14 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample8)
-			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(guard1) {
-			if(!fixedFlag$sample8)
-				bias = b;
+		if(!state.fixedFlag$sample8)
+			state.b = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+		if(state.guard1) {
+			if(!state.fixedFlag$sample8)
+				state.bias = state.b;
 		} else {
-			c[0] = (b / 2);
-			c[1] = (b / 2);
+			state.c[0] = (state.b / 2);
+			state.c[1] = (state.b / 2);
 			
 			// Execute the reduction function, saving the result into the return value.
 			// 
@@ -843,7 +655,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			// Set the right hand term to a value from the array c
 			// 
 			// Substituted "cv$reduction30Index" with its value "0".
-			bias = (c[0] + c[1]);
+			state.bias = (state.c[0] + state.c[1]);
 		}
 	}
 
@@ -851,14 +663,14 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample8)
-			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(guard1) {
-			if(!fixedFlag$sample8)
-				bias = b;
+		if(!state.fixedFlag$sample8)
+			state.b = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+		if(state.guard1) {
+			if(!state.fixedFlag$sample8)
+				state.bias = state.b;
 		} else {
-			c[0] = (b / 2);
-			c[1] = (b / 2);
+			state.c[0] = (state.b / 2);
+			state.c[1] = (state.b / 2);
 			
 			// Execute the reduction function, saving the result into the return value.
 			// 
@@ -880,10 +692,10 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			// Set the right hand term to a value from the array c
 			// 
 			// Substituted "cv$reduction30Index" with its value "0".
-			bias = (c[0] + c[1]);
+			state.bias = (state.c[0] + state.c[1]);
 		}
-		for(int var46 = 0; var46 < samples; var46 += 1)
-			flips[var46] = DistributionSampling.sampleBernoulli(RNG$, bias);
+		for(int var46 = 0; var46 < state.samples; var46 += 1)
+			state.flips[var46] = DistributionSampling.sampleBernoulli(state.RNG$, state.bias);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -891,13 +703,13 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample8) {
-			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-			if(guard1)
-				bias = b;
+		if(!state.fixedFlag$sample8) {
+			state.b = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+			if(state.guard1)
+				state.bias = state.b;
 			else {
-				c[0] = (b / 2);
-				c[1] = (b / 2);
+				state.c[0] = (state.b / 2);
+				state.c[1] = (state.b / 2);
 				
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
@@ -915,7 +727,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 				// Set the right hand term to a value from the array c
 				// 
 				// Substituted "cv$reduction30Index" with its value "0".
-				bias = (c[0] + c[1]);
+				state.bias = (state.c[0] + state.c[1]);
 			}
 		}
 	}
@@ -925,14 +737,14 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample8)
-			b = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
-		if(guard1) {
-			if(!fixedFlag$sample8)
-				bias = b;
+		if(!state.fixedFlag$sample8)
+			state.b = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
+		if(state.guard1) {
+			if(!state.fixedFlag$sample8)
+				state.bias = state.b;
 		} else {
-			c[0] = (b / 2);
-			c[1] = (b / 2);
+			state.c[0] = (state.b / 2);
+			state.c[1] = (state.b / 2);
 			
 			// Execute the reduction function, saving the result into the return value.
 			// 
@@ -954,7 +766,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			// Set the right hand term to a value from the array c
 			// 
 			// Substituted "cv$reduction30Index" with its value "0".
-			bias = (c[0] + c[1]);
+			state.bias = (state.c[0] + state.c[1]);
 		}
 	}
 
@@ -962,12 +774,12 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 	@Override
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample8)
+		if(!state.fixedFlag$sample8)
 			inferSample8();
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample8)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample8)
 			drawValueSample8();
 	}
 
@@ -979,22 +791,22 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample8)
-			logProbability$b = Double.NaN;
-		logProbability$bernoulli = Double.NaN;
-		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample50)
-			logProbability$var47 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$bias = 0.0;
+		if(!state.fixedProbFlag$sample8)
+			state.logProbability$b = Double.NaN;
+		state.logProbability$bernoulli = Double.NaN;
+		state.logProbability$flips = 0.0;
+		if(!state.fixedProbFlag$sample50)
+			state.logProbability$var47 = Double.NaN;
 	}
 
 	// Method for initialising the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		samples = length$flipsMeasured;
+		state.samples = state.length$flipsMeasured;
 	}
 
 	// Construct the evidence probabilities.
@@ -1004,7 +816,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample8)
+		if(state.fixedFlag$sample8)
 			logProbabilityValue$sample8();
 		logProbabilityValue$sample50();
 	}
@@ -1050,8 +862,8 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 	@Override
 	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
-		for(int i$var58 = (samples - 1); i$var58 >= 0; i$var58 -= 1)
-			flips[i$var58] = flipsMeasured[i$var58];
+		for(int i$var58 = (state.samples - 1); i$var58 >= 0; i$var58 -= 1)
+			state.flips[i$var58] = state.flipsMeasured[i$var58];
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are
@@ -1060,12 +872,12 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		if(guard1) {
-			if(fixedFlag$sample8)
-				bias = b;
+		if(state.guard1) {
+			if(state.fixedFlag$sample8)
+				state.bias = state.b;
 		} else {
-			c[0] = (b / 2);
-			c[1] = (b / 2);
+			state.c[0] = (state.b / 2);
+			state.c[1] = (state.b / 2);
 			
 			// Execute the reduction function, saving the result into the return value.
 			// 
@@ -1087,7 +899,7 @@ final class Flip1CoinMK15$SingleThreadCPU extends CoreModelSingleThreadCPU imple
 			// Set the right hand term to a value from the array c
 			// 
 			// Substituted "cv$reduction30Index" with its value "0".
-			bias = (c[0] + c[1]);
+			state.bias = (state.c[0] + state.c[1]);
 		}
 	}
 

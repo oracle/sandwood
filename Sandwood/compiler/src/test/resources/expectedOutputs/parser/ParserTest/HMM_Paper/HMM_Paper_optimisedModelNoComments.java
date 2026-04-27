@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,32 +16,266 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model HMM_Paper This is the class that all user
  * interactions with the model should occur through.
  */
-public final class HMM_Paper extends Model {
-    private HMM_Paper$CoreInterface system$c = new HMM_Paper$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class HMM_Paper extends Model<HMM_Paper.State> {
+	final class State extends CoreModelState {
+double[] bias;
+		boolean[] constrainedFlag$sample28;
+		boolean constrainedFlag$sample32 = true;
+		boolean[] constrainedFlag$sample47;
+		boolean constrainedFlag$sample53 = true;
+		boolean[] constrainedFlag$sample71;
+		boolean fixedFlag$sample28 = false;
+		boolean fixedFlag$sample32 = false;
+		boolean fixedFlag$sample47 = false;
+		boolean fixedFlag$sample53 = false;
+		boolean fixedFlag$sample71 = false;
+		boolean fixedProbFlag$sample28 = false;
+		boolean fixedProbFlag$sample32 = false;
+		boolean fixedProbFlag$sample47 = false;
+		boolean fixedProbFlag$sample53 = false;
+		boolean fixedProbFlag$sample71 = false;
+		boolean fixedProbFlag$sample87 = false;
+		boolean[] flips;
+		double[] initialCoin;
+		int length$measured;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$bias;
+		double logProbability$flips;
+		double logProbability$initialCoin;
+		double logProbability$m;
+		double[] logProbability$sample71;
+		double[] logProbability$sample87;
+		double logProbability$st;
+		double logProbability$var28;
+		double logProbability$var46;
+		double logProbability$var52;
+		double[][] m;
+		boolean[] measured;
+		int nCoins;
+		int nFlips;
+		int[] st;
+		boolean system$gibbsForward = true;
+		double[] v;
+
+		@Override
+		public final void allocate() {
+			v = new double[nCoins];
+			if(!fixedFlag$sample28) {
+				m = new double[nCoins][];
+				for(int var27 = 0; var27 < nCoins; var27 += 1)
+					m[var27] = new double[nCoins];
+			}
+			if(!fixedFlag$sample32)
+				initialCoin = new double[nCoins];
+			if(!fixedFlag$sample47)
+				bias = new double[nCoins];
+			if((!fixedFlag$sample53 || !fixedFlag$sample71))
+				st = new int[length$measured];
+			flips = new boolean[length$measured];
+			constrainedFlag$sample47 = new boolean[nCoins];
+			constrainedFlag$sample28 = new boolean[nCoins];
+			constrainedFlag$sample71 = new boolean[(length$measured - 1)];
+			logProbability$sample71 = new double[(length$measured - 1)];
+			logProbability$sample87 = new double[length$measured];
+		}
+
+		final double[] get$bias() {
+			return bias;
+		}
+
+		final void set$bias(double[] cv$value, boolean allocated$) {
+			bias = cv$value;
+			fixedProbFlag$sample47 = false;
+			fixedProbFlag$sample87 = false;
+		}
+
+		final boolean get$fixedFlag$sample28() {
+			return fixedFlag$sample28;
+		}
+
+		final void set$fixedFlag$sample28(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample28 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
+					constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
+			}
+			fixedProbFlag$sample28 = (cv$value && fixedProbFlag$sample28);
+			fixedProbFlag$sample71 = (cv$value && fixedProbFlag$sample71);
+		}
+
+		final boolean get$fixedFlag$sample32() {
+			return fixedFlag$sample32;
+		}
+
+		final void set$fixedFlag$sample32(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample32 = cv$value;
+			constrainedFlag$sample32 = (cv$value || constrainedFlag$sample32);
+			fixedProbFlag$sample32 = (cv$value && fixedProbFlag$sample32);
+			fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
+		}
+
+		final boolean get$fixedFlag$sample47() {
+			return fixedFlag$sample47;
+		}
+
+		final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample47 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
+					constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+			}
+			fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
+			fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
+		}
+
+		final boolean get$fixedFlag$sample53() {
+			return fixedFlag$sample53;
+		}
+
+		final void set$fixedFlag$sample53(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample53 = cv$value;
+			constrainedFlag$sample53 = (cv$value || constrainedFlag$sample53);
+			fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
+			fixedProbFlag$sample71 = (cv$value && fixedProbFlag$sample71);
+			fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
+		}
+
+		final boolean get$fixedFlag$sample71() {
+			return fixedFlag$sample71;
+		}
+
+		final void set$fixedFlag$sample71(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample71 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample71$1 = 0; index$constrainedFlag$sample71$1 < constrainedFlag$sample71.length; index$constrainedFlag$sample71$1 += 1)
+					constrainedFlag$sample71[index$constrainedFlag$sample71$1] = true;
+			}
+			fixedProbFlag$sample71 = (cv$value && fixedProbFlag$sample71);
+			fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
+		}
+
+		final boolean[] get$flips() {
+			return flips;
+		}
+
+		final double[] get$initialCoin() {
+			return initialCoin;
+		}
+
+		final void set$initialCoin(double[] cv$value, boolean allocated$) {
+			initialCoin = cv$value;
+			fixedProbFlag$sample32 = false;
+			fixedProbFlag$sample53 = false;
+		}
+
+		final int get$length$measured() {
+			return length$measured;
+		}
+
+		final void set$length$measured(int cv$value, boolean allocated$) {
+			length$measured = cv$value;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$bias() {
+			return logProbability$bias;
+		}
+
+		final double get$logProbability$flips() {
+			return logProbability$flips;
+		}
+
+		final double get$logProbability$initialCoin() {
+			return logProbability$initialCoin;
+		}
+
+		final double get$logProbability$m() {
+			return logProbability$m;
+		}
+
+		final double get$logProbability$st() {
+			return logProbability$st;
+		}
+
+		final double[][] get$m() {
+			return m;
+		}
+
+		final void set$m(double[][] cv$value, boolean allocated$) {
+			m = cv$value;
+			fixedProbFlag$sample28 = false;
+			fixedProbFlag$sample71 = false;
+		}
+
+		final boolean[] get$measured() {
+			return measured;
+		}
+
+		final void set$measured(boolean[] cv$value, boolean allocated$) {
+			measured = cv$value;
+		}
+
+		final int get$nCoins() {
+			return nCoins;
+		}
+
+		final void set$nCoins(int cv$value, boolean allocated$) {
+			nCoins = cv$value;
+		}
+
+		final int get$nFlips() {
+			return nFlips;
+		}
+
+		final int[] get$st() {
+			return st;
+		}
+
+		final void set$st(int[] cv$value, boolean allocated$) {
+			st = cv$value;
+			fixedProbFlag$sample53 = false;
+			fixedProbFlag$sample71 = false;
+			fixedProbFlag$sample87 = false;
+		}
+
+		final double[] get$v() {
+			return v;
+		}
+	}
 
     private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$bias(); }
+        public double[] getValue() { return state.get$bias(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$bias(value, allocated);
+            state.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$bias(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$bias(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample47(fixed, allocated);
+                state.set$fixedFlag$sample47(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample47())
+            if(state.get$fixedFlag$sample47())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -51,7 +287,7 @@ public final class HMM_Paper extends Model {
 
     private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$flips(); }
+        public boolean[] getValue() { return state.get$flips(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -62,7 +298,7 @@ public final class HMM_Paper extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flips(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flips(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -80,27 +316,27 @@ public final class HMM_Paper extends Model {
 
     private final ComputedDoubleArrayInternal $initialCoin = new ComputedDoubleArrayInternal(this, "initialCoin", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$initialCoin(); }
+        public double[] getValue() { return state.get$initialCoin(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$initialCoin(value, allocated);
+            state.set$initialCoin(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$initialCoin(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$initialCoin(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample32(fixed, allocated);
+                state.set$fixedFlag$sample32(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample32())
+            if(state.get$fixedFlag$sample32())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -114,16 +350,16 @@ public final class HMM_Paper extends Model {
 
     private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$m(); }
+        public double[][] getValue() { return state.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$m(value, allocated);
+            state.set$m(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$m(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$m(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -133,13 +369,13 @@ public final class HMM_Paper extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample28(fixed, allocated);
+                state.set$fixedFlag$sample28(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample28())
+            if(state.get$fixedFlag$sample28())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -151,29 +387,29 @@ public final class HMM_Paper extends Model {
 
     private final ComputedIntegerArrayInternal $st = new ComputedIntegerArrayInternal(this, "st", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$st(); }
+        public int[] getValue() { return state.get$st(); }
 
         @Override
         protected void setValueInternal(int[] value) {
-            system$c.set$st(value, allocated);
+            state.set$st(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$st(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$st(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample53(fixed, allocated);
-                system$c.set$fixedFlag$sample71(fixed, allocated);
+                state.set$fixedFlag$sample53(fixed, allocated);
+                state.set$fixedFlag$sample71(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample53 = system$c.get$fixedFlag$sample53();
-            boolean fixedFlag$sample71 = system$c.get$fixedFlag$sample71();
+            boolean fixedFlag$sample53 = state.get$fixedFlag$sample53();
+            boolean fixedFlag$sample71 = state.get$fixedFlag$sample71();
             if(fixedFlag$sample53 && fixedFlag$sample71)
                 return Immutability.FIXED;
             else if(fixedFlag$sample53 || fixedFlag$sample71)
@@ -192,12 +428,12 @@ public final class HMM_Paper extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$nCoins();
+                return state.get$nCoins();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$nCoins(value, allocated); }
+        protected void setValueInternal(int value) { state.set$nCoins(value, allocated); }
     };
 
 	/** Observed variable representing nCoins of type int from the Sandwood model. */
@@ -209,24 +445,24 @@ public final class HMM_Paper extends Model {
         @Override
         public boolean[] getValue() {
             synchronized(model) {
-                return system$c.get$measured();
+                return state.get$measured();
             }
         }
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$measured(value, allocated);
-            system$c.set$length$measured(value.length, allocated);
+            state.set$measured(value, allocated);
+            state.set$length$measured(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$measured(shape, allocated);
+            state.set$length$measured(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$measured();
+            return state.get$length$measured();
         }
     };
 
@@ -243,6 +479,7 @@ public final class HMM_Paper extends Model {
 	/** A constructor for a model where no variable values are set. */
     public HMM_Paper() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("bias", $bias);
         $computedVariables.put("flips", $flips);
@@ -255,7 +492,9 @@ public final class HMM_Paper extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("measured", $measured);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        HMM_Paper$SingleThreadCPU core = new HMM_Paper$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -285,52 +524,15 @@ public final class HMM_Paper extends Model {
     }
     
     @Override
-    protected HMM_Paper$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        HMM_Paper$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new HMM_Paper$SingleThreadCPU(target);
-                break;
+                return new HMM_Paper$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new HMM_Paper$MultiThreadCPU(target);
-                break;
+                return new HMM_Paper$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(HMM_Paper$CoreInterface oldCore, HMM_Paper$CoreInterface newCore) {
-        //Model inputs
-        if(nCoins.isSet())
-            newCore.set$nCoins(oldCore.get$nCoins(), false);
-
-        //Observed arrays
-        if(measured.isSet()) {
-            newCore.set$measured(oldCore.get$measured(), false);
-            newCore.set$length$measured(oldCore.get$length$measured(), false);
-        }
-        else if(measured.shapeSet())
-            newCore.set$length$measured(oldCore.get$length$measured(), false);
-
-        //ComputedVariables
-        if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias(), false);
-        if($initialCoin.isSet())
-            newCore.set$initialCoin(oldCore.get$initialCoin(), false);
-        if($m.isSet())
-            newCore.set$m(oldCore.get$m(), false);
-        if($st.isSet())
-            newCore.set$st(oldCore.get$st(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28(), false);
-        newCore.set$fixedFlag$sample32(oldCore.get$fixedFlag$sample32(), false);
-        newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47(), false);
-        newCore.set$fixedFlag$sample53(oldCore.get$fixedFlag$sample53(), false);
-        newCore.set$fixedFlag$sample71(oldCore.get$fixedFlag$sample71(), false);
     }
 
 	/**

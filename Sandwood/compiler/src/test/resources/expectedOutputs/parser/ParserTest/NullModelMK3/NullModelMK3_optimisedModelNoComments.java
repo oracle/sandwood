@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
 import org.sandwood.runtime.internal.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.ExecutionTarget;
@@ -14,32 +16,127 @@ import org.sandwood.runtime.model.variables.*;
  * Class representing the Sandwood model NullModelMK3 This is the class that all user
  * interactions with the model should occur through.
  */
-public final class NullModelMK3 extends Model {
-    private NullModelMK3$CoreInterface system$c = new NullModelMK3$SingleThreadCPU(ExecutionTarget.singleThread);
+public final class NullModelMK3 extends Model<NullModelMK3.State> {
+	final class State extends CoreModelState {
+double bias;
+		boolean constrainedFlag$sample10 = true;
+		double eta;
+		boolean fixedFlag$sample10 = false;
+		boolean fixedProbFlag$sample10 = false;
+		boolean fixedProbFlag$sample12 = false;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$bias;
+		double logProbability$binomial;
+		double logProbability$positiveCount;
+		double min;
+		int observedPositiveCount;
+		int observedSampleCount;
+		int positiveCount;
+		boolean system$gibbsForward = true;
+
+		@Override
+		public final void allocate() {}
+
+		final double get$bias() {
+			return bias;
+		}
+
+		final void set$bias(double cv$value, boolean allocated$) {
+			bias = cv$value;
+			fixedProbFlag$sample10 = false;
+			fixedProbFlag$sample12 = false;
+		}
+
+		final double get$eta() {
+			return eta;
+		}
+
+		final void set$eta(double cv$value, boolean allocated$) {
+			eta = cv$value;
+		}
+
+		final boolean get$fixedFlag$sample10() {
+			return fixedFlag$sample10;
+		}
+
+		final void set$fixedFlag$sample10(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample10 = cv$value;
+			constrainedFlag$sample10 = (cv$value || constrainedFlag$sample10);
+			fixedProbFlag$sample10 = (cv$value && fixedProbFlag$sample10);
+			fixedProbFlag$sample12 = (cv$value && fixedProbFlag$sample12);
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$bias() {
+			return logProbability$bias;
+		}
+
+		final double get$logProbability$binomial() {
+			return logProbability$binomial;
+		}
+
+		final double get$logProbability$positiveCount() {
+			return logProbability$positiveCount;
+		}
+
+		final double get$min() {
+			return min;
+		}
+
+		final int get$observedPositiveCount() {
+			return observedPositiveCount;
+		}
+
+		final void set$observedPositiveCount(int cv$value, boolean allocated$) {
+			observedPositiveCount = cv$value;
+		}
+
+		final int get$observedSampleCount() {
+			return observedSampleCount;
+		}
+
+		final void set$observedSampleCount(int cv$value, boolean allocated$) {
+			observedSampleCount = cv$value;
+		}
+
+		final int get$positiveCount() {
+			return positiveCount;
+		}
+	}
 
     private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$bias(); }
+        public double getValue() { return state.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$bias(value, allocated);
+            state.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$bias(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$bias(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample10(fixed, allocated);
+                state.set$fixedFlag$sample10(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample10())
+            if(state.get$fixedFlag$sample10())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
@@ -51,7 +148,7 @@ public final class NullModelMK3 extends Model {
 
     private final ComputedIntegerInternal $positiveCount = new ComputedIntegerInternal(this, "positiveCount", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int getValue() { return system$c.get$positiveCount(); }
+        public int getValue() { return state.get$positiveCount(); }
 
         @Override
         protected void setValueInternal(int value) {}
@@ -62,7 +159,7 @@ public final class NullModelMK3 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$positiveCount(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$positiveCount(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -86,12 +183,12 @@ public final class NullModelMK3 extends Model {
         @Override
         public double getValue() {
             synchronized(model) {
-                return system$c.get$eta();
+                return state.get$eta();
             }
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$eta(value, allocated); }
+        protected void setValueInternal(double value) { state.set$eta(value, allocated); }
     };
 
 	/** Observed variable representing eta of type double from the Sandwood model. */
@@ -101,12 +198,12 @@ public final class NullModelMK3 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$observedSampleCount();
+                return state.get$observedSampleCount();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$observedSampleCount(value, allocated); }
+        protected void setValueInternal(int value) { state.set$observedSampleCount(value, allocated); }
     };
 
 	/**
@@ -121,12 +218,12 @@ public final class NullModelMK3 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$observedPositiveCount();
+                return state.get$observedPositiveCount();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$observedPositiveCount(value, allocated); }
+        protected void setValueInternal(int value) { state.set$observedPositiveCount(value, allocated); }
     };
 
 	/**
@@ -140,7 +237,7 @@ public final class NullModelMK3 extends Model {
     private final RandomVariableInternal $binomial = new RandomVariableInternal(this, "binomial", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$binomial();
+            return state.get$logProbability$binomial();
         }
     };
 
@@ -153,6 +250,7 @@ public final class NullModelMK3 extends Model {
 	/** A constructor for a model where no variable values are set. */
     public NullModelMK3() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("bias", $bias);
         $computedVariables.put("positiveCount", $positiveCount);
@@ -163,7 +261,9 @@ public final class NullModelMK3 extends Model {
 
         //Observed scalar fields
         $regularObservedValues.put("observedPositiveCount", $observedPositiveCount);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+
+        NullModelMK3$SingleThreadCPU core = new NullModelMK3$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
     }
 
 	/**
@@ -194,40 +294,15 @@ public final class NullModelMK3 extends Model {
     }
     
     @Override
-    protected NullModelMK3$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        NullModelMK3$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new NullModelMK3$SingleThreadCPU(target);
-                break;
+                return new NullModelMK3$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new NullModelMK3$MultiThreadCPU(target);
-                break;
+                return new NullModelMK3$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
-    }
-
-    private void transferData(NullModelMK3$CoreInterface oldCore, NullModelMK3$CoreInterface newCore) {
-        //Model inputs
-        if(eta.isSet())
-            newCore.set$eta(oldCore.get$eta(), false);
-        if(observedSampleCount.isSet())
-            newCore.set$observedSampleCount(oldCore.get$observedSampleCount(), false);
-
-        //Observed scalars
-        if(observedPositiveCount.isSet())
-            newCore.set$observedPositiveCount(oldCore.get$observedPositiveCount(), false);
-
-        //ComputedVariables
-        if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10(), false);
     }
 
 	/**
