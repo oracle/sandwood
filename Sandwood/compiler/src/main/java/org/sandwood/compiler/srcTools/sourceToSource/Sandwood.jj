@@ -194,7 +194,14 @@ public class SandwoodParser
   private String getJavadocComment(Token t) {
       while (t.specialToken != null && t.specialToken.kind != FORMAL_COMMENT)
           t = t.specialToken;
-      return (t.specialToken==null)?null:t.specialToken.image.replace("\n", "\\n").replace("\r","");   
+      if(t.specialToken==null)
+          return null;
+      else {
+          String comment = t.specialToken.image;
+          comment = StringUtil.normalizeNewLines(comment);
+          comment = StringUtil.escapeSpecialCharacters(comment);
+          return comment;
+    }
   }
 
   private String getTypeConstructor(Type<?> type) {
