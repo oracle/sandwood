@@ -2158,14 +2158,13 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			}
 		}
 		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-			boolean[][] var215 = metric_valid_g[sample$var196];
 			double[][] var211 = metric_g[sample$var196];
 			for(int server = 0; server < noServers; server += 1) {
 				boolean[] metric_valid_inner = metric_valid_g[sample$var196][server];
 				double[] metric_inner = var211[server];
 				for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
 					metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
-					if(var215[server][timeStep$var226]) {
+					if(metric_valid_inner[timeStep$var226]) {
 						var245[sample$var196][server][timeStep$var226] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
 						metric_inner[timeStep$var226] = var245[sample$var196][server][timeStep$var226];
 					}
