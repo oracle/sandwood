@@ -129,7 +129,14 @@ public class ArrayConstructTask<A extends Variable<A>> extends ProducingDataflow
 
     @Override
     public void constructTrace(TraceConstructionDesc desc) {
+        // Push null to remove the current restrictions due to length type as this is now in a scalar world again.
+        desc.lengthTypes.push(null);
+        // Continue the trace via the length parameter
         super.constructTrace(desc);
+        // Then restore the length
+        desc.lengthTypes.pop();
+
+        // Continue the trace via any outer arrays.
         if(output.isSubArray()) {
             output.getOuterArrayDesc().getGetTask().constructTrace(desc);
         }

@@ -32,6 +32,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTaskImplementa
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
+import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.VariableWrapper;
@@ -605,16 +606,28 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
                     // If this is an array variable then the value being placed into the array is
                     // another array. As such all possible puts to this array that could affect the
                     // original get are required.
-                    if(in.getType().isArray()) {
-
-                        in.constructTrace(desc);
+                    Type<?> type = in.getType();
+                    if(type.isArray()) {
+                        // If the value being put is the same type as an array whose length is currently being tracked,
+                        // jump straight to the array constructor, skipping the exploration of any put operations on the
+                        // array.
+                        if(type.equals(desc.lengthTypes.peek()))
+                            in.instanceHandle().constructTrace(desc);
+                        else
+                            in.constructTrace(desc);
                     } else {
                         // We are starting a new trace through arrays as we are following
                         // the index or a scalar value variable, so clear the initial get field.
                         desc.arrayEntryPoint = null;
 
+                        // We are exploring a scalar so remove the restrictions due to length type.
+                        desc.lengthTypes.push(null);
+
                         // Explore the trace
                         in.constructTrace(desc);
+
+                        // Reinstate the guard
+                        desc.lengthTypes.pop();
 
                         // Restore the get task for this trace.
                         desc.arrayEntryPoint = arrayEntryPoint;
