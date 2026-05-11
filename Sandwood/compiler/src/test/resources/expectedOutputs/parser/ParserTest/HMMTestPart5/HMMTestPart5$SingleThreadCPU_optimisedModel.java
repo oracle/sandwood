@@ -921,6 +921,13 @@ class HMMTestPart5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void sample53() {
 		// Unrolled loop
 		{
+			// Guards to ensure that st is only updated when there is a valid path.
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			st[0] = 0;
+			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
@@ -1003,6 +1010,13 @@ class HMMTestPart5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Initialize a counter to track the reached distributions.
 			cv$var52$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
+		
+		// Guards to ensure that st is only updated when there is a valid path.
+		// 
+		// Value of the variable at this index
+		// 
+		// Substituted "cv$valuePos" with its value "1".
+		st[0] = 2;
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.

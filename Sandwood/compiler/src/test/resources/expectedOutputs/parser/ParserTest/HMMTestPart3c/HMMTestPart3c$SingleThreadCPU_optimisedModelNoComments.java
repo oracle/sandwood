@@ -346,6 +346,7 @@ class HMMTestPart3c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 
 	private final void sample53() {
 		{
+			st[0] = 0;
 			double cv$accumulatedProbabilities = Math.log(m[0][0]);
 			if((1 < samples))
 				cv$accumulatedProbabilities = ((((0.0 <= st[1]) && (st[1] < 2))?Math.log(m[0][st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
@@ -355,6 +356,7 @@ class HMMTestPart3c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			}
 			cv$var52$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
+		st[0] = 1;
 		double cv$accumulatedProbabilities = Math.log(m[0][1]);
 		if((1 < samples))
 			cv$accumulatedProbabilities = ((((0.0 <= st[1]) && (st[1] < 2))?Math.log(m[1][st[1]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);

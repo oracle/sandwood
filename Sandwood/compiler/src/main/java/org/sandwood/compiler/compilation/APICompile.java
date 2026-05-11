@@ -95,7 +95,7 @@ import org.sandwood.compiler.trees.outputTree.OutputSandwoodInterfaceGenerated;
 import org.sandwood.compiler.trees.transformationTree.TransSandwoodClassGenerated;
 
 public class APICompile {
-    // A flag used to make the compiler run in serial mode. THis is used to make it easier to debug errors in the
+    // A flag used to make the compiler run in serial mode. This is used to make it easier to debug errors in the
     // compiler and should always be true in production systems.
     public static final boolean parallel = true;
 

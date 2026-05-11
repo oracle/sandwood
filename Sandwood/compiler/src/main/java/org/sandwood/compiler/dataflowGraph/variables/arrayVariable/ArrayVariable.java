@@ -8,13 +8,19 @@
 
 package org.sandwood.compiler.dataflowGraph.variables.arrayVariable;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.Sandwood;
+import org.sandwood.compiler.dataflowGraph.scopes.ElseScope;
+import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
+import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
+import org.sandwood.compiler.dataflowGraph.scopes.Scope.ScopeType;
 import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
 import org.sandwood.compiler.dataflowGraph.tasks.ArrayProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
@@ -483,6 +489,18 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
      * @return
      */
     public Set<ArrayVariable<A>> getPossibleInstances(Scope consumerScope, int destinationID) {
+        Map<IfScope, ElseScope> conditionalScopes = new HashMap<>();
+        {
+            Scope s = consumerScope;
+            while(s != GlobalScope.scope) {
+                if(s.getScopeType() == ScopeType.ELSE) {
+                    ElseScope e = (ElseScope) s;
+                    conditionalScopes.put(e.ifScope, e);
+                }
+                s = s.getEnclosingScope();
+            }
+        }
+
         Set<ArrayVariable<A>> vars = new HashSet<>();
 
         // Get any puts that happen after the scope, but could reach it. This goes beyond
@@ -491,7 +509,32 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
         ArrayVariable<A> vec = instanceHandle;
         while(vec != null) {
             if(vec.getParent().id() < destinationID) {
-                vars.add(vec);
+                Scope s = vec.scope();
+                boolean iterating = false;
+                boolean inScope = true;
+                ElseScope lastElse = null;
+                while(s != GlobalScope.scope) {
+                    switch(s.getScopeType()) {
+                        case ELSE:
+                            lastElse = (ElseScope) s;
+                            break;
+                        case FOR:
+                            iterating = true;
+                            break;
+                        case IF:
+                            ElseScope e = conditionalScopes.get(s);
+                            if(e != null)
+                                inScope = inScope && e == lastElse;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    s = s.getEnclosingScope();
+                }
+
+                if(iterating || inScope)
+                    vars.add(vec);
                 vec = vec.childInstance;
             } else
                 break;

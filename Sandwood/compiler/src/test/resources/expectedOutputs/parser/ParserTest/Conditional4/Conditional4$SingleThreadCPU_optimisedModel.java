@@ -668,6 +668,7 @@ class Conditional4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// 
 		// Substituted "cv$valuePos" with its value "0".
 		guard = false;
+		bias[0] = var19;
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
