@@ -78,7 +78,9 @@ public class GetArrayLengthTask extends NumberProducingDataflowTaskImplementatio
     @Override
     public void constructTrace(TraceConstructionDesc desc) {
         desc.trace.push(new DataflowTaskArgDesc(this, 0));
+        desc.lengthTypes.push(array.getType());
         array.instanceHandle().constructTrace(desc);
+        desc.lengthTypes.pop();
         desc.trace.pop();
     }
 

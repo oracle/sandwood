@@ -12,8 +12,6 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private boolean fixedFlag$sample101 = false;
 	private boolean fixedProbFlag$sample101 = false;
 	private boolean fixedProbFlag$sample165 = false;
-	private boolean[][][] guard$sample101poisson164$global;
-	private boolean[][][] guard$sample101put160$global;
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$arr;
@@ -414,7 +412,6 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 							}
 						}
 						{
-							boolean[][] guard$sample101put160 = guard$sample101put160$global[threadID$cv$i$var80];
 							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
 								if((i$var80 == i$var119)) {
 									for(int j = 0; j < time_dim; j += 1) {
@@ -424,97 +421,17 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 													if((t == index$t$3_4)) {
 														for(int index$i$3_5 = 0; index$i$3_5 < n_ac; index$i$3_5 += 1) {
 															if((i$var119 == index$i$3_5)) {
-																{
-																	guard$sample101put160[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = false;
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$4_4 = (0 + 1); index$t$4_4 < T; index$t$4_4 += 1) {
-													if((t == index$t$4_4)) {
-														for(int index$i$4_5 = 0; index$i$4_5 < n_ac; index$i$4_5 += 1) {
-															if((i$var119 == index$i$4_5)) {
 																if(((0 <= j) && (j < time_dim))) {
 																	{
-																		guard$sample101put160[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = false;
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$5_4 = (0 + 1); index$t$5_4 < T; index$t$5_4 += 1) {
-													if((t == index$t$5_4)) {
-														for(int index$i$5_5 = 0; index$i$5_5 < n_ac; index$i$5_5 += 1) {
-															if((i$var119 == index$i$5_5)) {
-																{
-																	if(!guard$sample101put160[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)]) {
-																		guard$sample101put160[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = true;
 																		{
-																			double[] var139 = sum_t[index$t$5_4];
-																			double reduceVar$var151$12 = 0.0;
+																			double[] var139 = sum_t[index$t$3_4];
+																			double reduceVar$var151$9 = 0.0;
 																			for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-																				double x = reduceVar$var151$12;
-																				double y = time_impact[index$t$5_4][index$i$5_5][cv$reduction152Index];
-																				reduceVar$var151$12 = (x + y);
+																				double x = reduceVar$var151$9;
+																				double y = time_impact[index$t$3_4][index$i$3_5][cv$reduction152Index];
+																				reduceVar$var151$9 = (x + y);
 																			}
-																			var139[index$i$5_5] = reduceVar$var151$12;
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$6_4 = (0 + 1); index$t$6_4 < T; index$t$6_4 += 1) {
-													if((t == index$t$6_4)) {
-														for(int index$i$6_5 = 0; index$i$6_5 < n_ac; index$i$6_5 += 1) {
-															if((i$var119 == index$i$6_5)) {
-																if(((0 <= j) && (j < time_dim))) {
-																	{
-																		if(!guard$sample101put160[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)]) {
-																			guard$sample101put160[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = true;
-																			{
-																				double[] var139 = sum_t[index$t$6_4];
-																				double reduceVar$var151$13 = 0.0;
-																				for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-																					double x = reduceVar$var151$13;
-																					double y = time_impact[index$t$6_4][index$i$6_5][cv$reduction152Index];
-																					reduceVar$var151$13 = (x + y);
-																				}
-																				var139[index$i$6_5] = reduceVar$var151$13;
-																			}
+																			var139[index$i$3_5] = reduceVar$var151$9;
 																		}
 																	}
 																}
@@ -543,98 +460,39 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - cv$temp$0$var83) / Math.sqrt(cv$temp$1$var84))) - (0.5 * Math.log(cv$temp$1$var84))));
 					{
 						{
-							boolean[][] guard$sample101poisson164 = guard$sample101poisson164$global[threadID$cv$i$var80];
+							double traceTempVariable$var134$4_1 = cv$currentValue;
 							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
 								if((i$var80 == i$var119)) {
 									for(int j = 0; j < time_dim; j += 1) {
 										if((var95 == j)) {
 											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$7_4 = (0 + 1); index$t$7_4 < T; index$t$7_4 += 1) {
-													if((t == index$t$7_4)) {
-														for(int index$i$7_5 = 0; index$i$7_5 < n_ac; index$i$7_5 += 1) {
-															if((i$var119 == index$i$7_5)) {
-																{
-																	for(int index$t$7_6 = (0 + 1); index$t$7_6 < T; index$t$7_6 += 1) {
-																		if((index$t$7_4 == index$t$7_6)) {
-																			for(int index$i$7_7 = 0; index$i$7_7 < n_ac; index$i$7_7 += 1) {
-																				if((index$i$7_5 == index$i$7_7))
-																					guard$sample101poisson164[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = false;
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$8_4 = (0 + 1); index$t$8_4 < T; index$t$8_4 += 1) {
-													if((t == index$t$8_4)) {
-														for(int index$i$8_5 = 0; index$i$8_5 < n_ac; index$i$8_5 += 1) {
-															if((i$var119 == index$i$8_5)) {
+												double traceTempVariable$x$4_5 = (TimeFeat[t][j] * traceTempVariable$var134$4_1);
+												for(int index$t$4_6 = (0 + 1); index$t$4_6 < T; index$t$4_6 += 1) {
+													if((t == index$t$4_6)) {
+														for(int index$i$4_7 = 0; index$i$4_7 < n_ac; index$i$4_7 += 1) {
+															if((i$var119 == index$i$4_7)) {
 																if(((0 <= j) && (j < time_dim))) {
 																	{
-																		for(int index$t$8_6 = (0 + 1); index$t$8_6 < T; index$t$8_6 += 1) {
-																			if((index$t$8_4 == index$t$8_6)) {
-																				for(int index$i$8_7 = 0; index$i$8_7 < n_ac; index$i$8_7 += 1) {
-																					if((index$i$8_5 == index$i$8_7))
-																						guard$sample101poisson164[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = false;
-																				}
+																		if((0 < time_dim)) {
+																			double reduceVar$var151$10 = 0.0;
+																			for(int cv$reduction673Index = 0; cv$reduction673Index < j; cv$reduction673Index += 1) {
+																				double x = reduceVar$var151$10;
+																				double y = time_impact[index$t$4_6][index$i$4_7][cv$reduction673Index];
+																				reduceVar$var151$10 = (x + y);
 																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							double traceTempVariable$var134$9_1 = cv$currentValue;
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												for(int index$t$9_5 = (0 + 1); index$t$9_5 < T; index$t$9_5 += 1) {
-													if((t == index$t$9_5)) {
-														for(int index$i$9_6 = 0; index$i$9_6 < n_ac; index$i$9_6 += 1) {
-															if((i$var119 == index$i$9_6)) {
-																{
-																	if((0 < time_dim)) {
-																		double reduceVar$var151$14 = time_impact[index$t$9_5][index$i$9_6][0];
-																		for(int cv$reduction1129Index = 0; cv$reduction1129Index < 0; cv$reduction1129Index += 1) {
-																			double x = reduceVar$var151$14;
-																			double y = time_impact[index$t$9_5][index$i$9_6][cv$reduction1129Index];
-																			reduceVar$var151$14 = (x + y);
-																		}
-																		for(int cv$reduction1129Index = (0 + 1); cv$reduction1129Index < time_dim; cv$reduction1129Index += 1) {
-																			double x = reduceVar$var151$14;
-																			double y = time_impact[index$t$9_5][index$i$9_6][cv$reduction1129Index];
-																			reduceVar$var151$14 = (x + y);
-																		}
-																		double cv$reduced152 = reduceVar$var151$14;
-																		reduceVar$var151$14 = (0.0 + cv$reduced152);
-																		double traceTempVariable$var151$9_7 = reduceVar$var151$14;
-																		double traceTempVariable$var156$9_8 = traceTempVariable$var151$9_7;
-																		for(int index$t$9_9 = (0 + 1); index$t$9_9 < T; index$t$9_9 += 1) {
-																			if((index$t$9_5 == index$t$9_9)) {
-																				for(int index$i$9_10 = 0; index$i$9_10 < n_ac; index$i$9_10 += 1) {
-																					if((index$i$9_6 == index$i$9_10)) {
-																						if(!guard$sample101poisson164[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)]) {
-																							guard$sample101poisson164[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = true;
+																			for(int cv$reduction673Index = (j + 1); cv$reduction673Index < time_dim; cv$reduction673Index += 1) {
+																				double x = reduceVar$var151$10;
+																				double y = time_impact[index$t$4_6][index$i$4_7][cv$reduction673Index];
+																				reduceVar$var151$10 = (x + y);
+																			}
+																			double cv$reduced152 = reduceVar$var151$10;
+																			reduceVar$var151$10 = (traceTempVariable$x$4_5 + cv$reduced152);
+																			double traceTempVariable$var151$4_8 = reduceVar$var151$10;
+																			double traceTempVariable$var156$4_9 = traceTempVariable$var151$4_8;
+																			for(int index$t$4_10 = (0 + 1); index$t$4_10 < T; index$t$4_10 += 1) {
+																				if((index$t$4_6 == index$t$4_10)) {
+																					for(int index$i$4_11 = 0; index$i$4_11 < n_ac; index$i$4_11 += 1) {
+																						if((index$i$4_7 == index$i$4_11)) {
 																							{
 																								double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
 																								double cv$consumerDistributionProbabilityAccumulator = 1.0;
@@ -644,16 +502,16 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 																											{
 																												double cv$temp$2$var156;
 																												{
-																													double var156 = traceTempVariable$var156$9_8;
+																													double var156 = traceTempVariable$var156$4_9;
 																													cv$temp$2$var156 = var156;
 																												}
-																												if(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$9_9][index$i$9_10], cv$temp$2$var156)) < cv$accumulatedConsumerProbabilities))
-																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$9_9][index$i$9_10], cv$temp$2$var156)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																												if(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], cv$temp$2$var156)) < cv$accumulatedConsumerProbabilities))
+																													cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], cv$temp$2$var156)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																												else {
 																													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$9_9][index$i$9_10], cv$temp$2$var156));
+																														cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], cv$temp$2$var156));
 																													else
-																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$9_9][index$i$9_10], cv$temp$2$var156)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$9_9][index$i$9_10], cv$temp$2$var156)));
+																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], cv$temp$2$var156)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$4_10][index$i$4_11], cv$temp$2$var156)));
 																												}
 																												cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																											}
@@ -668,93 +526,6 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 																										cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
 																									else
 																										cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																								}
-																							}
-																						}
-																					}
-																				}
-																			}
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							double traceTempVariable$var134$10_1 = cv$currentValue;
-							for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-								if((i$var80 == i$var119)) {
-									for(int j = 0; j < time_dim; j += 1) {
-										if((var95 == j)) {
-											for(int t = (0 + 1); t < T; t += 1) {
-												double traceTempVariable$x$10_5 = (TimeFeat[t][j] * traceTempVariable$var134$10_1);
-												for(int index$t$10_6 = (0 + 1); index$t$10_6 < T; index$t$10_6 += 1) {
-													if((t == index$t$10_6)) {
-														for(int index$i$10_7 = 0; index$i$10_7 < n_ac; index$i$10_7 += 1) {
-															if((i$var119 == index$i$10_7)) {
-																if(((0 <= j) && (j < time_dim))) {
-																	{
-																		if((0 < time_dim)) {
-																			double reduceVar$var151$15 = 0.0;
-																			for(int cv$reduction1175Index = 0; cv$reduction1175Index < j; cv$reduction1175Index += 1) {
-																				double x = reduceVar$var151$15;
-																				double y = time_impact[index$t$10_6][index$i$10_7][cv$reduction1175Index];
-																				reduceVar$var151$15 = (x + y);
-																			}
-																			for(int cv$reduction1175Index = (j + 1); cv$reduction1175Index < time_dim; cv$reduction1175Index += 1) {
-																				double x = reduceVar$var151$15;
-																				double y = time_impact[index$t$10_6][index$i$10_7][cv$reduction1175Index];
-																				reduceVar$var151$15 = (x + y);
-																			}
-																			double cv$reduced152 = reduceVar$var151$15;
-																			reduceVar$var151$15 = (traceTempVariable$x$10_5 + cv$reduced152);
-																			double traceTempVariable$var151$10_8 = reduceVar$var151$15;
-																			double traceTempVariable$var156$10_9 = traceTempVariable$var151$10_8;
-																			for(int index$t$10_10 = (0 + 1); index$t$10_10 < T; index$t$10_10 += 1) {
-																				if((index$t$10_6 == index$t$10_10)) {
-																					for(int index$i$10_11 = 0; index$i$10_11 < n_ac; index$i$10_11 += 1) {
-																						if((index$i$10_7 == index$i$10_11)) {
-																							if(!guard$sample101poisson164[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)]) {
-																								guard$sample101poisson164[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = true;
-																								{
-																									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																									double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																									{
-																										{
-																											{
-																												{
-																													double cv$temp$3$var156;
-																													{
-																														double var156 = traceTempVariable$var156$10_9;
-																														cv$temp$3$var156 = var156;
-																													}
-																													if(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$10_10][index$i$10_11], cv$temp$3$var156)) < cv$accumulatedConsumerProbabilities))
-																														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$10_10][index$i$10_11], cv$temp$3$var156)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																													else {
-																														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$10_10][index$i$10_11], cv$temp$3$var156));
-																														else
-																															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$10_10][index$i$10_11], cv$temp$3$var156)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityPoisson(arr[index$t$10_10][index$i$10_11], cv$temp$3$var156)));
-																													}
-																													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																												}
-																											}
-																										}
-																									}
-																									cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																									if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																										cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																									else {
-																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																											cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																										else
-																											cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																									}
 																								}
 																							}
 																						}
@@ -814,107 +585,26 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 					}
 				}
 				{
-					boolean[][] guard$sample101put160 = guard$sample101put160$global[threadID$cv$i$var80];
 					for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
 						if((i$var80 == i$var119)) {
 							for(int j = 0; j < time_dim; j += 1) {
 								if((var95 == j)) {
 									for(int t = (0 + 1); t < T; t += 1) {
-										for(int index$t$17_4 = (0 + 1); index$t$17_4 < T; index$t$17_4 += 1) {
-											if((t == index$t$17_4)) {
-												for(int index$i$17_5 = 0; index$i$17_5 < n_ac; index$i$17_5 += 1) {
-													if((i$var119 == index$i$17_5)) {
-														{
-															guard$sample101put160[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = false;
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-						if((i$var80 == i$var119)) {
-							for(int j = 0; j < time_dim; j += 1) {
-								if((var95 == j)) {
-									for(int t = (0 + 1); t < T; t += 1) {
-										for(int index$t$18_4 = (0 + 1); index$t$18_4 < T; index$t$18_4 += 1) {
-											if((t == index$t$18_4)) {
-												for(int index$i$18_5 = 0; index$i$18_5 < n_ac; index$i$18_5 += 1) {
-													if((i$var119 == index$i$18_5)) {
+										for(int index$t$9_4 = (0 + 1); index$t$9_4 < T; index$t$9_4 += 1) {
+											if((t == index$t$9_4)) {
+												for(int index$i$9_5 = 0; index$i$9_5 < n_ac; index$i$9_5 += 1) {
+													if((i$var119 == index$i$9_5)) {
 														if(((0 <= j) && (j < time_dim))) {
 															{
-																guard$sample101put160[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = false;
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-						if((i$var80 == i$var119)) {
-							for(int j = 0; j < time_dim; j += 1) {
-								if((var95 == j)) {
-									for(int t = (0 + 1); t < T; t += 1) {
-										for(int index$t$19_4 = (0 + 1); index$t$19_4 < T; index$t$19_4 += 1) {
-											if((t == index$t$19_4)) {
-												for(int index$i$19_5 = 0; index$i$19_5 < n_ac; index$i$19_5 += 1) {
-													if((i$var119 == index$i$19_5)) {
-														{
-															if(!guard$sample101put160[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)]) {
-																guard$sample101put160[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = true;
 																{
-																	double[] var139 = sum_t[index$t$19_4];
-																	double reduceVar$var151$16 = 0.0;
+																	double[] var139 = sum_t[index$t$9_4];
+																	double reduceVar$var151$11 = 0.0;
 																	for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-																		double x = reduceVar$var151$16;
-																		double y = time_impact[index$t$19_4][index$i$19_5][cv$reduction152Index];
-																		reduceVar$var151$16 = (x + y);
+																		double x = reduceVar$var151$11;
+																		double y = time_impact[index$t$9_4][index$i$9_5][cv$reduction152Index];
+																		reduceVar$var151$11 = (x + y);
 																	}
-																	var139[index$i$19_5] = reduceVar$var151$16;
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1) {
-						if((i$var80 == i$var119)) {
-							for(int j = 0; j < time_dim; j += 1) {
-								if((var95 == j)) {
-									for(int t = (0 + 1); t < T; t += 1) {
-										for(int index$t$20_4 = (0 + 1); index$t$20_4 < T; index$t$20_4 += 1) {
-											if((t == index$t$20_4)) {
-												for(int index$i$20_5 = 0; index$i$20_5 < n_ac; index$i$20_5 += 1) {
-													if((i$var119 == index$i$20_5)) {
-														if(((0 <= j) && (j < time_dim))) {
-															{
-																if(!guard$sample101put160[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)]) {
-																	guard$sample101put160[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = true;
-																	{
-																		double[] var139 = sum_t[index$t$20_4];
-																		double reduceVar$var151$17 = 0.0;
-																		for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-																			double x = reduceVar$var151$17;
-																			double y = time_impact[index$t$20_4][index$i$20_5][cv$reduction152Index];
-																			reduceVar$var151$17 = (x + y);
-																		}
-																		var139[index$i$20_5] = reduceVar$var151$17;
-																	}
+																	var139[index$i$9_5] = reduceVar$var151$11;
 																}
 															}
 														}
@@ -933,34 +623,7 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	}
 
 	@Override
-	public final void allocateScratch() {
-		{
-			int cv$max_t = 0;
-			int cv$max_i$var119 = 0;
-			for(int t = (0 + 1); t < T; t += 1)
-				cv$max_i$var119 = Math.max(cv$max_i$var119, ((n_ac - 0) / 1));
-			cv$max_t = Math.max(cv$max_t, ((T - (0 + 1)) / 1));
-			{
-				int cv$threadCount = threadCount();
-				guard$sample101put160$global = new boolean[cv$threadCount][][];
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					guard$sample101put160$global[cv$index] = new boolean[cv$max_t][cv$max_i$var119];
-			}
-		}
-		{
-			int cv$max_t = 0;
-			int cv$max_i$var119 = 0;
-			for(int t = (0 + 1); t < T; t += 1)
-				cv$max_i$var119 = Math.max(cv$max_i$var119, ((n_ac - 0) / 1));
-			cv$max_t = Math.max(cv$max_t, ((T - (0 + 1)) / 1));
-			{
-				int cv$threadCount = threadCount();
-				guard$sample101poisson164$global = new boolean[cv$threadCount][][];
-				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
-					guard$sample101poisson164$global[cv$index] = new boolean[cv$max_t][cv$max_i$var119];
-			}
-		}
-	}
+	public final void allocateScratch() {}
 
 	@Override
 	public final void allocator() {
@@ -1010,7 +673,6 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			for(int t = (0 + 1); t < T; t += 1)
 				logProbability$sample165[((t - (0 + 1)) / 1)] = new double[((((n_ac - 1) - 0) / 1) + 1)];
 		}
-		allocateScratch();
 	}
 
 	@Override
@@ -1052,15 +714,15 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 													}
 											}
 										);
-										double reduceVar$var151$18 = 0.0;
+										double reduceVar$var151$12 = 0.0;
 										for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-											double x = reduceVar$var151$18;
+											double x = reduceVar$var151$12;
 											double y = time_impact[t][i$var119][cv$reduction152Index];
 											if(!fixedFlag$sample101)
-												reduceVar$var151$18 = (x + y);
+												reduceVar$var151$12 = (x + y);
 										}
 										if(!fixedFlag$sample101)
-											var139[i$var119] = reduceVar$var151$18;
+											var139[i$var119] = reduceVar$var151$12;
 										var154[i$var119] = DistributionSampling.samplePoisson(RNG$2, sum_t[t][i$var119]);
 									}
 							}
@@ -1107,13 +769,13 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 													}
 											}
 										);
-										double reduceVar$var151$22 = 0.0;
+										double reduceVar$var151$16 = 0.0;
 										for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-											double x = reduceVar$var151$22;
+											double x = reduceVar$var151$16;
 											double y = time_impact[t][i$var119][cv$reduction152Index];
-											reduceVar$var151$22 = (x + y);
+											reduceVar$var151$16 = (x + y);
 										}
-										var139[i$var119] = reduceVar$var151$22;
+										var139[i$var119] = reduceVar$var151$16;
 									}
 							}
 						);
@@ -1160,13 +822,13 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 													}
 											}
 										);
-										double reduceVar$var151$19 = 0.0;
+										double reduceVar$var151$13 = 0.0;
 										for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-											double x = reduceVar$var151$19;
+											double x = reduceVar$var151$13;
 											double y = time_impact[t][i$var119][cv$reduction152Index];
-											reduceVar$var151$19 = (x + y);
+											reduceVar$var151$13 = (x + y);
 										}
-										var139[i$var119] = reduceVar$var151$19;
+										var139[i$var119] = reduceVar$var151$13;
 										var154[i$var119] = DistributionSampling.samplePoisson(RNG$2, sum_t[t][i$var119]);
 									}
 							}
@@ -1214,15 +876,15 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 													}
 											}
 										);
-										double reduceVar$var151$20 = 0.0;
+										double reduceVar$var151$14 = 0.0;
 										for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-											double x = reduceVar$var151$20;
+											double x = reduceVar$var151$14;
 											double y = time_impact[t][i$var119][cv$reduction152Index];
 											if(!fixedFlag$sample101)
-												reduceVar$var151$20 = (x + y);
+												reduceVar$var151$14 = (x + y);
 										}
 										if(!fixedFlag$sample101)
-											var139[i$var119] = reduceVar$var151$20;
+											var139[i$var119] = reduceVar$var151$14;
 									}
 							}
 						);
@@ -1268,13 +930,13 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 													}
 											}
 										);
-										double reduceVar$var151$21 = 0.0;
+										double reduceVar$var151$15 = 0.0;
 										for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-											double x = reduceVar$var151$21;
+											double x = reduceVar$var151$15;
 											double y = time_impact[t][i$var119][cv$reduction152Index];
-											reduceVar$var151$21 = (x + y);
+											reduceVar$var151$15 = (x + y);
 										}
-										var139[i$var119] = reduceVar$var151$21;
+										var139[i$var119] = reduceVar$var151$15;
 									}
 							}
 						);
@@ -1400,13 +1062,13 @@ class ReductionTest1$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 													}
 											}
 										);
-										double reduceVar$var151$23 = 0.0;
+										double reduceVar$var151$17 = 0.0;
 										for(int cv$reduction152Index = 0; cv$reduction152Index < time_dim; cv$reduction152Index += 1) {
-											double x = reduceVar$var151$23;
+											double x = reduceVar$var151$17;
 											double y = time_impact[t][i$var119][cv$reduction152Index];
-											reduceVar$var151$23 = (x + y);
+											reduceVar$var151$17 = (x + y);
 										}
-										var139[i$var119] = reduceVar$var151$23;
+										var139[i$var119] = reduceVar$var151$17;
 									}
 							}
 						);

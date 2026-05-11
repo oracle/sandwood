@@ -172,9 +172,11 @@ public abstract class GetTask<A extends Variable<A>> extends ProducingDataflowTa
         }
         desc.trace.pop();
 
-        // Explore the index
+        // Explore the index deactivating any length restrictions at the same time.
         desc.trace.push(new DataflowTaskArgDesc(this, 1));
+        desc.lengthTypes.push(null);
         index.constructTrace(desc);
+        desc.lengthTypes.pop();
         desc.trace.pop();
     }
 
