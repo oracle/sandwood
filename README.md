@@ -111,20 +111,20 @@ As a running example we will use a [Hidden Markov Model (HMM)](https://en.wikipe
 ```java
 package org.sandwood.examples.hmm;
  
-model HMM(int[] actionsMeasured, int nActions, int nStates) {
+model HMM(int[] eventsMeasured, int numStates, int numEvents) {
   //Construct a transition matrix m.
-  double[] v = new double[nStates] <~ 0.1;
-  double[][] m = dirichlet(v).sample(nStates);
+  double[] v = new double[numStates] <~ 0.1;
+  double[][] m = dirichlet(v).sample(numStates);
  
   //Construct weighting for which state to start in.
   double[] initialState = new Dirichlet(v).sample();
       
   //Construct weighting for each event in each state.
-  double[] w = new double[nActions] <~ 0.1;
-  double[][] bias = dirichlet(w).sample(nStates);
+  double[] w = new double[numEvents] <~ 0.1;
+  double[][] bias = dirichlet(w).sample(numStates);
  
   //Allocate space to record the sequence of states.
-  int sequenceLength = actionsMeasured.length;
+  int sequenceLength = eventsMeasured.length;
   int[] st = new int[sequenceLength];
  
   //Calculate the movements between states.
@@ -133,12 +133,12 @@ model HMM(int[] actionsMeasured, int nActions, int nStates) {
     st[i] = categorical(m[st[i - 1]]).sampleDistribution();
  
   //Emit the events for each state.
-  int[] actions = new int[sequenceLength];
+  int[] events = new int[sequenceLength];
   for (int j = 0; j < sequenceLength; j++)
-    actions[j] = new Categorical(bias[st[j]]).sample();
+    events[j] = new Categorical(bias[st[j]]).sample();
     
   //Assert that the events match the eventsMeasured data.
-  actions.observe(actionsMeasured);
+  events.observe(eventsMeasured);
 }
 ```
 
