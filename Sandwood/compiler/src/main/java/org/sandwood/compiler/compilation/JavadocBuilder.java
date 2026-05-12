@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -25,6 +25,7 @@ import javax.tools.DocumentationTool;
 import javax.tools.ToolProvider;
 
 import org.sandwood.compiler.compilation.util.SandwoodCompileError;
+import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClass;
 
 public class JavadocBuilder {
@@ -122,6 +123,8 @@ public class JavadocBuilder {
      * @throws IOException
      */
     private static Set<String> unzip(InputStream stream, File destinationDir) throws IOException {
+        String destinationDirPath = destinationDir.getCanonicalPath();
+
         Set<String> files = new HashSet<>();
 
         byte[] buffer = new byte[1024];
@@ -131,6 +134,16 @@ public class JavadocBuilder {
             String name = zipEntry.getName();
             if(name.endsWith(".java")) {
                 File newFile = new File(destinationDir, name);
+
+                /*
+                 * Check that the file is located inside the target directory. This is a guard against a supply chain
+                 * attack
+                 */
+                if(!newFile.getCanonicalPath().startsWith(destinationDirPath))
+                    throw new CompilerException(
+                            "JavaDoc writer is attempting to write files outside of its working directory. "
+                                    + "This implies that the Runtime source jar file is corrupt");
+
                 new File(newFile.getParent()).mkdirs();
 
                 files.add(newFile.getAbsolutePath());
