@@ -44,7 +44,7 @@ public class DAGUtils {
      */
     public static boolean skippableTask(DataflowTask<?> task) {
         Scope s = task.scope();
-        return skipableScope(s);
+        return skippableScope(s);
     }
 
     /**
@@ -54,12 +54,12 @@ public class DAGUtils {
      * @param variable The variable to test.
      * @return Returns true if it is possible to not execute the variable during normal control flow.
      */
-    public static boolean skipableVariable(Variable<?> variable) {
+    public static boolean skippableVariable(Variable<?> variable) {
         Scope s = variable.scope();
-        return skipableScope(s);
+        return skippableScope(s);
     }
 
-    private static boolean skipableScope(Scope s) {
+    private static boolean skippableScope(Scope s) {
         boolean constraint = false;
         while(!constraint && s != GlobalScope.scope) {
             switch(s.getScopeType()) {

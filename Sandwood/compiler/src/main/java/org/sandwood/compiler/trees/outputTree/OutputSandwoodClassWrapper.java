@@ -52,7 +52,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             this.name = rv.getVarDesc().name;
             this.uniqueName = rv.getUniqueVarDesc().name;
             this.comment = rv.getComment();
-            this.skippable = DAGUtils.skipableVariable(rv);
+            this.skippable = DAGUtils.skippableVariable(rv);
         }
 
         @Override
@@ -1000,7 +1000,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         constructorArgs += ", " + (ft.isSample ? "true" : "false");
         constructorArgs += ", " + (ft.isPrivate ? "true" : "false");
         constructorArgs += ", "
-                + (DAGUtils.skipableVariable(v) ? "ProbabilityType.SKIPPABLE" : "ProbabilityType.UNSKIPPABLE");
+                + (DAGUtils.skippableVariable(v) ? "ProbabilityType.SKIPPABLE" : "ProbabilityType.UNSKIPPABLE");
         boolean generic = false;
         switch(javaType) {
             case "double":
