@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK14$CoreInterface {
+final class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK14$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double b;
@@ -21,11 +21,9 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$b;
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
-	private double logProbability$c;
 	private double logProbability$flips;
 	private double logProbability$sample8;
 	private double logProbability$var35;
-	private double logProbability$var7;
 	private int samples;
 	private boolean system$gibbsForward = true;
 
@@ -295,13 +293,11 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var7 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$sample8 = cv$distributionAccumulator;
+			
+			// Guard to ensure that bias is only updated once for this probability.
+			boolean cv$guard$bias = false;
 			
 			// Update the variable probability
 			// 
@@ -318,36 +314,16 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			logProbability$b = (logProbability$b + cv$distributionAccumulator);
-			
-			// Add probability to constructed variables that have guards, so need per sample probabilities
-			// from the combined probability
-			// 
-			// Looking for a path between Sample 8 and consumer double 22.
-			if(guard1)
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			else {
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
+			if(guard1) {
+				// Set the guard so the update is only applied once.
+				cv$guard$bias = true;
 				
 				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				// Declaration comment was:
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this instance of the random variable to the probability
-				// of all instances of the random variable.
-				// 
-				// Accumulator for probabilities of instances of the random variable
-				// 
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$c = (logProbability$c + cv$distributionAccumulator);
+				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
+			if((!guard1 && !cv$guard$bias))
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			
 			// Add probability to model
 			// 
@@ -390,31 +366,23 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var7 = logProbability$sample8;
+			// Guard to ensure that bias is only updated once for this probability.
+			boolean cv$guard$bias = false;
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
 			logProbability$b = (logProbability$b + logProbability$sample8);
-			
-			// Add probability to constructed variables that have guards, so need per sample probabilities
-			// from the combined probability
-			// 
-			// Looking for a path between Sample 8 and consumer double 22.
-			if(guard1)
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + logProbability$sample8);
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			else {
-				// Update the variable probability
-				logProbability$bias = (logProbability$bias + logProbability$sample8);
+			if(guard1) {
+				// Set the guard so the update is only applied once.
+				cv$guard$bias = true;
 				
 				// Update the variable probability
-				// 
-				// Variable declaration of cv$accumulator moved.
-				logProbability$c = (logProbability$c + logProbability$sample8);
+				logProbability$bias = (logProbability$bias + logProbability$sample8);
 			}
+			if((!guard1 && !cv$guard$bias))
+				// Update the variable probability
+				logProbability$bias = (logProbability$bias + logProbability$sample8);
 			
 			// Add probability to model
 			// 
@@ -753,9 +721,7 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var7 = 0.0;
 		logProbability$b = 0.0;
-		logProbability$c = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample8)
 			logProbability$sample8 = Double.NaN;

@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DiscreteChoice$CoreInterface {
+final class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DiscreteChoice$CoreInterface {
 	
 	// Declare the variables for the model.
 	private int[] ObsChoices;
@@ -21,8 +21,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] logProbability$sample24;
 	private double logProbability$sum;
 	private double logProbability$ut;
-	private double[] logProbability$var23;
-	private double logProbability$var65;
 	private double logProbability$var77;
 	private int noObs;
 	private int noProducts;
@@ -246,7 +244,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var23[((i$var18 - 1) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample24[((i$var18 - 1) / 1)] = cv$sampleProbability;
@@ -369,7 +366,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var23[((i$var18 - 1) / 1)] = cv$rvAccumulator;
 				
 				// Guard to ensure that exped is only updated once for this probability.
 				boolean cv$guard$exped = false;
@@ -534,7 +530,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var65 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var77 = cv$sampleAccumulator;
@@ -565,7 +560,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$sampleValue = logProbability$var77;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var65 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$choices = (logProbability$choices + cv$accumulator);
@@ -789,24 +783,24 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 												double reduceVar$sum$10 = 0.0;
 												
 												// Reduce for every value except a masked value which will be skipped.
-												for(int cv$reduction725Index = 0; cv$reduction725Index < i$var36; cv$reduction725Index += 1) {
+												for(int cv$reduction720Index = 0; cv$reduction720Index < i$var36; cv$reduction720Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double i$var47 = reduceVar$sum$10;
 													
 													// Set the right hand term to a value from the array exped
-													double j = exped[cv$reduction725Index];
+													double j = exped[cv$reduction720Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
 													// Copy the result of the reduction into the variable returned by the reduction.
 													reduceVar$sum$10 = (i$var47 + j);
 												}
-												for(int cv$reduction725Index = (i$var36 + 1); cv$reduction725Index < noProducts; cv$reduction725Index += 1) {
+												for(int cv$reduction720Index = (i$var36 + 1); cv$reduction720Index < noProducts; cv$reduction720Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double i$var47 = reduceVar$sum$10;
 													
 													// Set the right hand term to a value from the array exped
-													double j = exped[cv$reduction725Index];
+													double j = exped[cv$reduction720Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -842,22 +836,22 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 																			{
 																				cv$temp$2$prob = prob;
 																			}
-																			int cv$temp$3$$var512;
+																			int cv$temp$3$$var507;
 																			{
 																				// Constructing a random variable input for use later.
-																				int $var512 = noProducts;
-																				cv$temp$3$$var512 = $var512;
+																				int $var507 = noProducts;
+																				cv$temp$3$$var507 = $var507;
 																			}
 																			
 																			// Record the probability of sample task 78 generating output with current configuration.
-																			if(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var512))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var512))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			if(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var507))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var507))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																			else {
 																				// If the second value is -infinity.
 																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var512))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY));
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var507))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY));
 																				else
-																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var512))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var512))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var507))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$3$$var507))?Math.log(cv$temp$2$prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
 																			}
 																			
 																			// Recorded the probability of reaching sample task 78 with the current configuration.
@@ -918,22 +912,22 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 																		{
 																			cv$temp$4$prob = prob;
 																		}
-																		int cv$temp$5$$var513;
+																		int cv$temp$5$$var508;
 																		{
 																			// Constructing a random variable input for use later.
-																			int $var513 = noProducts;
-																			cv$temp$5$$var513 = $var513;
+																			int $var508 = noProducts;
+																			cv$temp$5$$var508 = $var508;
 																		}
 																		
 																		// Record the probability of sample task 78 generating output with current configuration.
-																		if(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var513))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var513))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		if(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var508))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var508))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																		else {
 																			// If the second value is -infinity.
 																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var513))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY));
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var508))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY));
 																			else
-																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var513))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var513))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var508))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= choices[var76]) && (choices[var76] < cv$temp$5$$var508))?Math.log(cv$temp$4$prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
 																		}
 																		
 																		// Recorded the probability of reaching sample task 78 with the current configuration.
@@ -1165,11 +1159,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		// Constructor for choices
 		{
 			choices = new int[noObs];
-		}
-		
-		// Constructor for logProbability$var23
-		{
-			logProbability$var23 = new double[((((noProducts - 1) - 1) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample24
@@ -1563,8 +1552,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
-			logProbability$var23[((i$var18 - 1) / 1)] = Double.NaN;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
 		logProbability$sum = 0.0;
@@ -1573,7 +1560,6 @@ class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
 				logProbability$sample24[((i$var18 - 1) / 1)] = Double.NaN;
 		}
-		logProbability$var65 = Double.NaN;
 		logProbability$choices = 0.0;
 		if(!fixedProbFlag$sample78)
 			logProbability$var77 = Double.NaN;

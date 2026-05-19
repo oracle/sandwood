@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model HMMMetrics This is the class that
   * all user interactions with the model should occur through.
   */
-public class HMMMetrics extends Model {
+public final class HMMMetrics extends Model {
 
     private HMMMetrics$CoreInterface system$c = new HMMMetrics$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $cpu = new ComputedDoubleArrayInternal(this, "cpu", false, true, false) {
+    private final ComputedDoubleArrayInternal $cpu = new ComputedDoubleArrayInternal(this, "cpu", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$cpu(); }
 
@@ -49,7 +50,7 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray cpu = $cpu;
 
-    private final ComputedDoubleArrayInternal $cpuMean = new ComputedDoubleArrayInternal(this, "cpuMean", true, true, false) {
+    private final ComputedDoubleArrayInternal $cpuMean = new ComputedDoubleArrayInternal(this, "cpuMean", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$cpuMean(); }
 
@@ -83,7 +84,7 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray cpuMean = $cpuMean;
 
-    private final ComputedDoubleArrayInternal $cpuVar = new ComputedDoubleArrayInternal(this, "cpuVar", true, true, false) {
+    private final ComputedDoubleArrayInternal $cpuVar = new ComputedDoubleArrayInternal(this, "cpuVar", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$cpuVar(); }
 
@@ -117,7 +118,7 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray cpuVar = $cpuVar;
 
-    private final ComputedDoubleArrayInternal $initialStateDistribution = new ComputedDoubleArrayInternal(this, "initialStateDistribution", true, true, false) {
+    private final ComputedDoubleArrayInternal $initialStateDistribution = new ComputedDoubleArrayInternal(this, "initialStateDistribution", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$initialStateDistribution(); }
 
@@ -151,7 +152,7 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray initialStateDistribution = $initialStateDistribution;
 
-    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$m(); }
 
@@ -190,7 +191,7 @@ public class HMMMetrics extends Model {
      */
     public final ComputedObjectArray<double[]> m = $m;
 
-    private final ComputedDoubleArrayInternal $mem = new ComputedDoubleArrayInternal(this, "mem", false, true, false) {
+    private final ComputedDoubleArrayInternal $mem = new ComputedDoubleArrayInternal(this, "mem", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$mem(); }
 
@@ -221,7 +222,7 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray mem = $mem;
 
-    private final ComputedDoubleArrayInternal $memMean = new ComputedDoubleArrayInternal(this, "memMean", true, true, false) {
+    private final ComputedDoubleArrayInternal $memMean = new ComputedDoubleArrayInternal(this, "memMean", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$memMean(); }
 
@@ -255,7 +256,7 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray memMean = $memMean;
 
-    private final ComputedDoubleArrayInternal $memVar = new ComputedDoubleArrayInternal(this, "memVar", true, true, false) {
+    private final ComputedDoubleArrayInternal $memVar = new ComputedDoubleArrayInternal(this, "memVar", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$memVar(); }
 
@@ -289,7 +290,7 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray memVar = $memVar;
 
-    private final ComputedDoubleArrayInternal $pageFaults = new ComputedDoubleArrayInternal(this, "pageFaults", false, true, false) {
+    private final ComputedDoubleArrayInternal $pageFaults = new ComputedDoubleArrayInternal(this, "pageFaults", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$pageFaults(); }
 
@@ -320,7 +321,7 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray pageFaults = $pageFaults;
 
-    private final ComputedDoubleArrayInternal $pageFaultsMean = new ComputedDoubleArrayInternal(this, "pageFaultsMean", true, true, false) {
+    private final ComputedDoubleArrayInternal $pageFaultsMean = new ComputedDoubleArrayInternal(this, "pageFaultsMean", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$pageFaultsMean(); }
 
@@ -354,7 +355,7 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray pageFaultsMean = $pageFaultsMean;
 
-    private final ComputedDoubleArrayInternal $pageFaultsVar = new ComputedDoubleArrayInternal(this, "pageFaultsVar", true, true, false) {
+    private final ComputedDoubleArrayInternal $pageFaultsVar = new ComputedDoubleArrayInternal(this, "pageFaultsVar", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$pageFaultsVar(); }
 
@@ -388,7 +389,7 @@ public class HMMMetrics extends Model {
      */
     public final ComputedDoubleArray pageFaultsVar = $pageFaultsVar;
 
-    private final ComputedIntegerArrayInternal $st = new ComputedIntegerArrayInternal(this, "st", true, true, false) {
+    private final ComputedIntegerArrayInternal $st = new ComputedIntegerArrayInternal(this, "st", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int[] getValue() { return system$c.get$st(); }
 

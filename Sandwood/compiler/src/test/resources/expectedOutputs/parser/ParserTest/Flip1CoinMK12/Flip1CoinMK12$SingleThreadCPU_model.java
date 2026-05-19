@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK12$CoreInterface {
+final class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK12$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double bias;
@@ -28,11 +28,8 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$sample16;
 	private double logProbability$sample28;
 	private double logProbability$sample35;
-	private double logProbability$var13;
 	private double logProbability$var14;
-	private double logProbability$var23;
 	private double logProbability$var26;
-	private double logProbability$var30;
 	private double logProbability$var33;
 	private double logProbability$var48;
 	private int samples;
@@ -333,7 +330,6 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var13 = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample16 = cv$sampleProbability;
@@ -388,7 +384,6 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var13 = cv$rvAccumulator;
 				
 				// Guard to ensure that bias is only updated once for this probability.
 				boolean cv$guard$bias = false;
@@ -488,7 +483,6 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					// Add the probability of this instance of the random variable to the probability
 					// of all instances of the random variable.
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var23 = cv$sampleAccumulator;
 					
 					// Store the sample task probability
 					logProbability$sample28 = cv$sampleProbability;
@@ -547,7 +541,6 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var23 = cv$rvAccumulator;
 					
 					// Guard to ensure that bias is only updated once for this probability.
 					boolean cv$guard$bias = false;
@@ -650,7 +643,6 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					// Add the probability of this instance of the random variable to the probability
 					// of all instances of the random variable.
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var30 = cv$sampleAccumulator;
 					
 					// Store the sample task probability
 					logProbability$sample35 = cv$sampleProbability;
@@ -709,7 +701,6 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var30 = cv$rvAccumulator;
 					
 					// Guard to ensure that bias is only updated once for this probability.
 					boolean cv$guard$bias = false;
@@ -1531,16 +1522,13 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$sample16 = Double.NaN;
-		logProbability$var23 = Double.NaN;
 		logProbability$var26 = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$sample28 = Double.NaN;
-		logProbability$var30 = Double.NaN;
 		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample35)
 			logProbability$sample35 = Double.NaN;

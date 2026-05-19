@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model RaggedArray3 This is the class that
   * all user interactions with the model should occur through.
   */
-public class RaggedArray3 extends Model {
+public final class RaggedArray3 extends Model {
 
     private RaggedArray3$CoreInterface system$c = new RaggedArray3$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $d = new ComputedDoubleArrayInternal(this, "d", true, true, false) {
+    private final ComputedDoubleArrayInternal $d = new ComputedDoubleArrayInternal(this, "d", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$d(); }
 
@@ -52,7 +53,7 @@ public class RaggedArray3 extends Model {
      */
     public final ComputedDoubleArray d = $d;
 
-    private final ComputedIntegerArrayInternal $obs = new ComputedIntegerArrayInternal(this, "obs", false, true, false) {
+    private final ComputedIntegerArrayInternal $obs = new ComputedIntegerArrayInternal(this, "obs", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int[] getValue() { return system$c.get$obs(); }
 

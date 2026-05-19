@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model ParallelMK4 This is the class that
   * all user interactions with the model should occur through.
   */
-public class ParallelMK4 extends Model {
+public final class ParallelMK4 extends Model {
 
     private ParallelMK4$CoreInterface system$c = new ParallelMK4$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedIntegerArrayInternal $generated = new ComputedIntegerArrayInternal(this, "generated", false, true, false) {
+    private final ComputedIntegerArrayInternal $generated = new ComputedIntegerArrayInternal(this, "generated", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int[] getValue() { return system$c.get$generated(); }
 
@@ -49,7 +50,7 @@ public class ParallelMK4 extends Model {
      */
     public final ComputedIntegerArray generated = $generated;
 
-    private final ComputedObjectArrayInternal<double[]> $indirection1 = new ComputedObjectArrayInternal<double[]>(this, "indirection1", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $indirection1 = new ComputedObjectArrayInternal<double[]>(this, "indirection1", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$indirection1(); }
 
@@ -88,7 +89,7 @@ public class ParallelMK4 extends Model {
      */
     public final ComputedObjectArray<double[]> indirection1 = $indirection1;
 
-    private final ComputedObjectArrayInternal<double[]> $indirection2 = new ComputedObjectArrayInternal<double[]>(this, "indirection2", false, false, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $indirection2 = new ComputedObjectArrayInternal<double[]>(this, "indirection2", false, false, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$indirection2(); }
 

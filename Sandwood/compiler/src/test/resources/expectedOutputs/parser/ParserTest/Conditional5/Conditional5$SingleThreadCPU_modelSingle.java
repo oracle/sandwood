@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional5$CoreInterface {
+final class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional5$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double a;
@@ -21,8 +21,6 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$sample13;
 	private double logProbability$sample9;
 	private double logProbability$value;
-	private double logProbability$var12;
-	private double logProbability$var8;
 	private boolean observedGuard;
 	private double observedValue;
 	private boolean system$gibbsForward = true;
@@ -181,7 +179,6 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var12 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$sample13 = cv$sampleProbability;
@@ -224,7 +221,6 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleValue = logProbability$sample13;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var12 = cv$rvAccumulator;
 			
 			// Guard to ensure that value is only updated once for this probability.
 			boolean cv$guard$value = false;
@@ -398,7 +394,6 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var8 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$sample9 = cv$sampleProbability;
@@ -441,7 +436,6 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleValue = logProbability$sample9;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var8 = cv$rvAccumulator;
 			
 			// Guard to ensure that value is only updated once for this probability.
 			boolean cv$guard$value = false;
@@ -547,12 +541,10 @@ class Conditional5$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample5)
 			logProbability$guard = Double.NaN;
-		logProbability$var8 = 0.0;
 		logProbability$a = 0.0;
 		logProbability$value = 0.0;
 		if(!fixedProbFlag$sample9)
 			logProbability$sample9 = Double.NaN;
-		logProbability$var12 = 0.0;
 		logProbability$b = 0.0;
 		if(!fixedProbFlag$sample13)
 			logProbability$sample13 = Double.NaN;

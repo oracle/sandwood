@@ -5,7 +5,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ReductionTest$CoreInterface {
+final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ReductionTest$CoreInterface {
 	private double[] bias;
 	private double[][] cv$var30$countGlobal;
 	private double[] cv$var61$stateProbabilityGlobal;
@@ -27,12 +27,8 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double[] logProbability$sample62;
 	private double[] logProbability$sample87;
 	private double logProbability$st;
-	private double logProbability$var18;
 	private double logProbability$var30;
-	private double logProbability$var34;
 	private double logProbability$var46;
-	private double[] logProbability$var60;
-	private double[] logProbability$var84;
 	private double[][] m;
 	private int noCats;
 	private int noFlips;
@@ -202,7 +198,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleAccumulator = 0.0;
 			for(int var29 = 0; var29 < noCats; var29 += 1)
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var29], v, noStates));
-			logProbability$var18 = cv$sampleAccumulator;
 			logProbability$var30 = cv$sampleAccumulator;
 			logProbability$m = (logProbability$m + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
@@ -210,7 +205,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 			fixedProbFlag$sample30 = fixedFlag$sample30;
 		} else {
-			logProbability$var18 = logProbability$var30;
 			logProbability$m = (logProbability$m + logProbability$var30);
 			logProbability$$model = (logProbability$$model + logProbability$var30);
 			if(fixedFlag$sample30)
@@ -223,7 +217,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleAccumulator = 0.0;
 			for(int var45 = 0; var45 < noFlips; var45 += 1)
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[var45], 1.0, 1.0));
-			logProbability$var34 = cv$sampleAccumulator;
 			logProbability$var46 = cv$sampleAccumulator;
 			logProbability$bias = (logProbability$bias + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
@@ -231,7 +224,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 			fixedProbFlag$sample47 = fixedFlag$sample47;
 		} else {
-			logProbability$var34 = logProbability$var46;
 			logProbability$bias = (logProbability$bias + logProbability$var46);
 			logProbability$$model = (logProbability$$model + logProbability$var46);
 			if(fixedFlag$sample47)
@@ -246,7 +238,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				int cv$sampleValue = st[i$var58];
 				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(m[i$var58][cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var60[i$var58] = cv$distributionAccumulator;
 				logProbability$sample62[i$var58] = cv$distributionAccumulator;
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -256,11 +247,8 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			fixedProbFlag$sample62 = (fixedFlag$sample62 && fixedFlag$sample30);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
-				double cv$rvAccumulator = logProbability$sample62[i$var58];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var60[i$var58] = cv$rvAccumulator;
-			}
+			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample62[i$var58]);
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample62)
@@ -278,7 +266,6 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				double var83 = bias[reduceVar$var82$7];
 				double cv$distributionAccumulator = Math.log((flips[j$var73]?var83:(1.0 - var83)));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var84[j$var73] = cv$distributionAccumulator;
 				logProbability$sample87[j$var73] = cv$distributionAccumulator;
 			}
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -287,11 +274,8 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			fixedProbFlag$sample87 = (fixedFlag$sample47 && fixedFlag$sample62);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-				double cv$rvAccumulator = logProbability$sample87[j$var73];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var84[j$var73] = cv$rvAccumulator;
-			}
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample87[j$var73]);
 			logProbability$flips = (logProbability$flips + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -328,10 +312,10 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			st[i$var58] = cv$valuePos;
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(m[i$var58][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			int reduceVar$var82$6 = 0;
-			for(int cv$reduction407Index = 0; cv$reduction407Index < i$var58; cv$reduction407Index += 1)
-				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction407Index]);
-			for(int cv$reduction407Index = (i$var58 + 1); cv$reduction407Index < noCats; cv$reduction407Index += 1)
-				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction407Index]);
+			for(int cv$reduction397Index = 0; cv$reduction397Index < i$var58; cv$reduction397Index += 1)
+				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction397Index]);
+			for(int cv$reduction397Index = (i$var58 + 1); cv$reduction397Index < noCats; cv$reduction397Index += 1)
+				reduceVar$var82$6 = (reduceVar$var82$6 + st[cv$reduction397Index]);
 			reduceVar$var82$6 = (cv$valuePos + reduceVar$var82$6);
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
 				double cv$temp$2$var83 = bias[reduceVar$var82$6];
@@ -388,9 +372,7 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(!fixedFlag$sample62)
 			st = new int[noCats];
 		flips = new boolean[length$flipsMeasured];
-		logProbability$var60 = new double[noCats];
 		logProbability$sample62 = new double[noCats];
-		logProbability$var84 = new double[length$flipsMeasured];
 		logProbability$sample87 = new double[length$flipsMeasured];
 		allocateScratch();
 	}
@@ -618,23 +600,17 @@ class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var18 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample30)
 			logProbability$var30 = Double.NaN;
-		logProbability$var34 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample47)
 			logProbability$var46 = Double.NaN;
-		for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
-			logProbability$var60[i$var58] = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample62) {
 			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
 				logProbability$sample62[i$var58] = Double.NaN;
 		}
-		for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
-			logProbability$var84[j$var73] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample87) {
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)

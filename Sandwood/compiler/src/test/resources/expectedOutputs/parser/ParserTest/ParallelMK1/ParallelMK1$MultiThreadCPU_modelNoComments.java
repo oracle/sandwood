@@ -4,7 +4,7 @@ import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK1$CoreInterface {
+final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK1$CoreInterface {
 	private boolean fixedFlag$sample20 = false;
 	private boolean fixedProbFlag$sample20 = false;
 	private boolean fixedProbFlag$sample24 = false;
@@ -19,8 +19,6 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double logProbability$sample;
 	private double[] logProbability$sample20;
 	private double[] logProbability$sample24;
-	private double[] logProbability$var19;
-	private double[] logProbability$var23;
 	private double[] observed;
 	private double[] sample;
 	private boolean system$gibbsForward = true;
@@ -87,11 +85,6 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	}
 
 	@Override
-	public final double get$logProbability$sample() {
-		return logProbability$sample;
-	}
-
-	@Override
 	public final double[] get$observed() {
 		return observed;
 	}
@@ -146,7 +139,6 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var19[((i - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample20[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			boolean cv$guard$indirection = false;
@@ -170,7 +162,6 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var19[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			boolean cv$guard$indirection = false;
 			logProbability$sample = (logProbability$sample + cv$accumulator);
@@ -220,7 +211,6 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var23[((i - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample24[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$generated = (logProbability$generated + cv$accumulator);
@@ -236,7 +226,6 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var23[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$generated = (logProbability$generated + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -437,13 +426,7 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			}
 		}
 		{
-			logProbability$var19 = new double[((((length$observed - 1) - 0) / 1) + 1)];
-		}
-		{
 			logProbability$sample20 = new double[((((length$observed - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$var23 = new double[((((length$observed - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$sample24 = new double[((((length$observed - 1) - 0) / 1) + 1)];
@@ -549,16 +532,12 @@ class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var19[((i - 0) / 1)] = Double.NaN;
 		logProbability$sample = 0.0;
 		logProbability$indirection = 0.0;
 		if(!fixedProbFlag$sample20) {
 			for(int i = 0; i < length$observed; i += 1)
 				logProbability$sample20[((i - 0) / 1)] = Double.NaN;
 		}
-		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var23[((i - 0) / 1)] = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample24) {
 			for(int i = 0; i < length$observed; i += 1)

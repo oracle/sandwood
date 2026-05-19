@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMTestPart2b$CoreInterface {
+final class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMTestPart2b$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[] bias;
@@ -28,12 +28,8 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] logProbability$sample71;
 	private double[] logProbability$sample86;
 	private double logProbability$st;
-	private double logProbability$var16;
 	private double logProbability$var28;
-	private double logProbability$var32;
 	private double logProbability$var44;
-	private double[] logProbability$var69;
-	private double[] logProbability$var84;
 	private double[][] m;
 	private int samples;
 	private int[] st;
@@ -324,7 +320,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// 
 			// The sample value to calculate the probability of generating
 			double cv$sampleAccumulator = (DistributionSampling.logProbabilityDirichlet(m[0], v, 2) + DistributionSampling.logProbabilityDirichlet(m[1], v, 2));
-			logProbability$var16 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var28 = cv$sampleAccumulator;
@@ -362,8 +357,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var16 = logProbability$var28;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -437,7 +430,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// 
 			// The sample value to calculate the probability of generating
 			double cv$sampleAccumulator = (DistributionSampling.logProbabilityBeta(bias[0], 1.0, 1.0) + DistributionSampling.logProbabilityBeta(bias[1], 1.0, 1.0));
-			logProbability$var32 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var44 = cv$sampleAccumulator;
@@ -475,8 +467,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var32 = logProbability$var44;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -537,11 +527,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var69[i$var64] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample71[i$var64] = cv$distributionAccumulator;
 			}
@@ -566,12 +551,8 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i$var64 = 0; i$var64 < (samples - 1); i$var64 += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample71[i$var64];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var69[i$var64] = cv$rvAccumulator;
-			}
+			for(int i$var64 = 0; i$var64 < (samples - 1); i$var64 += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample71[i$var64]);
 			
 			// Update the variable probability
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -631,11 +612,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var84[(j - 1)] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample86[(j - 1)] = cv$distributionAccumulator;
 			}
@@ -656,12 +632,8 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int j = 1; j < samples; j += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample86[(j - 1)];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var84[(j - 1)] = cv$rvAccumulator;
-			}
+			for(int j = 1; j < samples; j += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample86[(j - 1)]);
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -1028,14 +1000,8 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Constructor for flips
 		flips = new boolean[length$flipsMeasured];
 		
-		// Constructor for logProbability$var69
-		logProbability$var69 = new double[(length$flipsMeasured - 1)];
-		
 		// Constructor for logProbability$sample71
 		logProbability$sample71 = new double[(length$flipsMeasured - 1)];
-		
-		// Constructor for logProbability$var84
-		logProbability$var84 = new double[(length$flipsMeasured - 1)];
 		
 		// Constructor for logProbability$sample86
 		logProbability$sample86 = new double[(length$flipsMeasured - 1)];
@@ -1249,23 +1215,17 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$var28 = Double.NaN;
-		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
 			logProbability$var44 = Double.NaN;
-		for(int i$var64 = 0; i$var64 < (samples - 1); i$var64 += 1)
-			logProbability$var69[i$var64] = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample71) {
 			for(int i$var64 = 0; i$var64 < (samples - 1); i$var64 += 1)
 				logProbability$sample71[i$var64] = Double.NaN;
 		}
-		for(int j = 1; j < samples; j += 1)
-			logProbability$var84[(j - 1)] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample86) {
 			for(int j = 1; j < samples; j += 1)

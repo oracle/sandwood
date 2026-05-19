@@ -5,7 +5,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements GaussianMixtureTest$CoreInterface {
+final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements GaussianMixtureTest$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[] alpha;
@@ -26,15 +26,9 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double[] logProbability$sample68;
 	private double[] logProbability$sample72;
 	private double logProbability$sigma;
-	private double logProbability$var16;
-	private double logProbability$var22;
 	private double logProbability$var34;
-	private double logProbability$var40;
 	private double logProbability$var52;
-	private double[] logProbability$var67;
-	private double[] logProbability$var71;
 	private double logProbability$x;
-	private double logProbability$z;
 	private double[] mu;
 	private double[] phi;
 	private double[] sigma;
@@ -159,12 +153,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final double get$logProbability$x() {
 		return logProbability$x;
-	}
-
-	// Getter for logProbability$z.
-	@Override
-	public final double get$logProbability$z() {
-		return logProbability$z;
 	}
 
 	// Getter for mu.
@@ -309,7 +297,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var16 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$phi = cv$sampleProbability;
@@ -335,7 +322,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleValue = logProbability$phi;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var16 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -413,7 +399,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var22 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var34 = cv$sampleAccumulator;
@@ -448,7 +433,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleValue = logProbability$var34;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var22 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$mu = (logProbability$mu + cv$accumulator);
@@ -529,7 +513,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var40 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var52 = cv$sampleAccumulator;
@@ -564,7 +547,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$sampleValue = logProbability$var52;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var40 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$sigma = (logProbability$sigma + cv$accumulator);
@@ -638,14 +620,10 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var67[((i$var66 - 0) / 1)] = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$sample68[((i$var66 - 0) / 1)] = cv$sampleProbability;
 		}
-		
-		// Update the variable probability
-		logProbability$z = (logProbability$z + cv$accumulator);
 		
 		// Add probability to model
 		logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -713,7 +691,6 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var71[((i$var66 - 0) / 1)] = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$sample72[((i$var66 - 0) / 1)] = cv$sampleProbability;
@@ -938,16 +915,16 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					{
 						cv$temp$0$phi = phi;
 					}
-					int cv$temp$1$$var350;
+					int cv$temp$1$$var340;
 					{
 						// Constructing a random variable input for use later.
-						int $var350 = k;
-						cv$temp$1$$var350 = $var350;
+						int $var340 = k;
+						cv$temp$1$$var340 = $var340;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var350))?Math.log(cv$temp$0$phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var340))?Math.log(cv$temp$0$phi[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 71.
 					{
@@ -1229,19 +1206,9 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			z = new int[((((length$xMeasured - 1) - 0) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$var67
-		{
-			logProbability$var67 = new double[((((length$xMeasured - 1) - 0) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample68
 		{
 			logProbability$sample68 = new double[((((length$xMeasured - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$var71
-		{
-			logProbability$var71 = new double[((((length$xMeasured - 1) - 0) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample72
@@ -1602,24 +1569,16 @@ class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$phi = Double.NaN;
-		logProbability$var22 = Double.NaN;
 		logProbability$mu = 0.0;
 		if(!fixedProbFlag$sample34)
 			logProbability$var34 = Double.NaN;
-		logProbability$var40 = Double.NaN;
 		logProbability$sigma = 0.0;
 		if(!fixedProbFlag$sample52)
 			logProbability$var52 = Double.NaN;
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$var67[((i$var66 - 0) / 1)] = Double.NaN;
-		logProbability$z = 0.0;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
 			logProbability$sample68[((i$var66 - 0) / 1)] = Double.NaN;
-		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
-			logProbability$var71[((i$var66 - 0) / 1)] = Double.NaN;
 		logProbability$x = 0.0;
 		for(int i$var66 = 0; i$var66 < length$xMeasured; i$var66 += 1)
 			logProbability$sample72[((i$var66 - 0) / 1)] = Double.NaN;

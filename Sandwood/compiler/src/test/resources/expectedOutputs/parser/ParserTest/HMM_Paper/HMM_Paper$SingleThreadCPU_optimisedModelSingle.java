@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMM_Paper$CoreInterface {
+final class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMM_Paper$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[] bias;
@@ -33,16 +33,10 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	private double logProbability$initialCoin;
 	private double logProbability$m;
 	private double logProbability$st;
-	private double logProbability$var16;
 	private double logProbability$var28;
-	private double logProbability$var30;
-	private double logProbability$var34;
 	private double logProbability$var46;
-	private double logProbability$var51;
 	private double logProbability$var52;
-	private double logProbability$var69;
 	private double logProbability$var70;
-	private double logProbability$var85;
 	private double logProbability$var86;
 	private double[][] m;
 	private boolean[] measured;
@@ -409,13 +403,11 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var27], v, nCoins));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var16 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				logProbability$var28 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -450,14 +442,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < nCoins))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var16 = logProbability$var28;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -508,11 +492,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(initialCoin, v, nCoins);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var30 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$initialCoin = cv$distributionAccumulator;
 			
@@ -557,8 +536,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var30 = logProbability$initialCoin;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -606,13 +583,11 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[var45], 1.0, 1.0));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var34 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				logProbability$var46 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -647,14 +622,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < nCoins))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var34 = logProbability$var46;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -703,11 +670,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < nCoins))?Math.log(initialCoin[cv$sampleValue]):Double.NEGATIVE_INFINITY);
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var51 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$var52 = cv$distributionAccumulator;
@@ -769,8 +731,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var51 = logProbability$var52;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -824,10 +784,9 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < nCoins))?Math.log(m[st[(i - 1)]][cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var69 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -835,7 +794,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var70 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -870,14 +828,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((1 < nFlips))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var69 = logProbability$var70;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -932,10 +882,9 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j]?var84:(1.0 - var84))));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var85 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -943,7 +892,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var86 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -975,14 +923,6 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < nFlips))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var85 = logProbability$var86;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1718,25 +1658,19 @@ class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$var28 = Double.NaN;
-		logProbability$var30 = 0.0;
 		if(!fixedProbFlag$sample32)
 			logProbability$initialCoin = Double.NaN;
-		logProbability$var34 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample47)
 			logProbability$var46 = Double.NaN;
-		logProbability$var51 = 0.0;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample53)
 			logProbability$var52 = Double.NaN;
-		logProbability$var69 = Double.NaN;
 		if(!fixedProbFlag$sample71)
 			logProbability$var70 = Double.NaN;
-		logProbability$var85 = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample87)
 			logProbability$var86 = Double.NaN;

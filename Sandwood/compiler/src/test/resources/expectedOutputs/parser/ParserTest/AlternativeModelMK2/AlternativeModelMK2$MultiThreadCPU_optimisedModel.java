@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements AlternativeModelMK2$CoreInterface {
+final class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements AlternativeModelMK2$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double bias;
@@ -16,7 +16,6 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double logProbability$bias;
 	private double logProbability$binomial;
 	private double logProbability$positiveCount;
-	private double logProbability$var5;
 	private int observedPositiveCount;
 	private int observedSampleCount;
 	private int positiveCount;
@@ -163,11 +162,6 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var5 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$bias = cv$distributionAccumulator;
 			
@@ -212,8 +206,6 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var5 = logProbability$bias;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -413,7 +405,6 @@ class AlternativeModelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
 			logProbability$bias = Double.NaN;
 		logProbability$binomial = 0.0;

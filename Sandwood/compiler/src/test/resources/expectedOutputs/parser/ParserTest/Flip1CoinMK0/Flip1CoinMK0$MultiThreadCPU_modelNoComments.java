@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK0$CoreInterface {
+final class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK0$CoreInterface {
 	private double bias;
 	private boolean fixedFlag$sample5 = false;
 	private boolean fixedProbFlag$sample5 = false;
@@ -16,7 +16,6 @@ class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
 	private double logProbability$flip;
-	private double logProbability$var4;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK0$MultiThreadCPU(ExecutionTarget target) {
@@ -119,7 +118,6 @@ class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var4 = cv$sampleAccumulator;
 			logProbability$bias = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample5)
@@ -131,7 +129,6 @@ class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleValue = logProbability$bias;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var4 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample5)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -268,7 +265,6 @@ class Flip1CoinMK0$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var4 = 0.0;
 		if(!fixedProbFlag$sample5)
 			logProbability$bias = Double.NaN;
 		logProbability$bernoulli = 0.0;

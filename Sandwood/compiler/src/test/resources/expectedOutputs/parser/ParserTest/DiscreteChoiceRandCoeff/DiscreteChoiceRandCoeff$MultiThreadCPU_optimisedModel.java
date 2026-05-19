@@ -5,7 +5,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DiscreteChoiceRandCoeff$CoreInterface {
+final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DiscreteChoiceRandCoeff$CoreInterface {
 	
 	// Declare the variables for the model.
 	private int[] ObsChoices;
@@ -32,18 +32,12 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 	private double logProbability$b;
 	private double logProbability$beta;
 	private double logProbability$choices;
-	private double logProbability$exped;
 	private double logProbability$prob;
 	private double[] logProbability$sample103;
 	private double[] logProbability$sample21;
 	private double[] logProbability$sample47;
 	private double logProbability$sigma;
 	private double logProbability$ut;
-	private double[] logProbability$var101;
-	private double logProbability$var27;
-	private double logProbability$var33;
-	private double logProbability$var35;
-	private double logProbability$var9;
 	private int noObs;
 	private int noProducts;
 	private double[][] prob;
@@ -392,11 +386,6 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var101[i] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample103[i] = cv$distributionAccumulator;
 			}
@@ -417,12 +406,8 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < noObs; i += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample103[i];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var101[i] = cv$rvAccumulator;
-			}
+			for(int i = 0; i < noObs; i += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample103[i]);
 			
 			// Update the variable probability
 			logProbability$choices = (logProbability$choices + cv$accumulator);
@@ -475,15 +460,10 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 				logProbability$sample21[var20] = cv$distributionAccumulator;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < noObs)) {
-					// Update the variable probability
-					logProbability$exped = (logProbability$exped + cv$distributionAccumulator);
-					
+				if((0 < noObs))
 					// Update the variable probability
 					logProbability$prob = (logProbability$prob + cv$distributionAccumulator);
-				}
 			}
-			logProbability$var9 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -524,15 +504,10 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < noObs)) {
-					// Update the variable probability
-					logProbability$exped = (logProbability$exped + cv$sampleValue);
-					
+				if((0 < noObs))
 					// Update the variable probability
 					logProbability$prob = (logProbability$prob + cv$sampleValue);
-				}
 			}
-			logProbability$var9 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$ut = (logProbability$ut + cv$rvAccumulator);
@@ -579,11 +554,6 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((b / 3.1622776601683795)) - 1.151292546497023);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var27 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$b = cv$distributionAccumulator;
 			
@@ -628,8 +598,6 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var27 = logProbability$b;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -675,11 +643,6 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityInverseGamma(sigma, 2.0, 2.0);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var33 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$sigma = cv$distributionAccumulator;
 			
@@ -724,8 +687,6 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var33 = logProbability$sigma;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -781,20 +742,10 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 				logProbability$sample47[var46] = cv$distributionAccumulator;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < noProducts)) {
-					// Add probability to constructed variables that have guards, so need per sample probabilities
-					// from the combined probability
-					// 
-					// Looking for a path between Sample 47 and consumer double[] 77.
-					// 
-					// Update the variable probability
-					logProbability$exped = (logProbability$exped + cv$distributionAccumulator);
-					
+				if((0 < noProducts))
 					// Update the variable probability
 					logProbability$prob = (logProbability$prob + cv$distributionAccumulator);
-				}
 			}
-			logProbability$var35 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -835,20 +786,10 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 < noProducts)) {
-					// Add probability to constructed variables that have guards, so need per sample probabilities
-					// from the combined probability
-					// 
-					// Looking for a path between Sample 47 and consumer double[] 77.
-					// 
-					// Update the variable probability
-					logProbability$exped = (logProbability$exped + cv$sampleValue);
-					
+				if((0 < noProducts))
 					// Update the variable probability
 					logProbability$prob = (logProbability$prob + cv$sampleValue);
-				}
 			}
-			logProbability$var35 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$beta = (logProbability$beta + cv$rvAccumulator);
@@ -1855,9 +1796,6 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 		// Constructor for logProbability$sample47
 		logProbability$sample47 = new double[noObs];
 		
-		// Constructor for logProbability$var101
-		logProbability$var101 = new double[noObs];
-		
 		// Constructor for logProbability$sample103
 		logProbability$sample103 = new double[noObs];
 		
@@ -2405,28 +2343,21 @@ class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.intern
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = Double.NaN;
 		logProbability$ut = 0.0;
-		logProbability$exped = 0.0;
 		logProbability$prob = 0.0;
 		if(!fixedProbFlag$sample21) {
 			for(int var20 = 0; var20 < noProducts; var20 += 1)
 				logProbability$sample21[var20] = Double.NaN;
 		}
-		logProbability$var27 = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$b = Double.NaN;
-		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample34)
 			logProbability$sigma = Double.NaN;
-		logProbability$var35 = Double.NaN;
 		logProbability$beta = 0.0;
 		if(!fixedProbFlag$sample47) {
 			for(int var46 = 0; var46 < noObs; var46 += 1)
 				logProbability$sample47[var46] = Double.NaN;
 		}
-		for(int i = 0; i < noObs; i += 1)
-			logProbability$var101[i] = Double.NaN;
 		logProbability$choices = 0.0;
 		if(!fixedProbFlag$sample103) {
 			for(int i = 0; i < noObs; i += 1)

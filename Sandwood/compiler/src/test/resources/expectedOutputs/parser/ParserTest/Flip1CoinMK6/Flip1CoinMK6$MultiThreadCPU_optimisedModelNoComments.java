@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK6$CoreInterface {
+final class Flip1CoinMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK6$CoreInterface {
 	private double bias;
 	private boolean fixedFlag$sample9 = false;
 	private boolean fixedProbFlag$sample22 = false;
@@ -24,7 +24,6 @@ class Flip1CoinMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$flips2;
 	private double logProbability$var22;
 	private double logProbability$var35;
-	private double logProbability$var8;
 	private int samples1;
 	private int samples2;
 	private boolean system$gibbsForward = true;
@@ -202,14 +201,12 @@ class Flip1CoinMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private final void logProbabilityValue$sample9() {
 		if(!fixedProbFlag$sample9) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
-			logProbability$var8 = cv$distributionAccumulator;
 			logProbability$bias = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample9)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample9 = fixedFlag$sample9;
 		} else {
-			logProbability$var8 = logProbability$bias;
 			logProbability$$model = (logProbability$$model + logProbability$bias);
 			if(fixedFlag$sample9)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
@@ -311,7 +308,6 @@ class Flip1CoinMK6$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var8 = 0.0;
 		if(!fixedProbFlag$sample9)
 			logProbability$bias = Double.NaN;
 		logProbability$bernoulli = Double.NaN;

@@ -5,7 +5,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip2CoinsMK5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip2CoinsMK5b$CoreInterface {
+final class Flip2CoinsMK5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip2CoinsMK5b$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[] bias;
@@ -20,7 +20,6 @@ class Flip2CoinsMK5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
 	private double logProbability$flips;
-	private double logProbability$var17;
 	private double logProbability$var18;
 	private double logProbability$var47;
 	private int[] shape;
@@ -179,10 +178,9 @@ class Flip2CoinsMK5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[i], 1.0, 1.0));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var17 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -190,7 +188,6 @@ class Flip2CoinsMK5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var18 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -225,14 +222,6 @@ class Flip2CoinsMK5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < coins))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var17 = logProbability$var18;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -609,7 +598,6 @@ class Flip2CoinsMK5b$MultiThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var17 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample18)
 			logProbability$var18 = Double.NaN;

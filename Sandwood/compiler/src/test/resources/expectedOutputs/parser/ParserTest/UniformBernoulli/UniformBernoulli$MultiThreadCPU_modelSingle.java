@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements UniformBernoulli$CoreInterface {
+final class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements UniformBernoulli$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double a;
@@ -18,7 +18,6 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 	private double logProbability$output;
 	private double logProbability$prior;
 	private double logProbability$var19;
-	private double logProbability$var4;
 	private boolean[] observed;
 	private boolean[] output;
 	private double prior;
@@ -308,7 +307,6 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var4 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$prior = cv$sampleProbability;
@@ -334,7 +332,6 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 			double cv$sampleValue = logProbability$prior;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var4 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -627,7 +624,6 @@ class UniformBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var4 = 0.0;
 		if(!fixedProbFlag$sample5)
 			logProbability$prior = Double.NaN;
 		logProbability$bernoulli = Double.NaN;

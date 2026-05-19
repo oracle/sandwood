@@ -5,7 +5,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LDATest$CoreInterface {
+final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LDATest$CoreInterface {
 	private double[] alpha;
 	private double[] beta;
 	private double[][] cv$var42$countGlobal;
@@ -23,14 +23,9 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	private double[][] logProbability$sample90;
 	private double[][] logProbability$sample93;
 	private double logProbability$theta;
-	private double logProbability$var30;
 	private double logProbability$var42;
-	private double logProbability$var44;
 	private double logProbability$var57;
-	private double[][] logProbability$var87;
-	private double[][] logProbability$var90;
 	private double logProbability$w;
-	private double logProbability$z;
 	private int noTopics;
 	private double[][] phi;
 	private boolean system$gibbsForward = true;
@@ -121,11 +116,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	}
 
 	@Override
-	public final double get$logProbability$z() {
-		return logProbability$z;
-	}
-
-	@Override
 	public final int get$noTopics() {
 		return noTopics;
 	}
@@ -187,7 +177,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			double cv$sampleAccumulator = 0.0;
 			for(int var41 = 0; var41 < noTopics; var41 += 1)
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(phi[var41], beta, vocabSize));
-			logProbability$var30 = cv$sampleAccumulator;
 			logProbability$var42 = cv$sampleAccumulator;
 			logProbability$phi = (logProbability$phi + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
@@ -195,7 +184,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 			fixedProbFlag$sample42 = fixedFlag$sample42;
 		} else {
-			logProbability$var30 = logProbability$var42;
 			logProbability$phi = (logProbability$phi + logProbability$var42);
 			logProbability$$model = (logProbability$$model + logProbability$var42);
 			if(fixedFlag$sample42)
@@ -208,7 +196,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 			double cv$sampleAccumulator = 0.0;
 			for(int var56 = 0; var56 < length$documents.length; var56 += 1)
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(theta[var56], alpha, noTopics));
-			logProbability$var44 = cv$sampleAccumulator;
 			logProbability$var57 = cv$sampleAccumulator;
 			logProbability$theta = (logProbability$theta + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
@@ -216,7 +203,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 			fixedProbFlag$sample58 = fixedFlag$sample58;
 		} else {
-			logProbability$var44 = logProbability$var57;
 			logProbability$theta = (logProbability$theta + logProbability$var57);
 			logProbability$$model = (logProbability$$model + logProbability$var57);
 			if(fixedFlag$sample58)
@@ -231,11 +217,9 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 				int cv$sampleValue = z[i$var71][j];
 				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < noTopics))?Math.log(theta[i$var71][cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var87[i$var71][j] = cv$distributionAccumulator;
 				logProbability$sample90[i$var71][j] = cv$distributionAccumulator;
 			}
 		}
-		logProbability$z = (logProbability$z + cv$accumulator);
 		logProbability$$model = (logProbability$$model + cv$accumulator);
 	}
 
@@ -246,7 +230,6 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 				int cv$sampleValue = w[i$var71][j];
 				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < vocabSize))?Math.log(phi[z[i$var71][j]][cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var90[i$var71][j] = cv$distributionAccumulator;
 				logProbability$sample93[i$var71][j] = cv$distributionAccumulator;
 			}
 		}
@@ -351,15 +334,9 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 		z = new int[length$documents.length][];
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
 			z[i$var71] = new int[length$documents[i$var71]];
-		logProbability$var87 = new double[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			logProbability$var87[i$var71] = new double[length$documents[i$var71]];
 		logProbability$sample90 = new double[length$documents.length][];
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
 			logProbability$sample90[i$var71] = new double[length$documents[i$var71]];
-		logProbability$var90 = new double[length$documents.length][];
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
-			logProbability$var90[i$var71] = new double[length$documents[i$var71]];
 		logProbability$sample93 = new double[length$documents.length][];
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
 			logProbability$sample93[i$var71] = new double[length$documents[i$var71]];
@@ -629,26 +606,15 @@ class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreMod
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var30 = Double.NaN;
 		logProbability$phi = 0.0;
 		if(!fixedProbFlag$sample42)
 			logProbability$var42 = Double.NaN;
-		logProbability$var44 = Double.NaN;
 		logProbability$theta = 0.0;
 		if(!fixedProbFlag$sample58)
 			logProbability$var57 = Double.NaN;
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
 			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$var87[i$var71][j] = Double.NaN;
-		}
-		logProbability$z = 0.0;
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
 				logProbability$sample90[i$var71][j] = Double.NaN;
-		}
-		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-			for(int j = 0; j < length$documents[i$var71]; j += 1)
-				logProbability$var90[i$var71][j] = Double.NaN;
 		}
 		logProbability$w = 0.0;
 		for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {

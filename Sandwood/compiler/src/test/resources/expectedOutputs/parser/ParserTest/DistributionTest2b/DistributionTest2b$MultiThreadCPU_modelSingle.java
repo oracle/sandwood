@@ -4,7 +4,7 @@ import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DistributionTest2b$CoreInterface {
+final class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DistributionTest2b$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[][] cv$var23$stateProbabilityGlobal;
@@ -28,11 +28,8 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private double logProbability$v1;
 	private double logProbability$v2;
 	private double logProbability$v3;
-	private double logProbability$var22;
 	private double logProbability$var23;
-	private double logProbability$var42;
 	private double logProbability$var43;
-	private double logProbability$var8;
 	private double logProbability$var9;
 	private int size;
 	private boolean system$gibbsForward = true;
@@ -186,12 +183,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	@Override
 	public final double get$logProbability$v2() {
 		return logProbability$v2;
-	}
-
-	// Getter for logProbability$v3.
-	@Override
-	public final double get$logProbability$v3() {
-		return logProbability$v3;
 	}
 
 	// Getter for size.
@@ -352,8 +343,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				if(cv$sampleReached)
-					logProbability$var22 = cv$sampleAccumulator;
 				
 				// Only update the sample if it was reached, otherwise the NaN will be
 				// erroneously over written.
@@ -394,8 +383,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$sampleValue = logProbability$var23;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var22 = cv$rvAccumulator;
 			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
 			if(fixedFlag$sample23)
@@ -715,8 +702,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Add the probability of this instance of the random variable to the probability
 		// of all instances of the random variable.
 		cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-		if(cv$sampleReached)
-			logProbability$var42 = cv$sampleAccumulator;
 		
 		// Only update the sample if it was reached, otherwise the NaN will be
 		// erroneously over written.
@@ -889,7 +874,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var8 = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$var9 = cv$sampleProbability;
@@ -921,7 +905,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$sampleValue = logProbability$var9;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var8 = cv$rvAccumulator;
 			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
 			if(fixedFlag$sample9)
@@ -1004,8 +987,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var22 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -1043,8 +1024,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$sampleValue = logProbability$var23;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var22 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$v2 = (logProbability$v2 + cv$accumulator);
@@ -1193,8 +1172,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Add the probability of this instance of the random variable to the probability
 		// of all instances of the random variable.
 		cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-		if(cv$sampleReached)
-			logProbability$var42 = cv$sampleAccumulator;
 		
 		// Only update the sample if it was reached, otherwise the NaN will be
 		// erroneously over written.
@@ -1358,7 +1335,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var8 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$var9 = cv$sampleProbability;
@@ -1387,7 +1363,6 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$sampleValue = logProbability$var9;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var8 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$v2 = (logProbability$v2 + cv$accumulator);
@@ -2892,15 +2867,12 @@ class DistributionTest2b$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbability$c = 0.0;
 		if(!fixedProbFlag$sample5)
 			logProbability$v1 = Double.NaN;
-		logProbability$var8 = 0.0;
 		logProbability$v2 = 0.0;
 		if(!fixedProbFlag$sample9)
 			logProbability$var9 = Double.NaN;
-		logProbability$var22 = Double.NaN;
 		if(!fixedProbFlag$sample23)
 			logProbability$var23 = Double.NaN;
 		logProbability$v3 = Double.NaN;
-		logProbability$var42 = Double.NaN;
 		logProbability$v = 0.0;
 		logProbability$var43 = Double.NaN;
 	}

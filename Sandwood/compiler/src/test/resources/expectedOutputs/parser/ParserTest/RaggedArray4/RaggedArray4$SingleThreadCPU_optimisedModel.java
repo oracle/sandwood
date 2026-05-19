@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements RaggedArray4$CoreInterface {
+final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements RaggedArray4$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[][] a;
@@ -22,9 +22,6 @@ class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$$model;
 	private double logProbability$d;
 	private double logProbability$obs;
-	private double logProbability$var44;
-	private double logProbability$var47;
-	private double logProbability$var49;
 	private double logProbability$var62;
 	private double logProbability$y;
 	private int[] obs;
@@ -232,11 +229,6 @@ class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (((0.0 <= y) && (y < 2))?Math.log(b[y]):Double.NEGATIVE_INFINITY);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var44 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$y = cv$distributionAccumulator;
 			
@@ -281,8 +273,6 @@ class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var44 = logProbability$y;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -339,11 +329,6 @@ class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_4);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var47 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$d = cv$distributionAccumulator;
 			
@@ -388,8 +373,6 @@ class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var47 = logProbability$d;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -442,7 +425,6 @@ class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Store the value of the function call, so the function call is only made once.
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$48_5))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
-			logProbability$var49 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var62 = cv$sampleAccumulator;
@@ -477,8 +459,6 @@ class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var49 = logProbability$var62;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -972,13 +952,10 @@ class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var44 = 0.0;
 		if(!fixedProbFlag$sample47)
 			logProbability$y = Double.NaN;
-		logProbability$var47 = 0.0;
 		if(!fixedProbFlag$sample50)
 			logProbability$d = Double.NaN;
-		logProbability$var49 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample64)
 			logProbability$var62 = Double.NaN;

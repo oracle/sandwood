@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK1$CoreInterface {
+final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK1$CoreInterface {
 	
 	// Declare the variables for the model.
 	private boolean fixedFlag$sample20 = false;
@@ -20,8 +20,6 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$sample;
 	private double[] logProbability$sample20;
 	private double[] logProbability$sample24;
-	private double[] logProbability$var19;
-	private double[] logProbability$var23;
 	private double[] observed;
 	private double[] sample;
 	private boolean system$gibbsForward = true;
@@ -111,12 +109,6 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		return logProbability$indirection;
 	}
 
-	// Getter for logProbability$sample.
-	@Override
-	public final double get$logProbability$sample() {
-		return logProbability$sample;
-	}
-
 	// Getter for observed.
 	@Override
 	public final double[] get$observed() {
@@ -185,11 +177,6 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var19[i] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample20[i] = cv$distributionAccumulator;
 			}
@@ -217,12 +204,8 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < length$observed; i += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample20[i];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var19[i] = cv$rvAccumulator;
-			}
+			for(int i = 0; i < length$observed; i += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample20[i]);
 			
 			// Update the variable probability
 			logProbability$sample = (logProbability$sample + cv$accumulator);
@@ -285,11 +268,6 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var23[i] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample24[i] = cv$distributionAccumulator;
 			}
@@ -310,12 +288,8 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < length$observed; i += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample24[i];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var23[i] = cv$rvAccumulator;
-			}
+			for(int i = 0; i < length$observed; i += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample24[i]);
 			
 			// Update the variable probability
 			logProbability$generated = (logProbability$generated + cv$accumulator);
@@ -566,14 +540,8 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Constructor for sample
 			sample = new double[length$observed];
 		
-		// Constructor for logProbability$var19
-		logProbability$var19 = new double[length$observed];
-		
 		// Constructor for logProbability$sample20
 		logProbability$sample20 = new double[length$observed];
-		
-		// Constructor for logProbability$var23
-		logProbability$var23 = new double[length$observed];
 		
 		// Constructor for logProbability$sample24
 		logProbability$sample24 = new double[length$observed];
@@ -680,16 +648,12 @@ class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var19[i] = Double.NaN;
 		logProbability$sample = 0.0;
 		logProbability$indirection = 0.0;
 		if(!fixedProbFlag$sample20) {
 			for(int i = 0; i < length$observed; i += 1)
 				logProbability$sample20[i] = Double.NaN;
 		}
-		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var23[i] = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample24) {
 			for(int i = 0; i < length$observed; i += 1)

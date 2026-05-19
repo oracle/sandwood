@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK16$CoreInterface {
+final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK16$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double bias;
@@ -16,7 +16,6 @@ class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
 	private double logProbability$flip;
-	private double logProbability$var11;
 	private boolean system$gibbsForward = true;
 
 	public Flip1CoinMK16$SingleThreadCPU(ExecutionTarget target) {
@@ -33,12 +32,6 @@ class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	@Override
 	public final void set$bias(double cv$value) {
 		bias = cv$value;
-	}
-
-	// Getter for flip.
-	@Override
-	public final boolean get$flip() {
-		return flip;
 	}
 
 	// Getter for flipMeasured.
@@ -83,18 +76,6 @@ class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		return logProbability$bernoulli;
 	}
 
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$flip.
-	@Override
-	public final double get$logProbability$flip() {
-		return logProbability$flip;
-	}
-
 	// Calculate the probability of the samples represented by sample14 using sampled
 	// values.
 	private final void logProbabilityValue$sample14() {
@@ -128,10 +109,9 @@ class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			cv$sampleAccumulator = DistributionSampling.logProbabilityBeta(bias, 1.0, 1.0);
 		}
 		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(cv$sampleReached) {
-			logProbability$var11 = cv$sampleAccumulator;
-			
+		// Only update the sample if it was reached, otherwise the NaN will be
+		// erroneously over written.
+		if(cv$sampleReached)
 			// Store the random variable instance probability
 			// 
 			// Add the probability of this instance of the random variable to the probability
@@ -139,7 +119,6 @@ class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// 
 			// Accumulator for probabilities of instances of the random variable
 			logProbability$bias = cv$sampleAccumulator;
-		}
 		
 		// Add probability to model
 		// 
@@ -318,7 +297,6 @@ class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var11 = Double.NaN;
 		logProbability$bias = Double.NaN;
 		logProbability$bernoulli = Double.NaN;
 		logProbability$flip = Double.NaN;

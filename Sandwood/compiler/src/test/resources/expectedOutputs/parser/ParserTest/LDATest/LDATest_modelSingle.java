@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model LDATest This is the class that
   * all user interactions with the model should occur through.
   */
-public class LDATest extends Model {
+public final class LDATest extends Model {
 
     private LDATest$CoreInterface system$c = new LDATest$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedObjectArrayInternal<double[]> $phi = new ComputedObjectArrayInternal<double[]>(this, "phi", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $phi = new ComputedObjectArrayInternal<double[]>(this, "phi", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$phi(); }
 
@@ -57,7 +58,7 @@ public class LDATest extends Model {
      */
     public final ComputedObjectArray<double[]> phi = $phi;
 
-    private final ComputedObjectArrayInternal<double[]> $theta = new ComputedObjectArrayInternal<double[]>(this, "theta", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $theta = new ComputedObjectArrayInternal<double[]>(this, "theta", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$theta(); }
 
@@ -96,7 +97,7 @@ public class LDATest extends Model {
      */
     public final ComputedObjectArray<double[]> theta = $theta;
 
-    private final ComputedObjectArrayInternal<int[]> $w = new ComputedObjectArrayInternal<int[]>(this, "w", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
+    private final ComputedObjectArrayInternal<int[]> $w = new ComputedObjectArrayInternal<int[]>(this, "w", false, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
         public int[][] getValue() { return system$c.get$w(); }
 
@@ -132,7 +133,7 @@ public class LDATest extends Model {
      */
     public final ComputedObjectArray<int[]> w = $w;
 
-    private final ComputedObjectArrayInternal<int[]> $z = new ComputedObjectArrayInternal<int[]>(this, "z", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
+    private final ComputedObjectArrayInternal<int[]> $z = new ComputedObjectArrayInternal<int[]>(this, "z", true, true, true, ProbabilityType.SKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
         public int[][] getValue() { return system$c.get$z(); }
 
@@ -143,7 +144,7 @@ public class LDATest extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$z(); }
+        public double getCurrentLogProbability() { throw new SandwoodException("Log probabilities are not available for this value."); }
 
         @Override
         public int[][][] constructArray(int iterations) {
@@ -152,19 +153,14 @@ public class LDATest extends Model {
 
         @Override
         public void setFixed(boolean fixed) {
-            throw new SandwoodException("An observed variable can only have the value fixed to the observed value if the value is consumed by another random variable.");
+            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
         }
 
         @Override
         public Immutability isFixed() {
-            return Immutability.DETERMINISTIC;
+                return Immutability.FREE;
         }
     };
-
-    /**
-     * Computed variable representing z of type int[][] from the Sandwood model 
-     */
-    public final ComputedObjectArray<int[]> z = $z;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
@@ -244,7 +240,7 @@ public class LDATest extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private HasProbabilityInternal[] $probabilityVariables = {$phi, $theta, $w, $z};
+    private HasProbabilityInternal[] $probabilityVariables = {$phi, $theta, $w};
 
     //Constructors
     /**
@@ -402,14 +398,11 @@ public class LDATest extends Model {
         public final double[][] theta;
         /** Field holding the value of w after a convention execution step.*/
         public final int[][] w;
-        /** Field holding the value of z after a convention execution step.*/
-        public final int[][] z;
 
         InferredValueOutputs(LDATest system$model) {
             this.phi = system$model.phi.getSamples()[0];
             this.theta = system$model.theta.getSamples()[0];
             this.w = system$model.w.getSamples()[0];
-            this.z = system$model.z.getSamples()[0];
         }
     }
 
@@ -424,15 +417,12 @@ public class LDATest extends Model {
         public final double theta;
         /** Field holding the log probability of computed variable w */
         public final double w;
-        /** Field holding the log probability of computed variable z */
-        public final double z;
 
         LogProbabilities(LDATest system$model) {
             this.$logModelProbability = system$model.getLogProbability();
             this.phi = system$model.phi.getLogProbability();
             this.theta = system$model.theta.getLogProbability();
             this.w = system$model.w.getLogProbability();
-            this.z = system$model.z.getLogProbability();
         }
 
         /** Method to return log probability of the whole model 
@@ -451,15 +441,12 @@ public class LDATest extends Model {
         public final double theta;
         /** Field holding the probability of computed variable w */
         public final double w;
-        /** Field holding the probability of computed variable z */
-        public final double z;
 
         Probabilities(LDATest system$model) {
             this.$modelProbability = system$model.getProbability();
             this.phi = system$model.phi.getProbability();
             this.theta = system$model.theta.getProbability();
             this.w = system$model.w.getProbability();
-            this.z = system$model.z.getProbability();
         }
 
         /** Method to return probability of the whole model 
@@ -475,13 +462,10 @@ public class LDATest extends Model {
         public final double[][][] phi;
         /** Field holding the MAP or Sample value of theta after an infer model call. */
         public final double[][][] theta;
-        /** Field holding the MAP or Sample value of z after an infer model call. */
-        public final int[][][] z;
 
         InferredModelOutputs(LDATest system$model) {
             this.phi = system$model.getInferredValue(system$model.$phi);
             this.theta = system$model.getInferredValue(system$model.$theta);
-            this.z = system$model.getInferredValue(system$model.$z);
         }
     }
 

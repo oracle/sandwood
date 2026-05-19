@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DistributionsTest$CoreInterface {
+final class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DistributionsTest$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double b0;
@@ -17,10 +17,7 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double logProbability$$model;
 	private double logProbability$b0;
 	private double logProbability$b1;
-	private double logProbability$var10;
-	private double logProbability$var26;
 	private double logProbability$var27;
-	private double logProbability$var6;
 	private double logProbability$y;
 	private int noSamples;
 	private boolean system$gibbsForward = true;
@@ -243,7 +240,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var10 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$b1 = cv$sampleProbability;
@@ -269,7 +265,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$sampleValue = logProbability$b1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var10 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -346,8 +341,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var26 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -381,8 +374,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$sampleValue = logProbability$var27;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var26 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -451,7 +442,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var6 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$b0 = cv$sampleProbability;
@@ -477,7 +467,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$sampleValue = logProbability$b0;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var6 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -939,13 +928,10 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var6 = 0.0;
 		if(!fixedProbFlag$sample7)
 			logProbability$b0 = Double.NaN;
-		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
 			logProbability$b1 = Double.NaN;
-		logProbability$var26 = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample27)
 			logProbability$var27 = Double.NaN;

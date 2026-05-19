@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK14$CoreInterface {
+final class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK14$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double b;
@@ -21,11 +21,9 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$b;
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
-	private double logProbability$c;
 	private double logProbability$flips;
 	private double logProbability$sample8;
 	private double logProbability$var35;
-	private double logProbability$var7;
 	private int samples;
 	private boolean system$gibbsForward = true;
 
@@ -333,16 +331,12 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var7 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$sample8 = cv$sampleProbability;
 			
 			// Guard to ensure that bias is only updated once for this probability.
 			boolean cv$guard$bias = false;
-			
-			// Guard to ensure that c is only updated once for this probability.
-			boolean cv$guard$c = false;
 			
 			// Update the variable probability
 			logProbability$b = (logProbability$b + cv$accumulator);
@@ -378,20 +372,6 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				}
 			}
 			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard1) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$c) {
-						// Set the guard so the update is only applied once.
-						cv$guard$c = true;
-						
-						// Update the variable probability
-						logProbability$c = (logProbability$c + cv$accumulator);
-					}
-				}
-			}
-			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
@@ -413,13 +393,9 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$sampleValue = logProbability$sample8;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var7 = cv$rvAccumulator;
 			
 			// Guard to ensure that bias is only updated once for this probability.
 			boolean cv$guard$bias = false;
-			
-			// Guard to ensure that c is only updated once for this probability.
-			boolean cv$guard$c = false;
 			
 			// Update the variable probability
 			logProbability$b = (logProbability$b + cv$accumulator);
@@ -451,20 +427,6 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 								logProbability$bias = (logProbability$bias + cv$sampleValue);
 							}
 						}
-					}
-				}
-			}
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard1) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$c) {
-						// Set the guard so the update is only applied once.
-						cv$guard$c = true;
-						
-						// Update the variable probability
-						logProbability$c = (logProbability$c + cv$accumulator);
 					}
 				}
 			}
@@ -927,9 +889,7 @@ class Flip1CoinMK14$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var7 = 0.0;
 		logProbability$b = 0.0;
-		logProbability$c = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample8)
 			logProbability$sample8 = Double.NaN;

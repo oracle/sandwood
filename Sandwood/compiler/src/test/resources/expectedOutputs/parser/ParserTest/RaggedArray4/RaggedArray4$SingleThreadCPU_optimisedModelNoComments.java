@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements RaggedArray4$CoreInterface {
+final class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements RaggedArray4$CoreInterface {
 	private double[][] a;
 	private double[] b;
 	private double[] cv$var45$stateProbabilityGlobal;
@@ -20,9 +20,6 @@ class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$$model;
 	private double logProbability$d;
 	private double logProbability$obs;
-	private double logProbability$var44;
-	private double logProbability$var47;
-	private double logProbability$var49;
 	private double logProbability$var62;
 	private double logProbability$y;
 	private int[] obs;
@@ -145,14 +142,12 @@ class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void logProbabilityValue$sample47() {
 		if(!fixedProbFlag$sample47) {
 			double cv$distributionAccumulator = (((0.0 <= y) && (y < 2))?Math.log(b[y]):Double.NEGATIVE_INFINITY);
-			logProbability$var44 = cv$distributionAccumulator;
 			logProbability$y = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample47)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample47 = fixedFlag$sample47;
 		} else {
-			logProbability$var44 = logProbability$y;
 			logProbability$$model = (logProbability$$model + logProbability$y);
 			if(fixedFlag$sample47)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$y);
@@ -167,14 +162,12 @@ class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			if((0 == y))
 				lengthCV$a$48_4 = 2;
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_4);
-			logProbability$var47 = cv$distributionAccumulator;
 			logProbability$d = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample50)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample50 = (fixedFlag$sample50 && fixedFlag$sample47);
 		} else {
-			logProbability$var47 = logProbability$d;
 			logProbability$$model = (logProbability$$model + logProbability$d);
 			if(fixedFlag$sample50)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$d);
@@ -193,14 +186,12 @@ class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 					lengthCV$a$48_5 = 2;
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$48_5))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
-			logProbability$var49 = cv$sampleAccumulator;
 			logProbability$var62 = cv$sampleAccumulator;
 			logProbability$obs = (logProbability$obs + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 			fixedProbFlag$sample64 = fixedFlag$sample50;
 		} else {
-			logProbability$var49 = logProbability$var62;
 			logProbability$obs = (logProbability$obs + logProbability$var62);
 			logProbability$$model = (logProbability$$model + logProbability$var62);
 			logProbability$$evidence = (logProbability$$evidence + logProbability$var62);
@@ -391,13 +382,10 @@ class RaggedArray4$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var44 = 0.0;
 		if(!fixedProbFlag$sample47)
 			logProbability$y = Double.NaN;
-		logProbability$var47 = 0.0;
 		if(!fixedProbFlag$sample50)
 			logProbability$d = Double.NaN;
-		logProbability$var49 = Double.NaN;
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample64)
 			logProbability$var62 = Double.NaN;

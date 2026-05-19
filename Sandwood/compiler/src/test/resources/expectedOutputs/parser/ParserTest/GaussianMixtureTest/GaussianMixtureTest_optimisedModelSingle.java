@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model GaussianMixtureTest This is the class that
   * all user interactions with the model should occur through.
   */
-public class GaussianMixtureTest extends Model {
+public final class GaussianMixtureTest extends Model {
 
     private GaussianMixtureTest$CoreInterface system$c = new GaussianMixtureTest$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $mu = new ComputedDoubleArrayInternal(this, "mu", true, true, false) {
+    private final ComputedDoubleArrayInternal $mu = new ComputedDoubleArrayInternal(this, "mu", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$mu(); }
 
@@ -52,7 +53,7 @@ public class GaussianMixtureTest extends Model {
      */
     public final ComputedDoubleArray mu = $mu;
 
-    private final ComputedDoubleArrayInternal $phi = new ComputedDoubleArrayInternal(this, "phi", true, true, false) {
+    private final ComputedDoubleArrayInternal $phi = new ComputedDoubleArrayInternal(this, "phi", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$phi(); }
 
@@ -86,7 +87,7 @@ public class GaussianMixtureTest extends Model {
      */
     public final ComputedDoubleArray phi = $phi;
 
-    private final ComputedDoubleArrayInternal $sigma = new ComputedDoubleArrayInternal(this, "sigma", true, true, false) {
+    private final ComputedDoubleArrayInternal $sigma = new ComputedDoubleArrayInternal(this, "sigma", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$sigma(); }
 
@@ -120,7 +121,7 @@ public class GaussianMixtureTest extends Model {
      */
     public final ComputedDoubleArray sigma = $sigma;
 
-    private final ComputedDoubleArrayInternal $x = new ComputedDoubleArrayInternal(this, "x", false, true, false) {
+    private final ComputedDoubleArrayInternal $x = new ComputedDoubleArrayInternal(this, "x", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$x(); }
 
@@ -151,7 +152,7 @@ public class GaussianMixtureTest extends Model {
      */
     public final ComputedDoubleArray x = $x;
 
-    private final ComputedIntegerArrayInternal $z = new ComputedIntegerArrayInternal(this, "z", true, true, false) {
+    private final ComputedIntegerArrayInternal $z = new ComputedIntegerArrayInternal(this, "z", true, true, true, ProbabilityType.SKIPPABLE) {
         @Override
         public int[] getValue() { return system$c.get$z(); }
 
@@ -162,23 +163,18 @@ public class GaussianMixtureTest extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$z(); }
+        public double getCurrentLogProbability() { throw new SandwoodException("Log probabilities are not available for this value."); }
 
         @Override
         public void setFixed(boolean fixed) {
-            throw new SandwoodException("An observed variable can only have the value fixed to the observed value if the value is consumed by another random variable.");
+            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
         }
 
         @Override
         public Immutability isFixed() {
-            return Immutability.DETERMINISTIC;
+                return Immutability.FREE;
         }
     };
-
-    /**
-     * Computed variable representing z of type int[] from the Sandwood model 
-     */
-    public final ComputedIntegerArray z = $z;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
@@ -216,7 +212,7 @@ public class GaussianMixtureTest extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private HasProbabilityInternal[] $probabilityVariables = {$mu, $phi, $sigma, $x, $z};
+    private HasProbabilityInternal[] $probabilityVariables = {$mu, $phi, $sigma, $x};
 
     //Constructors
     /**
@@ -347,15 +343,12 @@ public class GaussianMixtureTest extends Model {
         public final double[] sigma;
         /** Field holding the value of x after a convention execution step.*/
         public final double[] x;
-        /** Field holding the value of z after a convention execution step.*/
-        public final int[] z;
 
         InferredValueOutputs(GaussianMixtureTest system$model) {
             this.mu = system$model.mu.getSamples()[0];
             this.phi = system$model.phi.getSamples()[0];
             this.sigma = system$model.sigma.getSamples()[0];
             this.x = system$model.x.getSamples()[0];
-            this.z = system$model.z.getSamples()[0];
         }
     }
 
@@ -372,8 +365,6 @@ public class GaussianMixtureTest extends Model {
         public final double sigma;
         /** Field holding the log probability of computed variable x */
         public final double x;
-        /** Field holding the log probability of computed variable z */
-        public final double z;
 
         LogProbabilities(GaussianMixtureTest system$model) {
             this.$logModelProbability = system$model.getLogProbability();
@@ -381,7 +372,6 @@ public class GaussianMixtureTest extends Model {
             this.phi = system$model.phi.getLogProbability();
             this.sigma = system$model.sigma.getLogProbability();
             this.x = system$model.x.getLogProbability();
-            this.z = system$model.z.getLogProbability();
         }
 
         /** Method to return log probability of the whole model 
@@ -402,8 +392,6 @@ public class GaussianMixtureTest extends Model {
         public final double sigma;
         /** Field holding the probability of computed variable x */
         public final double x;
-        /** Field holding the probability of computed variable z */
-        public final double z;
 
         Probabilities(GaussianMixtureTest system$model) {
             this.$modelProbability = system$model.getProbability();
@@ -411,7 +399,6 @@ public class GaussianMixtureTest extends Model {
             this.phi = system$model.phi.getProbability();
             this.sigma = system$model.sigma.getProbability();
             this.x = system$model.x.getProbability();
-            this.z = system$model.z.getProbability();
         }
 
         /** Method to return probability of the whole model 
@@ -429,14 +416,11 @@ public class GaussianMixtureTest extends Model {
         public final double[][] phi;
         /** Field holding the MAP or Sample value of sigma after an infer model call. */
         public final double[][] sigma;
-        /** Field holding the MAP or Sample value of z after an infer model call. */
-        public final int[][] z;
 
         InferredModelOutputs(GaussianMixtureTest system$model) {
             this.mu = system$model.getInferredValue(system$model.$mu);
             this.phi = system$model.getInferredValue(system$model.$phi);
             this.sigma = system$model.getInferredValue(system$model.$sigma);
-            this.z = system$model.getInferredValue(system$model.$z);
         }
     }
 

@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LinearRegressionWrongNameFail$CoreInterface {
+final class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LinearRegressionWrongNameFail$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double b0;
@@ -21,10 +21,6 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 	private double logProbability$b0;
 	private double logProbability$b1;
 	private double[] logProbability$sample31;
-	private double logProbability$var10;
-	private double logProbability$var14;
-	private double[] logProbability$var30;
-	private double logProbability$var6;
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
@@ -282,11 +278,6 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((b1 - 1.0) / 2.23606797749979)) - 0.8047189562170501);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var10 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$b1 = cv$distributionAccumulator;
 			
@@ -331,8 +322,6 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var10 = logProbability$b1;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -378,11 +367,6 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityInverseGamma(variance, 1.0, 1.0);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var14 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$variance = cv$distributionAccumulator;
 			
@@ -427,8 +411,6 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var14 = logProbability$variance;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -485,11 +467,6 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var30[i] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample31[i] = cv$distributionAccumulator;
 			}
@@ -510,12 +487,8 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < noSamples; i += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample31[i];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var30[i] = cv$rvAccumulator;
-			}
+			for(int i = 0; i < noSamples; i += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample31[i]);
 			
 			// Update the variable probability
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -556,11 +529,6 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 			// 
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((b0 / 1.4142135623730951)) - 0.34657359027997264);
-			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var6 = cv$distributionAccumulator;
 			
 			// Store the sample task probability
 			logProbability$b0 = cv$distributionAccumulator;
@@ -606,8 +574,6 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var6 = logProbability$b0;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -773,9 +739,6 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 		// Constructor for y
 		y = new double[x.length];
 		
-		// Constructor for logProbability$var30
-		logProbability$var30 = new double[x.length];
-		
 		// Constructor for logProbability$sample31
 		logProbability$sample31 = new double[x.length];
 	}
@@ -906,17 +869,12 @@ class LinearRegressionWrongNameFail$MultiThreadCPU extends org.sandwood.runtime.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var6 = 0.0;
 		if(!fixedProbFlag$sample7)
 			logProbability$b0 = Double.NaN;
-		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
 			logProbability$b1 = Double.NaN;
-		logProbability$var14 = 0.0;
 		if(!fixedProbFlag$sample15)
 			logProbability$variance = Double.NaN;
-		for(int i = 0; i < noSamples; i += 1)
-			logProbability$var30[i] = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample31) {
 			for(int i = 0; i < noSamples; i += 1)

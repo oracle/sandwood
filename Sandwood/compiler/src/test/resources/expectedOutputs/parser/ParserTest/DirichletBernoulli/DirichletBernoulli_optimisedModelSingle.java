@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model DirichletBernoulli This is the class that
   * all user interactions with the model should occur through.
   */
-public class DirichletBernoulli extends Model {
+public final class DirichletBernoulli extends Model {
 
     private DirichletBernoulli$CoreInterface system$c = new DirichletBernoulli$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", false, true, false) {
+    private final ComputedBooleanArrayInternal $output = new ComputedBooleanArrayInternal(this, "output", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean[] getValue() { return system$c.get$output(); }
 
@@ -49,7 +50,7 @@ public class DirichletBernoulli extends Model {
      */
     public final ComputedBooleanArray output = $output;
 
-    private final ComputedDoubleArrayInternal $prior = new ComputedDoubleArrayInternal(this, "prior", true, true, false) {
+    private final ComputedDoubleArrayInternal $prior = new ComputedDoubleArrayInternal(this, "prior", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$prior(); }
 
@@ -119,7 +120,7 @@ public class DirichletBernoulli extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private final RandomVariableInternal $b1 = new RandomVariableInternal(this, "b1") {
+    private final RandomVariableInternal $b1 = new RandomVariableInternal(this, "b1", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$b1();
@@ -131,7 +132,7 @@ public class DirichletBernoulli extends Model {
      */
     public final RandomVariable b1 = $b1;
 
-    private final RandomVariableInternal $b2 = new RandomVariableInternal(this, "b2") {
+    private final RandomVariableInternal $b2 = new RandomVariableInternal(this, "b2", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$b2();

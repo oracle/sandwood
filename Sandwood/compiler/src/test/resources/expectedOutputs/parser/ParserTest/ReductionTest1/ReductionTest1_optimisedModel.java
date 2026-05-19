@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model ReductionTest1 This is the class that
   * all user interactions with the model should occur through.
   */
-public class ReductionTest1 extends Model {
+public final class ReductionTest1 extends Model {
 
     private ReductionTest1$CoreInterface system$c = new ReductionTest1$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedObjectArrayInternal<int[]> $arr = new ComputedObjectArrayInternal<int[]>(this, "arr", false, true, false, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
+    private final ComputedObjectArrayInternal<int[]> $arr = new ComputedObjectArrayInternal<int[]>(this, "arr", false, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
         public int[][] getValue() { return system$c.get$arr(); }
 
@@ -54,7 +55,7 @@ public class ReductionTest1 extends Model {
      */
     public final ComputedObjectArray<int[]> arr = $arr;
 
-    private final ComputedObjectArrayInternal<double[]> $sum_t = new ComputedObjectArrayInternal<double[]>(this, "sum_t", false, false, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $sum_t = new ComputedObjectArrayInternal<double[]>(this, "sum_t", false, false, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$sum_t(); }
 
@@ -95,7 +96,7 @@ public class ReductionTest1 extends Model {
      */
     public final ComputedObjectArray<double[]> sum_t = $sum_t;
 
-    private final ComputedObjectArrayInternal<double[]> $time_coeff = new ComputedObjectArrayInternal<double[]>(this, "time_coeff", true, true, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $time_coeff = new ComputedObjectArrayInternal<double[]>(this, "time_coeff", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$time_coeff(); }
 
@@ -134,7 +135,7 @@ public class ReductionTest1 extends Model {
      */
     public final ComputedObjectArray<double[]> time_coeff = $time_coeff;
 
-    private final ComputedObjectArrayInternal<double[][]> $time_impact = new ComputedObjectArrayInternal<double[][]>(this, "time_impact", false, false, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 3) {
+    private final ComputedObjectArrayInternal<double[][]> $time_impact = new ComputedObjectArrayInternal<double[][]>(this, "time_impact", false, false, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 3) {
         @Override
         public double[][][] getValue() { return system$c.get$time_impact(); }
 

@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional3$CoreInterface {
+final class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Conditional3$CoreInterface {
 	private double bias;
 	private double[] cv$var4$stateProbabilityGlobal;
 	private boolean fixedFlag$sample16 = false;
@@ -19,9 +19,7 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$guard;
 	private double logProbability$sample16;
 	private double logProbability$value;
-	private double logProbability$var13;
 	private double logProbability$var14;
-	private double logProbability$var17;
 	private double observedValue;
 	private boolean system$gibbsForward = true;
 	private double value;
@@ -166,7 +164,6 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var13 = cv$sampleAccumulator;
 				logProbability$sample16 = cv$sampleProbability;
 				boolean cv$guard$bias = false;
 				{
@@ -192,7 +189,6 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var13 = cv$rvAccumulator;
 				boolean cv$guard$bias = false;
 				{
 					if(!guard) {
@@ -241,7 +237,6 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var17 = cv$sampleAccumulator;
 			logProbability$value = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -252,7 +247,6 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleValue = logProbability$value;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var17 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
@@ -758,12 +752,10 @@ class Conditional3$SingleThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$bernoulli = 0.0;
 		if(!fixedProbFlag$sample4)
 			logProbability$guard = Double.NaN;
-		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$sample16 = Double.NaN;
-		logProbability$var17 = 0.0;
 		if(!fixedProbFlag$sample20)
 			logProbability$value = Double.NaN;
 	}

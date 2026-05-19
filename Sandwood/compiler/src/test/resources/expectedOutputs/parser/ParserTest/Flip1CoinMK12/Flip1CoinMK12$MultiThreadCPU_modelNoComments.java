@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK12$CoreInterface {
+final class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK12$CoreInterface {
 	private double bias;
 	private boolean fixedFlag$sample16 = false;
 	private boolean fixedFlag$sample28 = false;
@@ -26,11 +26,8 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$sample16;
 	private double logProbability$sample28;
 	private double logProbability$sample35;
-	private double logProbability$var13;
 	private double logProbability$var14;
-	private double logProbability$var23;
 	private double logProbability$var26;
-	private double logProbability$var30;
 	private double logProbability$var33;
 	private double logProbability$var48;
 	private int samples;
@@ -230,7 +227,6 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var13 = cv$sampleAccumulator;
 				logProbability$sample16 = cv$sampleProbability;
 				boolean cv$guard$bias = false;
 				{
@@ -256,7 +252,6 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var13 = cv$rvAccumulator;
 				boolean cv$guard$bias = false;
 				{
 					if(guard1) {
@@ -310,7 +305,6 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var23 = cv$sampleAccumulator;
 					logProbability$sample28 = cv$sampleProbability;
 					boolean cv$guard$bias = false;
 					{
@@ -340,7 +334,6 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var23 = cv$rvAccumulator;
 					boolean cv$guard$bias = false;
 					{
 						if((guard2 <= 2)) {
@@ -397,7 +390,6 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var30 = cv$sampleAccumulator;
 					logProbability$sample35 = cv$sampleProbability;
 					boolean cv$guard$bias = false;
 					{
@@ -427,7 +419,6 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var30 = cv$rvAccumulator;
 					boolean cv$guard$bias = false;
 					{
 						if(!(guard2 <= 2)) {
@@ -984,16 +975,13 @@ class Flip1CoinMK12$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$sample16 = Double.NaN;
-		logProbability$var23 = Double.NaN;
 		logProbability$var26 = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$sample28 = Double.NaN;
-		logProbability$var30 = Double.NaN;
 		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample35)
 			logProbability$sample35 = Double.NaN;

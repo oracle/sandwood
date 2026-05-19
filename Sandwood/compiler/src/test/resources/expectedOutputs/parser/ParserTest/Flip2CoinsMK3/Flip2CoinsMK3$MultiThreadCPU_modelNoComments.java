@@ -5,7 +5,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip2CoinsMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip2CoinsMK3$CoreInterface {
+final class Flip2CoinsMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip2CoinsMK3$CoreInterface {
 	private double a;
 	private double b;
 	private double[] bias;
@@ -23,7 +23,6 @@ class Flip2CoinsMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$flips;
 	private double[] logProbability$sample44;
 	private double logProbability$var17;
-	private double logProbability$var5;
 	private boolean system$gibbsForward = true;
 
 	public Flip2CoinsMK3$MultiThreadCPU(ExecutionTarget target) {
@@ -163,7 +162,6 @@ class Flip2CoinsMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var5 = cv$sampleAccumulator;
 			logProbability$var17 = cv$sampleAccumulator;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -179,7 +177,6 @@ class Flip2CoinsMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleValue = logProbability$var17;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var5 = cv$rvAccumulator;
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample17)
@@ -422,7 +419,6 @@ class Flip2CoinsMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var5 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$var17 = Double.NaN;

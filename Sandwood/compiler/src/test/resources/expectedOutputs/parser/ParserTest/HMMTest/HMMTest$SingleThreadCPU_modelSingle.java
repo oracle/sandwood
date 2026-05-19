@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMTest$CoreInterface {
+final class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMTest$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[] bias;
@@ -26,13 +26,9 @@ class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 	private double logProbability$flips;
 	private double logProbability$m;
 	private double logProbability$st;
-	private double logProbability$var16;
 	private double logProbability$var28;
-	private double logProbability$var32;
 	private double logProbability$var44;
-	private double logProbability$var67;
 	private double logProbability$var68;
-	private double logProbability$var82;
 	private double logProbability$var83;
 	private double[][] m;
 	private int samples;
@@ -321,8 +317,6 @@ class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var16 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -360,8 +354,6 @@ class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			double cv$sampleValue = logProbability$var28;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var16 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$m = (logProbability$m + cv$accumulator);
@@ -442,8 +434,6 @@ class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var32 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -481,8 +471,6 @@ class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			double cv$sampleValue = logProbability$var44;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var32 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$bias = (logProbability$bias + cv$accumulator);
@@ -562,8 +550,6 @@ class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var67 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -601,8 +587,6 @@ class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			double cv$sampleValue = logProbability$var68;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var67 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -682,8 +666,6 @@ class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var82 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -717,8 +699,6 @@ class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 			double cv$sampleValue = logProbability$var83;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var82 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$flips = (logProbability$flips + cv$accumulator);
@@ -1336,19 +1316,15 @@ class HMMTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreMo
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$var28 = Double.NaN;
-		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
 			logProbability$var44 = Double.NaN;
-		logProbability$var67 = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample69)
 			logProbability$var68 = Double.NaN;
-		logProbability$var82 = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample84)
 			logProbability$var83 = Double.NaN;

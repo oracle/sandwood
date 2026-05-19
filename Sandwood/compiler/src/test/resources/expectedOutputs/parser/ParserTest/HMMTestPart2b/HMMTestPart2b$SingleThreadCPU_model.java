@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMTestPart2b$CoreInterface {
+final class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMTestPart2b$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[] bias;
@@ -28,12 +28,8 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double[] logProbability$sample71;
 	private double[] logProbability$sample86;
 	private double logProbability$st;
-	private double logProbability$var16;
 	private double logProbability$var28;
-	private double logProbability$var32;
 	private double logProbability$var44;
-	private double[] logProbability$var69;
-	private double[] logProbability$var84;
 	private double[][] m;
 	private int samples;
 	private int[] st;
@@ -321,7 +317,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var16 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var28 = cv$sampleAccumulator;
@@ -356,7 +351,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$sampleValue = logProbability$var28;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var16 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$m = (logProbability$m + cv$accumulator);
@@ -437,7 +431,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var32 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var44 = cv$sampleAccumulator;
@@ -472,7 +465,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$sampleValue = logProbability$var44;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var32 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$bias = (logProbability$bias + cv$accumulator);
@@ -551,7 +543,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var69[((i$var64 - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample71[((i$var64 - 0) / 1)] = cv$sampleProbability;
@@ -588,7 +579,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var69[((i$var64 - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -668,7 +658,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var84[((j - 1) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample86[((j - 1) / 1)] = cv$sampleProbability;
@@ -701,7 +690,6 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var84[((j - 1) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -1157,19 +1145,9 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			flips = new boolean[length$flipsMeasured];
 		}
 		
-		// Constructor for logProbability$var69
-		{
-			logProbability$var69 = new double[(((((length$flipsMeasured - 1) - 1) - 0) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample71
 		{
 			logProbability$sample71 = new double[(((((length$flipsMeasured - 1) - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$var84
-		{
-			logProbability$var84 = new double[((((length$flipsMeasured - 1) - 1) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample86
@@ -1340,23 +1318,17 @@ class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$var28 = Double.NaN;
-		logProbability$var32 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample45)
 			logProbability$var44 = Double.NaN;
-		for(int i$var64 = 0; i$var64 < (samples - 1); i$var64 += 1)
-			logProbability$var69[((i$var64 - 0) / 1)] = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample71) {
 			for(int i$var64 = 0; i$var64 < (samples - 1); i$var64 += 1)
 				logProbability$sample71[((i$var64 - 0) / 1)] = Double.NaN;
 		}
-		for(int j = 1; j < samples; j += 1)
-			logProbability$var84[((j - 1) / 1)] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample86) {
 			for(int j = 1; j < samples; j += 1)

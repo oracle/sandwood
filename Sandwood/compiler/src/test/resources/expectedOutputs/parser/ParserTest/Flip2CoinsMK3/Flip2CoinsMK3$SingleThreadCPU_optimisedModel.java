@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip2CoinsMK3$CoreInterface {
+final class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip2CoinsMK3$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double a;
@@ -24,7 +24,6 @@ class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$flips;
 	private double[] logProbability$sample44;
 	private double logProbability$var17;
-	private double logProbability$var5;
 	private boolean system$gibbsForward = true;
 
 	public Flip2CoinsMK3$SingleThreadCPU(ExecutionTarget target) {
@@ -196,7 +195,6 @@ class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// 
 				// The sample value to calculate the probability of generating
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(bias[var16], a, b));
-			logProbability$var5 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var17 = cv$sampleAccumulator;
@@ -234,8 +232,6 @@ class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var5 = logProbability$var17;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -490,7 +486,6 @@ class Flip2CoinsMK3$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var5 = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$var17 = Double.NaN;

@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements LinearRegressionWrongNameFail$CoreInterface {
+final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements LinearRegressionWrongNameFail$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double b0;
@@ -20,11 +20,7 @@ class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime
 	private double logProbability$$model;
 	private double logProbability$b0;
 	private double logProbability$b1;
-	private double logProbability$var10;
-	private double logProbability$var14;
-	private double logProbability$var30;
 	private double logProbability$var31;
-	private double logProbability$var6;
 	private double logProbability$variance;
 	private double logProbability$y;
 	private int noSamples;
@@ -297,7 +293,6 @@ class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var10 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$b1 = cv$sampleProbability;
@@ -323,7 +318,6 @@ class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime
 			double cv$sampleValue = logProbability$b1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var10 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -394,7 +388,6 @@ class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var14 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$variance = cv$sampleProbability;
@@ -420,7 +413,6 @@ class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime
 			double cv$sampleValue = logProbability$variance;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var14 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -497,8 +489,6 @@ class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var30 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -532,8 +522,6 @@ class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime
 			double cv$sampleValue = logProbability$var31;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var30 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -602,7 +590,6 @@ class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var6 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$b0 = cv$sampleProbability;
@@ -628,7 +615,6 @@ class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime
 			double cv$sampleValue = logProbability$b0;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var6 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -907,16 +893,12 @@ class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.runtime
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var6 = 0.0;
 		if(!fixedProbFlag$sample7)
 			logProbability$b0 = Double.NaN;
-		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
 			logProbability$b1 = Double.NaN;
-		logProbability$var14 = 0.0;
 		if(!fixedProbFlag$sample15)
 			logProbability$variance = Double.NaN;
-		logProbability$var30 = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample31)
 			logProbability$var31 = Double.NaN;

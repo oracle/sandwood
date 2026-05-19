@@ -13,6 +13,7 @@ import java.io.IOException;
 import org.sandwood.runtime.exceptions.SandwoodJsonException;
 import org.sandwood.runtime.internal.json.JsonDecoder;
 import org.sandwood.runtime.internal.json.JsonEncoder;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.RetentionPolicy;
 import org.sandwood.runtime.model.variables.ComputedDouble;
@@ -21,8 +22,9 @@ public abstract class ComputedDoubleInternal extends ComputedVariableInternal im
     private double[] samples;
     private double map;
 
-    public ComputedDoubleInternal(Model model, String name, boolean isSettable, boolean isSample, boolean isPrivate) {
-        super(model, name, isSettable, isSample, isPrivate);
+    public ComputedDoubleInternal(Model model, String name, boolean isSettable, boolean isSample, boolean isPrivate,
+            ProbabilityType probType) {
+        super(model, name, isSettable, isSample, isPrivate, probType);
     }
 
     @Override

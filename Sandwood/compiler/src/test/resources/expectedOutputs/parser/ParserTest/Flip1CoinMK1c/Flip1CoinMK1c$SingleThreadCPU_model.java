@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK1c$CoreInterface {
+final class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK1c$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double a;
@@ -17,7 +17,6 @@ class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$bernoulli;
 	private double logProbability$flips;
 	private double logProbability$var19;
-	private double logProbability$var5;
 	private double logProbability$var6;
 	private int samples;
 	private boolean system$gibbsForward = true;
@@ -249,7 +248,6 @@ class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Add the probability of this instance of the random variable to the probability
 		// of all instances of the random variable.
 		cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-		logProbability$var5 = cv$sampleAccumulator;
 		
 		// Store the sample task probability
 		logProbability$var6 = cv$sampleProbability;
@@ -376,7 +374,6 @@ class Flip1CoinMK1c$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var5 = 0.0;
 		logProbability$var6 = Double.NaN;
 		logProbability$bernoulli = Double.NaN;
 		logProbability$flips = 0.0;

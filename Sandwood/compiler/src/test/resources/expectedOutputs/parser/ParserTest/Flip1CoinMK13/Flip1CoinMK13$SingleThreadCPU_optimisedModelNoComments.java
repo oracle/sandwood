@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK13$CoreInterface {
+final class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK13$CoreInterface {
 	private double b;
 	private double bias;
 	private boolean fixedFlag$sample9 = false;
@@ -22,7 +22,6 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$flips;
 	private double logProbability$sample9;
 	private double logProbability$var36;
-	private double logProbability$var8;
 	private int samples;
 	private boolean system$gibbsForward = true;
 
@@ -161,7 +160,6 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void logProbabilityValue$sample9() {
 		if(!fixedProbFlag$sample9) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);
-			logProbability$var8 = cv$distributionAccumulator;
 			logProbability$sample9 = cv$distributionAccumulator;
 			boolean cv$guard$bias = false;
 			logProbability$b = (logProbability$b + cv$distributionAccumulator);
@@ -180,7 +178,6 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample9 = fixedFlag$sample9;
 		} else {
-			logProbability$var8 = logProbability$sample9;
 			boolean cv$guard$bias = false;
 			logProbability$b = (logProbability$b + logProbability$sample9);
 			if(guard1)
@@ -363,7 +360,6 @@ class Flip1CoinMK13$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var8 = 0.0;
 		logProbability$b = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample9)

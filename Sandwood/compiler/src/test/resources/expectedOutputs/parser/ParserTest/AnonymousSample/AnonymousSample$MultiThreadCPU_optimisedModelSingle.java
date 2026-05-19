@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements AnonymousSample$CoreInterface {
+final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements AnonymousSample$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[] amounts1;
@@ -25,13 +25,8 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	private double logProbability$mean1;
 	private double logProbability$mean2;
 	private double logProbability$priorSigma2;
-	private double logProbability$var14;
-	private double logProbability$var20;
-	private double logProbability$var34;
 	private double logProbability$var35;
-	private double logProbability$var38;
 	private double logProbability$var39;
-	private double logProbability$var8;
 	private double mean1;
 	private double mean2;
 	private int n;
@@ -322,11 +317,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((mean1 - 2000.0) / 100.0)) - 4.605170185988092);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var14 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$mean1 = cv$distributionAccumulator;
 			
@@ -371,8 +361,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var14 = logProbability$mean1;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -418,11 +406,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((mean2 - 2000.0) / 100.0)) - 4.605170185988092);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var20 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$mean2 = cv$distributionAccumulator;
 			
@@ -467,8 +450,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var20 = logProbability$mean2;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -516,10 +497,9 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2)))) - (Math.log(priorSigma2) * 0.5));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var34 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -527,7 +507,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var35 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -559,14 +538,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < n))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var34 = logProbability$var35;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -616,10 +587,9 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 				cv$sampleAccumulator = ((cv$sampleAccumulator + DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2)))) - (Math.log(priorSigma2) * 0.5));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var38 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -627,7 +597,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var39 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -659,14 +628,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < n))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var38 = logProbability$var39;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -713,11 +674,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((priorSigma2 - 10000.0) / 30.0)) - 3.4011973816621555);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var8 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$priorSigma2 = cv$distributionAccumulator;
 			
@@ -762,8 +718,6 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var8 = logProbability$priorSigma2;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1194,20 +1148,15 @@ class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var8 = 0.0;
 		if(!fixedProbFlag$sample9)
 			logProbability$priorSigma2 = Double.NaN;
-		logProbability$var14 = 0.0;
 		if(!fixedProbFlag$sample15)
 			logProbability$mean1 = Double.NaN;
-		logProbability$var20 = 0.0;
 		if(!fixedProbFlag$sample21)
 			logProbability$mean2 = Double.NaN;
-		logProbability$var34 = Double.NaN;
 		logProbability$amounts1 = 0.0;
 		if(!fixedProbFlag$sample35)
 			logProbability$var35 = Double.NaN;
-		logProbability$var38 = Double.NaN;
 		logProbability$amounts2 = 0.0;
 		if(!fixedProbFlag$sample39)
 			logProbability$var39 = Double.NaN;

@@ -8,8 +8,12 @@
 
 package org.sandwood.runtime.internal.model.variables;
 
+import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 import org.sandwood.runtime.exceptions.SandwooodRetentionPolicyException;
-import org.sandwood.runtime.internal.numericTools.LogSumExponential;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import org.sandwood.runtime.internal.model.variables.probability.SkippableProbability;
+import org.sandwood.runtime.internal.model.variables.probability.UnskippableProbability;
+import org.sandwood.runtime.internal.model.variables.probability.VariableProbability;
 import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.RetentionPolicy;
 import org.sandwood.runtime.model.variables.ComputedVariable;
@@ -23,9 +27,7 @@ public abstract class ComputedVariableInternal
     // A value is set in the model core
     protected boolean valueSet = false;
 
-    private double logProbability;
-    private final LogSumExponential logProbabilitySum = new LogSumExponential();
-    private boolean probabilityComputed = false;
+    private final VariableProbability prob;
 
     protected final String name;
     protected final Model model;
@@ -35,12 +37,28 @@ public abstract class ComputedVariableInternal
 
     protected int i;
 
-    public ComputedVariableInternal(Model model, String name, boolean isSettable, boolean isSample, boolean isPrivate) {
+    public ComputedVariableInternal(Model model, String name, boolean isSettable, boolean isSample, boolean isPrivate,
+            ProbabilityType probType) {
         this.name = name;
         this.model = model;
         this.isSettable = isSettable;
         this.isSample = isSample;
         this.isPrivate = isPrivate;
+        if(isPrivate)
+            // This object should never be accessed in a private variable.
+            prob = null;
+        else {
+            switch(probType) {
+                case SKIPPABLE:
+                    prob = new SkippableProbability(this);
+                    break;
+                case UNSKIPPABLE:
+                    prob = new UnskippableProbability(this);
+                    break;
+                default:
+                    throw new SandwoodRuntimeException("Unexpected probability type.");
+            }
+        }
     }
 
     @Override
@@ -85,11 +103,15 @@ public abstract class ComputedVariableInternal
     public final boolean isSample() {
         return isSample;
     }
+    
+    public final boolean isPrivate() {
+        return isPrivate;
+    }
 
     @Override
     public final boolean probabilityComputed() {
         synchronized(model) {
-            return probabilityComputed;
+            return prob.probabilityComputed();
         }
     }
 
@@ -156,32 +178,30 @@ public abstract class ComputedVariableInternal
     @Override
     public final double getProbability() {
         synchronized(model) {
-            return Math.exp(logProbability);
+            return prob.getProbability();
         }
     }
 
     @Override
     public final double getLogProbability() {
         synchronized(model) {
-            return logProbability;
+            return prob.getLogProbability();
         }
     }
 
     @Override
     public final void startLogProbability() {
-        logProbabilitySum.clear();
-        probabilityComputed = false;
+        prob.startLogProbability();
     }
 
     @Override
     public final void ingestLogProbability() {
-        logProbabilitySum.add(getCurrentLogProbability());
+        prob.ingestLogProbability();
     }
 
     @Override
     public final void completeLogProbability(int iterations) {
-        logProbability = logProbabilitySum.getSum() - Math.log(iterations);
-        probabilityComputed = true;
+        prob.completeLogProbability(iterations);
     }
 
     public abstract void initializeSamples(int iterations);

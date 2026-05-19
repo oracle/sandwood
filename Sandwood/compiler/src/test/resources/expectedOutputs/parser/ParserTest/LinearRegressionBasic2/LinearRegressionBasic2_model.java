@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model LinearRegressionBasic2 This is the class that
   * all user interactions with the model should occur through.
   */
-public class LinearRegressionBasic2 extends Model {
+public final class LinearRegressionBasic2 extends Model {
 
     private LinearRegressionBasic2$CoreInterface system$c = new LinearRegressionBasic2$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $b0 = new ComputedDoubleInternal(this, "b0", true, true, false) {
+    private final ComputedDoubleInternal $b0 = new ComputedDoubleInternal(this, "b0", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$b0(); }
 
@@ -52,7 +53,7 @@ public class LinearRegressionBasic2 extends Model {
      */
     public final ComputedDouble b0 = $b0;
 
-    private final ComputedDoubleInternal $b1 = new ComputedDoubleInternal(this, "b1", true, true, false) {
+    private final ComputedDoubleInternal $b1 = new ComputedDoubleInternal(this, "b1", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$b1(); }
 
@@ -86,7 +87,7 @@ public class LinearRegressionBasic2 extends Model {
      */
     public final ComputedDouble b1 = $b1;
 
-    private final ComputedDoubleInternal $variance = new ComputedDoubleInternal(this, "variance", true, true, false) {
+    private final ComputedDoubleInternal $variance = new ComputedDoubleInternal(this, "variance", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$variance(); }
 
@@ -120,7 +121,7 @@ public class LinearRegressionBasic2 extends Model {
      */
     public final ComputedDouble variance = $variance;
 
-    private final ComputedDoubleArrayInternal $y = new ComputedDoubleArrayInternal(this, "y", false, true, false) {
+    private final ComputedDoubleArrayInternal $y = new ComputedDoubleArrayInternal(this, "y", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$y(); }
 

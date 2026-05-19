@@ -4,7 +4,7 @@ import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK5$CoreInterface {
+final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK5$CoreInterface {
 	
 	// Declare the variables for the model.
 	private boolean fixedFlag$sample61 = false;
@@ -20,9 +20,7 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double logProbability$indirection1;
 	private double logProbability$indirection2;
 	private double[][] logProbability$sample61;
-	private double logProbability$var100;
 	private double logProbability$var101;
-	private double logProbability$var58;
 	private int[] observed;
 	private boolean system$gibbsForward = true;
 
@@ -205,8 +203,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var100 = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
@@ -240,8 +236,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			double cv$sampleValue = logProbability$var101;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var100 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$generated = (logProbability$generated + cv$accumulator);
@@ -352,8 +346,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			if(cv$sampleReached)
-				logProbability$var58 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			logProbability$indirection1 = (logProbability$indirection1 + cv$accumulator);
@@ -415,8 +407,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			if(cv$sampleReached)
-				logProbability$var58 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$indirection1 = (logProbability$indirection1 + cv$accumulator);
@@ -1077,7 +1067,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var58 = Double.NaN;
 		logProbability$indirection1 = 0.0;
 		logProbability$indirection2 = 0.0;
 		if(!fixedProbFlag$sample61) {
@@ -1086,7 +1075,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					logProbability$sample61[((i - 0) / 1)][((j - 0) / 1)] = Double.NaN;
 			}
 		}
-		logProbability$var100 = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample103)
 			logProbability$var101 = Double.NaN;

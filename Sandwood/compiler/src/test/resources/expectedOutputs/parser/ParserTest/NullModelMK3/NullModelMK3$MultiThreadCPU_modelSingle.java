@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements NullModelMK3$CoreInterface {
+final class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements NullModelMK3$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double bias;
@@ -16,7 +16,6 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$bias;
 	private double logProbability$binomial;
 	private double logProbability$positiveCount;
-	private double logProbability$var9;
 	private double min;
 	private int observedPositiveCount;
 	private int observedSampleCount;
@@ -205,7 +204,6 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var9 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$bias = cv$sampleProbability;
@@ -231,7 +229,6 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleValue = logProbability$bias;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var9 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -589,7 +586,6 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = 0.0;
 		if(!fixedProbFlag$sample10)
 			logProbability$bias = Double.NaN;
 		logProbability$binomial = 0.0;

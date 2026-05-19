@@ -5,7 +5,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Deterministic$CoreInterface {
+final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Deterministic$CoreInterface {
 	
 	// Declare the variables for the model.
 	private int[] a;
@@ -27,10 +27,7 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$m;
 	private double[] logProbability$sample55;
 	private double[] logProbability$sample75;
-	private double logProbability$var17;
 	private double logProbability$var29;
-	private double[] logProbability$var53;
-	private double[] logProbability$var73;
 	private double[][] m;
 	private int n;
 	private int states;
@@ -273,7 +270,6 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var17 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var29 = cv$sampleAccumulator;
@@ -308,7 +304,6 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleValue = logProbability$var29;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var17 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$m = (logProbability$m + cv$accumulator);
@@ -387,7 +382,6 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var53[((i$var46 - 1) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample55[((i$var46 - 1) / 1)] = cv$sampleProbability;
@@ -446,7 +440,6 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var53[((i$var46 - 1) / 1)] = cv$rvAccumulator;
 				
 				// Guard to ensure that b is only updated once for this probability.
 				boolean cv$guard$b = false;
@@ -548,7 +541,6 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var73[((j - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample75[((j - 0) / 1)] = cv$sampleProbability;
@@ -581,7 +573,6 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var73[((j - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -707,16 +698,16 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						double[] var52 = m[b[i$var46]];
 						cv$temp$0$var52 = var52;
 					}
-					int cv$temp$1$$var315;
+					int cv$temp$1$$var305;
 					{
 						// Constructing a random variable input for use later.
-						int $var315 = states;
-						cv$temp$1$$var315 = $var315;
+						int $var305 = states;
+						cv$temp$1$$var305 = $var305;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var315))?Math.log(cv$temp$0$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var305))?Math.log(cv$temp$0$var52[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 53.
 					{
@@ -747,22 +738,22 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 																	double[] var52 = m[traceTempVariable$var51$3_3];
 																	cv$temp$2$var52 = var52;
 																}
-																int cv$temp$3$$var326;
+																int cv$temp$3$$var316;
 																{
 																	// Constructing a random variable input for use later.
-																	int $var326 = states;
-																	cv$temp$3$$var326 = $var326;
+																	int $var316 = states;
+																	cv$temp$3$$var316 = $var316;
 																}
 																
 																// Record the probability of sample task 55 generating output with current configuration.
-																if(((Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var326))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var326))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var316))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var316))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var326))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var316))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var326))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var326))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var316))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= a[index$i$3_4]) && (a[index$i$3_4] < cv$temp$3$$var316))?Math.log(cv$temp$2$var52[a[index$i$3_4]]):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 55 with the current configuration.
@@ -1021,19 +1012,9 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			flips = new boolean[n];
 		}
 		
-		// Constructor for logProbability$var53
-		{
-			logProbability$var53 = new double[((((n - 1) - 1) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample55
 		{
 			logProbability$sample55 = new double[((((n - 1) - 1) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$var73
-		{
-			logProbability$var73 = new double[((((n - 1) - 0) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample75
@@ -1266,20 +1247,15 @@ class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var17 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample29)
 			logProbability$var29 = Double.NaN;
-		for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
-			logProbability$var53[((i$var46 - 1) / 1)] = Double.NaN;
-		logProbability$b = 0.0;
 		logProbability$a = 0.0;
+		logProbability$b = 0.0;
 		if(!fixedProbFlag$sample55) {
 			for(int i$var46 = 1; i$var46 < n; i$var46 += 1)
 				logProbability$sample55[((i$var46 - 1) / 1)] = Double.NaN;
 		}
-		for(int j = 0; j < n; j += 1)
-			logProbability$var73[((j - 0) / 1)] = Double.NaN;
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample75) {
 			for(int j = 0; j < n; j += 1)

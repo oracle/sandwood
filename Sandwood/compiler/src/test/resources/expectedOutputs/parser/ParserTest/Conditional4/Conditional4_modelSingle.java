@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model Conditional4 This is the class that
   * all user interactions with the model should occur through.
   */
-public class Conditional4 extends Model {
+public final class Conditional4 extends Model {
 
     private Conditional4$CoreInterface system$c = new Conditional4$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true, true, false) {
+    private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$bias(); }
 
@@ -57,7 +58,7 @@ public class Conditional4 extends Model {
      */
     public final ComputedDoubleArray bias = $bias;
 
-    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true, true, false) {
+    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean getValue() { return system$c.get$guard(); }
 
@@ -91,7 +92,7 @@ public class Conditional4 extends Model {
      */
     public final ComputedBoolean guard = $guard;
 
-    private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", false, true, false) {
+    private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$value(); }
 
@@ -122,7 +123,7 @@ public class Conditional4 extends Model {
      */
     public final ComputedDouble value = $value;
 
-    private final ComputedDoubleInternal $var19 = new ComputedDoubleInternal(this, "var19", true, true, true) {
+    private final ComputedDoubleInternal $var19 = new ComputedDoubleInternal(this, "var19", true, true, true, ProbabilityType.SKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$var19(); }
 
@@ -142,7 +143,7 @@ public class Conditional4 extends Model {
 
         @Override
         public Immutability isFixed() {
-            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
+                return Immutability.FREE;
         }
     };
 
@@ -169,7 +170,7 @@ public class Conditional4 extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli") {
+    private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$bernoulli();

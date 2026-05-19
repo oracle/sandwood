@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip2CoinsMK7$CoreInterface {
+final class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip2CoinsMK7$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double a;
@@ -23,7 +23,6 @@ class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$flips;
 	private double[] logProbability$sample18;
 	private double[] logProbability$sample46;
-	private double[] logProbability$var17;
 	private boolean system$gibbsForward = true;
 
 	public Flip2CoinsMK7$SingleThreadCPU(ExecutionTarget target) {
@@ -212,11 +211,6 @@ class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var17[i] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample18[i] = cv$distributionAccumulator;
 			}
@@ -241,12 +235,8 @@ class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < coins; i += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample18[i];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var17[i] = cv$rvAccumulator;
-			}
+			for(int i = 0; i < coins; i += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample18[i]);
 			
 			// Update the variable probability
 			logProbability$bias = (logProbability$bias + cv$accumulator);
@@ -485,9 +475,6 @@ class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		for(int j = 0; j < length$flipsMeasured.length; j += 1)
 			flips[j] = new boolean[length$flipsMeasured[j]];
 		
-		// Constructor for logProbability$var17
-		logProbability$var17 = new double[length$flipsMeasured.length];
-		
 		// Constructor for logProbability$sample18
 		logProbability$sample18 = new double[length$flipsMeasured.length];
 		
@@ -602,8 +589,6 @@ class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i = 0; i < coins; i += 1)
-			logProbability$var17[i] = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample18) {
 			for(int i = 0; i < coins; i += 1)

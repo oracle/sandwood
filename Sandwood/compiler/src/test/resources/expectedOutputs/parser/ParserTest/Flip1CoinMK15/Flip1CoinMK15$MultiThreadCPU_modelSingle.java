@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK15$CoreInterface {
+final class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK15$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double b;
@@ -21,11 +21,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	private double logProbability$b;
 	private double logProbability$bernoulli;
 	private double logProbability$bias;
-	private double logProbability$c;
 	private double logProbability$flips;
 	private double logProbability$sample8;
 	private double logProbability$var47;
-	private double logProbability$var7;
 	private int samples;
 	private boolean system$gibbsForward = true;
 
@@ -333,16 +331,12 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var7 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$sample8 = cv$sampleProbability;
 			
 			// Guard to ensure that bias is only updated once for this probability.
 			boolean cv$guard$bias = false;
-			
-			// Guard to ensure that c is only updated once for this probability.
-			boolean cv$guard$c = false;
 			
 			// Update the variable probability
 			logProbability$b = (logProbability$b + cv$accumulator);
@@ -394,32 +388,6 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 				}
 			}
 			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard1) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$c) {
-						// Set the guard so the update is only applied once.
-						cv$guard$c = true;
-						
-						// Update the variable probability
-						logProbability$c = (logProbability$c + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard1) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$c) {
-						// Set the guard so the update is only applied once.
-						cv$guard$c = true;
-						
-						// Update the variable probability
-						logProbability$c = (logProbability$c + cv$accumulator);
-					}
-				}
-			}
-			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			
@@ -441,13 +409,9 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			double cv$sampleValue = logProbability$sample8;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var7 = cv$rvAccumulator;
 			
 			// Guard to ensure that bias is only updated once for this probability.
 			boolean cv$guard$bias = false;
-			
-			// Guard to ensure that c is only updated once for this probability.
-			boolean cv$guard$c = false;
 			
 			// Update the variable probability
 			logProbability$b = (logProbability$b + cv$accumulator);
@@ -495,32 +459,6 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 								}
 							}
 						}
-					}
-				}
-			}
-			
-			// Add probability to constructed variables from the combined probability
-			{
-				if(!guard1) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$c) {
-						// Set the guard so the update is only applied once.
-						cv$guard$c = true;
-						
-						// Update the variable probability
-						logProbability$c = (logProbability$c + cv$accumulator);
-					}
-				}
-			}
-			{
-				if(!guard1) {
-					// If the probability of the variable has not already been updated
-					if(!cv$guard$c) {
-						// Set the guard so the update is only applied once.
-						cv$guard$c = true;
-						
-						// Update the variable probability
-						logProbability$c = (logProbability$c + cv$accumulator);
 					}
 				}
 			}
@@ -824,24 +762,24 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 											double reduceVar$var33$17 = 0.0;
 											
 											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction409Index = 0; cv$reduction409Index < 0; cv$reduction409Index += 1) {
+											for(int cv$reduction395Index = 0; cv$reduction395Index < 0; cv$reduction395Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var30 = reduceVar$var33$17;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction409Index];
+												double j = c[cv$reduction395Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$var33$17 = (i$var30 + j);
 											}
-											for(int cv$reduction409Index = (0 + 1); cv$reduction409Index < 2; cv$reduction409Index += 1) {
+											for(int cv$reduction395Index = (0 + 1); cv$reduction395Index < 2; cv$reduction395Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var30 = reduceVar$var33$17;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction409Index];
+												double j = c[cv$reduction395Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -935,24 +873,24 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 											double reduceVar$var33$18 = 0.0;
 											
 											// Reduce for every value except a masked value which will be skipped.
-											for(int cv$reduction430Index = 0; cv$reduction430Index < 1; cv$reduction430Index += 1) {
+											for(int cv$reduction416Index = 0; cv$reduction416Index < 1; cv$reduction416Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var30 = reduceVar$var33$18;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction430Index];
+												double j = c[cv$reduction416Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
 												// Copy the result of the reduction into the variable returned by the reduction.
 												reduceVar$var33$18 = (i$var30 + j);
 											}
-											for(int cv$reduction430Index = (1 + 1); cv$reduction430Index < 2; cv$reduction430Index += 1) {
+											for(int cv$reduction416Index = (1 + 1); cv$reduction416Index < 2; cv$reduction416Index += 1) {
 												// Set the left hand term of the reduction function to the return variable value.
 												double i$var30 = reduceVar$var33$18;
 												
 												// Set the right hand term to a value from the array c
-												double j = c[cv$reduction430Index];
+												double j = c[cv$reduction416Index];
 												
 												// Execute the reduction function, saving the result into the return value.
 												// 
@@ -1479,9 +1417,7 @@ class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var7 = 0.0;
 		logProbability$b = 0.0;
-		logProbability$c = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample8)
 			logProbability$sample8 = Double.NaN;

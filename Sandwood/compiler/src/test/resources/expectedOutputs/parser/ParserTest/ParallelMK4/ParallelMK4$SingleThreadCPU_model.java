@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK4$CoreInterface {
+final class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK4$CoreInterface {
 	
 	// Declare the variables for the model.
 	private boolean fixedFlag$sample61 = false;
@@ -20,8 +20,6 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$indirection2;
 	private double[] logProbability$sample103;
 	private double[][] logProbability$sample61;
-	private double[] logProbability$var100;
-	private double[][] logProbability$var58;
 	private int[] observed;
 	private boolean system$gibbsForward = true;
 
@@ -203,7 +201,6 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var100[((m - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample103[((m - 0) / 1)] = cv$sampleProbability;
@@ -236,7 +233,6 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var100[((m - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -314,7 +310,6 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// Add the probability of this instance of the random variable to the probability
 					// of all instances of the random variable.
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var58[((i - 0) / 1)][((j - 0) / 1)] = cv$sampleAccumulator;
 					
 					// Store the sample task probability
 					logProbability$sample61[((i - 0) / 1)][((j - 0) / 1)] = cv$sampleProbability;
@@ -379,7 +374,6 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var58[((i - 0) / 1)][((j - 0) / 1)] = cv$rvAccumulator;
 					
 					// Guard to ensure that indirection2 is only updated once for this probability.
 					boolean cv$guard$indirection2 = false;
@@ -695,23 +689,11 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				indirection2[var31] = new double[10];
 		}
 		
-		// Constructor for logProbability$var58
-		{
-			logProbability$var58 = new double[((((length$observed - 1) - 0) / 1) + 1)][];
-			for(int i = 0; i < length$observed; i += 1)
-				logProbability$var58[((i - 0) / 1)] = new double[((((10 - 1) - 0) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample61
 		{
 			logProbability$sample61 = new double[((((length$observed - 1) - 0) / 1) + 1)][];
 			for(int i = 0; i < length$observed; i += 1)
 				logProbability$sample61[((i - 0) / 1)] = new double[((((10 - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$var100
-		{
-			logProbability$var100 = new double[((((length$observed - 1) - 0) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample103
@@ -860,10 +842,6 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i = 0; i < length$observed; i += 1) {
-			for(int j = 0; j < 10; j += 1)
-				logProbability$var58[((i - 0) / 1)][((j - 0) / 1)] = Double.NaN;
-		}
 		logProbability$indirection1 = 0.0;
 		logProbability$indirection2 = 0.0;
 		if(!fixedProbFlag$sample61) {
@@ -872,8 +850,6 @@ class ParallelMK4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					logProbability$sample61[((i - 0) / 1)][((j - 0) / 1)] = Double.NaN;
 			}
 		}
-		for(int m = 0; m < length$observed; m += 1)
-			logProbability$var100[((m - 0) / 1)] = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample103) {
 			for(int m = 0; m < length$observed; m += 1)

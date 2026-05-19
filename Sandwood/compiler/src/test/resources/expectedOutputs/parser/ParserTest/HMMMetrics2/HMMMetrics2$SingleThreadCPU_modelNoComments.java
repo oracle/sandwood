@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMMetrics2$CoreInterface {
+final class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMMetrics2$CoreInterface {
 	private double[] cv$distributionAccumulator$var120;
 	private double[] cv$var102$stateProbabilityGlobal;
 	private double[] cv$var121$stateProbabilityGlobal;
@@ -48,19 +48,10 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[][] logProbability$sample145;
 	private double[][] logProbability$sample157;
 	private double logProbability$st;
-	private double[] logProbability$var101;
-	private double[][] logProbability$var120;
-	private double[][] logProbability$var140;
-	private double[][] logProbability$var150;
 	private double logProbability$var151;
-	private double logProbability$var18;
-	private double logProbability$var20;
 	private double logProbability$var32;
-	private double logProbability$var39;
 	private double logProbability$var51;
-	private double logProbability$var55;
 	private double logProbability$var67;
-	private double logProbability$var71;
 	private double logProbability$var83;
 	private double[][] m;
 	private double[][] metric;
@@ -417,7 +408,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var101[((sample - 0) / 1)] = cv$sampleAccumulator;
 					logProbability$sample104[((sample - 0) / 1)] = cv$sampleProbability;
 				}
 				if(fixedFlag$sample104)
@@ -436,7 +426,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var101[((sample - 0) / 1)] = cv$rvAccumulator;
 			}
 			if(fixedFlag$sample104)
 				logProbability$st = (logProbability$st + cv$accumulator);
@@ -604,7 +593,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						cv$sampleReached = true;
 						cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-						logProbability$var120[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)] = cv$sampleAccumulator;
 						logProbability$sample123[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)] = cv$sampleProbability;
 					}
 				}
@@ -625,7 +613,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var120[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)] = cv$rvAccumulator;
 				}
 			}
 			if(fixedFlag$sample123)
@@ -770,7 +757,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var140[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleAccumulator;
 					logProbability$sample145[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleProbability;
 				}
 			}
@@ -795,7 +781,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var140[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$rvAccumulator;
 				}
 			}
 			boolean cv$guard$metric_valid_g = false;
@@ -1348,7 +1333,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						cv$sampleReached = true;
 						cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-						logProbability$var150[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleAccumulator;
 						logProbability$sample157[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleProbability;
 					}
 				}
@@ -1375,7 +1359,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 						cv$sampleReached = true;
 						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-						logProbability$var150[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$rvAccumulator;
 					}
 				}
 			}
@@ -1426,7 +1409,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var101[((sample - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample104[((sample - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -1443,7 +1425,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var101[((sample - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1489,7 +1470,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var120[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)] = cv$sampleAccumulator;
 					logProbability$sample123[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)] = cv$sampleProbability;
 				}
 			}
@@ -1508,7 +1488,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var120[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)] = cv$rvAccumulator;
 				}
 			}
 			logProbability$st = (logProbability$st + cv$accumulator);
@@ -1553,7 +1532,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var140[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleAccumulator;
 					logProbability$sample145[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleProbability;
 				}
 			}
@@ -1578,7 +1556,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var140[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$rvAccumulator;
 				}
 			}
 			boolean cv$guard$metric_valid_g = false;
@@ -1631,7 +1608,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						cv$sampleReached = true;
 						cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-						logProbability$var150[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleAccumulator;
 						logProbability$sample157[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$sampleProbability;
 					}
 				}
@@ -1658,7 +1634,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 						cv$sampleReached = true;
 						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-						logProbability$var150[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = cv$rvAccumulator;
 					}
 				}
 			}
@@ -1705,7 +1680,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var18 = cv$sampleAccumulator;
 			logProbability$initialStateDistribution = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample19)
@@ -1717,7 +1691,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleValue = logProbability$initialStateDistribution;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var18 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample19)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -1758,7 +1731,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var20 = cv$sampleAccumulator;
 			logProbability$var32 = cv$sampleAccumulator;
 			logProbability$m = (logProbability$m + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1774,7 +1746,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleValue = logProbability$var32;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var20 = cv$rvAccumulator;
 			logProbability$m = (logProbability$m + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample32)
@@ -1818,7 +1789,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var39 = cv$sampleAccumulator;
 			logProbability$var51 = cv$sampleAccumulator;
 			logProbability$metric_mean = (logProbability$metric_mean + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1834,7 +1804,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleValue = logProbability$var51;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var39 = cv$rvAccumulator;
 			logProbability$metric_mean = (logProbability$metric_mean + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample52)
@@ -1878,7 +1847,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var55 = cv$sampleAccumulator;
 			logProbability$var67 = cv$sampleAccumulator;
 			logProbability$metric_var = (logProbability$metric_var + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1894,7 +1862,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleValue = logProbability$var67;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var55 = cv$rvAccumulator;
 			logProbability$metric_var = (logProbability$metric_var + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample68)
@@ -1938,7 +1905,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var71 = cv$sampleAccumulator;
 			logProbability$var83 = cv$sampleAccumulator;
 			logProbability$metric_valid_bias = (logProbability$metric_valid_bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1954,7 +1920,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleValue = logProbability$var83;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var71 = cv$rvAccumulator;
 			logProbability$metric_valid_bias = (logProbability$metric_valid_bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample84)
@@ -6788,15 +6753,7 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			}
 		}
 		{
-			logProbability$var101 = new double[((((length$metric.length - 1) - 0) / 1) + 1)];
-		}
-		{
 			logProbability$sample104 = new double[((((length$metric.length - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$var120 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][];
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				logProbability$var120[((sample - 0) / 1)] = new double[((((length$metric[sample] - 1) - 1) / 1) + 1)];
 		}
 		{
 			logProbability$sample123 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][];
@@ -6804,19 +6761,9 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				logProbability$sample123[((sample - 0) / 1)] = new double[((((length$metric[sample] - 1) - 1) / 1) + 1)];
 		}
 		{
-			logProbability$var140 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][];
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				logProbability$var140[((sample - 0) / 1)] = new double[((((length$metric[sample] - 1) - 0) / 1) + 1)];
-		}
-		{
 			logProbability$sample145 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][];
 			for(int sample = 0; sample < length$metric.length; sample += 1)
 				logProbability$sample145[((sample - 0) / 1)] = new double[((((length$metric[sample] - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$var150 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][];
-			for(int sample = 0; sample < length$metric.length; sample += 1)
-				logProbability$var150[((sample - 0) / 1)] = new double[((((length$metric[sample] - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$sample157 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][];
@@ -7185,45 +7132,30 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var18 = 0.0;
 		if(!fixedProbFlag$sample19)
 			logProbability$initialStateDistribution = Double.NaN;
-		logProbability$var20 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample32)
 			logProbability$var32 = Double.NaN;
-		logProbability$var39 = Double.NaN;
 		logProbability$metric_mean = 0.0;
 		if(!fixedProbFlag$sample52)
 			logProbability$var51 = Double.NaN;
-		logProbability$var55 = Double.NaN;
 		logProbability$metric_var = 0.0;
 		if(!fixedProbFlag$sample68)
 			logProbability$var67 = Double.NaN;
-		logProbability$var71 = Double.NaN;
 		logProbability$metric_valid_bias = 0.0;
 		if(!fixedProbFlag$sample84)
 			logProbability$var83 = Double.NaN;
-		for(int sample = 0; sample < noSamples; sample += 1)
-			logProbability$var101[((sample - 0) / 1)] = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample104) {
 			for(int sample = 0; sample < noSamples; sample += 1)
 				logProbability$sample104[((sample - 0) / 1)] = Double.NaN;
-		}
-		for(int sample = 0; sample < noSamples; sample += 1) {
-			for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1)
-				logProbability$var120[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)] = Double.NaN;
 		}
 		if(!fixedProbFlag$sample123) {
 			for(int sample = 0; sample < noSamples; sample += 1) {
 				for(int timeStep$var113 = 1; timeStep$var113 < length$metric[sample]; timeStep$var113 += 1)
 					logProbability$sample123[((sample - 0) / 1)][((timeStep$var113 - 1) / 1)] = Double.NaN;
 			}
-		}
-		for(int sample = 0; sample < noSamples; sample += 1) {
-			for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1)
-				logProbability$var140[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = Double.NaN;
 		}
 		logProbability$metric_valid_1d = 0.0;
 		logProbability$metric_valid_g = 0.0;
@@ -7232,10 +7164,6 @@ class HMMMetrics2$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1)
 					logProbability$sample145[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = Double.NaN;
 			}
-		}
-		for(int sample = 0; sample < noSamples; sample += 1) {
-			for(int timeStep$var136 = 0; timeStep$var136 < length$metric[sample]; timeStep$var136 += 1)
-				logProbability$var150[((sample - 0) / 1)][((timeStep$var136 - 0) / 1)] = Double.NaN;
 		}
 		logProbability$var151 = 0.0;
 		logProbability$metric_g = 0.0;

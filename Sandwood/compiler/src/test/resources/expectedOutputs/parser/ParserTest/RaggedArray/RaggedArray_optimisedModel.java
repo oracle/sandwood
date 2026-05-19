@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model RaggedArray This is the class that
   * all user interactions with the model should occur through.
   */
-public class RaggedArray extends Model {
+public final class RaggedArray extends Model {
 
     private RaggedArray$CoreInterface system$c = new RaggedArray$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedIntegerInternal $i = new ComputedIntegerInternal(this, "i", true, true, false) {
+    private final ComputedIntegerInternal $i = new ComputedIntegerInternal(this, "i", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int getValue() { return system$c.get$i(); }
 
@@ -52,7 +53,7 @@ public class RaggedArray extends Model {
      */
     public final ComputedInteger i = $i;
 
-    private final ComputedBooleanArrayInternal $obs = new ComputedBooleanArrayInternal(this, "obs", false, true, false) {
+    private final ComputedBooleanArrayInternal $obs = new ComputedBooleanArrayInternal(this, "obs", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean[] getValue() { return system$c.get$obs(); }
 
@@ -83,7 +84,7 @@ public class RaggedArray extends Model {
      */
     public final ComputedBooleanArray obs = $obs;
 
-    private final ComputedDoubleInternal $p = new ComputedDoubleInternal(this, "p", false, false, false) {
+    private final ComputedDoubleInternal $p = new ComputedDoubleInternal(this, "p", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$p(); }
 

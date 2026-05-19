@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model DistributionTest1b This is the class that
   * all user interactions with the model should occur through.
   */
-public class DistributionTest1b extends Model {
+public final class DistributionTest1b extends Model {
 
     private DistributionTest1b$CoreInterface system$c = new DistributionTest1b$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedBooleanInternal $v = new ComputedBooleanInternal(this, "v", false, true, false) {
+    private final ComputedBooleanInternal $v = new ComputedBooleanInternal(this, "v", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean getValue() { return system$c.get$v(); }
 
@@ -49,7 +50,7 @@ public class DistributionTest1b extends Model {
      */
     public final ComputedBoolean v = $v;
 
-    private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true, true, false) {
+    private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int getValue() { return system$c.get$v1(); }
 
@@ -83,7 +84,7 @@ public class DistributionTest1b extends Model {
      */
     public final ComputedInteger v1 = $v1;
 
-    private final ComputedIntegerInternal $v2 = new ComputedIntegerInternal(this, "v2", true, true, false) {
+    private final ComputedIntegerInternal $v2 = new ComputedIntegerInternal(this, "v2", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int getValue() { return system$c.get$v2(); }
 
@@ -117,7 +118,7 @@ public class DistributionTest1b extends Model {
      */
     public final ComputedInteger v2 = $v2;
 
-    private final ComputedIntegerInternal $v3 = new ComputedIntegerInternal(this, "v3", true, true, false) {
+    private final ComputedIntegerInternal $v3 = new ComputedIntegerInternal(this, "v3", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int getValue() { return system$c.get$v3(); }
 
@@ -191,7 +192,7 @@ public class DistributionTest1b extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private final RandomVariableInternal $c = new RandomVariableInternal(this, "c") {
+    private final RandomVariableInternal $c = new RandomVariableInternal(this, "c", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$c();

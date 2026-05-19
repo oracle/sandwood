@@ -41,9 +41,6 @@ interface LDATest$CoreInterface extends org.sandwood.runtime.internal.model.Core
 	// Getter for logProbability$w.
 	public double get$logProbability$w();
 
-	// Getter for logProbability$z.
-	public double get$logProbability$z();
-
 	// Getter for noTopics.
 	public int get$noTopics();
 

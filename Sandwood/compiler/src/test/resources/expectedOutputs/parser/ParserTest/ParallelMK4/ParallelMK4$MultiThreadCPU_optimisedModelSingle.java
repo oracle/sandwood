@@ -4,7 +4,7 @@ import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK4$CoreInterface {
+final class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK4$CoreInterface {
 	
 	// Declare the variables for the model.
 	private boolean fixedFlag$sample61 = false;
@@ -20,9 +20,7 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double logProbability$indirection1;
 	private double logProbability$indirection2;
 	private double[][] logProbability$sample61;
-	private double logProbability$var100;
 	private double logProbability$var101;
-	private double logProbability$var58;
 	private int[] observed;
 	private boolean system$gibbsForward = true;
 
@@ -179,10 +177,9 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < 10))?Math.log(indirection2[m][cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var100 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -190,7 +187,6 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var101 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -222,14 +218,6 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < length$observed))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var100 = logProbability$var101;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -254,9 +242,6 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
 			for(int i = 0; i < length$observed; i += 1) {
 				for(int j = 0; j < 10; j += 1) {
 					// The sample value to calculate the probability of generating
@@ -283,9 +268,6 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					// Store the value of the function call, so the function call is only made once.
 					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					
 					// Add the probability of this sample task to the sample task accumulator.
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 					
@@ -296,8 +278,6 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					logProbability$indirection2 = (logProbability$indirection2 + cv$distributionAccumulator);
 				}
 			}
-			if(cv$sampleReached)
-				logProbability$var58 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -333,23 +313,15 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
 			for(int i = 0; i < length$observed; i += 1) {
 				for(int j = 0; j < 10; j += 1) {
 					double cv$sampleValue = logProbability$sample61[i][j];
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					
 					// Update the variable probability
 					logProbability$indirection2 = (logProbability$indirection2 + cv$sampleValue);
 				}
 			}
-			if(cv$sampleReached)
-				logProbability$var58 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$indirection1 = (logProbability$indirection1 + cv$rvAccumulator);
@@ -853,7 +825,6 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var58 = Double.NaN;
 		logProbability$indirection1 = 0.0;
 		logProbability$indirection2 = 0.0;
 		if(!fixedProbFlag$sample61) {
@@ -862,7 +833,6 @@ class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					logProbability$sample61[i][j] = Double.NaN;
 			}
 		}
-		logProbability$var100 = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample103)
 			logProbability$var101 = Double.NaN;

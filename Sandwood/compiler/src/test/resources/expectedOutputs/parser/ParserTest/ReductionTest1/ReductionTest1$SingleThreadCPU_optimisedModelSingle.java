@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ReductionTest1$CoreInterface {
+final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ReductionTest1$CoreInterface {
 	
 	// Declare the variables for the model.
 	private int[][] ObsArr;
@@ -20,9 +20,7 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private double logProbability$sum_t;
 	private double logProbability$time_coeff;
 	private double logProbability$time_impact;
-	private double logProbability$var157;
 	private double logProbability$var158;
-	private double logProbability$var85;
 	private int n_ac;
 	private double[][] sum_t;
 	private boolean system$gibbsForward = true;
@@ -200,9 +198,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
 			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
 				for(int var95 = 0; var95 < time_dim; var95 += 1) {
 					// Variable declaration of cv$distributionAccumulator moved.
@@ -230,9 +225,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					// The sample value to calculate the probability of generating
 					double cv$distributionAccumulator = DistributionSampling.logProbabilityGaussian(time_coeff[i$var80][var95]);
 					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
-					
 					// Add the probability of this sample task to the sample task accumulator.
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 					
@@ -249,8 +241,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					}
 				}
 			}
-			if(cv$sampleReached)
-				logProbability$var85 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -286,16 +276,10 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
-			
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
 			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1) {
 				for(int var95 = 0; var95 < time_dim; var95 += 1) {
 					double cv$sampleValue = logProbability$sample101[i$var80][var95];
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-					
-					// Record that the sample was reached.
-					cv$sampleReached = true;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					if((1 < T)) {
@@ -307,8 +291,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					}
 				}
 			}
-			if(cv$sampleReached)
-				logProbability$var85 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$time_coeff = (logProbability$time_coeff + cv$rvAccumulator);
@@ -359,10 +341,9 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				}
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var157 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -370,7 +351,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var158 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -402,14 +382,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if(((1 < T) && (0 < n_ac)))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var157 = logProbability$var158;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1010,7 +982,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var85 = Double.NaN;
 		logProbability$time_coeff = 0.0;
 		logProbability$time_impact = 0.0;
 		logProbability$sum_t = 0.0;
@@ -1020,7 +991,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					logProbability$sample101[i$var80][var95] = Double.NaN;
 			}
 		}
-		logProbability$var157 = Double.NaN;
 		logProbability$arr = 0.0;
 		if(!fixedProbFlag$sample165)
 			logProbability$var158 = Double.NaN;

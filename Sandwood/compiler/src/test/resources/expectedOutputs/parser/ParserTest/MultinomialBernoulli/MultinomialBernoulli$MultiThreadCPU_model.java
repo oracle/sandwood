@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements MultinomialBernoulli$CoreInterface {
+final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements MultinomialBernoulli$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[] beta;
@@ -26,8 +26,6 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$output;
 	private double logProbability$p;
 	private double logProbability$prior;
-	private double logProbability$var16;
-	private double logProbability$var19;
 	private double logProbability$var48;
 	private double logProbability$var60;
 	private double logProbability$var72;
@@ -294,7 +292,6 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var16 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$p = cv$sampleProbability;
@@ -320,7 +317,6 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			double cv$sampleValue = logProbability$p;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var16 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -388,7 +384,6 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var19 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$prior = cv$sampleProbability;
@@ -414,7 +409,6 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 			double cv$sampleValue = logProbability$prior;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var19 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -1303,10 +1297,8 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$p = Double.NaN;
-		logProbability$var19 = 0.0;
 		if(!fixedProbFlag$sample20)
 			logProbability$prior = Double.NaN;
 		logProbability$b1 = Double.NaN;

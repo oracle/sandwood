@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements MultinomialBernoulli$CoreInterface {
+final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements MultinomialBernoulli$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[] beta;
@@ -26,8 +26,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 	private double logProbability$output;
 	private double logProbability$p;
 	private double logProbability$prior;
-	private double logProbability$var16;
-	private double logProbability$var19;
 	private double logProbability$var48;
 	private double logProbability$var60;
 	private double logProbability$var72;
@@ -281,11 +279,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(p, beta, 3);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var16 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$p = cv$distributionAccumulator;
 			
@@ -330,8 +323,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var16 = logProbability$p;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -377,11 +368,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityMultinomial(prior, p, 3, 10);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var19 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$prior = cv$distributionAccumulator;
 			
@@ -426,8 +412,6 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var19 = logProbability$prior;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -1119,10 +1103,8 @@ class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.internal
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$p = Double.NaN;
-		logProbability$var19 = 0.0;
 		if(!fixedProbFlag$sample20)
 			logProbability$prior = Double.NaN;
 		logProbability$b1 = Double.NaN;

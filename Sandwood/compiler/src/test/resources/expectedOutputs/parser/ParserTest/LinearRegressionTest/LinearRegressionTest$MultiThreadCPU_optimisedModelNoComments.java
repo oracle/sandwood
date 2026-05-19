@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LinearRegressionTest$CoreInterface {
+final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements LinearRegressionTest$CoreInterface {
 	private double bias;
 	private boolean fixedFlag$sample24 = false;
 	private boolean fixedFlag$sample31 = false;
@@ -17,14 +17,9 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$$evidence;
 	private double logProbability$$model;
 	private double logProbability$bias;
-	private double logProbability$phi;
 	private double[] logProbability$sample24;
 	private double[] logProbability$sample74;
 	private double logProbability$tau;
-	private double logProbability$var12;
-	private double logProbability$var30;
-	private double logProbability$var34;
-	private double[] logProbability$var72;
 	private double logProbability$weights;
 	private double logProbability$y;
 	private int n;
@@ -184,10 +179,7 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((weights[var23] / 3.1622776601683795)) - 1.151292546497023);
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$distributionAccumulator);
 				logProbability$sample24[var23] = cv$distributionAccumulator;
-				if((0 < n))
-					logProbability$phi = (logProbability$phi + cv$distributionAccumulator);
 			}
-			logProbability$var12 = cv$sampleAccumulator;
 			logProbability$weights = (logProbability$weights + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			if(fixedFlag$sample24)
@@ -195,13 +187,8 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			fixedProbFlag$sample24 = fixedFlag$sample24;
 		} else {
 			double cv$rvAccumulator = 0.0;
-			for(int var23 = 0; var23 < k; var23 += 1) {
-				double cv$sampleValue = logProbability$sample24[var23];
-				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
-				if((0 < n))
-					logProbability$phi = (logProbability$phi + cv$sampleValue);
-			}
-			logProbability$var12 = cv$rvAccumulator;
+			for(int var23 = 0; var23 < k; var23 += 1)
+				cv$rvAccumulator = (cv$rvAccumulator + logProbability$sample24[var23]);
 			logProbability$weights = (logProbability$weights + cv$rvAccumulator);
 			logProbability$$model = (logProbability$$model + cv$rvAccumulator);
 			if(fixedFlag$sample24)
@@ -212,14 +199,12 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private final void logProbabilityValue$sample31() {
 		if(!fixedProbFlag$sample31) {
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((bias / 3.1622776601683795)) - 1.151292546497023);
-			logProbability$var30 = cv$distributionAccumulator;
 			logProbability$bias = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample31)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample31 = fixedFlag$sample31;
 		} else {
-			logProbability$var30 = logProbability$bias;
 			logProbability$$model = (logProbability$$model + logProbability$bias);
 			if(fixedFlag$sample31)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
@@ -229,14 +214,12 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private final void logProbabilityValue$sample35() {
 		if(!fixedProbFlag$sample35) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityInverseGamma(tau, 3.0, 1.0);
-			logProbability$var34 = cv$distributionAccumulator;
 			logProbability$tau = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample35)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample35 = fixedFlag$sample35;
 		} else {
-			logProbability$var34 = logProbability$tau;
 			logProbability$$model = (logProbability$$model + logProbability$tau);
 			if(fixedFlag$sample35)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$tau);
@@ -252,7 +235,6 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 					reduceVar$var70$9 = (reduceVar$var70$9 + phi[i$var45][cv$reduction65Index]);
 				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((y[i$var45] - (reduceVar$var70$9 + bias)) / Math.sqrt(tau))) - (Math.log(tau) * 0.5));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var72[i$var45] = cv$distributionAccumulator;
 				logProbability$sample74[i$var45] = cv$distributionAccumulator;
 			}
 			logProbability$y = (logProbability$y + cv$accumulator);
@@ -261,11 +243,8 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 			fixedProbFlag$sample74 = ((fixedFlag$sample24 && fixedFlag$sample31) && fixedFlag$sample35);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-				double cv$rvAccumulator = logProbability$sample74[i$var45];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var72[i$var45] = cv$rvAccumulator;
-			}
+			for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample74[i$var45]);
 			logProbability$y = (logProbability$y + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -280,10 +259,10 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
 			double cv$denominator = x[i$var45][var23];
 			double reduceVar$var70$6 = 0.0;
-			for(int cv$reduction395Index = 0; cv$reduction395Index < var23; cv$reduction395Index += 1)
-				reduceVar$var70$6 = (reduceVar$var70$6 + phi[i$var45][cv$reduction395Index]);
-			for(int cv$reduction395Index = (var23 + 1); cv$reduction395Index < k; cv$reduction395Index += 1)
-				reduceVar$var70$6 = (reduceVar$var70$6 + phi[i$var45][cv$reduction395Index]);
+			for(int cv$reduction366Index = 0; cv$reduction366Index < var23; cv$reduction366Index += 1)
+				reduceVar$var70$6 = (reduceVar$var70$6 + phi[i$var45][cv$reduction366Index]);
+			for(int cv$reduction366Index = (var23 + 1); cv$reduction366Index < k; cv$reduction366Index += 1)
+				reduceVar$var70$6 = (reduceVar$var70$6 + phi[i$var45][cv$reduction366Index]);
 			cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
 			cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - (reduceVar$var70$6 + bias))));
 			if(cv$sigmaNotFound) {
@@ -341,7 +320,6 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 		for(int i$var45 = 0; i$var45 < x.length; i$var45 += 1)
 			phi[i$var45] = new double[x[0].length];
 		logProbability$sample24 = new double[x[0].length];
-		logProbability$var72 = new double[x.length];
 		logProbability$sample74 = new double[x.length];
 	}
 
@@ -540,21 +518,15 @@ class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var12 = Double.NaN;
 		logProbability$weights = 0.0;
-		logProbability$phi = 0.0;
 		if(!fixedProbFlag$sample24) {
 			for(int var23 = 0; var23 < k; var23 += 1)
 				logProbability$sample24[var23] = Double.NaN;
 		}
-		logProbability$var30 = 0.0;
 		if(!fixedProbFlag$sample31)
 			logProbability$bias = Double.NaN;
-		logProbability$var34 = 0.0;
 		if(!fixedProbFlag$sample35)
 			logProbability$tau = Double.NaN;
-		for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-			logProbability$var72[i$var45] = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample74) {
 			for(int i$var45 = 0; i$var45 < n; i$var45 += 1)

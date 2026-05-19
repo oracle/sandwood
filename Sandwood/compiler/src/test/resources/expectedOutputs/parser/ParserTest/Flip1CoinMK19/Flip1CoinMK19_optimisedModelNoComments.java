@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model Flip1CoinMK19 This is the class that
   * all user interactions with the model should occur through.
   */
-public class Flip1CoinMK19 extends Model {
+public final class Flip1CoinMK19 extends Model {
 
     private Flip1CoinMK19$CoreInterface system$c = new Flip1CoinMK19$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedObjectArrayInternal<double[]> $bias = new ComputedObjectArrayInternal<double[]>(this, "bias", false, false, false, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
+    private final ComputedObjectArrayInternal<double[]> $bias = new ComputedObjectArrayInternal<double[]>(this, "bias", false, false, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() { return system$c.get$bias(); }
 
@@ -64,7 +65,7 @@ public class Flip1CoinMK19 extends Model {
      */
     public final ComputedObjectArray<double[]> bias = $bias;
 
-    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false) {
+    private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean[] getValue() { return system$c.get$flips(); }
 
@@ -95,7 +96,7 @@ public class Flip1CoinMK19 extends Model {
      */
     public final ComputedBooleanArray flips = $flips;
 
-    private final ComputedDoubleInternal $q = new ComputedDoubleInternal(this, "q", true, true, false) {
+    private final ComputedDoubleInternal $q = new ComputedDoubleInternal(this, "q", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$q(); }
 
@@ -129,7 +130,7 @@ public class Flip1CoinMK19 extends Model {
      */
     public final ComputedDouble q = $q;
 
-    private final ComputedDoubleInternal $t = new ComputedDoubleInternal(this, "t", true, true, false) {
+    private final ComputedDoubleInternal $t = new ComputedDoubleInternal(this, "t", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$t(); }
 
@@ -237,7 +238,7 @@ public class Flip1CoinMK19 extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli") {
+    private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$bernoulli();

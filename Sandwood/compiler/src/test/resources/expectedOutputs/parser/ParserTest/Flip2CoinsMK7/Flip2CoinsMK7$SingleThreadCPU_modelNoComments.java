@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip2CoinsMK7$CoreInterface {
+final class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip2CoinsMK7$CoreInterface {
 	private double a;
 	private double b;
 	private double[] bias;
@@ -21,7 +21,6 @@ class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$flips;
 	private double[] logProbability$sample18;
 	private double[] logProbability$sample46;
-	private double[] logProbability$var17;
 	private boolean system$gibbsForward = true;
 
 	public Flip2CoinsMK7$SingleThreadCPU(ExecutionTarget target) {
@@ -160,7 +159,6 @@ class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var17[((i - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample18[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$bias = (logProbability$bias + cv$accumulator);
@@ -177,7 +175,6 @@ class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var17[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$bias = (logProbability$bias + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -377,9 +374,6 @@ class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				flips[j] = new boolean[length$flipsMeasured[j]];
 		}
 		{
-			logProbability$var17 = new double[((((length$flipsMeasured.length - 1) - 0) / 1) + 1)];
-		}
-		{
 			logProbability$sample18 = new double[((((length$flipsMeasured.length - 1) - 0) / 1) + 1)];
 		}
 		{
@@ -464,8 +458,6 @@ class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i = 0; i < coins; i += 1)
-			logProbability$var17[((i - 0) / 1)] = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample18) {
 			for(int i = 0; i < coins; i += 1)

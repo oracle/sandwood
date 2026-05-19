@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements PoissonDecayMK1$CoreInterface {
+final class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements PoissonDecayMK1$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double a;
@@ -21,7 +21,6 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 	private double logProbability$poisson;
 	private double logProbability$rate;
 	private double logProbability$var19;
-	private double logProbability$var5;
 	private double rate;
 	private int samples;
 	private boolean system$gibbsForward = true;
@@ -323,7 +322,6 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var5 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$rate = cv$sampleProbability;
@@ -349,7 +347,6 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			double cv$sampleValue = logProbability$rate;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var5 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -503,7 +500,6 @@ class PoissonDecayMK1$MultiThreadCPU extends org.sandwood.runtime.internal.model
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var5 = 0.0;
 		if(!fixedProbFlag$sample6)
 			logProbability$rate = Double.NaN;
 		logProbability$poisson = Double.NaN;

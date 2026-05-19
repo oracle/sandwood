@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DiscreteChoiceAlt$CoreInterface {
+final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DiscreteChoiceAlt$CoreInterface {
 	private int[] ObsChoices;
 	private int[] choices;
 	private double[] exped;
@@ -19,8 +19,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private double[] logProbability$sample24;
 	private double logProbability$sum;
 	private double logProbability$ut;
-	private double[] logProbability$var23;
-	private double logProbability$var65;
 	private double logProbability$var77;
 	private int noObs;
 	private int noProducts;
@@ -148,7 +146,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
 				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian((ut[i$var18] / 3.1622776601683795)) - 1.151292546497023);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var23[(i$var18 - 1)] = cv$distributionAccumulator;
 				logProbability$sample24[(i$var18 - 1)] = cv$distributionAccumulator;
 				logProbability$exped = (logProbability$exped + cv$distributionAccumulator);
 				logProbability$sum = (logProbability$sum + cv$distributionAccumulator);
@@ -164,7 +161,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
 				double cv$sampleValue = logProbability$sample24[(i$var18 - 1)];
 				cv$accumulator = (cv$accumulator + cv$sampleValue);
-				logProbability$var23[(i$var18 - 1)] = cv$sampleValue;
 				logProbability$exped = (logProbability$exped + cv$sampleValue);
 				logProbability$sum = (logProbability$sum + cv$sampleValue);
 				logProbability$prob = (logProbability$prob + cv$sampleValue);
@@ -183,14 +179,12 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				int cv$sampleValue = choices[var76];
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts))?Math.log(prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
-			logProbability$var65 = cv$sampleAccumulator;
 			logProbability$var77 = cv$sampleAccumulator;
 			logProbability$choices = (logProbability$choices + cv$sampleAccumulator);
 			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
 			fixedProbFlag$sample78 = fixedFlag$sample24;
 		} else {
-			logProbability$var65 = logProbability$var77;
 			logProbability$choices = (logProbability$choices + logProbability$var77);
 			logProbability$$model = (logProbability$$model + logProbability$var77);
 			logProbability$$evidence = (logProbability$$evidence + logProbability$var77);
@@ -267,7 +261,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		exped = new double[noProducts];
 		prob = new double[noProducts];
 		choices = new int[noObs];
-		logProbability$var23 = new double[(noProducts - 1)];
 		logProbability$sample24 = new double[(noProducts - 1)];
 		allocateScratch();
 	}
@@ -451,8 +444,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
-			logProbability$var23[(i$var18 - 1)] = Double.NaN;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
 		logProbability$sum = 0.0;
@@ -461,7 +452,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
 				logProbability$sample24[(i$var18 - 1)] = Double.NaN;
 		}
-		logProbability$var65 = Double.NaN;
 		logProbability$choices = 0.0;
 		if(!fixedProbFlag$sample78)
 			logProbability$var77 = Double.NaN;

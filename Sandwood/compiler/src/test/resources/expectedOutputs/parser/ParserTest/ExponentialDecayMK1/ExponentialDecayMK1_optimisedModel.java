@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model ExponentialDecayMK1 This is the class that
   * all user interactions with the model should occur through.
   */
-public class ExponentialDecayMK1 extends Model {
+public final class ExponentialDecayMK1 extends Model {
 
     private ExponentialDecayMK1$CoreInterface system$c = new ExponentialDecayMK1$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $decay = new ComputedDoubleArrayInternal(this, "decay", false, true, false) {
+    private final ComputedDoubleArrayInternal $decay = new ComputedDoubleArrayInternal(this, "decay", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$decay(); }
 
@@ -49,7 +50,7 @@ public class ExponentialDecayMK1 extends Model {
      */
     public final ComputedDoubleArray decay = $decay;
 
-    private final ComputedDoubleInternal $rate = new ComputedDoubleInternal(this, "rate", true, true, false) {
+    private final ComputedDoubleInternal $rate = new ComputedDoubleInternal(this, "rate", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$rate(); }
 
@@ -153,7 +154,7 @@ public class ExponentialDecayMK1 extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private final RandomVariableInternal $exponential = new RandomVariableInternal(this, "exponential") {
+    private final RandomVariableInternal $exponential = new RandomVariableInternal(this, "exponential", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$exponential();

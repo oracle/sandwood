@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK12$CoreInterface {
+final class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK12$CoreInterface {
 	private double bias;
 	private boolean fixedFlag$sample16 = false;
 	private boolean fixedFlag$sample28 = false;
@@ -26,11 +26,8 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$sample16;
 	private double logProbability$sample28;
 	private double logProbability$sample35;
-	private double logProbability$var13;
 	private double logProbability$var14;
-	private double logProbability$var23;
 	private double logProbability$var26;
-	private double logProbability$var30;
 	private double logProbability$var33;
 	private double logProbability$var48;
 	private int samples;
@@ -201,7 +198,6 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			if(guard1) {
 				double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(var14, 1.0, 1.0);
 				cv$accumulator = cv$distributionAccumulator;
-				logProbability$var13 = cv$distributionAccumulator;
 				logProbability$sample16 = cv$distributionAccumulator;
 				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
@@ -214,7 +210,6 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$accumulator = 0.0;
 			if(guard1) {
 				cv$accumulator = logProbability$sample16;
-				logProbability$var13 = logProbability$sample16;
 				logProbability$bias = (logProbability$bias + logProbability$sample16);
 			}
 			logProbability$var14 = (logProbability$var14 + cv$accumulator);
@@ -230,7 +225,6 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			if((!guard1 && (guard2 <= 2))) {
 				double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta((var26 * 2), 1.0, 1.0);
 				cv$accumulator = cv$distributionAccumulator;
-				logProbability$var23 = cv$distributionAccumulator;
 				logProbability$sample28 = cv$distributionAccumulator;
 				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
@@ -243,7 +237,6 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$accumulator = 0.0;
 			if((!guard1 && (guard2 <= 2))) {
 				cv$accumulator = logProbability$sample28;
-				logProbability$var23 = logProbability$sample28;
 				logProbability$bias = (logProbability$bias + logProbability$sample28);
 			}
 			logProbability$var26 = (logProbability$var26 + cv$accumulator);
@@ -259,7 +252,6 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			if((!guard1 && !(guard2 <= 2))) {
 				double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta((var33 * 3), 1.0, 1.0);
 				cv$accumulator = cv$distributionAccumulator;
-				logProbability$var30 = cv$distributionAccumulator;
 				logProbability$sample35 = cv$distributionAccumulator;
 				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			}
@@ -272,7 +264,6 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$accumulator = 0.0;
 			if((!guard1 && !(guard2 <= 2))) {
 				cv$accumulator = logProbability$sample35;
-				logProbability$var30 = logProbability$sample35;
 				logProbability$bias = (logProbability$bias + logProbability$sample35);
 			}
 			logProbability$var33 = (logProbability$var33 + cv$accumulator);
@@ -508,16 +499,13 @@ class Flip1CoinMK12$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var13 = Double.NaN;
 		logProbability$var14 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$sample16 = Double.NaN;
-		logProbability$var23 = Double.NaN;
 		logProbability$var26 = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$sample28 = Double.NaN;
-		logProbability$var30 = Double.NaN;
 		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample35)
 			logProbability$sample35 = Double.NaN;

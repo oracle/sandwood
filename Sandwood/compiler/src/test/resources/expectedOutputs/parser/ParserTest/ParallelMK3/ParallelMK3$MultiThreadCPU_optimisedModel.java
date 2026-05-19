@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK3$CoreInterface {
+final class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK3$CoreInterface {
 	
 	// Declare the variables for the model.
 	private boolean fixedFlag$sample21 = false;
@@ -19,8 +19,6 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double logProbability$indirection;
 	private double logProbability$sample;
 	private double[] logProbability$sample38;
-	private double logProbability$var20;
-	private double[] logProbability$var37;
 	private double[] observed;
 	private double[] sample;
 	private boolean system$gibbsForward = true;
@@ -182,11 +180,6 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(sample, v, 10);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var20 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$sample = cv$distributionAccumulator;
 			
@@ -249,8 +242,6 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var20 = logProbability$sample;
-			
 			// Add probability to constructed variables from the combined probability
 			if((0 < length$observed))
 				// Update the variable probability
@@ -316,11 +307,6 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var37[i] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample38[i] = cv$distributionAccumulator;
 			}
@@ -341,12 +327,8 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < length$observed; i += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample38[i];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var37[i] = cv$rvAccumulator;
-			}
+			for(int i = 0; i < length$observed; i += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample38[i]);
 			
 			// Update the variable probability
 			logProbability$generated = (logProbability$generated + cv$accumulator);
@@ -437,7 +419,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$$var259" with its value "10".
+			// Substituted "cv$temp$1$$var254" with its value "10".
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(sample, v, 10);
 			for(int i = 0; i < length$observed; i += 1)
 				// Set the flags to false
@@ -550,7 +532,7 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$$var259" with its value "10".
+		// Substituted "cv$temp$1$$var254" with its value "10".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(sample, v, 10);
 		for(int i = 0; i < length$observed; i += 1)
 			// Set the flags to false
@@ -707,9 +689,6 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			// Constructor for sample
 			sample = new double[10];
 		
-		// Constructor for logProbability$var37
-		logProbability$var37 = new double[length$observed];
-		
 		// Constructor for logProbability$sample38
 		logProbability$sample38 = new double[length$observed];
 		
@@ -857,12 +836,9 @@ class ParallelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var20 = 0.0;
 		logProbability$indirection = 0.0;
 		if(!fixedProbFlag$sample21)
 			logProbability$sample = Double.NaN;
-		for(int i = 0; i < length$observed; i += 1)
-			logProbability$var37[i] = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample38) {
 			for(int i = 0; i < length$observed; i += 1)

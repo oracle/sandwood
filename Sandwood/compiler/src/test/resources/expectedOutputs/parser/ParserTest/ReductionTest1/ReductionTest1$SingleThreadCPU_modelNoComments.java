@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ReductionTest1$CoreInterface {
+final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ReductionTest1$CoreInterface {
 	private int[][] ObsArr;
 	private int T;
 	private double[][] TimeFeat;
@@ -19,8 +19,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private double logProbability$sum_t;
 	private double logProbability$time_coeff;
 	private double logProbability$time_impact;
-	private double[][] logProbability$var157;
-	private double[] logProbability$var85;
 	private int n_ac;
 	private double[][] sum_t;
 	private boolean system$gibbsForward = true;
@@ -230,7 +228,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					}
 				}
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var85[((i$var80 - 0) / 1)] = cv$sampleAccumulator;
 			}
 			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -294,7 +291,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					}
 				}
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var85[((i$var80 - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$time_coeff = (logProbability$time_coeff + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -338,7 +334,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					cv$sampleReached = true;
 					cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var157[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = cv$sampleAccumulator;
 					logProbability$sample165[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = cv$sampleProbability;
 				}
 			}
@@ -356,7 +351,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 					cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var157[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = cv$rvAccumulator;
 				}
 			}
 			logProbability$arr = (logProbability$arr + cv$accumulator);
@@ -655,17 +649,9 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				arr[var68] = new int[n_ac];
 		}
 		{
-			logProbability$var85 = new double[((((n_ac - 1) - 0) / 1) + 1)];
-		}
-		{
 			logProbability$sample101 = new double[((((n_ac - 1) - 0) / 1) + 1)][];
 			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
 				logProbability$sample101[((i$var80 - 0) / 1)] = new double[((((TimeFeat[0].length - 1) - 0) / 1) + 1)];
-		}
-		{
-			logProbability$var157 = new double[((((T - 1) - (0 + 1)) / 1) + 1)][];
-			for(int t = (0 + 1); t < T; t += 1)
-				logProbability$var157[((t - (0 + 1)) / 1)] = new double[((((n_ac - 1) - 0) / 1) + 1)];
 		}
 		{
 			logProbability$sample165 = new double[((((T - 1) - (0 + 1)) / 1) + 1)][];
@@ -852,8 +838,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
-			logProbability$var85[((i$var80 - 0) / 1)] = Double.NaN;
 		logProbability$time_coeff = 0.0;
 		logProbability$time_impact = 0.0;
 		logProbability$sum_t = 0.0;
@@ -862,10 +846,6 @@ class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal.model
 				for(int var95 = 0; var95 < time_dim; var95 += 1)
 					logProbability$sample101[((i$var80 - 0) / 1)][((var95 - 0) / 1)] = Double.NaN;
 			}
-		}
-		for(int t = (0 + 1); t < T; t += 1) {
-			for(int i$var119 = 0; i$var119 < n_ac; i$var119 += 1)
-				logProbability$var157[((t - (0 + 1)) / 1)][((i$var119 - 0) / 1)] = Double.NaN;
 		}
 		logProbability$arr = 0.0;
 		if(!fixedProbFlag$sample165) {

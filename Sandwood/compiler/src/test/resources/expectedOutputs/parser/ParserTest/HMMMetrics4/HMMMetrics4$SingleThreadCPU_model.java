@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMMetrics4$CoreInterface {
+final class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements HMMMetrics4$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[][] current_metric_mean;
@@ -52,20 +52,11 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double[] logProbability$sample57;
 	private double[][] logProbability$sample76;
 	private double logProbability$st;
-	private double logProbability$var108;
 	private double logProbability$var130;
-	private double logProbability$var135;
 	private double logProbability$var157;
-	private double logProbability$var162;
 	private double logProbability$var184;
-	private double logProbability$var19;
-	private double logProbability$var21;
-	private double[][][] logProbability$var231;
-	private double[][][] logProbability$var244;
 	private double logProbability$var245;
 	private double logProbability$var33;
-	private double[] logProbability$var54;
-	private double[][] logProbability$var73;
 	private double[][] m;
 	private int max_metric;
 	private double[][][] metric;
@@ -775,7 +766,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// Add the probability of this instance of the random variable to the probability
 						// of all instances of the random variable.
 						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-						logProbability$var231[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleAccumulator;
 						
 						// Store the sample task probability
 						logProbability$sample241[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleProbability;
@@ -827,7 +817,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// Record that the sample was reached.
 						cv$sampleReached = true;
 						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-						logProbability$var231[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$rvAccumulator;
 					}
 				}
 			}
@@ -1644,7 +1633,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// Add the probability of this instance of the random variable to the probability
 							// of all instances of the random variable.
 							cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-							logProbability$var244[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleAccumulator;
 							
 							// Store the sample task probability
 							logProbability$sample256[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleProbability;
@@ -1698,7 +1686,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// Record that the sample was reached.
 							cv$sampleReached = true;
 							cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-							logProbability$var244[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$rvAccumulator;
 						}
 					}
 				}
@@ -1796,7 +1783,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// Add the probability of this instance of the random variable to the probability
 					// of all instances of the random variable.
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var54[((sample$var45 - 0) / 1)] = cv$sampleAccumulator;
 					
 					// Store the sample task probability
 					logProbability$sample57[((sample$var45 - 0) / 1)] = cv$sampleProbability;
@@ -1836,7 +1822,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var54[((sample$var45 - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
@@ -2089,7 +2074,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// Add the probability of this instance of the random variable to the probability
 						// of all instances of the random variable.
 						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-						logProbability$var73[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = cv$sampleAccumulator;
 						
 						// Store the sample task probability
 						logProbability$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = cv$sampleProbability;
@@ -2131,7 +2115,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var73[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = cv$rvAccumulator;
 				}
 			}
 			
@@ -2218,7 +2201,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var108 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var130 = cv$sampleAccumulator;
@@ -2255,7 +2237,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleValue = logProbability$var130;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var108 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$current_metric_mean = (logProbability$current_metric_mean + cv$accumulator);
@@ -2338,7 +2319,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var135 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var157 = cv$sampleAccumulator;
@@ -2375,7 +2355,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleValue = logProbability$var157;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var135 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$current_metric_var = (logProbability$current_metric_var + cv$accumulator);
@@ -2458,7 +2437,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var162 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var184 = cv$sampleAccumulator;
@@ -2495,7 +2473,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleValue = logProbability$var184;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var162 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$current_metric_valid_bias = (logProbability$current_metric_valid_bias + cv$accumulator);
@@ -2566,7 +2543,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var19 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$initialStateDistribution = cv$sampleProbability;
@@ -2592,7 +2568,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleValue = logProbability$initialStateDistribution;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var19 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -2670,7 +2645,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// Add the probability of this instance of the random variable to the probability
 						// of all instances of the random variable.
 						cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-						logProbability$var231[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleAccumulator;
 						
 						// Store the sample task probability
 						logProbability$sample241[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleProbability;
@@ -2722,7 +2696,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 						// Record that the sample was reached.
 						cv$sampleReached = true;
 						cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-						logProbability$var231[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$rvAccumulator;
 					}
 				}
 			}
@@ -2819,7 +2792,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// Add the probability of this instance of the random variable to the probability
 							// of all instances of the random variable.
 							cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-							logProbability$var244[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleAccumulator;
 							
 							// Store the sample task probability
 							logProbability$sample256[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$sampleProbability;
@@ -2873,7 +2845,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 							// Record that the sample was reached.
 							cv$sampleReached = true;
 							cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-							logProbability$var244[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = cv$rvAccumulator;
 						}
 					}
 				}
@@ -2966,7 +2937,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var21 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var33 = cv$sampleAccumulator;
@@ -3001,7 +2971,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			double cv$sampleValue = logProbability$var33;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var21 = cv$rvAccumulator;
 			
 			// Update the variable probability
 			logProbability$m = (logProbability$m + cv$accumulator);
@@ -3081,7 +3050,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var54[((sample$var45 - 0) / 1)] = cv$sampleAccumulator;
 				
 				// Store the sample task probability
 				logProbability$sample57[((sample$var45 - 0) / 1)] = cv$sampleProbability;
@@ -3118,7 +3086,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var54[((sample$var45 - 0) / 1)] = cv$rvAccumulator;
 			}
 			
 			// Update the variable probability
@@ -3205,7 +3172,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// Add the probability of this instance of the random variable to the probability
 					// of all instances of the random variable.
 					cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-					logProbability$var73[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = cv$sampleAccumulator;
 					
 					// Store the sample task probability
 					logProbability$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = cv$sampleProbability;
@@ -3244,7 +3210,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 					cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-					logProbability$var73[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = cv$rvAccumulator;
 				}
 			}
 			
@@ -10371,21 +10336,9 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 			}
 		}
 		
-		// Constructor for logProbability$var54
-		{
-			logProbability$var54 = new double[((((length$metric.length - 1) - 0) / 1) + 1)];
-		}
-		
 		// Constructor for logProbability$sample57
 		{
 			logProbability$sample57 = new double[((((length$metric.length - 1) - 0) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$var73
-		{
-			logProbability$var73 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][];
-			for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1)
-				logProbability$var73[((sample$var45 - 0) / 1)] = new double[((((length$metric[sample$var45][0] - 1) - 1) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample76
@@ -10395,34 +10348,12 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 				logProbability$sample76[((sample$var45 - 0) / 1)] = new double[((((length$metric[sample$var45][0] - 1) - 1) / 1) + 1)];
 		}
 		
-		// Constructor for logProbability$var231
-		{
-			logProbability$var231 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][][];
-			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-				double[][] subarray$0 = new double[((((length$metric[0].length - 1) - 0) / 1) + 1)][];
-				logProbability$var231[((sample$var196 - 0) / 1)] = subarray$0;
-				for(int server = 0; server < length$metric[0].length; server += 1)
-					subarray$0[((server - 0) / 1)] = new double[((((length$metric[sample$var196][0] - 1) - 0) / 1) + 1)];
-			}
-		}
-		
 		// Constructor for logProbability$sample241
 		{
 			logProbability$sample241 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][][];
 			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
 				double[][] subarray$0 = new double[((((length$metric[0].length - 1) - 0) / 1) + 1)][];
 				logProbability$sample241[((sample$var196 - 0) / 1)] = subarray$0;
-				for(int server = 0; server < length$metric[0].length; server += 1)
-					subarray$0[((server - 0) / 1)] = new double[((((length$metric[sample$var196][0] - 1) - 0) / 1) + 1)];
-			}
-		}
-		
-		// Constructor for logProbability$var244
-		{
-			logProbability$var244 = new double[((((length$metric.length - 1) - 0) / 1) + 1)][][];
-			for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-				double[][] subarray$0 = new double[((((length$metric[0].length - 1) - 0) / 1) + 1)][];
-				logProbability$var244[((sample$var196 - 0) / 1)] = subarray$0;
 				for(int server = 0; server < length$metric[0].length; server += 1)
 					subarray$0[((server - 0) / 1)] = new double[((((length$metric[sample$var196][0] - 1) - 0) / 1) + 1)];
 			}
@@ -10921,23 +10852,15 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var19 = 0.0;
 		if(!fixedProbFlag$sample20)
 			logProbability$initialStateDistribution = Double.NaN;
-		logProbability$var21 = Double.NaN;
 		logProbability$m = 0.0;
 		if(!fixedProbFlag$sample33)
 			logProbability$var33 = Double.NaN;
-		for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1)
-			logProbability$var54[((sample$var45 - 0) / 1)] = Double.NaN;
 		logProbability$st = 0.0;
 		if(!fixedProbFlag$sample57) {
 			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1)
 				logProbability$sample57[((sample$var45 - 0) / 1)] = Double.NaN;
-		}
-		for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-			for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
-				logProbability$var73[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = Double.NaN;
 		}
 		if(!fixedProbFlag$sample76) {
 			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
@@ -10945,24 +10868,15 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					logProbability$sample76[((sample$var45 - 0) / 1)][((timeStep$var66 - 1) / 1)] = Double.NaN;
 			}
 		}
-		logProbability$var108 = Double.NaN;
 		logProbability$current_metric_mean = 0.0;
 		if(!fixedProbFlag$sample134)
 			logProbability$var130 = Double.NaN;
-		logProbability$var135 = Double.NaN;
 		logProbability$current_metric_var = 0.0;
 		if(!fixedProbFlag$sample162)
 			logProbability$var157 = Double.NaN;
-		logProbability$var162 = Double.NaN;
 		logProbability$current_metric_valid_bias = 0.0;
 		if(!fixedProbFlag$sample190)
 			logProbability$var184 = Double.NaN;
-		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-			for(int server = 0; server < noServers; server += 1) {
-				for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1)
-					logProbability$var231[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = Double.NaN;
-			}
-		}
 		logProbability$metric_valid_inner = 0.0;
 		logProbability$metric_valid_g = 0.0;
 		if(!fixedProbFlag$sample241) {
@@ -10971,12 +10885,6 @@ class HMMMetrics4$SingleThreadCPU extends org.sandwood.runtime.internal.model.Co
 					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1)
 						logProbability$sample241[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = Double.NaN;
 				}
-			}
-		}
-		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-			for(int server = 0; server < noServers; server += 1) {
-				for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1)
-					logProbability$var244[((sample$var196 - 0) / 1)][((server - 0) / 1)][((timeStep$var226 - 0) / 1)] = Double.NaN;
 			}
 		}
 		logProbability$var245 = 0.0;

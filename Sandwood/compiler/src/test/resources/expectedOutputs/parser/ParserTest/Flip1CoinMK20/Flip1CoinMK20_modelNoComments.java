@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model Flip1CoinMK20 This is the class that
   * all user interactions with the model should occur through.
   */
-public class Flip1CoinMK20 extends Model {
+public final class Flip1CoinMK20 extends Model {
 
     private Flip1CoinMK20$CoreInterface system$c = new Flip1CoinMK20$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false) {
+    private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$bias(); }
 
@@ -52,7 +53,7 @@ public class Flip1CoinMK20 extends Model {
      */
     public final ComputedDouble bias = $bias;
 
-    private final ComputedIntegerInternal $count1 = new ComputedIntegerInternal(this, "count1", false, true, false) {
+    private final ComputedIntegerInternal $count1 = new ComputedIntegerInternal(this, "count1", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int getValue() { return system$c.get$count1(); }
 
@@ -83,7 +84,7 @@ public class Flip1CoinMK20 extends Model {
      */
     public final ComputedInteger count1 = $count1;
 
-    private final ComputedIntegerInternal $count2 = new ComputedIntegerInternal(this, "count2", false, true, false) {
+    private final ComputedIntegerInternal $count2 = new ComputedIntegerInternal(this, "count2", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int getValue() { return system$c.get$count2(); }
 
@@ -114,7 +115,7 @@ public class Flip1CoinMK20 extends Model {
      */
     public final ComputedInteger count2 = $count2;
 
-    private final ComputedIntegerInternal $total = new ComputedIntegerInternal(this, "total", false, false, false) {
+    private final ComputedIntegerInternal $total = new ComputedIntegerInternal(this, "total", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public int getValue() { return system$c.get$total(); }
 
@@ -185,7 +186,7 @@ public class Flip1CoinMK20 extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private final RandomVariableInternal $binomial = new RandomVariableInternal(this, "binomial") {
+    private final RandomVariableInternal $binomial = new RandomVariableInternal(this, "binomial", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$binomial();

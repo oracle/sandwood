@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK20$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK20$CoreInterface {
+final class Flip1CoinMK20$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK20$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double bias;
@@ -22,7 +22,6 @@ class Flip1CoinMK20$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$binomial;
 	private double logProbability$count1;
 	private double logProbability$count2;
-	private double logProbability$var7;
 	private int obs1;
 	private int obs2;
 	private boolean system$gibbsForward = true;
@@ -417,7 +416,6 @@ class Flip1CoinMK20$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var7 = cv$sampleAccumulator;
 			
 			// Store the sample task probability
 			logProbability$bias = cv$sampleProbability;
@@ -443,7 +441,6 @@ class Flip1CoinMK20$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			double cv$sampleValue = logProbability$bias;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var7 = cv$rvAccumulator;
 			
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -608,7 +605,6 @@ class Flip1CoinMK20$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var7 = 0.0;
 		if(!fixedProbFlag$sample8)
 			logProbability$bias = Double.NaN;
 		logProbability$binomial = 0.0;

@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements MultinomialBernoulli$CoreInterface {
+final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements MultinomialBernoulli$CoreInterface {
 	private double[] beta;
 	private double[] cv$var17$countGlobal;
 	private boolean fixedFlag$sample17 = false;
@@ -24,8 +24,6 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private double logProbability$output;
 	private double logProbability$p;
 	private double logProbability$prior;
-	private double logProbability$var16;
-	private double logProbability$var19;
 	private double logProbability$var48;
 	private double logProbability$var60;
 	private double logProbability$var72;
@@ -174,14 +172,12 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private final void logProbabilityValue$sample17() {
 		if(!fixedProbFlag$sample17) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(p, beta, 3);
-			logProbability$var16 = cv$distributionAccumulator;
 			logProbability$p = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample17)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample17 = fixedFlag$sample17;
 		} else {
-			logProbability$var16 = logProbability$p;
 			logProbability$$model = (logProbability$$model + logProbability$p);
 			if(fixedFlag$sample17)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$p);
@@ -191,14 +187,12 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private final void logProbabilityValue$sample20() {
 		if(!fixedProbFlag$sample20) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityMultinomial(prior, p, 3, 10);
-			logProbability$var19 = cv$distributionAccumulator;
 			logProbability$prior = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample20)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample20 = (fixedFlag$sample20 && fixedFlag$sample17);
 		} else {
-			logProbability$var19 = logProbability$prior;
 			logProbability$$model = (logProbability$$model + logProbability$prior);
 			if(fixedFlag$sample20)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$prior);
@@ -452,10 +446,8 @@ class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.internal.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var16 = 0.0;
 		if(!fixedProbFlag$sample17)
 			logProbability$p = Double.NaN;
-		logProbability$var19 = 0.0;
 		if(!fixedProbFlag$sample20)
 			logProbability$prior = Double.NaN;
 		logProbability$b1 = Double.NaN;

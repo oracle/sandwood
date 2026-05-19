@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DiscreteChoiceRandCoeff$CoreInterface {
+final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DiscreteChoiceRandCoeff$CoreInterface {
 	private int[] ObsChoices;
 	private int[][] Prices;
 	private double b;
@@ -29,18 +29,12 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	private double logProbability$b;
 	private double logProbability$beta;
 	private double logProbability$choices;
-	private double logProbability$exped;
 	private double logProbability$prob;
 	private double[] logProbability$sample103;
 	private double[] logProbability$sample21;
 	private double[] logProbability$sample47;
 	private double logProbability$sigma;
 	private double logProbability$ut;
-	private double[] logProbability$var101;
-	private double logProbability$var27;
-	private double logProbability$var33;
-	private double logProbability$var35;
-	private double logProbability$var9;
 	private int noObs;
 	private int noProducts;
 	private double[][] prob;
@@ -271,7 +265,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-				logProbability$var101[((i - 0) / 1)] = cv$sampleAccumulator;
 				logProbability$sample103[((i - 0) / 1)] = cv$sampleProbability;
 			}
 			logProbability$choices = (logProbability$choices + cv$accumulator);
@@ -287,7 +280,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var101[((i - 0) / 1)] = cv$rvAccumulator;
 			}
 			logProbability$choices = (logProbability$choices + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -330,20 +322,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				logProbability$sample21[((var20 - 0) / 1)] = cv$sampleProbability;
-				boolean cv$guard$exped = false;
 				boolean cv$guard$prob = false;
-				{
-					for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-						if((var20 == j$var69)) {
-							for(int i = 0; i < noObs; i += 1) {
-								if(!cv$guard$exped) {
-									cv$guard$exped = true;
-									logProbability$exped = (logProbability$exped + cv$sampleProbability);
-								}
-							}
-						}
-					}
-				}
 				{
 					for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
 						if((var20 == j$var69)) {
@@ -378,7 +357,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var9 = cv$sampleAccumulator;
 			logProbability$ut = (logProbability$ut + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample21)
@@ -392,20 +370,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				double cv$sampleValue = logProbability$sample21[((var20 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
-				boolean cv$guard$exped = false;
 				boolean cv$guard$prob = false;
-				{
-					for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-						if((var20 == j$var69)) {
-							for(int i = 0; i < noObs; i += 1) {
-								if(!cv$guard$exped) {
-									cv$guard$exped = true;
-									logProbability$exped = (logProbability$exped + cv$sampleValue);
-								}
-							}
-						}
-					}
-				}
 				{
 					for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
 						if((var20 == j$var69)) {
@@ -440,7 +405,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var9 = cv$rvAccumulator;
 			logProbability$ut = (logProbability$ut + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample21)
@@ -480,7 +444,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var27 = cv$sampleAccumulator;
 			logProbability$b = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample28)
@@ -492,7 +455,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			double cv$sampleValue = logProbability$b;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var27 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample28)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -531,7 +493,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			double cv$sampleProbability = cv$distributionAccumulator;
 			cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var33 = cv$sampleAccumulator;
 			logProbability$sigma = cv$sampleProbability;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample34)
@@ -543,7 +504,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			double cv$sampleValue = logProbability$sigma;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var33 = cv$rvAccumulator;
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample34)
 				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -583,20 +543,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$sampleReached = true;
 				cv$sampleAccumulator = (cv$sampleAccumulator + cv$sampleProbability);
 				logProbability$sample47[((var46 - 0) / 1)] = cv$sampleProbability;
-				boolean cv$guard$exped = false;
 				boolean cv$guard$prob = false;
-				{
-					for(int i = 0; i < noObs; i += 1) {
-						if((var46 == i)) {
-							for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-								if(!cv$guard$exped) {
-									cv$guard$exped = true;
-									logProbability$exped = (logProbability$exped + cv$sampleProbability);
-								}
-							}
-						}
-					}
-				}
 				{
 					for(int i = 0; i < noObs; i += 1) {
 						if((var46 == i)) {
@@ -631,7 +578,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
-			logProbability$var35 = cv$sampleAccumulator;
 			logProbability$beta = (logProbability$beta + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample47)
@@ -645,20 +591,7 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				double cv$sampleValue = logProbability$sample47[((var46 - 0) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				cv$sampleReached = true;
-				boolean cv$guard$exped = false;
 				boolean cv$guard$prob = false;
-				{
-					for(int i = 0; i < noObs; i += 1) {
-						if((var46 == i)) {
-							for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1) {
-								if(!cv$guard$exped) {
-									cv$guard$exped = true;
-									logProbability$exped = (logProbability$exped + cv$sampleValue);
-								}
-							}
-						}
-					}
-				}
 				{
 					for(int i = 0; i < noObs; i += 1) {
 						if((var46 == i)) {
@@ -693,7 +626,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 				}
 			}
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-			logProbability$var35 = cv$rvAccumulator;
 			logProbability$beta = (logProbability$beta + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			if(fixedFlag$sample47)
@@ -1565,9 +1497,6 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 			logProbability$sample47 = new double[((((noObs - 1) - 0) / 1) + 1)];
 		}
 		{
-			logProbability$var101 = new double[((((noObs - 1) - 0) / 1) + 1)];
-		}
-		{
 			logProbability$sample103 = new double[((((noObs - 1) - 0) / 1) + 1)];
 		}
 		allocateScratch();
@@ -1763,28 +1692,21 @@ class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = Double.NaN;
 		logProbability$ut = 0.0;
-		logProbability$exped = 0.0;
 		logProbability$prob = 0.0;
 		if(!fixedProbFlag$sample21) {
 			for(int var20 = 0; var20 < noProducts; var20 += 1)
 				logProbability$sample21[((var20 - 0) / 1)] = Double.NaN;
 		}
-		logProbability$var27 = 0.0;
 		if(!fixedProbFlag$sample28)
 			logProbability$b = Double.NaN;
-		logProbability$var33 = 0.0;
 		if(!fixedProbFlag$sample34)
 			logProbability$sigma = Double.NaN;
-		logProbability$var35 = Double.NaN;
 		logProbability$beta = 0.0;
 		if(!fixedProbFlag$sample47) {
 			for(int var46 = 0; var46 < noObs; var46 += 1)
 				logProbability$sample47[((var46 - 0) / 1)] = Double.NaN;
 		}
-		for(int i = 0; i < noObs; i += 1)
-			logProbability$var101[((i - 0) / 1)] = Double.NaN;
 		logProbability$choices = 0.0;
 		if(!fixedProbFlag$sample103) {
 			for(int i = 0; i < noObs; i += 1)

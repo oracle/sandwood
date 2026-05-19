@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model ParallelMK1 This is the class that
   * all user interactions with the model should occur through.
   */
-public class ParallelMK1 extends Model {
+public final class ParallelMK1 extends Model {
 
     private ParallelMK1$CoreInterface system$c = new ParallelMK1$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $generated = new ComputedDoubleArrayInternal(this, "generated", false, true, false) {
+    private final ComputedDoubleArrayInternal $generated = new ComputedDoubleArrayInternal(this, "generated", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$generated(); }
 
@@ -49,7 +50,7 @@ public class ParallelMK1 extends Model {
      */
     public final ComputedDoubleArray generated = $generated;
 
-    private final ComputedDoubleArrayInternal $indirection = new ComputedDoubleArrayInternal(this, "indirection", true, true, false) {
+    private final ComputedDoubleArrayInternal $indirection = new ComputedDoubleArrayInternal(this, "indirection", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$indirection(); }
 
@@ -83,7 +84,7 @@ public class ParallelMK1 extends Model {
      */
     public final ComputedDoubleArray indirection = $indirection;
 
-    private final ComputedDoubleArrayInternal $sample = new ComputedDoubleArrayInternal(this, "sample", true, true, false) {
+    private final ComputedDoubleArrayInternal $sample = new ComputedDoubleArrayInternal(this, "sample", true, true, true, ProbabilityType.SKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$sample(); }
 
@@ -94,23 +95,18 @@ public class ParallelMK1 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$sample(); }
+        public double getCurrentLogProbability() { throw new SandwoodException("Log probabilities are not available for this value."); }
 
         @Override
         public void setFixed(boolean fixed) {
-            throw new SandwoodException("An observed variable can only have the value fixed to the observed value if the value is consumed by another random variable.");
+            throw new SandwoodRuntimeException("This method should never be called on a private variable.");
         }
 
         @Override
         public Immutability isFixed() {
-            return Immutability.DETERMINISTIC;
+                return Immutability.FREE;
         }
     };
-
-    /**
-     * Computed variable representing sample of type double[] from the Sandwood model 
-     */
-    public final ComputedDoubleArray sample = $sample;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
 
@@ -148,7 +144,7 @@ public class ParallelMK1 extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private HasProbabilityInternal[] $probabilityVariables = {$generated, $indirection, $sample};
+    private HasProbabilityInternal[] $probabilityVariables = {$generated, $indirection};
 
     //Constructors
     /**
@@ -267,13 +263,10 @@ public class ParallelMK1 extends Model {
         public final double[] generated;
         /** Field holding the value of indirection after a convention execution step.*/
         public final double[] indirection;
-        /** Field holding the value of sample after a convention execution step.*/
-        public final double[] sample;
 
         InferredValueOutputs(ParallelMK1 system$model) {
             this.generated = system$model.generated.getSamples()[0];
             this.indirection = system$model.indirection.getSamples()[0];
-            this.sample = system$model.sample.getSamples()[0];
         }
     }
 
@@ -286,14 +279,11 @@ public class ParallelMK1 extends Model {
         public final double generated;
         /** Field holding the log probability of computed variable indirection */
         public final double indirection;
-        /** Field holding the log probability of computed variable sample */
-        public final double sample;
 
         LogProbabilities(ParallelMK1 system$model) {
             this.$logModelProbability = system$model.getLogProbability();
             this.generated = system$model.generated.getLogProbability();
             this.indirection = system$model.indirection.getLogProbability();
-            this.sample = system$model.sample.getLogProbability();
         }
 
         /** Method to return log probability of the whole model 
@@ -310,14 +300,11 @@ public class ParallelMK1 extends Model {
         public final double generated;
         /** Field holding the probability of computed variable indirection */
         public final double indirection;
-        /** Field holding the probability of computed variable sample */
-        public final double sample;
 
         Probabilities(ParallelMK1 system$model) {
             this.$modelProbability = system$model.getProbability();
             this.generated = system$model.generated.getProbability();
             this.indirection = system$model.indirection.getProbability();
-            this.sample = system$model.sample.getProbability();
         }
 
         /** Method to return probability of the whole model 
@@ -331,12 +318,9 @@ public class ParallelMK1 extends Model {
     public static class InferredModelOutputs {
         /** Field holding the MAP or Sample value of indirection after an infer model call. */
         public final double[][] indirection;
-        /** Field holding the MAP or Sample value of sample after an infer model call. */
-        public final double[][] sample;
 
         InferredModelOutputs(ParallelMK1 system$model) {
             this.indirection = system$model.getInferredValue(system$model.$indirection);
-            this.sample = system$model.getInferredValue(system$model.$sample);
         }
     }
 

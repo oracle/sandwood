@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK19$CoreInterface {
+final class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK19$CoreInterface {
 	private int a;
 	private int b;
 	private double[][] bias;
@@ -22,9 +22,7 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private double logProbability$flips;
 	private double logProbability$q;
 	private double logProbability$t;
-	private double logProbability$var15;
 	private double logProbability$var47;
-	private double logProbability$var9;
 	private double q;
 	private int samples;
 	private boolean system$gibbsForward = true;
@@ -170,7 +168,6 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void logProbabilityValue$sample10() {
 		if(!fixedProbFlag$sample10) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(q, 1.0, 1.0);
-			logProbability$var9 = cv$distributionAccumulator;
 			logProbability$q = cv$distributionAccumulator;
 			logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -178,7 +175,6 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample10 = fixedFlag$sample10;
 		} else {
-			logProbability$var9 = logProbability$q;
 			logProbability$bias = (logProbability$bias + logProbability$q);
 			logProbability$$model = (logProbability$$model + logProbability$q);
 			if(fixedFlag$sample10)
@@ -189,7 +185,6 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void logProbabilityValue$sample16() {
 		if(!fixedProbFlag$sample16) {
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityBeta(t, 1.0, 1.0);
-			logProbability$var15 = cv$distributionAccumulator;
 			logProbability$t = cv$distributionAccumulator;
 			logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -197,7 +192,6 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample16 = fixedFlag$sample16;
 		} else {
-			logProbability$var15 = logProbability$t;
 			logProbability$bias = (logProbability$bias + logProbability$t);
 			logProbability$$model = (logProbability$$model + logProbability$t);
 			if(fixedFlag$sample16)
@@ -348,11 +342,9 @@ class Flip1CoinMK19$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = 0.0;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample10)
 			logProbability$q = Double.NaN;
-		logProbability$var15 = 0.0;
 		if(!fixedProbFlag$sample16)
 			logProbability$t = Double.NaN;
 		logProbability$bernoulli = Double.NaN;

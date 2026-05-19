@@ -4,7 +4,7 @@ import org.sandwood.random.internal.Rng;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK5$CoreInterface {
+final class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements ParallelMK5$CoreInterface {
 	private boolean fixedFlag$sample61 = false;
 	private boolean fixedProbFlag$sample103 = false;
 	private boolean fixedProbFlag$sample61 = false;
@@ -19,8 +19,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private double logProbability$indirection2;
 	private double[] logProbability$sample103;
 	private double[][] logProbability$sample61;
-	private double[] logProbability$var100;
-	private double[][] logProbability$var58;
 	private int[] observed;
 	private boolean system$gibbsForward = true;
 
@@ -114,7 +112,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				int cv$sampleValue = generated[m];
 				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 10))?Math.log(indirection2[m][cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var100[m] = cv$distributionAccumulator;
 				logProbability$sample103[m] = cv$distributionAccumulator;
 			}
 			logProbability$generated = (logProbability$generated + cv$accumulator);
@@ -123,11 +120,8 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 			fixedProbFlag$sample103 = fixedFlag$sample61;
 		} else {
 			double cv$accumulator = 0.0;
-			for(int m = 0; m < length$observed; m += 1) {
-				double cv$rvAccumulator = logProbability$sample103[m];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var100[m] = cv$rvAccumulator;
-			}
+			for(int m = 0; m < length$observed; m += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample103[m]);
 			logProbability$generated = (logProbability$generated + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -142,7 +136,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					double cv$sampleValue = indirection1[i][j];
 					double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 					cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-					logProbability$var58[i][j] = cv$distributionAccumulator;
 					logProbability$sample61[i][j] = cv$distributionAccumulator;
 					logProbability$indirection2 = (logProbability$indirection2 + cv$distributionAccumulator);
 				}
@@ -158,7 +151,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 				for(int j = 0; j < length$observed; j += 1) {
 					double cv$sampleValue = logProbability$sample61[i][j];
 					cv$accumulator = (cv$accumulator + cv$sampleValue);
-					logProbability$var58[i][j] = cv$sampleValue;
 					logProbability$indirection2 = (logProbability$indirection2 + cv$sampleValue);
 				}
 			}
@@ -199,13 +191,9 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 		indirection2 = new double[length$observed][];
 		for(int var31 = 0; var31 < length$observed; var31 += 1)
 			indirection2[var31] = new double[10];
-		logProbability$var58 = new double[10][];
-		for(int i = 0; i < 10; i += 1)
-			logProbability$var58[i] = new double[length$observed];
 		logProbability$sample61 = new double[10][];
 		for(int i = 0; i < 10; i += 1)
 			logProbability$sample61[i] = new double[length$observed];
-		logProbability$var100 = new double[length$observed];
 		logProbability$sample103 = new double[length$observed];
 	}
 
@@ -425,10 +413,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i = 0; i < 10; i += 1) {
-			for(int j = 0; j < length$observed; j += 1)
-				logProbability$var58[i][j] = Double.NaN;
-		}
 		logProbability$indirection1 = 0.0;
 		logProbability$indirection2 = 0.0;
 		if(!fixedProbFlag$sample61) {
@@ -437,8 +421,6 @@ class ParallelMK5$MultiThreadCPU extends org.sandwood.runtime.internal.model.Cor
 					logProbability$sample61[i][j] = Double.NaN;
 			}
 		}
-		for(int m = 0; m < length$observed; m += 1)
-			logProbability$var100[m] = Double.NaN;
 		logProbability$generated = 0.0;
 		if(!fixedProbFlag$sample103) {
 			for(int m = 0; m < length$observed; m += 1)

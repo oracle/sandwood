@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements NullModelMK3$CoreInterface {
+final class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements NullModelMK3$CoreInterface {
 	private double bias;
 	private double eta;
 	private boolean fixedFlag$sample10 = false;
@@ -14,7 +14,6 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private double logProbability$bias;
 	private double logProbability$binomial;
 	private double logProbability$positiveCount;
-	private double logProbability$var9;
 	private double min;
 	private int observedPositiveCount;
 	private int observedSampleCount;
@@ -117,14 +116,12 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private final void logProbabilityValue$sample10() {
 		if(!fixedProbFlag$sample10) {
 			double cv$distributionAccumulator = (((min <= bias) && (bias < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY);
-			logProbability$var9 = cv$distributionAccumulator;
 			logProbability$bias = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample10)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample10 = fixedFlag$sample10;
 		} else {
-			logProbability$var9 = logProbability$bias;
 			logProbability$$model = (logProbability$$model + logProbability$bias);
 			if(fixedFlag$sample10)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
@@ -212,7 +209,6 @@ class NullModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.Co
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var9 = 0.0;
 		if(!fixedProbFlag$sample10)
 			logProbability$bias = Double.NaN;
 		logProbability$binomial = 0.0;

@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model AnonymousSample This is the class that
   * all user interactions with the model should occur through.
   */
-public class AnonymousSample extends Model {
+public final class AnonymousSample extends Model {
 
     private AnonymousSample$CoreInterface system$c = new AnonymousSample$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleArrayInternal $amounts1 = new ComputedDoubleArrayInternal(this, "amounts1", false, true, false) {
+    private final ComputedDoubleArrayInternal $amounts1 = new ComputedDoubleArrayInternal(this, "amounts1", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$amounts1(); }
 
@@ -49,7 +50,7 @@ public class AnonymousSample extends Model {
      */
     public final ComputedDoubleArray amounts1 = $amounts1;
 
-    private final ComputedDoubleArrayInternal $amounts2 = new ComputedDoubleArrayInternal(this, "amounts2", false, false, false) {
+    private final ComputedDoubleArrayInternal $amounts2 = new ComputedDoubleArrayInternal(this, "amounts2", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double[] getValue() { return system$c.get$amounts2(); }
 
@@ -80,7 +81,7 @@ public class AnonymousSample extends Model {
      */
     public final ComputedDoubleArray amounts2 = $amounts2;
 
-    private final ComputedDoubleInternal $mean1 = new ComputedDoubleInternal(this, "mean1", true, true, false) {
+    private final ComputedDoubleInternal $mean1 = new ComputedDoubleInternal(this, "mean1", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$mean1(); }
 
@@ -114,7 +115,7 @@ public class AnonymousSample extends Model {
      */
     public final ComputedDouble mean1 = $mean1;
 
-    private final ComputedDoubleInternal $mean2 = new ComputedDoubleInternal(this, "mean2", true, true, false) {
+    private final ComputedDoubleInternal $mean2 = new ComputedDoubleInternal(this, "mean2", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$mean2(); }
 
@@ -148,7 +149,7 @@ public class AnonymousSample extends Model {
      */
     public final ComputedDouble mean2 = $mean2;
 
-    private final ComputedDoubleInternal $priorSigma2 = new ComputedDoubleInternal(this, "priorSigma2", true, true, false) {
+    private final ComputedDoubleInternal $priorSigma2 = new ComputedDoubleInternal(this, "priorSigma2", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$priorSigma2(); }
 

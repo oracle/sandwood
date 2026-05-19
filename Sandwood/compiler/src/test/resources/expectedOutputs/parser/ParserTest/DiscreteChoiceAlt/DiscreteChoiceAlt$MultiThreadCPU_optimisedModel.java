@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DiscreteChoiceAlt$CoreInterface {
+final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DiscreteChoiceAlt$CoreInterface {
 	
 	// Declare the variables for the model.
 	private int[] ObsChoices;
@@ -21,8 +21,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private double[] logProbability$sample24;
 	private double logProbability$sum;
 	private double logProbability$ut;
-	private double[] logProbability$var23;
-	private double logProbability$var65;
 	private double logProbability$var77;
 	private int noObs;
 	private int noProducts;
@@ -228,11 +226,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var23[(i$var18 - 1)] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample24[(i$var18 - 1)] = cv$distributionAccumulator;
 				
@@ -276,7 +269,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
 				double cv$sampleValue = logProbability$sample24[(i$var18 - 1)];
 				cv$accumulator = (cv$accumulator + cv$sampleValue);
-				logProbability$var23[(i$var18 - 1)] = cv$sampleValue;
 				
 				// Add probability to constructed variables that have guards, so need per sample probabilities
 				// from the combined probability
@@ -336,7 +328,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Store the value of the function call, so the function call is only made once.
 				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts))?Math.log(prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
-			logProbability$var65 = cv$sampleAccumulator;
 			
 			// Store the random variable instance probability
 			logProbability$var77 = cv$sampleAccumulator;
@@ -371,8 +362,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var65 = logProbability$var77;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -436,9 +425,9 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Substituted "cv$temp$2$prob" with its value "prob".
 				// 
-				// cv$temp$3$$var512's comment
+				// cv$temp$3$$var507's comment
 				// 
-				// $var512's comment
+				// $var507's comment
 				// Constructing a random variable input for use later.
 				cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
@@ -558,9 +547,9 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// 
 			// Substituted "cv$temp$2$prob" with its value "prob".
 			// 
-			// cv$temp$3$$var512's comment
+			// cv$temp$3$$var507's comment
 			// 
-			// $var512's comment
+			// $var507's comment
 			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		
@@ -699,9 +688,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		
 		// Constructor for choices
 		choices = new int[noObs];
-		
-		// Constructor for logProbability$var23
-		logProbability$var23 = new double[(noProducts - 1)];
 		
 		// Constructor for logProbability$sample24
 		logProbability$sample24 = new double[(noProducts - 1)];
@@ -1082,8 +1068,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
-			logProbability$var23[(i$var18 - 1)] = Double.NaN;
 		logProbability$ut = 0.0;
 		logProbability$exped = 0.0;
 		logProbability$sum = 0.0;
@@ -1092,7 +1076,6 @@ class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
 				logProbability$sample24[(i$var18 - 1)] = Double.NaN;
 		}
-		logProbability$var65 = Double.NaN;
 		logProbability$choices = 0.0;
 		if(!fixedProbFlag$sample78)
 			logProbability$var77 = Double.NaN;

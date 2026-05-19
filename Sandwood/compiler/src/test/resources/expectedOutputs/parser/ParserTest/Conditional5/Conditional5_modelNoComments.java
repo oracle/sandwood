@@ -4,6 +4,7 @@ import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.ExecutionTarget;
 import org.sandwood.runtime.model.variables.*;
 import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
 
@@ -14,11 +15,11 @@ import java.util.HashMap;
   * Class representing the Sandwood model Conditional5 This is the class that
   * all user interactions with the model should occur through.
   */
-public class Conditional5 extends Model {
+public final class Conditional5 extends Model {
 
     private Conditional5$CoreInterface system$c = new Conditional5$SingleThreadCPU(ExecutionTarget.singleThread);
 
-    private final ComputedDoubleInternal $a = new ComputedDoubleInternal(this, "a", false, true, false) {
+    private final ComputedDoubleInternal $a = new ComputedDoubleInternal(this, "a", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$a(); }
 
@@ -49,7 +50,7 @@ public class Conditional5 extends Model {
      */
     public final ComputedDouble a = $a;
 
-    private final ComputedDoubleInternal $b = new ComputedDoubleInternal(this, "b", false, true, false) {
+    private final ComputedDoubleInternal $b = new ComputedDoubleInternal(this, "b", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$b(); }
 
@@ -80,7 +81,7 @@ public class Conditional5 extends Model {
      */
     public final ComputedDouble b = $b;
 
-    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", false, true, false) {
+    private final ComputedBooleanInternal $guard = new ComputedBooleanInternal(this, "guard", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public boolean getValue() { return system$c.get$guard(); }
 
@@ -111,7 +112,7 @@ public class Conditional5 extends Model {
      */
     public final ComputedBoolean guard = $guard;
 
-    private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", false, false, false) {
+    private final ComputedDoubleInternal $value = new ComputedDoubleInternal(this, "value", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getValue() { return system$c.get$value(); }
 
@@ -182,7 +183,7 @@ public class Conditional5 extends Model {
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
-    private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli") {
+    private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
             return system$c.get$logProbability$bernoulli();

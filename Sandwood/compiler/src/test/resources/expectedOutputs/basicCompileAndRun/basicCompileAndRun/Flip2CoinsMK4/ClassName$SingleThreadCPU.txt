@@ -2,7 +2,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ClassName$CoreInterface {
+final class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ClassName$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double[] bias;
@@ -20,7 +20,6 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 	private double logProbability$flips;
 	private double[] logProbability$sample17;
 	private double[] logProbability$sample44;
-	private double[] logProbability$var16;
 	private boolean system$gibbsForward = true;
 
 	public ClassName$SingleThreadCPU(ExecutionTarget target) {
@@ -197,11 +196,6 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				
-				// Add the probability of this sample task to the sample task accumulator.
-				// 
-				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$var16[var15] = cv$distributionAccumulator;
-				
 				// Store the sample task probability
 				logProbability$sample17[var15] = cv$distributionAccumulator;
 			}
@@ -226,12 +220,8 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
-			for(int var15 = 0; var15 < coins; var15 += 1) {
-				// Variable declaration of cv$rvAccumulator moved.
-				double cv$rvAccumulator = logProbability$sample17[var15];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var16[var15] = cv$rvAccumulator;
-			}
+			for(int var15 = 0; var15 < coins; var15 += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample17[var15]);
 			
 			// Update the variable probability
 			logProbability$bias = (logProbability$bias + cv$accumulator);
@@ -371,9 +361,6 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		for(int j = 0; j < length$flipsMeasured.length; j += 1)
 			flips[j] = new boolean[length$flipsMeasured[j]];
 		
-		// Constructor for logProbability$var16
-		logProbability$var16 = new double[length$flipsMeasured.length];
-		
 		// Constructor for logProbability$sample17
 		logProbability$sample17 = new double[length$flipsMeasured.length];
 		
@@ -488,8 +475,6 @@ class ClassName$SingleThreadCPU extends org.sandwood.runtime.internal.model.Core
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		for(int var15 = 0; var15 < coins; var15 += 1)
-			logProbability$var16[var15] = Double.NaN;
 		logProbability$bias = 0.0;
 		if(!fixedProbFlag$sample17) {
 			for(int var15 = 0; var15 < coins; var15 += 1)

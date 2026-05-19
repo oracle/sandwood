@@ -4,7 +4,7 @@ import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements AnonymousSample$CoreInterface {
+final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements AnonymousSample$CoreInterface {
 	private double[] amounts1;
 	private double[] amounts2;
 	private boolean fixedFlag$sample15 = false;
@@ -25,12 +25,7 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	private double logProbability$priorSigma2;
 	private double[] logProbability$sample35;
 	private double[] logProbability$sample39;
-	private double logProbability$var14;
-	private double logProbability$var20;
-	private double[] logProbability$var34;
-	private double[] logProbability$var38;
 	private double logProbability$var39;
-	private double logProbability$var8;
 	private double mean1;
 	private double mean2;
 	private int n;
@@ -201,14 +196,12 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	private final void logProbabilityValue$sample15() {
 		if(!fixedProbFlag$sample15) {
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((mean1 - 2000.0) / 100.0)) - 4.605170185988092);
-			logProbability$var14 = cv$distributionAccumulator;
 			logProbability$mean1 = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample15)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample15 = fixedFlag$sample15;
 		} else {
-			logProbability$var14 = logProbability$mean1;
 			logProbability$$model = (logProbability$$model + logProbability$mean1);
 			if(fixedFlag$sample15)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$mean1);
@@ -218,14 +211,12 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	private final void logProbabilityValue$sample21() {
 		if(!fixedProbFlag$sample21) {
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((mean2 - 2000.0) / 100.0)) - 4.605170185988092);
-			logProbability$var20 = cv$distributionAccumulator;
 			logProbability$mean2 = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample21)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample21 = fixedFlag$sample21;
 		} else {
-			logProbability$var20 = logProbability$mean2;
 			logProbability$$model = (logProbability$$model + logProbability$mean2);
 			if(fixedFlag$sample21)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$mean2);
@@ -238,7 +229,6 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 			for(int i = 0; i < n; i += 1) {
 				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var34[i] = cv$distributionAccumulator;
 				logProbability$sample35[i] = cv$distributionAccumulator;
 			}
 			logProbability$amounts1 = (logProbability$amounts1 + cv$accumulator);
@@ -247,11 +237,8 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 			fixedProbFlag$sample35 = (fixedFlag$sample9 && fixedFlag$sample15);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < n; i += 1) {
-				double cv$rvAccumulator = logProbability$sample35[i];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var34[i] = cv$rvAccumulator;
-			}
+			for(int i = 0; i < n; i += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample35[i]);
 			logProbability$amounts1 = (logProbability$amounts1 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
@@ -264,7 +251,6 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 			for(int i = 0; i < n; i += 1) {
 				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5));
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
-				logProbability$var38[i] = cv$distributionAccumulator;
 				logProbability$sample39[i] = cv$distributionAccumulator;
 			}
 			logProbability$var39 = (logProbability$var39 + cv$accumulator);
@@ -274,11 +260,8 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 			fixedProbFlag$sample39 = (fixedFlag$sample9 && fixedFlag$sample21);
 		} else {
 			double cv$accumulator = 0.0;
-			for(int i = 0; i < n; i += 1) {
-				double cv$rvAccumulator = logProbability$sample39[i];
-				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
-				logProbability$var38[i] = cv$rvAccumulator;
-			}
+			for(int i = 0; i < n; i += 1)
+				cv$accumulator = (cv$accumulator + logProbability$sample39[i]);
 			logProbability$var39 = (logProbability$var39 + cv$accumulator);
 			logProbability$amounts2 = (logProbability$amounts2 + cv$accumulator);
 			logProbability$$model = (logProbability$$model + cv$accumulator);
@@ -289,14 +272,12 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	private final void logProbabilityValue$sample9() {
 		if(!fixedProbFlag$sample9) {
 			double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((priorSigma2 - 10000.0) / 30.0)) - 3.4011973816621555);
-			logProbability$var8 = cv$distributionAccumulator;
 			logProbability$priorSigma2 = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
 			if(fixedFlag$sample9)
 				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
 			fixedProbFlag$sample9 = fixedFlag$sample9;
 		} else {
-			logProbability$var8 = logProbability$priorSigma2;
 			logProbability$$model = (logProbability$$model + logProbability$priorSigma2);
 			if(fixedFlag$sample9)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$priorSigma2);
@@ -368,9 +349,7 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		amounts1 = new double[length$obsAmounts1];
 		amounts2 = new double[length$obsAmounts1];
 		var39 = new double[length$obsAmounts1];
-		logProbability$var34 = new double[length$obsAmounts1];
 		logProbability$sample35 = new double[length$obsAmounts1];
-		logProbability$var38 = new double[length$obsAmounts1];
 		logProbability$sample39 = new double[length$obsAmounts1];
 	}
 
@@ -462,24 +441,17 @@ class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var8 = 0.0;
 		if(!fixedProbFlag$sample9)
 			logProbability$priorSigma2 = Double.NaN;
-		logProbability$var14 = 0.0;
 		if(!fixedProbFlag$sample15)
 			logProbability$mean1 = Double.NaN;
-		logProbability$var20 = 0.0;
 		if(!fixedProbFlag$sample21)
 			logProbability$mean2 = Double.NaN;
-		for(int i = 0; i < n; i += 1)
-			logProbability$var34[i] = Double.NaN;
 		logProbability$amounts1 = 0.0;
 		if(!fixedProbFlag$sample35) {
 			for(int i = 0; i < n; i += 1)
 				logProbability$sample35[i] = Double.NaN;
 		}
-		for(int i = 0; i < n; i += 1)
-			logProbability$var38[i] = Double.NaN;
 		logProbability$var39 = 0.0;
 		logProbability$amounts2 = 0.0;
 		if(!fixedProbFlag$sample39) {

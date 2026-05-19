@@ -3,7 +3,7 @@ package org.sandwood.compiler.tests.parser;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DistributionsTest$CoreInterface {
+final class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DistributionsTest$CoreInterface {
 	
 	// Declare the variables for the model.
 	private double b0;
@@ -17,10 +17,7 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	private double logProbability$$model;
 	private double logProbability$b0;
 	private double logProbability$b1;
-	private double logProbability$var10;
-	private double logProbability$var26;
 	private double logProbability$var27;
-	private double logProbability$var6;
 	private double logProbability$y;
 	private int noSamples;
 	private boolean system$gibbsForward = true;
@@ -224,11 +221,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityHalfCauchy(b1, 1.0, 5.0);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var10 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$b1 = cv$distributionAccumulator;
 			
@@ -273,8 +265,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var10 = logProbability$b1;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -322,10 +312,9 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityStudentT(y[i], (b0 + (b1 * x[i]))));
 			}
 			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(cv$sampleReached) {
-				logProbability$var26 = cv$sampleAccumulator;
-				
+			// Only update the sample if it was reached, otherwise the NaN will be
+			// erroneously over written.
+			if(cv$sampleReached)
 				// Store the random variable instance probability
 				// 
 				// Add the probability of this instance of the random variable to the probability
@@ -333,7 +322,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// 
 				// Accumulator for probabilities of instances of the random variable
 				logProbability$var27 = cv$sampleAccumulator;
-			}
 			
 			// Update the variable probability
 			// 
@@ -365,14 +353,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			// A guard to check if the sample value is ever reached.
-			boolean cv$sampleReached = false;
-			if((0 < noSamples))
-				// Record that the sample was reached.
-				cv$sampleReached = true;
-			if(cv$sampleReached)
-				logProbability$var26 = logProbability$var27;
-			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -419,11 +399,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// The sample value to calculate the probability of generating
 			double cv$distributionAccumulator = DistributionSampling.logProbabilityCauchy(b0, 0.0, 2.0);
 			
-			// Add the probability of this sample task to the sample task accumulator.
-			// 
-			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$var6 = cv$distributionAccumulator;
-			
 			// Store the sample task probability
 			logProbability$b0 = cv$distributionAccumulator;
 			
@@ -468,8 +443,6 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		else {
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
-			logProbability$var6 = logProbability$b0;
-			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
@@ -842,13 +815,10 @@ class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		// calculated.
 		logProbability$$model = 0.0;
 		logProbability$$evidence = 0.0;
-		logProbability$var6 = 0.0;
 		if(!fixedProbFlag$sample7)
 			logProbability$b0 = Double.NaN;
-		logProbability$var10 = 0.0;
 		if(!fixedProbFlag$sample11)
 			logProbability$b1 = Double.NaN;
-		logProbability$var26 = Double.NaN;
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample27)
 			logProbability$var27 = Double.NaN;
