@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -24,7 +24,6 @@ import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.compilation.inference.InferenceGenerator;
 import org.sandwood.compiler.compilation.inference.InferenceGeneratorScalar;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
-import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
@@ -40,6 +39,7 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVaria
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
+import org.sandwood.compiler.traces.guards.ScopeConstructor;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
@@ -101,14 +101,15 @@ public class GammaToExponential
      * @param funcData       The function data for this inference function.
      */
     @Override
-    protected void constructFunctionVariables(CompilationContext compilationCtx, GammaToExponentialData funcData) {
-
+    protected void constructFunctionVariables(GammaToExponentialData funcData, CompilationContext compilationCtx) {
         // add a trees to initialize the temporary variables.
-        compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
-                "Variable to track the sum of the samples."));
+        funcData.targetScope.addTree((TreeBuilderInfo info) -> {
+            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
+                    "Variable to track the sum of the samples."));
 
-        compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countName, constant(0),
-                "Variable to record how many samples have been included in this calculation."));
+            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countName, constant(0),
+                    "Variable to record how many samples have been included in this calculation."));
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -218,8 +219,8 @@ public class GammaToExponential
     protected void finalize(GammaToExponentialData funcData, CompilationContext compilationCtx) {}
 
     @Override
-    protected Scope getBackTraceScope(GammaToExponentialData funcData) {
-        return GlobalScope.scope;
+    protected ScopeConstructor getBackTraceScope(GammaToExponentialData funcData) {
+        return funcData.targetScope;
     }
 
     @Override

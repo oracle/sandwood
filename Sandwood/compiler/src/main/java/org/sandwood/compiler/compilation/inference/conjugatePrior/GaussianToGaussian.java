@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -42,7 +42,6 @@ import org.sandwood.compiler.compilation.inference.InferenceGenerator;
 import org.sandwood.compiler.compilation.inference.InferenceGeneratorScalar;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.ReductionScope;
-import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.arrayTasks.PutTask;
@@ -68,6 +67,7 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVaria
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
+import org.sandwood.compiler.traces.guards.ScopeConstructor;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTree;
@@ -141,17 +141,19 @@ public class GaussianToGaussian
      * @param funcData       The function data for this function inference method.
      */
     @Override
-    protected void constructFunctionVariables(CompilationContext compilationCtx, GaussianToGaussianData funcData) {
-
+    protected void constructFunctionVariables(GaussianToGaussianData funcData, CompilationContext compilationCtx) {
         // add a trees to initialize the temporary variables.
-        compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
-                "State to record the weighting of each sample that is consumed. This is the:\nsum of the sample denominator*(the sample value - the sample nominator)."));
-        compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.denominatorSquareSumName,
-                constant(0.0), "State for storing the sum of the squares of the sample denominators."));
-        compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sigmaNotFoundName,
-                constant(true), "Flag to record if we have a value for Sigma."));
-        compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sigmaValueName,
-                constant(1.0), "State for the value of sigma once we find it."));
+        funcData.targetScope.addTree((TreeBuilderInfo info) -> {
+            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
+                    "State to record the weighting of each sample that is consumed. This is the:\nsum of the sample denominator*(the sample value - the sample nominator)."));
+            compilationCtx.addTreeToScope(GlobalScope.scope,
+                    IRTree.initializeVariable(funcData.denominatorSquareSumName, constant(0.0),
+                            "State for storing the sum of the squares of the sample denominators."));
+            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sigmaNotFoundName,
+                    constant(true), "Flag to record if we have a value for Sigma."));
+            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sigmaValueName,
+                    constant(1.0), "State for the value of sigma once we find it."));
+        });
     }
 
     @Override
@@ -176,8 +178,7 @@ public class GaussianToGaussian
 
         // TODO this is not the observation to the sample this is the producer to the
         // consumer and should be evaluated
-        for(int i = 0; i < consumerTrace.size(); i++) { // TODO check if task.scope can be replaced with the current
-                                                        // task.scope
+        for(int i = 0; i < consumerTrace.size(); i++) {
             DataflowTaskArgDesc d = consumerTrace.get(i);
             DataflowTask<?> t = d.task;
             // Check if the environment should move to a different set of substitutions.
@@ -603,8 +604,8 @@ public class GaussianToGaussian
     protected void finalize(GaussianToGaussianData funcData, CompilationContext compilationCtx) {}
 
     @Override
-    protected Scope getBackTraceScope(GaussianToGaussianData funcData) {
-        return GlobalScope.scope;
+    protected ScopeConstructor getBackTraceScope(GaussianToGaussianData funcData) {
+        return funcData.targetScope;
     }
 
     @Override
@@ -635,8 +636,8 @@ public class GaussianToGaussian
 
     @Override
     protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
-            IRTreeReturn<C> current, ScalarVariable<D> input, GaussianToGaussianData funcData,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {
+            IRTreeReturn<C> current, ScalarVariable<D> input, GaussianToGaussianData funcData, TreeBuilderInfo info,
+            CompilationContext compilationCtx) {
         throw new CompilerException("Unable to infer conditional guards in a conjugate prior.");
     }
 }

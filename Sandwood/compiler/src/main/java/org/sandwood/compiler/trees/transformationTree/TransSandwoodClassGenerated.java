@@ -79,11 +79,11 @@ public class TransSandwoodClassGenerated {
         Map<FunctionName, TransFunction<?>> optimisedFunctions = new HashMap<>();
 
         // Get the values that are set to constants.
-        TransFunction<?> initilise = functions.get(AuxFunctionType.INITIALIZE.functionName);
-        initilise = initilise.applyOptimisations(Collections.emptyMap());
-        Map<VariableDescription<?>, TransTreeReturn<?>> constants = getConstants(initilise);
-        initilise = initilise.applyConstants(constants);
-        optimisedFunctions.put(AuxFunctionType.INITIALIZE.functionName, initilise);
+        TransFunction<?> initilize = functions.get(AuxFunctionType.INITIALIZE.functionName);
+        initilize = initilize.applyOptimisations(Collections.emptyMap());
+        Map<VariableDescription<?>, TransTreeReturn<?>> constants = getConstants(initilize);
+        initilize = initilize.applyConstants(constants);
+        optimisedFunctions.put(AuxFunctionType.INITIALIZE.functionName, initilize);
 
         // Construct tasks to perform optimisations
         List<FunctionOptTask> functionTasks = new ArrayList<>();

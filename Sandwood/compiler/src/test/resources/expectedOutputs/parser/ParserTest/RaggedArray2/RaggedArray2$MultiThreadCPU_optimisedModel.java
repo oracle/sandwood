@@ -273,9 +273,9 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample100 = (fixedFlag$sample81 && fixedFlag$sample84);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -364,9 +364,9 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample81 = fixedFlag$sample81;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -393,12 +393,12 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			int lengthCV$a$82_12 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$82_12 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$82_12 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$82_12 = 3;
 			
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -464,9 +464,9 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample84 = (fixedFlag$sample84 && fixedFlag$sample81);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -510,7 +510,7 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$0$c" with its value "c".
+			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
 			// 
@@ -525,7 +525,7 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$0$c" with its value "c".
+			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
 			// 
@@ -536,7 +536,6 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// cv$temp$2$var78's comment
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
@@ -558,8 +557,6 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// Substituted "cv$temp$4$p" with its value "p".
 				cv$accumulatedProbabilities = (Math.log((obs[var95]?p:(1.0 - p))) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
@@ -595,7 +592,7 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$0$c" with its value "c".
+		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
 		// 
@@ -610,7 +607,7 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$0$c" with its value "c".
+		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
 		// 
@@ -621,7 +618,6 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
-		// cv$temp$2$var78's comment
 		// Constructing a random variable input for use later.
 		// 
 		// Value of the variable at this index
@@ -643,8 +639,6 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			// 
-			// Substituted "cv$temp$4$p" with its value "p".
 			cv$accumulatedProbabilities = (Math.log((obs[var95]?p:(1.0 - p))) + cv$accumulatedProbabilities);
 		
 		// Save the calculated index value into the array of index value probabilities
@@ -718,7 +712,7 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Write out the new value of the sample.
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// variable marginalization
 		y = DistributionSampling.sampleCategorical(RNG$, cv$var77$stateProbabilityGlobal, 2);
 		
@@ -736,23 +730,23 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		int lengthCV$a$82_10 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == y))
-			lengthCV$a$82_10 = 3;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if((0 == y))
 			lengthCV$a$82_10 = 2;
 		
-		// Variable declaration of cv$numNumStates moved.
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((1 == y))
+			lengthCV$a$82_10 = 3;
+		
+		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
 		// Calculate the number of states to evaluate.
 		// 
 		// variable marginalization
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// Calculate the number of states to evaluate.
-		int cv$numNumStates = Math.max(0, lengthCV$a$82_10);
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		int cv$numStates = Math.max(0, lengthCV$a$82_10);
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// Write out the new value of the sample.
 			// 
 			// Value of the variable at this index
@@ -769,19 +763,16 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			int lengthCV$a$82_11 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$82_11 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$82_11 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$82_11 = 3;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
-			// 
-			// cv$temp$0$var78's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < lengthCV$a$82_11)?Math.log(a[y][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -799,8 +790,6 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// Substituted "cv$temp$2$p" with its value "p".
 				cv$accumulatedProbabilities = (Math.log((obs[var95]?p:(1.0 - p))) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
@@ -826,7 +815,7 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		double cv$lseMax = cv$var80$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var80$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -843,7 +832,7 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var80$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -856,12 +845,12 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var80$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numNumStates);
+				cv$var80$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var80$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var80$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
@@ -869,14 +858,14 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var80$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var80$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
 			cv$var80$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		// 
 		// Get a local reference to the scratch space.
-		i = DistributionSampling.sampleCategorical(RNG$, cv$var80$stateProbabilityGlobal, cv$numNumStates);
+		i = DistributionSampling.sampleCategorical(RNG$, cv$var80$stateProbabilityGlobal, cv$numStates);
 		
 		// Guards to ensure that p is only updated when there is a valid path.
 		// 
@@ -936,12 +925,12 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			int lengthCV$a$82_13 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$82_13 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$82_13 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$82_13 = 3;
 			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_13);
 		}
 		if((!fixedFlag$sample81 || !fixedFlag$sample84))
@@ -973,12 +962,12 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			int lengthCV$a$82_17 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$82_17 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$82_17 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$82_17 = 3;
 			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_17);
 		}
 		p = b[y][i];
@@ -997,12 +986,12 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			int lengthCV$a$82_14 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$82_14 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$82_14 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$82_14 = 3;
 			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_14);
 		}
 		p = b[y][i];
@@ -1032,12 +1021,12 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			int lengthCV$a$82_15 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$82_15 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$82_15 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$82_15 = 3;
 			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_15);
 		}
 		if((!fixedFlag$sample81 || !fixedFlag$sample84))
@@ -1058,12 +1047,12 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			int lengthCV$a$82_16 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$82_16 = 3;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
 				lengthCV$a$82_16 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$82_16 = 3;
 			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_16);
 		}
 		p = b[y][i];

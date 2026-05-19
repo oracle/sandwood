@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -17,10 +17,8 @@ import static org.sandwood.compiler.trees.irTree.IRTree.lessThanEqual;
 import static org.sandwood.compiler.trees.irTree.IRTree.load;
 import static org.sandwood.compiler.trees.irTree.IRTree.log;
 import static org.sandwood.compiler.trees.irTree.IRTree.or;
-import static org.sandwood.compiler.trees.irTree.IRTree.sequential;
 import static org.sandwood.compiler.trees.irTree.IRTree.store;
 import static org.sandwood.compiler.trees.irTree.IRTree.subtractDD;
-import static org.sandwood.compiler.trees.irTree.IRTree.treeScope;
 
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.ExternalFunction;
@@ -41,6 +39,9 @@ import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
 import org.sandwood.compiler.traces.guards.BackTraceInfo;
+import org.sandwood.compiler.traces.guards.ScopeConstructor;
+import org.sandwood.compiler.traces.guards.ScopeConstructor.IfElseScopeConstructors;
+import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
@@ -177,38 +178,26 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
                 load(funcData.originalProbabilityName));
         compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(ratioName, ratio,
                 "The probability ration for the proposed value and the current value."));
+
         IRTreeReturn<DoubleVariable> bound = log(functionCallReturn(FunctionType.SAMPLE, VariableType.DoubleVariable,
                 VariableType.Uniform, constant(0.0), constant(1.0)));
         // This needs to be less than or equal as otherwise if the proposed value is not possible and the random value
         // is 0 an impossible value will be accepted.
-        IRTreeReturn<BooleanVariable> guard = lessThanEqual(ratio, bound);
+        IRTreeReturn<BooleanVariable> guard = lessThanEqual(load(ratioName), bound);
         guard = or(guard, functionCallReturn(ExternalFunction.IS_NAN, VariableType.BooleanVariable, load(ratioName)));
-
+        ScopeConstructor targetScope = ScopeConstructor.construct(funcData.sampleDesc.sample,
+                "Test if the probability of the sample is sufficient "
+                        + "to keep the value. This needs to be less than or equal as otherwise if the proposed value is not possible and "
+                        + "the random value is 0 an impossible value will be accepted.",
+                compilationCtx);
+        targetScope = targetScope.addCondition(guard).ifScopeConstructor();
+        targetScope = targetScope.addComment("If it is not revert the changes.");
         // Update set tree to include resetting of the sample value, and then reusing
         // the tree to set all the intermediate variables etc.
-        getSetSampleValueTree(funcData, compilationCtx);
-        IRTreeVoid tree = funcData.sampleTree;
-        tree.prefixComment("If it is not revert the changes.");
-
-        compilationCtx.addTreeToScope(GlobalScope.scope, ifElse(guard, tree,
-                "Test if the probability of the sample is sufficient to keep the value. This needs to be less "
-                        + "than or equal as otherwise if the proposed value is not possible and the random value is 0 "
-                        + "an impossible value will be accepted."));
-    }
-
-    /**
-     * Method so that the value can be collected and placed in a scope tree to prevent name collisions on any generated
-     * variables.
-     *
-     * @param funcData       the function data for this inference function generator.
-     * @param compilationCtx The compilation context for this compilation process.
-     */
-    private void getSetSampleValueTree(MetropolisHastingsData<A, B> funcData, CompilationContext compilationCtx) {
-        compilationCtx.pushScope();
-        super.addSampleValueTree(funcData, compilationCtx);
-        funcData.sampleTree = compilationCtx.getOutermostScopeTree();
-        funcData.sampleTree.postfixComment("Set the sample value");
-        compilationCtx.popScope();
+        targetScope = targetScope.addComment("Set the sample value");
+        targetScope.addTree((TreeBuilderInfo info) -> {
+            super.addSampleValueTree(funcData, compilationCtx);
+        });
     }
 
     /**
@@ -223,18 +212,24 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
 
     @Override
     protected void setSampleValue(MetropolisHastingsData<A, B> funcData, CompilationContext compilationCtx) {
-        IRTreeVoid updateCurrent = setCurrentValue(load(funcData.proposedValueName), Tree.NoComment);
-        compilationCtx.pushScope();
-        funcData.sampleDesc.updateSample(load(funcData.proposedValueName), compilationCtx);
-        IRTreeVoid sampleUpdate = compilationCtx.getOutermostScopeTree();
-        compilationCtx.popScope();
-        IRTreeVoid combinedTree = treeScope(sampleUpdate, "Update Sample and intermediate values");
-        IRTreeVoid elseBody = sequential(Tree.NoComment, updateCurrent, combinedTree);
-        compilationCtx.addTreeToScope(GlobalScope.scope,
-                ifElse(eq(funcData.valuePos, constant(0)),
-                        setCurrentValue(load(funcData.originalValueName),
-                                "Set the current value to the current state of the tree."),
-                        Tree.NoComment, elseBody, Tree.NoComment));
+        ScopeConstructor sc = ScopeConstructor.construct(funcData.sampleDesc.sample, Tree.NoComment, compilationCtx);
+        IfElseScopeConstructors ifElse = sc.addCondition(eq(funcData.valuePos, constant(0)));
+        ifElse.ifScopeConstructor().addTree((TreeBuilderInfo info) -> {
+            IRTreeVoid t = setCurrentValue(load(funcData.originalValueName),
+                    "Set the current value to the current state of the tree.");
+            compilationCtx.addTreeToScope(GlobalScope.scope, t);
+        });
+
+        ScopeConstructor elseSC = ifElse.elseScopeConstructor();
+        elseSC.addTree((TreeBuilderInfo info) -> {
+            IRTreeVoid updateCurrent = setCurrentValue(load(funcData.proposedValueName), Tree.NoComment);
+            compilationCtx.addTreeToScope(GlobalScope.scope, updateCurrent);
+        });
+
+        ScopeConstructor blockSC = elseSC.addComment("Update Sample and intermediate values");
+        blockSC.addTree((TreeBuilderInfo) -> {
+            funcData.sampleDesc.updateSample(load(funcData.proposedValueName), compilationCtx);
+        });
     }
 
     @Override

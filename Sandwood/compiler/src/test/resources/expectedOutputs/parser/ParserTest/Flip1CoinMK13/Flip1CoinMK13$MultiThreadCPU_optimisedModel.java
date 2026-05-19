@@ -235,9 +235,9 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample40 = fixedFlag$sample9;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$bernoulli = logProbability$var36;
@@ -309,12 +309,16 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			logProbability$b = (logProbability$b + cv$distributionAccumulator);
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard1)
 				// Update the variable probability
 				logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			else {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				// 
 				// Guard to ensure that bias is only updated once for this probability.
 				if(guard2) {
 					// Set the guard so the update is only applied once.
@@ -323,6 +327,8 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// Update the variable probability
 					logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
 				}
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((!guard2 && !cv$guard$bias))
 					// Update the variable probability
 					logProbability$bias = (logProbability$bias + cv$distributionAccumulator);
@@ -364,9 +370,9 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample9 = fixedFlag$sample9;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Guard to ensure that bias is only updated once for this probability.
@@ -376,12 +382,16 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// 
 			// Variable declaration of cv$accumulator moved.
 			logProbability$b = (logProbability$b + logProbability$sample9);
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard1)
 				// Update the variable probability
 				logProbability$bias = (logProbability$bias + logProbability$sample9);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			else {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				// 
 				// Guard to ensure that bias is only updated once for this probability.
 				if(guard2) {
 					// Set the guard so the update is only applied once.
@@ -390,6 +400,8 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// Update the variable probability
 					logProbability$bias = (logProbability$bias + logProbability$sample9);
 				}
+				
+				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((!guard2 && !cv$guard$bias))
 					// Update the variable probability
 					logProbability$bias = (logProbability$bias + logProbability$sample9);
@@ -436,14 +448,14 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var7" with its value "1.0".
-			// 
 			// Set the current value to the current state of the tree.
 			// 
 			// The original value of the sample
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(b, 1.0, 1.0);
 			
 			// Processing random variable 24.
+			// 
+			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard1) {
 				// Processing sample task 40 of consumer random variable bernoulli.
 				for(int var35 = 0; var35 < samples; var35 += 1)
@@ -460,8 +472,6 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
 					// 
-					// Substituted "cv$temp$2$bias" with its value "cv$currentValue".
-					// 
 					// Set the current value to the current state of the tree.
 					// 
 					// The original value of the sample
@@ -470,6 +480,7 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			else {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if(guard2) {
 					// Set the current value to the current state of the tree.
 					// 
@@ -490,10 +501,10 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 						// Declaration comment was:
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
-						// 
-						// Substituted "cv$temp$3$bias" with its value "traceTempVariable$bias$5_2".
 						cv$accumulatedProbabilities = (Math.log((flips[var35]?traceTempVariable$bias$5_2:(1.0 - traceTempVariable$bias$5_2))) + cv$accumulatedProbabilities);
-				} else {
+				}
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				else {
 					// Set the current value to the current state of the tree.
 					// 
 					// The original value of the sample
@@ -513,8 +524,6 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 						// Declaration comment was:
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
-						// 
-						// Substituted "cv$temp$4$bias" with its value "traceTempVariable$bias$6_2".
 						cv$accumulatedProbabilities = (Math.log((flips[var35]?traceTempVariable$bias$6_2:(1.0 - traceTempVariable$bias$6_2))) + cv$accumulatedProbabilities);
 				}
 			}
@@ -534,24 +543,28 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		b = cv$proposedValue;
 		
 		// Guards to ensure that bias is only updated when there is a valid path.
+		// 
+		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(guard1)
 			bias = cv$proposedValue;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		else {
+			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard2)
 				bias = (cv$proposedValue / 2);
+			// Constraints moved from conditionals in inner loops/scopes/etc.
 			else
 				bias = (cv$proposedValue / 3);
 		}
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$1$var7" with its value "1.0".
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityBeta(cv$proposedValue, 1.0, 1.0);
 		
 		// Processing random variable 24.
+		// 
+		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(guard1) {
 			// Processing sample task 40 of consumer random variable bernoulli.
 			for(int var35 = 0; var35 < samples; var35 += 1)
@@ -567,13 +580,12 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// Substituted "cv$temp$2$bias" with its value "cv$currentValue".
 				cv$accumulatedProbabilities = (Math.log((flips[var35]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		else {
+			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard2) {
 				double traceTempVariable$bias$5_2 = (cv$proposedValue / 2);
 				
@@ -591,10 +603,10 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// Declaration comment was:
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					// 
-					// Substituted "cv$temp$3$bias" with its value "traceTempVariable$bias$5_2".
 					cv$accumulatedProbabilities = (Math.log((flips[var35]?traceTempVariable$bias$5_2:(1.0 - traceTempVariable$bias$5_2))) + cv$accumulatedProbabilities);
-			} else {
+			}
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			else {
 				double traceTempVariable$bias$6_2 = (cv$proposedValue / 3);
 				
 				// Processing sample task 40 of consumer random variable bernoulli.
@@ -611,16 +623,10 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// Declaration comment was:
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
-					// 
-					// Substituted "cv$temp$4$bias" with its value "traceTempVariable$bias$6_2".
 					cv$accumulatedProbabilities = (Math.log((flips[var35]?traceTempVariable$bias$6_2:(1.0 - traceTempVariable$bias$6_2))) + cv$accumulatedProbabilities);
 			}
 		}
 		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
 		// The probability ration for the proposed value and the current value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
@@ -629,7 +635,12 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -637,6 +648,8 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			b = cv$originalValue;
 			
 			// Guards to ensure that bias is only updated when there is a valid path.
+			// 
+			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(guard1)
 				// b's comment
 				// Write out the new value of the sample.
@@ -644,10 +657,12 @@ final class Flip1CoinMK13$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			else {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if(guard2)
 					// b's comment
 					// Write out the new value of the sample.
 					bias = (cv$originalValue / 2);
+				// Constraints moved from conditionals in inner loops/scopes/etc.
 				else
 					// b's comment
 					// Write out the new value of the sample.

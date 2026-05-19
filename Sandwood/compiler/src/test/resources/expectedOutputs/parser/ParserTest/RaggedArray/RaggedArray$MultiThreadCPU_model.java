@@ -174,45 +174,51 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			{
-				// The sample value to calculate the probability of generating
-				int cv$sampleValue = i;
 				{
+					// The sample value to calculate the probability of generating
+					int cv$sampleValue = i;
 					{
-						double[] var67 = a[y];
-						
-						// Allocate a local variable to hold the length of the array.
-						int lengthCV$a$71_10 = -1;
-						
-						// calculate array length.
-						// 
-						// Looking for a path between Put 17 and consumer double[] 67.
 						{
-							if((0 == y))
-								lengthCV$a$71_10 = 2;
+							double[] var67 = a[y];
+							
+							// Allocate a local variable to hold the length of the array.
+							int lengthCV$a$71_10 = -1;
+							
+							// calculate array length.
+							// 
+							// Looking for a path between Put 17 and consumer double[] 67.
+							{
+								{
+									if((0 == y))
+										lengthCV$a$71_10 = 2;
+								}
+							}
+							
+							// Looking for a path between Put 35 and consumer double[] 67.
+							{
+								{
+									if((1 == y))
+										lengthCV$a$71_10 = 3;
+								}
+							}
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$71_10))?Math.log(var67[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						
-						// Looking for a path between Put 35 and consumer double[] 67.
-						{
-							if((1 == y))
-								lengthCV$a$71_10 = 3;
-						}
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$71_10))?Math.log(var67[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -245,9 +251,9 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample73 = fixedFlag$sample73;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -288,26 +294,28 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				{
-					// The sample value to calculate the probability of generating
-					boolean cv$sampleValue = obs[var84];
 					{
+						// The sample value to calculate the probability of generating
+						boolean cv$sampleValue = obs[var84];
 						{
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?p:(1.0 - p))));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?p:(1.0 - p))));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -343,9 +351,9 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample89 = fixedFlag$sample73;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -375,7 +383,7 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void sample73() {
 		if(true) {
 			// Calculate the number of states to evaluate.
-			int cv$numNumStates = 0;
+			int cv$numStates = 0;
 			{
 				// Allocate a local variable to hold the length of the array.
 				int lengthCV$a$71_8 = -1;
@@ -384,23 +392,27 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Looking for a path between Put 17 and consumer double[] 67.
 				{
-					if((0 == y))
-						lengthCV$a$71_8 = 2;
+					{
+						if((0 == y))
+							lengthCV$a$71_8 = 2;
+					}
 				}
 				
 				// Looking for a path between Put 35 and consumer double[] 67.
 				{
-					if((1 == y))
-						lengthCV$a$71_8 = 3;
+					{
+						if((1 == y))
+							lengthCV$a$71_8 = 3;
+					}
 				}
 				
 				// variable marginalization
-				cv$numNumStates = Math.max(cv$numNumStates, lengthCV$a$71_8);
+				cv$numStates = Math.max(cv$numStates, lengthCV$a$71_8);
 			}
 			
 			// Get a local reference to the scratch space.
 			double[] cv$stateProbabilityLocal = cv$var69$stateProbabilityGlobal;
-			for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 				
@@ -423,98 +435,101 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Guards to ensure that p is only updated when there is a valid path.
 				{
 					{
-						// Write out the new sample value.
-						p = b[y][cv$currentValue];
+						{
+							// Write out the new sample value.
+							p = b[y][cv$currentValue];
+						}
 					}
 				}
 				{
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					double[] cv$temp$0$var67;
+					
+					// Constructing a random variable input for use later.
+					double[] var67 = a[y];
+					
+					// Allocate a local variable to hold the length of the array.
+					int lengthCV$a$71_9 = -1;
+					
+					// calculate array length.
+					// 
+					// Looking for a path between Put 17 and consumer double[] 67.
 					{
-						cv$temp$0$var67 = a[y];
-					}
-					int cv$temp$1$$var241;
-					{
-						// Allocate a local variable to hold the length of the array.
-						int lengthCV$a$71_9 = -1;
-						
-						// calculate array length.
-						// 
-						// Looking for a path between Put 17 and consumer double[] 67.
 						{
 							if((0 == y))
 								lengthCV$a$71_9 = 2;
 						}
-						
-						// Looking for a path between Put 35 and consumer double[] 67.
+					}
+					
+					// Looking for a path between Put 35 and consumer double[] 67.
+					{
 						{
 							if((1 == y))
 								lengthCV$a$71_9 = 3;
 						}
-						cv$temp$1$$var241 = lengthCV$a$71_9;
 					}
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < cv$temp$1$$var241))?Math.log(cv$temp$0$var67[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < lengthCV$a$71_9))?Math.log(var67[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 72.
 					{
 						{
-							int traceTempVariable$i$6_1 = cv$currentValue;
-							
-							// Processing sample task 89 of consumer random variable null.
 							{
-								for(int var84 = 0; var84 < length$obs_measured; var84 += 1) {
-									// Set an accumulator to sum the probabilities for each possible configuration of
-									// inputs.
-									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-									
-									// Set an accumulator to record the consumer distributions not seen. Initially set
-									// to 1 as seen values will be deducted from this value.
-									double cv$consumerDistributionProbabilityAccumulator = 1.0;
+								int traceTempVariable$i$6_1 = cv$currentValue;
+								
+								// Processing sample task 89 of consumer random variable null.
+								{
 									{
-										{
+										for(int var84 = 0; var84 < length$obs_measured; var84 += 1) {
+											// Set an accumulator to sum the probabilities for each possible configuration of
+											// inputs.
+											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+											
+											// Set an accumulator to record the consumer distributions not seen. Initially set
+											// to 1 as seen values will be deducted from this value.
+											double cv$consumerDistributionProbabilityAccumulator = 1.0;
 											{
 												{
-													double cv$temp$2$p;
 													{
-														cv$temp$2$p = p;
+														{
+															{
+																// Record the probability of sample task 89 generating output with current configuration.
+																if(((Math.log(1.0) + Math.log((obs[var84]?p:(1.0 - p)))) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((obs[var84]?p:(1.0 - p)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																else {
+																	// If the second value is -infinity.
+																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((obs[var84]?p:(1.0 - p))));
+																	else
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((obs[var84]?p:(1.0 - p)))))) + 1)) + (Math.log(1.0) + Math.log((obs[var84]?p:(1.0 - p)))));
+																}
+																
+																// Recorded the probability of reaching sample task 89 with the current configuration.
+																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+															}
+														}
 													}
-													
-													// Record the probability of sample task 89 generating output with current configuration.
-													if(((Math.log(1.0) + Math.log((obs[var84]?cv$temp$2$p:(1.0 - cv$temp$2$p)))) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((obs[var84]?cv$temp$2$p:(1.0 - cv$temp$2$p)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-													else {
-														// If the second value is -infinity.
-														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((obs[var84]?cv$temp$2$p:(1.0 - cv$temp$2$p))));
-														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((obs[var84]?cv$temp$2$p:(1.0 - cv$temp$2$p)))))) + 1)) + (Math.log(1.0) + Math.log((obs[var84]?cv$temp$2$p:(1.0 - cv$temp$2$p)))));
-													}
-													
-													// Recorded the probability of reaching sample task 89 with the current configuration.
-													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}
 											}
+											
+											// A check to ensure rounding of floating point values can never result in a negative
+											// value.
+											cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+											
+											// Multiply (log space add) in the probability of the sample task to the overall probability
+											// for this configuration of the source random variable.
+											if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+												cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+											else {
+												// If the second value is -infinity.
+												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+													cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+												else
+													cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+											}
 										}
-									}
-									
-									// A check to ensure rounding of floating point values can never result in a negative
-									// value.
-									cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-									
-									// Multiply (log space add) in the probability of the sample task to the overall probability
-									// for this configuration of the source random variable.
-									if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-										cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-									else {
-										// If the second value is -infinity.
-										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-											cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-										else
-											cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 									}
 								}
 							}
@@ -547,7 +562,7 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				double cv$lseMax = cv$stateProbabilityLocal[0];
 				
 				// Find max value.
-				for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+				for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 					double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 					if((cv$lseMax < cv$lseElementValue))
 						cv$lseMax = cv$lseElementValue;
@@ -563,7 +578,7 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					double cv$lseSum = 0.0;
 					
 					// Offset values, move to normal space, and sum.
-					for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+					for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 						cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 					
 					// Increment the value of the target, moving the value back into log space.
@@ -574,26 +589,28 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Normalize log space values and move to normal space
-				for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
-					cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numNumStates);
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numStates);
 			} else {
 				// Normalize log space values and move to normal space
-				for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 					cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
-			for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
-			i = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates);
+			i = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
 			
 			// Guards to ensure that p is only updated when there is a valid path.
 			{
 				{
-					// Write out the new sample value.
-					p = b[y][i];
+					{
+						// Write out the new sample value.
+						p = b[y][i];
+					}
 				}
 			}
 		}
@@ -651,17 +668,21 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// Looking for a path between Put 17 and consumer double[] 67.
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample73)
-					lengthCV$a$71_11 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample73)
+						lengthCV$a$71_11 = 2;
+				}
 			}
 		}
 		
 		// Looking for a path between Put 35 and consumer double[] 67.
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample73)
-					lengthCV$a$71_11 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample73)
+						lengthCV$a$71_11 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample73)
@@ -693,17 +714,21 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// Looking for a path between Put 17 and consumer double[] 67.
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample73)
-					lengthCV$a$71_15 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample73)
+						lengthCV$a$71_15 = 2;
+				}
 			}
 		}
 		
 		// Looking for a path between Put 35 and consumer double[] 67.
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample73)
-					lengthCV$a$71_15 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample73)
+						lengthCV$a$71_15 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample73)
@@ -722,17 +747,21 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// Looking for a path between Put 17 and consumer double[] 67.
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample73)
-					lengthCV$a$71_12 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample73)
+						lengthCV$a$71_12 = 2;
+				}
 			}
 		}
 		
 		// Looking for a path between Put 35 and consumer double[] 67.
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample73)
-					lengthCV$a$71_12 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample73)
+						lengthCV$a$71_12 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample73)
@@ -762,17 +791,21 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// Looking for a path between Put 17 and consumer double[] 67.
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample73)
-					lengthCV$a$71_13 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample73)
+						lengthCV$a$71_13 = 2;
+				}
 			}
 		}
 		
 		// Looking for a path between Put 35 and consumer double[] 67.
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample73)
-					lengthCV$a$71_13 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample73)
+						lengthCV$a$71_13 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample73)
@@ -793,17 +826,21 @@ final class RaggedArray$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// Looking for a path between Put 17 and consumer double[] 67.
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample73)
-					lengthCV$a$71_14 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample73)
+						lengthCV$a$71_14 = 2;
+				}
 			}
 		}
 		
 		// Looking for a path between Put 35 and consumer double[] 67.
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample73)
-					lengthCV$a$71_14 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample73)
+						lengthCV$a$71_14 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample73)

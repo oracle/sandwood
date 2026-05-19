@@ -1,13 +1,14 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
 package org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators;
 
+import java.util.List;
 import java.util.Map;
 
 import org.sandwood.compiler.compilation.CompilationContext;
@@ -19,7 +20,7 @@ import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
-import org.sandwood.compiler.exceptions.MissingFeatureException;
+import org.sandwood.compiler.exceptions.SandwoodModelException;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.traces.TraceConstructionDesc;
 import org.sandwood.compiler.traces.guards.BackTraceInfo;
@@ -37,15 +38,21 @@ public class ReductionInput<A extends Variable<A>> extends ProducingDataflowTask
     public ReductionInput(IntVariable start, IntVariable end, Variable<A> emptyValue, ArrayVariable<A> a, boolean first,
             Location location) {
         super(DFType.REDUCE_INPUT, a.getElementType(), location, start, end, emptyValue, a.getCurrentInstance());
-        if(a.isDistribution())
-            throw new MissingFeatureException(
-                    "Sandwood is currently unable to reduce arrays of distributions as the number of concurrent distributed values cannot be calculated at compile time.");
         this.start = start;
         this.end = end;
         this.emptyValue = emptyValue.getCurrentInstance();
         this.array = a.getCurrentInstance();
         inlineableTask = false;
         this.first = first;
+    }
+    
+    @Override
+    public void testTask(List<SandwoodModelException> errors) {
+        super.testTask(errors);
+        
+        if(array.isDistribution())
+            errors.add(new SandwoodModelException(
+                    "Sandwood is currently unable to reduce arrays of distributions as the number of concurrent distributed values cannot be calculated at compile time.", getLocation()));
     }
 
     @Override

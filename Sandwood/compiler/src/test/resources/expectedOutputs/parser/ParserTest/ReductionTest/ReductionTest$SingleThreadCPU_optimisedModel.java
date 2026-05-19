@@ -337,9 +337,9 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample30 = fixedFlag$sample30;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -418,9 +418,9 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample47 = fixedFlag$sample47;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -501,9 +501,9 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample62 = (fixedFlag$sample62 && fixedFlag$sample30);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -598,9 +598,9 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample87 = (fixedFlag$sample47 && fixedFlag$sample62);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -698,16 +698,16 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	// by sample task 62 drawn from Categorical 60. Inference was performed using variable
 	// marginalization.
 	private final void sample62(int i$var58) {
-		// Variable declaration of cv$numNumStates moved.
+		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
 		// Calculate the number of states to evaluate.
 		// 
 		// variable marginalization
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// Calculate the number of states to evaluate.
-		int cv$numNumStates = Math.max(0, noStates);
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		int cv$numStates = Math.max(0, noStates);
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// Guards to ensure that st is only updated when there is a valid path.
 			// 
 			// Value of the variable at this index
@@ -716,9 +716,6 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
-			// 
-			// cv$temp$0$var59's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(m[i$var58][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
@@ -730,24 +727,22 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			int reduceVar$var82$1 = 0;
 			
 			// Reduce for every value except a masked value which will be skipped.
-			for(int cv$reduction223Index = 0; cv$reduction223Index < i$var58; cv$reduction223Index += 1)
+			for(int cv$reduction222Index = 0; cv$reduction222Index < i$var58; cv$reduction222Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j$var80's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction223Index]);
-			for(int cv$reduction223Index = (i$var58 + 1); cv$reduction223Index < noCats; cv$reduction223Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
+				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction222Index]);
+			for(int cv$reduction222Index = (i$var58 + 1); cv$reduction222Index < noCats; cv$reduction222Index += 1)
 				// Execute the reduction function, saving the result into the return value.
 				// 
 				// Copy the result of the reduction into the variable returned by the reduction.
 				// 
 				// j$var80's comment
 				// Set the right hand term to a value from the array st
-				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction223Index]);
+				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction222Index]);
 			
 			// Copy the result of the reduction into the variable returned by the reduction.
 			// 
@@ -757,10 +752,8 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			reduceVar$var82$1 = (cv$valuePos + reduceVar$var82$1);
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
 				// Processing sample task 87 of consumer random variable null.
-				// Variable declaration of cv$temp$2$var83 moved.
-				// 
 				// Constructing a random variable input for use later.
-				double cv$temp$2$var83 = bias[reduceVar$var82$1];
+				double var83 = bias[reduceVar$var82$1];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -774,7 +767,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (Math.log((flips[j$var73]?cv$temp$2$var83:(1.0 - cv$temp$2$var83))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[j$var73]?var83:(1.0 - var83))) + cv$accumulatedProbabilities);
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
@@ -800,7 +793,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		double cv$lseMax = cv$var61$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var61$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -817,7 +810,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var61$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -830,12 +823,12 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var61$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numNumStates);
+				cv$var61$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var61$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var61$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
@@ -843,7 +836,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var61$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var61$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
 			cv$var61$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
@@ -853,7 +846,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		// intermediate variables.
 		// 
 		// Get a local reference to the scratch space.
-		st[i$var58] = DistributionSampling.sampleCategorical(RNG$, cv$var61$stateProbabilityGlobal, cv$numNumStates);
+		st[i$var58] = DistributionSampling.sampleCategorical(RNG$, cv$var61$stateProbabilityGlobal, cv$numStates);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating

@@ -39,6 +39,8 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVaria
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.names.VariableNames;
+import org.sandwood.compiler.traces.guards.ScopeConstructor;
+import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
@@ -204,25 +206,20 @@ public class MarginalizationFunctions<A extends ScalarVariable<A>, B extends Dis
 
     @Override
     protected void addDistributionProbabilities(MarginalizationData<A, B> funcData, CompilationContext compilationCtx) {
-        compilationCtx.pushScope();
-        IRTreeVoid t;
+        ScopeConstructor targetScope = funcData.targetScope
+                .addComment("Set the calculated probabilities to be the distribution values, and normalize");
+        targetScope.addTree((TreeBuilderInfo info) -> {
+            IRTreeReturn<ArrayVariable<DoubleVariable>> arrayValue = load(funcData.statesProbabilityNameLocal);
 
-        IRTreeReturn<ArrayVariable<DoubleVariable>> arrayValue = load(funcData.statesProbabilityNameLocal);
+            // Get the probability array
+            VariableDescription<ArrayVariable<DoubleVariable>> localProbability = VariableNames
+                    .calcVarName("localProbability", VariableType.arrayType(VariableType.DoubleVariable), true);
+            IRTreeReturn<ArrayVariable<DoubleVariable>> probabilityArray = ((DistributionSampleTask<?, ?>) funcData.sampleDesc.sample)
+                    .getProbabilitiesArray().getForwardIR(compilationCtx);
+            compilationCtx.addTreeToScope(GlobalScope.scope,
+                    initializeVariable(localProbability, probabilityArray, "Local copy of the probability array"));
 
-        // Get the probability array
-        VariableDescription<ArrayVariable<DoubleVariable>> localProbability = VariableNames
-                .calcVarName("localProbability", VariableType.arrayType(VariableType.DoubleVariable), true);
-        IRTreeReturn<ArrayVariable<DoubleVariable>> probabilityArray = ((DistributionSampleTask<?, ?>) funcData.sampleDesc.sample)
-                .getProbabilitiesArray().getForwardIR(compilationCtx);
-        compilationCtx.addTreeToScope(GlobalScope.scope,
-                initializeVariable(localProbability, probabilityArray, "Local copy of the probability array"));
-
-        normalizeArray(arrayValue, load(localProbability), compilationCtx);
-
-        t = compilationCtx.getOutermostScopeTree();
-        compilationCtx.popScope();
-        t.prefixComment("Set the calculated probabilities to be the distribution values, and normalize");
-
-        compilationCtx.addTreeToScope(GlobalScope.scope, t);
+            normalizeArray(arrayValue, load(localProbability), compilationCtx);
+        });
     }
 }

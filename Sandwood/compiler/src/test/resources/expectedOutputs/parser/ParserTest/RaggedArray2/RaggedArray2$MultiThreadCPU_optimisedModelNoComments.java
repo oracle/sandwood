@@ -187,10 +187,10 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	private final void logProbabilityValue$sample84() {
 		if(!fixedProbFlag$sample84) {
 			int lengthCV$a$82_12 = -1;
-			if((1 == y))
-				lengthCV$a$82_12 = 3;
 			if((0 == y))
 				lengthCV$a$82_12 = 2;
+			if((1 == y))
+				lengthCV$a$82_12 = 3;
 			double cv$distributionAccumulator = (((0.0 <= i) && (i < lengthCV$a$82_12))?Math.log(a[y][i]):Double.NEGATIVE_INFINITY);
 			logProbability$i = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -243,19 +243,19 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	private final void sample84() {
 		int lengthCV$a$82_10 = -1;
-		if((1 == y))
-			lengthCV$a$82_10 = 3;
 		if((0 == y))
 			lengthCV$a$82_10 = 2;
-		int cv$numNumStates = Math.max(0, lengthCV$a$82_10);
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		if((1 == y))
+			lengthCV$a$82_10 = 3;
+		int cv$numStates = Math.max(0, lengthCV$a$82_10);
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			i = cv$valuePos;
 			p = b[y][cv$valuePos];
 			int lengthCV$a$82_11 = -1;
-			if((1 == y))
-				lengthCV$a$82_11 = 3;
 			if((0 == y))
 				lengthCV$a$82_11 = 2;
+			if((1 == y))
+				lengthCV$a$82_11 = 3;
 			double cv$accumulatedProbabilities = ((cv$valuePos < lengthCV$a$82_11)?Math.log(a[y][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			for(int var95 = 0; var95 < length$obs_measured; var95 += 1)
 				cv$accumulatedProbabilities = (Math.log((obs[var95]?p:(1.0 - p))) + cv$accumulatedProbabilities);
@@ -263,7 +263,7 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 		double cv$logSum;
 		double cv$lseMax = cv$var80$stateProbabilityGlobal[0];
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			double cv$lseElementValue = cv$var80$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
@@ -272,20 +272,20 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			cv$logSum = Double.NEGATIVE_INFINITY;
 		else {
 			double cv$lseSum = 0.0;
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var80$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
 		}
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
-				cv$var80$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numNumStates);
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+				cv$var80$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
 		} else {
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				cv$var80$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var80$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var80$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var80$stateProbabilityGlobal.length; cv$indexName += 1)
 			cv$var80$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		i = DistributionSampling.sampleCategorical(RNG$, cv$var80$stateProbabilityGlobal, cv$numNumStates);
+		i = DistributionSampling.sampleCategorical(RNG$, cv$var80$stateProbabilityGlobal, cv$numStates);
 		p = b[y][i];
 	}
 
@@ -314,10 +314,10 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			y = DistributionSampling.sampleCategorical(RNG$, c, 2);
 		if(!fixedFlag$sample84) {
 			int lengthCV$a$82_13 = -1;
-			if((1 == y))
-				lengthCV$a$82_13 = 3;
 			if((0 == y))
 				lengthCV$a$82_13 = 2;
+			if((1 == y))
+				lengthCV$a$82_13 = 3;
 			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_13);
 		}
 		if((!fixedFlag$sample81 || !fixedFlag$sample84))
@@ -336,10 +336,10 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			y = DistributionSampling.sampleCategorical(RNG$, c, 2);
 		if(!fixedFlag$sample84) {
 			int lengthCV$a$82_17 = -1;
-			if((1 == y))
-				lengthCV$a$82_17 = 3;
 			if((0 == y))
 				lengthCV$a$82_17 = 2;
+			if((1 == y))
+				lengthCV$a$82_17 = 3;
 			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_17);
 		}
 		p = b[y][i];
@@ -351,10 +351,10 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			y = DistributionSampling.sampleCategorical(RNG$, c, 2);
 		if(!fixedFlag$sample84) {
 			int lengthCV$a$82_14 = -1;
-			if((1 == y))
-				lengthCV$a$82_14 = 3;
 			if((0 == y))
 				lengthCV$a$82_14 = 2;
+			if((1 == y))
+				lengthCV$a$82_14 = 3;
 			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_14);
 		}
 		p = b[y][i];
@@ -372,10 +372,10 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			y = DistributionSampling.sampleCategorical(RNG$, c, 2);
 		if(!fixedFlag$sample84) {
 			int lengthCV$a$82_15 = -1;
-			if((1 == y))
-				lengthCV$a$82_15 = 3;
 			if((0 == y))
 				lengthCV$a$82_15 = 2;
+			if((1 == y))
+				lengthCV$a$82_15 = 3;
 			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_15);
 		}
 		if((!fixedFlag$sample81 || !fixedFlag$sample84))
@@ -388,10 +388,10 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			y = DistributionSampling.sampleCategorical(RNG$, c, 2);
 		if(!fixedFlag$sample84) {
 			int lengthCV$a$82_16 = -1;
-			if((1 == y))
-				lengthCV$a$82_16 = 3;
 			if((0 == y))
 				lengthCV$a$82_16 = 2;
+			if((1 == y))
+				lengthCV$a$82_16 = 3;
 			i = DistributionSampling.sampleCategorical(RNG$, a[y], lengthCV$a$82_16);
 		}
 		p = b[y][i];

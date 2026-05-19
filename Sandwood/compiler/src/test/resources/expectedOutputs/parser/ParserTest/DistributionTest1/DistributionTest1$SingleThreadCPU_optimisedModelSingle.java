@@ -362,9 +362,9 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample11 = (fixedFlag$sample4 && fixedFlag$sample6);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -451,9 +451,9 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Substituted "fixedFlag$sample4" with its value "true".
 				fixedProbFlag$sample4 = true;
 			}
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -543,9 +543,9 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Substituted "fixedFlag$sample6" with its value "true".
 				fixedProbFlag$sample6 = true;
 			}
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -631,9 +631,9 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample11 = (fixedFlag$sample4 && fixedFlag$sample6);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -716,9 +716,9 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample4 = fixedFlag$sample4;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -804,9 +804,9 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample6 = fixedFlag$sample6;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -826,19 +826,19 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 	// by sample task 4 drawn from Categorical 3. Inference was performed using variable
 	// marginalization.
 	private final void sample4() {
-		// Variable declaration of cv$numNumStates moved.
+		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
 		// Calculate the number of states to evaluate.
 		// 
 		// variable marginalization
-		int cv$numNumStates = weightings.length;
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		int cv$numStates = weightings.length;
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$0$weightings" with its value "weightings".
+			// Value of the variable at this index
 			double cv$accumulatedProbabilities = Math.log(weightings[cv$valuePos]);
 			
 			// Processing sample task 11 of consumer random variable null.
@@ -854,15 +854,13 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Enumerating the possible arguments for the variable Bernoulli 10 which is consuming
 			// the output of Sample task 4.
 			if(fixedFlag$sample6) {
-				// Variable declaration of cv$temp$2$var9 moved.
-				// 
 				// Constructing a random variable input for use later.
 				// 
 				// Processing random variable 10.
 				// 
 				// Value of the variable at this index
-				double cv$temp$2$var9 = ((double)cv$valuePos / v2);
-				cv$accumulatedConsumerProbabilities = Math.log((v?cv$temp$2$var9:(1.0 - cv$temp$2$var9)));
+				double var9 = ((double)cv$valuePos / v2);
+				cv$accumulatedConsumerProbabilities = Math.log((v?var9:(1.0 - var9)));
 				
 				// Recorded the probability of reaching sample task 11 with the current configuration.
 				// 
@@ -883,18 +881,13 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 					double var9 = ((double)cv$valuePos / index$sample6$4);
 					
 					// Record the probability of sample task 11 generating output with current configuration.
-					// 
-					// Substituted "cv$temp$3$var9" with its value "var9".
 					if(((Math.log(cv$probabilitySample6Value5) + Math.log((v?var9:(1.0 - var9)))) < cv$accumulatedConsumerProbabilities))
-						// Substituted "cv$temp$3$var9" with its value "var9".
 						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample6Value5) + Math.log((v?var9:(1.0 - var9)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 					else {
 						// If the second value is -infinity.
 						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-							// Substituted "cv$temp$3$var9" with its value "var9".
 							cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample6Value5) + Math.log((v?var9:(1.0 - var9))));
 						else
-							// Substituted "cv$temp$3$var9" with its value "var9".
 							cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample6Value5) + Math.log((v?var9:(1.0 - var9)))))) + 1)) + Math.log(cv$probabilitySample6Value5)) + Math.log((v?var9:(1.0 - var9))));
 					}
 					
@@ -942,7 +935,7 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 		double cv$lseMax = cv$var4$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var4$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -959,7 +952,7 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var4$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -972,14 +965,14 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// 
 				// Local copy of the probability array
-				distribution$sample4[cv$indexName] = (1.0 / cv$numNumStates);
+				distribution$sample4[cv$indexName] = (1.0 / cv$numStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// 
 				// Local copy of the probability array
@@ -989,7 +982,7 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var4$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var4$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Set the calculated probabilities to be the distribution values, and normalize
 			// 
 			// Local copy of the probability array
@@ -1000,19 +993,19 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 	// by sample task 6 drawn from Categorical 5. Inference was performed using variable
 	// marginalization.
 	private final void sample6() {
-		// Variable declaration of cv$numNumStates moved.
+		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
 		// Calculate the number of states to evaluate.
 		// 
 		// variable marginalization
-		int cv$numNumStates = weightings.length;
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		int cv$numStates = weightings.length;
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$0$weightings" with its value "weightings".
+			// Value of the variable at this index
 			double cv$accumulatedProbabilities = Math.log(weightings[cv$valuePos]);
 			
 			// Processing sample task 11 of consumer random variable null.
@@ -1028,15 +1021,13 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Enumerating the possible arguments for the variable Bernoulli 10 which is consuming
 			// the output of Sample task 6.
 			if(fixedFlag$sample4) {
-				// Variable declaration of cv$temp$2$var9 moved.
-				// 
 				// Constructing a random variable input for use later.
 				// 
 				// Processing random variable 10.
 				// 
 				// Value of the variable at this index
-				double cv$temp$2$var9 = ((double)v1 / cv$valuePos);
-				cv$accumulatedConsumerProbabilities = Math.log((v?cv$temp$2$var9:(1.0 - cv$temp$2$var9)));
+				double var9 = ((double)v1 / cv$valuePos);
+				cv$accumulatedConsumerProbabilities = Math.log((v?var9:(1.0 - var9)));
 				
 				// Recorded the probability of reaching sample task 11 with the current configuration.
 				// 
@@ -1057,18 +1048,13 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 					double var9 = ((double)index$sample4$4 / cv$valuePos);
 					
 					// Record the probability of sample task 11 generating output with current configuration.
-					// 
-					// Substituted "cv$temp$3$var9" with its value "var9".
 					if(((Math.log(cv$probabilitySample4Value5) + Math.log((v?var9:(1.0 - var9)))) < cv$accumulatedConsumerProbabilities))
-						// Substituted "cv$temp$3$var9" with its value "var9".
 						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(cv$probabilitySample4Value5) + Math.log((v?var9:(1.0 - var9)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 					else {
 						// If the second value is -infinity.
 						if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-							// Substituted "cv$temp$3$var9" with its value "var9".
 							cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample4Value5) + Math.log((v?var9:(1.0 - var9))));
 						else
-							// Substituted "cv$temp$3$var9" with its value "var9".
 							cv$accumulatedConsumerProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(cv$probabilitySample4Value5) + Math.log((v?var9:(1.0 - var9)))))) + 1)) + Math.log(cv$probabilitySample4Value5)) + Math.log((v?var9:(1.0 - var9))));
 					}
 					
@@ -1116,7 +1102,7 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 		double cv$lseMax = cv$var6$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var6$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -1133,7 +1119,7 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var6$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -1146,14 +1132,14 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// 
 				// Local copy of the probability array
-				distribution$sample6[cv$indexName] = (1.0 / cv$numNumStates);
+				distribution$sample6[cv$indexName] = (1.0 / cv$numStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Set the calculated probabilities to be the distribution values, and normalize
 				// 
 				// Local copy of the probability array
@@ -1163,7 +1149,7 @@ final class DistributionTest1$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var6$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var6$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Set the calculated probabilities to be the distribution values, and normalize
 			// 
 			// Local copy of the probability array

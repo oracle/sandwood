@@ -163,10 +163,12 @@ final class ParallelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		{
 			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			guard$sample26gaussian31$global[i] = false;
+			if((i < (length$observed - 1)))
+				guard$sample26gaussian31$global[i] = false;
 			if(!guard$sample26gaussian31$global[i]) {
 				guard$sample26gaussian31$global[i] = true;
-				double cv$temp$3$var30 = indirection[i];
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(cv$temp$3$var30))) + cv$accumulatedProbabilities) - (Math.log(cv$temp$3$var30) * 0.5));
+				double var30 = indirection[i];
+				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(var30))) + cv$accumulatedProbabilities) - (Math.log(var30) * 0.5));
 			}
 			if(!guard$sample26gaussian31$global[i]) {
 				int index$i$5_2 = (i + 1);
@@ -179,17 +181,20 @@ final class ParallelMK2$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		indirection[(i + 1)] = cv$proposedValue;
 		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 		guard$sample26gaussian31$global[i] = false;
+		if((i < (length$observed - 1)))
+			guard$sample26gaussian31$global[i] = false;
 		if(!guard$sample26gaussian31$global[i]) {
 			guard$sample26gaussian31$global[i] = true;
-			double cv$temp$3$var30 = indirection[i];
-			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(cv$temp$3$var30))) + cv$accumulatedProbabilities) - (Math.log(cv$temp$3$var30) * 0.5));
+			double var30 = indirection[i];
+			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(var30))) + cv$accumulatedProbabilities) - (Math.log(var30) * 0.5));
 		}
 		int index$i$5_2 = (i + 1);
 		if(((index$i$5_2 < length$observed) && !guard$sample26gaussian31$global[i])) {
 			guard$sample26gaussian31$global[i] = true;
 			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[index$i$5_2] - cv$proposedValue) / Math.sqrt(cv$proposedValue))) + cv$accumulatedProbabilities) - (Math.log(cv$proposedValue) * 0.5));
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			sample[i] = cv$originalValue;
 			indirection[(i + 1)] = sample[i];
 		}

@@ -137,19 +137,21 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					boolean cv$sampleValue = flips[var34];
 					{
+						boolean cv$sampleValue = flips[var34];
 						{
-							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?bias:(1.0 - bias))));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?bias:(1.0 - bias))));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -191,21 +193,23 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
-				double cv$sampleValue = b;
 				{
+					double cv$sampleValue = b;
 					{
-						double var4 = 1.0;
-						double var6 = 1.0;
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var4, var6));
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var4 = 1.0;
+							double var6 = 1.0;
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var4, var6));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -220,18 +224,22 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			boolean cv$guard$bias = false;
 			logProbability$b = (logProbability$b + cv$accumulator);
 			{
-				if(guard1) {
-					if(!cv$guard$bias) {
-						cv$guard$bias = true;
-						logProbability$bias = (logProbability$bias + cv$sampleProbability);
+				{
+					if(guard1) {
+						if(!cv$guard$bias) {
+							cv$guard$bias = true;
+							logProbability$bias = (logProbability$bias + cv$sampleProbability);
+						}
 					}
 				}
-				if(!guard1) {
-					if((0 == 0)) {
-						if(!guard1) {
-							if(!cv$guard$bias) {
-								cv$guard$bias = true;
-								logProbability$bias = (logProbability$bias + cv$sampleProbability);
+				{
+					if(!guard1) {
+						if((0 == 0)) {
+							if(!guard1) {
+								if(!cv$guard$bias) {
+									cv$guard$bias = true;
+									logProbability$bias = (logProbability$bias + cv$sampleProbability);
+								}
 							}
 						}
 					}
@@ -250,18 +258,22 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			boolean cv$guard$bias = false;
 			logProbability$b = (logProbability$b + cv$accumulator);
 			{
-				if(guard1) {
-					if(!cv$guard$bias) {
-						cv$guard$bias = true;
-						logProbability$bias = (logProbability$bias + cv$sampleValue);
+				{
+					if(guard1) {
+						if(!cv$guard$bias) {
+							cv$guard$bias = true;
+							logProbability$bias = (logProbability$bias + cv$sampleValue);
+						}
 					}
 				}
-				if(!guard1) {
-					if((0 == 0)) {
-						if(!guard1) {
-							if(!cv$guard$bias) {
-								cv$guard$bias = true;
-								logProbability$bias = (logProbability$bias + cv$sampleValue);
+				{
+					if(!guard1) {
+						if((0 == 0)) {
+							if(!guard1) {
+								if(!cv$guard$bias) {
+									cv$guard$bias = true;
+									logProbability$bias = (logProbability$bias + cv$sampleValue);
+								}
 							}
 						}
 					}
@@ -275,9 +287,9 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	private final void sample8() {
 		if(true) {
-			int cv$numNumStates = 0;
+			int cv$numStates = 0;
 			{
-				cv$numNumStates = Math.max(cv$numNumStates, 2);
+				cv$numStates = Math.max(cv$numStates, 2);
 			}
 			double cv$originalValue = b;
 			double cv$originalProbability = 0.0;
@@ -286,7 +298,7 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				cv$var = (0.1 * 0.1);
 			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 			double cv$proposedProbability = 0.0;
-			for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 				double cv$reachedDistributionSourceRV = 0.0;
 				double cv$accumulatedDistributionProbabilities = 0.0;
@@ -295,8 +307,8 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					cv$currentValue = cv$originalValue;
 				else {
 					cv$currentValue = cv$proposedValue;
+					b = cv$proposedValue;
 					{
-						b = cv$proposedValue;
 						{
 							if(!guard1) {
 								{
@@ -304,23 +316,21 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 								}
 							}
 						}
+					}
+					{
 						{
 							if(guard1) {
 								{
-									if(guard1)
-										bias = cv$currentValue;
-									else
-										bias = c[0];
+									bias = cv$currentValue;
 								}
 							}
+						}
+						{
 							if(!guard1) {
 								if((0 == 0)) {
 									if(!guard1) {
 										{
-											if(guard1)
-												bias = cv$currentValue;
-											else
-												bias = c[0];
+											bias = c[0];
 										}
 									}
 								}
@@ -330,63 +340,14 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				}
 				{
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					double cv$temp$0$var4;
-					{
-						cv$temp$0$var4 = 1.0;
-					}
-					double cv$temp$1$var6;
-					{
-						cv$temp$1$var6 = 1.0;
-					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$currentValue, cv$temp$0$var4, cv$temp$1$var6));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$currentValue, 1.0, 1.0));
 					{
 						{
-							if(guard1) {
-								double traceTempVariable$bias$4_1 = cv$currentValue;
-								double traceTempVariable$b$4_2 = cv$currentValue;
-								{
-									for(int var34 = 0; var34 < samples; var34 += 1) {
-										double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-										double cv$consumerDistributionProbabilityAccumulator = 1.0;
-										{
-											{
-												{
-													{
-														double cv$temp$2$bias;
-														{
-															cv$temp$2$bias = traceTempVariable$bias$4_1;
-														}
-														if(((Math.log(1.0) + Math.log((flips[var34]?cv$temp$2$bias:(1.0 - cv$temp$2$bias)))) < cv$accumulatedConsumerProbabilities))
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[var34]?cv$temp$2$bias:(1.0 - cv$temp$2$bias)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-														else {
-															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[var34]?cv$temp$2$bias:(1.0 - cv$temp$2$bias))));
-															else
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[var34]?cv$temp$2$bias:(1.0 - cv$temp$2$bias)))))) + 1)) + (Math.log(1.0) + Math.log((flips[var34]?cv$temp$2$bias:(1.0 - cv$temp$2$bias)))));
-														}
-														cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-													}
-												}
-											}
-										}
-										cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-										if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-											cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-										else {
-											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-												cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-											else
-												cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-										}
-									}
-								}
-							}
-							if(!guard1) {
-								double traceTempVariable$b$5_1 = cv$currentValue;
-								double traceTempVariable$var21$5_2 = (traceTempVariable$b$5_1 / 2);
-								if((0 == 0)) {
-									if(!guard1) {
-										double traceTempVariable$bias$5_3 = traceTempVariable$var21$5_2;
+							{
+								if(guard1) {
+									double traceTempVariable$bias$4_1 = cv$currentValue;
+									double traceTempVariable$b$4_2 = cv$currentValue;
+									{
 										{
 											for(int var34 = 0; var34 < samples; var34 += 1) {
 												double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
@@ -395,19 +356,17 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 													{
 														{
 															{
-																double cv$temp$3$bias;
 																{
-																	cv$temp$3$bias = traceTempVariable$bias$5_3;
+																	if(((Math.log(1.0) + Math.log((flips[var34]?traceTempVariable$bias$4_1:(1.0 - traceTempVariable$bias$4_1)))) < cv$accumulatedConsumerProbabilities))
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[var34]?traceTempVariable$bias$4_1:(1.0 - traceTempVariable$bias$4_1)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																	else {
+																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[var34]?traceTempVariable$bias$4_1:(1.0 - traceTempVariable$bias$4_1))));
+																		else
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[var34]?traceTempVariable$bias$4_1:(1.0 - traceTempVariable$bias$4_1)))))) + 1)) + (Math.log(1.0) + Math.log((flips[var34]?traceTempVariable$bias$4_1:(1.0 - traceTempVariable$bias$4_1)))));
+																	}
+																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 																}
-																if(((Math.log(1.0) + Math.log((flips[var34]?cv$temp$3$bias:(1.0 - cv$temp$3$bias)))) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[var34]?cv$temp$3$bias:(1.0 - cv$temp$3$bias)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																else {
-																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[var34]?cv$temp$3$bias:(1.0 - cv$temp$3$bias))));
-																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[var34]?cv$temp$3$bias:(1.0 - cv$temp$3$bias)))))) + 1)) + (Math.log(1.0) + Math.log((flips[var34]?cv$temp$3$bias:(1.0 - cv$temp$3$bias)))));
-																}
-																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
 														}
 													}
@@ -420,6 +379,53 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 														cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
 													else
 														cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								if(!guard1) {
+									double traceTempVariable$b$5_1 = cv$currentValue;
+									double traceTempVariable$var21$5_2 = (traceTempVariable$b$5_1 / 2);
+									if((0 == 0)) {
+										if(!guard1) {
+											double traceTempVariable$bias$5_3 = traceTempVariable$var21$5_2;
+											{
+												{
+													for(int var34 = 0; var34 < samples; var34 += 1) {
+														double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+														double cv$consumerDistributionProbabilityAccumulator = 1.0;
+														{
+															{
+																{
+																	{
+																		{
+																			if(((Math.log(1.0) + Math.log((flips[var34]?traceTempVariable$bias$5_3:(1.0 - traceTempVariable$bias$5_3)))) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((flips[var34]?traceTempVariable$bias$5_3:(1.0 - traceTempVariable$bias$5_3)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			else {
+																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((flips[var34]?traceTempVariable$bias$5_3:(1.0 - traceTempVariable$bias$5_3))));
+																				else
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((flips[var34]?traceTempVariable$bias$5_3:(1.0 - traceTempVariable$bias$5_3)))))) + 1)) + (Math.log(1.0) + Math.log((flips[var34]?traceTempVariable$bias$5_3:(1.0 - traceTempVariable$bias$5_3)))));
+																			}
+																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																		}
+																	}
+																}
+															}
+														}
+														cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+														if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+														else {
+															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+															else
+																cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+														}
+													}
 												}
 											}
 										}
@@ -443,32 +449,32 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
 			double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-			if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+			if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
 				b = cv$originalValue;
 				{
-					if(!guard1) {
-						{
-							c[0] = (b / 2);
+					{
+						if(!guard1) {
+							{
+								c[0] = (b / 2);
+							}
 						}
 					}
 				}
 				{
-					if(guard1) {
-						{
-							if(guard1)
+					{
+						if(guard1) {
+							{
 								bias = b;
-							else
-								bias = c[0];
+							}
 						}
 					}
-					if(!guard1) {
-						if((0 == 0)) {
-							if(!guard1) {
-								{
-									if(guard1)
-										bias = b;
-									else
+					{
+						if(!guard1) {
+							if((0 == 0)) {
+								if(!guard1) {
+									{
 										bias = c[0];
+									}
 								}
 							}
 						}

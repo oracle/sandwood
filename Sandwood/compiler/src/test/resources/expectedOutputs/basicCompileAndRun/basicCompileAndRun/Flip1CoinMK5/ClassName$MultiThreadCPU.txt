@@ -272,9 +272,9 @@ final class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample21 = fixedFlag$sample8;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$bernoulli1 = logProbability$var21;
@@ -350,9 +350,9 @@ final class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample35 = fixedFlag$sample8;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$bernoulli2 = logProbability$var35;
@@ -442,9 +442,9 @@ final class ClassName$MultiThreadCPU extends org.sandwood.runtime.internal.model
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample8 = fixedFlag$sample8;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model

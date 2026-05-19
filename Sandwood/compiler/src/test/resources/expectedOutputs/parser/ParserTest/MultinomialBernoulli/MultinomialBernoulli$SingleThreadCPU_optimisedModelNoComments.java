@@ -293,16 +293,16 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 		{
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(prior, p, 3, 10);
 			for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
-				double cv$temp$3$var24 = (double)(prior[0] / 10);
-				cv$accumulatedProbabilities = (Math.log((output[i$var47]?cv$temp$3$var24:(1.0 - cv$temp$3$var24))) + cv$accumulatedProbabilities);
+				double var24 = (double)(prior[0] / 10);
+				cv$accumulatedProbabilities = (Math.log((output[i$var47]?var24:(1.0 - var24))) + cv$accumulatedProbabilities);
 			}
 			for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
-				double cv$temp$4$var29 = (double)(prior[1] / 10);
-				cv$accumulatedProbabilities = (Math.log((output[i$var59]?cv$temp$4$var29:(1.0 - cv$temp$4$var29))) + cv$accumulatedProbabilities);
+				double var29 = (double)(prior[1] / 10);
+				cv$accumulatedProbabilities = (Math.log((output[i$var59]?var29:(1.0 - var29))) + cv$accumulatedProbabilities);
 			}
 			for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
-				double cv$temp$5$var34 = (double)(prior[2] / 10);
-				cv$accumulatedProbabilities = (Math.log((output[i$var71]?cv$temp$5$var34:(1.0 - cv$temp$5$var34))) + cv$accumulatedProbabilities);
+				double var34 = (double)(prior[2] / 10);
+				cv$accumulatedProbabilities = (Math.log((output[i$var71]?var34:(1.0 - var34))) + cv$accumulatedProbabilities);
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
@@ -310,16 +310,16 @@ final class MultinomialBernoulli$SingleThreadCPU extends org.sandwood.runtime.in
 		prior[cv$destinationIndex] = (prior[cv$destinationIndex] + cv$changeValue);
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(prior, p, 3, 10);
 		for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
-			double cv$temp$3$var24 = (double)(prior[0] / 10);
-			cv$accumulatedProbabilities = (Math.log((output[i$var47]?cv$temp$3$var24:(1.0 - cv$temp$3$var24))) + cv$accumulatedProbabilities);
+			double var24 = (double)(prior[0] / 10);
+			cv$accumulatedProbabilities = (Math.log((output[i$var47]?var24:(1.0 - var24))) + cv$accumulatedProbabilities);
 		}
 		for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
-			double cv$temp$4$var29 = (double)(prior[1] / 10);
-			cv$accumulatedProbabilities = (Math.log((output[i$var59]?cv$temp$4$var29:(1.0 - cv$temp$4$var29))) + cv$accumulatedProbabilities);
+			double var29 = (double)(prior[1] / 10);
+			cv$accumulatedProbabilities = (Math.log((output[i$var59]?var29:(1.0 - var29))) + cv$accumulatedProbabilities);
 		}
 		for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
-			double cv$temp$5$var34 = (double)(prior[2] / 10);
-			cv$accumulatedProbabilities = (Math.log((output[i$var71]?cv$temp$5$var34:(1.0 - cv$temp$5$var34))) + cv$accumulatedProbabilities);
+			double var34 = (double)(prior[2] / 10);
+			cv$accumulatedProbabilities = (Math.log((output[i$var71]?var34:(1.0 - var34))) + cv$accumulatedProbabilities);
 		}
 		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
 			prior[cv$sourceIndex] = (prior[cv$sourceIndex] + cv$changeValue);

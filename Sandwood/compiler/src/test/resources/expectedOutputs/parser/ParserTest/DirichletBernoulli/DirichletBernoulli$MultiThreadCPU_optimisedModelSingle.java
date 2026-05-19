@@ -236,9 +236,9 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample17 = fixedFlag$sample17;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -323,9 +323,9 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample38 = fixedFlag$sample17;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// A guard to check if the sample value is ever reached.
@@ -420,9 +420,9 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample51 = fixedFlag$sample17;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// A guard to check if the sample value is ever reached.
@@ -524,17 +524,15 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$$var159" with its value "2".
+			// A reference local to the function for the sample variable.
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
 			
 			// Processing random variable 20.
 			// 
 			// Processing sample task 38 of consumer random variable b1.
 			for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
-				// Variable declaration of cv$temp$2$var19 moved.
-				// 
 				// Constructing a random variable input for use later.
-				double cv$temp$2$var19 = prior[0];
+				double var19 = prior[0];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -548,17 +546,15 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (Math.log((output[i$var37]?cv$temp$2$var19:(1.0 - cv$temp$2$var19))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((output[i$var37]?var19:(1.0 - var19))) + cv$accumulatedProbabilities);
 			}
 			
 			// Processing random variable 23.
 			// 
 			// Processing sample task 51 of consumer random variable b2.
 			for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
-				// Variable declaration of cv$temp$3$var22 moved.
-				// 
 				// Constructing a random variable input for use later.
-				double cv$temp$3$var22 = prior[1];
+				double var22 = prior[1];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -572,7 +568,7 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (Math.log((output[i$var50]?cv$temp$3$var22:(1.0 - cv$temp$3$var22))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((output[i$var50]?var22:(1.0 - var22))) + cv$accumulatedProbabilities);
 			}
 			
 			// Initialize an accumulator to take the product of all the distribution probabilities
@@ -612,17 +608,15 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$1$$var159" with its value "2".
+		// A reference local to the function for the sample variable.
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(prior, v, 2);
 		
 		// Processing random variable 20.
 		// 
 		// Processing sample task 38 of consumer random variable b1.
 		for(int i$var37 = 0; i$var37 < (length / 2); i$var37 += 1) {
-			// Variable declaration of cv$temp$2$var19 moved.
-			// 
 			// Constructing a random variable input for use later.
-			double cv$temp$2$var19 = prior[0];
+			double var19 = prior[0];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -636,17 +630,15 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = (Math.log((output[i$var37]?cv$temp$2$var19:(1.0 - cv$temp$2$var19))) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((output[i$var37]?var19:(1.0 - var19))) + cv$accumulatedProbabilities);
 		}
 		
 		// Processing random variable 23.
 		// 
 		// Processing sample task 51 of consumer random variable b2.
 		for(int i$var50 = (length / 2); i$var50 < length; i$var50 += 1) {
-			// Variable declaration of cv$temp$3$var22 moved.
-			// 
 			// Constructing a random variable input for use later.
-			double cv$temp$3$var22 = prior[1];
+			double var22 = prior[1];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -660,12 +652,14 @@ final class DirichletBernoulli$MultiThreadCPU extends org.sandwood.runtime.inter
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = (Math.log((output[i$var50]?cv$temp$3$var22:(1.0 - cv$temp$3$var22))) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((output[i$var50]?var22:(1.0 - var22))) + cv$accumulatedProbabilities);
 		}
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
 		// the random value is 0 an impossible value will be accepted.
+		// 
+		// Ratio of the probability of proposed and original sample values
 		// 
 		// Variable declaration of cv$proposedProbability moved.
 		// Declaration comment was:

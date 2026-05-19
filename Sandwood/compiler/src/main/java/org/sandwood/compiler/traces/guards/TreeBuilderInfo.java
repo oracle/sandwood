@@ -8,13 +8,9 @@
 
 package org.sandwood.compiler.traces.guards;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.sandwood.compiler.compilation.CompilationContext;
-import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
-import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.traces.TraceHandle;
@@ -43,20 +39,6 @@ public class TreeBuilderInfo {
         this.position = position;
         this.task = task;
         d.applySubstitutions(position, task, compilationCtx);
-        // Set all base and additional scopes to point to global, the provided scopes
-        // will already have had this done.
-        for(Scope scope:getScopes(task))
-            compilationCtx.addScopeSubstitute(scope, GlobalScope.scope);
-    }
-
-    private Set<Scope> getScopes(DataflowTask<?> task) {
-        Set<Scope> scopes = new HashSet<>();
-        Scope s = task.scope();
-        while(s != null) {
-            scopes.add(s);
-            s = s.getEnclosingScope();
-        }
-        return scopes;
     }
 
     public TraceHandle getTrace() {
@@ -65,8 +47,6 @@ public class TreeBuilderInfo {
 
     public void removeSubstitutions(CompilationContext compilationCtx) {
         d.removeSubstitutions(position, task, compilationCtx);
-        for(Scope scope:getScopes(task))
-            compilationCtx.removeScopeSubstitute(scope);
     }
 
     public void changeSubstitutions(int position, DataflowTask<?> task, CompilationContext compilationCtx) {

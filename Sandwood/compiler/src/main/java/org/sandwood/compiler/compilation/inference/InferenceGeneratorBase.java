@@ -100,6 +100,9 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
         public final List<RandomVariable<?, ?>> consumingRVs;
 
+        // TODO work out if we can make this a private variable of the parent class.
+        public final ScopeConstructor targetScope;
+
         /**
          *
          * @param sampleDesc
@@ -133,6 +136,88 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
             distributionTraces = Traces.findDistributionTraces(sampleDesc.sample.randomVariable, compilationCtx);
 
             this.sampleUpdated = sampleUpdated;
+
+            targetScope = constructTargetScope(compilationCtx);
+        }
+
+        private ScopeConstructor constructTargetScope(CompilationContext compilationCtx) {
+            int size = sampleDesc.scopes.size();
+            for(int i = 1; i < size; i++)
+                compilationCtx.addScopeSubstitute(sampleDesc.scopes.get(i), GlobalScope.scope);
+            ScopeConstructor sc = ScopeConstructor.construct(sampleDesc.sample, distributionTraces, Tree.NoComment,
+                    Tree.NoComment, compilationCtx);
+            sc = sc.addFixedFlag(sampleDesc.sample, false);
+            for(int i = 1; i < size; i++)
+                compilationCtx.removeScopeSubstitute(sampleDesc.scopes.get(i));
+
+            // Add a test to check that the sample inference is needed based on the random variables arguments.
+            sc = constructInferenceCheck(sc, compilationCtx);
+
+            // If required add a guard to ensure that the value to be inferred is not already observed.
+            sc = observationGuard(sc, compilationCtx);
+
+            return sc;
+        }
+
+        /**
+         * A method to construct a guard to prevent inference if the sample value cannot change due to the arguments to
+         * the random variable
+         * 
+         * @param targetScope
+         * @param funcData
+         * @param compilationCtx
+         * @return
+         */
+        private ScopeConstructor constructInferenceCheck(ScopeConstructor targetScope,
+                CompilationContext compilationCtx) {
+            targetScope = targetScope.addCondition(inferenceSampleGuard(compilationCtx)).ifScopeConstructor();
+            return targetScope;
+        }
+
+        @SuppressWarnings("unused")
+        protected IRTreeReturn<BooleanVariable> inferenceSampleGuard(CompilationContext compilationCtx) {
+            return constant(true);
+        }
+
+        /**
+         * A method to construct a guard to prevent inference on observed samples if required. If not required it just
+         * returns the existing scope.
+         * 
+         * @param targetScope
+         * @param funcData
+         * @param compilationCtx
+         * @return
+         */
+        private ScopeConstructor observationGuard(ScopeConstructor targetScope, CompilationContext compilationCtx) {
+            // Get the traces from this sample to observed variables
+            SampleTask<?, ?> s = sampleDesc.sample;
+            Map<Variable<?>, Set<TraceHandle>> observationTraces = compilationCtx.traces
+                    .getUnconditionalObservedTraces(s);
+
+            // If there are no traces return the current target scope
+            if(observationTraces == null)
+                return targetScope;
+
+            // Otherwise create a flag to record if the observed variables are reachable
+            VariableDescription<BooleanVariable> observationGuard = VariableNames.calcVarName("varObserved",
+                    VariableType.BooleanVariable, true);
+            targetScope.addTree((TreeBuilderInfo info) -> {
+                initializeVariable(observationGuard, constant(false), "A guard to record if the variable is observed");
+            });
+
+            // Attempt to reach each of the observed variabls
+            targetScope.addIsolation("Look for a valid path to an observed variable");
+            for(Set<TraceHandle> ts:observationTraces.values()) {
+                for(TraceHandle t:ts) {
+                    ScopeConstructor b = targetScope.addConstraint(t);
+                    b.addTree((TreeBuilderInfo info) -> compilationCtx.addTreeToScope(GlobalScope.scope,
+                            store(observationGuard, constant(true), "Record that this sample is observed")));
+                }
+            }
+
+            // Construct a new target scope that will only execute if none of the observed variables are reachable.
+            targetScope = targetScope.addCondition(negateBoolean(load(observationGuard))).ifScopeConstructor();
+            return targetScope;
         }
 
         /**
@@ -168,230 +253,33 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         // Add any constructors before we start restructuring scopes.
         allocateGlobalStateInternal(compilationCtx, funcData);
 
-        Scope targetScope = constructTargetScope(funcData, compilationCtx);
-
-        // Add a test to check that the sample inference is needed based on the random variables arguments.
-        targetScope = constructInferenceCheck(targetScope, funcData, compilationCtx);
-
-        // If required add a guard to ensure that the value to be inferred is not already observed.
-        targetScope = observationGuard(targetScope, funcData, compilationCtx);
-
         // Clear the context ready to start
-        compilationCtx.pushScope();
-        constructFunctionVariablesInternal(compilationCtx, funcData);
+        constructFunctionVariablesInternal(funcData, compilationCtx);
 
-        compilationCtx.pushScope();
+        getBackTraceScope(funcData).addTree((TreeBuilderInfo outerInfo) -> {
+            ScopeConstructor a = ScopeConstructor.construct(funcData.sampleDesc.sample, GlobalScope.scope,
+                    funcData.distributionTraces,
+                    "Exploring all the possible distribution values for random variable "
+                            + funcData.sampleDesc.sample.randomVariable.getId() + " creating sample task "
+                            + funcData.sampleDesc.id + ".",
+                    Tree.NoComment, compilationCtx);
 
-        ScopeConstructor a = ScopeConstructor.construct(funcData.sampleDesc.sample, getBackTraceScope(funcData),
-                funcData.distributionTraces,
-                "Exploring all the possible distribution values for random variable "
-                        + funcData.sampleDesc.sample.randomVariable.getId() + " creating sample task "
-                        + funcData.sampleDesc.id + ".",
-                Tree.NoComment, compilationCtx);
+            a = a.addFixedFlag(funcData.sampleDesc.sample, false);
 
-        a = a.addFixedFlag(funcData.sampleDesc.sample, false);
+            a.addTree((TreeBuilderInfo info) -> backTraceScopeStartIR(funcData, info, compilationCtx));
 
-        a.addTree((TreeBuilderInfo info) -> backTraceScopeStartIR(funcData, info, compilationCtx));
+            { // Handle all the normal samples
+                ScopeConstructor sourceDisArgs = a.applyAllDistributedArguments();
+                sourceDisArgs.addTree(0,
+                        (TreeBuilderInfo info) -> getPerSourceConfigStartIR(funcData, info, compilationCtx));
 
-        { // Handle all the normal samples
-            ScopeConstructor sourceDisArgs = a.applyAllDistributedArguments();
-            sourceDisArgs.addTree(0,
-                    (TreeBuilderInfo info) -> getPerSourceConfigStartIR(funcData, info, compilationCtx));
+                // For each random variable that consumes the results of this sample.
+                for(RandomVariable<?, ?> consumingRV:funcData.consumingRVs) {
+                    ScopeConstructor b = sourceDisArgs.resetProbabilities();
+                    b = b.addIsolation("Processing random variable " + consumingRV.getId() + ".");
 
-            // For each random variable that consumes the results of this sample.
-            for(RandomVariable<?, ?> consumingRV:funcData.consumingRVs) {
-                ScopeConstructor b = sourceDisArgs.resetProbabilities();
-                b = b.addIsolation("Processing random variable " + consumingRV.getId() + ".");
-
-                Map<SampleTask<?, ?>, Set<TraceHandle>> groupedTraces = new LinkedHashMap<>();
-                addTraces(groupedTraces, compilationCtx.traces.getSampleVariableTraces(consumingRV));
-                Set<Set<TraceHandle>> rvDistTraces = Traces.findDistributionTraces(consumingRV, compilationCtx);
-                // Get the trace of operations between the consuming random variable, and the
-                // sample task.
-                Set<TraceHandle> consumerTraces = funcData.getToConsumingRV(consumingRV);
-
-                b = b.addConstraints(consumerTraces, rvDistTraces,
-                        funcData.sampleUpdated ? PASS_VALUES : IGNORE_VALUES);
-
-                // Inside this loop we have a Source Sample -> ConsumerRV -> Consumer Sample
-                // task mapping, and now explore the distributed properties.
-                for(SampleTask<?, ?> s:groupedTraces.keySet()) {
-                    if(s.isDistribution()) {
-                        // We know that the "sample" value is not fixed because we are calculating it.
-                        if(s != sample) {
-                            IRTreeReturn<BooleanVariable> ifGuard;
-                            if(compilationCtx.traces.getFixableTasks().contains(s))
-                                ifGuard = load(VariableNames.fixedFlagName(s));
-                            else
-                                ifGuard = constant(false);
-                            IfElseScopeConstructors ifsc = b.addCondition(ifGuard);
-                            processSample(s, consumingRV, ifsc.ifScopeConstructor, groupedTraces.get(s), funcData,
-                                    compilationCtx);
-                        }
-                    } else {
-                        processSample(s, consumingRV, b, groupedTraces.get(s), funcData, compilationCtx);
-                    }
-                }
-            }
-
-            // For each branching trace that is reached
-            Map<ProducingDataflowTask<?>, Set<TraceHandle>> branches = compilationCtx.traces
-                    .getTracesToConditionals(sample);
-            for(ProducingDataflowTask<?> p:branches.keySet()) {
-                Set<TraceHandle> toBranch = branches.get(p);
-
-                ScopeConstructor b = sourceDisArgs.resetProbabilities();
-                b = b.addIsolation("Processing conditional point" + p.id() + ".");
-                b = b.addConstraints(toBranch);
-                SplitConditionalTraces splitTraces = compilationCtx.traces.getSplitConditionalTraces(p);
-                for(ProducingDataflowTask<?> sinkTask:splitTraces.sinkToConditional.keySet()) {
-                    ScopeConstructor c = b.addIsolation();
-                    Variable<?> sink = sinkTask.getOutput();
-                    Map<DataflowTaskArgDesc, Set<TraceHandle>> sinkToConditional = splitTraces.sinkToConditional
-                            .get(sinkTask);
-                    if(sink.isObserved()) {
-
-                        c.addTree((TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info, compilationCtx));
-                        // Handle observed outputs.
-                        for(DataflowTaskArgDesc d:sinkToConditional.keySet()) {
-                            ScalarVariable<?> input = (ScalarVariable<?>) d.task.getInput(d.argPos);
-                            if(input.isDeterministic()) {
-                                // input is deterministic, so can be recovered directly.
-                                processObservedDeterministicConditional(sink, sinkToConditional.get(d), input, funcData,
-                                        c, compilationCtx);
-                            } else {
-                                // Input will need to be inverted for a calculation with the source random variable
-                                // There currently can only be one random variable in this scenario.
-                                throw new MissingFeatureException(
-                                        "This code is part of the feature to observe outputs from conditionals. It is not yet fully implemented.");
-                            }
-                        }
-                        c.addTree((TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info, compilationCtx));
-                    } else {
-                        for(DataflowTaskArgDesc branchPointDesc:sinkToConditional.keySet()) {
-                            // Handle RV consumer
-                            RandomVariable<?, ?> consumingRV = (RandomVariable<?, ?>) sink;
-                            Map<SampleTask<?, ?>, Set<TraceHandle>> groupedTraces = new LinkedHashMap<>();
-                            addTraces(groupedTraces, compilationCtx.traces.getSampleVariableTraces(consumingRV));
-                            Set<Set<TraceHandle>> rvDistTraces = Traces.findDistributionTraces(consumingRV,
-                                    compilationCtx);
-                            // Set the constraint linking the branch point and the consuming random variable.
-                            ScopeConstructor consumerSC = c.addConstraints(sinkToConditional.get(branchPointDesc),
-                                    rvDistTraces, funcData.sampleUpdated ? PASS_VALUES : IGNORE_VALUES);
-
-                            // Inside this loop we have a Source Sample -> ConsumerRV -> Consumer Sample
-                            // task mapping, and now explore the distributed properties.
-                            for(SampleTask<?, ?> s:groupedTraces.keySet()) {
-                                if(s.isDistribution()) {
-                                    // We know that the "sample" value is not fixed because we are calculating it.
-                                    if(s != sample) {
-                                        IRTreeReturn<BooleanVariable> ifGuard;
-                                        if(compilationCtx.traces.getFixableTasks().contains(s))
-                                            ifGuard = load(VariableNames.fixedFlagName(s));
-                                        else
-                                            ifGuard = constant(false);
-                                        IfElseScopeConstructors ifsc = consumerSC.addCondition(ifGuard);
-                                        processSample(s, consumingRV, ifsc.ifScopeConstructor, groupedTraces.get(s),
-                                                funcData, compilationCtx);
-                                    }
-                                } else {
-                                    processSample(s, consumingRV, consumerSC, groupedTraces.get(s), funcData,
-                                            compilationCtx);
-                                }
-                            }
-
-                            // Handle the RV producers passing through this branch.
-                            Map<SampleTask<?, ?>, Set<TraceHandle>> conditionalToSource = splitTraces.conditionalToSource
-                                    .get(branchPointDesc);
-                            for(SampleTask<?, ?> source:conditionalToSource.keySet()) {
-                                RandomVariable<?, ?> sourceRV = source.randomVariable;
-                                Set<Set<TraceHandle>> sourceRVDistTraces = Traces.findDistributionTraces(sourceRV,
-                                        compilationCtx);
-                                Set<TraceHandle> tracesToBranch = conditionalToSource.get(source);
-                                ScopeConstructor sourceSC = c.addBackConstraints(tracesToBranch, sourceRVDistTraces,
-                                        IGNORE_VALUES);
-
-                                TraceHandle sampleTrace = compilationCtx.traces
-                                        .getSampleTrace(source).traceToSampleVariable;
-                                sourceSC = sourceSC
-                                        .addComment("Processing sample task " + source.id()
-                                                + " of consumer random variable " + sourceRV.getAlias() + ".")
-                                        .addConstraint(sampleTrace);
-
-                                sourceSC.addTree(2, (TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info,
-                                        compilationCtx));
-
-                                ScopeConstructor dConsumerAllArgs = sourceSC.applyAllDistributedArguments();
-                                /*
-                                 * This will not depend on distributions as it goes either to a sample value, so can
-                                 * only have put operations, or to an observed value so is not allowed to be a
-                                 * distribution. It does need to have a constraint on the trace though to make sure the
-                                 * trace is valid.
-                                 */
-                                dConsumerAllArgs.addTree((TreeBuilderInfo info) -> {
-
-                                    /*
-                                     * Construct the arguments for the consumer random variable. If we could apply the
-                                     * distributions before the sample task is fixed this could be moved further out and
-                                     * run only once. However, as in the future the may be distributions in the sample
-                                     * trace that is not possible, so, it is placed here with the expectation that the
-                                     * optimisation phase can move shared values out where appropriate.
-                                     */
-                                    getConsumerRVInputIR(info, sourceRV, funcData, compilationCtx);
-
-                                    Trace trace = sampleTrace.getTrace();
-
-                                    DataflowTaskArgDesc d = trace.pop();
-                                    ProducingDataflowTask<?> t = d.task;
-
-                                    Variable<?> v = t.getOutput();
-                                    IRTreeReturn<?> current = v.getForwardIR(compilationCtx);
-
-                                    while(t.getType() != DFType.SAMPLE) {
-                                        current = t.getInverseIR(d.argPos, current, info.backTraceInfo, compilationCtx);
-                                        d = trace.pop();
-                                        t = d.task;
-                                    }
-
-                                    if(info.backTraceInfo.noGetValues() != 0) {
-                                        Location start = sampleTrace.get(0).task.getLocation();
-                                        Location end = sampleTrace.peek().task.getLocation();
-                                        throw new CompilerException(
-                                                "Unaccounted for get in trace " + sampleTrace + "\nStarting at line "
-                                                        + start.startLine + " through to line " + end.endLine);
-                                    }
-
-                                    getObservationToSampleIR(source, current, funcData, info, compilationCtx);
-                                });
-
-                                sourceSC.addTree(2,
-                                        (TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info, compilationCtx));
-                            }
-                        }
-                    }
-                }
-            }
-
-            sourceDisArgs.addTree(0, (TreeBuilderInfo info) -> getPerSourceConfigEndIR(funcData, info, compilationCtx));
-        }
-
-        { // Handle all the distributed samples
-          // For each random variable that consumes the results of this sample.
-            for(RandomVariable<?, ?> consumingRV:funcData.consumingRVs) {
-
-                // Find any distribution sample tasks for this random variable.
-                Set<DistributionSampleTask<?, ?>> tasks = new HashSet<>();
-                for(DataflowTask<?> d:consumingRV.getConsumers()) {
-                    if(d.getType() == DFType.SAMPLE) {
-                        SampleTask<?, ?> s = (SampleTask<?, ?>) d;
-                        if(s.isDistribution())
-                            tasks.add((DistributionSampleTask<?, ?>) d);
-                    }
-                }
-
-                if(!tasks.isEmpty()) {
-                    ScopeConstructor b = a.addIsolation("Processing random variable " + consumingRV.getId() + ".");
-
+                    Map<SampleTask<?, ?>, Set<TraceHandle>> groupedTraces = new LinkedHashMap<>();
+                    addTraces(groupedTraces, compilationCtx.traces.getSampleVariableTraces(consumingRV));
                     Set<Set<TraceHandle>> rvDistTraces = Traces.findDistributionTraces(consumingRV, compilationCtx);
                     // Get the trace of operations between the consuming random variable, and the
                     // sample task.
@@ -402,30 +290,217 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
                     // Inside this loop we have a Source Sample -> ConsumerRV -> Consumer Sample
                     // task mapping, and now explore the distributed properties.
-                    for(DistributionSampleTask<?, ?> ds:tasks) {
-                        if(ds == sample) // If the distributed sample is the same as the sample we know it is not
-                            // fixed, otherwise we have to test.
-                            processDistributionSample(ds, consumingRV, b, funcData, compilationCtx);
-                        else {
-                            IRTreeReturn<BooleanVariable> ifGuard;
-                            if(compilationCtx.traces.getFixableTasks().contains(ds))
-                                ifGuard = negateBoolean(load(VariableNames.fixedFlagName(ds)));
-                            else
-                                ifGuard = constant(true);
-                            IfElseScopeConstructors ifsc = b.addCondition(ifGuard);
-                            processDistributionSample(ds, consumingRV, ifsc.ifScopeConstructor, funcData,
-                                    compilationCtx);
+                    for(SampleTask<?, ?> s:groupedTraces.keySet()) {
+                        if(s.isDistribution()) {
+                            // We know that the "sample" value is not fixed because we are calculating it.
+                            if(s != sample) {
+                                IRTreeReturn<BooleanVariable> ifGuard;
+                                if(compilationCtx.traces.getFixableTasks().contains(s))
+                                    ifGuard = load(VariableNames.fixedFlagName(s));
+                                else
+                                    ifGuard = constant(false);
+                                IfElseScopeConstructors ifsc = b.addCondition(ifGuard);
+                                processSample(s, consumingRV, ifsc.ifScopeConstructor(), groupedTraces.get(s), funcData,
+                                        compilationCtx);
+                            }
+                        } else {
+                            processSample(s, consumingRV, b, groupedTraces.get(s), funcData, compilationCtx);
+                        }
+                    }
+                }
+
+                // For each branching trace that is reached
+                Map<ProducingDataflowTask<?>, Set<TraceHandle>> branches = compilationCtx.traces
+                        .getTracesToConditionals(sample);
+                for(ProducingDataflowTask<?> p:branches.keySet()) {
+                    Set<TraceHandle> toBranch = branches.get(p);
+
+                    ScopeConstructor b = sourceDisArgs.resetProbabilities();
+                    b = b.addIsolation("Processing conditional point" + p.id() + ".");
+                    b = b.addConstraints(toBranch);
+                    SplitConditionalTraces splitTraces = compilationCtx.traces.getSplitConditionalTraces(p);
+                    for(ProducingDataflowTask<?> sinkTask:splitTraces.sinkToConditional.keySet()) {
+                        ScopeConstructor c = b.addIsolation();
+                        Variable<?> sink = sinkTask.getOutput();
+                        Map<DataflowTaskArgDesc, Set<TraceHandle>> sinkToConditional = splitTraces.sinkToConditional
+                                .get(sinkTask);
+                        if(sink.isObserved()) {
+
+                            c.addTree((TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info, compilationCtx));
+                            // Handle observed outputs.
+                            for(DataflowTaskArgDesc d:sinkToConditional.keySet()) {
+                                ScalarVariable<?> input = (ScalarVariable<?>) d.task.getInput(d.argPos);
+                                if(input.isDeterministic()) {
+                                    // input is deterministic, so can be recovered directly.
+                                    processObservedDeterministicConditional(sink, sinkToConditional.get(d), input,
+                                            funcData, c, compilationCtx);
+                                } else {
+                                    // Input will need to be inverted for a calculation with the source random variable
+                                    // There currently can only be one random variable in this scenario.
+                                    throw new MissingFeatureException(
+                                            "This code is part of the feature to observe outputs from conditionals. It is not yet fully implemented.");
+                                }
+                            }
+                            c.addTree((TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info, compilationCtx));
+                        } else {
+                            for(DataflowTaskArgDesc branchPointDesc:sinkToConditional.keySet()) {
+                                // Handle RV consumer
+                                RandomVariable<?, ?> consumingRV = (RandomVariable<?, ?>) sink;
+                                Map<SampleTask<?, ?>, Set<TraceHandle>> groupedTraces = new LinkedHashMap<>();
+                                addTraces(groupedTraces, compilationCtx.traces.getSampleVariableTraces(consumingRV));
+                                Set<Set<TraceHandle>> rvDistTraces = Traces.findDistributionTraces(consumingRV,
+                                        compilationCtx);
+                                // Set the constraint linking the branch point and the consuming random variable.
+                                ScopeConstructor consumerSC = c.addConstraints(sinkToConditional.get(branchPointDesc),
+                                        rvDistTraces, funcData.sampleUpdated ? PASS_VALUES : IGNORE_VALUES);
+
+                                // Inside this loop we have a Source Sample -> ConsumerRV -> Consumer Sample
+                                // task mapping, and now explore the distributed properties.
+                                for(SampleTask<?, ?> s:groupedTraces.keySet()) {
+                                    if(s.isDistribution()) {
+                                        // We know that the "sample" value is not fixed because we are calculating it.
+                                        if(s != sample) {
+                                            IRTreeReturn<BooleanVariable> ifGuard;
+                                            if(compilationCtx.traces.getFixableTasks().contains(s))
+                                                ifGuard = load(VariableNames.fixedFlagName(s));
+                                            else
+                                                ifGuard = constant(false);
+                                            IfElseScopeConstructors ifsc = consumerSC.addCondition(ifGuard);
+                                            processSample(s, consumingRV, ifsc.ifScopeConstructor(),
+                                                    groupedTraces.get(s), funcData, compilationCtx);
+                                        }
+                                    } else {
+                                        processSample(s, consumingRV, consumerSC, groupedTraces.get(s), funcData,
+                                                compilationCtx);
+                                    }
+                                }
+
+                                // Handle the RV producers passing through this branch.
+                                Map<SampleTask<?, ?>, Set<TraceHandle>> conditionalToSource = splitTraces.conditionalToSource
+                                        .get(branchPointDesc);
+                                for(SampleTask<?, ?> source:conditionalToSource.keySet()) {
+                                    RandomVariable<?, ?> sourceRV = source.randomVariable;
+                                    Set<Set<TraceHandle>> sourceRVDistTraces = Traces.findDistributionTraces(sourceRV,
+                                            compilationCtx);
+                                    Set<TraceHandle> tracesToBranch = conditionalToSource.get(source);
+                                    ScopeConstructor sourceSC = c.addBackConstraints(tracesToBranch, sourceRVDistTraces,
+                                            IGNORE_VALUES);
+
+                                    TraceHandle sampleTrace = compilationCtx.traces
+                                            .getSampleTrace(source).traceToSampleVariable;
+                                    sourceSC = sourceSC
+                                            .addComment("Processing sample task " + source.id()
+                                                    + " of consumer random variable " + sourceRV.getAlias() + ".")
+                                            .addConstraint(sampleTrace);
+
+                                    sourceSC.addTree(2, (TreeBuilderInfo info) -> getPerConsumerStartIR(funcData, info,
+                                            compilationCtx));
+
+                                    ScopeConstructor dConsumerAllArgs = sourceSC.applyAllDistributedArguments();
+                                    /*
+                                     * This will not depend on distributions as it goes either to a sample value, so can
+                                     * only have put operations, or to an observed value so is not allowed to be a
+                                     * distribution. It does need to have a constraint on the trace though to make sure
+                                     * the trace is valid.
+                                     */
+                                    dConsumerAllArgs.addTree((TreeBuilderInfo info) -> {
+
+                                        /*
+                                         * Construct the arguments for the consumer random variable. If we could apply
+                                         * the distributions before the sample task is fixed this could be moved further
+                                         * out and run only once. However, as in the future the may be distributions in
+                                         * the sample trace that is not possible, so, it is placed here with the
+                                         * expectation that the optimisation phase can move shared values out where
+                                         * appropriate.
+                                         */
+                                        getConsumerRVInputIR(info, sourceRV, funcData, compilationCtx);
+
+                                        Trace trace = sampleTrace.getTrace();
+
+                                        DataflowTaskArgDesc d = trace.pop();
+                                        ProducingDataflowTask<?> t = d.task;
+
+                                        Variable<?> v = t.getOutput();
+                                        IRTreeReturn<?> current = v.getForwardIR(compilationCtx);
+
+                                        while(t.getType() != DFType.SAMPLE) {
+                                            current = t.getInverseIR(d.argPos, current, info.backTraceInfo,
+                                                    compilationCtx);
+                                            d = trace.pop();
+                                            t = d.task;
+                                        }
+
+                                        if(info.backTraceInfo.noGetValues() != 0) {
+                                            Location start = sampleTrace.get(0).task.getLocation();
+                                            Location end = sampleTrace.peek().task.getLocation();
+                                            throw new CompilerException("Unaccounted for get in trace " + sampleTrace
+                                                    + "\nStarting at line " + start.startLine + " through to line "
+                                                    + end.endLine);
+                                        }
+
+                                        getObservationToSampleIR(source, current, funcData, info, compilationCtx);
+                                    });
+
+                                    sourceSC.addTree(2, (TreeBuilderInfo info) -> getPerConsumerEndIR(funcData, info,
+                                            compilationCtx));
+                                }
+                            }
+                        }
+                    }
+                }
+
+                sourceDisArgs.addTree(0,
+                        (TreeBuilderInfo info) -> getPerSourceConfigEndIR(funcData, info, compilationCtx));
+            }
+
+            { // Handle all the distributed samples
+              // For each random variable that consumes the results of this sample.
+                for(RandomVariable<?, ?> consumingRV:funcData.consumingRVs) {
+
+                    // Find any distribution sample tasks for this random variable.
+                    Set<DistributionSampleTask<?, ?>> tasks = new HashSet<>();
+                    for(DataflowTask<?> d:consumingRV.getConsumers()) {
+                        if(d.getType() == DFType.SAMPLE) {
+                            SampleTask<?, ?> s = (SampleTask<?, ?>) d;
+                            if(s.isDistribution())
+                                tasks.add((DistributionSampleTask<?, ?>) d);
+                        }
+                    }
+
+                    if(!tasks.isEmpty()) {
+                        ScopeConstructor b = a.addIsolation("Processing random variable " + consumingRV.getId() + ".");
+
+                        Set<Set<TraceHandle>> rvDistTraces = Traces.findDistributionTraces(consumingRV, compilationCtx);
+                        // Get the trace of operations between the consuming random variable, and the
+                        // sample task.
+                        Set<TraceHandle> consumerTraces = funcData.getToConsumingRV(consumingRV);
+
+                        b = b.addConstraints(consumerTraces, rvDistTraces,
+                                funcData.sampleUpdated ? PASS_VALUES : IGNORE_VALUES);
+
+                        // Inside this loop we have a Source Sample -> ConsumerRV -> Consumer Sample
+                        // task mapping, and now explore the distributed properties.
+                        for(DistributionSampleTask<?, ?> ds:tasks) {
+                            if(ds == sample) // If the distributed sample is the same as the sample we know it is not
+                                // fixed, otherwise we have to test.
+                                processDistributionSample(ds, consumingRV, b, funcData, compilationCtx);
+                            else {
+                                IRTreeReturn<BooleanVariable> ifGuard;
+                                if(compilationCtx.traces.getFixableTasks().contains(ds))
+                                    ifGuard = negateBoolean(load(VariableNames.fixedFlagName(ds)));
+                                else
+                                    ifGuard = constant(true);
+                                IfElseScopeConstructors ifsc = b.addCondition(ifGuard);
+                                processDistributionSample(ds, consumingRV, ifsc.ifScopeConstructor(), funcData,
+                                        compilationCtx);
+                            }
                         }
                     }
                 }
             }
-        }
 
-        a.addTree((TreeBuilderInfo info) -> backTraceScopeEndIR(funcData, info, compilationCtx));
-
-        IRTreeVoid t = compilationCtx.getOutermostScopeTree();
-        compilationCtx.popScope();
-        compilationCtx.addTreeToScope(GlobalScope.scope, t);
+            a.addTree((TreeBuilderInfo info) -> backTraceScopeEndIR(funcData, info, compilationCtx));
+        });
 
         finalize(funcData, compilationCtx);
 
@@ -433,23 +508,13 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         if(funcData.sampleDesc.sample.isDistribution())
             addDistributionProbabilities(funcData, compilationCtx);
         else {
-            compilationCtx.pushScope();
-            addSampleValueTree(funcData, compilationCtx);
-            IRTreeVoid valueTree = compilationCtx.getOutermostScopeTree();
-            compilationCtx.popScope();
-            compilationCtx.addTreeToScope(GlobalScope.scope, valueTree);
+            funcData.targetScope.addTree((TreeBuilderInfo info) -> {
+                addSampleValueTree(funcData, compilationCtx);
+            });
         }
 
         // Get the constructed tree.
         IRTreeVoid result = compilationCtx.getOutermostScopeTree();
-
-        // Place the result in the correct scope.
-        compilationCtx.popScope();
-        compilationCtx.addTreeToScope(targetScope, result);
-        result = compilationCtx.getOutermostScopeTree();
-
-        // Clear any leftover substitutions.
-        removeTargetScopeSubstitutes(funcData, compilationCtx);
 
         /*
          * Get the values names of any loops, and use them as the arguments for this function. At the same time known
@@ -470,65 +535,6 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         // And place the subtree in a void function.
         return voidFunction(Visibility.PRIVATE, FunctionName.createFunctionName(funcData.sampleDesc.uniqueName),
                 functionArgs, result, comment, knownValues);
-    }
-
-    /**
-     * A method to construct a guard to prevent inference if the sample value cannot change due to the arguments to the
-     * random variable
-     * 
-     * @param targetScope
-     * @param funcData
-     * @param compilationCtx
-     * @return
-     */
-    private Scope constructInferenceCheck(Scope targetScope, FuncData funcData, CompilationContext compilationCtx) {
-        targetScope = new IfScope(targetScope, inferenceSampleGuard(funcData, compilationCtx));
-        return targetScope;
-    }
-
-    @SuppressWarnings("unused")
-    protected IRTreeReturn<BooleanVariable> inferenceSampleGuard(FuncData funcData, CompilationContext compilationCtx) {
-        return constant(true);
-    }
-
-    /**
-     * A method to construct a guard to prevent inference on observed samples if required. If not required it just
-     * returns the existing scope.
-     * 
-     * @param targetScope
-     * @param funcData
-     * @param compilationCtx
-     * @return
-     */
-    private Scope observationGuard(Scope targetScope, FuncData funcData, CompilationContext compilationCtx) {
-        // Get the traces from this sample to observed variables
-        SampleTask<?, ?> s = funcData.sampleDesc.sample;
-        Map<Variable<?>, Set<TraceHandle>> observationTraces = compilationCtx.traces.getUnconditionalObservedTraces(s);
-
-        // If there are no traces return the current target scope
-        if(observationTraces == null)
-            return targetScope;
-
-        // Otherwise create a flag to record if the observed variables are reachable
-        VariableDescription<BooleanVariable> observationGuard = VariableNames.calcVarName("varObserved",
-                VariableType.BooleanVariable, true);
-        compilationCtx.addTreeToScope(targetScope,
-                initializeVariable(observationGuard, constant(false), "A guard to record if the variable is observed"));
-
-        // Attempt to reach each of the observed variables
-        ScopeConstructor a = ScopeConstructor.construct(s, targetScope, "Look for a valid path to an observed variable",
-                compilationCtx);
-        for(Set<TraceHandle> ts:observationTraces.values()) {
-            for(TraceHandle t:ts) {
-                ScopeConstructor b = a.addConstraint(t);
-                b.addTree((TreeBuilderInfo info) -> compilationCtx.addTreeToScope(GlobalScope.scope,
-                        store(observationGuard, constant(true), "Record that this sample is observed")));
-            }
-        }
-
-        // Construct a new target scope that will only execute if none of the observed variables are reachable.
-        targetScope = new IfScope(targetScope, negateBoolean(load(observationGuard)));
-        return targetScope;
     }
 
     private KnownValuesIR constructKnownValues(FuncData funcData, CompilationContext compilationCtx) {
@@ -723,7 +729,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
     protected abstract String getInferenceType();
 
-    protected abstract Scope getBackTraceScope(FuncData funcData);
+    protected abstract ScopeConstructor getBackTraceScope(FuncData funcData);
 
     protected abstract void getDistributionSampleIR(DistributionSampleTask<?, ?> s,
             IRTreeReturn<DoubleVariable> sourceProbability, FuncData funcData, TreeBuilderInfo info,
@@ -754,14 +760,6 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
             IRTreeReturn<C> current, ScalarVariable<D> input, FuncData funcData, TreeBuilderInfo info,
             CompilationContext compilationCtx);
 
-    private void removeTargetScopeSubstitutes(FuncData funcData, CompilationContext compilationCtx) {
-        int noScopes = funcData.sampleDesc.scopes.size();
-        for(int i = 1; i < noScopes; i++) { // First scope will always be global.
-            Scope innerScope = funcData.sampleDesc.scopes.get(i);
-            compilationCtx.removeScopeSubstitute(innerScope);
-        }
-    }
-
     private void addTraces(Map<SampleTask<?, ?>, Set<TraceHandle>> groupedTraces, List<TraceHandle> traces) {
         for(TraceHandle t:traces) {
             SampleTask<?, ?> s = (SampleTask<?, ?>) t.get(0).task;
@@ -770,20 +768,11 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
         }
     }
 
+    // This method takes a scope constructor as it might not always be applied to the target scope. In MH it will be
+    // needed to both set and revert the sample value
     protected abstract void addSampleValueTree(FuncData funcData, CompilationContext compilationCtx);
 
-    private Scope constructTargetScope(FuncData funcData, CompilationContext compilationCtx) {
-        Scope scope = GlobalScope.scope;
-        int noScopes = funcData.sampleDesc.scopes.size();
-        for(int i = 1; i < noScopes; i++) { // First scope will always be global.
-            Scope innerScope = funcData.sampleDesc.scopes.get(i);
-            compilationCtx.addScopeSubstitute(innerScope, GlobalScope.scope);
-        }
-
-        return scope;
-    }
-
-    protected abstract void constructFunctionVariablesInternal(CompilationContext compilationCtx, FuncData funcData);
+    protected abstract void constructFunctionVariablesInternal(FuncData funcData, CompilationContext compilationCtx);
 
     /**
      * Method to get the inverse intermediate representation tree.
