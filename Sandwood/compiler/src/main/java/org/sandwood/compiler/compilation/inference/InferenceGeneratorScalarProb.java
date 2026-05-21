@@ -36,15 +36,12 @@ import java.util.Map;
 
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.FunctionType;
+import org.sandwood.compiler.compilation.CompilationContext.CompilationPhase;
 import org.sandwood.compiler.compilation.util.TreeUtils;
-import org.sandwood.compiler.dataflowGraph.Sandwood;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
-import org.sandwood.compiler.dataflowGraph.scopes.Scope;
-import org.sandwood.compiler.dataflowGraph.scopes.ScopeStack;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
-import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -57,20 +54,21 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
+import org.sandwood.compiler.traces.Traces;
 import org.sandwood.compiler.traces.guards.ScopeConstructor;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
-import org.sandwood.compiler.trees.irTree.IRLoad;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
+import org.sandwood.compiler.trees.irTree.IRTree.IRTreeType;
 
 /**
  * Class that implements the specific method bodies to allow inference to be performed by calculating the probabilities
  * of provided samples. The formulas for the probability of each value being are as follows:
  * <p>
  * The probabilities for the source RV generating the value, and each sample task from a consuming RV that produce a
- * fixed output our combined for efficiency reasons, but can be described for each part as.
+ * fixed output are combined for efficiency reasons, but can be described for each part as.
  * <p>
  * Probability of the source generating the marginalized value = (Sum over possible distributed source arguments 'ds'
  * (P(source_value | ds) * p(ds))) / (Sum over possible distributed source arguments 'ds' P(ds))
@@ -129,12 +127,10 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         }
     }
 
-    private int id = 0;
-
     private final static VariableDescription<IntVariable> valuePosName = VariableNames.calcVarName("valuePos",
             VariableType.IntVariable, false);
 
-    protected final static VariableDescription<IntVariable> numStatesName = VariableNames.calcVarName("numNumStates",
+    protected final static VariableDescription<IntVariable> numStatesName = VariableNames.calcVarName("numStates",
             VariableType.IntVariable, false);
 
     // Flags for the different variables that we will need to construct for this
@@ -181,31 +177,39 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
 
     // The current value being considered
     private VariableDescription<A> currentValueName;
+    private Variable<A> currentValue;
 
     private boolean canSetCurrent = false;
 
     @Override
-    protected void constructFunctionVariables(CompilationContext compilationCtx, FuncData funcData) {
+    protected void constructFunctionVariables(FuncData funcData, CompilationContext compilationCtx) {
         // TODO update this so that it just recovers the maximum number of states from the random variable.
-        compilationCtx.addTreeToScope(GlobalScope.scope,
-                initializeVariable(numStatesName, constant(0), "Calculate the number of states to evaluate."));
+        funcData.targetScope.addTree((TreeBuilderInfo) -> {
+            compilationCtx.addTreeToScope(GlobalScope.scope,
+                    initializeVariable(numStatesName, constant(0), "Calculate the number of states to evaluate."));
+        });
 
-        ScopeConstructor a = ScopeConstructor
-                .construct(funcData.sampleDesc.sample, funcData.distributionTraces,
-                        "Exploring all the possible state counts for random variable "
-                                + funcData.sampleDesc.sample.randomVariable.getId() + ".",
-                        Tree.NoComment, compilationCtx);
-        a = a.applyAllDistributedArguments();
-        a.addTree((TreeBuilderInfo info) -> {
+        ScopeConstructor internal;
+        if(funcData.distributionTraces != Traces.noDistributionTraces) {
+            internal = funcData.targetScope.addComment("Exploring all the possible state counts for random variable "
+                    + funcData.sampleDesc.sample.randomVariable.getId() + ".");
+            internal = internal.applyAllDistributedArguments();
+        } else {
+            internal = funcData.targetScope.addIsolation();
+        }
+
+        internal.addTree((TreeBuilderInfo info) -> {
             compilationCtx.addTreeToScope(GlobalScope.scope, store(numStatesName,
                     max(load(numStatesName), funcData.noStates.getForwardIR(compilationCtx)), getInferenceType()));
         });
 
-        constructFunctionVariablesProb(compilationCtx, funcData);
+        funcData.targetScope.addTree((TreeBuilderInfo info) -> {
+            constructFunctionVariablesProb(compilationCtx, funcData);
+        });
 
         currentValueName = VariableNames.calcVarName("currentValue", funcData.sampleDesc.output.getType(), true);
-
-        compilationCtx.addSubstitute(funcData.sampleDesc.output, Variable.namedVariable(currentValueName));
+        currentValue = Variable.namedVariable(currentValueName);
+        compilationCtx.addSubstitute(funcData.sampleDesc.output, currentValue);
     }
 
     protected abstract void constructFunctionVariablesProb(CompilationContext compilationCtx, FuncData funcData);
@@ -426,35 +430,29 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
 
         for(int i = 0; i < noInputs; i++) {
             Variable<?> v = randomInputs.get(i);
-            args.add(constructScopedArg(v, compilationCtx));
+            args.add(constructInput(v, compilationCtx));
             if(v.getType().isArray())
-                args.add(constructScopedArg(((ArrayVariable<?>) v).length(), compilationCtx));
+                args.add(constructInput(((ArrayVariable<?>) v).length(), compilationCtx));
         }
         return args;
     }
 
-    private <C extends Variable<C>> IRLoad<C> constructScopedArg(Variable<C> v, CompilationContext compilationCtx) {
-        VariableDescription<C> tempName = VariableNames.calcVarName("temp", Integer.toString(id++),
-                v.getUniqueVarDesc().name.getName(), v.getType(), false);
-        compilationCtx.addTreeToScope(GlobalScope.scope, initializeUnsetVariable(tempName, Tree.NoComment));
-        compilationCtx.pushScope();
-        IRTreeReturn<C> value = compilationCtx.getSubstitute(v).getForwardIR(compilationCtx);
-        // A hack so that the variable name of the constructed value is saved to keep the optimised code cleaner. Just
-        // the else branch will also generate correct code.
-        VariableDescription<C> pName = v.getUniqueVarDesc();
-        if(!v.isIntermediate() && !v.isSample() && !v.isDeterministic() && !compilationCtx.initialized(v)) {
-            compilationCtx.addTreeToScope(v.getParent().scope(),
-                    initializeVariable(pName, value, "Constructing a random variable input for use later."));
-            compilationCtx.addInitialized(v);
+    private <C extends Variable<C>> IRTreeReturn<C> constructInput(Variable<C> p, CompilationContext compilationCtx) {
+        if(compilationCtx.initializedInScope(p) || p.isSample() || p.isIntermediate())
+            return p.getForwardIR(compilationCtx);
 
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.store(tempName, load(pName), Tree.NoComment));
-        } else {
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.store(tempName, value, Tree.NoComment));
-        }
-        IRTreeVoid s = IRTree.treeScope(compilationCtx.getOutermostScopeTree(), Tree.NoComment);
-        compilationCtx.popScope();
-        compilationCtx.addTreeToScope(GlobalScope.scope, s);
-        return load(tempName);
+        IRTreeReturn<C> pTree = p.getForwardIR(compilationCtx);
+        IRTreeType type = pTree.type;
+        // TODO add a size metric to the trees and perform this step if the tree size is 1.
+        if(type == IRTreeType.LOAD || type == IRTreeType.CONST_BOOLEAN || type == IRTreeType.CONST_DOUBLE
+                || type == IRTreeType.CONST_INT)
+            return pTree;
+
+        Variable<C> pInit = compilationCtx.addInitialized(p);
+        VariableDescription<C> pName = pInit.getUniqueVarDesc();
+        compilationCtx.addTreeToScope(p.scope(),
+                initializeVariable(pName, pTree, "Constructing a random variable input for use later."));
+        return IRTree.load(pName);
     }
 
     @Override
@@ -470,19 +468,15 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
      * 
      */
     @Override
-    protected Scope getBackTraceScope(FuncData funcData) {
-        // Push the scope onto the stack.
-        ScopeStack.pushScope(GlobalScope.scope);
+    protected ScopeConstructor getBackTraceScope(FuncData funcData) {
+        ScopeConstructor target = funcData.targetScope.addForLoop(Variable.intVariable(0),
+                Variable.namedVariable(numStatesName), Variable.intVariable(1), valuePosName, Tree.NoComment, true);
+        SampleTask<A, B> sample = funcData.sampleDesc.sample;
+        if(sample.isDistribution())
+            target = target.updateDistribution((DistributionSampleTask<A, ?>) sample, sample.getOutput(),
+                    currentValue);
 
-        ForTask loop = Sandwood.forLoop(Variable.intVariable(0), Variable.namedVariable(numStatesName),
-                Variable.intVariable(1), true, (i) -> {
-                    i.setAlias(valuePosName);
-                    i.setUniqueVarDesc(valuePosName);
-                });
-
-        // Restore ScopeStack status.
-        ScopeStack.popScope(GlobalScope.scope);
-        return loop;
+        return target;
     }
 
     // No global state is required.
@@ -511,8 +505,17 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
     protected <C extends Variable<C>> void allocateGlobalArray(CompilationContext compilationCtx, FuncData funcData,
             DistributableRandomVariable<?, ?> rv, VariableDescription<ArrayVariable<C>> variableDescription) {
         // Allocate space for storing the results.
-        compilationCtx.pushScope();
+        compilationCtx.pushScopeState();
+        /*
+         * Because of the reuse of max this needs to be serial. We could overcome this by taking a copy of the value of
+         * max in a new in, but as I am not sure that parallel allocation is a beneficial, for now we will make this
+         * serial and skip any overhead.
+         */
         compilationCtx.pushIsSerial(true);
+
+        // Update phase
+        CompilationPhase currentPhase = compilationCtx.phase;
+        compilationCtx.phase = CompilationPhase.ALLOCATION;
 
         IRTreeReturn<IntVariable> noStates = rv.getMaxNoStates(compilationCtx);
 
@@ -522,8 +525,9 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
         // Get the allocator
         IRTreeVoid allocator = compilationCtx.getOutermostScopeTree();
 
+        compilationCtx.phase = currentPhase;
         compilationCtx.popIsSerial();
-        compilationCtx.popScope();
+        compilationCtx.popScopeState();
 
         createGlobalField(variableDescription, allocator, funcData, compilationCtx);
     }

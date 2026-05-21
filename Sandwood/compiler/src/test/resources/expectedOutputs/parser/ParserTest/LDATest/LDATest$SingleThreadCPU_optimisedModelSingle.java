@@ -294,9 +294,9 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample42 = fixedFlag$sample42;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -385,9 +385,9 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample58 = fixedFlag$sample58;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -598,16 +598,16 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 	// by sample task 90 drawn from Categorical 87. Inference was performed using variable
 	// marginalization.
 	private final void sample90(int i$var71, int j) {
-		// Variable declaration of cv$numNumStates moved.
+		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
 		// Calculate the number of states to evaluate.
 		// 
 		// variable marginalization
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// Calculate the number of states to evaluate.
-		int cv$numNumStates = Math.max(0, noTopics);
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		int cv$numStates = Math.max(0, noTopics);
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// Write out the new value of the sample.
 			// 
 			// Value of the variable at this index
@@ -632,9 +632,6 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
-			// 
-			// cv$temp$0$var86's comment
 			// Constructing a random variable input for use later.
 			cv$var88$stateProbabilityGlobal[cv$valuePos] = ((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize))?Math.log(phi[cv$valuePos][w[i$var71][j]]):Double.NEGATIVE_INFINITY) + ((cv$valuePos < noTopics)?Math.log(theta[i$var71][cv$valuePos]):Double.NEGATIVE_INFINITY));
 		}
@@ -646,13 +643,13 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var88$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var88$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -665,11 +662,11 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		
 		// Sum the values in the array.
 		else {
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var88$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -682,12 +679,12 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var88$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numNumStates);
+				cv$var88$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var88$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var88$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
@@ -695,14 +692,14 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var88$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var88$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
 			cv$var88$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		// 
 		// Get a local reference to the scratch space.
-		z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, cv$var88$stateProbabilityGlobal, cv$numNumStates);
+		z[i$var71][j] = DistributionSampling.sampleCategorical(RNG$, cv$var88$stateProbabilityGlobal, cv$numStates);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating

@@ -269,9 +269,9 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample24 = fixedFlag$sample24;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
@@ -375,9 +375,9 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample78 = fixedFlag$sample24;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -421,8 +421,6 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$1$var22" with its value "10.0".
-			// 
 			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
 			
@@ -440,13 +438,6 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// Substituted "cv$temp$2$prob" with its value "prob".
-				// 
-				// cv$temp$3$$var226's comment
-				// 
-				// $var226's comment
-				// Constructing a random variable input for use later.
 				cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
 			// Initialize a log space accumulator to take the product of all the distribution
@@ -458,8 +449,6 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
 		
-		// Update Sample and intermediate values
-		// 
 		// Guards to ensure that ut is only updated when there is a valid path.
 		ut[i$var18] = cv$proposedValue;
 		
@@ -544,8 +533,6 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$1$var22" with its value "10.0".
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		
 		// Processing sample task 78 of consumer random variable null.
@@ -562,19 +549,8 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			// 
-			// Substituted "cv$temp$2$prob" with its value "prob".
-			// 
-			// cv$temp$3$$var226's comment
-			// 
-			// $var226's comment
-			// Constructing a random variable input for use later.
 			cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
 		// The probability ration for the proposed value and the current value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
@@ -583,7 +559,12 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -679,9 +660,9 @@ final class DiscreteChoiceAlt$SingleThreadCPU extends org.sandwood.runtime.inter
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {
-		// Constructor for guard$sample24put65$global
-		// 
 		// Allocate scratch space.
+		// 
+		// Constructor for guard$sample24put65$global
 		// 
 		// Allocation of guard$sample24put65$global for single threaded execution
 		// 

@@ -27,7 +27,6 @@ import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.compilation.inference.InferenceGenerator;
 import org.sandwood.compiler.compilation.inference.InferenceGeneratorScalar;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
-import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
@@ -48,6 +47,7 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVaria
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
+import org.sandwood.compiler.traces.guards.ScopeConstructor;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
@@ -118,18 +118,19 @@ public class InverseGammaToGaussian extends
      * @param funcData       The function data for this inference function generator.
      */
     @Override
-    protected void constructFunctionVariables(CompilationContext compilationCtx, InverseGammaToGaussianData funcData) {
-
+    protected void constructFunctionVariables(InverseGammaToGaussianData funcData, CompilationContext compilationCtx) {
         // add a trees to initialize the temporary variables.
-        compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
-                "Variable to track the sum of the difference between the samples and the random variables mean squared."));
+        funcData.targetScope.addTree((TreeBuilderInfo info) -> {
+            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
+                    "Variable to track the sum of the difference between the samples and the random variables mean squared."));
 
-        if(funcData.distributedConsumers)
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countNameDis,
-                    constant(0.0), "Variable to record the number of samples from consuming random variables."));
-        else
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countName, constant(0),
-                    "Variable to record the number of samples from consuming random variables."));
+            if(funcData.distributedConsumers)
+                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countNameDis,
+                        constant(0.0), "Variable to record the number of samples from consuming random variables."));
+            else
+                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countName,
+                        constant(0), "Variable to record the number of samples from consuming random variables."));
+        });
     }
 
     @Override
@@ -300,8 +301,8 @@ public class InverseGammaToGaussian extends
     protected void finalize(InverseGammaToGaussianData funcData, CompilationContext compilationCtx) {}
 
     @Override
-    protected Scope getBackTraceScope(InverseGammaToGaussianData funcData) {
-        return GlobalScope.scope;
+    protected ScopeConstructor getBackTraceScope(InverseGammaToGaussianData funcData) {
+        return funcData.targetScope;
     }
 
     @Override

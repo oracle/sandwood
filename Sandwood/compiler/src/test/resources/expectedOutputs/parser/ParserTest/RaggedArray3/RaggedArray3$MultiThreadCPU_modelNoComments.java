@@ -117,29 +117,35 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
-				double[] cv$sampleValue = d;
 				{
+					double[] cv$sampleValue = d;
 					{
-						double[] var35 = a[y];
-						int lengthCV$a$37_15 = -1;
 						{
-							if((0 == y))
-								lengthCV$a$37_15 = 2;
+							double[] var35 = a[y];
+							int lengthCV$a$37_15 = -1;
+							{
+								{
+									if((0 == y))
+										lengthCV$a$37_15 = 2;
+								}
+							}
+							{
+								{
+									if((1 == y))
+										lengthCV$a$37_15 = 3;
+								}
+							}
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, var35, lengthCV$a$37_15));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						{
-							if((1 == y))
-								lengthCV$a$37_15 = 3;
-						}
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, var35, lengthCV$a$37_15));
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-						}
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -176,28 +182,34 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					int cv$sampleValue = obs[var50];
 					{
+						int cv$sampleValue = obs[var50];
 						{
-							int lengthCV$a$37_16 = -1;
 							{
-								if((0 == y))
-									lengthCV$a$37_16 = 2;
+								int lengthCV$a$37_16 = -1;
+								{
+									{
+										if((0 == y))
+											lengthCV$a$37_16 = 2;
+									}
+								}
+								{
+									{
+										if((1 == y))
+											lengthCV$a$37_16 = 3;
+									}
+								}
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_16))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							{
-								if((1 == y))
-									lengthCV$a$37_16 = 3;
-							}
-							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_16))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -236,12 +248,16 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double[] cv$countLocal = cv$var37$countGlobal;
 			int lengthCV$a$37_13 = -1;
 			{
-				if((0 == y))
-					lengthCV$a$37_13 = 2;
+				{
+					if((0 == y))
+						lengthCV$a$37_13 = 2;
+				}
 			}
 			{
-				if((1 == y))
-					lengthCV$a$37_13 = 3;
+				{
+					if((1 == y))
+						lengthCV$a$37_13 = 3;
+				}
 			}
 			int cv$arrayLength = lengthCV$a$37_13;
 			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
@@ -250,20 +266,28 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				{
 					{
 						{
-							for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
-								cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+							{
+								{
+									for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
+										cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+								}
+							}
 						}
 					}
 				}
 			}
 			int lengthCV$a$37_14 = -1;
 			{
-				if((0 == y))
-					lengthCV$a$37_14 = 2;
+				{
+					if((0 == y))
+						lengthCV$a$37_14 = 2;
+				}
 			}
 			{
-				if((1 == y))
-					lengthCV$a$37_14 = 3;
+				{
+					if((1 == y))
+						lengthCV$a$37_14 = 3;
+				}
 			}
 			Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal, lengthCV$a$37_14);
 		}
@@ -287,12 +311,16 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			{
 				int lengthCV$a$37_12 = -1;
 				{
-					if((0 == y))
-						lengthCV$a$37_12 = 2;
+					{
+						if((0 == y))
+							lengthCV$a$37_12 = 2;
+					}
 				}
 				{
-					if((1 == y))
-						lengthCV$a$37_12 = 3;
+					{
+						if((1 == y))
+							lengthCV$a$37_12 = 3;
+					}
 				}
 				d = new double[lengthCV$a$37_12];
 			}
@@ -307,27 +335,35 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void forwardGeneration() {
 		int lengthCV$a$37_17 = -1;
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_17 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_17 = 2;
+				}
 			}
 		}
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_17 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_17 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample39)
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_17, d);
 		int lengthCV$a$37_18 = -1;
 		{
-			if((0 == y))
-				lengthCV$a$37_18 = 2;
+			{
+				if((0 == y))
+					lengthCV$a$37_18 = 2;
+			}
 		}
 		{
-			if((1 == y))
-				lengthCV$a$37_18 = 3;
+			{
+				if((1 == y))
+					lengthCV$a$37_18 = 3;
+			}
 		}
 		int lengthCV$a$37_18$1 = lengthCV$a$37_18;
 		parallelFor(RNG$, 0, length$obs_measured, 1,
@@ -342,15 +378,19 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
 		int lengthCV$a$37_23 = -1;
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_23 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_23 = 2;
+				}
 			}
 		}
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_23 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_23 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample39)
@@ -361,27 +401,35 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void forwardGenerationPrime() {
 		int lengthCV$a$37_19 = -1;
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_19 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_19 = 2;
+				}
 			}
 		}
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_19 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_19 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample39)
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_19, d);
 		int lengthCV$a$37_20 = -1;
 		{
-			if((0 == y))
-				lengthCV$a$37_20 = 2;
+			{
+				if((0 == y))
+					lengthCV$a$37_20 = 2;
+			}
 		}
 		{
-			if((1 == y))
-				lengthCV$a$37_20 = 3;
+			{
+				if((1 == y))
+					lengthCV$a$37_20 = 3;
+			}
 		}
 		int lengthCV$a$37_20$1 = lengthCV$a$37_20;
 		parallelFor(RNG$, 0, length$obs_measured, 1,
@@ -396,15 +444,19 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void forwardGenerationValuesNoOutputs() {
 		int lengthCV$a$37_21 = -1;
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_21 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_21 = 2;
+				}
 			}
 		}
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_21 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_21 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample39)
@@ -415,15 +467,19 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	public final void forwardGenerationValuesNoOutputsPrime() {
 		int lengthCV$a$37_22 = -1;
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_22 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_22 = 2;
+				}
 			}
 		}
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_22 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_22 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample39)

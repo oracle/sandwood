@@ -318,9 +318,9 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample11 = fixedFlag$sample11;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -423,9 +423,9 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample16 = fixedFlag$sample16;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -503,9 +503,9 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample33 = ((fixedFlag$sample7 && fixedFlag$sample11) && fixedFlag$sample16);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -591,9 +591,9 @@ final class LinearRegressionBasic2$SingleThreadCPU extends org.sandwood.runtime.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample7 = fixedFlag$sample7;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model

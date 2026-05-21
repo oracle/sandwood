@@ -142,26 +142,28 @@ final class Flip1CoinMK1c$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			{
-				// The sample value to calculate the probability of generating
-				boolean cv$sampleValue = flips[var18];
 				{
+					// The sample value to calculate the probability of generating
+					boolean cv$sampleValue = flips[var18];
 					{
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var6:(1.0 - var6))));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var6:(1.0 - var6))));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -211,26 +213,28 @@ final class Flip1CoinMK1c$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// An accumulator for the distributed probability space covered.
 		double cv$probabilityReached = 0.0;
 		{
-			// The sample value to calculate the probability of generating
-			double cv$sampleValue = var6;
 			{
+				// The sample value to calculate the probability of generating
+				double cv$sampleValue = var6;
 				{
-					// Store the value of the function call, so the function call is only made once.
-					double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, a, b));
-					
-					// Add the probability of this sample task to the distribution accumulator.
-					if((cv$weightedProbability < cv$distributionAccumulator))
-						cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-					else {
-						// If the second value is -infinity.
-						if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-							cv$distributionAccumulator = cv$weightedProbability;
-						else
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+					{
+						// Store the value of the function call, so the function call is only made once.
+						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, a, b));
+						
+						// Add the probability of this sample task to the distribution accumulator.
+						if((cv$weightedProbability < cv$distributionAccumulator))
+							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+						else {
+							// If the second value is -infinity.
+							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+								cv$distributionAccumulator = cv$weightedProbability;
+							else
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						}
+						
+						// Add the probability of this distribution configuration to the accumulator.
+						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
-					
-					// Add the probability of this distribution configuration to the accumulator.
-					cv$probabilityReached = (cv$probabilityReached + 1.0);
 				}
 			}
 		}
@@ -270,16 +274,20 @@ final class Flip1CoinMK1c$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Processing random variable 7.
 				{
 					{
-						// Processing sample task 19 of consumer random variable bernoulli.
 						{
-							for(int var18 = 0; var18 < samples; var18 += 1) {
-								// Include the value sampled by task 19 from random variable bernoulli.
-								// Increment the number of samples.
-								cv$count = (cv$count + 1);
-								
-								// If the sample value was positive increase the count
-								if(flips[var18])
-									cv$sum = (cv$sum + 1);
+							// Processing sample task 19 of consumer random variable bernoulli.
+							{
+								{
+									for(int var18 = 0; var18 < samples; var18 += 1) {
+										// Include the value sampled by task 19 from random variable bernoulli.
+										// Increment the number of samples.
+										cv$count = (cv$count + 1);
+										
+										// If the sample value was positive increase the count
+										if(flips[var18])
+											cv$sum = (cv$sum + 1);
+									}
+								}
 							}
 						}
 					}

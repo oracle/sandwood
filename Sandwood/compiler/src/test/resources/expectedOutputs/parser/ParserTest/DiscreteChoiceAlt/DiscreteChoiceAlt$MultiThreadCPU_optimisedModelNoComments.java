@@ -226,7 +226,8 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
 		for(int var76 = 0; var76 < noObs; var76 += 1)
 			cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			ut[i$var18] = cv$originalValue;
 			exped[i$var18] = Math.exp(ut[i$var18]);
 			double reduceVar$sum$11 = 0.0;

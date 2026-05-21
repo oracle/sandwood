@@ -253,31 +253,26 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					if((1 == i$var46)) {
-						// Substituted "i$var46" with its value "1".
-						int var28 = b[1];
-						if(((0 <= var28) && (var28 < 5))) {
-							// Store the value of the function call, so the function call is only made once.
-							// 
-							// Enumerating the possible arguments for Categorical 53.
-							cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(m[0][cv$sampleValue]):Double.NEGATIVE_INFINITY);
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							// 
-							// An accumulator for the distributed probability space covered.
-							cv$probabilityReached = 1.0;
-						}
+						// Store the value of the function call, so the function call is only made once.
+						cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(m[0][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+						
+						// Add the probability of this distribution configuration to the accumulator.
+						// 
+						// An accumulator for the distributed probability space covered.
+						cv$probabilityReached = 1.0;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					// 
 					// Substituted "index$i$6_1" with its value "(i$var46 - 1)".
 					if((2 <= i$var46)) {
-						int var28 = b[i$var46];
-						if(((0 <= var28) && (var28 < 5))) {
+						// Substituted "index$i$6_2" with its value "i$var46".
+						int traceTempVariable$var51$6_3 = a[(i$var46 - 1)];
+						
+						// Substituted "index$i$6_2" with its value "i$var46".
+						if(((0 <= traceTempVariable$var51$6_3) && (traceTempVariable$var51$6_3 < 5))) {
 							// Store the value of the function call, so the function call is only made once.
-							// 
-							// Substituted "index$i$6_2" with its value "i$var46".
-							double cv$weightedProbability = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(m[a[(i$var46 - 1)]][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+							double cv$weightedProbability = (((0.0 <= cv$sampleValue) && (cv$sampleValue < 5))?Math.log(m[traceTempVariable$var51$6_3][cv$sampleValue]):Double.NEGATIVE_INFINITY);
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -331,9 +326,9 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Substituted "fixedFlag$sample55" with its value "true".
 				fixedProbFlag$sample55 = fixedFlag$sample29;
 			}
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -407,7 +402,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 						for(int index$sample55$5 = 0; index$sample55$5 < 5; index$sample55$5 += 1) {
 							// Update the probability of sampling this value from the distribution value.
 							double cv$probabilitySample55Value6 = distribution$sample55[(i$var46 - 1)][index$sample55$5];
-							double var72 = (double)(1 / a[(j + 1)]);
+							double var72 = (double)(1 / index$sample55$5);
 							
 							// Store the value of the function call, so the function call is only made once.
 							double cv$weightedProbability = (Math.log(cv$probabilitySample55Value6) + Math.log((cv$sampleValue?var72:(1.0 - var72))));
@@ -457,9 +452,9 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample75 = fixedFlag$sample55;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -533,9 +528,9 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample29 = fixedFlag$sample29;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -621,9 +616,9 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample55 = (fixedFlag$sample55 && fixedFlag$sample29);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -709,9 +704,9 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample75 = fixedFlag$sample55;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -747,7 +742,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Looking for a path between Sample 29 and consumer Categorical 53.
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(((1 < n) && (var28 == b[1])))
+			if(((1 < n) && (var28 == 0)))
 				// Processing sample task 55 of consumer random variable null.
 				// 
 				// Increment the sample counter with the value sampled by sample task 55 of random
@@ -756,7 +751,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// Substituted "i$var46" with its value "1".
 				cv$countLocal[a[1]] = (cv$countLocal[a[1]] + 1.0);
 			for(int i$var46 = 2; i$var46 < n; i$var46 += 1) {
-				if((var28 == b[i$var46]))
+				if((var28 == a[(i$var46 - 1)]))
 					// Processing sample task 55 of consumer random variable null.
 					// 
 					// Increment the sample counter with the value sampled by sample task 55 of random
@@ -772,7 +767,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			// Looking for a path between Sample 29 and consumer Categorical 53.
 			// 
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(((1 < n) && (var28 == b[1]))) {
+			if(((1 < n) && (var28 == 0))) {
 				// Merge the distribution probabilities into the count
 				// 
 				// Get the length of the array
@@ -784,28 +779,27 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 					// Declare and zero an accumulator for tracking the reached source probability space.
 					cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + distribution$sample55[0][cv$loopIndex]);
 			}
-			for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
-				if((var28 == b[i$var46])) {
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((var28 < 5)) {
+				for(int i$var46 = 1; i$var46 < n; i$var46 += 1) {
 					int index$i$27 = (i$var46 - 1);
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					if((1 <= index$i$27)) {
-						// Enumerating the possible outputs of Categorical 53.
-						for(int index$sample55$28 = 0; index$sample55$28 < 5; index$sample55$28 += 1) {
-							// Processing sample task 55 of consumer random variable null.
-							// 
-							// The probability of reaching the consumer with this set of consumer arguments
-							// 
-							// cv$probabilitySample55Value29's comment
-							// Update the probability of sampling this value from the distribution value.
-							double cv$distributionProbability = distribution$sample55[(index$i$27 - 1)][index$sample55$28];
-							
-							// Merge the distribution probabilities into the count
-							// 
-							// Get the length of the array
-							for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
-								cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample55[(i$var46 - 1)][cv$loopIndex] * cv$distributionProbability));
-						}
+						// The probability of reaching the consumer with this set of consumer arguments
+						// 
+						// cv$probabilitySample55Value29's comment
+						// Update the probability of sampling this value from the distribution value.
+						// 
+						// Substituted "index$sample55$28" with its value "var28".
+						double cv$distributionProbability = distribution$sample55[(index$i$27 - 1)][var28];
+						
+						// Merge the distribution probabilities into the count
+						// 
+						// Get the length of the array
+						for(int cv$loopIndex = 0; cv$loopIndex < 5; cv$loopIndex += 1)
+							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample55[(i$var46 - 1)][cv$loopIndex] * cv$distributionProbability));
 					}
 				}
 			}
@@ -824,47 +818,28 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 	// marginalization.
 	private final void sample55(int i$var46) {
 		// Calculate the number of states to evaluate.
-		int cv$numNumStates = 0;
+		int cv$numStates = 0;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == i$var46)) {
-			// Substituted "i$var46" with its value "1".
-			int var28 = b[1];
-			if(((0 <= var28) && (var28 < 5)))
-				// variable marginalization
-				cv$numNumStates = 5;
-		}
-		if(fixedFlag$sample55) {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((2 <= i$var46)) {
-				int var28 = b[i$var46];
-				if(((0 <= var28) && (var28 < 5)))
-					// variable marginalization
-					cv$numNumStates = 5;
-			}
-		} else {
-			int index$i$6 = (i$var46 - 1);
-			
-			// index$i$1's comment
-			// Exploring all the possible state counts for random variable 53.
-			// 
-			// Copy of index so that its values can be safely substituted
-			// 
-			// Substituted "index$i$6" with its value "(i$var46 - 1)".
-			// 
-			// Substituted "index$i$6" with its value "(i$var46 - 1)".
-			// 
-			// Substituted "index$i$6" with its value "(i$var46 - 1)".
-			// 
-			// Substituted "index$i$6" with its value "(i$var46 - 1)".
-			if(((1 <= index$i$6) && !(index$i$6 == i$var46))) {
-				int var28 = b[i$var46];
-				if(((0 <= var28) && (var28 < 5)))
-					// variable marginalization
-					cv$numNumStates = 5;
-			}
-		}
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		if((1 == i$var46))
+			// variable marginalization
+			cv$numStates = 5;
+		int index$i$5 = (i$var46 - 1);
+		
+		// index$i$1's comment
+		// Copy of index so that its values can be safely substituted
+		// 
+		// Substituted "index$i$5" with its value "(i$var46 - 1)".
+		// 
+		// Substituted "index$i$5" with its value "(i$var46 - 1)".
+		// 
+		// Substituted "index$i$5" with its value "(i$var46 - 1)".
+		// 
+		// Substituted "index$i$5" with its value "(i$var46 - 1)".
+		if(((1 <= index$i$5) && !(index$i$5 == i$var46)))
+			// variable marginalization
+			cv$numStates = 5;
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// Exploring all the possible distribution values for random variable 53 creating
 			// sample task 55.
 			// Initialize the summed probabilities to 0.
@@ -879,25 +854,71 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((1 == i$var46)) {
-				// Substituted "i$var46" with its value "1".
-				int var28 = b[1];
-				if(((0 <= var28) && (var28 < 5))) {
-					// Record the reached probability density.
-					// 
-					// Initialize a counter to track the reached distributions.
-					cv$reachedDistributionSourceRV = 1.0;
+				// Record the reached probability density.
+				// 
+				// Initialize a counter to track the reached distributions.
+				cv$reachedDistributionSourceRV = 1.0;
+				
+				// Constructing a random variable input for use later.
+				// 
+				// Processing random variable 73.
+				// 
+				// Looking for a path between Sample 55 and consumer Bernoulli 73.
+				// 
+				// Value of the variable at this index
+				double var72 = (double)(1 / cv$valuePos);
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 75 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// An accumulator to allow the value for each distribution to be constructed before
+				// it is added to the index probabilities.
+				// 
+				// Constructing a random variable input for use later.
+				cv$stateProbabilityValue = (Math.log((flips[0]?var72:(1.0 - var72))) + Math.log(m[0][cv$valuePos]));
+			}
+			int index$i$15 = (i$var46 - 1);
+			
+			// index$i$1's comment
+			// Copy of index so that its values can be safely substituted
+			// 
+			// Substituted "index$i$15" with its value "(i$var46 - 1)".
+			// 
+			// Substituted "index$i$15" with its value "(i$var46 - 1)".
+			// 
+			// Substituted "index$i$15" with its value "(i$var46 - 1)".
+			// 
+			// Substituted "index$i$15" with its value "(i$var46 - 1)".
+			if(((1 <= index$i$15) && !(index$i$15 == i$var46))) {
+				// Enumerating the possible outputs of Categorical 53.
+				for(int index$sample55$16 = 0; index$sample55$16 < 5; index$sample55$16 += 1) {
+					// Update the probability of sampling this value from the distribution value.
+					double cv$probabilitySample55Value17 = distribution$sample55[(index$i$15 - 1)][index$sample55$16];
 					
-					// Variable declaration of cv$temp$6$var72 moved.
-					// 
+					// Record the reached probability density.
+					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample55Value17);
+					
 					// Constructing a random variable input for use later.
 					// 
 					// Processing random variable 73.
 					// 
 					// Looking for a path between Sample 55 and consumer Bernoulli 73.
+					double var72 = (double)(1 / index$sample55$16);
+					
+					// Variable declaration of cv$accumulatedProbabilities moved.
+					// Declaration comment was:
+					// An accumulator to allow the value for each distribution to be constructed before
+					// it is added to the index probabilities.
 					// 
 					// Value of the variable at this index
-					double cv$temp$6$var72 = (double)(1 / cv$valuePos);
-					
+					// 
+					// Constructing a random variable input for use later.
+					// 
 					// A check to ensure rounding of floating point values can never result in a negative
 					// value.
 					// 
@@ -911,198 +932,87 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// Value of the variable at this index
 					// 
-					// cv$temp$1$$var810's comment
-					// 
-					// $var810's comment
 					// Constructing a random variable input for use later.
-					// 
-					// cv$temp$0$var52's comment
-					// Variable declaration of cv$temp$0$var52 moved.
-					// 
-					// Constructing a random variable input for use later.
-					// 
-					// Enumerating the possible arguments for Categorical 53.
-					cv$stateProbabilityValue = (Math.log((flips[0]?cv$temp$6$var72:(1.0 - cv$temp$6$var72))) + Math.log(m[0][cv$valuePos]));
-				}
-			}
-			int index$i$18 = (i$var46 - 1);
-			
-			// index$i$14's comment
-			// Copy of index so that its values can be safely substituted
-			// 
-			// Substituted "index$i$18" with its value "(i$var46 - 1)".
-			// 
-			// Substituted "index$i$18" with its value "(i$var46 - 1)".
-			// 
-			// Substituted "index$i$18" with its value "(i$var46 - 1)".
-			// 
-			// Substituted "index$i$18" with its value "(i$var46 - 1)".
-			if(((1 <= index$i$18) && !(index$i$18 == i$var46))) {
-				// Enumerating the possible outputs of Categorical 53.
-				for(int index$sample55$19 = 0; index$sample55$19 < 5; index$sample55$19 += 1) {
-					// Update the probability of sampling this value from the distribution value.
-					double cv$probabilitySample55Value20 = distribution$sample55[(index$i$18 - 1)][index$sample55$19];
-					int var28 = b[i$var46];
-					if(((0 <= var28) && (var28 < 5))) {
-						// Record the reached probability density.
-						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample55Value20);
-						
-						// Variable declaration of cv$temp$8$var72 moved.
-						// 
-						// Constructing a random variable input for use later.
-						// 
-						// Processing random variable 73.
-						// 
-						// Looking for a path between Sample 55 and consumer Bernoulli 73.
-						double cv$temp$8$var72 = (double)(1 / index$sample55$19);
-						
-						// Variable declaration of cv$accumulatedProbabilities moved.
-						// Declaration comment was:
-						// An accumulator to allow the value for each distribution to be constructed before
-						// it is added to the index probabilities.
-						// 
-						// Value of the variable at this index
-						// 
-						// Substituted "cv$temp$4$var52" with its value "var52".
-						// 
-						// Constructing a random variable input for use later.
-						// 
-						// Value of the variable at this index
-						// 
-						// A check to ensure rounding of floating point values can never result in a negative
-						// value.
-						// 
-						// Recorded the probability of reaching sample task 75 with the current configuration.
-						// 
-						// Set an accumulator to record the consumer distributions not seen. Initially set
-						// to 1 as seen values will be deducted from this value.
-						// 
-						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-						// Declaration comment was:
-						// Processing sample task 75 of consumer random variable null.
-						// 
-						// Set an accumulator to sum the probabilities for each possible configuration of
-						// inputs.
-						// 
-						// Substituted "j" with its value "(i$var46 - 1)".
-						// 
-						// An accumulator to allow the value for each distribution to be constructed before
-						// it is added to the index probabilities.
-						// 
-						// Value of the variable at this index
-						// 
-						// Substituted "cv$temp$4$var52" with its value "var52".
-						// 
-						// Constructing a random variable input for use later.
-						// 
-						// Value of the variable at this index
-						double cv$accumulatedProbabilities = ((Math.log((flips[(i$var46 - 1)]?cv$temp$8$var72:(1.0 - cv$temp$8$var72))) + Math.log(cv$probabilitySample55Value20)) + Math.log(m[cv$valuePos][cv$valuePos]));
-						
-						// Add the values for the source and any standard consumers for this configuration
-						// of arguments to the source.
-						if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-							cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-						else {
-							// If the second value is -infinity.
-							if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-								cv$stateProbabilityValue = cv$accumulatedProbabilities;
-							else
-								cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-						}
+					double cv$accumulatedProbabilities = ((Math.log((flips[(i$var46 - 1)]?var72:(1.0 - var72))) + Math.log(cv$probabilitySample55Value17)) + Math.log(m[index$sample55$16][cv$valuePos]));
+					
+					// Add the values for the source and any standard consumers for this configuration
+					// of arguments to the source.
+					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+					else {
+						// If the second value is -infinity.
+						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+							cv$stateProbabilityValue = cv$accumulatedProbabilities;
+						else
+							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
 					}
 				}
 			}
-			int index$i$37_2 = (i$var46 + 1);
-			if((index$i$37_2 < n)) {
+			int index$i$34_2 = (i$var46 + 1);
+			if((index$i$34_2 < n)) {
 				// Zero all the elements in the distribution accumulator
 				for(int cv$i = 0; cv$i < 5; cv$i += 1)
 					// A local array to hold the accumulated distributions of the sample tasks for each
 					// configuration of distributions.
 					cv$distributionAccumulator$var53[cv$i] = 0.0;
 				
-				// Zero an accumulator to track the probabilities reached.
-				double cv$reachedDistributionProbability = 0.0;
-				int var28 = b[index$i$37_2];
+				// Declare and zero an accumulator for tracking the reached source probability space.
+				double scopeVariable$reachedSourceProbability = 0.0;
 				
-				// Substituted "index$i$37_4" with its value "index$i$37_2".
-				if(((0 <= var28) && (var28 < 5))) {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if((1 == i$var46))
+					// Add the probability of this argument configuration.
+					// 
 					// Declare and zero an accumulator for tracking the reached source probability space.
-					double scopeVariable$reachedSourceProbability = 0.0;
-					
-					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == i$var46)) {
-						// Substituted "i$var46" with its value "1".
-						int index$var28$42_1 = b[1];
-						if(((0 <= index$var28$42_1) && (index$var28$42_1 < 5)))
-							// Add the probability of this argument configuration.
-							// 
-							// Declare and zero an accumulator for tracking the reached source probability space.
-							scopeVariable$reachedSourceProbability = 1.0;
-					}
-					int index$i$44 = (i$var46 - 1);
-					
-					// index$i$14's comment
-					// Copy of index so that its values can be safely substituted
-					// 
-					// index$i$39's comment
-					// Processing sample task 55 of consumer random variable null.
-					// 
-					// Copy of index so that its values can be safely substituted
-					// 
-					// Substituted "index$i$37_4" with its value "index$i$37_2".
-					// 
-					// Substituted "index$i$37_2" with its value "(i$var46 + 1)".
-					// 
-					// Substituted "index$i$37_2" with its value "(i$var46 + 1)".
-					// 
-					// Substituted "index$i$37_2" with its value "(i$var46 + 1)".
-					// 
-					// Substituted "index$i$37_2" with its value "(i$var46 + 1)".
-					// 
-					// Substituted "index$i$37_2" with its value "(i$var46 + 1)".
-					if((((1 <= index$i$44) && !(index$i$44 == i$var46)) && !(index$i$44 == index$i$37_2))) {
-						// Enumerating the possible outputs of Categorical 53.
-						for(int index$sample55$45 = 0; index$sample55$45 < 5; index$sample55$45 += 1) {
-							int index$var28$50_1 = b[i$var46];
-							if(((0 <= index$var28$50_1) && (index$var28$50_1 < 5)))
-								// Add the probability of this argument configuration.
-								// 
-								// cv$probabilitySample55Value46's comment
-								// Update the probability of sampling this value from the distribution value.
-								scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample55[(index$i$44 - 1)][index$sample55$45]);
-						}
-					}
-					
-					// Record the reached distribution.
-					// 
-					// The probability of reaching the consumer with this set of consumer arguments
-					// 
-					// Zero an accumulator to track the probabilities reached.
-					cv$reachedDistributionProbability = scopeVariable$reachedSourceProbability;
-					
-					// Add the current distribution to the distribution accumulator.
-					// 
-					// The probability of reaching the consumer with this set of consumer arguments
-					// 
-					// cv$temp$10$$var862's comment
-					// 
-					// $var862's comment
-					// Constructing a random variable input for use later.
-					// 
-					// Constructing a random variable input for use later.
-					// 
-					// Processing random variable 53.
-					// 
-					// Looking for a path between Sample 55 and consumer Categorical 53.
-					// 
-					// Value of the variable at this index
-					DistributionSampling.addProbabilityDistributionCategorical(cv$distributionAccumulator$var53, scopeVariable$reachedSourceProbability, m[cv$valuePos], 5);
+					scopeVariable$reachedSourceProbability = 1.0;
+				int index$i$41 = (i$var46 - 1);
+				
+				// index$i$1's comment
+				// Copy of index so that its values can be safely substituted
+				// 
+				// index$i$36's comment
+				// Processing sample task 55 of consumer random variable null.
+				// 
+				// Copy of index so that its values can be safely substituted
+				// 
+				// Substituted "index$i$34_4" with its value "index$i$34_2".
+				// 
+				// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
+				// 
+				// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
+				// 
+				// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
+				// 
+				// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
+				// 
+				// Substituted "index$i$34_2" with its value "(i$var46 + 1)".
+				if((((1 <= index$i$41) && !(index$i$41 == i$var46)) && !(index$i$41 == index$i$34_2))) {
+					// Enumerating the possible outputs of Categorical 53.
+					for(int index$sample55$42 = 0; index$sample55$42 < 5; index$sample55$42 += 1)
+						// Add the probability of this argument configuration.
+						// 
+						// cv$probabilitySample55Value43's comment
+						// Update the probability of sampling this value from the distribution value.
+						scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample55[(index$i$41 - 1)][index$sample55$42]);
 				}
+				
+				// Add the current distribution to the distribution accumulator.
+				// 
+				// The probability of reaching the consumer with this set of consumer arguments
+				// 
+				// Constructing a random variable input for use later.
+				// 
+				// Processing random variable 53.
+				// 
+				// Looking for a path between Sample 55 and consumer Categorical 53.
+				// 
+				// Value of the variable at this index
+				DistributionSampling.addProbabilityDistributionCategorical(cv$distributionAccumulator$var53, scopeVariable$reachedSourceProbability, m[cv$valuePos], 5);
 				
 				// A local copy of the samples' distribution.
 				// 
-				// Substituted "index$i$37_4" with its value "index$i$37_2".
-				double[] cv$sampleDistribution = distribution$sample55[(index$i$37_2 - 1)];
+				// Substituted "index$i$34_4" with its value "index$i$34_2".
+				double[] cv$sampleDistribution = distribution$sample55[(index$i$34_2 - 1)];
 				
 				// The overlap of the distributions so far.
 				double cv$overlap = 0.0;
@@ -1113,7 +1023,13 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 					// 
 					// A local array to hold the accumulated distributions of the sample tasks for each
 					// configuration of distributions.
-					double cv$normalisedDistValue = (cv$distributionAccumulator$var53[cv$i] / cv$reachedDistributionProbability);
+					// 
+					// Record the reached distribution.
+					// 
+					// The probability of reaching the consumer with this set of consumer arguments
+					// 
+					// Zero an accumulator to track the probabilities reached.
+					double cv$normalisedDistValue = (cv$distributionAccumulator$var53[cv$i] / scopeVariable$reachedSourceProbability);
 					
 					// Corresponding value from the sample distribution
 					double cv$sampleDistValue = cv$sampleDistribution[cv$i];
@@ -1133,7 +1049,13 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				// 
 				// Initialize a log space accumulator to take the product of all the distribution
 				// probabilities.
-				cv$accumulatedDistributionProbabilities = Math.log((((cv$overlap * cv$reachedDistributionProbability) + 1.0) - Math.min(cv$reachedDistributionProbability, 1.0)));
+				// 
+				// Record the reached distribution.
+				// 
+				// The probability of reaching the consumer with this set of consumer arguments
+				// 
+				// Zero an accumulator to track the probabilities reached.
+				cv$accumulatedDistributionProbabilities = Math.log((((cv$overlap * scopeVariable$reachedSourceProbability) + 1.0) - Math.min(scopeVariable$reachedSourceProbability, 1.0)));
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
@@ -1154,13 +1076,13 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var54$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var54$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -1173,11 +1095,11 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 		
 		// Sum the values in the array.
 		else {
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var54$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -1190,11 +1112,11 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
-				cv$localProbability[cv$indexName] = (1.0 / cv$numNumStates);
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+				cv$localProbability[cv$indexName] = (1.0 / cv$numStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$localProbability[cv$indexName] = Math.exp((cv$var54$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
@@ -1202,7 +1124,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var54$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var54$stateProbabilityGlobal.length; cv$indexName += 1)
 			cv$localProbability[cv$indexName] = Double.NEGATIVE_INFINITY;
 	}
 
@@ -1348,17 +1270,10 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
 				if((1 == i$var46)) {
-					// Substituted "i$var46" with its value "1".
-					int var28 = b[1];
-					if(((0 <= var28) && (var28 < 5))) {
-						// Iterate through possible values for var53's arguments.
-						// 
-						// Enumerating the possible arguments for Categorical 53.
-						double[] var52 = m[0];
-						for(int index$var53 = 0; index$var53 < 5; index$var53 += 1)
-							// Save the probability of each value
-							cv$distribution$sample55[index$var53] = (cv$distribution$sample55[index$var53] + var52[index$var53]);
-					}
+					double[] var52 = m[0];
+					for(int index$var53 = 0; index$var53 < 5; index$var53 += 1)
+						// Save the probability of each value
+						cv$distribution$sample55[index$var53] = (cv$distribution$sample55[index$var53] + var52[index$var53]);
 				}
 				int index$i$4 = (i$var46 - 1);
 				
@@ -1368,14 +1283,10 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 					for(int index$sample55$5 = 0; index$sample55$5 < 5; index$sample55$5 += 1) {
 						// Update the probability of sampling this value from the distribution value.
 						double cv$probabilitySample55Value6 = distribution$sample55[(index$i$4 - 1)][index$sample55$5];
-						int var28 = b[i$var46];
-						if(((0 <= var28) && (var28 < 5))) {
-							// Substituted "index$i$8_1" with its value "i$var46".
-							double[] var52 = m[a[(i$var46 - 1)]];
-							for(int index$var53 = 0; index$var53 < 5; index$var53 += 1)
-								// Save the probability of each value
-								cv$distribution$sample55[index$var53] = (cv$distribution$sample55[index$var53] + (cv$probabilitySample55Value6 * var52[index$var53]));
-						}
+						double[] var52 = m[index$sample55$5];
+						for(int index$var53 = 0; index$var53 < 5; index$var53 += 1)
+							// Save the probability of each value
+							cv$distribution$sample55[index$var53] = (cv$distribution$sample55[index$var53] + (cv$probabilitySample55Value6 * var52[index$var53]));
 					}
 				}
 				

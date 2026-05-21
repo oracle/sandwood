@@ -24,7 +24,6 @@ import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.compilation.inference.InferenceGenerator;
 import org.sandwood.compiler.compilation.inference.InferenceGeneratorScalar;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
-import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
@@ -40,6 +39,7 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVaria
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
+import org.sandwood.compiler.traces.guards.ScopeConstructor;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTree;
@@ -111,17 +111,18 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
      * @param funcData       The function data for generating this inference function.
      */
     @Override
-    protected void constructFunctionVariables(CompilationContext compilationCtx, GammaToPoissonData funcData) {
-
+    protected void constructFunctionVariables(GammaToPoissonData funcData, CompilationContext compilationCtx) {
         // add a trees to initialize the temporary variables.
-        compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
-                "Variable to store the sum of all the samples from consuming random variables."));
-        if(funcData.distributedConsumers)
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countNameDis,
-                    constant(0.0), "Variable to record the number of samples from consuming random variables."));
-        else
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countName, constant(0),
-                    "Variable to record the number of samples from consuming random variables."));
+        funcData.targetScope.addTree((TreeBuilderInfo info) -> {
+            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
+                    "Variable to store the sum of all the samples from consuming random variables."));
+            if(funcData.distributedConsumers)
+                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countNameDis,
+                        constant(0.0), "Variable to record the number of samples from consuming random variables."));
+            else
+                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countName,
+                        constant(0), "Variable to record the number of samples from consuming random variables."));
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -232,8 +233,8 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
     protected void finalize(GammaToPoissonData funcData, CompilationContext compilationCtx) {}
 
     @Override
-    protected Scope getBackTraceScope(GammaToPoissonData funcData) {
-        return GlobalScope.scope;
+    protected ScopeConstructor getBackTraceScope(GammaToPoissonData funcData) {
+        return funcData.targetScope;
     }
 
     @Override

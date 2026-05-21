@@ -223,10 +223,10 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$originalValue);
 			for(int t = 1; t < T; t += 1) {
 				double reduceVar$var151$1 = 0.0;
-				for(int cv$reduction326Index = 0; cv$reduction326Index < var95; cv$reduction326Index += 1)
-					reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction326Index]);
-				for(int cv$reduction326Index = (var95 + 1); cv$reduction326Index < time_dim; cv$reduction326Index += 1)
-					reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction326Index]);
+				for(int cv$reduction308Index = 0; cv$reduction308Index < var95; cv$reduction308Index += 1)
+					reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction308Index]);
+				for(int cv$reduction308Index = (var95 + 1); cv$reduction308Index < time_dim; cv$reduction308Index += 1)
+					reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction308Index]);
 				reduceVar$var151$1 = ((TimeFeat[t][var95] * cv$originalValue) + reduceVar$var151$1);
 				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityPoisson(arr[t][i$var80], reduceVar$var151$1) + cv$accumulatedProbabilities);
 			}
@@ -244,14 +244,15 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityGaussian(cv$proposedValue);
 		for(int t = 1; t < T; t += 1) {
 			double reduceVar$var151$1 = 0.0;
-			for(int cv$reduction326Index = 0; cv$reduction326Index < var95; cv$reduction326Index += 1)
-				reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction326Index]);
-			for(int cv$reduction326Index = (var95 + 1); cv$reduction326Index < time_dim; cv$reduction326Index += 1)
-				reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction326Index]);
+			for(int cv$reduction308Index = 0; cv$reduction308Index < var95; cv$reduction308Index += 1)
+				reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction308Index]);
+			for(int cv$reduction308Index = (var95 + 1); cv$reduction308Index < time_dim; cv$reduction308Index += 1)
+				reduceVar$var151$1 = (reduceVar$var151$1 + time_impact[t][i$var80][cv$reduction308Index]);
 			reduceVar$var151$1 = ((TimeFeat[t][var95] * cv$proposedValue) + reduceVar$var151$1);
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityPoisson(arr[t][i$var80], reduceVar$var151$1) + cv$accumulatedProbabilities);
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			time_coeff[i$var80][var95] = cv$originalValue;
 			for(int t = 1; t < T; t += 1)
 				time_impact[t][i$var80][var95] = (TimeFeat[t][var95] * time_coeff[i$var80][var95]);

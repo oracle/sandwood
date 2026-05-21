@@ -53,10 +53,10 @@ public abstract class GetTask<A extends Variable<A>> extends ProducingDataflowTa
 
     @Override
     public IRTreeReturn<A> getForwardIRinternal(CompilationContext compilationCtx) {
-        if(compilationCtx.initialized(output))
-            return load(output);
-        else if(compilationCtx.initialized(array))
-            return arrayGet(load(array), index.getForwardIR(compilationCtx));
+        if(compilationCtx.initializedInScope(output))
+            return load(compilationCtx.getInitializedVariable(output));
+        else if(compilationCtx.initializedInScope(array))
+            return arrayGet(load(compilationCtx.getInitializedVariable(array)), index.getForwardIR(compilationCtx));
         else
             return arrayGet(array.getForwardIR(compilationCtx), index.getForwardIR(compilationCtx));
     }

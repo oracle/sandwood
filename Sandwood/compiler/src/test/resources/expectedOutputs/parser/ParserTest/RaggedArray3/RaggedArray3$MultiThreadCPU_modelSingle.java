@@ -162,45 +162,51 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			{
-				// The sample value to calculate the probability of generating
-				double[] cv$sampleValue = d;
 				{
+					// The sample value to calculate the probability of generating
+					double[] cv$sampleValue = d;
 					{
-						double[] var35 = a[y];
-						
-						// Allocate a local variable to hold the length of the array.
-						int lengthCV$a$37_15 = -1;
-						
-						// calculate array length.
-						// 
-						// Looking for a path between Put 17 and consumer double[] 35.
 						{
-							if((0 == y))
-								lengthCV$a$37_15 = 2;
+							double[] var35 = a[y];
+							
+							// Allocate a local variable to hold the length of the array.
+							int lengthCV$a$37_15 = -1;
+							
+							// calculate array length.
+							// 
+							// Looking for a path between Put 17 and consumer double[] 35.
+							{
+								{
+									if((0 == y))
+										lengthCV$a$37_15 = 2;
+								}
+							}
+							
+							// Looking for a path between Put 35 and consumer double[] 35.
+							{
+								{
+									if((1 == y))
+										lengthCV$a$37_15 = 3;
+								}
+							}
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, var35, lengthCV$a$37_15));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						
-						// Looking for a path between Put 35 and consumer double[] 35.
-						{
-							if((1 == y))
-								lengthCV$a$37_15 = 3;
-						}
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, var35, lengthCV$a$37_15));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -233,9 +239,9 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample39 = fixedFlag$sample39;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -276,43 +282,49 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				{
-					// The sample value to calculate the probability of generating
-					int cv$sampleValue = obs[var50];
 					{
+						// The sample value to calculate the probability of generating
+						int cv$sampleValue = obs[var50];
 						{
-							// Allocate a local variable to hold the length of the array.
-							int lengthCV$a$37_16 = -1;
-							
-							// calculate array length.
-							// 
-							// Looking for a path between Put 17 and consumer double[] 35.
 							{
-								if((0 == y))
-									lengthCV$a$37_16 = 2;
+								// Allocate a local variable to hold the length of the array.
+								int lengthCV$a$37_16 = -1;
+								
+								// calculate array length.
+								// 
+								// Looking for a path between Put 17 and consumer double[] 35.
+								{
+									{
+										if((0 == y))
+											lengthCV$a$37_16 = 2;
+									}
+								}
+								
+								// Looking for a path between Put 35 and consumer double[] 35.
+								{
+									{
+										if((1 == y))
+											lengthCV$a$37_16 = 3;
+									}
+								}
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_16))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							
-							// Looking for a path between Put 35 and consumer double[] 35.
-							{
-								if((1 == y))
-									lengthCV$a$37_16 = 3;
-							}
-							
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_16))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -351,9 +363,9 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample53 = fixedFlag$sample39;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -395,14 +407,18 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// 
 			// Looking for a path between Put 17 and consumer double[] 35.
 			{
-				if((0 == y))
-					lengthCV$a$37_13 = 2;
+				{
+					if((0 == y))
+						lengthCV$a$37_13 = 2;
+				}
 			}
 			
 			// Looking for a path between Put 35 and consumer double[] 35.
 			{
-				if((1 == y))
-					lengthCV$a$37_13 = 3;
+				{
+					if((1 == y))
+						lengthCV$a$37_13 = 3;
+				}
 			}
 			
 			// Get the length of the array
@@ -415,12 +431,16 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Processing random variable 38.
 				{
 					{
-						// Processing sample task 53 of consumer random variable null.
 						{
-							for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
-								// Increment the sample counter with the value sampled by sample task 53 of random
-								// variable var38
-								cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+							// Processing sample task 53 of consumer random variable null.
+							{
+								{
+									for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
+										// Increment the sample counter with the value sampled by sample task 53 of random
+										// variable var38
+										cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+								}
+							}
 						}
 					}
 				}
@@ -433,14 +453,18 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// 
 			// Looking for a path between Put 17 and consumer double[] 35.
 			{
-				if((0 == y))
-					lengthCV$a$37_14 = 2;
+				{
+					if((0 == y))
+						lengthCV$a$37_14 = 2;
+				}
 			}
 			
 			// Looking for a path between Put 35 and consumer double[] 35.
 			{
-				if((1 == y))
-					lengthCV$a$37_14 = 3;
+				{
+					if((1 == y))
+						lengthCV$a$37_14 = 3;
+				}
 			}
 			
 			// Calculate the new sample value
@@ -487,14 +511,18 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// 
 				// Looking for a path between Put 17 and consumer double[] 35.
 				{
-					if((0 == y))
-						lengthCV$a$37_12 = 2;
+					{
+						if((0 == y))
+							lengthCV$a$37_12 = 2;
+					}
 				}
 				
 				// Looking for a path between Put 35 and consumer double[] 35.
 				{
-					if((1 == y))
-						lengthCV$a$37_12 = 3;
+					{
+						if((1 == y))
+							lengthCV$a$37_12 = 3;
+					}
 				}
 				d = new double[lengthCV$a$37_12];
 			}
@@ -519,17 +547,21 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_17 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_17 = 2;
+				}
 			}
 		}
 		
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_17 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_17 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample39)
@@ -542,14 +574,18 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
-			if((0 == y))
-				lengthCV$a$37_18 = 2;
+			{
+				if((0 == y))
+					lengthCV$a$37_18 = 2;
+			}
 		}
 		
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
-			if((1 == y))
-				lengthCV$a$37_18 = 3;
+			{
+				if((1 == y))
+					lengthCV$a$37_18 = 3;
+			}
 		}
 		
 		// Alternative name for lengthCV$a$37_18 to make it effectively final.
@@ -579,17 +615,21 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_23 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_23 = 2;
+				}
 			}
 		}
 		
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_23 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_23 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample39)
@@ -607,17 +647,21 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_19 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_19 = 2;
+				}
 			}
 		}
 		
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_19 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_19 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample39)
@@ -630,14 +674,18 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
-			if((0 == y))
-				lengthCV$a$37_20 = 2;
+			{
+				if((0 == y))
+					lengthCV$a$37_20 = 2;
+			}
 		}
 		
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
-			if((1 == y))
-				lengthCV$a$37_20 = 3;
+			{
+				if((1 == y))
+					lengthCV$a$37_20 = 3;
+			}
 		}
 		
 		// Alternative name for lengthCV$a$37_20 to make it effectively final.
@@ -666,17 +714,21 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_21 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_21 = 2;
+				}
 			}
 		}
 		
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_21 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_21 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample39)
@@ -695,17 +747,21 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
-			if((0 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_22 = 2;
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_22 = 2;
+				}
 			}
 		}
 		
 		// Looking for a path between Put 35 and consumer double[] 35.
 		{
-			if((1 == y)) {
-				if(!fixedFlag$sample39)
-					lengthCV$a$37_22 = 3;
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_22 = 3;
+				}
 			}
 		}
 		if(!fixedFlag$sample39)

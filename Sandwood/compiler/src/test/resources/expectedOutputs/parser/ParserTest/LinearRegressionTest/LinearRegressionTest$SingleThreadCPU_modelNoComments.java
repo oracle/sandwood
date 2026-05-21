@@ -181,21 +181,23 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					double cv$sampleValue = weights[var23];
 					{
+						double cv$sampleValue = weights[var23];
 						{
-							double var10 = 0.0;
-							double var11 = 10.0;
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var10) / Math.sqrt(var11))) - (0.5 * Math.log(var11))));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double var10 = 0.0;
+								double var11 = 10.0;
+								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var10) / Math.sqrt(var11))) - (0.5 * Math.log(var11))));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -238,21 +240,23 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
-				double cv$sampleValue = bias;
 				{
+					double cv$sampleValue = bias;
 					{
-						double var28 = 0.0;
-						double var29 = 10.0;
-						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var28) / Math.sqrt(var29))) - (0.5 * Math.log(var29))));
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var28 = 0.0;
+							double var29 = 10.0;
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var28) / Math.sqrt(var29))) - (0.5 * Math.log(var29))));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -287,21 +291,23 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
-				double cv$sampleValue = tau;
 				{
+					double cv$sampleValue = tau;
 					{
-						double var32 = 3.0;
-						double var33 = 1.0;
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var32, var33));
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var32 = 3.0;
+							double var33 = 1.0;
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityInverseGamma(cv$sampleValue, var32, var33));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -338,26 +344,28 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					double cv$sampleValue = y[i$var45];
 					{
+						double cv$sampleValue = y[i$var45];
 						{
-							double reduceVar$var70$3 = 0.0;
-							for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
-								double i$var67 = reduceVar$var70$3;
-								double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
-								reduceVar$var70$3 = (i$var67 + j$var68);
+							{
+								double reduceVar$var70$3 = 0.0;
+								for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+									double i$var67 = reduceVar$var70$3;
+									double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+									reduceVar$var70$3 = (i$var67 + j$var68);
+								}
+								double var71 = (reduceVar$var70$3 + bias);
+								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var71) / Math.sqrt(tau))) - (0.5 * Math.log(tau))));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							double var71 = (reduceVar$var70$3 + bias);
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var71) / Math.sqrt(tau))) - (0.5 * Math.log(tau))));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
-							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -400,41 +408,45 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			{
 				{
 					{
-						for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-							if((var23 == j$var55)) {
-								for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-									if(((0 <= j$var55) && (j$var55 < k))) {
-										{
+						{
+							for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+								if((var23 == j$var55)) {
+									for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+										if(((0 <= j$var55) && (j$var55 < k))) {
 											{
 												{
 													{
 														{
 															{
-																double cv$denominator = 1.0;
-																double cv$numerator = 0.0;
-																cv$numerator = (cv$numerator * x[i$var45][j$var55]);
-																cv$denominator = (cv$denominator * x[i$var45][j$var55]);
-																if((0 < k)) {
-																	double reduceVar$var70$0 = 0.0;
-																	for(int cv$reduction155Index = 0; cv$reduction155Index < j$var55; cv$reduction155Index += 1) {
-																		double i$var67 = reduceVar$var70$0;
-																		double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction155Index];
-																		reduceVar$var70$0 = (i$var67 + j$var68);
+																{
+																	{
+																		double cv$denominator = 1.0;
+																		double cv$numerator = 0.0;
+																		cv$numerator = (cv$numerator * x[i$var45][j$var55]);
+																		cv$denominator = (cv$denominator * x[i$var45][j$var55]);
+																		if((0 < k)) {
+																			double reduceVar$var70$0 = 0.0;
+																			for(int cv$reduction149Index = 0; cv$reduction149Index < j$var55; cv$reduction149Index += 1) {
+																				double i$var67 = reduceVar$var70$0;
+																				double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction149Index];
+																				reduceVar$var70$0 = (i$var67 + j$var68);
+																			}
+																			for(int cv$reduction149Index = (j$var55 + 1); cv$reduction149Index < k; cv$reduction149Index += 1) {
+																				double i$var67 = reduceVar$var70$0;
+																				double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction149Index];
+																				reduceVar$var70$0 = (i$var67 + j$var68);
+																			}
+																			double cv$reduced65 = reduceVar$var70$0;
+																			cv$numerator = (cv$numerator + cv$reduced65);
+																		}
+																		cv$numerator = (cv$numerator + bias);
+																		cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+																		cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
+																		if(cv$sigmaNotFound) {
+																			cv$sigmaValue = tau;
+																			cv$sigmaNotFound = false;
+																		}
 																	}
-																	for(int cv$reduction155Index = (j$var55 + 1); cv$reduction155Index < k; cv$reduction155Index += 1) {
-																		double i$var67 = reduceVar$var70$0;
-																		double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction155Index];
-																		reduceVar$var70$0 = (i$var67 + j$var68);
-																	}
-																	double cv$reduced65 = reduceVar$var70$0;
-																	cv$numerator = (cv$numerator + cv$reduced65);
-																}
-																cv$numerator = (cv$numerator + bias);
-																cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-																cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
-																if(cv$sigmaNotFound) {
-																	cv$sigmaValue = tau;
-																	cv$sigmaNotFound = false;
 																}
 															}
 														}
@@ -452,14 +464,18 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			double var24 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
 			{
 				{
-					weights[var23] = var24;
+					{
+						weights[var23] = var24;
+					}
 				}
 			}
 			{
-				for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-					if((var23 == j$var55)) {
-						for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-							phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+				{
+					for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+						if((var23 == j$var55)) {
+							for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
+								phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+						}
 					}
 				}
 			}
@@ -475,21 +491,23 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			{
 				{
 					{
-						for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-							double cv$denominator = 1.0;
-							double cv$numerator = 0.0;
-							double reduceVar$var70$1 = 0.0;
-							for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
-								double i$var67 = reduceVar$var70$1;
-								double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
-								reduceVar$var70$1 = (i$var67 + j$var68);
-							}
-							cv$numerator = (reduceVar$var70$1 + cv$numerator);
-							cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-							cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
-							if(cv$sigmaNotFound) {
-								cv$sigmaValue = tau;
-								cv$sigmaNotFound = false;
+						{
+							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+								double cv$denominator = 1.0;
+								double cv$numerator = 0.0;
+								double reduceVar$var70$1 = 0.0;
+								for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+									double i$var67 = reduceVar$var70$1;
+									double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+									reduceVar$var70$1 = (i$var67 + j$var68);
+								}
+								cv$numerator = (reduceVar$var70$1 + cv$numerator);
+								cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+								cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
+								if(cv$sigmaNotFound) {
+									cv$sigmaValue = tau;
+									cv$sigmaNotFound = false;
+								}
 							}
 						}
 					}
@@ -506,17 +524,19 @@ final class LinearRegressionTest$SingleThreadCPU extends org.sandwood.runtime.in
 			{
 				{
 					{
-						for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-							double reduceVar$var70$2 = 0.0;
-							for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
-								double i$var67 = reduceVar$var70$2;
-								double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
-								reduceVar$var70$2 = (i$var67 + j$var68);
+						{
+							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+								double reduceVar$var70$2 = 0.0;
+								for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+									double i$var67 = reduceVar$var70$2;
+									double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+									reduceVar$var70$2 = (i$var67 + j$var68);
+								}
+								double cv$var72$mu = (reduceVar$var70$2 + bias);
+								double cv$var72$diff = (cv$var72$mu - y[i$var45]);
+								cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
+								cv$count = (cv$count + 1);
 							}
-							double cv$var72$mu = (reduceVar$var70$2 + bias);
-							double cv$var72$diff = (cv$var72$mu - y[i$var45]);
-							cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
-							cv$count = (cv$count + 1);
 						}
 					}
 				}

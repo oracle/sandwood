@@ -254,29 +254,31 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			{
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = b1;
 				{
+					// The sample value to calculate the probability of generating
+					double cv$sampleValue = b1;
 					{
-						double var8 = 1.0;
-						double var9 = 5.0;
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var8) / Math.sqrt(var9))) - (0.5 * Math.log(var9))));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var8 = 1.0;
+							double var9 = 5.0;
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var8) / Math.sqrt(var9))) - (0.5 * Math.log(var9))));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -309,9 +311,9 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample11 = fixedFlag$sample11;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -349,29 +351,31 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			{
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = (1 / variance);
 				{
+					// The sample value to calculate the probability of generating
+					double cv$sampleValue = (1 / variance);
 					{
-						double var13 = 1.0;
-						double var14 = 1.0;
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGamma(cv$sampleValue, var13, var14));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var13 = 1.0;
+							double var14 = 1.0;
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityGamma(cv$sampleValue, var13, var14));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -407,9 +411,9 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample16 = fixedFlag$sample16;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -453,28 +457,30 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 				// An accumulator for the distributed probability space covered.
 				double cv$probabilityReached = 0.0;
 				{
-					// The sample value to calculate the probability of generating
-					double cv$sampleValue = y[i];
 					{
+						// The sample value to calculate the probability of generating
+						double cv$sampleValue = y[i];
 						{
-							double var31 = (b0 + (b1 * x[i]));
-							
-							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var31) / Math.sqrt(variance))) - (0.5 * Math.log(variance))));
-							
-							// Add the probability of this sample task to the distribution accumulator.
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								// If the second value is -infinity.
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double var31 = (b0 + (b1 * x[i]));
+								
+								// Store the value of the function call, so the function call is only made once.
+								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var31) / Math.sqrt(variance))) - (0.5 * Math.log(variance))));
+								
+								// Add the probability of this sample task to the distribution accumulator.
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									// If the second value is -infinity.
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								
+								// Add the probability of this distribution configuration to the accumulator.
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							
-							// Add the probability of this distribution configuration to the accumulator.
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -510,9 +516,9 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample33 = ((fixedFlag$sample7 && fixedFlag$sample11) && fixedFlag$sample16);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -556,29 +562,31 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			// An accumulator for the distributed probability space covered.
 			double cv$probabilityReached = 0.0;
 			{
-				// The sample value to calculate the probability of generating
-				double cv$sampleValue = b0;
 				{
+					// The sample value to calculate the probability of generating
+					double cv$sampleValue = b0;
 					{
-						double var4 = 0.0;
-						double var5 = 2.0;
-						
-						// Store the value of the function call, so the function call is only made once.
-						double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var4) / Math.sqrt(var5))) - (0.5 * Math.log(var5))));
-						
-						// Add the probability of this sample task to the distribution accumulator.
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							// If the second value is -infinity.
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var4 = 0.0;
+							double var5 = 2.0;
+							
+							// Store the value of the function call, so the function call is only made once.
+							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var4) / Math.sqrt(var5))) - (0.5 * Math.log(var5))));
+							
+							// Add the probability of this sample task to the distribution accumulator.
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								// If the second value is -infinity.
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							
+							// Add the probability of this distribution configuration to the accumulator.
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						
-						// Add the probability of this distribution configuration to the accumulator.
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -611,9 +619,9 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample7 = fixedFlag$sample7;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -653,29 +661,31 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 				// Processing random variable 32.
 				{
 					{
-						for(int i = 0; i < noSamples; i += 1) {
-							// State for tracking the changes that happen to the sampled value between it being
-							// consumed and it being produced.
-							double cv$denominator = 1.0;
-							double cv$numerator = 0.0;
-							cv$numerator = (cv$numerator * x[i]);
-							cv$denominator = (cv$denominator * x[i]);
-							cv$numerator = (b0 + cv$numerator);
-							
-							// Record the value of a sample generated by a consuming sample 33 of random variable
-							// var32.
-							// 
-							// Add the denominator squared to the sample denominator
-							cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-							
-							// Add the weighting of the sample to the sum.
-							cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
-							
-							// If we have not got the value of sigma yet record it and set a flag so it is not
-							// recorded again.
-							if(cv$sigmaNotFound) {
-								cv$sigmaValue = variance;
-								cv$sigmaNotFound = false;
+						{
+							for(int i = 0; i < noSamples; i += 1) {
+								// State for tracking the changes that happen to the sampled value between it being
+								// consumed and it being produced.
+								double cv$denominator = 1.0;
+								double cv$numerator = 0.0;
+								cv$numerator = (cv$numerator * x[i]);
+								cv$denominator = (cv$denominator * x[i]);
+								cv$numerator = (b0 + cv$numerator);
+								
+								// Record the value of a sample generated by a consuming sample 33 of random variable
+								// var32.
+								// 
+								// Add the denominator squared to the sample denominator
+								cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+								
+								// Add the weighting of the sample to the sum.
+								cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
+								
+								// If we have not got the value of sigma yet record it and set a flag so it is not
+								// recorded again.
+								if(cv$sigmaNotFound) {
+									cv$sigmaValue = variance;
+									cv$sigmaNotFound = false;
+								}
 							}
 						}
 					}
@@ -702,20 +712,22 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 				// Processing random variable 32.
 				{
 					{
-						for(int i = 0; i < noSamples; i += 1) {
-							// The mean parameter for Gaussian var32.
-							double cv$var32$mu = (b0 + (b1 * x[i]));
-							
-							// Consume sample task 33 from random variable var32.
-							// 
-							// The difference between the mean parameter and the value sampled from the Gaussian.
-							double cv$var32$diff = (cv$var32$mu - y[i]);
-							
-							// Include this sample by adding the square of the difference to the sum.
-							cv$sum = (cv$sum + (cv$var32$diff * cv$var32$diff));
-							
-							// Increment the number of samples in the calculation.
-							cv$count = (cv$count + 1);
+						{
+							for(int i = 0; i < noSamples; i += 1) {
+								// The mean parameter for Gaussian var32.
+								double cv$var32$mu = (b0 + (b1 * x[i]));
+								
+								// Consume sample task 33 from random variable var32.
+								// 
+								// The difference between the mean parameter and the value sampled from the Gaussian.
+								double cv$var32$diff = (cv$var32$mu - y[i]);
+								
+								// Include this sample by adding the square of the difference to the sum.
+								cv$sum = (cv$sum + (cv$var32$diff * cv$var32$diff));
+								
+								// Increment the number of samples in the calculation.
+								cv$count = (cv$count + 1);
+							}
 						}
 					}
 				}
@@ -728,8 +740,10 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 			// Guards to ensure that variance is only updated when there is a valid path.
 			{
 				{
-					// Write out the new sample value.
-					variance = (1 / var16);
+					{
+						// Write out the new sample value.
+						variance = (1 / var16);
+					}
 				}
 			}
 		}
@@ -756,27 +770,29 @@ final class LinearRegressionBasic2$MultiThreadCPU extends org.sandwood.runtime.i
 				// Processing random variable 32.
 				{
 					{
-						for(int i = 0; i < noSamples; i += 1) {
-							// State for tracking the changes that happen to the sampled value between it being
-							// consumed and it being produced.
-							double cv$denominator = 1.0;
-							double cv$numerator = 0.0;
-							cv$numerator = (cv$numerator + (b1 * x[i]));
-							
-							// Record the value of a sample generated by a consuming sample 33 of random variable
-							// var32.
-							// 
-							// Add the denominator squared to the sample denominator
-							cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-							
-							// Add the weighting of the sample to the sum.
-							cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
-							
-							// If we have not got the value of sigma yet record it and set a flag so it is not
-							// recorded again.
-							if(cv$sigmaNotFound) {
-								cv$sigmaValue = variance;
-								cv$sigmaNotFound = false;
+						{
+							for(int i = 0; i < noSamples; i += 1) {
+								// State for tracking the changes that happen to the sampled value between it being
+								// consumed and it being produced.
+								double cv$denominator = 1.0;
+								double cv$numerator = 0.0;
+								cv$numerator = (cv$numerator + (b1 * x[i]));
+								
+								// Record the value of a sample generated by a consuming sample 33 of random variable
+								// var32.
+								// 
+								// Add the denominator squared to the sample denominator
+								cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+								
+								// Add the weighting of the sample to the sum.
+								cv$sum = (cv$sum + (cv$denominator * (y[i] - cv$numerator)));
+								
+								// If we have not got the value of sigma yet record it and set a flag so it is not
+								// recorded again.
+								if(cv$sigmaNotFound) {
+									cv$sigmaValue = variance;
+									cv$sigmaNotFound = false;
+								}
 							}
 						}
 					}

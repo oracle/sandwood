@@ -79,11 +79,11 @@ public class TransSandwoodClassGenerated {
         Map<FunctionName, TransFunction<?>> optimisedFunctions = new HashMap<>();
 
         // Get the values that are set to constants.
-        TransFunction<?> initilise = functions.get(AuxFunctionType.INITIALIZE.functionName);
-        initilise = initilise.applyOptimisations(Collections.emptyMap());
-        Map<VariableDescription<?>, TransTreeReturn<?>> constants = getConstants(initilise);
-        initilise = initilise.applyConstants(constants);
-        optimisedFunctions.put(AuxFunctionType.INITIALIZE.functionName, initilise);
+        TransFunction<?> initialize = functions.get(AuxFunctionType.INITIALIZE.functionName);
+        initialize = initialize.applyOptimisations(Collections.emptyMap());
+        Map<VariableDescription<?>, TransTreeReturn<?>> constants = getConstants(initialize);
+        initialize = initialize.applyConstants(constants);
+        optimisedFunctions.put(AuxFunctionType.INITIALIZE.functionName, initialize);
 
         // Construct tasks to perform optimisations
         List<FunctionOptTask> functionTasks = new ArrayList<>();
@@ -115,9 +115,9 @@ public class TransSandwoodClassGenerated {
                 optimisedFunctions, fieldTrees, optimisedGettersAndSetters);
     }
 
-    private Map<VariableDescription<?>, TransTreeReturn<?>> getConstants(TransFunction<?> initialise) {
+    private Map<VariableDescription<?>, TransTreeReturn<?>> getConstants(TransFunction<?> initialize) {
         Map<VariableDescription<?>, TransTreeReturn<?>> constants = new HashMap<>();
-        initialise.body.traverseTree(new TreeVisitor() {
+        initialize.body.traverseTree(new TreeVisitor() {
             @Override
             public void visit(TransTree<?> tree) {
                 switch(tree.type) {

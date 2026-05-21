@@ -54,7 +54,7 @@ public class SampleDescScalar<A extends ScalarVariable<A>, B extends RandomVaria
                 Variable<A> vSub = compilationCtx.getSubstitute(v);
                 ProducingDataflowTask<A> task = vSub.getParent();
                 IRTreeReturn<A> t = task.getForwardIR(compilationCtx);
-                compilationCtx.addTreeToScope(v.scope(),
+                compilationCtx.addTreeToScope(GlobalScope.scope,
                         TreeUtils.putIndirectValue(v, t, "Write out the new sample value.", compilationCtx));
                 output.unmarkStopPoint();
             }

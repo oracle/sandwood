@@ -262,9 +262,9 @@ final class Flip1CoinMK5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample22 = fixedFlag$sample9;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$bernoulli1 = logProbability$var22;
@@ -340,9 +340,9 @@ final class Flip1CoinMK5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample36 = fixedFlag$sample9;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$bernoulli2 = logProbability$var36;
@@ -432,9 +432,9 @@ final class Flip1CoinMK5$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample9 = fixedFlag$sample9;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model

@@ -151,21 +151,23 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
-				double cv$sampleValue = bias[0];
 				{
+					double cv$sampleValue = bias[0];
 					{
-						double var6 = 1.0;
-						double var7 = 1.0;
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var6, var7));
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var6 = 1.0;
+							double var7 = 1.0;
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var6, var7));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -206,21 +208,23 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					double cv$sampleValue = bias[i$var22];
 					{
+						double cv$sampleValue = bias[i$var22];
 						{
-							double var6 = 1.0;
-							double var7 = 1.0;
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var6, var7));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double var6 = 1.0;
+								double var7 = 1.0;
+								double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, var6, var7));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -267,20 +271,22 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					double cv$probabilityReached = 0.0;
 					{
-						boolean cv$sampleValue = flips[j][var49];
 						{
+							boolean cv$sampleValue = flips[j][var49];
 							{
-								double var38 = bias[j];
-								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var38:(1.0 - var38))));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								{
+									double var38 = bias[j];
+									double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var38:(1.0 - var38))));
+									if((cv$weightedProbability < cv$distributionAccumulator))
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+									else {
+										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+											cv$distributionAccumulator = cv$weightedProbability;
+										else
+											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+									}
+									cv$probabilityReached = (cv$probabilityReached + 1.0);
 								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
 						}
 					}
@@ -328,20 +334,22 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 					double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 					double cv$probabilityReached = 0.0;
 					{
-						boolean cv$sampleValue = flips[k][var76];
 						{
+							boolean cv$sampleValue = flips[k][var76];
 							{
-								double var65 = bias[k];
-								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var65:(1.0 - var65))));
-								if((cv$weightedProbability < cv$distributionAccumulator))
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-								else {
-									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-										cv$distributionAccumulator = cv$weightedProbability;
-									else
-										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								{
+									double var65 = bias[k];
+									double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var65:(1.0 - var65))));
+									if((cv$weightedProbability < cv$distributionAccumulator))
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+									else {
+										if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+											cv$distributionAccumulator = cv$weightedProbability;
+										else
+											cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+									}
+									cv$probabilityReached = (cv$probabilityReached + 1.0);
 								}
-								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
 						}
 					}
@@ -386,13 +394,17 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 			{
 				{
 					{
-						for(int j = 0; j < 1; j += 1) {
-							if((0 == j)) {
-								{
-									for(int var49 = 0; var49 < length$flipsMeasured[j]; var49 += 1) {
-										cv$count = (cv$count + 1);
-										if(flips[j][var49])
-											cv$sum = (cv$sum + 1);
+						{
+							for(int j = 0; j < 1; j += 1) {
+								if((0 == j)) {
+									{
+										{
+											for(int var49 = 0; var49 < length$flipsMeasured[j]; var49 += 1) {
+												cv$count = (cv$count + 1);
+												if(flips[j][var49])
+													cv$sum = (cv$sum + 1);
+											}
+										}
 									}
 								}
 							}
@@ -401,13 +413,17 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 				}
 				{
 					{
-						for(int k = 1; k < coins; k += 1) {
-							if((0 == k)) {
-								{
-									for(int var76 = 0; var76 < length$flipsMeasured[k]; var76 += 1) {
-										cv$count = (cv$count + 1);
-										if(flips[k][var76])
-											cv$sum = (cv$sum + 1);
+						{
+							for(int k = 1; k < coins; k += 1) {
+								if((0 == k)) {
+									{
+										{
+											for(int var76 = 0; var76 < length$flipsMeasured[k]; var76 += 1) {
+												cv$count = (cv$count + 1);
+												if(flips[k][var76])
+													cv$sum = (cv$sum + 1);
+											}
+										}
 									}
 								}
 							}
@@ -418,7 +434,9 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 			double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 			{
 				{
-					bias[0] = var10;
+					{
+						bias[0] = var10;
+					}
 				}
 			}
 		}
@@ -431,13 +449,17 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 			{
 				{
 					{
-						for(int j = 0; j < 1; j += 1) {
-							if((i$var22 == j)) {
-								{
-									for(int var49 = 0; var49 < length$flipsMeasured[j]; var49 += 1) {
-										cv$count = (cv$count + 1);
-										if(flips[j][var49])
-											cv$sum = (cv$sum + 1);
+						{
+							for(int j = 0; j < 1; j += 1) {
+								if((i$var22 == j)) {
+									{
+										{
+											for(int var49 = 0; var49 < length$flipsMeasured[j]; var49 += 1) {
+												cv$count = (cv$count + 1);
+												if(flips[j][var49])
+													cv$sum = (cv$sum + 1);
+											}
+										}
 									}
 								}
 							}
@@ -446,13 +468,17 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 				}
 				{
 					{
-						for(int k = 1; k < coins; k += 1) {
-							if((i$var22 == k)) {
-								{
-									for(int var76 = 0; var76 < length$flipsMeasured[k]; var76 += 1) {
-										cv$count = (cv$count + 1);
-										if(flips[k][var76])
-											cv$sum = (cv$sum + 1);
+						{
+							for(int k = 1; k < coins; k += 1) {
+								if((i$var22 == k)) {
+									{
+										{
+											for(int var76 = 0; var76 < length$flipsMeasured[k]; var76 += 1) {
+												cv$count = (cv$count + 1);
+												if(flips[k][var76])
+													cv$sum = (cv$sum + 1);
+											}
+										}
 									}
 								}
 							}
@@ -463,7 +489,9 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 			double var23 = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 			{
 				{
-					bias[i$var22] = var23;
+					{
+						bias[i$var22] = var23;
+					}
 				}
 			}
 		}

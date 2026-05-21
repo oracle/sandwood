@@ -74,8 +74,8 @@ public class ArrayConstructTask<A extends Variable<A>> extends ProducingDataflow
     @Override
     protected IRTreeReturn<ArrayVariable<A>> getForwardIRinternal(CompilationContext compilationCtx) {
         if(output.isSubArray()) {
-            if(compilationCtx.initialized(output))
-                return IRTree.load(output);
+            if(compilationCtx.initializedInScope(output))
+                return IRTree.load(compilationCtx.getInitializedVariable(output));
             else {
                 OuterArrayDesc<A> outerDesc = output.getOuterArrayDesc();
                 return IRTree.arrayGet(outerDesc.getArray().getForwardIR(compilationCtx),

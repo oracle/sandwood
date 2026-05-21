@@ -373,9 +373,9 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample124 = (fixedFlag$sample124 && fixedFlag$sample28);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -462,9 +462,9 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample191 = ((fixedFlag$sample45 && fixedFlag$sample84) && fixedFlag$sample124);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -571,9 +571,9 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample28 = fixedFlag$sample28;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -681,9 +681,9 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample45 = fixedFlag$sample45;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -790,9 +790,9 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample84 = (fixedFlag$sample84 && fixedFlag$sample28);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -822,8 +822,6 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Unrolled loop
 		{
-			// Variable declaration of cv$temp$2$var184 moved.
-			// 
 			// Constructing a random variable input for use later.
 			// 
 			// Processing random variable 185.
@@ -833,7 +831,7 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
-			double cv$temp$2$var184 = bias[0];
+			double var184 = bias[0];
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -855,15 +853,12 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
-			// 
-			// cv$temp$0$var119's comment
 			// Constructing a random variable input for use later.
-			cv$stateProbabilityLocal[0] = (Math.log((flips[j1][k1][i1]?cv$temp$2$var184:(1.0 - cv$temp$2$var184))) + Math.log(m[0][0]));
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			cv$stateProbabilityLocal[0] = (Math.log((flips[j1][k1][i1]?var184:(1.0 - var184))) + Math.log(m[0][0]));
 		}
 		
-		// Variable declaration of cv$temp$2$var184 moved.
-		// 
 		// Constructing a random variable input for use later.
 		// 
 		// Processing random variable 185.
@@ -873,7 +868,7 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		double cv$temp$2$var184 = bias[1];
+		double var184 = bias[1];
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
@@ -895,11 +890,10 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
-		// 
-		// cv$temp$0$var119's comment
 		// Constructing a random variable input for use later.
-		cv$stateProbabilityLocal[1] = (Math.log((flips[j1][k1][i1]?cv$temp$2$var184:(1.0 - cv$temp$2$var184))) + Math.log(m[0][1]));
+		// 
+		// Substituted "cv$valuePos" with its value "1".
+		cv$stateProbabilityLocal[1] = (Math.log((flips[j1][k1][i1]?var184:(1.0 - var184))) + Math.log(m[0][1]));
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -908,7 +902,7 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		double cv$lseMax = cv$stateProbabilityLocal[0];
 		
 		// Unrolled loop
@@ -926,17 +920,17 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// 
 			// The sum of all the probabilities in log space
 			// 
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			cv$logSum = (Math.log((Math.exp((cv$stateProbabilityLocal[0] - cv$lseMax)) + Math.exp((cv$stateProbabilityLocal[1] - cv$lseMax)))) + cv$lseMax);
 		
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Unrolled loop
-			// cv$numNumStates's comment
+			// cv$numStates's comment
 			// variable marginalization
 			cv$stateProbabilityLocal[0] = 0.5;
 			
-			// cv$numNumStates's comment
+			// cv$numStates's comment
 			// variable marginalization
 			cv$stateProbabilityLocal[1] = 0.5;
 		} else {
@@ -947,7 +941,7 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Set array values that are not computed for the input to negative infinity.
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// variable marginalization
 		for(int cv$indexName = 2; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 			cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
@@ -955,7 +949,7 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// variable marginalization
 		st[i1][j1][k1] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, 2);
 	}
@@ -1051,16 +1045,13 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
-			// 
-			// cv$temp$0$var79's comment
 			// Constructing a random variable input for use later.
+			// 
+			// Substituted "cv$valuePos" with its value "0".
 			double cv$accumulatedProbabilities = Math.log(m[0][0]);
 			
 			// Substituted "p" with its value "0".
 			if((0 < samples)) {
-				// Variable declaration of cv$temp$2$var184 moved.
-				// 
 				// Constructing a random variable input for use later.
 				// 
 				// Processing random variable 185.
@@ -1070,7 +1061,7 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Value of the variable at this index
 				// 
 				// Substituted "cv$valuePos" with its value "0".
-				double cv$temp$2$var184 = bias[0];
+				double var184 = bias[0];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -1088,7 +1079,7 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// inputs.
 				// 
 				// Substituted "l" with its value "0".
-				cv$accumulatedProbabilities = (Math.log((flips[0][0][0]?cv$temp$2$var184:(1.0 - cv$temp$2$var184))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[0][0][0]?var184:(1.0 - var184))) + cv$accumulatedProbabilities);
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
@@ -1104,16 +1095,13 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
-		// 
-		// cv$temp$0$var79's comment
 		// Constructing a random variable input for use later.
+		// 
+		// Substituted "cv$valuePos" with its value "1".
 		double cv$accumulatedProbabilities = Math.log(m[0][1]);
 		
 		// Substituted "p" with its value "0".
 		if((0 < samples)) {
-			// Variable declaration of cv$temp$2$var184 moved.
-			// 
 			// Constructing a random variable input for use later.
 			// 
 			// Processing random variable 185.
@@ -1123,7 +1111,7 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			double cv$temp$2$var184 = bias[1];
+			double var184 = bias[1];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -1141,7 +1129,7 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// inputs.
 			// 
 			// Substituted "l" with its value "0".
-			cv$accumulatedProbabilities = (Math.log((flips[0][0][0]?cv$temp$2$var184:(1.0 - cv$temp$2$var184))) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((flips[0][0][0]?var184:(1.0 - var184))) + cv$accumulatedProbabilities);
 		}
 		
 		// Save the calculated index value into the array of index value probabilities
@@ -1160,7 +1148,7 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var81$stateProbabilityGlobal[0];
@@ -1186,7 +1174,7 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// 
 			// Get a local reference to the scratch space.
 			// 
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			cv$logSum = (Math.log((Math.exp((cv$var81$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var81$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 		
 		// If all the sum is zero, just share the probability evenly.
@@ -1216,7 +1204,7 @@ final class HMMTestPart4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// variable marginalization
 		st[0][0][0] = DistributionSampling.sampleCategorical(RNG$, cv$var81$stateProbabilityGlobal, 2);
 	}

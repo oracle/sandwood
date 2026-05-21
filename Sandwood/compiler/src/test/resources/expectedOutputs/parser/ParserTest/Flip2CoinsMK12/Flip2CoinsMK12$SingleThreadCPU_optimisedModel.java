@@ -305,9 +305,9 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample10 = fixedFlag$sample10;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$beta = (logProbability$beta + logProbability$var10);
@@ -389,9 +389,9 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample23 = fixedFlag$sample23;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$beta = (logProbability$beta + logProbability$var23);
@@ -478,9 +478,9 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample50 = (fixedFlag$sample10 && fixedFlag$sample23);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Variable declaration of cv$rvAccumulator moved.
@@ -552,9 +552,9 @@ final class Flip2CoinsMK12$SingleThreadCPU extends org.sandwood.runtime.internal
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample78 = (fixedFlag$sample10 && fixedFlag$sample23);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;

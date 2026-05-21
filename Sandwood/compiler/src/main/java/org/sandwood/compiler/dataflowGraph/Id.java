@@ -37,4 +37,20 @@ public class Id {
     public int id() {
         return id;
     }
+
+    @Override
+    public int hashCode() {
+        return id * 31;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj)
+            return true;
+        if((obj == null) || (getClass() != obj.getClass()))
+            return false;
+        Id other = (Id) obj;
+
+        return id == other.id();
+    }
 }

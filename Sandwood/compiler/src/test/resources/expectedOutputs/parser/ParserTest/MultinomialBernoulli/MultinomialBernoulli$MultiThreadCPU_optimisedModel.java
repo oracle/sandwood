@@ -318,9 +318,9 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample17 = fixedFlag$sample17;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -407,9 +407,9 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample20 = (fixedFlag$sample20 && fixedFlag$sample17);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -484,9 +484,9 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample48 = fixedFlag$sample20;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$b1 = logProbability$var48;
@@ -565,9 +565,9 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample60 = fixedFlag$sample20;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$b2 = logProbability$var60;
@@ -646,9 +646,9 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample72 = fixedFlag$sample20;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$b3 = logProbability$var72;
@@ -750,22 +750,15 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$2$n" with its value "10".
-			// 
-			// cv$temp$1$$var212's comment
-			// 
-			// $var212's comment
-			// Constructing a random variable input for use later.
+			// A reference local to the function for the sample variable.
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(prior, p, 3, 10);
 			
 			// Processing random variable 25.
 			// 
 			// Processing sample task 48 of consumer random variable b1.
 			for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
-				// Variable declaration of cv$temp$3$var24 moved.
-				// 
 				// Constructing a random variable input for use later.
-				double cv$temp$3$var24 = (double)(prior[0] / 10);
+				double var24 = (double)(prior[0] / 10);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -779,17 +772,15 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (Math.log((output[i$var47]?cv$temp$3$var24:(1.0 - cv$temp$3$var24))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((output[i$var47]?var24:(1.0 - var24))) + cv$accumulatedProbabilities);
 			}
 			
 			// Processing random variable 30.
 			// 
 			// Processing sample task 60 of consumer random variable b2.
 			for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
-				// Variable declaration of cv$temp$4$var29 moved.
-				// 
 				// Constructing a random variable input for use later.
-				double cv$temp$4$var29 = (double)(prior[1] / 10);
+				double var29 = (double)(prior[1] / 10);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -803,17 +794,15 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (Math.log((output[i$var59]?cv$temp$4$var29:(1.0 - cv$temp$4$var29))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((output[i$var59]?var29:(1.0 - var29))) + cv$accumulatedProbabilities);
 			}
 			
 			// Processing random variable 35.
 			// 
 			// Processing sample task 72 of consumer random variable b3.
 			for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
-				// Variable declaration of cv$temp$5$var34 moved.
-				// 
 				// Constructing a random variable input for use later.
-				double cv$temp$5$var34 = (double)(prior[2] / 10);
+				double var34 = (double)(prior[2] / 10);
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -827,7 +816,7 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (Math.log((output[i$var71]?cv$temp$5$var34:(1.0 - cv$temp$5$var34))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((output[i$var71]?var34:(1.0 - var34))) + cv$accumulatedProbabilities);
 			}
 			
 			// Initialize an accumulator to take the product of all the distribution probabilities
@@ -852,22 +841,15 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$2$n" with its value "10".
-		// 
-		// cv$temp$1$$var212's comment
-		// 
-		// $var212's comment
-		// Constructing a random variable input for use later.
+		// A reference local to the function for the sample variable.
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityMultinomial(prior, p, 3, 10);
 		
 		// Processing random variable 25.
 		// 
 		// Processing sample task 48 of consumer random variable b1.
 		for(int i$var47 = 0; i$var47 < length; i$var47 += 3) {
-			// Variable declaration of cv$temp$3$var24 moved.
-			// 
 			// Constructing a random variable input for use later.
-			double cv$temp$3$var24 = (double)(prior[0] / 10);
+			double var24 = (double)(prior[0] / 10);
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -881,17 +863,15 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = (Math.log((output[i$var47]?cv$temp$3$var24:(1.0 - cv$temp$3$var24))) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((output[i$var47]?var24:(1.0 - var24))) + cv$accumulatedProbabilities);
 		}
 		
 		// Processing random variable 30.
 		// 
 		// Processing sample task 60 of consumer random variable b2.
 		for(int i$var59 = 1; i$var59 < length; i$var59 += 3) {
-			// Variable declaration of cv$temp$4$var29 moved.
-			// 
 			// Constructing a random variable input for use later.
-			double cv$temp$4$var29 = (double)(prior[1] / 10);
+			double var29 = (double)(prior[1] / 10);
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -905,17 +885,15 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = (Math.log((output[i$var59]?cv$temp$4$var29:(1.0 - cv$temp$4$var29))) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((output[i$var59]?var29:(1.0 - var29))) + cv$accumulatedProbabilities);
 		}
 		
 		// Processing random variable 35.
 		// 
 		// Processing sample task 72 of consumer random variable b3.
 		for(int i$var71 = 2; i$var71 < length; i$var71 += 3) {
-			// Variable declaration of cv$temp$5$var34 moved.
-			// 
 			// Constructing a random variable input for use later.
-			double cv$temp$5$var34 = (double)(prior[2] / 10);
+			double var34 = (double)(prior[2] / 10);
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -929,12 +907,14 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = (Math.log((output[i$var71]?cv$temp$5$var34:(1.0 - cv$temp$5$var34))) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((output[i$var71]?var34:(1.0 - var34))) + cv$accumulatedProbabilities);
 		}
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
 		// the random value is 0 an impossible value will be accepted.
+		// 
+		// Ratio of the probability of proposed and original sample values
 		// 
 		// Variable declaration of cv$proposedProbability moved.
 		// Declaration comment was:
@@ -967,9 +947,9 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {
-		// Constructor for cv$var17$countGlobal
-		// 
 		// Allocate scratch space.
+		// 
+		// Constructor for cv$var17$countGlobal
 		// 
 		// Allocation of cv$var17$countGlobal for single threaded execution
 		cv$var17$countGlobal = new double[3];

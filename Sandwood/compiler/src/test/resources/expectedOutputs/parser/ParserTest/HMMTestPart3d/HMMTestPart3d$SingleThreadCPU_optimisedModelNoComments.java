@@ -388,15 +388,15 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 				}
 			}
 			if((0 < samples)) {
-				double cv$temp$6$var116 = bias[0];
-				cv$accumulatedProbabilities = (Math.log((flips[0]?cv$temp$6$var116:(1.0 - cv$temp$6$var116))) + cv$accumulatedProbabilities);
+				double var116 = bias[0];
+				cv$accumulatedProbabilities = (Math.log((flips[0]?var116:(1.0 - var116))) + cv$accumulatedProbabilities);
 			}
 			for(int i$var71 = 1; i$var71 < samples; i$var71 += 1) {
 				if((0 == (indirection[(i$var71 - 1)][i$var71] / i$var71))) {
 					int j = (indirection[(i$var71 - 1)][i$var71] / i$var71);
 					if(((0 <= j) && (j < samples))) {
-						double cv$temp$7$var116 = bias[0];
-						cv$accumulatedProbabilities = (Math.log((flips[j]?cv$temp$7$var116:(1.0 - cv$temp$7$var116))) + cv$accumulatedProbabilities);
+						double var116 = bias[0];
+						cv$accumulatedProbabilities = (Math.log((flips[j]?var116:(1.0 - var116))) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -418,15 +418,15 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			}
 		}
 		if((0 < samples)) {
-			double cv$temp$6$var116 = bias[1];
-			cv$accumulatedProbabilities = (Math.log((flips[0]?cv$temp$6$var116:(1.0 - cv$temp$6$var116))) + cv$accumulatedProbabilities);
+			double var116 = bias[1];
+			cv$accumulatedProbabilities = (Math.log((flips[0]?var116:(1.0 - var116))) + cv$accumulatedProbabilities);
 		}
 		for(int i$var71 = 1; i$var71 < samples; i$var71 += 1) {
 			if((0 == (indirection[(i$var71 - 1)][i$var71] / i$var71))) {
 				int j = (indirection[(i$var71 - 1)][i$var71] / i$var71);
 				if(((0 <= j) && (j < samples))) {
-					double cv$temp$7$var116 = bias[1];
-					cv$accumulatedProbabilities = (Math.log((flips[j]?cv$temp$7$var116:(1.0 - cv$temp$7$var116))) + cv$accumulatedProbabilities);
+					double var116 = bias[1];
+					cv$accumulatedProbabilities = (Math.log((flips[j]?var116:(1.0 - var116))) + cv$accumulatedProbabilities);
 				}
 			}
 		}
@@ -476,8 +476,8 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 				if((i$var71 == (indirection[(index$i$6_2 - 1)][index$i$6_2] / index$i$6_2))) {
 					int j = (indirection[(index$i$6_2 - 1)][index$i$6_2] / index$i$6_2);
 					if(((0 <= j) && (j < samples))) {
-						double cv$temp$4$var116 = bias[0];
-						cv$accumulatedProbabilities = (Math.log((flips[j]?cv$temp$4$var116:(1.0 - cv$temp$4$var116))) + cv$accumulatedProbabilities);
+						double var116 = bias[0];
+						cv$accumulatedProbabilities = (Math.log((flips[j]?var116:(1.0 - var116))) + cv$accumulatedProbabilities);
 					}
 				}
 			}
@@ -500,8 +500,8 @@ final class HMMTestPart3d$SingleThreadCPU extends org.sandwood.runtime.internal.
 			if((i$var71 == (indirection[(index$i$6_2 - 1)][index$i$6_2] / index$i$6_2))) {
 				int j = (indirection[(index$i$6_2 - 1)][index$i$6_2] / index$i$6_2);
 				if(((0 <= j) && (j < samples))) {
-					double cv$temp$4$var116 = bias[1];
-					cv$accumulatedProbabilities = (Math.log((flips[j]?cv$temp$4$var116:(1.0 - cv$temp$4$var116))) + cv$accumulatedProbabilities);
+					double var116 = bias[1];
+					cv$accumulatedProbabilities = (Math.log((flips[j]?var116:(1.0 - var116))) + cv$accumulatedProbabilities);
 				}
 			}
 		}

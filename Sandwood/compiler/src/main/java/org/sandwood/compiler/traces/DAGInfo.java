@@ -26,7 +26,7 @@ public class DAGInfo {
         public final TraceHandle handle;
         public final Variable<?> sink;
 
-        public TraceSinkPair(TraceHandle handle, Variable<?> sink) {
+        private TraceSinkPair(TraceHandle handle, Variable<?> sink) {
             this.handle = handle;
             /*
              * If the last task in the trace is a put the output could be different to the output from the task as all

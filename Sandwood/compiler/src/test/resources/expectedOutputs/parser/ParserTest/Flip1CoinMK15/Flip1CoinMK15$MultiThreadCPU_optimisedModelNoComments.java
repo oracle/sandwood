@@ -179,9 +179,9 @@ final class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				for(int var46 = 0; var46 < samples; var46 += 1)
 					cv$accumulatedProbabilities = (Math.log((flips[var46]?b:(1.0 - b))) + cv$accumulatedProbabilities);
 			} else {
-				double reduceVar$var33$17 = ((b / 2) + c[1]);
+				double reduceVar$var33$14 = ((b / 2) + c[1]);
 				for(int var46 = 0; var46 < samples; var46 += 1)
-					cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$17:(1.0 - reduceVar$var33$17))) + cv$accumulatedProbabilities);
+					cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$14:(1.0 - reduceVar$var33$14))) + cv$accumulatedProbabilities);
 			}
 			cv$originalProbability = cv$accumulatedProbabilities;
 		}
@@ -198,11 +198,12 @@ final class Flip1CoinMK15$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			for(int var46 = 0; var46 < samples; var46 += 1)
 				cv$accumulatedProbabilities = (Math.log((flips[var46]?cv$proposedValue:(1.0 - cv$proposedValue))) + cv$accumulatedProbabilities);
 		} else {
-			double reduceVar$var33$17 = ((cv$proposedValue / 2) + c[1]);
+			double reduceVar$var33$14 = ((cv$proposedValue / 2) + c[1]);
 			for(int var46 = 0; var46 < samples; var46 += 1)
-				cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$17:(1.0 - reduceVar$var33$17))) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (Math.log((flips[var46]?reduceVar$var33$14:(1.0 - reduceVar$var33$14))) + cv$accumulatedProbabilities);
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			b = cv$originalValue;
 			if(guard1)
 				bias = cv$originalValue;

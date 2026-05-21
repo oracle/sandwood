@@ -299,7 +299,8 @@ final class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.
 			}
 			cv$proposedProbability = cv$accumulatedProbabilities;
 		}
-		if((((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$proposedProbability - cv$originalProbability)))) {
+		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			q = cv$originalValue;
 			bias[0][1][0] = (1 - cv$originalValue);
 			double[][] var52 = bias[1];
@@ -375,7 +376,8 @@ final class Flip1CoinMK18$SingleThreadCPU extends org.sandwood.runtime.internal.
 			}
 			cv$proposedProbability = cv$accumulatedProbabilities;
 		}
-		if((((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$proposedProbability - cv$originalProbability)))) {
+		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			t = cv$originalValue;
 			double[][] var21 = bias[0];
 			double[] var23 = var21[0];

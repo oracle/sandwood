@@ -199,7 +199,8 @@ final class Flip2CoinsMK7$SingleThreadCPU extends org.sandwood.runtime.internal.
 		double traceTempVariable$var34$2_1 = (1 - cv$proposedValue);
 		for(int var45 = 0; var45 < length$flipsMeasured[i]; var45 += 1)
 			cv$accumulatedProbabilities = (Math.log((flips[i][var45]?traceTempVariable$var34$2_1:(1.0 - traceTempVariable$var34$2_1))) + cv$accumulatedProbabilities);
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
 			bias[i] = (1 - cv$originalValue);
 	}
 

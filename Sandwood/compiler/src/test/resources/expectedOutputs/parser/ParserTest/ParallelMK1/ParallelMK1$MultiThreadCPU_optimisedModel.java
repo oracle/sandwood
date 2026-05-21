@@ -199,9 +199,9 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample20 = fixedFlag$sample20;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -283,9 +283,9 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample24 = fixedFlag$sample20;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -325,8 +325,6 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$0$var17" with its value "0.0".
-			// 
 			// Set the current value to the current state of the tree.
 			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 			
@@ -340,14 +338,14 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Set the flags to false
 			guard$sample20gaussian23[i] = false;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if(!guard$sample20gaussian23[i]) {
 				// The body will execute, so should not be executed again
 				guard$sample20gaussian23[i] = true;
 				
-				// Variable declaration of cv$temp$3$var22 moved.
-				// 
 				// Constructing a random variable input for use later.
-				double cv$temp$3$var22 = indirection[i];
+				double var22 = indirection[i];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -364,10 +362,8 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "cv$temp$2$sample" with its value "cv$currentValue".
-				// 
 				// Set the current value to the current state of the tree.
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(cv$temp$3$var22))) + cv$accumulatedProbabilities) - (Math.log(cv$temp$3$var22) * 0.5));
+				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(var22))) + cv$accumulatedProbabilities) - (Math.log(var22) * 0.5));
 			}
 			if(!guard$sample20gaussian23[i]) {
 				// The body will execute, so should not be executed again
@@ -388,14 +384,7 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
 				// 
-				// Substituted "cv$temp$4$sample" with its value "cv$currentValue".
-				// 
-				// Set the current value to the current state of the tree.
-				// 
-				// cv$temp$5$var22's comment
-				// Variable declaration of cv$temp$5$var22 moved.
-				// 
-				// Constructing a random variable input for use later.
+				// Substituted "index$i$5_2" with its value "i".
 				// 
 				// Set the current value to the current state of the tree.
 				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(cv$originalValue))) + cv$accumulatedProbabilities) - (Math.log(cv$originalValue) * 0.5));
@@ -420,8 +409,6 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$0$var17" with its value "0.0".
 		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
 		
 		// Processing random variable 23.
@@ -434,14 +421,14 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		
 		// Set the flags to false
 		guard$sample20gaussian23[i] = false;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!guard$sample20gaussian23[i]) {
 			// The body will execute, so should not be executed again
 			guard$sample20gaussian23[i] = true;
 			
-			// Variable declaration of cv$temp$3$var22 moved.
-			// 
 			// Constructing a random variable input for use later.
-			double cv$temp$3$var22 = indirection[i];
+			double var22 = indirection[i];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -457,9 +444,7 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// 
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			// 
-			// Substituted "cv$temp$2$sample" with its value "cv$currentValue".
-			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(cv$temp$3$var22))) + cv$accumulatedProbabilities) - (Math.log(cv$temp$3$var22) * 0.5));
+			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(var22))) + cv$accumulatedProbabilities) - (Math.log(var22) * 0.5));
 		}
 		if(!guard$sample20gaussian23[i]) {
 			// The body will execute, so should not be executed again
@@ -480,19 +465,10 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
 			// 
-			// Substituted "cv$temp$4$sample" with its value "cv$currentValue".
-			// 
-			// cv$temp$5$var22's comment
-			// Variable declaration of cv$temp$5$var22 moved.
-			// 
-			// Constructing a random variable input for use later.
+			// Substituted "index$i$5_2" with its value "i".
 			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(cv$proposedValue))) + cv$accumulatedProbabilities) - (Math.log(cv$proposedValue) * 0.5));
 		}
 		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
 		// The probability ration for the proposed value and the current value.
 		// 
 		// Initialize a log space accumulator to take the product of all the distribution
@@ -501,7 +477,12 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -518,9 +499,9 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {
-		// Constructor for guard$sample20gaussian23$global
-		// 
 		// Allocate scratch space.
+		// 
+		// Constructor for guard$sample20gaussian23$global
 		// Allocation of guard$sample20gaussian23$global for multithreaded execution
 		// 
 		// Get the thread count.

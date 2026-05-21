@@ -112,7 +112,7 @@ public class ParFor extends Transformer {
                     Set<VariableDescription<?>> toSubstitute = new HashSet<>();
                     // Set of variables that are modified and need to be written back. TODO
                     // Determine if these are ever read again, and only write the value back
-                    // if they are. This could be done by tagging the initialised variables
+                    // if they are. This could be done by tagging the initialized variables
                     // so they are not removed by a pass of the remove unused variables
                     // transformer, and then running the transformer.
                     Set<VariableDescription<?>> toWriteBack = new HashSet<>();

@@ -1,12 +1,12 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
-package org.sandwood.compiler.compilation;
+package org.sandwood.compiler.compilation.scopesState;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,14 +14,15 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
+import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.scopes.ElseScope;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope.ScopeType;
-import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRProxyTreeSeq;
@@ -29,6 +30,25 @@ import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
 
 public class ScopeTracking {
+    /**
+     * A class to allow scope states to be saved externally and restored later
+     */
+    public static class ScopeTrackingState {
+        private final ScopeDesc scopeState;
+
+        private ScopeTrackingState(ScopeDesc scopeState) {
+            Objects.requireNonNull(scopeState);
+            this.scopeState = scopeState;
+        }
+
+        public Scope getScope() {
+            return scopeState.scope;
+        }
+    }
+
+    /**
+     * Internal class the records the state of a scope in a usable way.
+     */
     private class ScopeDesc {
         private class SubScopeDesc {
             final ScopeDesc scopeDesc;
@@ -61,21 +81,21 @@ public class ScopeTracking {
          */
         private void setEnclosingScope(ScopeDesc enclosingScope) {
             assert enclosingScope != null;
+            assert enclosingScope.enclosingScope != null || enclosingScope.scope == GlobalScope.scope;
             assert this.enclosingScope == null;
             this.enclosingScope = enclosingScope;
             enclosingScope.addScope(this);
         }
 
         /**
-         * Method to initialise the scope tree for this scope description. TODO come up with a clean way of getting the
+         * Method to initialize the scope tree for this scope description. TODO come up with a clean way of getting the
          * else body to the if scope method without passing this object and having methods that expose some of its
          * internal structure (getScopeBodyTree).
          * 
          * @param tracking The tracking object that holds this scope description.
          */
-        private void initialiseScopeTree(ScopeTracking tracking) {
+        private void initializeScopeTree(ScopeTracking tracking) {
             assert scope == GlobalScope.scope || enclosingScope != null;
-
             scopeTree = scope.getScopeTree(tracking, scopeBody, reverseScopes, compilationCtx);
         }
 
@@ -90,56 +110,6 @@ public class ScopeTracking {
                 initialTrees.add(tree);
             else // pos - 1 is the last inactive scope description.
                 subScopes.get(pos - 1).postScopeTrees.add(tree);
-        }
-
-        public void addTree(IRTreeVoid tree, DataflowTask<?> t, boolean reverseScopes) {
-            List<IRTreeVoid> targetTrees = initialTrees;
-            int size = subScopes.size();
-            int id = getId(t);
-            if(reverseScopes) {
-                assert false; // This function is wrong, but as it will be removed soon I'm not going to fix it now.
-                for(int pos = size - 1; pos >= 0 && subScopes.get(pos).scopeDesc.scope.id() < id; pos--)
-                    targetTrees = subScopes.get(pos).postScopeTrees;
-            } else {
-                for(int pos = 0; pos < size && subScopes.get(pos).scopeDesc.scope.id() < id; pos++)
-                    targetTrees = subScopes.get(pos).postScopeTrees;
-
-            }
-            targetTrees.add(tree);
-        }
-
-        /**
-         * A method to find the correct id to search with. Normally this will just be the task id, but if the tree is
-         * being placed into a further out scope then the id needs to be adjusted to an id that will appear in the scope
-         * descriptor.
-         * 
-         * @param t
-         * @return
-         */
-        private int getId(DataflowTask<?> t) {
-            Set<Scope> seen = new HashSet<>();
-            Scope taskScope = t.scope();
-            seen.add(taskScope);
-            taskScope = compilationCtx.substituteScope(taskScope);
-
-            /*
-             * This guard returns the tasks id to order values that are being placed directly into the scope, not into a
-             * scope that is embedded in this scope
-             */
-            if(taskScope == scope)
-                return t.id();
-
-            seen.add(taskScope);
-            while(taskScope != scope) {
-                taskScope = taskScope.getEnclosingScope();
-                if(taskScope == scope)
-                    break;
-                if(!seen.contains(taskScope)) {
-                    seen.add(taskScope);
-                    taskScope = compilationCtx.substituteScope(taskScope);
-                }
-            }
-            return taskScope.id();
         }
 
         /**
@@ -204,8 +174,7 @@ public class ScopeTracking {
                 constructBody(m, this);
 
                 if(scope.getScopeType() == ScopeType.IF) {
-                    IfScope ifScope = (IfScope) scope;
-                    ScopeDesc elseDesc = scopes.get(ifScope.elseScope);
+                    ScopeDesc elseDesc = elseScopeDescs.get(this);
                     if(elseDesc != null)
                         constructBody(m, elseDesc);
                 }
@@ -242,11 +211,6 @@ public class ScopeTracking {
         }
     }
 
-    // A map containing information about the scopes required for any delayed
-    // actions
-    // such as what to do when we complete the last task in a scope.
-    // private final Map<Scope, ScopeDesc> scopeDescriptions = new HashMap<>();
-
     // The computational context of the current compilation. This is used for
     // constructing the
     // Trees that represent the body of each scope.
@@ -260,10 +224,20 @@ public class ScopeTracking {
     // part of the inference process.
     private boolean reverseScopes = false;
 
+    // A map from ifDescs to the corresponding else descs.
+    private final Map<ScopeDesc, ScopeDesc> elseScopeDescs = new HashMap<>();
+
     // Constructor
     public ScopeTracking(CompilationContext compilationCtx) {
         this.compilationCtx = compilationCtx;
         addScope(GlobalScope.scope);
+    }
+
+    public ScopeTracking(Set<Scope> taskScopes, ScopeTrackingState state, CompilationContext compilationCtx) {
+        this.compilationCtx = compilationCtx;
+        for(Scope scope:taskScopes)
+            scopes.put(scope, state.scopeState);
+        scopes.put(state.scopeState.scope, state.scopeState);
     }
 
     /**
@@ -290,21 +264,6 @@ public class ScopeTracking {
     }
 
     /**
-     * Method for adding an IR tree to a tasks scope. TODO This is only used as part of the put operations, and once we
-     * are not initialising variables anymore can be removed.
-     * 
-     * @param scope The scope that the tree should be added to.
-     * @param tree  The tree to add
-     * @param task  The task that the tree must not be in a scope that was created after this task w as created.
-     */
-    public void addTreeToScope(Scope scope, IRTreeVoid tree, DataflowTask<?> task) {
-        scope = compilationCtx.substituteScope(scope);
-        enterScope(scope);
-        scopes.get(scope).addTree(tree, task, reverseScopes);
-        leaveScope(scope);
-    }
-
-    /**
      * Method for adding a comment to a scope.
      * 
      * @param scope   The scope to add the comment to.
@@ -326,8 +285,6 @@ public class ScopeTracking {
      * @param scope The scope to touch.
      */
     public void touchScope(Scope scope) {
-        scope = compilationCtx.substituteScope(scope);
-
         if(!scopes.containsKey(scope))
             addScope(scope);
     }
@@ -338,11 +295,9 @@ public class ScopeTracking {
      *
      * @param currentScope
      */
-    public void leaveScope(Scope currentScope) {
-        Scope scope = currentScope;
+    public void leaveScope(Scope scope) {
         scope = compilationCtx.substituteScope(scope);
-        currentScope = scope;
-        scopes.get(currentScope).addLeaveTask();
+        scopes.get(scope).addLeaveTask();
     }
 
     /**
@@ -351,15 +306,13 @@ public class ScopeTracking {
      *
      * @param currentScope
      */
-    public void enterScope(Scope currentScope) {
-        Scope scope = currentScope;
+    public void enterScope(Scope scope) {
         scope = compilationCtx.substituteScope(scope);
-        currentScope = scope;
 
-        if(!scopes.containsKey(currentScope))
-            addScope(currentScope);
+        if(!scopes.containsKey(scope))
+            addScope(scope);
 
-        scopes.get(currentScope).addEnterTask();
+        scopes.get(scope).addEnterTask();
     }
 
     /**
@@ -368,7 +321,6 @@ public class ScopeTracking {
      * @param scope The scope to add.
      */
     private void addScope(Scope scope) {
-
         // Insert the scope description before doing anything else to ensure that if the construction of the scope tree
         // triggers its use it won't be constructed again. The reuse of a scope by its own scope tree can occur if a
         // substitute variable is used and that was constructed in a scope that is nested in this one.
@@ -378,10 +330,16 @@ public class ScopeTracking {
         // Once all the scope descriptions are constructed, construct the scope trees.
         for(ScopeDesc scopeDesc:constructedScopeDescs) {
             scopeDesc.addEnterTask();
-            scopeDesc.initialiseScopeTree(this);
+            scopeDesc.initializeScopeTree(this);
             scopeDesc.addLeaveTask();
         }
         assert scopes.containsKey(scope);
+    }
+
+    public void maskScope(Set<Scope> s) {
+        assert !s.contains(GlobalScope.scope);
+        for(Scope scope:s)
+            scopes.remove(scope);
     }
 
     /**
@@ -420,15 +378,19 @@ public class ScopeTracking {
             }
             case ELSE: {
                 IfScope ifScope = ((ElseScope) scope).ifScope;
-                if(!scopes.containsKey(ifScope))
+                if(!scopes.containsKey(ifScope)) {
                     addScopeDesc(ifScope, constructedScopeDescs);
+                    elseScopeDescs.put(scopes.get(ifScope), scopes.get(scope));
+                }
                 break;
             }
             case IF: {
                 // Ensures the else scope description is always constructed first.
                 ElseScope elseScope = ((IfScope) scope).elseScope;
-                if(!scopes.containsKey(elseScope))
+                if(!scopes.containsKey(elseScope)) {
                     addScopeDesc(elseScope, constructedScopeDescs);
+                    elseScopeDescs.put(scopes.get(scope), scopes.get(elseScope));
+                }
                 break;
             }
             default:
@@ -436,6 +398,19 @@ public class ScopeTracking {
         }
 
         return scopeDesc;
+    }
+
+    public void addScope(ScopeTracking innerMostScopes, Scope innerScope) {
+        assert innerMostScopes.scopes.containsKey(innerScope);
+        scopes.put(innerScope, innerMostScopes.scopes.get(innerScope));
+        if(innerScope != GlobalScope.scope) {
+            innerScope = compilationCtx.substituteScope(innerScope.getEnclosingScope());
+            while(!scopes.containsKey(innerScope)) {
+                assert innerMostScopes.scopes.containsKey(innerScope);
+                scopes.put(innerScope, innerMostScopes.scopes.get(innerScope));
+                innerScope = compilationCtx.substituteScope(innerScope.getEnclosingScope());
+            }
+        }
     }
 
     /**
@@ -454,7 +429,7 @@ public class ScopeTracking {
      * 
      * @param reverseScopes
      */
-    public void setreverseScopes(boolean reverseScopes) {
+    public void setReverseScopes(boolean reverseScopes) {
         this.reverseScopes = reverseScopes;
     }
 
@@ -466,5 +441,21 @@ public class ScopeTracking {
     public IRTreeVoid getScopeBodyTree(Scope scope) {
         ScopeDesc scopeDesc = scopes.get(scope);
         return scopeDesc.scopeBody;
+    }
+
+    public ScopeTrackingState getState(Scope scope) {
+        return new ScopeTrackingState(scopes.get(scope));
+    }
+
+    public Scope getTargetScope(Scope scope) {
+        ScopeDesc desc = scopes.get(scope);
+        if(desc == null)
+            return scope;
+        else
+            return desc.scope;
+    }
+
+    public boolean contiansScope(Scope scope) {
+        return scopes.containsKey(scope);
     }
 }

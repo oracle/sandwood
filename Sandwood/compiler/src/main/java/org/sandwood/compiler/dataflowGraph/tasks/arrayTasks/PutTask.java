@@ -338,17 +338,20 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
 
         // Setup the array ready for access
         IRTreeReturn<ArrayVariable<A>> arrayTree;
-        if(compilationCtx.initialized(array)) {
-            ArrayVariable<A> stopPoint = getStopPoint();
-            stopPoint.markStopPoint();
+        ArrayVariable<A> stopPoint = getStopPoint(array);
+        if(compilationCtx.initializedInScope(stopPoint)) {
+            Variable<ArrayVariable<A>> v = compilationCtx.getInitializedVariable(stopPoint);
+            compilationCtx.addSubstitute(stopPoint, v);
+            v.markStopPoint();
             arrayTree = array.getForwardIR(compilationCtx);
-            stopPoint.unmarkStopPoint();
+            v.unmarkStopPoint();
+            compilationCtx.removeSubstitute(stopPoint);
         } else {
             arrayTree = array.getForwardIR(compilationCtx);
-            // If the call did not initialise the array initialise it now.
-            if(!array.isIntermediate() && !compilationCtx.initialized(array)) {
-                IRTreeVoid t = initializeVariable(Visibility.DEFAULT, array.getUniqueVarDesc(), arrayTree,
-                        Tree.NoComment);
+            // If the call did not initialize the array initialize it now.
+            if(!array.isIntermediate() && !compilationCtx.initializedInScope(stopPoint)) {
+                Variable<ArrayVariable<A>> v = compilationCtx.addInitialized(stopPoint);
+                IRTreeVoid t = initializeVariable(v, arrayTree, Tree.NoComment);
                 // Find the outermost safe scope to place the value in.
                 Scope targetScope;
                 if(array.aliasSet())
@@ -366,7 +369,6 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
                 }
 
                 compilationCtx.addTreeToScope(targetScope, t);
-                compilationCtx.addInitialized(array);
                 arrayTree = load(array);
             }
         }
@@ -390,17 +392,16 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
                  * The exception to this is if the parent is a get. In this case a subarray of one array is being loaded
                  * and placed in another array. This will overwrite any state that is already in the array.
                  */
-                ArrayVariable<?> arrayValue = (ArrayVariable<?>) value;
-                if(!compilationCtx.initialized(arrayValue)) {
-                    compilationCtx.addInitialized(arrayValue);
-                    IRTreeVoid t = initializeVariable(Visibility.DEFAULT, value.getUniqueVarDesc(),
+                if(!compilationCtx.initializedInScope(value)) {
+                    Variable<A> initValue = compilationCtx.addInitialized(value);
+                    IRTreeVoid t = initializeVariable(Visibility.DEFAULT, initValue.getUniqueVarDesc(),
                             arrayGet(arrayTree, index.getForwardIR(compilationCtx)), Tree.NoComment);
                     Scope targetScope = value.aliasSet() ? value.scope()
                             : Scope.innerScope(array.scope(), index.scope());
-                    compilationCtx.enterScope(value.scope());
-                    // TODO once this and the call below is removed, remove this function from compilation context
-                    compilationCtx.addTreeToScope(targetScope, t, value.instanceHandle().getParent());
-                    compilationCtx.leaveScope(value.scope());
+                    Scope firstUseScope = getFirstUseScope(value);
+                    compilationCtx.enterScope(firstUseScope);
+                    compilationCtx.addTreeToScope(targetScope, t);
+                    compilationCtx.leaveScope(firstUseScope);
                 }
                 value.getForwardIR(compilationCtx);
             } else {
@@ -417,7 +418,39 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
         return arrayTree;
     }
 
-    private ArrayVariable<A> getStopPoint() {
+    private Scope getFirstUseScope(Variable<A> v) {
+        Scope vScope = v.scope();
+        Set<DataflowTask<?>> consumers = v.instanceHandle().getConsumers();
+        Scope firstScope = null;
+        for(DataflowTask<?> d:consumers) {
+            Scope s = d.scope();
+            if(enclosingScope(vScope, s)) {
+                if(firstScope == null || firstScope.id() > s.id())
+                    firstScope = s;
+            }
+        }
+        if(firstScope == null)
+            return vScope;
+        else
+            return firstScope;
+    }
+
+    private boolean enclosingScope(Scope vScope, Scope s) {
+        if(vScope == s)
+            return false;
+        do
+            s = s.getEnclosingScope();
+        while(s != vScope && s != null);
+        return s != null;
+    }
+
+    /**
+     * A method that walks back up the chain of put operations until it finds the put that placed this array into its
+     * outer array.
+     * 
+     * @return
+     */
+    private static <A extends Variable<A>> ArrayVariable<A> getStopPoint(ArrayVariable<A> array) {
         if(!array.isSubArray())
             return array;
         ArrayVariable<A> a = array;

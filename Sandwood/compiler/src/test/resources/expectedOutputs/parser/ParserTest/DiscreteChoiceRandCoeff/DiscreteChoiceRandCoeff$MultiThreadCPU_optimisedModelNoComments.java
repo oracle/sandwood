@@ -413,7 +413,8 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 				cv$accumulatedProbabilities = ((((0.0 <= choices[i]) && (choices[i] < noProducts))?Math.log(prob[i][choices[i]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			ut[var20] = cv$originalValue;
 			for(int i = 0; i < noObs; i += 1)
 				exped[i][var20] = Math.exp((ut[var20] - (beta[i] * Prices[i][var20])));
@@ -543,7 +544,8 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 			}
 			cv$proposedProbability = cv$accumulatedProbabilities;
 		}
-		if((((cv$proposedProbability - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$proposedProbability - cv$originalProbability)))) {
+		double cv$ratio = (cv$proposedProbability - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			beta[var46] = cv$originalValue;
 			for(int j$var69 = 0; j$var69 < noProducts; j$var69 += 1)
 				exped[var46][j$var69] = Math.exp((ut[j$var69] - (beta[var46] * Prices[var46][j$var69])));

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -36,9 +36,8 @@ public abstract class InferenceGeneratorScalar<A extends ScalarVariable<A>, B ex
 
     protected abstract IRTreeReturn<A> calculateSampleValue(CompilationContext compilationCtx, FuncData funcData);
 
-    // Methods passing through to the subclasses. this provides a point where we
-    // can add in code that should be executed for all scalar values, but not for
-    // arrays.
+    // Methods passing through to the subclasses. this provides a point where we can add in code that should be executed
+    // for all scalar values, but not for arrays.
     @Override
     protected void allocateGlobalStateInternal(CompilationContext compilationCtx, FuncData funcData) {
         CompilationPhase phase = compilationCtx.phase;
@@ -50,9 +49,9 @@ public abstract class InferenceGeneratorScalar<A extends ScalarVariable<A>, B ex
     protected abstract void allocateGlobalState(CompilationContext compilationCtx, FuncData funcData);
 
     @Override
-    protected void constructFunctionVariablesInternal(CompilationContext compilationCtx, FuncData funcData) {
-        constructFunctionVariables(compilationCtx, funcData);
+    protected void constructFunctionVariablesInternal(FuncData funcData, CompilationContext compilationCtx) {
+        constructFunctionVariables(funcData, compilationCtx);
     }
 
-    protected abstract void constructFunctionVariables(CompilationContext compilationCtx, FuncData funcData);
+    protected abstract void constructFunctionVariables(FuncData funcData, CompilationContext compilationCtx);
 }

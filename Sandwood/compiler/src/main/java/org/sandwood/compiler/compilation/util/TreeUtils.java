@@ -284,8 +284,7 @@ public class TreeUtils {
         if(desc == null)
             return null;
         // Set up the scope tracking to record the tree we generate.
-        compilationCtx.pushScope();
-        compilationCtx.pushSubstitutions();
+        compilationCtx.pushScopeState();
         Scope scope = desc.scope;
         compilationCtx.enterScope(scope);
 
@@ -311,8 +310,7 @@ public class TreeUtils {
 
         // Restore the old scope
         compilationCtx.phase = currentPhase;
-        compilationCtx.popSubstitutions();
-        compilationCtx.popScope();
+        compilationCtx.popScopeState();
         return t;
     }
 
@@ -428,7 +426,7 @@ public class TreeUtils {
      * @param declaredArrays A map recording the local variables that have already been constructed and the scope they
      *                       are constructed in.
      * @param compilationCtx The compilation context for this process.
-     * @param value          A lambda to describe how to create a value to initialise the local variable if it needs to
+     * @param value          A lambda to describe how to create a value to initialize the local variable if it needs to
      *                       be constructed.
      * @return The name of the local variable.
      */
@@ -456,7 +454,7 @@ public class TreeUtils {
         name = VariableNames.subarrayName(suffix[0]++, element.subarray.type);
         declaredSubArrays.computeIfAbsent(element.scope, k -> new HashMap<>()).put(new Index(element.index), name);
 
-        // Initialise a local variable with the name.
+        // Initialize a local variable with the name.
         compilationCtx.addTreeToScope(element.scope, initializeVariable(name, value.get(), Tree.NoComment));
 
         return name;
@@ -481,10 +479,10 @@ public class TreeUtils {
             CompilationContext compilationCtx) {
 
         // Set up the scope tracking to record the tree we generate.
-        compilationCtx.pushScope();
+        compilationCtx.pushScopeState();
         initializeInScope(name, value, desc, compilationCtx);
         IRTreeVoid t = compilationCtx.getOutermostScopeTree();
-        compilationCtx.popScope();
+        compilationCtx.popScopeState();
         return t;
     }
 
@@ -1342,7 +1340,7 @@ public class TreeUtils {
 
         // Initialize value for the max
         stmts.add(initializeVariable(maxName, arrayGet(arrayValue, IRTree.constant(0)),
-                "Initialise the max to the first element."));
+                "Initialize the max to the first element."));
 
         // Find the max value
         List<IRTreeVoid> maxBody = new ArrayList<>();
@@ -1354,7 +1352,7 @@ public class TreeUtils {
 
         // Sum all the values if max is not -infinity, otherwise return -infinity
         List<IRTreeVoid> sumStmts = new ArrayList<>();
-        sumStmts.add(initializeVariable(sumName, constant(0.0), "Initialise the sum of the array elements"));
+        sumStmts.add(initializeVariable(sumName, constant(0.0), "Initialize the sum of the array elements"));
         IRTreeVoid sumBody = store(sumName,
                 addDD(load(sumName), exp(subtractDD(arrayGet(arrayValue, load(indexName)), load(maxName)))),
                 Tree.NoComment);

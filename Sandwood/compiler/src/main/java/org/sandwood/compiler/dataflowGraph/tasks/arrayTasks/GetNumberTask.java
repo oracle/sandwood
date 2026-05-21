@@ -52,7 +52,7 @@ public class GetNumberTask<A extends NumberVariable<A>> extends GetTask<A> imple
         if(source.getType() == DFType.CONSTRUCT_INPUT) {
             // Input value: Find the largest possible to reach input value
 
-            // Initialise max value
+            // Initialize max value
             IRTreeReturn<A> initialValue;
             if(getOutputType() == VariableType.DoubleVariable)
                 initialValue = (IRTreeReturn<A>) IRTree.constant(Double.NEGATIVE_INFINITY);
@@ -130,7 +130,7 @@ public class GetNumberTask<A extends NumberVariable<A>> extends GetTask<A> imple
         if(source.getType() == DFType.CONSTRUCT_INPUT) {
             // Input value: Find the largest possible to reach input value
 
-            // Initialise max value
+            // Initialize max value
             IRTreeReturn<A> initialValue;
             if(getOutputType() == VariableType.DoubleVariable)
                 initialValue = (IRTreeReturn<A>) IRTree.constant(Double.POSITIVE_INFINITY);

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -11,6 +11,8 @@ package org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators;
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.scopes.ElseScope;
 import org.sandwood.compiler.dataflowGraph.scopes.IfScope;
+import org.sandwood.compiler.dataflowGraph.scopes.Scope;
+import org.sandwood.compiler.dataflowGraph.scopes.Scope.ScopeType;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTaskImplementation;
@@ -71,43 +73,72 @@ public class IfElseAssignmentTask<A extends Variable<A>> extends ProducingDatafl
     @Override
     protected IRTreeReturn<A> getForwardIRinternal(CompilationContext compilationCtx) {
         A output = getOutput();
-        VariableDescription<A> outputDesc = output.getUniqueVarDesc();
 
-        compilationCtx.enterScope(ifScope);
-        if(!output.isIntermediate()) {
-            if(compilationCtx.codeGuardSet()) {
-                // If the is a guard set for the code placed into scopes, the variable must be
-                // initialised to keep the compiler happy.
-                Type<?> type = output.getType();
-                if(type == VariableType.IntVariable) {
-                    compilationCtx.addTreeToScope(output.scope(), IRTree.initializeVariable(outputDesc,
-                            (IRTreeReturn<A>) IRTree.constant(0), Tree.NoComment));
-                } else if(type == VariableType.DoubleVariable) {
-                    compilationCtx.addTreeToScope(output.scope(), IRTree.initializeVariable(outputDesc,
-                            (IRTreeReturn<A>) IRTree.constant(0.0), Tree.NoComment));
-                } else if(type == VariableType.BooleanVariable) {
-                    compilationCtx.addTreeToScope(output.scope(), IRTree.initializeVariable(outputDesc,
-                            (IRTreeReturn<A>) IRTree.constant(false), Tree.NoComment));
+        if(compilationCtx.initializedInScope(output)) {
+            VariableDescription<A> outputDesc = compilationCtx.getInitializedVariable(output).getUniqueVarDesc();
+            return IRTree.load(outputDesc);
+        } else {
+            Variable<A> outputInit = compilationCtx.addInitialized(output);
+            VariableDescription<A> outputDesc = outputInit.getUniqueVarDesc();
+            // If is not substituted to a non conditional location
+            Scope newScope = compilationCtx.getTargetScope(ifScope);
+            if(newScope.getScopeType() == ScopeType.IF && ifScope.guard == ((IfScope) newScope).guard) {
+                // Else is not substituted to a non conditional location
+                newScope = compilationCtx.getTargetScope(ifScope.elseScope);
+                if(newScope.getScopeType() == ScopeType.ELSE && ifScope.guard == ((ElseScope) newScope).ifScope.guard) {
+                    compilationCtx.enterScope(ifScope);
+                    if(!output.isIntermediate()) {
+                        if(compilationCtx.codeGuardSet()) {
+                            // If the is a guard set for the code placed into scopes, the variable must be
+                            // initialized to keep the compiler happy.
+                            Type<?> type = output.getType();
+                            if(type == VariableType.IntVariable) {
+                                compilationCtx.addTreeToScope(output.scope(), IRTree.initializeVariable(outputDesc,
+                                        (IRTreeReturn<A>) IRTree.constant(0), Tree.NoComment));
+                            } else if(type == VariableType.DoubleVariable) {
+                                compilationCtx.addTreeToScope(output.scope(), IRTree.initializeVariable(outputDesc,
+                                        (IRTreeReturn<A>) IRTree.constant(0.0), Tree.NoComment));
+                            } else if(type == VariableType.BooleanVariable) {
+                                compilationCtx.addTreeToScope(output.scope(), IRTree.initializeVariable(outputDesc,
+                                        (IRTreeReturn<A>) IRTree.constant(false), Tree.NoComment));
+                            } else {
+                                throw new CompilerException("Unknown type");
+                            }
+                        } else {
+                            compilationCtx.addTreeToScope(output.scope(),
+                                    IRTree.initializeUnsetVariable(outputDesc, Tree.NoComment));
+                        }
+                    }
+
+                    compilationCtx.addTreeToScope(ifScope,
+                            IRTree.store(outputDesc, ifValue.getForwardIR(compilationCtx), Tree.NoComment));
+                    compilationCtx.leaveScope(ifScope);
+
+                    ElseScope elseScope = ifScope.elseScope;
+                    compilationCtx.enterScope(elseScope);
+                    compilationCtx.addTreeToScope(elseScope,
+                            IRTree.store(outputDesc, elseValue.getForwardIR(compilationCtx), Tree.NoComment));
+                    compilationCtx.leaveScope(elseScope);
                 } else {
-                    throw new CompilerException("Unknown type");
+                    // "Else" is a non conditional location, so the value should be set directly
+                    if(output.isIntermediate())
+                        compilationCtx.addTreeToScope(output.scope(),
+                                IRTree.store(outputDesc, elseValue.getForwardIR(compilationCtx), Tree.NoComment));
+                    else
+                        compilationCtx.addTreeToScope(output.scope(), IRTree.initializeVariable(outputDesc,
+                                elseValue.getForwardIR(compilationCtx), Tree.NoComment));
                 }
             } else {
-                compilationCtx.addTreeToScope(output.scope(),
-                        IRTree.initializeUnsetVariable(outputDesc, Tree.NoComment));
+                // "If" is a non conditional location and should be set directly
+                if(output.isIntermediate())
+                    compilationCtx.addTreeToScope(output.scope(),
+                            IRTree.store(outputDesc, ifValue.getForwardIR(compilationCtx), Tree.NoComment));
+                else
+                    compilationCtx.addTreeToScope(output.scope(), IRTree.initializeVariable(outputDesc,
+                            ifValue.getForwardIR(compilationCtx), Tree.NoComment));
             }
+            return IRTree.load(outputDesc);
         }
-        
-        compilationCtx.addTreeToScope(ifScope,
-                IRTree.store(outputDesc, ifValue.getForwardIR(compilationCtx), Tree.NoComment));
-        compilationCtx.leaveScope(ifScope);
-
-        ElseScope elseScope = ifScope.elseScope;
-        compilationCtx.enterScope(elseScope);
-        compilationCtx.addTreeToScope(elseScope,
-                IRTree.store(outputDesc, elseValue.getForwardIR(compilationCtx), Tree.NoComment));
-        compilationCtx.leaveScope(elseScope);
-
-        return IRTree.load(outputDesc);
     }
 
     @Override

@@ -317,9 +317,9 @@ final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.r
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample11 = fixedFlag$sample11;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -406,9 +406,9 @@ final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.r
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample15 = fixedFlag$sample15;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -494,9 +494,9 @@ final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.r
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample31 = ((fixedFlag$sample7 && fixedFlag$sample11) && fixedFlag$sample15);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -584,9 +584,9 @@ final class LinearRegressionWrongNameFail$SingleThreadCPU extends org.sandwood.r
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample7 = fixedFlag$sample7;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model

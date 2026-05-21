@@ -199,7 +199,8 @@ final class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.inter
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(cv$proposedValue, 1.0, 5.0);
 		for(int i = 0; i < noSamples; i += 1)
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (cv$proposedValue * x[i]))) + cv$accumulatedProbabilities);
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
 			b1 = cv$originalValue;
 	}
 
@@ -220,7 +221,8 @@ final class DistributionsTest$SingleThreadCPU extends org.sandwood.runtime.inter
 		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(cv$proposedValue, 0.0, 2.0);
 		for(int i = 0; i < noSamples; i += 1)
 			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (cv$proposedValue + (b1 * x[i]))) + cv$accumulatedProbabilities);
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability))))
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
 			b0 = cv$originalValue;
 	}
 

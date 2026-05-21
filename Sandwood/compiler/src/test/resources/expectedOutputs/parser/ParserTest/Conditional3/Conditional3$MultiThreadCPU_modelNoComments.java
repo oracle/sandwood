@@ -138,21 +138,23 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				double cv$probabilityReached = 0.0;
 				{
-					double cv$sampleValue = var14;
 					{
+						double cv$sampleValue = var14;
 						{
-							double var11 = 0.0;
-							double var12 = 0.5;
-							double cv$weightedProbability = (Math.log(1.0) + (((var11 <= cv$sampleValue) && (cv$sampleValue < var12))?(-Math.log((var12 - var11))):Double.NEGATIVE_INFINITY));
-							if((cv$weightedProbability < cv$distributionAccumulator))
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-							else {
-								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-									cv$distributionAccumulator = cv$weightedProbability;
-								else
-									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							{
+								double var11 = 0.0;
+								double var12 = 0.5;
+								double cv$weightedProbability = (Math.log(1.0) + (((var11 <= cv$sampleValue) && (cv$sampleValue < var12))?(-Math.log((var12 - var11))):Double.NEGATIVE_INFINITY));
+								if((cv$weightedProbability < cv$distributionAccumulator))
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+								else {
+									if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+										cv$distributionAccumulator = cv$weightedProbability;
+									else
+										cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+								}
+								cv$probabilityReached = (cv$probabilityReached + 1.0);
 							}
-							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
 					}
 				}
@@ -167,10 +169,12 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				logProbability$sample16 = cv$sampleProbability;
 				boolean cv$guard$bias = false;
 				{
-					if(!guard) {
-						if(!cv$guard$bias) {
-							cv$guard$bias = true;
-							logProbability$bias = (logProbability$bias + cv$sampleProbability);
+					{
+						if(!guard) {
+							if(!cv$guard$bias) {
+								cv$guard$bias = true;
+								logProbability$bias = (logProbability$bias + cv$sampleProbability);
+							}
 						}
 					}
 				}
@@ -191,10 +195,12 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 				boolean cv$guard$bias = false;
 				{
-					if(!guard) {
-						if(!cv$guard$bias) {
-							cv$guard$bias = true;
-							logProbability$bias = (logProbability$bias + cv$sampleValue);
+					{
+						if(!guard) {
+							if(!cv$guard$bias) {
+								cv$guard$bias = true;
+								logProbability$bias = (logProbability$bias + cv$sampleValue);
+							}
 						}
 					}
 				}
@@ -213,20 +219,22 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
-				double cv$sampleValue = value;
 				{
+					double cv$sampleValue = value;
 					{
-						double var16 = 1.0;
-						double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, bias, var16));
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var16 = 1.0;
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, bias, var16));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -259,20 +267,22 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 			double cv$probabilityReached = 0.0;
 			{
-				boolean cv$sampleValue = guard;
 				{
+					boolean cv$sampleValue = guard;
 					{
-						double var2 = 0.5;
-						double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var2:(1.0 - var2))));
-						if((cv$weightedProbability < cv$distributionAccumulator))
-							cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
-						else {
-							if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
-								cv$distributionAccumulator = cv$weightedProbability;
-							else
-								cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+						{
+							double var2 = 0.5;
+							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var2:(1.0 - var2))));
+							if((cv$weightedProbability < cv$distributionAccumulator))
+								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
+							else {
+								if((cv$distributionAccumulator == Double.NEGATIVE_INFINITY))
+									cv$distributionAccumulator = cv$weightedProbability;
+								else
+									cv$distributionAccumulator = (Math.log((Math.exp((cv$distributionAccumulator - cv$weightedProbability)) + 1)) + cv$weightedProbability);
+							}
+							cv$probabilityReached = (cv$probabilityReached + 1.0);
 						}
-						cv$probabilityReached = (cv$probabilityReached + 1.0);
 					}
 				}
 			}
@@ -304,9 +314,9 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	private final void sample16() {
 		if(true) {
-			int cv$numNumStates = 0;
+			int cv$numStates = 0;
 			{
-				cv$numNumStates = Math.max(cv$numNumStates, 2);
+				cv$numStates = Math.max(cv$numStates, 2);
 			}
 			double cv$originalValue = var14;
 			double cv$originalProbability = 0.0;
@@ -315,7 +325,7 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				cv$var = (0.1 * 0.1);
 			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
 			double cv$proposedProbability = 0.0;
-			for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 				double cv$reachedDistributionSourceRV = 0.0;
 				double cv$accumulatedDistributionProbabilities = 0.0;
@@ -324,13 +334,11 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					cv$currentValue = cv$originalValue;
 				else {
 					cv$currentValue = cv$proposedValue;
+					var14 = cv$proposedValue;
 					{
-						var14 = cv$proposedValue;
 						{
 							if(!guard) {
 								{
-									if(guard)
-										bias = 0.5;
 									bias = cv$currentValue;
 								}
 							}
@@ -339,55 +347,45 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				}
 				{
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					double cv$temp$0$var11;
-					{
-						cv$temp$0$var11 = 0.0;
-					}
-					double cv$temp$1$var12;
-					{
-						cv$temp$1$var12 = 0.5;
-					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((cv$temp$0$var11 <= cv$currentValue) && (cv$currentValue < cv$temp$1$var12))?(-Math.log((cv$temp$1$var12 - cv$temp$0$var11))):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < 0.5))?(-Math.log((0.5 - 0.0))):Double.NEGATIVE_INFINITY));
 					{
 						{
-							if(!guard) {
-								double traceTempVariable$bias$2_1 = cv$currentValue;
-								{
-									double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-									double cv$consumerDistributionProbabilityAccumulator = 1.0;
+							{
+								if(!guard) {
+									double traceTempVariable$bias$2_1 = cv$currentValue;
 									{
 										{
+											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+											double cv$consumerDistributionProbabilityAccumulator = 1.0;
 											{
 												{
-													double cv$temp$2$bias;
 													{
-														cv$temp$2$bias = traceTempVariable$bias$2_1;
+														{
+															{
+																if(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$2_1, 1.0)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$2_1, 1.0)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																else {
+																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$2_1, 1.0));
+																	else
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$2_1, 1.0)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$2_1, 1.0)));
+																}
+																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+															}
+														}
 													}
-													double cv$temp$3$var16;
-													{
-														cv$temp$3$var16 = 1.0;
-													}
-													if(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$bias, cv$temp$3$var16)) < cv$accumulatedConsumerProbabilities))
-														cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$bias, cv$temp$3$var16)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-													else {
-														if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-															cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$bias, cv$temp$3$var16));
-														else
-															cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$bias, cv$temp$3$var16)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$2$bias, cv$temp$3$var16)));
-													}
-													cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 												}
 											}
+											cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+											if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+												cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+											else {
+												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+													cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+												else
+													cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+											}
 										}
-									}
-									cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-									if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-										cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-									else {
-										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-											cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-										else
-											cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 									}
 								}
 							}
@@ -408,14 +406,14 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
 			double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-			if((((cv$proposedProbability - cv$originalProbability) <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+			if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
 				var14 = cv$originalValue;
 				{
-					if(!guard) {
-						{
-							if(guard)
-								bias = 0.5;
-							bias = var14;
+					{
+						if(!guard) {
+							{
+								bias = var14;
+							}
 						}
 					}
 				}
@@ -425,12 +423,12 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	private final void sample4() {
 		if(true) {
-			int cv$numNumStates = 0;
+			int cv$numStates = 0;
 			{
-				cv$numNumStates = Math.max(cv$numNumStates, 2);
+				cv$numStates = Math.max(cv$numStates, 2);
 			}
 			double[] cv$stateProbabilityLocal = cv$var4$stateProbabilityGlobal;
-			for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 				double cv$reachedDistributionSourceRV = 0.0;
 				double cv$accumulatedDistributionProbabilities = 0.0;
@@ -439,150 +437,142 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				guard = cv$currentValue;
 				{
 					{
-						if(cv$currentValue)
-							bias = 0.5;
-						else
-							bias = var14;
+						{
+							if(cv$currentValue)
+								bias = 0.5;
+							else
+								bias = var14;
+						}
 					}
 				}
 				{
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					double cv$temp$0$var2;
-					{
-						cv$temp$0$var2 = 0.5;
-					}
-					double cv$accumulatedProbabilities = (Math.log(1.0) + Math.log((cv$currentValue?cv$temp$0$var2:(1.0 - cv$temp$0$var2))));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + Math.log((cv$currentValue?0.5:(1.0 - 0.5))));
 					{
 						{
 							{
 								{
-									if(cv$currentValue) {
-										double traceTempVariable$bias$3_1 = 0.5;
+									{
 										{
-											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-											double cv$consumerDistributionProbabilityAccumulator = 1.0;
-											{
+											if(cv$currentValue) {
+												double traceTempVariable$bias$3_1 = 0.5;
 												{
 													{
+														double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+														double cv$consumerDistributionProbabilityAccumulator = 1.0;
 														{
 															{
-																double cv$temp$1$bias;
 																{
-																	cv$temp$1$bias = traceTempVariable$bias$3_1;
+																	{
+																		{
+																			{
+																				if(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$3_1, 1.0)) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$3_1, 1.0)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																				else {
+																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$3_1, 1.0));
+																					else
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$3_1, 1.0)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$3_1, 1.0)));
+																				}
+																				cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																			}
+																		}
+																	}
 																}
-																double cv$temp$2$var16;
-																{
-																	cv$temp$2$var16 = 1.0;
-																}
-																if(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$bias, cv$temp$2$var16)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$bias, cv$temp$2$var16)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																else {
-																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$bias, cv$temp$2$var16));
-																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$bias, cv$temp$2$var16)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$1$bias, cv$temp$2$var16)));
-																}
-																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
+														}
+														cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+														if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+														else {
+															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+															else
+																cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 														}
 													}
 												}
-											}
-											cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-											if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-												cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-											else {
-												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-													cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-												else
-													cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 											}
 										}
 									}
-								}
-								{
-									if(!cv$currentValue) {
-										double traceTempVariable$bias$6_1 = var14;
+									{
 										{
-											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-											double cv$consumerDistributionProbabilityAccumulator = 1.0;
-											{
+											if(!cv$currentValue) {
+												double traceTempVariable$bias$6_1 = var14;
 												{
 													{
+														double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+														double cv$consumerDistributionProbabilityAccumulator = 1.0;
 														{
 															{
-																double cv$temp$3$bias;
 																{
-																	cv$temp$3$bias = traceTempVariable$bias$6_1;
+																	{
+																		{
+																			{
+																				if(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$6_1, 1.0)) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$6_1, 1.0)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																				else {
+																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																						cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$6_1, 1.0));
+																					else
+																						cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$6_1, 1.0)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, traceTempVariable$bias$6_1, 1.0)));
+																				}
+																				cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																			}
+																		}
+																	}
 																}
-																double cv$temp$4$var16;
-																{
-																	cv$temp$4$var16 = 1.0;
-																}
-																if(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$3$bias, cv$temp$4$var16)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$3$bias, cv$temp$4$var16)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																else {
-																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$3$bias, cv$temp$4$var16));
-																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$3$bias, cv$temp$4$var16)))) + 1)) + (Math.log(1.0) + DistributionSampling.logProbabilityBeta(value, cv$temp$3$bias, cv$temp$4$var16)));
-																}
-																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
 															}
+														}
+														cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+														if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+														else {
+															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+															else
+																cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 														}
 													}
 												}
-											}
-											cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-											if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-												cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-											else {
-												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-													cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-												else
-													cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 											}
 										}
 									}
-								}
-								{
-									if(!cv$currentValue) {
+									{
 										{
-											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-											double cv$consumerDistributionProbabilityAccumulator = 1.0;
-											{
+											if(!cv$currentValue) {
 												{
 													{
+														double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+														double cv$consumerDistributionProbabilityAccumulator = 1.0;
 														{
-															double cv$temp$5$var11;
 															{
-																cv$temp$5$var11 = 0.0;
+																{
+																	{
+																		if(((Math.log(1.0) + (((0.0 <= var14) && (var14 < 0.5))?(-Math.log((0.5 - 0.0))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var14) && (var14 < 0.5))?(-Math.log((0.5 - 0.0))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																		else {
+																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																				cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var14) && (var14 < 0.5))?(-Math.log((0.5 - 0.0))):Double.NEGATIVE_INFINITY));
+																			else
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var14) && (var14 < 0.5))?(-Math.log((0.5 - 0.0))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var14) && (var14 < 0.5))?(-Math.log((0.5 - 0.0))):Double.NEGATIVE_INFINITY)));
+																		}
+																		cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																	}
+																}
 															}
-															double cv$temp$6$var12;
-															{
-																cv$temp$6$var12 = 0.5;
-															}
-															if(((Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 < cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 < cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-															else {
-																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 < cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY));
-																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 < cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((cv$temp$5$var11 <= var14) && (var14 < cv$temp$6$var12))?(-Math.log((cv$temp$6$var12 - cv$temp$5$var11))):Double.NEGATIVE_INFINITY)));
-															}
-															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+														}
+														cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+														if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+														else {
+															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+															else
+																cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 														}
 													}
 												}
-											}
-											cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-											if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-												cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-											else {
-												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-													cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-												else
-													cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
 											}
 										}
 									}
@@ -604,7 +594,7 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$logSum = 0.0;
 			{
 				double cv$lseMax = cv$stateProbabilityLocal[0];
-				for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+				for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 					double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
 					if((cv$lseMax < cv$lseElementValue))
 						cv$lseMax = cv$lseElementValue;
@@ -613,27 +603,29 @@ final class Conditional3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 					cv$logSum = Double.NEGATIVE_INFINITY;
 				else {
 					double cv$lseSum = 0.0;
-					for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+					for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 						cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
 					cv$logSum = (cv$logSum + (Math.log(cv$lseSum) + cv$lseMax));
 				}
 			}
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-				for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
-					cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numNumStates);
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numStates);
 			} else {
-				for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 					cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
 			}
-			for(int cv$indexName = cv$numNumStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+			for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
 				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
-			guard = (DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numNumStates) == 1);
+			guard = (DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates) == 1);
 			{
 				{
-					if(guard)
-						bias = 0.5;
-					else
-						bias = var14;
+					{
+						if(guard)
+							bias = 0.5;
+						else
+							bias = var14;
+					}
 				}
 			}
 		}

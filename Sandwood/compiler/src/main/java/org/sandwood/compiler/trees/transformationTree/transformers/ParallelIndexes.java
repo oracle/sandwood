@@ -96,7 +96,7 @@ public class ParallelIndexes extends Transformer {
 
                 if(d.usedInParallel && t.parallel) {
                     /*
-                     * Create a new index name based on the existing index name, and initialise the index name to the
+                     * Create a new index name based on the existing index name, and initialize the index name to the
                      * value of the new index name. When the for loop is created it will use the new index name instead
                      * of the existing one. Append the body to this, and use this as the new body. This is done to make
                      * the value effectively final for any inner lambdas that use the index. This for loop will now have

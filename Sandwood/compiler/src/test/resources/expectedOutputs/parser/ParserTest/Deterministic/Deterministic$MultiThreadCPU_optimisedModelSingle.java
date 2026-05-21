@@ -282,9 +282,9 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample29 = fixedFlag$sample29;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -379,9 +379,9 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample55 = (fixedFlag$sample55 && fixedFlag$sample29);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$rvAccumulator = 0.0;
@@ -480,9 +480,9 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample75 = fixedFlag$sample55;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -537,7 +537,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// by sample task 55 drawn from Categorical 53. Inference was performed using variable
 	// marginalization.
 	private final void sample55(int i$var46) {
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// variable marginalization
 		for(int cv$valuePos = 0; cv$valuePos < 5; cv$valuePos += 1) {
 			// Guards to ensure that a is only updated when there is a valid path.
@@ -555,9 +555,6 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
-			// 
-			// cv$temp$0$var52's comment
 			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = Math.log(m[b[i$var46]][cv$valuePos]);
 			int index$i$3_2 = (i$var46 + 1);
@@ -579,8 +576,6 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// 
 				// Substituted "index$i$3_4" with its value "index$i$3_2".
 				// 
-				// Substituted "cv$temp$2$var52" with its value "var52".
-				// 
 				// Constructing a random variable input for use later.
 				// 
 				// Processing random variable 53.
@@ -590,8 +585,6 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				// Value of the variable at this index
 				cv$accumulatedProbabilities = ((((0.0 <= a[index$i$3_2]) && (a[index$i$3_2] < 5))?Math.log(m[cv$valuePos][a[index$i$3_2]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			
-			// Variable declaration of cv$temp$4$var72 moved.
-			// 
 			// Constructing a random variable input for use later.
 			// 
 			// Processing random variable 73.
@@ -599,7 +592,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// Looking for a path between Sample 55 and consumer Bernoulli 73.
 			// 
 			// Value of the variable at this index
-			double cv$temp$4$var72 = (double)(1 / cv$valuePos);
+			double var72 = (double)(1 / cv$valuePos);
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -617,7 +610,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			// inputs.
 			// 
 			// Substituted "j" with its value "(i$var46 - 1)".
-			cv$accumulatedProbabilities = (Math.log((flips[(i$var46 - 1)]?cv$temp$4$var72:(1.0 - cv$temp$4$var72))) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (Math.log((flips[(i$var46 - 1)]?var72:(1.0 - var72))) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
@@ -636,7 +629,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var54$stateProbabilityGlobal[0];
@@ -672,12 +665,12 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Sum the values in the array.
 		else {
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
 			// 
-			// cv$numNumStates's comment
+			// cv$numStates's comment
 			// variable marginalization
 			for(int cv$lseIndex = 0; cv$lseIndex < 5; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
@@ -693,7 +686,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
 			// 
-			// cv$numNumStates's comment
+			// cv$numStates's comment
 			// variable marginalization
 			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
 				// Get a local reference to the scratch space.
@@ -701,7 +694,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		} else {
 			// Normalize log space values and move to normal space
 			// 
-			// cv$numNumStates's comment
+			// cv$numStates's comment
 			// variable marginalization
 			for(int cv$indexName = 0; cv$indexName < 5; cv$indexName += 1)
 				// Get a local reference to the scratch space.
@@ -720,7 +713,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		// Write out the value of the sample to a temporary variable prior to updating the
 		// intermediate variables.
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// variable marginalization
 		a[i$var46] = DistributionSampling.sampleCategorical(RNG$, cv$var54$stateProbabilityGlobal, 5);
 		

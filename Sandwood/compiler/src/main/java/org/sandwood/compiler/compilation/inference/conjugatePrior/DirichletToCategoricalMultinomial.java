@@ -24,10 +24,10 @@ import java.util.Set;
 
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.FunctionType;
+import org.sandwood.compiler.compilation.CompilationContext.CompilationPhase;
 import org.sandwood.compiler.compilation.inference.InferenceGenerator;
 import org.sandwood.compiler.compilation.inference.InferenceGeneratorArray;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
-import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
@@ -44,6 +44,7 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVaria
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
+import org.sandwood.compiler.traces.guards.ScopeConstructor;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRFor;
@@ -112,24 +113,26 @@ public class DirichletToCategoricalMultinomial extends
      * @param funcData       The function data for this inference function.
      */
     @Override
-    protected void constructFunctionVariables(CompilationContext compilationCtx, DirichletToCategoricalData funcData) {
-        // Set up a pointer for accessing local space.
-        IRTreeReturn<ArrayVariable<DoubleVariable>> globalState = loadGlobalField(funcData.countNameGlobal, funcData,
-                compilationCtx);
-        IRTreeVoid getLocalState = initializeVariable(countNameLocal, globalState,
-                "A local reference to the scratch space.");
-        compilationCtx.addTreeToScope(GlobalScope.scope, getLocalState);
+    protected void constructFunctionVariables(DirichletToCategoricalData funcData, CompilationContext compilationCtx) {
+        funcData.targetScope.addTree((TreeBuilderInfo info) -> {
+            // Set up a pointer for accessing local space.
+            IRTreeReturn<ArrayVariable<DoubleVariable>> globalState = loadGlobalField(funcData.countNameGlobal,
+                    funcData, compilationCtx);
+            IRTreeVoid getLocalState = initializeVariable(countNameLocal, globalState,
+                    "A local reference to the scratch space.");
+            compilationCtx.addTreeToScope(GlobalScope.scope, getLocalState);
 
-        IRTreeReturn<IntVariable> arrayLengthVal = funcData.sourceRandom.beta.scopedLength(null)
-                .getForwardIR(compilationCtx);
-        IRTreeVoid arrayLengthVar = initializeVariable(arrayLength, arrayLengthVal, "Get the length of the array");
-        compilationCtx.addTreeToScope(GlobalScope.scope, arrayLengthVar);
+            IRTreeReturn<IntVariable> arrayLengthVal = funcData.sourceRandom.beta.scopedLength(null)
+                    .getForwardIR(compilationCtx);
+            IRTreeVoid arrayLengthVar = initializeVariable(arrayLength, arrayLengthVal, "Get the length of the array");
+            compilationCtx.addTreeToScope(GlobalScope.scope, arrayLengthVar);
 
-        IRTreeReturn<ArrayVariable<DoubleVariable>> array = load(countNameLocal);
-        IRTreeVoid body = arrayPut(array, load(loopIndex), constant(0.0), Tree.NoComment);
-        IRFor loop = IRTree.forStmt(body, constant(0), load(arrayLength), constant(1), loopIndex, true,
-                "Initialize the array values to 0.");
-        compilationCtx.addTreeToScope(GlobalScope.scope, loop);
+            IRTreeReturn<ArrayVariable<DoubleVariable>> array = load(countNameLocal);
+            IRTreeVoid body = arrayPut(array, load(loopIndex), constant(0.0), Tree.NoComment);
+            IRFor loop = IRTree.forStmt(body, constant(0), load(arrayLength), constant(1), loopIndex, true,
+                    "Initialize the array values to 0.");
+            compilationCtx.addTreeToScope(GlobalScope.scope, loop);
+        });
     }
 
     @SuppressWarnings("unchecked")
@@ -215,14 +218,16 @@ public class DirichletToCategoricalMultinomial extends
 
     @Override
     protected void allocateGlobalState(CompilationContext compilationCtx, DirichletToCategoricalData funcData) {
-
         // Allocate space for storing the results.
-
-        compilationCtx.pushScope();
+        compilationCtx.pushScopeState();
         // Because of the reuse of max this needs to be serial. This could be overcome
         // this by taking a copy of the value of max, but as I am not sure that parallel
         // allocation is a beneficial, for now this is serial.
         compilationCtx.pushIsSerial(true);
+
+        // Update phase
+        CompilationPhase currentPhase = compilationCtx.phase;
+        compilationCtx.phase = CompilationPhase.ALLOCATION;
 
         // Search for the largest possible array value.
         IRTreeReturn<IntVariable> arrayLength = ((ArrayVariable<DoubleVariable>) funcData.sampleDesc.output)
@@ -233,8 +238,9 @@ public class DirichletToCategoricalMultinomial extends
         // Get the allocator
         IRTreeVoid allocator = compilationCtx.getOutermostScopeTree();
 
+        compilationCtx.phase = currentPhase;
         compilationCtx.popIsSerial();
-        compilationCtx.popScope();
+        compilationCtx.popScopeState();
 
         createGlobalField(funcData.countNameGlobal, allocator, funcData, compilationCtx);
     }
@@ -289,8 +295,8 @@ public class DirichletToCategoricalMultinomial extends
     protected void finalize(DirichletToCategoricalData funcData, CompilationContext compilationCtx) {}
 
     @Override
-    protected Scope getBackTraceScope(DirichletToCategoricalData funcData) {
-        return GlobalScope.scope;
+    protected ScopeConstructor getBackTraceScope(DirichletToCategoricalData funcData) {
+        return funcData.targetScope;
     }
 
     @Override

@@ -265,9 +265,9 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample21 = (fixedFlag$sample21 && fixedFlag$sample4);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			double cv$accumulator = 0.0;
@@ -358,9 +358,9 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample27 = (fixedFlag$sample4 && fixedFlag$sample21);
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -479,9 +479,9 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample4 = fixedFlag$sample4;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			logProbability$bernoulli = logProbability$guard;
@@ -532,17 +532,6 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// Initialize a counter to track the reached distributions.
 		// 
-		// Variable declaration of cv$accumulatedProbabilities moved.
-		// Declaration comment was:
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$0$var16" with its value "0.0".
-		// 
-		// Set the current value to the current state of the tree.
-		// 
-		// The original value of the sample
-		// 
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
 		// 
@@ -553,26 +542,6 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$0$var16" with its value "0.0".
-		// 
-		// Set the current value to the current state of the tree.
-		// 
-		// The original value of the sample
-		// 
-		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-		// Declaration comment was:
-		// Processing sample task 27 of consumer random variable null.
-		// 
-		// Set an accumulator to sum the probabilities for each possible configuration of
-		// inputs.
-		// 
-		// Substituted "cv$temp$3$var23" with its value "1.0".
-		// 
-		// cv$temp$2$var22's comment
-		// Variable declaration of cv$temp$2$var22 moved.
-		// 
-		// Constructing a random variable input for use later.
 		// 
 		// Set the current value to the current state of the tree.
 		// 
@@ -587,12 +556,14 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Guards to ensure that bias is only updated when there is a valid path.
 		bias[0] = cv$proposedValue;
 		
-		// Variable declaration of cv$accumulatedProbabilities moved.
-		// Declaration comment was:
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
+		// The probability ration for the proposed value and the current value.
 		// 
-		// Substituted "cv$temp$0$var16" with its value "0.0".
+		// Initialize a log space accumulator to take the product of all the distribution
+		// probabilities.
+		// 
+		// Record the reached probability density.
+		// 
+		// Initialize a counter to track the reached distributions.
 		// 
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
@@ -604,37 +575,12 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$0$var16" with its value "0.0".
-		// 
-		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-		// Declaration comment was:
-		// Processing sample task 27 of consumer random variable null.
-		// 
-		// Set an accumulator to sum the probabilities for each possible configuration of
-		// inputs.
-		// 
-		// Substituted "cv$temp$3$var23" with its value "1.0".
-		// 
-		// cv$temp$2$var22's comment
-		// Variable declaration of cv$temp$2$var22 moved.
-		// 
-		// Constructing a random variable input for use later.
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityBeta(value, cv$proposedValue, 1.0) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY));
+		double cv$ratio = ((DistributionSampling.logProbabilityBeta(value, cv$proposedValue, 1.0) + (((0.0 <= cv$proposedValue) && (cv$proposedValue < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY)) - cv$originalProbability);
 		
 		// Test if the probability of the sample is sufficient to keep the value. This needs
 		// to be less than or equal as otherwise if the proposed value is not possible and
 		// the random value is 0 an impossible value will be accepted.
-		// 
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			// If it is not revert the changes.
 			// 
 			// Set the sample value
@@ -686,21 +632,22 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
-		// Substituted "cv$temp$3$var16" with its value "0.0".
-		// 
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$0$var2" with its value "0.5".
+		// A check to ensure rounding of floating point values can never result in a negative
+		// value.
+		// 
+		// Recorded the probability of reaching sample task 27 with the current configuration.
+		// 
+		// Set an accumulator to record the consumer distributions not seen. Initially set
+		// to 1 as seen values will be deducted from this value.
 		// 
 		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
 		// 
-		// Substituted "cv$temp$2$var23" with its value "1.0".
-		// 
-		// cv$temp$1$var22's comment
 		// Constructing a random variable input for use later.
 		cv$var4$stateProbabilityGlobal[0] = (((((0.0 <= var19) && (var19 < 0.5))?0.6931471805599453:Double.NEGATIVE_INFINITY) + DistributionSampling.logProbabilityBeta(value, bias[0], 1.0)) - 0.6931471805599453);
 		
@@ -725,15 +672,23 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// Variable declaration of cv$accumulatedProbabilities moved.
 		// Declaration comment was:
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// Substituted "cv$temp$0$var2" with its value "0.5".
+		// This value is not used before it is set again, so removing the value declaration.
 		// 
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Substituted "cv$temp$0$var2" with its value "0.5".
+		// An accumulator to allow the value for each distribution to be constructed before
+		// it is added to the index probabilities.
+		// 
+		// A check to ensure rounding of floating point values can never result in a negative
+		// value.
+		// 
+		// Recorded the probability of reaching sample task 27 with the current configuration.
+		// 
+		// Set an accumulator to record the consumer distributions not seen. Initially set
+		// to 1 as seen values will be deducted from this value.
+		// 
+		// Looking for a path between Put 16 and consumer Beta 24.
 		// 
 		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
@@ -741,13 +696,6 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// 
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
-		// 
-		// Substituted "cv$temp$6$var23" with its value "1.0".
-		// 
-		// cv$temp$5$var22's comment
-		// Variable declaration of cv$temp$5$var22 moved.
-		// 
-		// Constructing a random variable input for use later.
 		cv$var4$stateProbabilityGlobal[1] = (DistributionSampling.logProbabilityBeta(value, 0.5, 1.0) - 0.6931471805599453);
 		
 		// This value is not used before it is set again, so removing the value declaration.
@@ -757,7 +705,7 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var4$stateProbabilityGlobal[0];
@@ -783,7 +731,7 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// 
 			// Get a local reference to the scratch space.
 			// 
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			cv$logSum = (Math.log((Math.exp((cv$var4$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var4$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 		
 		// If all the sum is zero, just share the probability evenly.
@@ -812,7 +760,7 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Write out the new value of the sample.
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// variable marginalization
 		guard = (DistributionSampling.sampleCategorical(RNG$, cv$var4$stateProbabilityGlobal, 2) == 1);
 		
@@ -830,9 +778,9 @@ final class Conditional4$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {
-		// Constructor for cv$var4$stateProbabilityGlobal
-		// 
 		// Allocate scratch space.
+		// 
+		// Constructor for cv$var4$stateProbabilityGlobal
 		// 
 		// Allocation of cv$var4$stateProbabilityGlobal for single threaded execution
 		cv$var4$stateProbabilityGlobal = new double[2];

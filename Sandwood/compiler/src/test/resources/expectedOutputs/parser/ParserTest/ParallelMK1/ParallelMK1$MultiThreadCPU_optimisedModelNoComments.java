@@ -167,8 +167,8 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			guard$sample20gaussian23[i] = false;
 			if(!guard$sample20gaussian23[i]) {
 				guard$sample20gaussian23[i] = true;
-				double cv$temp$3$var22 = indirection[i];
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(cv$temp$3$var22))) + cv$accumulatedProbabilities) - (Math.log(cv$temp$3$var22) * 0.5));
+				double var22 = indirection[i];
+				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(var22))) + cv$accumulatedProbabilities) - (Math.log(var22) * 0.5));
 			}
 			if(!guard$sample20gaussian23[i]) {
 				guard$sample20gaussian23[i] = true;
@@ -183,14 +183,15 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		guard$sample20gaussian23[i] = false;
 		if(!guard$sample20gaussian23[i]) {
 			guard$sample20gaussian23[i] = true;
-			double cv$temp$3$var22 = indirection[i];
-			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(cv$temp$3$var22))) + cv$accumulatedProbabilities) - (Math.log(cv$temp$3$var22) * 0.5));
+			double var22 = indirection[i];
+			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(var22))) + cv$accumulatedProbabilities) - (Math.log(var22) * 0.5));
 		}
 		if(!guard$sample20gaussian23[i]) {
 			guard$sample20gaussian23[i] = true;
 			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(cv$proposedValue))) + cv$accumulatedProbabilities) - (Math.log(cv$proposedValue) * 0.5));
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			sample[i] = cv$originalValue;
 			indirection[i] = sample[i];
 		}

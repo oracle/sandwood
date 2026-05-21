@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -9,7 +9,7 @@
 package org.sandwood.compiler.dataflowGraph.scopes;
 
 import org.sandwood.compiler.compilation.CompilationContext;
-import org.sandwood.compiler.compilation.ScopeTracking;
+import org.sandwood.compiler.compilation.scopesState.ScopeTracking;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.trees.irTree.IRTreeVoid;
@@ -63,11 +63,11 @@ public class GlobalScope implements Scope {
     public ScopeType getScopeType() {
         return ScopeType.GLOBAL;
     }
-    
+
     @Override
     public BooleanVariable getScopeCondition() {
-        //This is created every time it is accessed to prevent links between runs via a static object.
-        //TODO create it every time the construction of a DAG starts.
+        // This is created every time it is accessed to prevent links between runs via a static object.
+        // TODO create it every time the construction of a DAG starts.
         ScopeStack.pushScope(this);
         BooleanVariable scopeCondition = Variable.booleanVariable(true);
         ScopeStack.popScope(this);
@@ -91,5 +91,15 @@ public class GlobalScope implements Scope {
     @Override
     public boolean isSerial(CompilationContext compilationCtx) {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        return this == other;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
     }
 }

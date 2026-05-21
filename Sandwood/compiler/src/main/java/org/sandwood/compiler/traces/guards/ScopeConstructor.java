@@ -48,8 +48,8 @@ import java.util.Stack;
 
 import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.CompilationContext.CompilationPhase;
+import org.sandwood.compiler.compilation.scopesState.ScopeState.InitializedState;
 import org.sandwood.compiler.compilation.util.TreeUtils;
-import org.sandwood.compiler.dataflowGraph.Sandwood;
 import org.sandwood.compiler.dataflowGraph.scopes.BlockScope;
 import org.sandwood.compiler.dataflowGraph.scopes.CommentScope;
 import org.sandwood.compiler.dataflowGraph.scopes.ElseScope;
@@ -83,7 +83,12 @@ import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.Trace;
 import org.sandwood.compiler.traces.TraceHandle;
 import org.sandwood.compiler.traces.Traces;
+import org.sandwood.compiler.traces.guards.ScopeDescription.FixedFlagScopes;
+import org.sandwood.compiler.traces.guards.ScopeDescription.IfElseScopes;
+import org.sandwood.compiler.traces.guards.ScopeDescription.Initializations;
+import org.sandwood.compiler.traces.guards.ScopeDescription.ScopeState;
 import org.sandwood.compiler.traces.guards.ScopeDescription.Substitutions;
+import org.sandwood.compiler.traces.guards.ScopeDescription.TaskState;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRArrayGet;
 import org.sandwood.compiler.trees.irTree.IRTree;
@@ -127,25 +132,14 @@ public class ScopeConstructor {
         }
     }
 
-    private static class TraceDesc {
-        final DataflowTask<?> origin;
-        final DataflowTask<?> consumer;
-
+    private record TraceDesc(DataflowTask<?> origin, DataflowTask<?> consumer) {
         TraceDesc(TraceHandle t) {
-            origin = t.get(0).task;
-            consumer = t.peek().task;
+            this(t.get(0).task, t.peek().task);
         }
     }
 
-    public static class IfElseScopeConstructors {
-        public final ScopeConstructor ifScopeConstructor;
-        public final ScopeConstructor elseScopeConstructor;
-
-        IfElseScopeConstructors(ScopeConstructor ifScopeConstructor, ScopeConstructor elseScopeConstructor) {
-            this.ifScopeConstructor = ifScopeConstructor;
-            this.elseScopeConstructor = elseScopeConstructor;
-        }
-    }
+    public record IfElseScopeConstructors(ScopeConstructor ifScopeConstructor,
+            ScopeConstructor elseScopeConstructor) {}
 
     /**
      * A list of all the distributions scopes constructed to satisfy the sample distributions passed to this object.
@@ -190,7 +184,7 @@ public class ScopeConstructor {
      * recreated for every scope context. Currently, this would be a pain to do, and the sharing of values is not a
      * correctness issue, so just leave it for now.
      */
-    private final Map<DataflowTask<?>, Integer> guardTasks = new HashMap<>();
+    private final Map<TraceDesc, Integer> guardIDs = new HashMap<>();
 
     /**
      * The task the different steps of the scope constructor were created for, and helper methods to get the scopes for
@@ -300,6 +294,24 @@ public class ScopeConstructor {
     }
 
     /**
+     * A factory method for creating a scope constructor based in a specific targetScope. This scope constructor cannot
+     * be extended with a trace to another task as the task it uses is anonymous.
+     * 
+     * @param targetScope
+     * @param comment
+     * @param compilationCtx
+     * @return
+     */
+    public static ScopeConstructor construct(Scope targetScope, String comment, CompilationContext compilationCtx) {
+        // A hack to create a variable to carry the scope. TODO come up with a solution where the task can just be null,
+        // and the scope is kept in its own right.
+        ScopeStack.pushScope(targetScope);
+        DataflowTask<?> task = IntVariable.intVariable(0).getParent();
+        ScopeStack.popScope(targetScope);
+        return construct(task, targetScope, Traces.noDistributionTraces, Tree.NoComment, comment, compilationCtx);
+    }
+
+    /**
      * Factory method to construct an object for constructing the required additional scopes and guards to ensure the
      * generated code is only executed when there is a configuration of the model that satisfies all the trace
      * requirements.
@@ -343,10 +355,16 @@ public class ScopeConstructor {
         tasks = Collections.unmodifiableList(ts);
 
         // Construct the initial Distribution description.
+        compilationCtx.touchScope(targetScope);
+        targetScope = compilationCtx.getTargetScope(targetScope);
         List<ScopeDescription> ds = new ArrayList<>();
         CommentScope commentScope = new CommentScope(targetScope, comment);
-        ScopeDescription d = new ScopeDescription(commentScope, task, controlScopes, new HashSet<>(),
-                distributionTraces, compilationCtx);
+        compilationCtx.touchScope(commentScope);
+        Initializations i = new Initializations(targetScope, compilationCtx.getInitializedState());
+        TaskState t = new TaskState(new Substitutions(), i);
+        ScopeState s = new ScopeState(commentScope, t);
+        ScopeDescription d = new ScopeDescription(s, task, controlScopes, new HashSet<>(), distributionTraces,
+                compilationCtx);
         // If the task is a distributed sample task add the task to set of know samples.
         if(task.isDistribution() && task.getType() == DFType.SAMPLE) {
             DistributionSampleTask<A, ?> sampleTask = (DistributionSampleTask<A, ?>) task;
@@ -400,15 +418,15 @@ public class ScopeConstructor {
      * 
      * @param distributionScopes The list of distributed descriptions to use.
      * @param id                 The id to use to avoid name conflicts.
-     * @param guardTasks         The guard tasks for tasks that have already had traces constructed for them
+     * @param guardIDs           The guard tasks for tasks that have already had traces constructed for them
      * @param tasks              The tasks that are the origin of the traces.
      * @param compilationCtx     The compilation context for this compilation.
      */
-    private ScopeConstructor(List<ScopeDescription> distributionScopes, int id,
-            Map<DataflowTask<?>, Integer> guardTasks, List<DataflowTask<?>> tasks, CompilationContext compilationCtx) {
+    private ScopeConstructor(List<ScopeDescription> distributionScopes, int id, Map<TraceDesc, Integer> guardIDs,
+            List<DataflowTask<?>> tasks, CompilationContext compilationCtx) {
         assert (distributionScopes.size() != 0);
         this.distributionScopes = distributionScopes;
-        this.guardTasks.putAll(guardTasks);
+        this.guardIDs.putAll(guardIDs);
         this.tasks = tasks;
         this.compilationCtx = compilationCtx;
     }
@@ -416,7 +434,7 @@ public class ScopeConstructor {
     private ScopeConstructor(ScopeConstructor sc, DataflowTask<?> task) {
         List<ScopeDescription> ds = new ArrayList<>(sc.distributionScopes);
         this.distributionScopes = Collections.unmodifiableList(ds);
-        this.guardTasks.putAll(sc.guardTasks);
+        this.guardIDs.putAll(sc.guardIDs);
         // Set the already constructed scopes.
         List<DataflowTask<?>> ts = new ArrayList<>(sc.tasks);
         ts.add(task);
@@ -441,18 +459,23 @@ public class ScopeConstructor {
     private List<ScopeDescription> addInputDistributions(ScopeDescription d, Set<TraceHandle> distributionTraces,
             int position) {
 
+        // This will fail if constraints that work backwards over a trace are not handled correctly.
+        assert !distributionTraces.isEmpty() || distributionTraces.iterator().next().peek().task == tasks.get(position);
+
         Set<Scope> endScopes = getTaskScopes(tasks.get(position));
+        TaskState endInit = d.getConstraintState(position);
+        InitializedState endInitializations = endInit.initializations().initialized();
 
         // Construct scopes for each of the sets of distribution traces. We use the substitutions from the withGuardDesc
         // as that is the point that we are heading towards.
-        return constructDistributionScopes(d, distributionTraces, endScopes, position);
+        return constructDistributionScopes(d, distributionTraces, endScopes, endInitializations, position);
     }
 
     public ScopeConstructor resetProbabilities() {
         List<ScopeDescription> distributions = new ArrayList<>();
         for(ScopeDescription d:distributionScopes)
             distributions.add(d.setProbability(constant(1.0)));
-        return new ScopeConstructor(Collections.unmodifiableList(distributions), id.get().current(), guardTasks, tasks,
+        return new ScopeConstructor(Collections.unmodifiableList(distributions), id.get().current(), guardIDs, tasks,
                 compilationCtx);
     }
 
@@ -467,7 +490,7 @@ public class ScopeConstructor {
      *         of distribution samples.
      */
     private List<ScopeDescription> constructDistributionScopes(ScopeDescription d, Set<TraceHandle> traces,
-            Set<Scope> endScopes, int position) {
+            Set<Scope> endScopes, InitializedState endInitializations, int position) {
         // Construct a list of starting points.
         List<ScopeDescription> distributions = new ArrayList<>();
         distributions.add(d);
@@ -477,7 +500,7 @@ public class ScopeConstructor {
         // used by the next trace.
         while(!p.isEmpty()) {
             TraceHandle t = p.poll();
-            distributions = constructDistributionDescriptions(distributions, t, endScopes, position);
+            distributions = constructDistributionDescriptions(distributions, t, endScopes, endInitializations, position);
         }
         return distributions;
     }
@@ -492,11 +515,11 @@ public class ScopeConstructor {
      *         the extra scopes required for this sample task and constraints.
      */
     private List<ScopeDescription> constructDistributionDescriptions(List<ScopeDescription> distributions,
-            TraceHandle trace, Set<Scope> endScopes, int position) {
+            TraceHandle trace, Set<Scope> endScopes, InitializedState endInitializations, int position) {
 
         List<ScopeDescription> toReturn = new ArrayList<>();
         for(ScopeDescription d:distributions)
-            toReturn.addAll(constructDistributionDescriptions(d, trace, endScopes, position));
+            toReturn.addAll(constructDistributionDescriptions(d, trace, endScopes, endInitializations, position));
 
         return toReturn;
     }
@@ -510,13 +533,13 @@ public class ScopeConstructor {
      *         the extra scopes required for this sample task and constraints.
      */
     private List<ScopeDescription> constructDistributionDescriptions(ScopeDescription distribution, TraceHandle trace,
-            Set<Scope> endScopes, int position) {
+            Set<Scope> endScopes, InitializedState endInitializations, int position) {
 
         List<ScopeDescription> toReturn = new ArrayList<>();
         // Add guards to the existing distributions for the extra traces
-        toReturn.addAll(constructGuardedSample(trace, distribution, endScopes, position));
+        toReturn.addAll(constructGuardedSample(trace, distribution, endScopes, endInitializations, position));
         // Then add in a new distribution scope.
-        toReturn.addAll(constructScopedSample(trace, distribution, endScopes, position));
+        toReturn.addAll(constructScopedSample(trace, distribution, endScopes, endInitializations, position));
 
         return toReturn;
     }
@@ -530,7 +553,7 @@ public class ScopeConstructor {
      * @return
      */
     private <A extends ScalarVariable<A>> List<ScopeDescription> constructGuardedSample(TraceHandle trace,
-            ScopeDescription d, Set<Scope> endScopes, int position) {
+            ScopeDescription d, Set<Scope> endScopes, InitializedState endInitializations, int position) {
         // List to store the distributions to return.
         List<ScopeDescription> toReturn = new ArrayList<>();
 
@@ -548,8 +571,8 @@ public class ScopeConstructor {
                         // Create a new description that includes a guard checking this trace is satisfied by the scopes
                         // in subScopes.
                         toReturn.add(TraceArrayRestrictions.constructRestriction(trace, sampleDesc.scopeSubstitutions,
-                                constructScopeSubstitutions(endScopes, sampleD, position), sampleD, id.get().next(),
-                                PASS_VALUES, position, compilationCtx));
+                                constructScopeSubstitutions(endScopes, sampleD, position), endInitializations, sampleD,
+                                id.get().next(), PASS_VALUES, position, compilationCtx));
                     }
                 }
             }
@@ -568,7 +591,7 @@ public class ScopeConstructor {
      * @return A list of new distribution descriptions including sampling from the source of this trace.
      */
     private <A extends ScalarVariable<A>> List<ScopeDescription> constructScopedSample(TraceHandle trace,
-            ScopeDescription d, Set<Scope> endScopes, int position) {
+            ScopeDescription d, Set<Scope> endScopes, InitializedState endInitializations, int position) {
 
         // Construct a list to hold the values to return.
         List<ScopeDescription> toReturn = new ArrayList<>();
@@ -591,27 +614,20 @@ public class ScopeConstructor {
                 // If we have not met this sample task before.
                 if(flagValue == null) {
                     if(compilationCtx.traces.getFixableTasks().contains(disSampleTask)) {
-                        // Construct a conditional so that distributions are only explored if the values are not fixed.
-                        IRTreeReturn<BooleanVariable> ifGuard = load(VariableNames.fixedFlagName(disSampleTask));
-                        IfScope ifScope = new IfScope(d.innerScope, ifGuard);
 
-                        // Create a distribution based on this scope with the flag set to true
-                        ScopeDescription fixedGuardDistribution = d.addFixedFlagScope(ifScope, disSampleTask, true,
-                                compilationCtx);
+                        FixedFlagScopes fixedFlagScopes = d.constructFixedFlagScopes(disSampleTask, compilationCtx);
                         // Construct a distribution that ensure that the trace is satisfied, but no values are changed
                         // as this distribution is fixed.
                         ScopeDescription fixedTrace = TraceArrayRestrictions.constructRestriction(trace,
                                 Collections.emptyMap(),
-                                constructScopeSubstitutions(endScopes, fixedGuardDistribution, position),
-                                fixedGuardDistribution, id.get().next(), PASS_VALUES, position, compilationCtx);
+                                constructScopeSubstitutions(endScopes, fixedFlagScopes.fixed(), position),
+                                endInitializations, fixedFlagScopes.fixed(), id.get().next(), PASS_VALUES, position,
+                                compilationCtx);
                         toReturn.add(fixedTrace);
 
-                        // Construct a distribution with the flag set to false.
-                        ScopeDescription elseGuardDistribution = d.addFixedFlagScope(ifScope.elseScope, disSampleTask,
-                                false, compilationCtx);
                         // Construct a distribution here the output of the sample task is explored and add it to the
                         // list of distributions.
-                        toReturn.add(constructNonFixedValues(trace, endScopes, elseGuardDistribution, disSampleTask,
+                        toReturn.add(constructNonFixedValues(trace, endScopes, fixedFlagScopes.free(), disSampleTask,
                                 position));
                     } else {
                         // We know the value is not fixed.
@@ -624,8 +640,8 @@ public class ScopeConstructor {
                     // Construct a distribution that ensure that the trace is satisfied, but no values are changed as
                     // this distribution is fixed.
                     toReturn.add(TraceArrayRestrictions.constructRestriction(trace, Collections.emptyMap(),
-                            constructScopeSubstitutions(endScopes, d, position), d, id.get().next(), PASS_VALUES,
-                            position, compilationCtx));
+                            constructScopeSubstitutions(endScopes, d, position), endInitializations, d, id.get().next(),
+                            PASS_VALUES, position, compilationCtx));
                 else
                     // We have met this sample task before and if we are in this branch we know its values are not
                     // fixed. Construct a distribution here the output of the sample task is explored and add it to the
@@ -634,32 +650,45 @@ public class ScopeConstructor {
             } else {
                 // Non distributed values are just treated as fixed values.
                 toReturn.add(TraceArrayRestrictions.constructRestriction(trace, Collections.emptyMap(),
-                        constructScopeSubstitutions(endScopes, d, position), d, id.get().next(), PASS_VALUES, position,
-                        compilationCtx));
+                        constructScopeSubstitutions(endScopes, d, position), endInitializations, d, id.get().next(),
+                        PASS_VALUES, position, compilationCtx));
             }
         } else {
             // Fixed values are just treated as fixed values.
             toReturn.add(TraceArrayRestrictions.constructRestriction(trace, Collections.emptyMap(),
-                    constructScopeSubstitutions(endScopes, d, position), d, id.get().next(), PASS_VALUES, position,
-                    compilationCtx));
+                    constructScopeSubstitutions(endScopes, d, position), endInitializations, d, id.get().next(),
+                    PASS_VALUES, position, compilationCtx));
         }
         return toReturn;
     }
 
     private <A extends ScalarVariable<A>> ScopeDescription constructNonFixedValues(TraceHandle trace,
             Set<Scope> endScopes, ScopeDescription d, DistributionSampleTask<A, ?> sampleTask, int position) {
+        // Record the initialized state at the end of the trace
+        InitializedState initializedEndState = d.getConstraintState(position).initializations().initialized();
+
         // Construct a new description where the fixed scopes are the shared scopes of the consumer trace and the
         // existing distribution.
         List<Scope> changeableScopes = getChangeableScopes(sampleTask, trace);
         Set<Scope> fixedScopes = getTaskScopes(sampleTask);
         fixedScopes.removeAll(changeableScopes);
 
-        // A map to hold the mapping from scopes enclosing the sample to the scopes created in this context.
-        Map<Scope, IntVariable> subScopes = constructScopeSubstitutions(fixedScopes, d, position);
-
-        ScopeDescription knownScope = constructAdditionalScopes(changeableScopes, subScopes, d, position);
+        ScopeDescription knownScope = constructAdditionalScopes(changeableScopes, d, position);
 
         // Construct a scope to test if this scope has already been used. Push the enclosing scope onto the stack.
+
+        // A map to hold the mapping from scopes enclosing the sample to the scopes created in this context.
+        Map<Scope, IntVariable> subScopes = new HashMap<>();
+        knownScope.applySubstitutions(position, compilationCtx);
+        for(Scope scope:changeableScopes) {
+            if(scope.getScopeType() == ScopeType.FOR) {
+                ForTask t = (ForTask) scope;
+                IntVariable newIndex = (IntVariable) compilationCtx.getSubstitute(t.getIndex());
+                subScopes.put(t, newIndex);
+            } else
+                subScopes.put(scope, null);
+        }
+        knownScope.removeSubstitutions(position, compilationCtx);
 
         IRTreeReturn<BooleanVariable> guard = constant(true);
         for(DistSampleDesc<?> s:d.getExistingSamples(sampleTask)) {
@@ -678,15 +707,18 @@ public class ScopeConstructor {
         }
 
         // Construct the new scope.
-        ScopeDescription guardScope = knownScope.insertScope(new IfScope(knownScope.innerScope, guard), compilationCtx);
+        ScopeDescription guardScope = knownScope.insertIfScope(guard, compilationCtx);
 
         // And use it to construct the sample scope.
         ScopeDescription sampleSettingScope = constructSampleScope(guardScope, sampleTask, position);
 
         // Construct any extra scopes required for the trace restrictions, and add the guards.
-        return TraceArrayRestrictions.constructRestriction(trace, subScopes,
-                constructScopeSubstitutions(endScopes, d, position), sampleSettingScope, id.get().next(), PASS_VALUES,
-                position, compilationCtx);
+        ScopeDescription finalTargetScope = TraceArrayRestrictions.constructRestriction(trace, subScopes,
+                constructScopeSubstitutions(endScopes, d, position), initializedEndState, sampleSettingScope,
+                id.get().next(), PASS_VALUES, position, compilationCtx);
+
+        // And return the result
+        return finalTargetScope;
     }
 
     /**
@@ -710,17 +742,11 @@ public class ScopeConstructor {
         IntVariable numStates = r.getNumStates();
 
         // Construct the for loop to iterate through all the possible states.
-        ScopeStack.pushScope(scope.innerScope);
-        ForTask newScope = Sandwood.forLoop(Variable.intVariable(0), numStates, Variable.intVariable(1), true,
-                (index) -> {
-                    // Set alias for better readability, this has no effect on the generated code.
-                    index.setAlias(indexName);
-                    index.setUniqueVarDesc(indexName);
-                });
-        compilationCtx.touchScope(newScope);
-        ScopeStack.popScope(scope.innerScope);
         String comment = "Enumerating the possible outputs of " + r.getType() + " " + r.getId() + ".";
-        compilationCtx.addCommentToScope(newScope, comment);
+        ScopeDescription forScope = scope.insertForScope(Variable.intVariable(0), numStates, Variable.intVariable(1),
+                indexName, true, comment, position, compilationCtx);
+        scope.removeSubstitutions(position, compilationCtx);
+        forScope.applySubstitutions(position, compilationCtx);
 
         // Calculate the probability of this sampling. Generate a unique name for the variables. This must include an id
         // element as there may be several different values drawn from any given sample task.
@@ -729,27 +755,28 @@ public class ScopeConstructor {
                 false);
 
         // Get the index
-        IRTreeReturn<IntVariable> loopIndex = newScope.getIndex().getForwardIR(compilationCtx);
+        IRTreeReturn<IntVariable> loopIndex = IRTree.load(indexName);
 
         // Set the sample value.
         VariableDescription<A> tempName = VariableNames.distributionTempName(
                 disSampleTask.getOutput().getVarDesc().name, id.get().next(), disSampleTask.getOutputType());
-        compilationCtx.addTreeToScope(newScope,
-                initializeVariable(tempName, r.getStateValue(load(indexName)), Tree.NoComment));
-        Variable<A> sampleVariable = Variable.namedVariable(tempName, newScope);
+
+        forScope.addTreeToScope(initializeVariable(tempName, r.getStateValue(load(indexName)), Tree.NoComment),
+                compilationCtx);
+        Variable<A> sampleVariable = forScope.constructVariableInScope(tempName);
 
         // Recover and store the probability value.
         IRTreeReturn<ArrayVariable<DoubleVariable>> probabilityArray = disSampleTask.getProbabilitiesArray()
                 .getForwardIR(compilationCtx);
         IRArrayGet<DoubleVariable> localProbability = arrayGet(probabilityArray, loopIndex);
-        compilationCtx.addTreeToScope(newScope,
-                initializeVariable(probabilityName, multiplyDD(scope.probability, localProbability),
-                        "Update the probability of sampling this value from the distribution value."));
+        forScope.addTreeToScope(initializeVariable(probabilityName, multiplyDD(forScope.probability, localProbability),
+                "Update the probability of sampling this value from the distribution value."), compilationCtx);
 
-        scope.removeSubstitutions(position, compilationCtx);
+        ScopeDescription returnScope = forScope.addSampleScope(disSampleTask, sampleVariable, load(probabilityName),
+                position);
+        forScope.removeSubstitutions(position, compilationCtx);
 
-        return scope.addSampleScope(newScope, disSampleTask, sampleVariable, load(probabilityName), position,
-                compilationCtx);
+        return returnScope;
     }
 
     /**
@@ -802,7 +829,7 @@ public class ScopeConstructor {
 
             processed.clear();
         }
-        return new ScopeConstructor(Collections.unmodifiableList(toProcess), id.get().current(), guardTasks, tasks,
+        return new ScopeConstructor(Collections.unmodifiableList(toProcess), id.get().current(), guardIDs, tasks,
                 compilationCtx);
     }
 
@@ -816,8 +843,8 @@ public class ScopeConstructor {
         List<ScopeDescription> postTracesDescs = new ArrayList<>();
         for(ScopeDescription d:distributionScopes)
             postTracesDescs.addAll(applyDistributedArguments(d, position));
-        return new ScopeConstructor(Collections.unmodifiableList(postTracesDescs), id.get().current(), guardTasks,
-                tasks, compilationCtx);
+        return new ScopeConstructor(Collections.unmodifiableList(postTracesDescs), id.get().current(), guardIDs, tasks,
+                compilationCtx);
     }
 
     private List<ScopeDescription> applyDistributedArguments(ScopeDescription d, int position) {
@@ -826,19 +853,20 @@ public class ScopeConstructor {
         // For each group of distributed arguments apply the group.
         PriorityQueue<Set<TraceHandle>> postTracesQueue = new PriorityQueue<>(traceSetComparator);
         Set<Set<TraceHandle>> disArgTraces = d.getDistributionArgs(position);
+        d.applySubstitutions(position, compilationCtx);
         postTracesQueue.addAll(disArgTraces);
         while(!postTracesQueue.isEmpty()) {
             Set<TraceHandle> postTraces = postTracesQueue.poll();
             if(postTraces.isEmpty()) {
-                Scope blockScope = new BlockScope(d.innerScope, Tree.NoComment);
-                ScopeDescription block = d.insertScope(blockScope, compilationCtx);
+                ScopeDescription block = d.insertBlockScope(Tree.NoComment, compilationCtx);
                 postTracesDescs.add(block);
             } else {
-                d = d.insertScope(new CommentScope(d.innerScope, d.comment(position)), compilationCtx);
+                d = d.insertCommentScope(d.comment(position), compilationCtx);
                 for(ScopeDescription d1:addInputDistributions(d, postTraces, position))
                     postTracesDescs.add(d1.markDistArgsApplied(position));
             }
         }
+        d.removeSubstitutions(position, compilationCtx);
         return postTracesDescs;
     }
 
@@ -967,21 +995,20 @@ public class ScopeConstructor {
         switch(direction) {
             case FORWARDS: {
                 source = tasks.get(position - 1);
-                startScopes = getTaskScopes(source);
                 sink = tasks.get(position);
-                endScopes = getTaskScopes(sink);
                 break;
             }
             case BACKWARDS: {
                 source = tasks.get(position);
-                startScopes = getTaskScopes(source);
                 sink = tasks.get(position - 1);
-                endScopes = getTaskScopes(sink);
                 break;
             }
             default:
                 throw new CompilerException("Unexpected direction: " + direction);
         }
+
+        startScopes = getTaskScopes(source);
+        endScopes = getTaskScopes(sink);
 
         List<ScopeDescription> postTraceList = new ArrayList<>();
 
@@ -1005,26 +1032,33 @@ public class ScopeConstructor {
                 for(ScopeDescription d:distributionScopes) {
                     d = d.constructConstraintSpace(trace, direction);
                     if(preTraces.isEmpty()) {
-                        Map<Scope, IntVariable> startSubstitutions;
-                        Map<Scope, IntVariable> endSubstitutions;
                         switch(direction) {
                             case FORWARDS: {
-                                startSubstitutions = constructScopeSubstitutions(startScopes, d, position - 1);
-                                endSubstitutions = Collections.emptyMap();
+                                Map<Scope, IntVariable> startSubstitutions = constructScopeSubstitutions(startScopes, d,
+                                        position - 1);
+                                Map<Scope, IntVariable> endSubstitutions = Collections.emptyMap();
+                                // Passed initialized state is null as it will never be used because endSubstitutions is
+                                // empty.
+                                d = TraceArrayRestrictions.constructRestriction(trace, simplifyTraces.get(trace),
+                                        startSubstitutions, endSubstitutions, null, d, id.get().next(), arrayValues,
+                                        position, compilationCtx);
                                 break;
                             }
                             case BACKWARDS: {
-                                startSubstitutions = Collections.emptyMap();
-                                endSubstitutions = constructScopeSubstitutions(endScopes, d, position - 1);
+                                Map<Scope, IntVariable> startSubstitutions = Collections.emptyMap();
+                                Map<Scope, IntVariable> endSubstitutions = constructScopeSubstitutions(endScopes, d,
+                                        position - 1);
+                                InitializedState endState = d.getConstraintState(position - 1).initializations()
+                                        .initialized();
+                                d = TraceArrayRestrictions.constructRestriction(trace, simplifyTraces.get(trace),
+                                        startSubstitutions, endSubstitutions, endState, d, id.get().next(), arrayValues,
+                                        position, compilationCtx);
                                 break;
                             }
                             default:
                                 throw new CompilerException("Unexpected direction: " + direction);
                         }
-                        d = TraceArrayRestrictions.constructRestriction(trace, simplifyTraces.get(trace),
-                                startSubstitutions, endSubstitutions, d, id.get().next(), arrayValues, position,
-                                compilationCtx);
-                        // If the sink is a distribution sample add a description for it to the scope description.
+                        // If the consumer is a distribution sample add a description for it to the scope description.
                         if(sink.isDistribution() && sink.getType() == DFType.SAMPLE)
                             d = addSampleDesc((SampleTask<?, ?>) sink, null, d);
                         withTraceConstraint.add(d);
@@ -1032,16 +1066,20 @@ public class ScopeConstructor {
                         // Construct a new description where the fixed scopes are the shared scopes of the consumer
                         // trace and the existing distribution.
                         Set<Scope> fixedScopes;
+                        Scope outerScope;
                         List<Scope> changeableScopes;
+
                         switch(direction) {
                             case FORWARDS: {
                                 changeableScopes = getChangeableScopes(sink, trace);
+                                outerScope = sink.scope();
                                 fixedScopes = new HashSet<>(endScopes);
                                 fixedScopes.removeAll(changeableScopes);
                                 break;
                             }
                             case BACKWARDS: {
                                 changeableScopes = getChangeableScopes(source, trace);
+                                outerScope = source.scope();
                                 fixedScopes = new HashSet<>(startScopes);
                                 fixedScopes.removeAll(changeableScopes);
                                 break;
@@ -1049,8 +1087,11 @@ public class ScopeConstructor {
                             default:
                                 throw new CompilerException("Unexpected direction: " + direction);
                         }
-                        d = constructAdditionalScopes(changeableScopes,
-                                constructScopeSubstitutions(fixedScopes, d, position), d, position);
+
+                        InitializedState endInitializations = d.getConstraintState(position - 1).initializations()
+                                .initialized();
+
+                        d = constructAdditionalScopes(changeableScopes, d, position);
 
                         // If the consumer is a distribution sample add a description for it to the scope description.
                         if(sink.isDistribution() && sink.getType() == DFType.SAMPLE)
@@ -1064,7 +1105,7 @@ public class ScopeConstructor {
                         while(!p.isEmpty()) {
                             TraceHandle preTrace = p.poll();
                             preTraceDescriptions = constructDistributionDescriptions(preTraceDescriptions, preTrace,
-                                    endScopes, position);
+                                    endScopes, endInitializations, position);
                         }
 
                         // Construct the distributions going to the consumer
@@ -1074,8 +1115,9 @@ public class ScopeConstructor {
                                     withTraceConstraint.add(TraceArrayRestrictions.constructRestriction(trace,
                                             simplifyTraces.get(trace),
                                             constructScopeSubstitutions(startScopes, ptd, position - 1),
-                                            constructScopeSubstitutions(endScopes, ptd, position), ptd, id.get().next(),
-                                            arrayValues, position, compilationCtx));
+                                            constructScopeSubstitutions(endScopes, ptd, position),
+                                            ptd.getConstraintState(position).initializations().initialized(), ptd,
+                                            id.get().next(), arrayValues, position, compilationCtx));
                                 }
 
                                 break;
@@ -1085,7 +1127,8 @@ public class ScopeConstructor {
                                     withTraceConstraint.add(TraceArrayRestrictions.constructRestriction(trace,
                                             simplifyTraces.get(trace),
                                             constructScopeSubstitutions(startScopes, ptd, position),
-                                            constructScopeSubstitutions(endScopes, ptd, position - 1), ptd,
+                                            constructScopeSubstitutions(endScopes, ptd, position - 1),
+                                            ptd.getConstraintState(position - 1).initializations().initialized(), ptd,
                                             id.get().next(), arrayValues, position, compilationCtx));
                                 }
                                 break;
@@ -1108,94 +1151,49 @@ public class ScopeConstructor {
             }
         }
 
-        return new ScopeConstructor(Collections.unmodifiableList(postTraceList), id.get().current(), guardTasks, tasks,
+        return new ScopeConstructor(Collections.unmodifiableList(postTraceList), id.get().current(), guardIDs, tasks,
                 compilationCtx);
     }
 
-    private ScopeDescription constructAdditionalScopes(List<Scope> scopes, Map<Scope, IntVariable> substitutions,
-            ScopeDescription d, int position) {
+    private ScopeDescription constructAdditionalScopes(List<Scope> scopes, ScopeDescription d, int position) {
 
-        Scope innerScope = d.innerScope;
-        Set<Scope> existingScopes = new HashSet<>(d.existingScopes);
-
-        d.applySubstitutions(compilationCtx);
-
-        List<IntVariable> subedIndexes = new ArrayList<>();
         for(Scope s:scopes) {
             switch(s.getScopeType()) {
                 case IF: {
                     IfScope ifScope = (IfScope) s;
                     BooleanVariable guard = ifScope.guard;
-                    innerScope = new IfScope(innerScope, guard);
-                    substitutions.put(innerScope, null);
+                    d = d.insertIfScope(guard, compilationCtx);
                     break;
                 }
                 case ELSE: {
                     ElseScope elseScope = (ElseScope) s;
                     BooleanVariable guard = elseScope.ifScope.guard;
-                    innerScope = new IfScope(innerScope, guard).elseScope;
-                    substitutions.put(innerScope, null);
+                    d = d.insertElseScope(guard, compilationCtx);
                     break;
                 }
                 case FOR: {
                     ForTask t = (ForTask) s;
-                    ForTask newScope = ScopeUtils.constructForScope(innerScope, t, existingScopes.contains(t),
-                            Integer.toString(id.get().next()), compilationCtx);
-                    existingScopes.add(t);
-
-                    // Add in substitutes for the newly created scope
-                    IntVariable newIndex = newScope.getIndex();
-                    IntVariable index = t.getIndex();
-                    compilationCtx.addSubstitute(index, newIndex);
-                    subedIndexes.add(index);
-                    // Store the substitute for later
-                    substitutions.put(t, newIndex);
-                    innerScope = newScope;
+                    d = d.insertForScope(t, Integer.toString(id.get().next()), position, compilationCtx);
                     break;
                 }
-                case BLOCK:
-                case COMMENT:
+                case BLOCK: {
+                    BlockScope blockScope = (BlockScope) s;
+                    d.insertBlockScope(blockScope.comment, compilationCtx);
+                    break;
+                }
+                case COMMENT: {
+                    CommentScope commentScope = (CommentScope) s;
+                    d.insertCommentScope(commentScope.comment, compilationCtx);
+                    break;
+                }
                 case GLOBAL:
                 case REDUCE:
                     break;
                 default:
                     throw new CompilerException("Unexpected scope type.");
             }
-
         }
-
-        // Return the target scope, this scope will still have the same probability of reaching it. We use the
-        // sub-scopes for d for this construction as this method is used to construct lots of scopes, not all of which
-        // are to support a single sample task. In the case of constructing new scopes for a sample task those new
-        // scopes are added in the calling method.
-        compilationCtx.touchScope(innerScope);
-
-        for(IntVariable index:subedIndexes)
-            compilationCtx.removeSubstitute(index);
-
-        d.removeSubstitutions(compilationCtx);
-
-        d = d.insertScope(innerScope, existingScopes, d.reductionInputs, compilationCtx);
-        Substitutions s = constructSubstitutions(d.getSubstitutions(position), substitutions);
-        d = d.addSubstitutions(position, tasks.get(position), s);
-
         return d;
-    }
-
-    // TODO work out what happens here if a substitution is not set because we are using the original variable.
-    private static Substitutions constructSubstitutions(Substitutions originalSubstitutions,
-            Map<Scope, IntVariable> substitutions) {
-        HashMap<Variable<?>, VariablePair<?>> returnVarSubstitutions = new HashMap<>(
-                originalSubstitutions.varSubstitutions);
-        for(Scope s:substitutions.keySet()) {
-            if(s.getScopeType() == ScopeType.FOR) {
-                ForTask t = (ForTask) s;
-                IntVariable index = t.getIndex();
-                returnVarSubstitutions.put(index, new VariablePair<>(index, substitutions.get(t)));
-            }
-        }
-
-        return new Substitutions(returnVarSubstitutions);
     }
 
     private Map<TraceHandle, Set<TraceHandle>> simplifyTraces(Set<TraceHandle> traces) {
@@ -1233,47 +1231,45 @@ public class ScopeConstructor {
 
     private <A extends Variable<A>> ScopeDescription addSampleDesc(SampleTask<A, ?> sampleTask, Variable<A> sampleValue,
             ScopeDescription d) {
+        if(!d.containsSampleDesc(sampleTask, sampleValue)) {
+            Map<Scope, IntVariable> taskScopes = new LinkedHashMap<>();
 
-        Map<Scope, IntVariable> taskScopes = new HashMap<>();
-
-        // Get all the for loops and construct alternative indexes for them so that they can be safely substituted.
-        Scope s = sampleTask.scope();
-        Scope target = d.innerScope;
-        d.applySubstitutions(compilationCtx);
-        while(s != null) {
-            switch(s.getScopeType()) {
-                case IF:
-                case ELSE: {
-                    taskScopes.put(s, null);
-                    break;
+            // Get all the for loops and construct alternative indexes for them so that they can be safely substituted.
+            Scope s = sampleTask.scope();
+            while(s != null) {
+                switch(s.getScopeType()) {
+                    case IF:
+                    case ELSE: {
+                        taskScopes.put(s, null);
+                        break;
+                    }
+                    case FOR: {
+                        d.applySubstitutions(compilationCtx);
+                        ForTask t = (ForTask) s;
+                        IntVariable index = t.getIndex();
+                        VariableDescription<IntVariable> indexName = index.getVarDesc();
+                        VariableDescription<IntVariable> newIndexName = VariableNames.indexName(indexName,
+                                Integer.toString(id.get().next()));
+                        d.addTreeToScope(initializeVariable(newIndexName, load(compilationCtx.getSubstitute(index)),
+                                "Copy of index so that its values can be safely substituted"), compilationCtx);
+                        taskScopes.put(t, d.constructVariableInScope(newIndexName));
+                        d.removeSubstitutions(compilationCtx);
+                        break;
+                    }
+                    case BLOCK:
+                    case COMMENT:
+                    case GLOBAL:
+                    case REDUCE:
+                        break;
+                    default:
+                        throw new CompilerException("Unexpected Scope type " + s.getScopeType());
                 }
-                case FOR: {
-                    ForTask t = (ForTask) s;
-                    IntVariable index = t.getIndex();
-                    VariableDescription<IntVariable> indexName = index.getVarDesc();
-                    VariableDescription<IntVariable> newIndexName = VariableNames.indexName(indexName,
-                            Integer.toString(id.get().next()));
-                    compilationCtx.addTreeToScope(target,
-                            initializeVariable(newIndexName, load(compilationCtx.getSubstitute(index)),
-                                    "Copy of index so that its values can be safely substituted"));
-                    taskScopes.put(t, Variable.namedVariable(newIndexName, target));
-                    break;
-                }
-                case BLOCK:
-                case COMMENT:
-                case GLOBAL:
-                case REDUCE:
-                    break;
-                default:
-                    throw new CompilerException("Unexpected Scope type " + s.getScopeType());
+                s = s.getEnclosingScope();
             }
-            s = s.getEnclosingScope();
-        }
-        d.removeSubstitutions(compilationCtx);
 
-        d = d.insertScope(target, compilationCtx);
-        DistSampleDesc<A> sampleDesc = new DistSampleDesc<>(sampleValue, taskScopes);
-        d = d.addSampleDesc((DistributionSampleTask<?, ?>) sampleTask, sampleDesc, compilationCtx);
+            DistSampleDesc<A> sampleDesc = new DistSampleDesc<>(sampleValue, taskScopes);
+            d = d.addSampleDesc((DistributionSampleTask<?, ?>) sampleTask, sampleDesc);
+        }
         return d;
     }
 
@@ -1296,12 +1292,12 @@ public class ScopeConstructor {
 
         // Check this task has not already been used for a guard.
         DataflowTask<?> guardTask = direction == FORWARDS ? traceDesc.consumer : traceDesc.origin;
-        Integer guardNo = guardTasks.get(guardTask);
+        Integer guardNo = guardIDs.get(traceDesc);
         if(guardNo == null)
             guardNo = Integer.valueOf(1);
         else
             guardNo = guardNo + 1;
-        guardTasks.put(guardTask, guardNo);
+        guardIDs.put(traceDesc, guardNo);
 
         // Allocate guards if required.
         List<Scope> changeableScopes = getChangeableScopes(guardTask, consumerToSampleTraces);
@@ -1344,6 +1340,10 @@ public class ScopeConstructor {
             if(usedArrayScopes.contains(s))
                 break;
         }
+
+        // Remove any remaining scopes until the first iterating scope is reached.
+        while(!consumerScopes.isEmpty() && !consumerScopes.peek().iterating())
+            consumerScopes.pop();
 
         // Copy scopes to a new list. These are the only ones where the value can vary.
         List<Scope> changeable = new ArrayList<>();
@@ -1539,34 +1539,26 @@ public class ScopeConstructor {
     }
 
     private void addTree(ScopeDescription targetScope, int position, TreeBuilder treeBuilder) {
-        // Create a new scope to construct the user provided tree in.
-        compilationCtx.pushScope();
-        compilationCtx.pushExploredDistSamples(targetScope.getExistingSamples());
-        compilationCtx.pushInitializedArrays();
-
         TreeBuilderInfo treeBuilderInfo = new TreeBuilderInfo(targetScope, tasks);
 
         // Apply the required substitutions
         treeBuilderInfo.applySubstitutions(position, compilationCtx);
 
+        // Create a new scope to construct the user provided tree in.
+        compilationCtx.pushExploredDistSamples(targetScope.getExistingSamples());
+
         // Build and recover the tree.
         treeBuilder.buildTree(treeBuilderInfo);
-        IRTreeVoid tree = compilationCtx.getOutermostScopeTree();
+
+        // Restore the initial compilation context.
+        compilationCtx.popExploredDistSamples();
 
         // Remove the set substitutions
         treeBuilderInfo.removeSubstitutions(compilationCtx);
 
-        // Restore the initial compilation context.
-        compilationCtx.popInitializedArrays();
-        compilationCtx.popExploredDistSamples();
-        compilationCtx.popScope();
-
         if(!treeBuilderInfo.backTraceInfo.traceConstructedCorrectly())
             throw new CompilerException(
                     "Failed to construct a back trace correctly as get operations were not accounted for.");
-
-        // And add the constructed tree to the newly created scope.
-        compilationCtx.addTreeToScope(targetScope.innerScope, tree);
     }
 
     private Set<Scope> getUsedArrayScopes(TraceHandle t) {
@@ -1599,21 +1591,27 @@ public class ScopeConstructor {
         List<IRTreeReturn<IntVariable>> indexes = constructGuardScopes(guardDesc.scopes);
 
         IRTreeReturn<BooleanVariable> c = IRTree.negateBoolean(TreeUtils.getIndirectValue(guardDesc.varDesc, indexes));
-
-        ScopeDescription guardedDesc = targetDesc.insertScope(new IfScope(targetDesc.innerScope, c), compilationCtx);
-
-        // Required to construct the scope before the substitutions are applied.
-        compilationCtx.addTreeToScope(guardedDesc.innerScope, TreeUtils.putIndirectValue(guardDesc.varDesc, indexes,
-                constant(true), "The body will execute, so should not be executed again"));
         targetDesc.removeSubstitutions(position, compilationCtx);
-        return guardedDesc;
+
+        ScopeDescription newDesc = targetDesc.insertIfScope(c, compilationCtx);
+
+        // Add code to mark that the code has been run.
+        newDesc.applySubstitutions(compilationCtx);
+        IRTreeVoid t = TreeUtils.putIndirectValue(guardDesc.varDesc, indexes, constant(true),
+                "The body will execute, so should not be executed again");
+        newDesc.addTreeToScope(t, compilationCtx);
+        newDesc.removeSubstitutions(compilationCtx);
+        return newDesc;
     }
 
+    // TODO Look at this and see if it is still required.
     private Map<Scope, IntVariable> constructScopeSubstitutions(Set<Scope> scopes, ScopeDescription d, int position) {
         d.applySubstitutions(position, compilationCtx);
         Map<Scope, IntVariable> toReturn = new HashMap<>();
         for(Scope scope:scopes)
             switch(scope.getScopeType()) {
+                case BLOCK:
+                case COMMENT:
                 case IF:
                 case ELSE:
                     toReturn.put(scope, null);
@@ -1622,8 +1620,6 @@ public class ScopeConstructor {
                     ForTask t = (ForTask) scope;
                     toReturn.put(t, (IntVariable) compilationCtx.getSubstitute(t.getIndex()));
                     break;
-                case BLOCK:
-                case COMMENT:
                 case GLOBAL:
                 case REDUCE:
                     break;
@@ -1646,8 +1642,7 @@ public class ScopeConstructor {
             ScopeStack.popScope(enclosingScope);
         }
 
-        compilationCtx.pushScope();
-        compilationCtx.pushSubstitutions();
+        compilationCtx.pushScopeState();
         // Because of the reuse of max this needs to be serial. We could overcome this by taking a copy of the value of
         // max in a new in, but as I am not sure that parallel allocation is a beneficial, for now we will make this
         // serial and skip any overhead.
@@ -1685,8 +1680,7 @@ public class ScopeConstructor {
         compilationCtx.phase = phase;
 
         compilationCtx.popIsSerial();
-        compilationCtx.popSubstitutions();
-        compilationCtx.popScope();
+        compilationCtx.popScopeState();
 
         createGlobalField(guardName, allocator, parallelScope == null);
     }
@@ -1790,21 +1784,32 @@ public class ScopeConstructor {
 
     public ScopeConstructor addIsolation(String comment) {
         List<ScopeDescription> isolatedDescriptions = new ArrayList<>();
-        for(ScopeDescription d:distributionScopes) {
-            Scope s = new BlockScope(d.innerScope, comment);
-            isolatedDescriptions.add(d.insertScope(s, compilationCtx));
-        }
-        return new ScopeConstructor(Collections.unmodifiableList(isolatedDescriptions), id.get().current(), guardTasks,
+        for(ScopeDescription d:distributionScopes)
+            isolatedDescriptions.add(d.insertBlockScope(comment, compilationCtx));
+        return new ScopeConstructor(Collections.unmodifiableList(isolatedDescriptions), id.get().current(), guardIDs,
                 tasks, compilationCtx);
+    }
+
+    public ScopeConstructor addForLoop(IntVariable start, IntVariable end, IntVariable step,
+            VariableDescription<IntVariable> name, String comment, boolean incrementing) {
+        return addForLoop(start, end, step, name, comment, incrementing, tasks.size() - 1);
+    }
+
+    public ScopeConstructor addForLoop(IntVariable start, IntVariable end, IntVariable step,
+            VariableDescription<IntVariable> name, String comment, boolean incrementing, int position) {
+        List<ScopeDescription> loopDescriptions = new ArrayList<>();
+        for(ScopeDescription d:distributionScopes)
+            loopDescriptions
+                    .add(d.insertForScope(start, end, step, name, incrementing, comment, position, compilationCtx));
+        return new ScopeConstructor(Collections.unmodifiableList(loopDescriptions), id.get().current(), guardIDs, tasks,
+                compilationCtx);
     }
 
     public ScopeConstructor addComment(String comment) {
         List<ScopeDescription> commentDescriptions = new ArrayList<>();
-        for(ScopeDescription d:distributionScopes) {
-            Scope s = new CommentScope(d.innerScope, comment);
-            commentDescriptions.add(d.insertScope(s, compilationCtx));
-        }
-        return new ScopeConstructor(Collections.unmodifiableList(commentDescriptions), id.get().current(), guardTasks,
+        for(ScopeDescription d:distributionScopes)
+            commentDescriptions.add(d.insertCommentScope(comment, compilationCtx));
+        return new ScopeConstructor(Collections.unmodifiableList(commentDescriptions), id.get().current(), guardIDs,
                 tasks, compilationCtx);
     }
 
@@ -1813,15 +1818,15 @@ public class ScopeConstructor {
         List<ScopeDescription> elseDescriptions = new ArrayList<>();
 
         for(ScopeDescription d:distributionScopes) {
-            IfScope s = new IfScope(d.innerScope, guard);
-            ifDescriptions.add(d.insertScope(s, compilationCtx));
-            elseDescriptions.add(d.insertScope(s.elseScope, compilationCtx));
+            IfElseScopes ifElseScopes = d.insertIfElseScope(guard, compilationCtx);
+            ifDescriptions.add(ifElseScopes.ifScope());
+            elseDescriptions.add(ifElseScopes.elseScope());
         }
 
         return new IfElseScopeConstructors(
-                new ScopeConstructor(Collections.unmodifiableList(ifDescriptions), id.get().current(), guardTasks,
-                        tasks, compilationCtx),
-                new ScopeConstructor(Collections.unmodifiableList(elseDescriptions), id.get().current(), guardTasks,
+                new ScopeConstructor(Collections.unmodifiableList(ifDescriptions), id.get().current(), guardIDs, tasks,
+                        compilationCtx),
+                new ScopeConstructor(Collections.unmodifiableList(elseDescriptions), id.get().current(), guardIDs,
                         tasks, compilationCtx));
     }
 
@@ -1830,71 +1835,16 @@ public class ScopeConstructor {
         for(ScopeDescription d:distributionScopes) {
             fixedDescriptions.add(d.addFixedFlag(task, value));
         }
-        return new ScopeConstructor(Collections.unmodifiableList(fixedDescriptions), id.get().current(), guardTasks,
+        return new ScopeConstructor(Collections.unmodifiableList(fixedDescriptions), id.get().current(), guardIDs,
                 tasks, compilationCtx);
     }
 
-    public ScopeConstructor insertScopes(Scope insertScope) {
-        // Get a list of all the scopes to add, and reverse it so the outermost scope comes first.
-        List<Scope> scopes = new ArrayList<>();
-        while(insertScope != null) {
-            scopes.add(insertScope);
-            insertScope = compilationCtx.substituteScope(insertScope.getEnclosingScope());
-        }
-        Collections.reverse(scopes);
-
-        List<ScopeDescription> replacementDescs = new ArrayList<>(distributionScopes);
-        for(Scope s:scopes) {
-            List<ScopeDescription> newDescs = new ArrayList<>();
-            switch(s.getScopeType()) {
-                case BLOCK: {
-                    BlockScope blockScope = (BlockScope) s;
-                    for(ScopeDescription d:replacementDescs) {
-                        BlockScope newBlockScope = new BlockScope(d.innerScope, blockScope.comment);
-                        newDescs.add(d.insertScope(newBlockScope, compilationCtx));
-                    }
-                    break;
-                }
-                case COMMENT: {
-                    CommentScope commentScope = (CommentScope) s;
-                    for(ScopeDescription d:replacementDescs) {
-                        CommentScope newCommentScope = new CommentScope(d.innerScope, commentScope.comment);
-                        newDescs.add(d.insertScope(newCommentScope, compilationCtx));
-                    }
-                    break;
-                }
-                case ELSE:
-                    throw new CompilerException("Else branches are not allowed as inserted distributions scopes.");
-                case FOR:
-                    ForTask forScope = (ForTask) s;
-                    for(ScopeDescription d:replacementDescs) {
-                        ForTask newForScope = ScopeUtils.constructForScope(d.innerScope, forScope, compilationCtx);
-                        newDescs.add(d.insertScope(newForScope, compilationCtx));
-                    }
-                    break;
-                case GLOBAL:
-                    newDescs.addAll(distributionScopes);
-                    break;
-                case IF: {
-                    IfScope ifScope = (IfScope) s;
-                    for(ScopeDescription d:replacementDescs) {
-                        IfScope newIfScope = new IfScope(d.innerScope, ifScope);
-                        newDescs.add(d.insertScope(newIfScope, compilationCtx));
-                    }
-                    break;
-                }
-                case REDUCE:
-                    throw new MissingFeatureException(
-                            "Reduce operations are not currently allowed as inserted distributions scopes.");
-            }
-            replacementDescs.clear();
-            replacementDescs.addAll(newDescs);
-        }
-
-        for(ScopeDescription d:replacementDescs)
-            compilationCtx.touchScope(d.innerScope);
-
-        return new ScopeConstructor(Collections.unmodifiableList(replacementDescs), id.get().current(), guardTasks,
-                tasks, compilationCtx);
+    public <A extends Variable<A>> ScopeConstructor updateDistribution(DistributionSampleTask<?, ?> sampleTask,
+            Variable<A> currentValue, Variable<A> newValue) {
+        List<ScopeDescription> newDescriptions = new ArrayList<>();
+        for(ScopeDescription d:distributionScopes)
+            newDescriptions.add(d.updateDistribution(sampleTask, currentValue, newValue));
+        return new ScopeConstructor(Collections.unmodifiableList(newDescriptions), id.get().current(), guardIDs, tasks,
+                compilationCtx);
     }
 }

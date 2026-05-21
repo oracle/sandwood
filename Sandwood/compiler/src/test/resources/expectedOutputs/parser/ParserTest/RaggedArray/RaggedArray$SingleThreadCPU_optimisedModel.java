@@ -241,9 +241,9 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample73 = fixedFlag$sample73;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Add probability to model
@@ -314,9 +314,9 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
 			fixedProbFlag$sample89 = fixedFlag$sample73;
-		}
-		// Using cached values.
-		else {
+		} else {
+			// Using cached values.
+			// 
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Update the variable probability
@@ -349,16 +349,16 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		if((1 == y))
 			lengthCV$a$71_0 = 3;
 		
-		// Variable declaration of cv$numNumStates moved.
+		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
 		// Calculate the number of states to evaluate.
 		// 
 		// variable marginalization
 		// 
-		// cv$numNumStates's comment
+		// cv$numStates's comment
 		// Calculate the number of states to evaluate.
-		int cv$numNumStates = Math.max(0, lengthCV$a$71_0);
-		for(int cv$valuePos = 0; cv$valuePos < cv$numNumStates; cv$valuePos += 1) {
+		int cv$numStates = Math.max(0, lengthCV$a$71_0);
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// Write out the new value of the sample.
 			// 
 			// Value of the variable at this index
@@ -385,9 +385,7 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Substituted "cv$temp$0$var67" with its value "a[y]".
-			// 
-			// Substituted "cv$temp$1$$var159" with its value "lengthCV$a$71_1".
+			// Constructing a random variable input for use later.
 			double cv$accumulatedProbabilities = ((cv$valuePos < lengthCV$a$71_1)?Math.log(a[y][cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Processing sample task 89 of consumer random variable null.
@@ -404,8 +402,6 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				// 
-				// Substituted "cv$temp$2$p" with its value "p".
 				cv$accumulatedProbabilities = (Math.log((obs[var84]?p:(1.0 - p))) + cv$accumulatedProbabilities);
 			
 			// Save the calculated index value into the array of index value probabilities
@@ -425,13 +421,13 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var69$stateProbabilityGlobal[0];
 		
 		// Find max value.
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1) {
+		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 			// Get a local reference to the scratch space.
 			double cv$lseElementValue = cv$var69$stateProbabilityGlobal[cv$lseIndex];
 			if((cv$lseMax < cv$lseElementValue))
@@ -444,11 +440,11 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Sum the values in the array.
 		else {
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numNumStates; cv$lseIndex += 1)
+			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 				// Get a local reference to the scratch space.
 				cv$lseSum = (cv$lseSum + Math.exp((cv$var69$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 			
@@ -461,12 +457,12 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var69$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numNumStates);
+				cv$var69$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
 		} else {
 			// Normalize log space values and move to normal space
-			for(int cv$indexName = 0; cv$indexName < cv$numNumStates; cv$indexName += 1)
+			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 				// Get a local reference to the scratch space.
 				cv$var69$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var69$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 		}
@@ -474,14 +470,14 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		// Set array values that are not computed for the input to negative infinity.
 		// 
 		// Get a local reference to the scratch space.
-		for(int cv$indexName = cv$numNumStates; cv$indexName < cv$var69$stateProbabilityGlobal.length; cv$indexName += 1)
+		for(int cv$indexName = cv$numStates; cv$indexName < cv$var69$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
 			cv$var69$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		// 
 		// Get a local reference to the scratch space.
-		i = DistributionSampling.sampleCategorical(RNG$, cv$var69$stateProbabilityGlobal, cv$numNumStates);
+		i = DistributionSampling.sampleCategorical(RNG$, cv$var69$stateProbabilityGlobal, cv$numStates);
 		
 		// Guards to ensure that p is only updated when there is a valid path.
 		// 
@@ -494,9 +490,9 @@ final class RaggedArray$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	// to GPU execution.
 	@Override
 	public final void allocateScratch() {
-		// Constructor for cv$var69$stateProbabilityGlobal
-		// 
 		// Allocate scratch space.
+		// 
+		// Constructor for cv$var69$stateProbabilityGlobal
 		// 
 		// Allocation of cv$var69$stateProbabilityGlobal for single threaded execution
 		// 

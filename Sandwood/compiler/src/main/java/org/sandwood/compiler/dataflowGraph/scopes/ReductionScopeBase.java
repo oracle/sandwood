@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sandwood.compiler.compilation.CompilationContext;
-import org.sandwood.compiler.compilation.ScopeTracking;
+import org.sandwood.compiler.compilation.scopesState.ScopeTracking;
 import org.sandwood.compiler.dataflowGraph.Id;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ReductionInput;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;

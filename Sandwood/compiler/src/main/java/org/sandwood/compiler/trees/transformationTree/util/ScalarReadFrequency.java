@@ -105,7 +105,7 @@ public class ScalarReadFrequency {
         // A stack to hold all the tree ids that should be considered.
         Stack<TreeID> toProcess = new Stack<>();
 
-        // Initialise the data structures.
+        // Initialize the data structures.
         for(TransTree<?> t:varTracking.trackedTrees()) {
             Set<TreeID> readIDs = null;
             switch(t.type) {

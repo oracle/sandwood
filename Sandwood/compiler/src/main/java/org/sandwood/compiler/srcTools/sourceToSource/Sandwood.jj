@@ -315,7 +315,7 @@ public class SandwoodParser
         if(outerScope.containsVar(id))
             outerScope.addVar(id, varDesc);
           else if(varDesc != null)
-            throw new SandwoodModelException("Variable " + id + " is never initialised.", varDesc.nameLocation()); 
+            throw new SandwoodModelException("Variable " + id + " is never initialized.", varDesc.nameLocation()); 
         }
     }
   
@@ -336,7 +336,7 @@ public class SandwoodParser
       for(String id:scope.varNames()) {
         VarDesc varDesc = scope.varDesc(id);
         if(varDesc != null)
-          throw new SandwoodModelException("Variable " + id + " is never initialised.", varDesc.nameLocation()); 
+          throw new SandwoodModelException("Variable " + id + " is never initialized.", varDesc.nameLocation()); 
       }
     }
 

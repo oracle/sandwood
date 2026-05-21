@@ -213,7 +213,8 @@ final class Flip1CoinMK14$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			for(int var34 = 0; var34 < samples; var34 += 1)
 				cv$accumulatedProbabilities = (Math.log((flips[var34]?traceTempVariable$var21$5_2:(1.0 - traceTempVariable$var21$5_2))) + cv$accumulatedProbabilities);
 		}
-		if((((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN((cv$accumulatedProbabilities - cv$originalProbability)))) {
+		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
 			b = cv$originalValue;
 			if(guard1)
 				bias = cv$originalValue;

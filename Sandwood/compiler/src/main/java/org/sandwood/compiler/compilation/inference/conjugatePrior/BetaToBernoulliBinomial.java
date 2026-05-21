@@ -30,7 +30,6 @@ import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.compilation.inference.InferenceGenerator;
 import org.sandwood.compiler.compilation.inference.InferenceGeneratorScalar;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
-import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
@@ -49,6 +48,7 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVaria
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.traces.TraceHandle;
+import org.sandwood.compiler.traces.guards.ScopeConstructor;
 import org.sandwood.compiler.traces.guards.TreeBuilderInfo;
 import org.sandwood.compiler.trees.Tree;
 import org.sandwood.compiler.trees.irTree.IRTree;
@@ -130,22 +130,23 @@ public class BetaToBernoulliBinomial
      * @param funcData       The function data for this inference method constructor.
      */
     @Override
-    protected void constructFunctionVariables(CompilationContext compilationCtx, BetaToBernoulliBinomialData funcData) {
-
+    protected void constructFunctionVariables(BetaToBernoulliBinomialData funcData, CompilationContext compilationCtx) {
         // add a trees to initialize the temporary variables.
-        if(funcData.distributedConsumers) {
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrueNameDis,
-                    constant(0.0), "Local variable to record the number of true samples."));
+        funcData.targetScope.addTree((TreeBuilderInfo info) -> {
+            if(funcData.distributedConsumers) {
+                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrueNameDis,
+                        constant(0.0), "Local variable to record the number of true samples."));
 
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrialsNameDis,
-                    constant(0.0), "Local variable to record the number of samples."));
-        } else {
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrueName, constant(0),
-                    "Local variable to record the number of true samples."));
+                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrialsNameDis,
+                        constant(0.0), "Local variable to record the number of samples."));
+            } else {
+                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrueName,
+                        constant(0), "Local variable to record the number of true samples."));
 
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrialsName,
-                    constant(0), "Local variable to record the number of samples."));
-        }
+                compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.noTrialsName,
+                        constant(0), "Local variable to record the number of samples."));
+            }
+        });
     }
 
     @Override
@@ -320,8 +321,8 @@ public class BetaToBernoulliBinomial
     protected void finalize(BetaToBernoulliBinomialData funcData, CompilationContext compilationCtx) {}
 
     @Override
-    protected Scope getBackTraceScope(BetaToBernoulliBinomialData funcData) {
-        return GlobalScope.scope;
+    protected ScopeConstructor getBackTraceScope(BetaToBernoulliBinomialData funcData) {
+        return funcData.targetScope;
     }
 
     @Override

@@ -317,11 +317,11 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	private final void sample122(int i$var95, int j$var104, int k) {
 		{
-			double cv$temp$2$var182 = bias[0];
-			cv$var119$stateProbabilityGlobal[0] = (Math.log((flips[j$var104][k][i$var95]?cv$temp$2$var182:(1.0 - cv$temp$2$var182))) + Math.log(m[0][0]));
+			double var182 = bias[0];
+			cv$var119$stateProbabilityGlobal[0] = (Math.log((flips[j$var104][k][i$var95]?var182:(1.0 - var182))) + Math.log(m[0][0]));
 		}
-		double cv$temp$2$var182 = bias[1];
-		cv$var119$stateProbabilityGlobal[1] = (Math.log((flips[j$var104][k][i$var95]?cv$temp$2$var182:(1.0 - cv$temp$2$var182))) + Math.log(m[0][1]));
+		double var182 = bias[1];
+		cv$var119$stateProbabilityGlobal[1] = (Math.log((flips[j$var104][k][i$var95]?var182:(1.0 - var182))) + Math.log(m[0][1]));
 		double cv$logSum;
 		double cv$lseMax = cv$var119$stateProbabilityGlobal[0];
 		double cv$lseElementValue = cv$var119$stateProbabilityGlobal[1];
@@ -379,15 +379,15 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		{
 			double cv$accumulatedProbabilities = Math.log(m[0][0]);
 			if((0 < samples)) {
-				double cv$temp$2$var182 = bias[0];
-				cv$accumulatedProbabilities = (Math.log((flips[0][0][0]?cv$temp$2$var182:(1.0 - cv$temp$2$var182))) + cv$accumulatedProbabilities);
+				double var182 = bias[0];
+				cv$accumulatedProbabilities = (Math.log((flips[0][0][0]?var182:(1.0 - var182))) + cv$accumulatedProbabilities);
 			}
 			cv$var79$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		double cv$accumulatedProbabilities = Math.log(m[0][1]);
 		if((0 < samples)) {
-			double cv$temp$2$var182 = bias[1];
-			cv$accumulatedProbabilities = (Math.log((flips[0][0][0]?cv$temp$2$var182:(1.0 - cv$temp$2$var182))) + cv$accumulatedProbabilities);
+			double var182 = bias[1];
+			cv$accumulatedProbabilities = (Math.log((flips[0][0][0]?var182:(1.0 - var182))) + cv$accumulatedProbabilities);
 		}
 		cv$var79$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
 		double cv$logSum;

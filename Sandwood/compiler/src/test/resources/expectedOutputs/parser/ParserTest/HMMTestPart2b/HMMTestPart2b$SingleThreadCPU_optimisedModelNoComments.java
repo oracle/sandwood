@@ -292,8 +292,8 @@ final class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			int index$i$2_2 = (i$var64 + 1);
 			if((index$i$2_2 < (samples - 1)))
 				cv$accumulatedProbabilities = ((((0.0 <= st[(index$i$2_2 + 1)]) && (st[(index$i$2_2 + 1)] < 2))?Math.log(m[0][st[(index$i$2_2 + 1)]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-			double cv$temp$4$var83 = bias[0];
-			cv$accumulatedProbabilities = (Math.log((flips[(i$var64 + 1)]?cv$temp$4$var83:(1.0 - cv$temp$4$var83))) + cv$accumulatedProbabilities);
+			double var83 = bias[0];
+			cv$accumulatedProbabilities = (Math.log((flips[(i$var64 + 1)]?var83:(1.0 - var83))) + cv$accumulatedProbabilities);
 			cv$var70$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		st[(i$var64 + 1)] = 1;
@@ -301,8 +301,8 @@ final class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		int index$i$2_2 = (i$var64 + 1);
 		if((index$i$2_2 < (samples - 1)))
 			cv$accumulatedProbabilities = ((((0.0 <= st[(index$i$2_2 + 1)]) && (st[(index$i$2_2 + 1)] < 2))?Math.log(m[1][st[(index$i$2_2 + 1)]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-		double cv$temp$4$var83 = bias[1];
-		cv$accumulatedProbabilities = (Math.log((flips[(i$var64 + 1)]?cv$temp$4$var83:(1.0 - cv$temp$4$var83))) + cv$accumulatedProbabilities);
+		double var83 = bias[1];
+		cv$accumulatedProbabilities = (Math.log((flips[(i$var64 + 1)]?var83:(1.0 - var83))) + cv$accumulatedProbabilities);
 		cv$var70$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
 		double cv$logSum;
 		double cv$lseMax = cv$var70$stateProbabilityGlobal[0];
