@@ -268,8 +268,7 @@ public class CollapseConstantsTransformer extends Transformer {
                     TransTreeReturn<IntVariable> newMin = TransTree.max(m.min, rMin);
                     bounds.addTransformedTree(right, newMin);
                     m.min = transform(newMin);
-                }
-                else
+                } else
                     m.min = transform(rMin);
                 bounds.addTransformedTree(right, m.min);
             }
@@ -762,30 +761,25 @@ public class CollapseConstantsTransformer extends Transformer {
     }
 
     private TransTreeVoid collapseConstants(TransInitialize<?> tree) {
-        TransTreeVoid toReturn = tree.applyTransformation(this);
-        if(tree.varDesc.type == VariableType.IntVariable) {
-            TransTreeReturn<IntVariable> min = (TransTreeReturn<IntVariable>) tree.value.minValue(bounds);
-            TransTreeReturn<IntVariable> max = (TransTreeReturn<IntVariable>) tree.value.maxValue(bounds);
-            bounds.addTransformedTree(tree.value, min);
-            bounds.addTransformedTree(tree.value, max);
-
-            updatedVars.add(tree.varDesc, true, tree.id, min, max);
-        } else
-            updatedVars.add(tree.varDesc, true);
-        return toReturn;
+        return collapseConstants(tree, tree.varDesc, tree.value, true);
     }
 
     private TransTreeVoid collapseConstants(TransStore<?> tree) {
-        TransTreeVoid toReturn = tree.applyTransformation(this);
-        if(tree.varDesc.type == VariableType.IntVariable) {
-            TransTreeReturn<IntVariable> min = (TransTreeReturn<IntVariable>) tree.value.minValue(bounds);
-            TransTreeReturn<IntVariable> max = (TransTreeReturn<IntVariable>) tree.value.maxValue(bounds);
-            bounds.addTransformedTree(tree.value, min);
-            bounds.addTransformedTree(tree.value, max);
+        return collapseConstants(tree, tree.varDesc, tree.value, false);
+    }
 
-            updatedVars.add(tree.varDesc, false, tree.id, min, max);
+    private TransTreeVoid collapseConstants(TransTreeVoid tree, VariableDescription<?> varDesc,
+            TransTreeReturn<?> value, boolean declaration) {
+        TransTreeVoid toReturn = tree.applyTransformation(this);
+        if(varDesc.type == VariableType.IntVariable) {
+            TransTreeReturn<IntVariable> min = (TransTreeReturn<IntVariable>) value.minValue(bounds);
+            TransTreeReturn<IntVariable> max = (TransTreeReturn<IntVariable>) value.maxValue(bounds);
+            bounds.addTransformedTree(value, min);
+            bounds.addTransformedTree(value, max);
+
+            updatedVars.add(varDesc, declaration, tree.id, min, max);
         } else
-            updatedVars.add(tree.varDesc, false);
+            updatedVars.add(varDesc, declaration);
         return toReturn;
     }
 

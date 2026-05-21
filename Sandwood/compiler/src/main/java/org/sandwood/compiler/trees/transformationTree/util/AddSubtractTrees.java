@@ -729,12 +729,10 @@ public class AddSubtractTrees<X extends NumberVariable<X>> {
     private <A extends NumberVariable<A>> void applyMax(List<TransTreeReturn<A>> list, boolean negated) {
 
         Set<TransTreeReturn<A>> toUpdate = new HashSet<>();
-        int size = list.size();
-        while(0 < size) {
+        for(int size = list.size(); 0 < size; size--) {
             TransTreeReturn<A> t = list.get(0);
             toUpdate.add(t);
             removeTree(list, 0);
-            size--;
         }
 
         for(TransTreeReturn<A> t:toUpdate) {
