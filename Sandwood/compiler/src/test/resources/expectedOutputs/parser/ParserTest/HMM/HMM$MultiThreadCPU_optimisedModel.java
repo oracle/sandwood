@@ -927,7 +927,7 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var52$stateProbabilityGlobal[0];
@@ -946,7 +946,7 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		
 		// Sum the values in the array.
 		else {
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
@@ -1083,7 +1083,7 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var70$stateProbabilityGlobal[0];
@@ -1102,7 +1102,7 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		
 		// Sum the values in the array.
 		else {
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.

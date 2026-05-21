@@ -348,7 +348,7 @@ public class PutTask<A extends Variable<A>> extends ProducingDataflowTaskImpleme
             compilationCtx.removeSubstitute(stopPoint);
         } else {
             arrayTree = array.getForwardIR(compilationCtx);
-            // If the call did not initialise the array initialise it now.
+            // If the call did not initialize the array initialize it now.
             if(!array.isIntermediate() && !compilationCtx.initializedInScope(stopPoint)) {
                 Variable<ArrayVariable<A>> v = compilationCtx.addInitialized(stopPoint);
                 IRTreeVoid t = initializeVariable(v, arrayTree, Tree.NoComment);

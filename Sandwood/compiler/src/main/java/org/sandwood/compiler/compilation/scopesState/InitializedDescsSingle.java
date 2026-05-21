@@ -23,16 +23,16 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.names.VariableNames;
 
-public class InitialisedDescsSingle extends InitializedDescs {
+public class InitializedDescsSingle extends InitializedDescs {
     private final Scope changeableParentScope;
     private final Map<Variable<?>, Variable<?>> trackedVars = new HashMap<>();
 
-    InitialisedDescsSingle() {
+    InitializedDescsSingle() {
         super(null);
         changeableParentScope = null;
     }
 
-    public InitialisedDescsSingle(InitializedDescs parent, Scope changeableParentScope) {
+    public InitializedDescsSingle(InitializedDescs parent, Scope changeableParentScope) {
         super(parent);
         this.changeableParentScope = changeableParentScope;
     }

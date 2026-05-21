@@ -1102,7 +1102,7 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var4$stateProbabilityGlobal[0];
@@ -1121,7 +1121,7 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 		
 		// Sum the values in the array.
 		else {
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
@@ -1268,7 +1268,7 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var6$stateProbabilityGlobal[0];
@@ -1287,7 +1287,7 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 		
 		// Sum the values in the array.
 		else {
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
@@ -1496,7 +1496,7 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var7$stateProbabilityGlobal[0];
@@ -1515,7 +1515,7 @@ final class DistributionTest1b$MultiThreadCPU extends org.sandwood.runtime.inter
 		
 		// Sum the values in the array.
 		else {
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.

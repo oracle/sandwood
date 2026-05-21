@@ -655,11 +655,11 @@ public class ProbabilityFunction {
                     funcData.compilationCtx.addSetSideEffect(sampleName, restFixed);
                 }
 
-                // Priority queue for fixed ordering of assignments.
-                PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>(funcData.inputSamples);
-
                 // Construct an expression to determine if the flag should be set.
-                if(!p.isEmpty()) {
+                if(!funcData.inputSamples.isEmpty()) {
+                    // Priority queue for fixed ordering of assignments.
+                    PriorityQueue<SampleTask<?, ?>> p = new PriorityQueue<>(funcData.inputSamples);
+
                     while(!p.isEmpty()) {
                         SampleTask<?, ?> s = p.poll();
                         if(funcData.fixable.contains(s)) {
@@ -733,7 +733,6 @@ public class ProbabilityFunction {
                         updateVarProbabilities(funcData, load(accumulatorName), load(sampleValueName));
                     });
         } else {
-            // Join all the subtrees with a sequential block
             if(funcData.sampleTask.isDistribution() && funcData.useDistributions) {
                 if(funcData.fixable.contains(funcData.sampleTask)) {
                     sc = sc.addCondition(load(funcData.fixedFlagName)).ifScopeConstructor();
@@ -778,7 +777,7 @@ public class ProbabilityFunction {
 
         IRTreeReturn<DoubleVariable> sampleAccumulatorValue = load(sampleAccumulatorName);
 
-        // Initialise the variables.
+        // Initialize the variables.
         funcData.compilationCtx.addTreeToScope(funcData.randomStoreScope,
                 initializeVariable(sampleAccumulatorName, IRTree.constant(0.0),
                         "Accumulator for sample probabilities for a specific instance of the random variable."));

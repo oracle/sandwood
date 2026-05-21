@@ -179,7 +179,7 @@ public class TraceArrayRestrictions {
         /**
          * The initialisation state of variables in the final scopes if any final scopes have been created.
          */
-        final InitializedState finalInitilizationState;
+        final InitializedState finalInitializationState;
 
         /**
          * A set containing all the scopes encompassing the final task in the trace.
@@ -203,14 +203,14 @@ public class TraceArrayRestrictions {
 
         public RestrictionsData(int position, TraceHandle trace, Map<Scope, IntVariable> existingStartScopes,
                 Map<Scope, IntVariable> existingEndScopes, Set<Scope> existingScopes,
-                Set<ReductionInput<?>> reductionInputs, InitializedState finalInitilizationState, int globalID,
+                Set<ReductionInput<?>> reductionInputs, InitializedState finalInitializationState, int globalID,
                 Values arrayValues) {
             this.position = position;
             this.trace = trace;
             this.existingStartScopes = Collections.unmodifiableMap(existingStartScopes);
             this.existingEndScopes = Collections.unmodifiableMap(existingEndScopes);
             this.reductionInputs = new HashSet<>(reductionInputs);
-            this.finalInitilizationState = finalInitilizationState;
+            this.finalInitializationState = finalInitializationState;
             this.globalID = globalID;
             passValues = arrayValues == Values.PASS_VALUES;
         }
@@ -244,21 +244,21 @@ public class TraceArrayRestrictions {
     // Scopes that are already constructed at the end are not included as the trees that are placed into them may not be
     // valid further out.
     public static ScopeDescription constructRestriction(TraceHandle trace, Map<Scope, IntVariable> existingStartScopes,
-            Map<Scope, IntVariable> existingEndScopes, InitializedState finalInitilizationState,
+            Map<Scope, IntVariable> existingEndScopes, InitializedState finalInitializationState,
             ScopeDescription target, int globalID, Values arrayValues, int position,
             CompilationContext compilationCtx) {
         Set<TraceHandle> rawTraces = new HashSet<>();
         rawTraces.add(trace);
-        return constructRestriction(trace, rawTraces, existingStartScopes, existingEndScopes, finalInitilizationState,
+        return constructRestriction(trace, rawTraces, existingStartScopes, existingEndScopes, finalInitializationState,
                 target, globalID, arrayValues, position, compilationCtx);
     }
 
     public static ScopeDescription constructRestriction(TraceHandle trace, Set<TraceHandle> rawTraces,
             Map<Scope, IntVariable> existingStartScopes, Map<Scope, IntVariable> existingEndScopes,
-            InitializedState finalInitilizationState, ScopeDescription target, int globalID, Values arrayValues,
+            InitializedState finalInitializationState, ScopeDescription target, int globalID, Values arrayValues,
             int position, CompilationContext compilationCtx) {
         RestrictionsData data = new RestrictionsData(position, trace, existingStartScopes, existingEndScopes,
-                target.existingScopes, target.reductionInputs, finalInitilizationState, globalID, arrayValues);
+                target.existingScopes, target.reductionInputs, finalInitializationState, globalID, arrayValues);
 
         constructOpPairs(data);
 
@@ -1165,7 +1165,7 @@ public class TraceArrayRestrictions {
                     outerScope = outerScope.addSubstitution(data.position, ((ForTask) scope).getIndex(), index);
                 }
             }
-            outerScope = outerScope.mergeInInitialised(data.position, data.finalInitilizationState, scope);
+            outerScope = outerScope.mergeInInitialized(data.position, data.finalInitializationState, scope);
         }
 
         // Construct any required Scopes

@@ -371,10 +371,10 @@ public class ArrayVariable<A extends Variable<A>> extends VariableImplementation
             } else {
                 // Generate an error message as multiple assignments are not allowed.
                 ArrayVariable<A> thisArray = instanceHandle();
-                ArrayVariable<A> exisitingOuterArray = (ArrayVariable<A>) arrayValue.outerArrayDesc.array;
-                if(thisArray == exisitingOuterArray) {
-                    IntVariable exisitingIndex = arrayValue.outerArrayDesc.index;
-                    if(index.equivalent(exisitingIndex)) {
+                ArrayVariable<A> existingOuterArray = (ArrayVariable<A>) arrayValue.outerArrayDesc.array;
+                if(thisArray == existingOuterArray) {
+                    IntVariable existingIndex = arrayValue.outerArrayDesc.index;
+                    if(index.equivalent(existingIndex)) {
                         putTask.assignmentToSameArrayElement();
                     } else {
                         putTask.assignmentToSameArrayDifferntElements();

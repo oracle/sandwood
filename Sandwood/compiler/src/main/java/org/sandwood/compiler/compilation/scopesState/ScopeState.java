@@ -26,28 +26,28 @@ public class ScopeState {
         }
         
         public InitializedState addChangeableScope(Scope changeableScope) {
-            InitializedDescs d = new InitialisedDescsSingle(i, changeableScope);
+            InitializedDescs d = new InitializedDescsSingle(i, changeableScope);
             return new InitializedState(d);
         }
 
-        public InitializedState mergeInExisitingInitilizations(InitializedState toMergeState, Scope outerExisiting) {
-            InitializedDescs d = new InitialisedDescsMerged(i, toMergeState.i, outerExisiting);
+        public InitializedState mergeInExistingInitializations(InitializedState toMergeState, Scope outerExisting) {
+            InitializedDescs d = new InitializedDescsMerged(i, toMergeState.i, outerExisting);
             return new InitializedState(d);
         }
     }
     
     public class ScopeStateDesc {
         private final ScopeTracking scopes;
-        private final InitializedState initialised;
+        private final InitializedState initialized;
         
         ScopeStateDesc(CompilationContext compilationCtx) {
             scopes = new ScopeTracking(compilationCtx);
-            initialised = new InitializedState(new InitialisedDescsSingle());
+            initialized = new InitializedState(new InitializedDescsSingle());
         }
         
-        ScopeStateDesc (ScopeTracking scopes, InitializedState initialised) {
+        ScopeStateDesc (ScopeTracking scopes, InitializedState initialized) {
             this.scopes = scopes;
-            this.initialised = initialised;
+            this.initialized = initialized;
         }
 
         public Scope getTargetScope(Scope scope) {
@@ -65,15 +65,15 @@ public class ScopeState {
     }
 
     public <A extends Variable<A>> Variable<A> getInitializedVariable(Variable<A> v) {
-        return states.peek().initialised.i.getInitializedVariable(v);
+        return states.peek().initialized.i.getInitializedVariable(v);
     }
 
     public boolean initializedInScope(Variable<?> v) {
-        return states.peek().initialised.i.isInitialized(v);
+        return states.peek().initialized.i.isInitialized(v);
     }
 
     public <A extends Variable<A>> Variable<A> addInitialized(Variable<A> v) {
-        return states.peek().initialised.i.addInitialized(v);
+        return states.peek().initialized.i.addInitialized(v);
     }    /**
      * Method for adding trees to the scope described by the dataflow task.
     *
@@ -106,8 +106,8 @@ public class ScopeState {
        states.peek().scopes.leaveScope(s);
    }
 
-   public void setreverseScopes(boolean reverseScopes) {
-       states.peek().scopes.setreverseScopes(reverseScopes);
+   public void setReverseScopes(boolean reverseScopes) {
+       states.peek().scopes.setReverseScopes(reverseScopes);
    }
 
    /**
@@ -143,13 +143,13 @@ public class ScopeState {
         return states.peek().getTargetScope(scope);
     }
 
-    public void push(Set<Scope> taskScopes, ScopeTrackingState scopeTrackingState, InitializedState initialised, CompilationContext compilationCtx) {
+    public void push(Set<Scope> taskScopes, ScopeTrackingState scopeTrackingState, InitializedState initialized, CompilationContext compilationCtx) {
         ScopeTracking st = new ScopeTracking(taskScopes, scopeTrackingState, compilationCtx);
-        states.push(new ScopeStateDesc(st, initialised));
+        states.push(new ScopeStateDesc(st, initialized));
     }
 
     public InitializedState getInitializedState() {
-        return states.peek().initialised;
+        return states.peek().initialized;
     }
 
     public boolean scopeConstructed(Scope scope) {

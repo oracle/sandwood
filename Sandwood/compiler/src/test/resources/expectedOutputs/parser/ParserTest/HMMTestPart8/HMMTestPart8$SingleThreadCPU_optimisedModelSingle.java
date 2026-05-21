@@ -1469,7 +1469,7 @@ final class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var52$stateProbabilityGlobal[0];
@@ -1505,7 +1505,7 @@ final class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Sum the values in the array.
 		else {
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.
@@ -1842,7 +1842,7 @@ final class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var70$stateProbabilityGlobal[0];
@@ -1861,7 +1861,7 @@ final class HMMTestPart8$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		
 		// Sum the values in the array.
 		else {
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.

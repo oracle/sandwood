@@ -74,7 +74,7 @@ class ParserTest {
                         + "testInputs" + File.separator + "org" + File.separator + "sandwood" + File.separator
                         + "compiler" + File.separator + "tests" + File.separator + "parser" + File.separator
                         + "firstPhaseOnly" + File.separator + "AssignmentTest_Error2.sandwood\n"
-                        + "Error on line: 18 between columns 13 and 18\n" + "Variable guard2 is never initialised.\n"
+                        + "Error on line: 18 between columns 13 and 18\n" + "Variable guard2 is never initialized.\n"
                         + "\n" + "\"\tboolean guard2;\"\n" + "\n" + "-----\n" + "\n" + "1 Error found.\n");
         errors.put(
                 sourceDir + File.separator + "org" + File.separator + "sandwood" + File.separator + "compiler"

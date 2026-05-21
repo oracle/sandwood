@@ -667,7 +667,7 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var77$stateProbabilityGlobal[0];
@@ -693,7 +693,7 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// 
 			// Get a local reference to the scratch space.
 			// 
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			cv$logSum = (Math.log((Math.exp((cv$var77$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var77$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 		
 		// If all the sum is zero, just share the probability evenly.
@@ -819,7 +819,7 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Sum all the values
 		// 
-		// Initialise the max to the first element.
+		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
 		double cv$lseMax = cv$var80$stateProbabilityGlobal[0];
@@ -838,7 +838,7 @@ final class RaggedArray2$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Sum the values in the array.
 		else {
-			// Initialise the sum of the array elements
+			// Initialize the sum of the array elements
 			double cv$lseSum = 0.0;
 			
 			// Offset values, move to normal space, and sum.

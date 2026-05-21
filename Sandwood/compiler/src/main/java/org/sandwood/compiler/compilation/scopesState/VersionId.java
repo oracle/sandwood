@@ -8,4 +8,13 @@
 
 package org.sandwood.compiler.compilation.scopesState;
 
-record VersionId(int usedId, int maxId) {}
+import org.sandwood.compiler.exceptions.CompilerException;
+
+record VersionId(int usedId, int maxId) {
+    VersionId {
+        if( usedId < 0 || maxId < 0)
+            throw new CompilerException("Negative ids are not allowed");
+        if( maxId < usedId)
+            throw new CompilerException("Max id cannot be less than used id");
+    }
+}

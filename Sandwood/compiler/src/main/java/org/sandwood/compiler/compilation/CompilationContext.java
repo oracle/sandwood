@@ -876,8 +876,8 @@ public class CompilationContext {
         scopeState.leaveScope(s);
     }
 
-    public void setreverseScopes(boolean reverseScopes) {
-        scopeState.setreverseScopes(reverseScopes);
+    public void setReverseScopes(boolean reverseScopes) {
+        scopeState.setReverseScopes(reverseScopes);
     }
 
     /**
@@ -906,8 +906,8 @@ public class CompilationContext {
     }
 
     public void pushScopeState(Set<Scope> taskScopes, ScopeTrackingState scopeTrackingState,
-            InitializedState initialised) {
-        scopeState.push(taskScopes, scopeTrackingState, initialised, this);
+            InitializedState initialized) {
+        scopeState.push(taskScopes, scopeTrackingState, initialized, this);
         substitutionsStack.push(substitutions);
     }
 

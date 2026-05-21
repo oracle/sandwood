@@ -39,7 +39,7 @@ public abstract class InitializedDescs {
     }
 
     /**
-     * Method to propagate back to parents the new max value, but not update the used value. 0 is the same us unused.
+     * Method to propagate back to parents the new max value, but not update the used value. 0 is the same as unused.
      * 
      * @param v
      * @param id

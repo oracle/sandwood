@@ -12,12 +12,12 @@ import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.scopes.Scope;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 
-class InitialisedDescsMerged extends InitialisedDescsSingle {
+class InitializedDescsMerged extends InitializedDescsSingle {
     private final InitializedDescs merged;
-    // Values initialised in merge in the merge scope or below will be returned, but not if they are in outer scopes.
+    // Values initialized in merge in the merge scope or below will be returned, but not if they are in outer scopes.
     private final Scope mergeScope;
 
-    InitialisedDescsMerged(InitializedDescs parent, InitializedDescs merged, Scope mergeScope) {
+    InitializedDescsMerged(InitializedDescs parent, InitializedDescs merged, Scope mergeScope) {
         super(parent, mergeScope);
         this.merged = merged;
         this.mergeScope = mergeScope;

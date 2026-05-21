@@ -118,9 +118,9 @@ class ScopeDescription {
         }
     }
 
-    public static record TaskState(Substitutions substitutions, Initializations initializations) {}
+    public record TaskState(Substitutions substitutions, Initializations initializations) {}
 
-    public static record Initializations(Scope scope, InitializedState initialised) {}
+    public record Initializations(Scope scope, InitializedState initialized) {}
 
     private static class ConstraintData {
         private final Map<DataflowTask<?>, TaskState> states;
@@ -178,16 +178,7 @@ class ScopeDescription {
         }
 
         ConstraintData(ConstraintData c, VariablePair<?> substitution) {
-            this.task = c.task;
-            trace = c.trace;
-            postTraceSets = c.postTraceSets;
-            Map<DataflowTask<?>, TaskState> m = new HashMap<>(c.states);
-            TaskState taskState = c.states.get(c.task);
-            TaskState state = new TaskState(new Substitutions(taskState.substitutions, substitution),
-                    taskState.initializations);
-            m.put(task, state);
-            states = Collections.unmodifiableMap(m);
-            changeableScope = c.changeableScope;
+            this(c, List.of(substitution));
         }
 
         ConstraintData(ConstraintData c, Scope changeableScope, TaskState state) {
@@ -321,7 +312,7 @@ class ScopeDescription {
         return insertScope(commentScope, compilationCtx);
     }
 
-    public static record IfElseScopes(ScopeDescription ifScope, ScopeDescription elseScope) {}
+    public record IfElseScopes(ScopeDescription ifScope, ScopeDescription elseScope) {}
 
     public IfElseScopes insertIfElseScope(IRTreeReturn<BooleanVariable> guard, CompilationContext compilationCtx) {
         IfScope ifScope = new IfScope(innerScope, guard);
@@ -435,7 +426,7 @@ class ScopeDescription {
         }
     }
 
-    // TODO make this private or make a different public method for pointing a target at an exisiting scope.
+    // TODO make this private or make a different public method for pointing a target at an existing scope.
     public ScopeDescription insertScope(Scope scope, CompilationContext compilationCtx) {
         return insertScope(scope, constraintData.size() - 1, compilationCtx);
     }
@@ -521,8 +512,6 @@ class ScopeDescription {
         sampleDescriptions = d.sampleDescriptions;
         this.constraintData = constraintData;
         knownFlags = d.knownFlags;
-        if(d.constraintData.size() != constraintData.size())
-            System.out.println("About to fail");
         assert d.constraintData.size() == constraintData.size();
     }
 
@@ -585,7 +574,7 @@ class ScopeDescription {
         knownFlags = d.knownFlags;
     }
 
-    public static record FixedFlagScopes(ScopeDescription fixed, ScopeDescription free) {}
+    public record FixedFlagScopes(ScopeDescription fixed, ScopeDescription free) {}
 
     public FixedFlagScopes constructFixedFlagScopes(SampleTask<?, ?> task, CompilationContext compilationCtx) {
         this.applySubstitutions(compilationCtx);
@@ -832,7 +821,7 @@ class ScopeDescription {
                 l.add(constraintData.get(i));
 
             t = new TaskState(t.substitutions, new Initializations(innerScope,
-                    t.initializations.initialised.addChangeableScope(c.changeableScope)));
+                    t.initializations.initialized.addChangeableScope(c.changeableScope)));
             l.add(new ConstraintData(c, null, t));
 
             int size = constraintData.size();
@@ -846,7 +835,7 @@ class ScopeDescription {
             addVarPairSubstitute(v, compilationCtx);
 
         Set<Scope> scopes = getScopes(c.trace, task, scopeState);
-        compilationCtx.pushScopeState(scopes, scopeState, t.initializations.initialised);
+        compilationCtx.pushScopeState(scopes, scopeState, t.initializations.initialized);
     }
 
     private Set<Scope> getScopes(TraceHandle trace, DataflowTask<?> task, ScopeTrackingState scopeState) {
@@ -1019,7 +1008,7 @@ class ScopeDescription {
         removeSubstitutions(compilationCtx);
     }
 
-    public ScopeDescription mergeInInitialised(int position, InitializedState toMergeState, Scope outerExisiting) {
+    public ScopeDescription mergeInInitialized(int position, InitializedState toMergeState, Scope outerExisting) {
         ConstraintData c = constraintData.get(position);
         TaskState t = c.states.get(c.task);
         // Additional scopes can only be added on to the end of the scope construction, they will not effect back
@@ -1030,7 +1019,7 @@ class ScopeDescription {
             l.add(constraintData.get(i));
 
         t = new TaskState(t.substitutions, new Initializations(innerScope,
-                t.initializations.initialised.mergeInExisitingInitilizations(toMergeState, outerExisiting)));
+                t.initializations.initialized.mergeInExistingInitializations(toMergeState, outerExisting)));
         l.add(new ConstraintData(c, null, t));
 
         int size = constraintData.size();
@@ -1040,7 +1029,7 @@ class ScopeDescription {
         return new ScopeDescription(l, this);
     }
 
-    public <A extends Variable<A>> ScopeDescription updateDistribuition(DistributionSampleTask<?, ?> sampleTask,
+    public <A extends Variable<A>> ScopeDescription updateDistribution(DistributionSampleTask<?, ?> sampleTask,
             Variable<A> currentValue, Variable<A> newValue) {
         Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>> newSampleDescriptions = new HashMap<>(
                 sampleDescriptions);

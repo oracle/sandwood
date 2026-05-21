@@ -473,7 +473,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
                 Variable.namedVariable(numStatesName), Variable.intVariable(1), valuePosName, Tree.NoComment, true);
         SampleTask<A, B> sample = funcData.sampleDesc.sample;
         if(sample.isDistribution())
-            target = target.updateDistribuition((DistributionSampleTask<A, ?>) sample, sample.getOutput(),
+            target = target.updateDistribution((DistributionSampleTask<A, ?>) sample, sample.getOutput(),
                     currentValue);
 
         return target;

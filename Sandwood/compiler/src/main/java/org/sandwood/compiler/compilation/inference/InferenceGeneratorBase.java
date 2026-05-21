@@ -205,7 +205,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                 initializeVariable(observationGuard, constant(false), "A guard to record if the variable is observed");
             });
 
-            // Attempt to reach each of the observed variabls
+            // Attempt to reach each of the observed variables
             targetScope.addIsolation("Look for a valid path to an observed variable");
             for(Set<TraceHandle> ts:observationTraces.values()) {
                 for(TraceHandle t:ts) {
@@ -408,7 +408,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                         /*
                                          * Construct the arguments for the consumer random variable. If we could apply
                                          * the distributions before the sample task is fixed this could be moved further
-                                         * out and run only once. However, as in the future the may be distributions in
+                                         * out and run only once. However, as in the future there may be distributions in
                                          * the sample trace that is not possible, so, it is placed here with the
                                          * expectation that the optimisation phase can move shared values out where
                                          * appropriate.

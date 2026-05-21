@@ -538,7 +538,7 @@ public class SubstituteKnownValuesTransformer extends Transformer {
         arrayIndexes = new Stack<>();
         arrayIndexes.push(new Stack<>());
 
-        // Initialise everything else
+        // Initialize everything else
         scalarReadFrequency = new ScalarReadFrequency(vars);
         arrayReadFrequency = new ArrayReadFrequency(vars, t);
         declaredVariables.push(new ArrayList<>());

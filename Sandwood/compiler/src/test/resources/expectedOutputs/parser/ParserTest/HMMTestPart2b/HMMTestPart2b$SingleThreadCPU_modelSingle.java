@@ -1048,7 +1048,7 @@ final class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			
 			// Sum all the values
 			{
-				// Initialise the max to the first element.
+				// Initialize the max to the first element.
 				double cv$lseMax = cv$stateProbabilityLocal[0];
 				
 				// Find max value.
@@ -1064,7 +1064,7 @@ final class HMMTestPart2b$SingleThreadCPU extends org.sandwood.runtime.internal.
 				
 				// Sum the values in the array.
 				else {
-					// Initialise the sum of the array elements
+					// Initialize the sum of the array elements
 					double cv$lseSum = 0.0;
 					
 					// Offset values, move to normal space, and sum.

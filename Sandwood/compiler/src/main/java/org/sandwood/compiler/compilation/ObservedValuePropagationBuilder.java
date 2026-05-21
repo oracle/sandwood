@@ -167,7 +167,7 @@ public class ObservedValuePropagationBuilder {
 
                 /*
                  * Add any recursive dependencies, this works because any dependencies as a later step will have already
-                 * been added to the existing VariableDependenceyDescs
+                 * been added to the existing VariableDependencyDescs
                  */
                 for(VariableDependencyDesc existing:vdds) {
                     if(vdd.dependencies.contains(existing.variable))
@@ -200,10 +200,10 @@ public class ObservedValuePropagationBuilder {
 
     public static void constructPropagateObservedValues(CompilationContext compilationCtx) {
         // Reset any fixed flags
-        IRTreeVoid t0 = initialiseFixedFlags(compilationCtx);
+        IRTreeVoid t0 = initializeFixedFlags(compilationCtx);
 
         // Set any observed variables required as input to the observation task.
-        IRTreeVoid t1 = initialiseConstants(compilationCtx);
+        IRTreeVoid t1 = initializeConstants(compilationCtx);
 
         // Set to record the intermediates whose value has been fixed.
         Set<Variable<?>> setIntermediates = new LinkedHashSet<>();
@@ -219,7 +219,7 @@ public class ObservedValuePropagationBuilder {
                 true, "Method to propagate observed values back into the model.");
     }
 
-    private static IRTreeVoid initialiseFixedFlags(CompilationContext compilationCtx) {
+    private static IRTreeVoid initializeFixedFlags(CompilationContext compilationCtx) {
         List<IRTreeVoid> l = new ArrayList<>();
         for(SampleTask<?, ?> s:compilationCtx.traces.getFixableTasks()) {
             if(s.getOutput().isFixed()) {
@@ -230,7 +230,7 @@ public class ObservedValuePropagationBuilder {
         return IRTree.sequential(l, "Reset any fixed flags on observed values");
     }
 
-    private static IRTreeVoid initialiseConstants(CompilationContext compilationCtx) {
+    private static IRTreeVoid initializeConstants(CompilationContext compilationCtx) {
         IRTreeVoid t1;
         // Set the phase
         compilationCtx.phase = CompilationPhase.INITIALIZATION_OF_CONSTANTS;
@@ -265,7 +265,7 @@ public class ObservedValuePropagationBuilder {
         // Make this serial for now to protect the unit tests. This may be removed later, but it will break the unit
         // tests as multiple RNGs will be created giving a different stream of numbers.
         compilationCtx.pushIsSerial(true);
-        compilationCtx.setreverseScopes(true);
+        compilationCtx.setReverseScopes(true);
 
         Map<Variable<?>, VarTraces> segmentedTraces = new LinkedHashMap<>();
         for(SampleTask<?, ?> sTask:compilationCtx.traces.getAllSampleTasks()) {
@@ -342,7 +342,7 @@ public class ObservedValuePropagationBuilder {
             }
         }
 
-        compilationCtx.setreverseScopes(false);
+        compilationCtx.setReverseScopes(false);
         compilationCtx.popIsSerial();
 
         t2 = IRTree.treeScope(compilationCtx.getOutermostScopeTree(),

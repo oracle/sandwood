@@ -88,13 +88,13 @@ public class ScopeTracking {
         }
 
         /**
-         * Method to initialise the scope tree for this scope description. TODO come up with a clean way of getting the
+         * Method to initialize the scope tree for this scope description. TODO come up with a clean way of getting the
          * else body to the if scope method without passing this object and having methods that expose some of its
          * internal structure (getScopeBodyTree).
          * 
          * @param tracking The tracking object that holds this scope description.
          */
-        private void initialiseScopeTree(ScopeTracking tracking) {
+        private void initializeScopeTree(ScopeTracking tracking) {
             assert scope == GlobalScope.scope || enclosingScope != null;
             scopeTree = scope.getScopeTree(tracking, scopeBody, reverseScopes, compilationCtx);
         }
@@ -330,7 +330,7 @@ public class ScopeTracking {
         // Once all the scope descriptions are constructed, construct the scope trees.
         for(ScopeDesc scopeDesc:constructedScopeDescs) {
             scopeDesc.addEnterTask();
-            scopeDesc.initialiseScopeTree(this);
+            scopeDesc.initializeScopeTree(this);
             scopeDesc.addLeaveTask();
         }
         assert scopes.containsKey(scope);
@@ -429,7 +429,7 @@ public class ScopeTracking {
      * 
      * @param reverseScopes
      */
-    public void setreverseScopes(boolean reverseScopes) {
+    public void setReverseScopes(boolean reverseScopes) {
         this.reverseScopes = reverseScopes;
     }
 

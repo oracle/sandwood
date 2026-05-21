@@ -90,7 +90,7 @@ public class IfElseAssignmentTask<A extends Variable<A>> extends ProducingDatafl
                     if(!output.isIntermediate()) {
                         if(compilationCtx.codeGuardSet()) {
                             // If the is a guard set for the code placed into scopes, the variable must be
-                            // initialised to keep the compiler happy.
+                            // initialized to keep the compiler happy.
                             Type<?> type = output.getType();
                             if(type == VariableType.IntVariable) {
                                 compilationCtx.addTreeToScope(output.scope(), IRTree.initializeVariable(outputDesc,
