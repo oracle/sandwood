@@ -238,21 +238,18 @@ public class CollapseConstantsTransformer extends Transformer {
 
         private void addUpperBound(TransLoad<IntVariable> left, TransTreeReturn<IntVariable> right,
                 Map<VariableDescription<?>, MinMax> boundMap, boolean includeEquals) {
-            MinMax m = boundMap.get(left.varDesc);
-            if(m == null) {
-                m = new MinMax();
-                boundMap.put(left.varDesc, m);
-            }
-
+            MinMax m = boundMap.computeIfAbsent(left.varDesc, k -> new MinMax());
             TransTreeReturn<IntVariable> rMax = right.maxValue(bounds);
             if(rMax != null) {
                 // Move the bound as the values cannot be equal
-                if(!includeEquals)
+                if(!includeEquals) {
                     rMax = TransTree.subtractII(rMax, TransTree.constant(1));
+                    bounds.addTransformedTree(right, rMax);
+                }
                 if(m.max != null)
-                    m.max = TransTree.min(m.max, rMax);
+                    m.max = transform(TransTree.min(m.max, rMax));
                 else
-                    m.max = rMax;
+                    m.max = transform(rMax);
                 bounds.addTransformedTree(right, m.max);
             }
         }
@@ -263,12 +260,16 @@ public class CollapseConstantsTransformer extends Transformer {
             TransTreeReturn<IntVariable> rMin = right.minValue(bounds);
             if(rMin != null) {
                 // Move the bound as the values cannot be equal;
-                if(!includeEquals)
+                if(!includeEquals) {
                     rMin = TransTree.addII(rMin, TransTree.constant(1));
-                if(m.min != null)
-                    m.min = TransTree.max(m.min, rMin);
-                else
-                    m.min = rMin;
+                    bounds.addTransformedTree(right, rMin);
+                }
+                if(m.min != null) {
+                    TransTreeReturn<IntVariable> newMin = TransTree.max(m.min, rMin);
+                    bounds.addTransformedTree(right, newMin);
+                    m.min = transform(newMin);
+                } else
+                    m.min = transform(rMin);
                 bounds.addTransformedTree(right, m.min);
             }
         }
@@ -299,24 +300,30 @@ public class CollapseConstantsTransformer extends Transformer {
         }
 
         private void applyBounds(Map<VariableDescription<?>, MinMax> boundsMap) {
-            for(VariableDescription<?> desc:boundsMap.keySet()) {
-                VarDef v = inScope.getVarDef(desc);
-                MinMax minMax = boundsMap.get(desc);
-                for(TreeID tag:v.writeLocations())
-                    bounds.addRange(desc, tag, minMax.min, minMax.max);
+            if(!boundsMap.isEmpty()) {
+                for(VariableDescription<?> desc:boundsMap.keySet()) {
+                    VarDef v = inScope.getVarDef(desc);
+                    MinMax minMax = boundsMap.get(desc);
+                    for(TreeID tag:v.writeLocations())
+                        bounds.addRange(desc, tag, minMax.min, minMax.max);
+                }
+                cachedTrees.push(new HashMap<>());
             }
         }
 
         private void removeBounds(Map<VariableDescription<?>, MinMax> boundsMap) {
-            for(VariableDescription<?> desc:boundsMap.keySet()) {
-                VarDef v = inScope.getVarDef(desc);
-                for(TreeID tag:v.writeLocations())
-                    bounds.removeRange(desc, tag);
+            if(!boundsMap.isEmpty()) {
+                for(VariableDescription<?> desc:boundsMap.keySet()) {
+                    VarDef v = inScope.getVarDef(desc);
+                    for(TreeID tag:v.writeLocations())
+                        bounds.removeRange(desc, tag);
+                }
+                cachedTrees.pop();
             }
         }
     }
 
-    private static class UpdatedVars {
+    private class UpdatedVars {
         record UpdatedVar(VariableDescription<?> desc, boolean declaration, TreeID id) {}
 
         private final List<UpdatedVar> updatedVars = new ArrayList<>();
@@ -332,6 +339,11 @@ public class CollapseConstantsTransformer extends Transformer {
 
         public void add(VariableDescription<?> desc, boolean declaration, TreeID id, TransTreeReturn<IntVariable> min,
                 TransTreeReturn<IntVariable> max) {
+            if(min != null) {
+                min = transformReturn(min);
+            }
+            if(max != null)
+                max = transformReturn(max);
             bounds.addRange(desc, id, min, max);
             updatedVars.add(new UpdatedVar(desc, declaration, id));
         }
@@ -397,9 +409,16 @@ public class CollapseConstantsTransformer extends Transformer {
     // A set to track all the trees see so that it is not possible to enter an infinite loop.
     private final TreeTracker seen = new TreeTracker();
 
+    private final int startID = TreeID.getCurrentValue();
+    private int nodeCount = 0;
+    private final Stack<Map<WrappedTransReturn<?>, TransTreeReturn<?>>> cachedTrees;
+
     public CollapseConstantsTransformer(ArgDesc<?>[] args, KnownValuesTrans knownValues, TransTree<?> tree) {
         bounds = new Bounds(args, knownValues, tree);
         updatedVars = new UpdatedVars(bounds);
+        cachedTrees = new Stack<>();
+        cachedTrees.add(new HashMap<>());
+
         for(ArgDesc<?> arg:args)
             updatedVars.add(arg.varDesc, true);
 
@@ -425,31 +444,39 @@ public class CollapseConstantsTransformer extends Transformer {
 
     @Override
     public TransTreeVoid transformVoid(TransTreeVoid tree) {
+        TransTreeVoid t;
+        cachedTrees.peek().clear();
+        bounds.enterSubTree();
         switch(tree.type) {
             case FOR:
                 visitedNodes.add(tree);
-                return collapseConstants((TransFor) tree);
+                t = collapseConstants((TransFor) tree);
+                break;
 
             case IF:
                 visitedNodes.add(tree);
-                return collapseConstants((TransIfElse) tree);
+                t = collapseConstants((TransIfElse) tree);
+                break;
 
             case SCOPE: {
                 int size = updatedVars.size();
-                TransTreeVoid toReturn = tree.applyTransformation(this);
+                t = tree.applyTransformation(this);
                 updatedVars.remove(size, tree);
-                return toReturn;
+                break;
             }
 
             case INITIALIZE:
-                return collapseConstants((TransInitialize<?>) tree);
+                t = collapseConstants((TransInitialize<?>) tree);
+                break;
 
             case INITIALIZE_UNSET:
                 updatedVars.add(((TransInitializeUnset<?>) tree).varDesc, true);
-                return tree.applyTransformation(this);
+                t = tree.applyTransformation(this);
+                break;
 
             case STORE:
-                return collapseConstants((TransStore<?>) tree);
+                t = collapseConstants((TransStore<?>) tree);
+                break;
 
             case ARRAY_PUT: // TODO Add code to add the constraint that the index is positive so 0 can be a lower bound.
             case LOCAL_FUNCTION_CALL:
@@ -461,133 +488,163 @@ public class CollapseConstantsTransformer extends Transformer {
             default:
                 throw new CompilerException("Unknown tree type " + tree.type + " encountered");
         }
+        bounds.leaveSubTree();
+        return t;
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public <X extends Variable<X>> TransTreeReturn<X> transformReturn(TransTreeReturn<X> tree) {
-        TransTreeReturn<X> toReturn = null;
+        WrappedTransReturn<X> w = new WrappedTransReturn<>(tree);
+        TransTreeReturn<X> cache = (TransTreeReturn<X>) cachedTrees.peek().get(w);
+        // If this value has already been computed.
+        if(cache != null) {
+            // Reset the constructed node count as we are examining an original tree, not a derived tree.
+            if(tree.id.tag < startID)
+                nodeCount = 0;
 
-        // Check we are not in a loop.
-        if(!seen.contains(tree)) {
-            seen.add(tree);
+            tree.addNodes(visitedNodes);
+            TransTreeReturn<X> toReturn = cache.copy();
+            bounds.addTransformedTree(tree, toReturn);
+            return toReturn;
+        } else if(nodeCount > 100000) {
+            // If we have constructed more than 100000 nodes since we last at a non derived tree
+            tree.addNodes(visitedNodes);
+            return tree;
+        } else {
+            TransTreeReturn<X> toReturn = null;
+            bounds.enterSubTree();
 
-            switch(tree.type) {
-                case LESS_THAN:
-                case LESS_THAN_EQUAL:
-                    visitedNodes.add(tree);
-                    toReturn = collapseConstants((TransBinOp) tree);
-                    break;
-                case EQUALITY:
-                    TransEq<?, ?> eq = (TransEq<?, ?>) tree;
-                    if(eq.left.getOutputType() == VariableType.BooleanVariable) {
-                        if(eq.right.getOutputType() == VariableType.BooleanVariable)
-                            toReturn = collapseBooleanEq((TransEq<BooleanVariable, BooleanVariable>) eq);
-                        else
-                            toReturn = tree.applyTransformation(this);
-                    } else {
-                        if(eq.right.getOutputType() == VariableType.BooleanVariable)
-                            toReturn = tree.applyTransformation(this);
-                        else
-                            toReturn = collapseConstants(
-                                    (TransEq<? extends NumberVariable, ? extends NumberVariable>) eq);
-                    }
-                    break;
+            // Check we are not in a loop.
+            if(!seen.contains(tree)) {
+                seen.add(tree);
 
-                case EXTERNAL_FUNCTION_CALL_RETURN:
-                    visitedNodes.add(tree);
-                    toReturn = collapseConstants((TransExternalFunctionCallReturn<X>) tree);
-                    break;
+                switch(tree.type) {
+                    case LESS_THAN:
+                    case LESS_THAN_EQUAL:
+                        visitedNodes.add(tree);
+                        toReturn = collapseConstants((TransBinOp) tree);
+                        break;
+                    case EQUALITY:
+                        TransEq<?, ?> eq = (TransEq<?, ?>) tree;
+                        if(eq.left.getOutputType() == VariableType.BooleanVariable) {
+                            if(eq.right.getOutputType() == VariableType.BooleanVariable)
+                                toReturn = collapseBooleanEq((TransEq<BooleanVariable, BooleanVariable>) eq);
+                            else
+                                toReturn = tree.applyTransformation(this);
+                        } else {
+                            if(eq.right.getOutputType() == VariableType.BooleanVariable)
+                                toReturn = tree.applyTransformation(this);
+                            else
+                                toReturn = collapseConstants(
+                                        (TransEq<? extends NumberVariable, ? extends NumberVariable>) eq);
+                        }
+                        break;
 
-                case MAX:
-                    visitedNodes.add(tree);
-                    toReturn = (TransTreeReturn<X>) collapseConstants((TransMax<?>) tree);
-                    break;
+                    case EXTERNAL_FUNCTION_CALL_RETURN:
+                        visitedNodes.add(tree);
+                        toReturn = collapseConstants((TransExternalFunctionCallReturn<X>) tree);
+                        break;
 
-                case MIN:
-                    visitedNodes.add(tree);
-                    toReturn = (TransTreeReturn<X>) collapseConstants((TransMin<?>) tree);
-                    break;
+                    case MAX:
+                        visitedNodes.add(tree);
+                        toReturn = (TransTreeReturn<X>) collapseConstants((TransMax<?>) tree);
+                        break;
 
-                case DIVIDE:
-                    visitedNodes.add(tree);
-                    toReturn = (TransTreeReturn<X>) collapseConstants((TransDivide<?, ?, ?>) tree);
-                    break;
+                    case MIN:
+                        visitedNodes.add(tree);
+                        toReturn = (TransTreeReturn<X>) collapseConstants((TransMin<?>) tree);
+                        break;
 
-                case REMAINDER:
-                    visitedNodes.add(tree);
-                    toReturn = (TransTreeReturn<X>) collapseConstants((TransRemainder<?, ?, ?>) tree);
-                    break;
+                    case DIVIDE:
+                        visitedNodes.add(tree);
+                        toReturn = (TransTreeReturn<X>) collapseConstants((TransDivide<?, ?, ?>) tree);
+                        break;
 
-                case ADD:
-                    visitedNodes.add(tree);
-                    toReturn = (TransTreeReturn<X>) collapseConstants((TransAdd<?, ?, ?>) tree);
-                    break;
+                    case REMAINDER:
+                        visitedNodes.add(tree);
+                        toReturn = (TransTreeReturn<X>) collapseConstants((TransRemainder<?, ?, ?>) tree);
+                        break;
 
-                case SUBTRACT:
-                    visitedNodes.add(tree);
-                    toReturn = (TransTreeReturn<X>) collapseConstants((TransSubtract<?, ?, ?>) tree);
-                    break;
+                    case ADD:
+                        visitedNodes.add(tree);
+                        toReturn = (TransTreeReturn<X>) collapseConstants((TransAdd<?, ?, ?>) tree);
+                        break;
 
-                case MULTIPLY:
-                    visitedNodes.add(tree);
-                    toReturn = (TransTreeReturn<X>) collapseConstants((TransMultiply<?, ?, ?>) tree);
-                    break;
+                    case SUBTRACT:
+                        visitedNodes.add(tree);
+                        toReturn = (TransTreeReturn<X>) collapseConstants((TransSubtract<?, ?, ?>) tree);
+                        break;
 
-                case NEGATE_BOOLEAN:
-                    visitedNodes.add(tree);
-                    toReturn = (TransTreeReturn<X>) collapseConstants((TransNegateBoolean) tree);
-                    break;
+                    case MULTIPLY:
+                        visitedNodes.add(tree);
+                        toReturn = (TransTreeReturn<X>) collapseConstants((TransMultiply<?, ?, ?>) tree);
+                        break;
 
-                case NEGATE:
-                    visitedNodes.add(tree);
-                    toReturn = (TransTreeReturn<X>) collapseConstants((TransNegate<?>) tree);
-                    break;
+                    case NEGATE_BOOLEAN:
+                        visitedNodes.add(tree);
+                        toReturn = (TransTreeReturn<X>) collapseConstants((TransNegateBoolean) tree);
+                        break;
 
-                case CAST_DOUBLE:
-                    visitedNodes.add(tree);
-                    toReturn = (TransTreeReturn<X>) collapseConstants((TransCastToDouble) tree);
-                    break;
+                    case NEGATE:
+                        visitedNodes.add(tree);
+                        toReturn = (TransTreeReturn<X>) collapseConstants((TransNegate<?>) tree);
+                        break;
 
-                case CAST_INT:
-                    visitedNodes.add(tree);
-                    toReturn = (TransTreeReturn<X>) collapseConstants((TransCastToInteger) tree);
-                    break;
+                    case CAST_DOUBLE:
+                        visitedNodes.add(tree);
+                        toReturn = (TransTreeReturn<X>) collapseConstants((TransCastToDouble) tree);
+                        break;
 
-                case CONDITIONAL_ASSIGNMENT:
-                    visitedNodes.add(tree);
-                    toReturn = collapseConstants((TransConditionalAssignment) tree);
-                    break;
+                    case CAST_INT:
+                        visitedNodes.add(tree);
+                        toReturn = (TransTreeReturn<X>) collapseConstants((TransCastToInteger) tree);
+                        break;
 
-                case ALLOCATE_ARRAY: // TODO Add code to add the constraint that the index is positive so 0 can be a
-                                     // lower bound.
-                case AND: // Constants are collapsed at construction time
-                case ARRAY_GET: // TODO Add code to add the constraint the that index is positive so 0 can be a lower
-                                // bound.
-                case CONST_BOOLEAN:
-                case CONST_DOUBLE:
-                case CONST_INT:
-                case LOCAL_FUNCTION_CALL_RETURN:
-                case RV_FUNCTION_CALL_RETURN:
-                case GET_FIELD:
-                case LOAD:
-                case OR: // Constants are collapsed at construction time
-                    toReturn = tree.applyTransformation(this);
-                    break;
+                    case CONDITIONAL_ASSIGNMENT:
+                        visitedNodes.add(tree);
+                        toReturn = collapseConstants((TransConditionalAssignment) tree);
+                        break;
 
-                default:
-                    throw new CompilerException("Unknown tree type " + tree.type + " encountered");
+                    case ALLOCATE_ARRAY: // TODO Add code to add the constraint that the index is positive so 0 can be a
+                        // lower bound.
+                    case AND: // Constants are collapsed at construction time
+                    case ARRAY_GET:
+                    case CONST_BOOLEAN:
+                    case CONST_DOUBLE:
+                    case CONST_INT:
+                    case LOCAL_FUNCTION_CALL_RETURN:
+                    case RV_FUNCTION_CALL_RETURN:
+                    case GET_FIELD:
+                    case LOAD:
+                    case OR: // Constants are collapsed at construction time
+                        toReturn = tree.applyTransformation(this);
+                        break;
+
+                    default:
+                        throw new CompilerException("Unknown tree type " + tree.type + " encountered");
+                }
+
+                seen.remove();
             }
 
-            seen.remove();
+            if(toReturn != null)
+                bounds.addTransformedTree(tree, toReturn);
+            else
+                toReturn = tree;
+
+            bounds.leaveSubTree();
+            cachedTrees.peek().put(w, toReturn);
+
+            // If this is examining an original tree reset the constructed node count, otherwise increment the node
+            // count.
+            if(tree.id.tag < startID)
+                nodeCount = 0;
+            else
+                nodeCount += toReturn.size();
+            return toReturn;
         }
 
-        if(toReturn != null)
-            bounds.addTransformedTree(tree, toReturn);
-        else
-            toReturn = tree;
-
-        return toReturn;
     }
 
     private <X extends Variable<X>> TransTreeReturn<X> collapseConstants(TransExternalFunctionCallReturn<X> tree) {
@@ -704,22 +761,25 @@ public class CollapseConstantsTransformer extends Transformer {
     }
 
     private TransTreeVoid collapseConstants(TransInitialize<?> tree) {
-        TransTreeVoid toReturn = tree.applyTransformation(this);
-        if(tree.varDesc.type == VariableType.IntVariable)
-            updatedVars.add(tree.varDesc, true, tree.id, (TransTreeReturn<IntVariable>) tree.value.minValue(bounds),
-                    (TransTreeReturn<IntVariable>) tree.value.maxValue(bounds));
-        else
-            updatedVars.add(tree.varDesc, true);
-        return toReturn;
+        return collapseConstants(tree, tree.varDesc, tree.value, true);
     }
 
     private TransTreeVoid collapseConstants(TransStore<?> tree) {
+        return collapseConstants(tree, tree.varDesc, tree.value, false);
+    }
+
+    private TransTreeVoid collapseConstants(TransTreeVoid tree, VariableDescription<?> varDesc,
+            TransTreeReturn<?> value, boolean declaration) {
         TransTreeVoid toReturn = tree.applyTransformation(this);
-        if(tree.varDesc.type == VariableType.IntVariable)
-            updatedVars.add(tree.varDesc, false, tree.id, (TransTreeReturn<IntVariable>) tree.value.minValue(bounds),
-                    (TransTreeReturn<IntVariable>) tree.value.maxValue(bounds));
-        else
-            updatedVars.add(tree.varDesc, false);
+        if(varDesc.type == VariableType.IntVariable) {
+            TransTreeReturn<IntVariable> min = (TransTreeReturn<IntVariable>) value.minValue(bounds);
+            TransTreeReturn<IntVariable> max = (TransTreeReturn<IntVariable>) value.maxValue(bounds);
+            bounds.addTransformedTree(value, min);
+            bounds.addTransformedTree(value, max);
+
+            updatedVars.add(varDesc, declaration, tree.id, min, max);
+        } else
+            updatedVars.add(varDesc, declaration);
         return toReturn;
     }
 
@@ -838,8 +898,7 @@ public class CollapseConstantsTransformer extends Transformer {
 
             // Test is it is possible to execute this loop.
             TransTreeReturn<BooleanVariable> validRange = lessThanEqual(min, max);
-            bounds.addTransformedTree(tf.end, validRange);
-            validRange = transform(validRange);
+            validRange = transformDerivedTree(tf.end, validRange);
             if(validRange.type == TransTreeType.CONST_BOOLEAN && !((TransConstBoolean) validRange).value) {
                 tf.addNodes(visitedNodes);
                 return TransTree.nop();
@@ -869,6 +928,7 @@ public class CollapseConstantsTransformer extends Transformer {
                 }
                 if(startMax != null) {
                     bounds.addTransformedTree(tf.end, startMax);
+                    startMax = transform(startMax);
                     VarDef v = bounds.inScopeVars(min).getVarDef(minDesc);
                     for(TreeID startTag:v.writeLocations())
                         bounds.addRange(minDesc, startTag, null, startMax);
@@ -895,6 +955,7 @@ public class CollapseConstantsTransformer extends Transformer {
                 if(endMin != null) {
                     // Using the read set for the end value as the index maybe in used in this value.
                     bounds.addTransformedTree(tf.end, endMin);
+                    endMin = transform(endMin);
                     VarDef v = bounds.inScopeVars(max).getVarDef(maxName);
                     for(TreeID endTag:v.writeLocations())
                         bounds.addRange(maxName, endTag, endMin, null);
@@ -1076,8 +1137,7 @@ public class CollapseConstantsTransformer extends Transformer {
             for(int j = 0; j < i && !removed; j++) {
                 TransTreeReturn<A> right = processed.get(j);
                 TransTreeReturn<BooleanVariable> test = lessThanEqual(left, right);
-                bounds.addTransformedTree(tree, test);
-                test = transform(test);
+                test = transformDerivedTree(tree, test);
                 switch(test.type) {
                     case CONST_BOOLEAN:
                         if(((TransConstBoolean) test).value) {
@@ -1095,8 +1155,7 @@ public class CollapseConstantsTransformer extends Transformer {
             for(int j = i + 1; j < noTerms && !removed; j++) {
                 TransTreeReturn<A> right = processed.get(j);
                 TransTreeReturn<BooleanVariable> test = lessThanEqual(left, right);
-                bounds.addTransformedTree(tree, test);
-                test = transform(test);
+                test = transformDerivedTree(tree, test);
                 switch(test.type) {
                     case CONST_BOOLEAN:
                         if(((TransConstBoolean) test).value) {
@@ -1157,8 +1216,7 @@ public class CollapseConstantsTransformer extends Transformer {
             for(int j = 0; j < i && !removed; j++) {
                 TransTreeReturn<A> left = processed.get(j);
                 TransTreeReturn<BooleanVariable> test = lessThanEqual(left, right);
-                bounds.addTransformedTree(tree, test);
-                test = transformReturn(test);
+                test = transformDerivedTree(tree, test);
                 switch(test.type) {
                     case CONST_BOOLEAN:
                         if(((TransConstBoolean) test).value) {
@@ -1176,8 +1234,7 @@ public class CollapseConstantsTransformer extends Transformer {
             for(int j = i + 1; j < noTerms && !removed; j++) {
                 TransTreeReturn<A> left = processed.get(j);
                 TransTreeReturn<BooleanVariable> test = lessThanEqual(left, right);
-                bounds.addTransformedTree(tree, test);
-                test = transformReturn(test);
+                test = transformDerivedTree(tree, test);
                 switch(test.type) {
                     case CONST_BOOLEAN:
                         if(((TransConstBoolean) test).value) {
@@ -2041,5 +2098,14 @@ public class CollapseConstantsTransformer extends Transformer {
         } else {
             inputs.add((TransTreeReturn<A>[]) current.toArray(new TransTreeReturn<?>[current.size()]));
         }
+    }
+
+    private <A extends Variable<A>> TransTreeReturn<A> transformDerivedTree(TransTreeReturn<?> originalTree,
+            TransTreeReturn<A> derivedTree) {
+        bounds.addTransformedTree(originalTree, derivedTree);
+        bounds.enterDerivedTree();
+        TransTreeReturn<A> returnTree = transformReturn(derivedTree);
+        bounds.leaveDerivedTree();
+        return returnTree;
     }
 }

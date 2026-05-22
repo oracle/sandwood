@@ -634,7 +634,7 @@ final class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		if((0 < noStates)) {
 			int index$j$13 = (j$var115 - 1);
 			if(((1 <= index$j$13) && !(index$j$13 == j$var115)))
-				cv$numStates = Math.max(cv$numStates, noStates);
+				cv$numStates = noStates;
 		}
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -669,24 +669,9 @@ final class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 					for(int index$sample95$22 = 0; index$sample95$22 < noStates; index$sample95$22 += 1) {
 						double cv$probabilitySample95Value23 = distribution$sample95[i$var104][index$sample95$22];
 						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample95Value23);
-						double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample95Value23) + ((cv$valuePos < noStates)?Math.log(m[index$sample95$22][cv$valuePos]):Double.NEGATIVE_INFINITY));
-						if((1 < length$eventsMeasured[i$var104])) {
-							double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							if((cv$valuePos < noStates)) {
-								cv$accumulatedConsumerProbabilities = (((1.0 <= events[i$var104][1]) && (events[i$var104][1] < (noEvents + 1)))?Math.log(bias[cv$valuePos][(events[i$var104][1] - 1)]):Double.NEGATIVE_INFINITY);
-								cv$consumerDistributionProbabilityAccumulator = 0.0;
-							}
-							cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-							if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-								cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-							else {
-								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-								else
-									cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-							}
-						}
+						double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample95Value23) + Math.log(m[index$sample95$22][cv$valuePos]));
+						if((1 < length$eventsMeasured[i$var104]))
+							cv$accumulatedProbabilities = ((((1.0 <= events[i$var104][1]) && (events[i$var104][1] < (noEvents + 1)))?Math.log(bias[cv$valuePos][(events[i$var104][1] - 1)]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 						if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
 							cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
 						else {
@@ -703,7 +688,7 @@ final class HMM_Mk2Dist$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 				for(int index$sample126$31 = 0; index$sample126$31 < noStates; index$sample126$31 += 1) {
 					double cv$probabilitySample126Value32 = distribution$sample126[i$var104][(index$j$30 - 1)][index$sample126$31];
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample126Value32);
-					double cv$accumulatedProbabilities = (((((1.0 <= events[i$var104][j$var115]) && (events[i$var104][j$var115] < (noEvents + 1)))?Math.log(bias[index$sample126$31][(events[i$var104][j$var115] - 1)]):Double.NEGATIVE_INFINITY) + Math.log(cv$probabilitySample126Value32)) + ((cv$valuePos < noStates)?Math.log(m[index$sample126$31][cv$valuePos]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (((((1.0 <= events[i$var104][j$var115]) && (events[i$var104][j$var115] < (noEvents + 1)))?Math.log(bias[index$sample126$31][(events[i$var104][j$var115] - 1)]):Double.NEGATIVE_INFINITY) + Math.log(cv$probabilitySample126Value32)) + Math.log(m[index$sample126$31][cv$valuePos]));
 					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
 						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
 					else {

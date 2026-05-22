@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -604,8 +604,6 @@ public class AddSubtractTrees<X extends NumberVariable<X>> {
         if(trees == null)
             return false;
 
-        bounds.setFilter(target.name.getName());
-
         boolean safe = true;
         for(TransTreeReturn<?> tree:trees) {
             if(null == tree.maxValue(bounds)) {
@@ -628,11 +626,9 @@ public class AddSubtractTrees<X extends NumberVariable<X>> {
         }
 
         if(safe) {
-            applyMin(subtractInt, bounds, transformer, trees, true);
-            applyMin(subtractDouble, bounds, transformer, trees, true);
+            applyMin(subtractInt, bounds, trees, true);
+            applyMin(subtractDouble, bounds, trees, true);
         }
-
-        bounds.clearFilter();
         simplifyTerms();
         return true;
     }
@@ -641,8 +637,6 @@ public class AddSubtractTrees<X extends NumberVariable<X>> {
         Set<TransTreeReturn<?>> trees = varToTree.get(target);
         if(trees == null)
             return false;
-
-        bounds.setFilter(target.name.getName());
 
         boolean safe = true;
         for(TransTreeReturn<?> tree:trees) {
@@ -653,8 +647,8 @@ public class AddSubtractTrees<X extends NumberVariable<X>> {
         }
 
         if(safe) {
-            applyMin(addInt, bounds, transformer, trees, false);
-            applyMin(addDouble, bounds, transformer, trees, false);
+            applyMin(addInt, bounds, trees, false);
+            applyMin(addDouble, bounds, trees, false);
         }
 
         safe = true;
@@ -670,7 +664,6 @@ public class AddSubtractTrees<X extends NumberVariable<X>> {
             applyMax(subtractDouble, trees, true);
         }
 
-        bounds.clearFilter();
         simplifyTerms();
         return true;
     }
@@ -712,7 +705,7 @@ public class AddSubtractTrees<X extends NumberVariable<X>> {
     }
 
     private <A extends NumberVariable<A>> void applyMin(List<TransTreeReturn<A>> list, Bounds bounds,
-            CollapseConstantsTransformer transformer, Set<TransTreeReturn<?>> trees, boolean negated) {
+            Set<TransTreeReturn<?>> trees, boolean negated) {
 
         Set<TransTreeReturn<A>> toUpdate = new HashSet<>();
         int size = list.size();
@@ -736,12 +729,10 @@ public class AddSubtractTrees<X extends NumberVariable<X>> {
     private <A extends NumberVariable<A>> void applyMax(List<TransTreeReturn<A>> list, boolean negated) {
 
         Set<TransTreeReturn<A>> toUpdate = new HashSet<>();
-        int size = list.size();
-        for(int i = 0; i < size;) {
-            TransTreeReturn<A> t = list.get(i);
+        for(int size = list.size(); 0 < size; size--) {
+            TransTreeReturn<A> t = list.get(0);
             toUpdate.add(t);
-            removeTree(list, i);
-            size--;
+            removeTree(list, 0);
         }
 
         for(TransTreeReturn<A> t:toUpdate) {
