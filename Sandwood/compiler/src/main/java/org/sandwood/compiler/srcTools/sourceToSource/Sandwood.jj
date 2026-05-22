@@ -186,7 +186,7 @@ public class SandwoodParser
           sb.append("\\n\"\n" + indent() + "     + \"" + parts[i]);
       } else {
         try {
-          MessageDigest md = MessageDigest.getInstance("MD5");
+          MessageDigest md = MessageDigest.getInstance("SHA-256");
           md.update(input.getBytes());
           for(byte b: md.digest()) {
             int decimal = (int)b & 0XFF;
