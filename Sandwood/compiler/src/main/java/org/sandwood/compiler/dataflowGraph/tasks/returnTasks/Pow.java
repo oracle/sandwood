@@ -81,7 +81,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
 
             // Test if this is possibly 0 to a positive power, in which case the minimum happens at zero and is zero if
             // the power is even, and happens a the minimum value if it is an odd power.
-            IRTreeReturn<BooleanVariable> gurad = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0.0)),
+            IRTreeReturn<BooleanVariable> guard = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0.0)),
                     IRTree.lessThanEqual(IRTree.constant(0.0), leftMax),
                     IRTree.lessThan(right.getForwardIR(compilationCtx), IRTree.constant(0.0)));
             // min(0, minLeft^right)
@@ -90,7 +90,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
             IRTreeReturn<DoubleVariable> falseCase = IRTree.max(
                     IRTree.powDD(leftMin, right.getForwardIR(compilationCtx)),
                     IRTree.powDD(leftMax, right.getForwardIR(compilationCtx)));
-            return IRTree.conditionalAssignment(gurad, trueCase, falseCase);
+            return IRTree.conditionalAssignment(guard, trueCase, falseCase);
         }
 
         @Override
@@ -105,7 +105,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
 
             // Test if this is possibly 0 to a positive power, in which case the minimum happens at zero and is zero if
             // the power is even, and happens a the minimum value if it is an odd power.
-            IRTreeReturn<BooleanVariable> gurad = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0.0)),
+            IRTreeReturn<BooleanVariable> guard = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0.0)),
                     IRTree.lessThanEqual(IRTree.constant(0.0), leftMax),
                     IRTree.lessThanEqual(IRTree.constant(0.0), right.getForwardIR(compilationCtx)));
             // min(0, minLeft^right)
@@ -115,7 +115,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
             IRTreeReturn<DoubleVariable> falseCase = IRTree.min(
                     IRTree.powDD(leftMin, right.getForwardIR(compilationCtx)),
                     IRTree.powDD(leftMax, right.getForwardIR(compilationCtx)));
-            return IRTree.conditionalAssignment(gurad, trueCase, falseCase);
+            return IRTree.conditionalAssignment(guard, trueCase, falseCase);
         }
     }
 
@@ -141,7 +141,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
 
             // Test if this is possibly 0 to a positive power, in which case the minimum happens at zero and is zero if
             // the power is even, and happens a the minimum value if it is an odd power.
-            IRTreeReturn<BooleanVariable> gurad = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0.0)),
+            IRTreeReturn<BooleanVariable> guard = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0.0)),
                     IRTree.lessThanEqual(IRTree.constant(0.0), leftMax),
                     IRTree.lessThan(right.getForwardIR(compilationCtx), IRTree.constant(0)));
             // min(0, minLeft^right)
@@ -150,7 +150,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
             IRTreeReturn<DoubleVariable> falseCase = IRTree.max(
                     IRTree.powDI(leftMin, right.getForwardIR(compilationCtx)),
                     IRTree.powDI(leftMax, right.getForwardIR(compilationCtx)));
-            return IRTree.conditionalAssignment(gurad, trueCase, falseCase);
+            return IRTree.conditionalAssignment(guard, trueCase, falseCase);
         }
 
         @Override
@@ -166,7 +166,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
 
             // Test if this is possibly 0 to a positive power, in which case the minimum happens at zero and is zero if
             // the power is even, and happens a the minimum value if it is an odd power.
-            IRTreeReturn<BooleanVariable> gurad = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0.0)),
+            IRTreeReturn<BooleanVariable> guard = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0.0)),
                     IRTree.lessThanEqual(IRTree.constant(0.0), leftMax), IRTree.lessThan(IRTree.constant(0), rightMax));
             // min(0, minLeft^right)
             IRTreeReturn<DoubleVariable> trueCase = IRTree.min(IRTree.constant(0.0),
@@ -175,7 +175,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
             IRTreeReturn<DoubleVariable> falseCase = IRTree.min(
                     IRTree.powDI(leftMin, right.getForwardIR(compilationCtx)),
                     IRTree.powDI(leftMax, right.getForwardIR(compilationCtx)));
-            return IRTree.conditionalAssignment(gurad, trueCase, falseCase);
+            return IRTree.conditionalAssignment(guard, trueCase, falseCase);
         }
     }
 
@@ -201,7 +201,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
 
             // Test if this is possibly 0 to a positive power, in which case the minimum happens at zero and is zero if
             // the power is even, and happens a the minimum value if it is an odd power.
-            IRTreeReturn<BooleanVariable> gurad = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0)),
+            IRTreeReturn<BooleanVariable> guard = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0)),
                     IRTree.lessThanEqual(IRTree.constant(0), leftMax),
                     IRTree.lessThan(right.getForwardIR(compilationCtx), IRTree.constant(0.0)));
             // min(0, minLeft^right)
@@ -210,7 +210,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
             IRTreeReturn<DoubleVariable> falseCase = IRTree.max(
                     IRTree.powID(leftMin, right.getForwardIR(compilationCtx)),
                     IRTree.powID(leftMax, right.getForwardIR(compilationCtx)));
-            return IRTree.conditionalAssignment(gurad, trueCase, falseCase);
+            return IRTree.conditionalAssignment(guard, trueCase, falseCase);
         }
 
         @Override
@@ -226,7 +226,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
 
             // Test if this is possibly 0 to a positive power, in which case the minimum happens at zero and is zero if
             // the power is even, and happens a the minimum value if it is an odd power.
-            IRTreeReturn<BooleanVariable> gurad = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0)),
+            IRTreeReturn<BooleanVariable> guard = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0)),
                     IRTree.lessThanEqual(IRTree.constant(0), leftMax), IRTree.lessThan(IRTree.constant(0.0), rightMax));
             // min(0, minLeft^right)
             IRTreeReturn<DoubleVariable> trueCase = IRTree.min(IRTree.constant(0.0),
@@ -235,7 +235,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
             IRTreeReturn<DoubleVariable> falseCase = IRTree.min(
                     IRTree.powID(leftMin, right.getForwardIR(compilationCtx)),
                     IRTree.powID(leftMax, right.getForwardIR(compilationCtx)));
-            return IRTree.conditionalAssignment(gurad, trueCase, falseCase);
+            return IRTree.conditionalAssignment(guard, trueCase, falseCase);
         }
     }
 
@@ -261,7 +261,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
 
             // Test if this is possibly 0 to a positive power, in which case the minimum happens at zero and is zero if
             // the power is even, and happens a the minimum value if it is an odd power.
-            IRTreeReturn<BooleanVariable> gurad = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0)),
+            IRTreeReturn<BooleanVariable> guard = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0)),
                     IRTree.lessThanEqual(IRTree.constant(0), leftMax),
                     IRTree.lessThan(right.getForwardIR(compilationCtx), IRTree.constant(0)));
             // min(0, minLeft^right)
@@ -269,7 +269,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
             // min(minLeft^b, maxLeft^b)
             IRTreeReturn<IntVariable> falseCase = IRTree.max(IRTree.powII(leftMin, right.getForwardIR(compilationCtx)),
                     IRTree.powII(leftMax, right.getForwardIR(compilationCtx)));
-            return IRTree.conditionalAssignment(gurad, trueCase, falseCase);
+            return IRTree.conditionalAssignment(guard, trueCase, falseCase);
         }
 
         @Override
@@ -285,7 +285,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
 
             // Test if this is possibly 0 to a positive power, in which case the minimum happens at zero and is zero if
             // the power is even, and happens a the minimum value if it is an odd power.
-            IRTreeReturn<BooleanVariable> gurad = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0)),
+            IRTreeReturn<BooleanVariable> guard = IRTree.and(IRTree.lessThanEqual(leftMin, IRTree.constant(0)),
                     IRTree.lessThanEqual(IRTree.constant(0), leftMax), IRTree.lessThan(IRTree.constant(0), rightMax));
             // min(0, minLeft^right)
             IRTreeReturn<IntVariable> trueCase = IRTree.min(IRTree.constant(0),
@@ -293,7 +293,7 @@ public abstract class Pow<A extends NumberVariable<A>, B extends NumberVariable<
             // min(minLeft^b, maxLeft^b)
             IRTreeReturn<IntVariable> falseCase = IRTree.min(IRTree.powII(leftMin, right.getForwardIR(compilationCtx)),
                     IRTree.powII(leftMax, right.getForwardIR(compilationCtx)));
-            return IRTree.conditionalAssignment(gurad, trueCase, falseCase);
+            return IRTree.conditionalAssignment(guard, trueCase, falseCase);
         }
     }
 

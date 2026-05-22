@@ -518,7 +518,7 @@ public abstract class IRTree extends Tree<IRTree> {
             IRTreeReturn<BooleanVariable>... extraConstraints) {
         IRTreeReturn<BooleanVariable> toReturn = IRBinOp.getOr(c1, c2);
         for(int i = 0; i < extraConstraints.length; i++)
-            toReturn = IRBinOp.getAnd(toReturn, extraConstraints[i]);
+            toReturn = IRBinOp.getOr(toReturn, extraConstraints[i]);
         return toReturn;
     }
 
