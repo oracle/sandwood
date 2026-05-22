@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -504,14 +504,22 @@ public abstract class IRTree extends Tree<IRTree> {
         return IRBinOp.getDivideII(a, b);
     }
 
-    public static IRBinOp<BooleanVariable, BooleanVariable, BooleanVariable> and(IRTreeReturn<BooleanVariable> a,
-            IRTreeReturn<BooleanVariable> b) {
-        return IRBinOp.getAnd(a, b);
+    @SafeVarargs
+    public static IRTreeReturn<BooleanVariable> and(IRTreeReturn<BooleanVariable> c1, IRTreeReturn<BooleanVariable> c2,
+            IRTreeReturn<BooleanVariable>... extraConstraints) {
+        IRTreeReturn<BooleanVariable> toReturn = IRBinOp.getAnd(c1, c2);
+        for(int i = 0; i < extraConstraints.length; i++)
+            toReturn = IRBinOp.getAnd(toReturn, extraConstraints[i]);
+        return toReturn;
     }
 
-    public static IRBinOp<BooleanVariable, BooleanVariable, BooleanVariable> or(IRTreeReturn<BooleanVariable> a,
-            IRTreeReturn<BooleanVariable> b) {
-        return IRBinOp.getOr(a, b);
+    @SafeVarargs
+    public static IRTreeReturn<BooleanVariable> or(IRTreeReturn<BooleanVariable> c1, IRTreeReturn<BooleanVariable> c2,
+            IRTreeReturn<BooleanVariable>... extraConstraints) {
+        IRTreeReturn<BooleanVariable> toReturn = IRBinOp.getOr(c1, c2);
+        for(int i = 0; i < extraConstraints.length; i++)
+            toReturn = IRBinOp.getOr(toReturn, extraConstraints[i]);
+        return toReturn;
     }
 
     public static <L extends NumberVariable<L>, R extends NumberVariable<R>> IRBinOp<L, R, BooleanVariable> lessThan(
@@ -559,6 +567,25 @@ public abstract class IRTree extends Tree<IRTree> {
         return IRBinOp.getRemainderDD(a, b);
     }
 
+    public static IRTreeReturn<DoubleVariable> powDD(IRTreeReturn<DoubleVariable> left,
+            IRTreeReturn<DoubleVariable> right) {
+        return functionCallReturn(ExternalFunction.POW, VariableType.DoubleVariable, left, right);
+    }
+
+    public static IRTreeReturn<DoubleVariable> powDI(IRTreeReturn<DoubleVariable> left,
+            IRTreeReturn<IntVariable> right) {
+        return functionCallReturn(ExternalFunction.POW, VariableType.DoubleVariable, left, right);
+    }
+
+    public static IRTreeReturn<DoubleVariable> powID(IRTreeReturn<IntVariable> left,
+            IRTreeReturn<DoubleVariable> right) {
+        return functionCallReturn(ExternalFunction.POW, VariableType.DoubleVariable, left, right);
+    }
+
+    public static IRTreeReturn<IntVariable> powII(IRTreeReturn<IntVariable> left, IRTreeReturn<IntVariable> right) {
+        return functionCallReturn(ExternalFunction.POW, VariableType.IntVariable, left, right);
+    }
+
     public static <A extends NumberVariable<A>> IRMax<A> max(IRTreeReturn<A> a, IRTreeReturn<A> b) {
         return IRMax.max(a, b);
     }
@@ -595,6 +622,14 @@ public abstract class IRTree extends Tree<IRTree> {
 
     public static <A extends NumberVariable<A>> IRTreeReturn<DoubleVariable> sqrt(IRTreeReturn<A> input) {
         return functionCallReturn(ExternalFunction.SQRT, VariableType.DoubleVariable, input);
+    }
+
+    public static <A extends NumberVariable<A>> IRTreeReturn<DoubleVariable> sin(IRTreeReturn<A> input) {
+        return functionCallReturn(ExternalFunction.SIN, VariableType.DoubleVariable, input);
+    }
+
+    public static <A extends NumberVariable<A>> IRTreeReturn<DoubleVariable> cos(IRTreeReturn<A> input) {
+        return functionCallReturn(ExternalFunction.COS, VariableType.DoubleVariable, input);
     }
 
     public static <A extends NumberVariable<A>> IRNegate<A> negate(IRTreeReturn<A> input) {
