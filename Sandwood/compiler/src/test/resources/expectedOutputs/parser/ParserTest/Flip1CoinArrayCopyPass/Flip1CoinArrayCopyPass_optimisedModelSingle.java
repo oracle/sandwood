@@ -25,7 +25,7 @@ public final class Flip1CoinArrayCopyPass extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$bias(value);
+            system$c.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class Flip1CoinArrayCopyPass extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample10(fixed);
+                system$c.set$fixedFlag$sample10(fixed, allocated);
             }
         }
 
@@ -95,7 +95,7 @@ public final class Flip1CoinArrayCopyPass extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$samples(value); }
+        protected void setValueInternal(int value) { system$c.set$samples(value, allocated); }
     };
 
     /**
@@ -114,7 +114,7 @@ public final class Flip1CoinArrayCopyPass extends Model {
         }
 
         @Override
-        protected void setValueInternal(boolean[] value) { system$c.set$flipsMeasured(value); }
+        protected void setValueInternal(boolean[] value) { system$c.set$flipsMeasured(value, allocated); }
     };
 
     /**
@@ -200,17 +200,18 @@ public final class Flip1CoinArrayCopyPass extends Model {
     private void transferData(Flip1CoinArrayCopyPass$CoreInterface oldCore, Flip1CoinArrayCopyPass$CoreInterface newCore) {
         //Model inputs
         if(samples.isSet())
-            newCore.set$samples(oldCore.get$samples());
+            newCore.set$samples(oldCore.get$samples(), false);
+
         //Observed scalars
         if(flipsMeasured.isSet())
-            newCore.set$flipsMeasured(oldCore.get$flipsMeasured());
+            newCore.set$flipsMeasured(oldCore.get$flipsMeasured(), false);
 
         //ComputedVariables
         if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
+            newCore.set$bias(oldCore.get$bias(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10());
+        newCore.set$fixedFlag$sample10(oldCore.get$fixedFlag$sample10(), false);
     }
 
     /**

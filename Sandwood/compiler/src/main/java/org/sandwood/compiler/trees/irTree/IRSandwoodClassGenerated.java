@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -19,6 +19,7 @@ import org.sandwood.compiler.compilation.CompilationContext.FieldDesc;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.names.ClassName;
 import org.sandwood.compiler.names.FunctionName;
@@ -95,17 +96,14 @@ public class IRSandwoodClassGenerated {
         }
 
         if(f.fieldType.setter) {
-            ArgDesc<?>[] args = new ArgDesc[1];
+            ArgDesc<?>[] args = new ArgDesc[2];
             VariableDescription<A> valueName = VariableNames.calcVarName("value", f.varDesc.type, false);
             args[0] = new ArgDesc<>(valueName);
+            VariableDescription<BooleanVariable> allocatedName = VariableNames.allocatedFlag();
+            args[1] = new ArgDesc<>(allocatedName);
+
             IRTreeReturn<A> argLoad = IRTree.load(valueName);
-            IRTreeVoid body;
-            if(f.varDesc.type.isArray()) {
-                List<IRTreeVoid> bodyParts = new ArrayList<>();
-                bodyParts.add(IRTree.store(f.varDesc, argLoad, Tree.NoComment));
-                body = IRTree.sequential(bodyParts, "Set " + f.varDesc);
-            } else
-                body = IRTree.store(f.varDesc, argLoad, Tree.NoComment);
+            IRTreeVoid body = IRTree.store(f.varDesc, argLoad, IRTree.NoComment);
 
             // Add in any side effects.
             Set<WrappedTree<IRTree, IRTreeVoid>> setSideEffects = f.getSetSideEffects();

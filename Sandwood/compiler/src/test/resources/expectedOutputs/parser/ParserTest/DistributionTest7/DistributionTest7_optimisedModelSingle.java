@@ -25,7 +25,7 @@ public final class DistributionTest7 extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$cat(value);
+            system$c.set$cat(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class DistributionTest7 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample31(fixed);
+                system$c.set$fixedFlag$sample31(fixed, allocated);
             }
         }
 
@@ -102,8 +102,8 @@ public final class DistributionTest7 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample31(fixed);
-                system$c.set$fixedFlag$sample45(fixed);
+                system$c.set$fixedFlag$sample31(fixed, allocated);
+                system$c.set$fixedFlag$sample45(fixed, allocated);
             }
         }
 
@@ -131,7 +131,7 @@ public final class DistributionTest7 extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$var43(value);
+            system$c.set$var43(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -162,7 +162,7 @@ public final class DistributionTest7 extends Model {
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$observedData(value); }
+        protected void setValueInternal(double value) { system$c.set$observedData(value, allocated); }
     };
 
     /**
@@ -220,18 +220,19 @@ public final class DistributionTest7 extends Model {
     }
 
     private void transferData(DistributionTest7$CoreInterface oldCore, DistributionTest7$CoreInterface newCore) {
+
         //Observed scalars
         if(observedData.isSet())
-            newCore.set$observedData(oldCore.get$observedData());
+            newCore.set$observedData(oldCore.get$observedData(), false);
 
         //ComputedVariables
         if($cat.isSet())
-            newCore.set$cat(oldCore.get$cat());
+            newCore.set$cat(oldCore.get$cat(), false);
         if($var43.isSet())
-            newCore.set$var43(oldCore.get$var43());
+            newCore.set$var43(oldCore.get$var43(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample31(oldCore.get$fixedFlag$sample31());
+        newCore.set$fixedFlag$sample31(oldCore.get$fixedFlag$sample31(), false);
     }
 
     /**

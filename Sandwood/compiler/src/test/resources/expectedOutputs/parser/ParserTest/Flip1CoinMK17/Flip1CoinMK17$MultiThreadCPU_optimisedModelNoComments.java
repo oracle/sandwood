@@ -5,6 +5,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinMK17$CoreInterface {
 	private double bias;
+	private boolean constrainedFlag$sample7 = true;
 	private boolean fixedFlag$sample7 = false;
 	private boolean fixedProbFlag$sample7 = false;
 	private boolean fixedProbFlag$sample9 = false;
@@ -27,7 +28,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		bias = cv$value;
 		fixedProbFlag$sample7 = false;
 		fixedProbFlag$sample9 = false;
@@ -39,8 +40,9 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value) {
+	public final void set$fixedFlag$sample7(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample7 = cv$value;
+		constrainedFlag$sample7 = (cv$value || constrainedFlag$sample7);
 		fixedProbFlag$sample7 = (cv$value && fixedProbFlag$sample7);
 		fixedProbFlag$sample9 = (cv$value && fixedProbFlag$sample9);
 	}
@@ -56,7 +58,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$flipMeasured(boolean cv$value) {
+	public final void set$flipMeasured(boolean cv$value, boolean allocated$) {
 		flipMeasured = cv$value;
 	}
 
@@ -85,6 +87,26 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		return logProbability$flip;
 	}
 
+	private final void drawValueSample7() {
+		bias = (DistributionSampling.sampleTruncatedGaussian(RNG$, -0.5, 0.3085375387259869, 0.5, 0.6914624612740131) + 0.5);
+	}
+
+	private final void inferSample7() {
+		constrainedFlag$sample7 = false;
+		double cv$originalValue = bias;
+		double cv$var = ((bias * bias) * 0.010000000000000002);
+		if((cv$var < 0.010000000000000002))
+			cv$var = 0.010000000000000002;
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
+		constrainedFlag$sample7 = true;
+		double cv$originalProbability = ((((0.0 <= bias) && (bias <= 1.0))?Math.log((flip?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY) + (((0.0 <= bias) && (bias <= 1.0))?(DistributionSampling.logProbabilityGaussian((bias - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY));
+		bias = cv$proposedValue;
+		constrainedFlag$sample7 = true;
+		double cv$ratio = (((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((flip?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?(DistributionSampling.logProbabilityGaussian((cv$proposedValue - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY)) - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+			bias = cv$originalValue;
+	}
+
 	private final void logProbabilityValue$sample7() {
 		if(!fixedProbFlag$sample7) {
 			double cv$distributionAccumulator = (((0.0 <= bias) && (bias <= 1.0))?(DistributionSampling.logProbabilityGaussian((bias - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY);
@@ -102,7 +124,7 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	private final void logProbabilityValue$sample9() {
 		if(!fixedProbFlag$sample9) {
-			double cv$distributionAccumulator = Math.log((flip?bias:(1.0 - bias)));
+			double cv$distributionAccumulator = (((0.0 <= bias) && (bias <= 1.0))?Math.log((flip?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY);
 			logProbability$bernoulli = cv$distributionAccumulator;
 			logProbability$flip = cv$distributionAccumulator;
 			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
@@ -113,19 +135,6 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$$model = (logProbability$$model + logProbability$flip);
 			logProbability$$evidence = (logProbability$$evidence + logProbability$flip);
 		}
-	}
-
-	private final void sample7() {
-		double cv$originalValue = bias;
-		double cv$var = ((bias * bias) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
-		double cv$originalProbability = (Math.log((flip?bias:(1.0 - bias))) + (((0.0 <= bias) && (bias <= 1.0))?(DistributionSampling.logProbabilityGaussian((bias - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY));
-		bias = cv$proposedValue;
-		double cv$ratio = ((Math.log((flip?cv$proposedValue:(1.0 - cv$proposedValue))) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?(DistributionSampling.logProbabilityGaussian((cv$proposedValue - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY)) - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			bias = cv$originalValue;
 	}
 
 	@Override
@@ -169,12 +178,11 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void gibbsRound() {
 		if(!fixedFlag$sample7)
-			sample7();
+			inferSample7();
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample7)
+			drawValueSample7();
 	}
-
-	@Override
-	public final void initializeConstants() {}
 
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
@@ -185,6 +193,9 @@ final class Flip1CoinMK17$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample9)
 			logProbability$flip = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

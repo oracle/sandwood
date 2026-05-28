@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -24,6 +24,7 @@ import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.compilation.ExternalFunction;
 import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.compilation.inference.InferenceGeneratorScalarProb;
+import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
@@ -55,26 +56,22 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
         extends InferenceGeneratorScalarProb<A, B, MetropolisHastingsScalarFunctions.MetropolisHastingsData<A, B>> {
     protected static class MetropolisHastingsData<A extends ScalarVariable<A>, B extends RandomVariable<A, B>>
             extends InferenceGeneratorScalarProb.ScalarProbFunctionData<A, B> {
-        final VariableDescription<DoubleVariable> originalProbabilityName;
-        final VariableDescription<DoubleVariable> proposedProbabilityName;
         final VariableDescription<A> originalValueName;
         final VariableDescription<A> proposedValueName;
-        /**
-         * Value used to capture the tree that sets the new value. This is done so that the value can be placed in a
-         * scope to prevent any name collisions with the code to reset in the event of a failed proposal.
-         */
-        IRTreeVoid sampleTree;
+
+        public ScopeConstructor sampleTargetScope;
 
         protected MetropolisHastingsData(SampleTask<A, B> sample, CompilationContext compilationCtx) {
             super(sample, IntVariable.intVariable(2), compilationCtx);
-            originalProbabilityName = VariableNames.calcVarName("originalProbability", VariableType.DoubleVariable,
-                    true);
             originalValueName = VariableNames.calcVarName("originalValue", sample.getOutputType(), true);
-            proposedProbabilityName = VariableNames.calcVarName("proposedProbability", VariableType.DoubleVariable,
-                    true);
             proposedValueName = VariableNames.calcVarName("proposedValue", sample.getOutputType(), true);
         }
     }
+
+    private static final VariableDescription<DoubleVariable> originalProbabilityName = VariableNames
+            .calcVarName("originalProbability", VariableType.DoubleVariable, true);
+    private static final VariableDescription<DoubleVariable> proposedProbabilityName = VariableNames
+            .calcVarName("proposedProbability", VariableType.DoubleVariable, true);
 
     @Override
     protected String getInferenceType() {
@@ -84,6 +81,31 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
     @Override
     protected MetropolisHastingsData<A, B> getFunctionData(SampleTask<A, B> sample, CompilationContext compilationCtx) {
         return new MetropolisHastingsData<>(sample, compilationCtx);
+    }
+
+    /**
+     * Method to construct the scope for the mMetropolisHastings trials to occur in, complete with guards for early
+     * termination if there is no observed data.
+     * 
+     * @param funcData The functionData.
+     * @return The scope to operate in.
+     * 
+     */
+    @Override
+    protected ScopeConstructor getBackTraceScope(MetropolisHastingsData<A, B> funcData,
+            CompilationContext compilationCtx) {
+        ScopeConstructor targetScope = super.getBackTraceScope(funcData, compilationCtx);
+        IRTreeReturn<BooleanVariable> guard = or(TreeUtils.getIsConstrained(funcData.sampleDesc.sample, compilationCtx),
+                eq(funcData.valuePos, constant(0)));
+        targetScope = targetScope.addCondition(guard).ifScopeConstructor();
+        funcData.sampleTargetScope = targetScope;
+        return targetScope;
+    }
+
+    @Override
+    protected ScopeConstructor getSampleTaskScope(MetropolisHastingsData<A, B> funcData,
+            CompilationContext compilationCtx) {
+        return funcData.sampleTargetScope;
     }
 
     /**
@@ -103,14 +125,14 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
         compilationCtx.addTreeToScope(GlobalScope.scope, originalValueTreeInit);
 
         IRTreeReturn<DoubleVariable> probOriginalValue = constant(0.0);
-        IRTreeVoid originalProbability = initializeVariable(funcData.originalProbabilityName, probOriginalValue,
+        IRTreeVoid originalProbability = initializeVariable(originalProbabilityName, probOriginalValue,
                 "The probability of the random variable generating the originally sampled value");
         compilationCtx.addTreeToScope(GlobalScope.scope, originalProbability);
 
         getProposedValue(funcData, compilationCtx);
 
         IRTreeReturn<DoubleVariable> probProposedValue = constant(0.0);
-        IRTreeVoid proposedProbability = initializeVariable(funcData.proposedProbabilityName, probProposedValue,
+        IRTreeVoid proposedProbability = initializeVariable(proposedProbabilityName, probProposedValue,
                 "The probability of the random variable generating the new sample value.");
         compilationCtx.addTreeToScope(GlobalScope.scope, proposedProbability);
     }
@@ -174,8 +196,7 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
     protected void addSampleValueTree(MetropolisHastingsData<A, B> funcData, CompilationContext compilationCtx) {
         VariableDescription<DoubleVariable> ratioName = VariableNames.calcVarName("ratio", VariableType.DoubleVariable,
                 true);
-        IRTreeReturn<DoubleVariable> ratio = subtractDD(load(funcData.proposedProbabilityName),
-                load(funcData.originalProbabilityName));
+        IRTreeReturn<DoubleVariable> ratio = subtractDD(load(proposedProbabilityName), load(originalProbabilityName));
         compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(ratioName, ratio,
                 "The probability ration for the proposed value and the current value."));
 
@@ -185,13 +206,16 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
         // is 0 an impossible value will be accepted.
         IRTreeReturn<BooleanVariable> guard = lessThanEqual(load(ratioName), bound);
         guard = or(guard, functionCallReturn(ExternalFunction.IS_NAN, VariableType.BooleanVariable, load(ratioName)));
+
         ScopeConstructor targetScope = ScopeConstructor.construct(funcData.sampleDesc.sample,
                 "Test if the probability of the sample is sufficient "
                         + "to keep the value. This needs to be less than or equal as otherwise if the proposed value is not possible and "
                         + "the random value is 0 an impossible value will be accepted.",
                 compilationCtx);
+        targetScope = targetScope.addCondition(eq(funcData.valuePos, constant(1))).ifScopeConstructor();
         targetScope = targetScope.addCondition(guard).ifScopeConstructor();
         targetScope = targetScope.addComment("If it is not revert the changes.");
+
         // Update set tree to include resetting of the sample value, and then reusing
         // the tree to set all the intermediate variables etc.
         targetScope = targetScope.addComment("Set the sample value");
@@ -235,16 +259,13 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
     @Override
     protected void saveBackTraceProbability(MetropolisHastingsData<A, B> funcData, IRTreeReturn<DoubleVariable> value,
             CompilationContext compilationCtx) {
-        compilationCtx.addTreeToScope(GlobalScope.scope,
-                ifElse(eq(funcData.valuePos, constant(0)),
-                        store(funcData.originalProbabilityName, value, Tree.NoComment),
-                        "Save the probability of the original value.",
-                        store(funcData.proposedProbabilityName, value, Tree.NoComment),
-                        "Save the probability of the proposed value."));
+        compilationCtx.addTreeToScope(GlobalScope.scope, ifElse(eq(funcData.valuePos, constant(0)),
+                store(originalProbabilityName, value, Tree.NoComment), "Save the probability of the original value.",
+                store(proposedProbabilityName, value, Tree.NoComment), "Save the probability of the proposed value."));
     }
 
     @Override
-    protected void addDistributionProbabilities(MetropolisHastingsData<A, B> funcData,
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, MetropolisHastingsData<A, B> funcData,
             CompilationContext compilationCtx) {
         throw new CompilerException("Distributions generation is not supported in Metropolis Hastings Inference.");
     }

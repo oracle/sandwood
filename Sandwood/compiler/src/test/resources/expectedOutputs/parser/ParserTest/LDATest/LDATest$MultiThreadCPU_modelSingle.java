@@ -10,6 +10,9 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 	// Declare the variables for the model.
 	private double[] alpha;
 	private double[] beta;
+	private boolean[] constrainedFlag$sample42;
+	private boolean[] constrainedFlag$sample58;
+	private boolean[][] constrainedFlag$sample90;
 	private double[][] cv$var42$countGlobal;
 	private double[][] cv$var57$countGlobal;
 	private double[][] cv$var88$stateProbabilityGlobal;
@@ -60,8 +63,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Setter for documents.
 	@Override
-	public final void set$documents(int[][] cv$value) {
-		// Set documents
+	public final void set$documents(int[][] cv$value, boolean allocated$) {
 		documents = cv$value;
 	}
 
@@ -73,10 +75,17 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Setter for fixedFlag$sample42.
 	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value) {
+	public final void set$fixedFlag$sample42(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample42 including if probabilities
 		// need to be updated.
 		fixedFlag$sample42 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
+				constrainedFlag$sample42[index$constrainedFlag$sample42$1] = fixedFlag$sample42;
+		}
 		
 		// Should the probability of sample 42 be set to fixed. This will only every change
 		// the flag to false.
@@ -91,10 +100,17 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Setter for fixedFlag$sample58.
 	@Override
-	public final void set$fixedFlag$sample58(boolean cv$value) {
+	public final void set$fixedFlag$sample58(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample58 including if probabilities
 		// need to be updated.
 		fixedFlag$sample58 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
+				constrainedFlag$sample58[index$constrainedFlag$sample58$1] = fixedFlag$sample58;
+		}
 		
 		// Should the probability of sample 58 be set to fixed. This will only every change
 		// the flag to false.
@@ -109,8 +125,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Setter for length$documents.
 	@Override
-	public final void set$length$documents(int[] cv$value) {
-		// Set length$documents
+	public final void set$length$documents(int[] cv$value, boolean allocated$) {
 		length$documents = cv$value;
 	}
 
@@ -152,7 +167,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Setter for noTopics.
 	@Override
-	public final void set$noTopics(int cv$value) {
+	public final void set$noTopics(int cv$value, boolean allocated$) {
 		noTopics = cv$value;
 	}
 
@@ -164,10 +179,9 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Setter for phi.
 	@Override
-	public final void set$phi(double[][] cv$value) {
+	public final void set$phi(double[][] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of phi including if probabilities need to be
 		// updated.
-		// Set phi
 		phi = cv$value;
 		
 		// Unset the fixed probability flag for sample 42 as it depends on phi.
@@ -182,10 +196,9 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Setter for theta.
 	@Override
-	public final void set$theta(double[][] cv$value) {
+	public final void set$theta(double[][] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of theta including if probabilities need to
 		// be updated.
-		// Set theta
 		theta = cv$value;
 		
 		// Unset the fixed probability flag for sample 58 as it depends on theta.
@@ -200,7 +213,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Setter for vocabSize.
 	@Override
-	public final void set$vocabSize(int cv$value) {
+	public final void set$vocabSize(int cv$value, boolean allocated$) {
 		vocabSize = cv$value;
 	}
 
@@ -218,9 +231,340 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 
 	// Setter for z.
 	@Override
-	public final void set$z(int[][] cv$value) {
-		// Set z
+	public final void set$z(int[][] cv$value, boolean allocated$) {
 		z = cv$value;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample42
+	private final void drawValueSample42(int var41, int threadID$cv$var41, Rng RNG$) {
+		double[] var42 = phi[var41];
+		DistributionSampling.sampleDirichlet(RNG$, beta, vocabSize, var42);
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample58
+	private final void drawValueSample58(int var56, int threadID$cv$var56, Rng RNG$) {
+		double[] var57 = theta[var56];
+		DistributionSampling.sampleDirichlet(RNG$, alpha, noTopics, var57);
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample90
+	private final void drawValueSample90(int i$var71, int j, int threadID$cv$j, Rng RNG$) {
+		z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, theta[i$var71], noTopics);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 42 drawn from Dirichlet 30. Inference was performed using a Dirichlet
+	// to Categorical conjugate prior.
+	private final void inferSample42(int var41, int threadID$cv$var41, Rng RNG$) {
+		if(true) {
+			constrainedFlag$sample42[((var41 - 0) / 1)] = false;
+			
+			// A reference local to the function for the sample variable.
+			double[] cv$targetLocal = phi[var41];
+			
+			// A local reference to the scratch space.
+			double[] cv$countLocal = cv$var42$countGlobal[threadID$cv$var41];
+			
+			// Get the length of the array
+			int cv$arrayLength = vocabSize;
+			
+			// Initialize the array values to 0.
+			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
+				cv$countLocal[cv$loopIndex] = 0.0;
+			{
+				// Processing random variable 90.
+				{
+					// Looking for a path between Sample 42 and consumer Categorical 90.
+					{
+						{
+							for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+								for(int j = 0; j < length$documents[i$var71]; j += 1) {
+									if((var41 == z[((i$var71 - 0) / 1)][((j - 0) / 1)])) {
+										// Processing sample task 93 of consumer random variable null.
+										{
+											{
+												// Flag recording if this sample task of the consuming random variable is constrained.
+												boolean cv$sampleConstrained = true;
+												if(cv$sampleConstrained) {
+													// Mark that the sample has observed constrained data.
+													constrainedFlag$sample42[((var41 - 0) / 1)] = true;
+													{
+														{
+															{
+																{
+																	{
+																		// Increment the sample counter with the value sampled by sample task 93 of random
+																		// variable var90
+																		cv$countLocal[w[i$var71][j]] = (cv$countLocal[w[i$var71][j]] + 1.0);
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample42[((var41 - 0) / 1)])
+				// Calculate the new sample value
+				// 
+				// Calculate a new sample value and write it into cv$targetLocal.
+				Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$countLocal, cv$targetLocal, vocabSize);
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 58 drawn from Dirichlet 44. Inference was performed using a Dirichlet
+	// to Categorical conjugate prior.
+	private final void inferSample58(int var56, int threadID$cv$var56, Rng RNG$) {
+		if(true) {
+			constrainedFlag$sample58[((var56 - 0) / 1)] = false;
+			
+			// A reference local to the function for the sample variable.
+			double[] cv$targetLocal = theta[var56];
+			
+			// A local reference to the scratch space.
+			double[] cv$countLocal = cv$var57$countGlobal[threadID$cv$var56];
+			
+			// Get the length of the array
+			int cv$arrayLength = noTopics;
+			
+			// Initialize the array values to 0.
+			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
+				cv$countLocal[cv$loopIndex] = 0.0;
+			{
+				// Processing random variable 87.
+				{
+					// Looking for a path between Sample 58 and consumer Categorical 87.
+					{
+						{
+							for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
+								if((var56 == i$var71)) {
+									for(int j = 0; j < length$documents[i$var71]; j += 1) {
+										// Flag recording if this sample task of the consuming random variable is constrained.
+										boolean cv$sampleConstrained = constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)];
+										if(cv$sampleConstrained) {
+											// Mark that the sample has observed constrained data.
+											constrainedFlag$sample58[((var56 - 0) / 1)] = true;
+											{
+												{
+													{
+														{
+															{
+																// Increment the sample counter with the value sampled by sample task 90 of random
+																// variable var87
+																cv$countLocal[z[((i$var71 - 0) / 1)][((j - 0) / 1)]] = (cv$countLocal[z[((i$var71 - 0) / 1)][((j - 0) / 1)]] + 1.0);
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample58[((var56 - 0) / 1)])
+				// Calculate the new sample value
+				// 
+				// Calculate a new sample value and write it into cv$targetLocal.
+				Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$countLocal, cv$targetLocal, noTopics);
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 90 drawn from Categorical 87. Inference was performed using variable
+	// marginalization.
+	private final void inferSample90(int i$var71, int j, int threadID$cv$j, Rng RNG$) {
+		if(true) {
+			constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = false;
+			
+			// Calculate the number of states to evaluate.
+			int cv$numStates = 0;
+			{
+				// variable marginalization
+				cv$numStates = Math.max(cv$numStates, noTopics);
+			}
+			
+			// Get a local reference to the scratch space.
+			double[] cv$stateProbabilityLocal = cv$var88$stateProbabilityGlobal[threadID$cv$j];
+			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
+				// Initialize the summed probabilities to 0.
+				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
+				
+				// Initialize a counter to track the reached distributions.
+				double cv$reachedDistributionSourceRV = 0.0;
+				
+				// Initialize a log space accumulator to take the product of all the distribution
+				// probabilities.
+				double cv$accumulatedDistributionProbabilities = 0.0;
+				
+				// The value currently being tested
+				int cv$currentValue;
+				
+				// Value of the variable at this index
+				cv$currentValue = cv$valuePos;
+				
+				// Write out the new value of the sample.
+				z[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$currentValue;
+				{
+					// Record the reached probability density.
+					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
+					
+					// Constructing a random variable input for use later.
+					double[] var86 = theta[i$var71];
+					
+					// An accumulator to allow the value for each distribution to be constructed before
+					// it is added to the index probabilities.
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < noTopics)) && (0 < noTopics)) && (0.0 <= var86[cv$currentValue])) && (var86[cv$currentValue] <= 1.0))?Math.log(var86[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					
+					// Processing random variable 90.
+					{
+						{
+							{
+								// Processing sample task 93 of consumer random variable null.
+								{
+									{
+										// Flag recording if this sample task of the consuming random variable is constrained.
+										boolean cv$sampleConstrained = true;
+										if(cv$sampleConstrained) {
+											// Mark that the sample has observed constrained data.
+											constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)] = true;
+											
+											// Set an accumulator to sum the probabilities for each possible configuration of
+											// inputs.
+											double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+											
+											// Set an accumulator to record the consumer distributions not seen. Initially set
+											// to 1 as seen values will be deducted from this value.
+											double cv$consumerDistributionProbabilityAccumulator = 1.0;
+											{
+												{
+													{
+														{
+															{
+																// Constructing a random variable input for use later.
+																double[] var89 = phi[cv$currentValue];
+																
+																// Record the probability of sample task 93 generating output with current configuration.
+																if(((Math.log(1.0) + ((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																else {
+																	// If the second value is -infinity.
+																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY));
+																	else
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[w[i$var71][j]])) && (var89[w[i$var71][j]] <= 1.0))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)));
+																}
+																
+																// Recorded the probability of reaching sample task 93 with the current configuration.
+																cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+															}
+														}
+													}
+												}
+											}
+											
+											// A check to ensure rounding of floating point values can never result in a negative
+											// value.
+											cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+											
+											// Multiply (log space add) in the probability of the sample task to the overall probability
+											// for this configuration of the source random variable.
+											if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+												cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+											else {
+												// If the second value is -infinity.
+												if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+													cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+												else
+													cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					
+					// Add the values for the source and any standard consumers for this configuration
+					// of arguments to the source.
+					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+					else {
+						// If the second value is -infinity.
+						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+							cv$stateProbabilityValue = cv$accumulatedProbabilities;
+						else
+							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
+					}
+				}
+				
+				// Save the calculated index value into the array of index value probabilities
+				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+			}
+			if(constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)]) {
+				// The sum of all the probabilities in log space
+				double cv$logSum = 0.0;
+				
+				// Sum all the values
+				{
+					// Initialize the max to the first element.
+					double cv$lseMax = cv$stateProbabilityLocal[0];
+					
+					// Find max value.
+					for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
+						double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
+						if((cv$lseMax < cv$lseElementValue))
+							cv$lseMax = cv$lseElementValue;
+					}
+					
+					// If the maximum value is -infinity return -infinity.
+					if((cv$lseMax == Double.NEGATIVE_INFINITY))
+						cv$logSum = Double.NEGATIVE_INFINITY;
+					
+					// Sum the values in the array.
+					else {
+						// Initialize the sum of the array elements
+						double cv$lseSum = 0.0;
+						
+						// Offset values, move to normal space, and sum.
+						for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
+							cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
+						
+						// Increment the value of the target, moving the value back into log space.
+						cv$logSum = (cv$logSum + (Math.log(cv$lseSum) + cv$lseMax));
+					}
+				}
+				
+				// If all the sum is zero, just share the probability evenly.
+				if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+					// Normalize log space values and move to normal space
+					for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+						cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numStates);
+				} else {
+					// Normalize log space values and move to normal space
+					for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+						cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
+				}
+				
+				// Set array values that are not computed for the input to negative infinity.
+				for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
+					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				
+				// Write out the new value of the sample.
+				z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
+			}
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample42 using sampled
@@ -483,7 +827,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 								double[] var86 = theta[i$var71];
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noTopics))?Math.log(var86[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noTopics)) && (0 < noTopics)) && (0.0 <= var86[cv$sampleValue])) && (var86[cv$sampleValue] <= 1.0))?Math.log(var86[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -560,7 +904,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 								double[] var89 = phi[z[((i$var71 - 0) / 1)][((j - 0) / 1)]];
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < vocabSize))?Math.log(var89[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < vocabSize)) && (0 < vocabSize)) && (0.0 <= var89[cv$sampleValue])) && (var89[cv$sampleValue] <= 1.0))?Math.log(var89[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -611,284 +955,6 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		// Add probability to model
 		logProbability$$model = (logProbability$$model + cv$accumulator);
 		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 42 drawn from Dirichlet 30. Inference was performed using a Dirichlet
-	// to Categorical conjugate prior.
-	private final void sample42(int var41, int threadID$cv$var41, Rng RNG$) {
-		if(true) {
-			// A reference local to the function for the sample variable.
-			double[] cv$targetLocal = phi[var41];
-			
-			// A local reference to the scratch space.
-			double[] cv$countLocal = cv$var42$countGlobal[threadID$cv$var41];
-			
-			// Get the length of the array
-			int cv$arrayLength = vocabSize;
-			
-			// Initialize the array values to 0.
-			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-				cv$countLocal[cv$loopIndex] = 0.0;
-			{
-				// Processing random variable 90.
-				{
-					// Looking for a path between Sample 42 and consumer Categorical 90.
-					{
-						{
-							for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-								for(int j = 0; j < length$documents[i$var71]; j += 1) {
-									if((var41 == z[((i$var71 - 0) / 1)][((j - 0) / 1)])) {
-										// Processing sample task 93 of consumer random variable null.
-										{
-											{
-												{
-													{
-														{
-															{
-																{
-																	// Increment the sample counter with the value sampled by sample task 93 of random
-																	// variable var90
-																	cv$countLocal[w[i$var71][j]] = (cv$countLocal[w[i$var71][j]] + 1.0);
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			// Calculate the new sample value
-			// 
-			// Calculate a new sample value and write it into cv$targetLocal.
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, beta, cv$countLocal, cv$targetLocal, vocabSize);
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 58 drawn from Dirichlet 44. Inference was performed using a Dirichlet
-	// to Categorical conjugate prior.
-	private final void sample58(int var56, int threadID$cv$var56, Rng RNG$) {
-		if(true) {
-			// A reference local to the function for the sample variable.
-			double[] cv$targetLocal = theta[var56];
-			
-			// A local reference to the scratch space.
-			double[] cv$countLocal = cv$var57$countGlobal[threadID$cv$var56];
-			
-			// Get the length of the array
-			int cv$arrayLength = noTopics;
-			
-			// Initialize the array values to 0.
-			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-				cv$countLocal[cv$loopIndex] = 0.0;
-			{
-				// Processing random variable 87.
-				{
-					// Looking for a path between Sample 58 and consumer Categorical 87.
-					{
-						{
-							for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1) {
-								if((var56 == i$var71)) {
-									for(int j = 0; j < length$documents[i$var71]; j += 1)
-										// Increment the sample counter with the value sampled by sample task 90 of random
-										// variable var87
-										cv$countLocal[z[((i$var71 - 0) / 1)][((j - 0) / 1)]] = (cv$countLocal[z[((i$var71 - 0) / 1)][((j - 0) / 1)]] + 1.0);
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			// Calculate the new sample value
-			// 
-			// Calculate a new sample value and write it into cv$targetLocal.
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, alpha, cv$countLocal, cv$targetLocal, noTopics);
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 90 drawn from Categorical 87. Inference was performed using variable
-	// marginalization.
-	private final void sample90(int i$var71, int j, int threadID$cv$j, Rng RNG$) {
-		if(true) {
-			// Calculate the number of states to evaluate.
-			int cv$numStates = 0;
-			{
-				// variable marginalization
-				cv$numStates = Math.max(cv$numStates, noTopics);
-			}
-			
-			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var88$stateProbabilityGlobal[threadID$cv$j];
-			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				// Initialize the summed probabilities to 0.
-				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
-				
-				// Initialize a counter to track the reached distributions.
-				double cv$reachedDistributionSourceRV = 0.0;
-				
-				// Initialize a log space accumulator to take the product of all the distribution
-				// probabilities.
-				double cv$accumulatedDistributionProbabilities = 0.0;
-				
-				// The value currently being tested
-				int cv$currentValue;
-				
-				// Value of the variable at this index
-				cv$currentValue = cv$valuePos;
-				
-				// Write out the new value of the sample.
-				z[((i$var71 - 0) / 1)][((j - 0) / 1)] = cv$currentValue;
-				{
-					// Record the reached probability density.
-					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					
-					// Constructing a random variable input for use later.
-					double[] var86 = theta[i$var71];
-					
-					// An accumulator to allow the value for each distribution to be constructed before
-					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (((0.0 <= cv$currentValue) && (cv$currentValue < noTopics))?Math.log(var86[cv$currentValue]):Double.NEGATIVE_INFINITY));
-					
-					// Processing random variable 90.
-					{
-						{
-							{
-								// Processing sample task 93 of consumer random variable null.
-								{
-									{
-										// Set an accumulator to sum the probabilities for each possible configuration of
-										// inputs.
-										double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-										
-										// Set an accumulator to record the consumer distributions not seen. Initially set
-										// to 1 as seen values will be deducted from this value.
-										double cv$consumerDistributionProbabilityAccumulator = 1.0;
-										{
-											{
-												{
-													{
-														{
-															// Constructing a random variable input for use later.
-															double[] var89 = phi[cv$currentValue];
-															
-															// Record the probability of sample task 93 generating output with current configuration.
-															if(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-															else {
-																// If the second value is -infinity.
-																if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																	cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY));
-																else
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= w[i$var71][j]) && (w[i$var71][j] < vocabSize))?Math.log(var89[w[i$var71][j]]):Double.NEGATIVE_INFINITY)));
-															}
-															
-															// Recorded the probability of reaching sample task 93 with the current configuration.
-															cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-														}
-													}
-												}
-											}
-										}
-										
-										// A check to ensure rounding of floating point values can never result in a negative
-										// value.
-										cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-										
-										// Multiply (log space add) in the probability of the sample task to the overall probability
-										// for this configuration of the source random variable.
-										if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-											cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-										else {
-											// If the second value is -infinity.
-											if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-												cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-											else
-												cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-										}
-									}
-								}
-							}
-						}
-					}
-					
-					// Add the values for the source and any standard consumers for this configuration
-					// of arguments to the source.
-					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-					else {
-						// If the second value is -infinity.
-						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-							cv$stateProbabilityValue = cv$accumulatedProbabilities;
-						else
-							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-					}
-				}
-				
-				// Save the calculated index value into the array of index value probabilities
-				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-			}
-			
-			// The sum of all the probabilities in log space
-			double cv$logSum = 0.0;
-			
-			// Sum all the values
-			{
-				// Initialize the max to the first element.
-				double cv$lseMax = cv$stateProbabilityLocal[0];
-				
-				// Find max value.
-				for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
-					double cv$lseElementValue = cv$stateProbabilityLocal[cv$lseIndex];
-					if((cv$lseMax < cv$lseElementValue))
-						cv$lseMax = cv$lseElementValue;
-				}
-				
-				// If the maximum value is -infinity return -infinity.
-				if((cv$lseMax == Double.NEGATIVE_INFINITY))
-					cv$logSum = Double.NEGATIVE_INFINITY;
-				
-				// Sum the values in the array.
-				else {
-					// Initialize the sum of the array elements
-					double cv$lseSum = 0.0;
-					
-					// Offset values, move to normal space, and sum.
-					for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
-						cv$lseSum = (cv$lseSum + Math.exp((cv$stateProbabilityLocal[cv$lseIndex] - cv$lseMax)));
-					
-					// Increment the value of the target, moving the value back into log space.
-					cv$logSum = (cv$logSum + (Math.log(cv$lseSum) + cv$lseMax));
-				}
-			}
-			
-			// If all the sum is zero, just share the probability evenly.
-			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-				// Normalize log space values and move to normal space
-				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					cv$stateProbabilityLocal[cv$indexName] = (1.0 / cv$numStates);
-			} else {
-				// Normalize log space values and move to normal space
-				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					cv$stateProbabilityLocal[cv$indexName] = Math.exp((cv$stateProbabilityLocal[cv$indexName] - cv$logSum));
-			}
-			
-			// Set array values that are not computed for the input to negative infinity.
-			for(int cv$indexName = cv$numStates; cv$indexName < cv$stateProbabilityLocal.length; cv$indexName += 1)
-				cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
-			
-			// Write out the new value of the sample.
-			z[((i$var71 - 0) / 1)][((j - 0) / 1)] = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
-		}
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -995,6 +1061,23 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 			z = new int[((((length$documents.length - 1) - 0) / 1) + 1)][];
 			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
 				z[((i$var71 - 0) / 1)] = new int[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample90
+		{
+			constrainedFlag$sample90 = new boolean[((((length$documents.length - 1) - 0) / 1) + 1)][];
+			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+				constrainedFlag$sample90[((i$var71 - 0) / 1)] = new boolean[((((length$documents[i$var71] - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample42
+		{
+			constrainedFlag$sample42 = new boolean[((((noTopics - 1) - 0) / 1) + 1)];
+		}
+		
+		// Constructor for constrainedFlag$sample58
+		{
+			constrainedFlag$sample58 = new boolean[((((length$documents.length - 1) - 0) / 1) + 1)];
 		}
 		
 		// Allocate scratch space
@@ -1306,7 +1389,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						// generator.
 						for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
 							if(!fixedFlag$sample42)
-								sample42(var41, threadID$var41, RNG$1);
+								inferSample42(var41, threadID$var41, RNG$1);
 						}
 				}
 			);
@@ -1319,7 +1402,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						// generator.
 						for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
 							if(!fixedFlag$sample58)
-								sample58(var56, threadID$var56, RNG$1);
+								inferSample58(var56, threadID$var56, RNG$1);
 						}
 				}
 			);
@@ -1341,7 +1424,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int j = forStart$j; j < forEnd$j; j += 1)
-											sample90(i$var71, j, threadID$j, RNG$2);
+											inferSample90(i$var71, j, threadID$j, RNG$2);
 								}
 							);
 						}
@@ -1367,7 +1450,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int j = forStart$j; j < forEnd$j; j += 1)
-											sample90(i$var71, j, threadID$j, RNG$2);
+											inferSample90(i$var71, j, threadID$j, RNG$2);
 								}
 							);
 						}
@@ -1382,7 +1465,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						// generator.
 						for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
 							if(!fixedFlag$sample58)
-								sample58(var56, threadID$var56, RNG$1);
+								inferSample58(var56, threadID$var56, RNG$1);
 						}
 				}
 			);
@@ -1395,7 +1478,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 						// generator.
 						for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
 							if(!fixedFlag$sample42)
-								sample42(var41, threadID$var41, RNG$1);
+								inferSample42(var41, threadID$var41, RNG$1);
 						}
 				}
 			);
@@ -1403,31 +1486,56 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
+		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, noTopics, 1,
-			(int forStart$i$var14, int forEnd$i$var14, int threadID$i$var14, org.sandwood.random.internal.Rng RNG$1) -> { 
+			(int forStart$var41, int forEnd$var41, int threadID$var41, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
-					for(int i$var14 = forStart$i$var14; i$var14 < forEnd$i$var14; i$var14 += 1)
-						alpha[i$var14] = 0.1;
+					for(int var41 = forStart$var41; var41 < forEnd$var41; var41 += 1) {
+						if(!constrainedFlag$sample42[((var41 - 0) / 1)])
+							drawValueSample42(var41, threadID$var41, RNG$1);
+					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, vocabSize, 1,
-			(int forStart$i$var27, int forEnd$i$var27, int threadID$i$var27, org.sandwood.random.internal.Rng RNG$1) -> { 
+		parallelFor(RNG$, 0, length$documents.length, 1,
+			(int forStart$var56, int forEnd$var56, int threadID$var56, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
-					for(int i$var27 = forStart$i$var27; i$var27 < forEnd$i$var27; i$var27 += 1)
-						beta[i$var27] = 0.1;
+					for(int var56 = forStart$var56; var56 < forEnd$var56; var56 += 1) {
+						if(!constrainedFlag$sample58[((var56 - 0) / 1)])
+							drawValueSample58(var56, threadID$var56, RNG$1);
+					}
+			}
+		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, length$documents.length, 1,
+			(int forStart$index$i$var71, int forEnd$index$i$var71, int threadID$index$i$var71, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int index$i$var71 = forStart$index$i$var71; index$i$var71 < forEnd$index$i$var71; index$i$var71 += 1) {
+						int i$var71 = index$i$var71;
+						int threadID$i$var71 = threadID$index$i$var71;
+						
+						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+						parallelFor(RNG$1, 0, length$documents[i$var71], 1,
+							(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$2) -> { 
+								
+									// Inner loop for running batches of iterations, each batch has its own random number
+									// generator.
+									for(int j = forStart$j; j < forEnd$j; j += 1) {
+										if(!constrainedFlag$sample90[((i$var71 - 0) / 1)][((j - 0) / 1)])
+											drawValueSample90(i$var71, j, threadID$j, RNG$2);
+									}
+							}
+						);
+					}
 			}
 		);
 	}
@@ -1451,6 +1559,31 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		logProbability$z = Double.NaN;
 		logProbability$w = 0.0;
 		logProbability$var91 = Double.NaN;
+	}
+
+	// Method for initializing the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		for(int i$var14 = 0; i$var14 < noTopics; i$var14 += 1)
+			alpha[i$var14] = 0.1;
+		for(int i$var27 = 0; i$var27 < vocabSize; i$var27 += 1)
+			beta[i$var27] = 0.1;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample90$1 = 0; index$constrainedFlag$sample90$1 < constrainedFlag$sample90.length; index$constrainedFlag$sample90$1 += 1) {
+			boolean[] cv$constrainedFlag$sample90$1 = constrainedFlag$sample90[index$constrainedFlag$sample90$1];
+			for(int index$constrainedFlag$sample90$2 = 0; index$constrainedFlag$sample90$2 < cv$constrainedFlag$sample90$1.length; index$constrainedFlag$sample90$2 += 1)
+				cv$constrainedFlag$sample90$1[index$constrainedFlag$sample90$2] = true;
+		}
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
+			constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
+			constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
 	}
 
 	// Construct the evidence probabilities.

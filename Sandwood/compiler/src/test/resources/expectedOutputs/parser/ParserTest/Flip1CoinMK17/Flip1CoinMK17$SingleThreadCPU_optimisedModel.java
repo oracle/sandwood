@@ -7,6 +7,7 @@ final class Flip1CoinMK17$SingleThreadCPU extends org.sandwood.runtime.internal.
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample7 = true;
 	private boolean fixedFlag$sample7 = false;
 	private boolean fixedProbFlag$sample7 = false;
 	private boolean fixedProbFlag$sample9 = false;
@@ -31,7 +32,7 @@ final class Flip1CoinMK17$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	// Setter for bias.
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
 		bias = cv$value;
@@ -51,10 +52,13 @@ final class Flip1CoinMK17$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	// Setter for fixedFlag$sample7.
 	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value) {
+	public final void set$fixedFlag$sample7(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample7 including if probabilities
 		// need to be updated.
 		fixedFlag$sample7 = cv$value;
+		
+		// Substituted "fixedFlag$sample7" with its value "cv$value".
+		constrainedFlag$sample7 = (cv$value || constrainedFlag$sample7);
 		
 		// Should the probability of sample 7 be set to fixed. This will only every change
 		// the flag to false.
@@ -83,7 +87,7 @@ final class Flip1CoinMK17$SingleThreadCPU extends org.sandwood.runtime.internal.
 
 	// Setter for flipMeasured.
 	@Override
-	public final void set$flipMeasured(boolean cv$value) {
+	public final void set$flipMeasured(boolean cv$value, boolean allocated$) {
 		flipMeasured = cv$value;
 	}
 
@@ -115,6 +119,107 @@ final class Flip1CoinMK17$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final double get$logProbability$flip() {
 		return logProbability$flip;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample7
+	private final void drawValueSample7() {
+		bias = (DistributionSampling.sampleTruncatedGaussian(RNG$, -0.5, 0.3085375387259869, 0.5, 0.6914624612740131) + 0.5);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 7 drawn from TruncatedGaussian 6. Inference was performed using
+	// Metropolis-Hastings.
+	private final void inferSample7() {
+		constrainedFlag$sample7 = false;
+		
+		// The original value of the sample
+		double cv$originalValue = bias;
+		
+		// Calculate a proposed variance.
+		// 
+		// The original value of the sample
+		double cv$var = ((bias * bias) * 0.010000000000000002);
+		
+		// Ensure the variance is at least 0.01
+		if((cv$var < 0.010000000000000002))
+			cv$var = 0.010000000000000002;
+		
+		// The proposed new value for the sample
+		// 
+		// The original value of the sample
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample7 = true;
+		
+		// Variable declaration of cv$originalProbability moved.
+		// Declaration comment was:
+		// This value is not used before it is set again, so removing the value declaration.
+		// 
+		// The probability of the random variable generating the originally sampled value
+		// 
+		// Initialize a log space accumulator to take the product of all the distribution
+		// probabilities.
+		// 
+		// Record the reached probability density.
+		// 
+		// Initialize a counter to track the reached distributions.
+		// 
+		// A check to ensure rounding of floating point values can never result in a negative
+		// value.
+		// 
+		// Recorded the probability of reaching sample task 9 with the current configuration.
+		// 
+		// Set an accumulator to record the consumer distributions not seen. Initially set
+		// to 1 as seen values will be deducted from this value.
+		// 
+		// An accumulator to allow the value for each distribution to be constructed before
+		// it is added to the index probabilities.
+		// 
+		// Set the current value to the current state of the tree.
+		// 
+		// The original value of the sample
+		double cv$originalProbability = ((((0.0 <= bias) && (bias <= 1.0))?Math.log((flip?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY) + (((0.0 <= bias) && (bias <= 1.0))?(DistributionSampling.logProbabilityGaussian((bias - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY));
+		
+		// Update Sample and intermediate values
+		// 
+		// Write out the new value of the sample.
+		bias = cv$proposedValue;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample7 = true;
+		
+		// The probability ration for the proposed value and the current value.
+		// 
+		// Initialize a log space accumulator to take the product of all the distribution
+		// probabilities.
+		// 
+		// Record the reached probability density.
+		// 
+		// Initialize a counter to track the reached distributions.
+		// 
+		// A check to ensure rounding of floating point values can never result in a negative
+		// value.
+		// 
+		// Recorded the probability of reaching sample task 9 with the current configuration.
+		// 
+		// Set an accumulator to record the consumer distributions not seen. Initially set
+		// to 1 as seen values will be deducted from this value.
+		// 
+		// An accumulator to allow the value for each distribution to be constructed before
+		// it is added to the index probabilities.
+		double cv$ratio = (((((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?Math.log((flip?cv$proposedValue:(1.0 - cv$proposedValue))):Double.NEGATIVE_INFINITY) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?(DistributionSampling.logProbabilityGaussian((cv$proposedValue - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY)) - cv$originalProbability);
+		
+		// Test if the probability of the sample is sufficient to keep the value. This needs
+		// to be less than or equal as otherwise if the proposed value is not possible and
+		// the random value is 0 an impossible value will be accepted.
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+			// If it is not revert the changes.
+			// 
+			// Set the sample value
+			// 
+			// Write out the new value of the sample.
+			bias = cv$originalValue;
 	}
 
 	// Calculate the probability of the samples represented by sample7 using sampled values.
@@ -234,7 +339,7 @@ final class Flip1CoinMK17$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = Math.log((flip?bias:(1.0 - bias)));
+			double cv$distributionAccumulator = (((0.0 <= bias) && (bias <= 1.0))?Math.log((flip?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -292,94 +397,6 @@ final class Flip1CoinMK17$SingleThreadCPU extends org.sandwood.runtime.internal.
 			// Variable declaration of cv$accumulator moved.
 			logProbability$$evidence = (logProbability$$evidence + logProbability$flip);
 		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 7 drawn from TruncatedGaussian 6. Inference was performed using
-	// Metropolis-Hastings.
-	private final void sample7() {
-		// The original value of the sample
-		double cv$originalValue = bias;
-		
-		// Calculate a proposed variance.
-		// 
-		// The original value of the sample
-		double cv$var = ((bias * bias) * 0.010000000000000002);
-		
-		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
-		
-		// The proposed new value for the sample
-		// 
-		// The original value of the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
-		
-		// Variable declaration of cv$originalProbability moved.
-		// Declaration comment was:
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The probability of the random variable generating the originally sampled value
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
-		// 
-		// Recorded the probability of reaching sample task 9 with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
-		// 
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// Set the current value to the current state of the tree.
-		// 
-		// The original value of the sample
-		double cv$originalProbability = (Math.log((flip?bias:(1.0 - bias))) + (((0.0 <= bias) && (bias <= 1.0))?(DistributionSampling.logProbabilityGaussian((bias - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY));
-		
-		// Update Sample and intermediate values
-		// 
-		// Write out the new value of the sample.
-		bias = cv$proposedValue;
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
-		// 
-		// Recorded the probability of reaching sample task 9 with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
-		// 
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$ratio = ((Math.log((flip?cv$proposedValue:(1.0 - cv$proposedValue))) + (((0.0 <= cv$proposedValue) && (cv$proposedValue <= 1.0))?(DistributionSampling.logProbabilityGaussian((cv$proposedValue - 0.5)) + 0.9599163336956222):Double.NEGATIVE_INFINITY)) - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
-			// 
-			// Write out the new value of the sample.
-			bias = cv$originalValue;
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -440,16 +457,13 @@ final class Flip1CoinMK17$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample7)
-			sample7();
+			inferSample7();
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample7)
+			drawValueSample7();
 	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
@@ -467,6 +481,11 @@ final class Flip1CoinMK17$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(!fixedProbFlag$sample9)
 			logProbability$flip = Double.NaN;
 	}
+
+	// Method for initializing the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override

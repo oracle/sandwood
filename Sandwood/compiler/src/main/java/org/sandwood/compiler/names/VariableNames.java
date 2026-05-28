@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -68,20 +68,6 @@ public final class VariableNames {
 
     public static VariableDescription<DoubleVariable> logProbabilityName(VariableName name) {
         return new VariableDescription<>(logProbability + name, VariableType.DoubleVariable, name.comment);
-    }
-
-    private static final String logProbabilityValue = "logProbabilityValue" + Name.prefix;
-
-    public static VariableDescription<DoubleVariable> logProbabilityValueName(VariableDescription<?> varDesc) {
-        return new VariableDescription<>(logProbabilityValue + varDesc, VariableType.DoubleVariable,
-                varDesc.name.comment);
-    }
-
-    private static final String logProbabilityDistribution = "logProbabilityDistribution" + Name.prefix;
-
-    public static VariableDescription<DoubleVariable> logProbabilityDistributionName(VariableDescription<?> varDesc) {
-        return new VariableDescription<>(logProbabilityDistribution + varDesc, VariableType.DoubleVariable,
-                varDesc.name.comment);
     }
 
     private static final String fixedSampleProbability = "fixedSampleDistProbability" + Name.prefix;
@@ -197,6 +183,17 @@ public final class VariableNames {
         return new VariableDescription<>(fixedFlag + varDesc, VariableType.BooleanVariable, varDesc.name.comment);
     }
 
+    /**
+     * Prefix for a flag to mark if a sample task could have been constrained either by a fixed result or an observed
+     * result somewhere in the model.
+     */
+    private static final String constrainedFlag = "constrainedFlag" + Name.prefix;
+
+    public static VariableDescription<BooleanVariable> constrainedFlagName(SampleTask<?, ?> task) {
+        VariableDescription<?> varDesc = task.getUniqueVarDesc();
+        return new VariableDescription<BooleanVariable>(constrainedFlag + varDesc, VariableType.BooleanVariable, false);
+    }
+
     private static final String fixedProbFlag = "fixedProbFlag" + Name.prefix;
 
     public static VariableDescription<BooleanVariable> getProbabilityFixedFlag(SampleTask<?, ?> task) {
@@ -213,6 +210,10 @@ public final class VariableNames {
     public static VariableDescription<IntVariable> indexName(VariableDescription<?> desc, String id) {
         return new VariableDescription<>(index + desc.name + Name.prefix + id, VariableType.IntVariable,
                 desc.name.comment);
+    }
+
+    public static VariableDescription<IntVariable> indexName(VariableName name, String id) {
+        return new VariableDescription<>(index + name + Name.prefix + id, VariableType.IntVariable, name.comment);
     }
 
     public static <A extends Variable<A>> VariableDescription<A> variableName(String alias, int id, Type<A> type,
@@ -311,5 +312,12 @@ public final class VariableNames {
     public static VariableDescription<BooleanVariable> observedGuard(Variable<?> v) {
         return new VariableDescription<>("observationGuard" + Name.prefix + v.getUniqueVarDesc().name,
                 VariableType.BooleanVariable, true);
+    }
+
+    private static final VariableDescription<BooleanVariable> allocatedFlag = new VariableDescription<>(
+            "allocated" + Name.prefix, VariableType.BooleanVariable, true);
+
+    public static VariableDescription<BooleanVariable> allocatedFlag() {
+        return allocatedFlag;
     }
 }

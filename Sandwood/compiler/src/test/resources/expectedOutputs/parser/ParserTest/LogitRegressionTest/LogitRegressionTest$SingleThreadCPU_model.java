@@ -7,6 +7,8 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean[] constrainedFlag$sample35;
+	private boolean constrainedFlag$sample42 = true;
 	private boolean fixedFlag$sample35 = false;
 	private boolean fixedFlag$sample42 = false;
 	private boolean fixedProbFlag$sample35 = false;
@@ -43,7 +45,7 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for bias.
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
 		bias = cv$value;
@@ -63,10 +65,17 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for fixedFlag$sample35.
 	@Override
-	public final void set$fixedFlag$sample35(boolean cv$value) {
+	public final void set$fixedFlag$sample35(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample35 including if probabilities
 		// need to be updated.
 		fixedFlag$sample35 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample35$1 = 0; index$constrainedFlag$sample35$1 < constrainedFlag$sample35.length; index$constrainedFlag$sample35$1 += 1)
+				constrainedFlag$sample35[index$constrainedFlag$sample35$1] = fixedFlag$sample35;
+		}
 		
 		// Should the probability of sample 35 be set to fixed. This will only every change
 		// the flag to false.
@@ -85,10 +94,11 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for fixedFlag$sample42.
 	@Override
-	public final void set$fixedFlag$sample42(boolean cv$value) {
+	public final void set$fixedFlag$sample42(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample42 including if probabilities
 		// need to be updated.
 		fixedFlag$sample42 = cv$value;
+		constrainedFlag$sample42 = (fixedFlag$sample42 || constrainedFlag$sample42);
 		
 		// Should the probability of sample 42 be set to fixed. This will only every change
 		// the flag to false.
@@ -149,10 +159,9 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for weights.
 	@Override
-	public final void set$weights(double[] cv$value) {
+	public final void set$weights(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of weights including if probabilities need to
 		// be updated.
-		// Set weights
 		weights = cv$value;
 		
 		// Unset the fixed probability flag for sample 35 as it depends on weights.
@@ -170,8 +179,7 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for x.
 	@Override
-	public final void set$x(double[][] cv$value) {
-		// Set x
+	public final void set$x(double[][] cv$value, boolean allocated$) {
 		x = cv$value;
 	}
 
@@ -189,9 +197,1194 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for yMeasured.
 	@Override
-	public final void set$yMeasured(boolean[][] cv$value) {
-		// Set yMeasured
+	public final void set$yMeasured(boolean[][] cv$value, boolean allocated$) {
 		yMeasured = cv$value;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample35
+	private final void drawValueSample35(int var33) {
+		weights[var33] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		
+		// Guards to ensure that indicator is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 35 and consumer double[] 67.
+		{
+			{
+				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+					if((var33 == j$var61)) {
+						for(int i = 0; i < n; i += 1)
+							indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+					}
+				}
+			}
+		}
+		
+		// Guards to ensure that p is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 35 and consumer double[] 88.
+		{
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			boolean[][] guard$sample35put89 = guard$sample35put89$global;
+			{
+				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+					if((var33 == j$var61)) {
+						if((j$var61 == 0)) {
+							for(int i = 0; i < n; i += 1) {
+								for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+									// Set the flags to false
+									guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+					if((var33 == j$var61)) {
+						if((j$var61 == 1)) {
+							for(int i = 0; i < n; i += 1) {
+								for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+									// Set the flags to false
+									guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+					if((var33 == j$var61)) {
+						if((j$var61 == 2)) {
+							for(int i = 0; i < n; i += 1) {
+								for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+									// Set the flags to false
+									guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+					if((var33 == j$var61)) {
+						for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+							if((j$var61 == j$var85)) {
+								for(int i = 0; i < n; i += 1)
+									// Set the flags to false
+									guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+					if((var33 == j$var61)) {
+						if((j$var61 == 0)) {
+							for(int i = 0; i < n; i += 1) {
+								for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+									if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+										// The body will execute, so should not be executed again
+										guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+										{
+											p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+					if((var33 == j$var61)) {
+						if((j$var61 == 1)) {
+							for(int i = 0; i < n; i += 1) {
+								for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+									if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+										// The body will execute, so should not be executed again
+										guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+										{
+											p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+					if((var33 == j$var61)) {
+						if((j$var61 == 2)) {
+							for(int i = 0; i < n; i += 1) {
+								for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+									if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+										// The body will execute, so should not be executed again
+										guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+										{
+											p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			{
+				for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+					if((var33 == j$var61)) {
+						for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+							if((j$var61 == j$var85)) {
+								for(int i = 0; i < n; i += 1) {
+									if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+										// The body will execute, so should not be executed again
+										guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+										{
+											p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample42
+	private final void drawValueSample42() {
+		bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 35 drawn from Gaussian 22. Inference was performed using Metropolis-Hastings.
+	private final void inferSample35(int var33) {
+		if(true) {
+			constrainedFlag$sample35[((var33 - 0) / 1)] = false;
+			
+			// Calculate the number of states to evaluate.
+			int cv$numStates = 0;
+			{
+				// Metropolis-Hastings
+				cv$numStates = Math.max(cv$numStates, 2);
+			}
+			
+			// The original value of the sample
+			double cv$originalValue = weights[var33];
+			
+			// The probability of the random variable generating the originally sampled value
+			double cv$originalProbability = 0.0;
+			
+			// Calculate a proposed variance.
+			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
+			
+			// Ensure the variance is at least 0.01
+			if((cv$var < (0.1 * 0.1)))
+				cv$var = (0.1 * 0.1);
+			
+			// The proposed new value for the sample
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			
+			// The probability of the random variable generating the new sample value.
+			double cv$proposedProbability = 0.0;
+			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
+				if((constrainedFlag$sample35[((var33 - 0) / 1)] || (cv$valuePos == 0))) {
+					// Initialize the summed probabilities to 0.
+					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
+					
+					// Initialize a counter to track the reached distributions.
+					double cv$reachedDistributionSourceRV = 0.0;
+					
+					// Initialize a log space accumulator to take the product of all the distribution
+					// probabilities.
+					double cv$accumulatedDistributionProbabilities = 0.0;
+					
+					// The value currently being tested
+					double cv$currentValue;
+					if((cv$valuePos == 0))
+						// Set the current value to the current state of the tree.
+						cv$currentValue = cv$originalValue;
+					else {
+						cv$currentValue = cv$proposedValue;
+						
+						// Update Sample and intermediate values
+						// 
+						// Write out the value of the sample to a temporary variable prior to updating the
+						// intermediate variables.
+						double var34 = cv$proposedValue;
+						
+						// Guards to ensure that weights is only updated when there is a valid path.
+						{
+							{
+								{
+									weights[var33] = cv$currentValue;
+								}
+							}
+						}
+						
+						// Guards to ensure that indicator is only updated when there is a valid path.
+						// 
+						// Looking for a path between Sample 35 and consumer double[] 67.
+						{
+							{
+								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									if((var33 == j$var61)) {
+										for(int i = 0; i < n; i += 1)
+											indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+									}
+								}
+							}
+						}
+						
+						// Guards to ensure that p is only updated when there is a valid path.
+						// 
+						// Looking for a path between Sample 35 and consumer double[] 88.
+						{
+							// Guard to check that at most one copy of the code is executed for a given random
+							// variable instance.
+							boolean[][] guard$sample35put89 = guard$sample35put89$global;
+							{
+								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									if((var33 == j$var61)) {
+										if((j$var61 == 0)) {
+											for(int i = 0; i < n; i += 1) {
+												for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+													// Set the flags to false
+													guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									if((var33 == j$var61)) {
+										if((j$var61 == 1)) {
+											for(int i = 0; i < n; i += 1) {
+												for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+													// Set the flags to false
+													guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									if((var33 == j$var61)) {
+										if((j$var61 == 2)) {
+											for(int i = 0; i < n; i += 1) {
+												for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+													// Set the flags to false
+													guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									if((var33 == j$var61)) {
+										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+											if((j$var61 == j$var85)) {
+												for(int i = 0; i < n; i += 1)
+													// Set the flags to false
+													guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									if((var33 == j$var61)) {
+										if((j$var61 == 0)) {
+											for(int i = 0; i < n; i += 1) {
+												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+													if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+														{
+															p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									if((var33 == j$var61)) {
+										if((j$var61 == 1)) {
+											for(int i = 0; i < n; i += 1) {
+												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+													if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+														{
+															p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									if((var33 == j$var61)) {
+										if((j$var61 == 2)) {
+											for(int i = 0; i < n; i += 1) {
+												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+													if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+														{
+															p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+							{
+								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+									if((var33 == j$var61)) {
+										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+											if((j$var61 == j$var85)) {
+												for(int i = 0; i < n; i += 1) {
+													if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+														// The body will execute, so should not be executed again
+														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+														{
+															p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					{
+						// Record the reached probability density.
+						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
+						
+						// An accumulator to allow the value for each distribution to be constructed before
+						// it is added to the index probabilities.
+						double cv$accumulatedProbabilities = (Math.log(1.0) + ((0.0 < 10.0)?(DistributionSampling.logProbabilityGaussian(((cv$currentValue - 0.0) / Math.sqrt(10.0))) - (0.5 * Math.log(10.0))):Double.NEGATIVE_INFINITY));
+						
+						// Processing random variable 92.
+						{
+							// Looking for a path between Sample 35 and consumer Bernoulli 92.
+							{
+								// Guard to check that at most one copy of the code is executed for a given random
+								// variable instance.
+								boolean[][] guard$sample35bernoulli93 = guard$sample35bernoulli93$global;
+								{
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											if((j$var61 == 0)) {
+												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+													for(int index$j$11_3 = 0; index$j$11_3 < k; index$j$11_3 += 1) {
+														if((j$var85 == index$j$11_3)) {
+															for(int i = 0; i < n; i += 1)
+																// Set the flags to false
+																guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											if((j$var61 == 1)) {
+												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+													for(int index$j$12_3 = 0; index$j$12_3 < k; index$j$12_3 += 1) {
+														if((j$var85 == index$j$12_3)) {
+															for(int i = 0; i < n; i += 1)
+																// Set the flags to false
+																guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											if((j$var61 == 2)) {
+												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+													for(int index$j$13_3 = 0; index$j$13_3 < k; index$j$13_3 += 1) {
+														if((j$var85 == index$j$13_3)) {
+															for(int i = 0; i < n; i += 1)
+																// Set the flags to false
+																guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+												if((j$var61 == j$var85)) {
+													for(int index$j$14_3 = 0; index$j$14_3 < k; index$j$14_3 += 1) {
+														if((j$var85 == index$j$14_3)) {
+															for(int i = 0; i < n; i += 1)
+																// Set the flags to false
+																guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									double traceTempVariable$var62$15_1 = cv$currentValue;
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											for(int i = 0; i < n; i += 1) {
+												double traceTempVariable$var69$15_4 = Math.exp((traceTempVariable$var62$15_1 * x[i][j$var61]));
+												if((j$var61 == 0)) {
+													for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+														double traceTempVariable$var90$15_6 = (indicator[((i - 0) / 1)][j$var85] / ((traceTempVariable$var69$15_4 + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+														for(int index$j$15_7 = 0; index$j$15_7 < k; index$j$15_7 += 1) {
+															if((j$var85 == index$j$15_7)) {
+																if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+																	// The body will execute, so should not be executed again
+																	guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+																	
+																	// Processing sample task 94 of consumer random variable null.
+																	{
+																		{
+																			// Flag recording if this sample task of the consuming random variable is constrained.
+																			boolean cv$sampleConstrained = true;
+																			if(cv$sampleConstrained) {
+																				// Mark that the sample has observed constrained data.
+																				constrainedFlag$sample35[((var33 - 0) / 1)] = true;
+																				
+																				// Set an accumulator to sum the probabilities for each possible configuration of
+																				// inputs.
+																				double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																				
+																				// Set an accumulator to record the consumer distributions not seen. Initially set
+																				// to 1 as seen values will be deducted from this value.
+																				double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																				{
+																					{
+																						{
+																							{
+																								{
+																									// Constructing a random variable input for use later.
+																									double var91 = (traceTempVariable$var90$15_6 + bias);
+																									
+																									// Record the probability of sample task 94 generating output with current configuration.
+																									if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																									else {
+																										// If the second value is -infinity.
+																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+																										else
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$15_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
+																									}
+																									
+																									// Recorded the probability of reaching sample task 94 with the current configuration.
+																									cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																								}
+																							}
+																						}
+																					}
+																				}
+																				
+																				// A check to ensure rounding of floating point values can never result in a negative
+																				// value.
+																				cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																				
+																				// Multiply (log space add) in the probability of the sample task to the overall probability
+																				// for this configuration of the source random variable.
+																				if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																				else {
+																					// If the second value is -infinity.
+																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																						cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																					else
+																						cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									double traceTempVariable$var62$16_1 = cv$currentValue;
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											for(int i = 0; i < n; i += 1) {
+												double traceTempVariable$var71$16_4 = Math.exp((traceTempVariable$var62$16_1 * x[i][j$var61]));
+												if((j$var61 == 1)) {
+													for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+														double traceTempVariable$var90$16_6 = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + traceTempVariable$var71$16_4) + indicator[((i - 0) / 1)][2]));
+														for(int index$j$16_7 = 0; index$j$16_7 < k; index$j$16_7 += 1) {
+															if((j$var85 == index$j$16_7)) {
+																if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+																	// The body will execute, so should not be executed again
+																	guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+																	
+																	// Processing sample task 94 of consumer random variable null.
+																	{
+																		{
+																			// Flag recording if this sample task of the consuming random variable is constrained.
+																			boolean cv$sampleConstrained = true;
+																			if(cv$sampleConstrained) {
+																				// Mark that the sample has observed constrained data.
+																				constrainedFlag$sample35[((var33 - 0) / 1)] = true;
+																				
+																				// Set an accumulator to sum the probabilities for each possible configuration of
+																				// inputs.
+																				double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																				
+																				// Set an accumulator to record the consumer distributions not seen. Initially set
+																				// to 1 as seen values will be deducted from this value.
+																				double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																				{
+																					{
+																						{
+																							{
+																								{
+																									// Constructing a random variable input for use later.
+																									double var91 = (traceTempVariable$var90$16_6 + bias);
+																									
+																									// Record the probability of sample task 94 generating output with current configuration.
+																									if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																									else {
+																										// If the second value is -infinity.
+																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+																										else
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$16_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
+																									}
+																									
+																									// Recorded the probability of reaching sample task 94 with the current configuration.
+																									cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																								}
+																							}
+																						}
+																					}
+																				}
+																				
+																				// A check to ensure rounding of floating point values can never result in a negative
+																				// value.
+																				cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																				
+																				// Multiply (log space add) in the probability of the sample task to the overall probability
+																				// for this configuration of the source random variable.
+																				if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																				else {
+																					// If the second value is -infinity.
+																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																						cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																					else
+																						cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									double traceTempVariable$var62$17_1 = cv$currentValue;
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											for(int i = 0; i < n; i += 1) {
+												double traceTempVariable$var74$17_4 = Math.exp((traceTempVariable$var62$17_1 * x[i][j$var61]));
+												if((j$var61 == 2)) {
+													for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+														double traceTempVariable$var90$17_6 = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + traceTempVariable$var74$17_4));
+														for(int index$j$17_7 = 0; index$j$17_7 < k; index$j$17_7 += 1) {
+															if((j$var85 == index$j$17_7)) {
+																if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+																	// The body will execute, so should not be executed again
+																	guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+																	
+																	// Processing sample task 94 of consumer random variable null.
+																	{
+																		{
+																			// Flag recording if this sample task of the consuming random variable is constrained.
+																			boolean cv$sampleConstrained = true;
+																			if(cv$sampleConstrained) {
+																				// Mark that the sample has observed constrained data.
+																				constrainedFlag$sample35[((var33 - 0) / 1)] = true;
+																				
+																				// Set an accumulator to sum the probabilities for each possible configuration of
+																				// inputs.
+																				double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																				
+																				// Set an accumulator to record the consumer distributions not seen. Initially set
+																				// to 1 as seen values will be deducted from this value.
+																				double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																				{
+																					{
+																						{
+																							{
+																								{
+																									// Constructing a random variable input for use later.
+																									double var91 = (traceTempVariable$var90$17_6 + bias);
+																									
+																									// Record the probability of sample task 94 generating output with current configuration.
+																									if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																									else {
+																										// If the second value is -infinity.
+																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+																										else
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$17_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
+																									}
+																									
+																									// Recorded the probability of reaching sample task 94 with the current configuration.
+																									cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																								}
+																							}
+																						}
+																					}
+																				}
+																				
+																				// A check to ensure rounding of floating point values can never result in a negative
+																				// value.
+																				cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																				
+																				// Multiply (log space add) in the probability of the sample task to the overall probability
+																				// for this configuration of the source random variable.
+																				if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																				else {
+																					// If the second value is -infinity.
+																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																						cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																					else
+																						cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									double traceTempVariable$var62$18_1 = cv$currentValue;
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											for(int i = 0; i < n; i += 1) {
+												double traceTempVariable$var86$18_4 = Math.exp((traceTempVariable$var62$18_1 * x[i][j$var61]));
+												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+													if((j$var61 == j$var85)) {
+														double traceTempVariable$var90$18_6 = (traceTempVariable$var86$18_4 / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+														for(int index$j$18_7 = 0; index$j$18_7 < k; index$j$18_7 += 1) {
+															if((j$var85 == index$j$18_7)) {
+																if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+																	// The body will execute, so should not be executed again
+																	guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+																	
+																	// Processing sample task 94 of consumer random variable null.
+																	{
+																		{
+																			// Flag recording if this sample task of the consuming random variable is constrained.
+																			boolean cv$sampleConstrained = true;
+																			if(cv$sampleConstrained) {
+																				// Mark that the sample has observed constrained data.
+																				constrainedFlag$sample35[((var33 - 0) / 1)] = true;
+																				
+																				// Set an accumulator to sum the probabilities for each possible configuration of
+																				// inputs.
+																				double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+																				
+																				// Set an accumulator to record the consumer distributions not seen. Initially set
+																				// to 1 as seen values will be deducted from this value.
+																				double cv$consumerDistributionProbabilityAccumulator = 1.0;
+																				{
+																					{
+																						{
+																							{
+																								{
+																									// Constructing a random variable input for use later.
+																									double var91 = (traceTempVariable$var90$18_6 + bias);
+																									
+																									// Record the probability of sample task 94 generating output with current configuration.
+																									if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																										cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																									else {
+																										// If the second value is -infinity.
+																										if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																											cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+																										else
+																											cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][index$j$18_7]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
+																									}
+																									
+																									// Recorded the probability of reaching sample task 94 with the current configuration.
+																									cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																								}
+																							}
+																						}
+																					}
+																				}
+																				
+																				// A check to ensure rounding of floating point values can never result in a negative
+																				// value.
+																				cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+																				
+																				// Multiply (log space add) in the probability of the sample task to the overall probability
+																				// for this configuration of the source random variable.
+																				if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+																					cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+																				else {
+																					// If the second value is -infinity.
+																					if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																						cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+																					else
+																						cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						
+						// Add the values for the source and any standard consumers for this configuration
+						// of arguments to the source.
+						if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+							cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+						else {
+							// If the second value is -infinity.
+							if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+								cv$stateProbabilityValue = cv$accumulatedProbabilities;
+							else
+								cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
+						}
+					}
+					
+					// Save the probability of the original value.
+					if((cv$valuePos == 0))
+						cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// Save the probability of the proposed value.
+					else
+						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// The probability ration for the proposed value and the current value.
+					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
+					
+					// Test if the probability of the sample is sufficient to keep the value. This needs
+					// to be less than or equal as otherwise if the proposed value is not possible and
+					// the random value is 0 an impossible value will be accepted.
+					if((cv$valuePos == 1)) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+							// If it is not revert the changes.
+							// 
+							// Set the sample value
+							// Write out the value of the sample to a temporary variable prior to updating the
+							// intermediate variables.
+							double var34 = cv$originalValue;
+							
+							// Guards to ensure that weights is only updated when there is a valid path.
+							{
+								{
+									{
+										weights[var33] = var34;
+									}
+								}
+							}
+							
+							// Guards to ensure that indicator is only updated when there is a valid path.
+							// 
+							// Looking for a path between Sample 35 and consumer double[] 67.
+							{
+								{
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											for(int i = 0; i < n; i += 1)
+												indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
+										}
+									}
+								}
+							}
+							
+							// Guards to ensure that p is only updated when there is a valid path.
+							// 
+							// Looking for a path between Sample 35 and consumer double[] 88.
+							{
+								// Guard to check that at most one copy of the code is executed for a given random
+								// variable instance.
+								boolean[][] guard$sample35put89 = guard$sample35put89$global;
+								{
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											if((j$var61 == 0)) {
+												for(int i = 0; i < n; i += 1) {
+													for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+														// Set the flags to false
+														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											if((j$var61 == 1)) {
+												for(int i = 0; i < n; i += 1) {
+													for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+														// Set the flags to false
+														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											if((j$var61 == 2)) {
+												for(int i = 0; i < n; i += 1) {
+													for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
+														// Set the flags to false
+														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+												if((j$var61 == j$var85)) {
+													for(int i = 0; i < n; i += 1)
+														// Set the flags to false
+														guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											if((j$var61 == 0)) {
+												for(int i = 0; i < n; i += 1) {
+													for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+														if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+															// The body will execute, so should not be executed again
+															guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+															{
+																p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											if((j$var61 == 1)) {
+												for(int i = 0; i < n; i += 1) {
+													for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+														if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+															// The body will execute, so should not be executed again
+															guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+															{
+																p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											if((j$var61 == 2)) {
+												for(int i = 0; i < n; i += 1) {
+													for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+														if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+															// The body will execute, so should not be executed again
+															guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+															{
+																p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								{
+									for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
+										if((var33 == j$var61)) {
+											for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+												if((j$var61 == j$var85)) {
+													for(int i = 0; i < n; i += 1) {
+														if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
+															// The body will execute, so should not be executed again
+															guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
+															{
+																p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 42 drawn from Gaussian 40. Inference was performed using Metropolis-Hastings.
+	private final void inferSample42() {
+		if(true) {
+			constrainedFlag$sample42 = false;
+			
+			// Calculate the number of states to evaluate.
+			int cv$numStates = 0;
+			{
+				// Metropolis-Hastings
+				cv$numStates = Math.max(cv$numStates, 2);
+			}
+			
+			// The original value of the sample
+			double cv$originalValue = bias;
+			
+			// The probability of the random variable generating the originally sampled value
+			double cv$originalProbability = 0.0;
+			
+			// Calculate a proposed variance.
+			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
+			
+			// Ensure the variance is at least 0.01
+			if((cv$var < (0.1 * 0.1)))
+				cv$var = (0.1 * 0.1);
+			
+			// The proposed new value for the sample
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			
+			// The probability of the random variable generating the new sample value.
+			double cv$proposedProbability = 0.0;
+			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
+				if((constrainedFlag$sample42 || (cv$valuePos == 0))) {
+					// Initialize the summed probabilities to 0.
+					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
+					
+					// Initialize a counter to track the reached distributions.
+					double cv$reachedDistributionSourceRV = 0.0;
+					
+					// Initialize a log space accumulator to take the product of all the distribution
+					// probabilities.
+					double cv$accumulatedDistributionProbabilities = 0.0;
+					
+					// The value currently being tested
+					double cv$currentValue;
+					if((cv$valuePos == 0))
+						// Set the current value to the current state of the tree.
+						cv$currentValue = cv$originalValue;
+					else {
+						cv$currentValue = cv$proposedValue;
+						
+						// Update Sample and intermediate values
+						// 
+						// Write out the new value of the sample.
+						bias = cv$proposedValue;
+					}
+					{
+						// Record the reached probability density.
+						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
+						
+						// An accumulator to allow the value for each distribution to be constructed before
+						// it is added to the index probabilities.
+						double cv$accumulatedProbabilities = (Math.log(1.0) + ((0.0 < 10.0)?(DistributionSampling.logProbabilityGaussian(((cv$currentValue - 0.0) / Math.sqrt(10.0))) - (0.5 * Math.log(10.0))):Double.NEGATIVE_INFINITY));
+						
+						// Processing random variable 92.
+						{
+							{
+								{
+									for(int i = 0; i < n; i += 1) {
+										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
+											double traceTempVariable$bias$1_3 = cv$currentValue;
+											
+											// Processing sample task 94 of consumer random variable null.
+											{
+												{
+													// Flag recording if this sample task of the consuming random variable is constrained.
+													boolean cv$sampleConstrained = true;
+													if(cv$sampleConstrained) {
+														// Mark that the sample has observed constrained data.
+														constrainedFlag$sample42 = true;
+														
+														// Set an accumulator to sum the probabilities for each possible configuration of
+														// inputs.
+														double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
+														
+														// Set an accumulator to record the consumer distributions not seen. Initially set
+														// to 1 as seen values will be deducted from this value.
+														double cv$consumerDistributionProbabilityAccumulator = 1.0;
+														{
+															{
+																{
+																	{
+																		{
+																			// Constructing a random variable input for use later.
+																			double var91 = (p[((i - 0) / 1)][j$var85] + traceTempVariable$bias$1_3);
+																			
+																			// Record the probability of sample task 94 generating output with current configuration.
+																			if(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																				cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																			else {
+																				// If the second value is -infinity.
+																				if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																					cv$accumulatedConsumerProbabilities = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
+																				else
+																					cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((y[i][j$var85]?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY)));
+																			}
+																			
+																			// Recorded the probability of reaching sample task 94 with the current configuration.
+																			cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
+																		}
+																	}
+																}
+															}
+														}
+														
+														// A check to ensure rounding of floating point values can never result in a negative
+														// value.
+														cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
+														
+														// Multiply (log space add) in the probability of the sample task to the overall probability
+														// for this configuration of the source random variable.
+														if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
+															cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
+														else {
+															// If the second value is -infinity.
+															if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
+																cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
+															else
+																cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						
+						// Add the values for the source and any standard consumers for this configuration
+						// of arguments to the source.
+						if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
+							cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
+						else {
+							// If the second value is -infinity.
+							if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
+								cv$stateProbabilityValue = cv$accumulatedProbabilities;
+							else
+								cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
+						}
+					}
+					
+					// Save the probability of the original value.
+					if((cv$valuePos == 0))
+						cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// Save the probability of the proposed value.
+					else
+						cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
+					
+					// The probability ration for the proposed value and the current value.
+					double cv$ratio = (cv$proposedProbability - cv$originalProbability);
+					
+					// Test if the probability of the sample is sufficient to keep the value. This needs
+					// to be less than or equal as otherwise if the proposed value is not possible and
+					// the random value is 0 an impossible value will be accepted.
+					if((cv$valuePos == 1)) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
+							// If it is not revert the changes.
+							// 
+							// Set the sample value
+							// 
+							// Write out the new value of the sample.
+							bias = cv$originalValue;
+					}
+				}
+			}
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample35 using sampled
@@ -225,7 +1418,7 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 								double var21 = 10.0;
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var20) / Math.sqrt(var21))) - (0.5 * Math.log(var21))));
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var21)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var20) / Math.sqrt(var21))) - (0.5 * Math.log(var21))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -340,7 +1533,7 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 							double var39 = 10.0;
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var38) / Math.sqrt(var39))) - (0.5 * Math.log(var39))));
+							double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var39)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var38) / Math.sqrt(var39))) - (0.5 * Math.log(var39))):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -440,7 +1633,7 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 									double var91 = (p[((i - 0) / 1)][j$var85] + bias);
 									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var91:(1.0 - var91))));
+									double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var91) && (var91 <= 1.0))?Math.log((cv$sampleValue?var91:(1.0 - var91))):Double.NEGATIVE_INFINITY));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -522,984 +1715,6 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 35 drawn from Gaussian 22. Inference was performed using Metropolis-Hastings.
-	private final void sample35(int var33) {
-		if(true) {
-			// Calculate the number of states to evaluate.
-			int cv$numStates = 0;
-			{
-				// Metropolis-Hastings
-				cv$numStates = Math.max(cv$numStates, 2);
-			}
-			
-			// The original value of the sample
-			double cv$originalValue = weights[var33];
-			
-			// The probability of the random variable generating the originally sampled value
-			double cv$originalProbability = 0.0;
-			
-			// Calculate a proposed variance.
-			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
-			
-			// Ensure the variance is at least 0.01
-			if((cv$var < (0.1 * 0.1)))
-				cv$var = (0.1 * 0.1);
-			
-			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-			
-			// The probability of the random variable generating the new sample value.
-			double cv$proposedProbability = 0.0;
-			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				// Initialize the summed probabilities to 0.
-				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
-				
-				// Initialize a counter to track the reached distributions.
-				double cv$reachedDistributionSourceRV = 0.0;
-				
-				// Initialize a log space accumulator to take the product of all the distribution
-				// probabilities.
-				double cv$accumulatedDistributionProbabilities = 0.0;
-				
-				// The value currently being tested
-				double cv$currentValue;
-				if((cv$valuePos == 0))
-					// Set the current value to the current state of the tree.
-					cv$currentValue = cv$originalValue;
-				else {
-					cv$currentValue = cv$proposedValue;
-					
-					// Update Sample and intermediate values
-					// 
-					// Write out the value of the sample to a temporary variable prior to updating the
-					// intermediate variables.
-					double var34 = cv$proposedValue;
-					
-					// Guards to ensure that weights is only updated when there is a valid path.
-					{
-						{
-							{
-								weights[var33] = cv$currentValue;
-							}
-						}
-					}
-					
-					// Guards to ensure that indicator is only updated when there is a valid path.
-					// 
-					// Looking for a path between Sample 35 and consumer double[] 67.
-					{
-						{
-							for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-								if((var33 == j$var61)) {
-									for(int i = 0; i < n; i += 1)
-										indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-								}
-							}
-						}
-					}
-					
-					// Guards to ensure that p is only updated when there is a valid path.
-					// 
-					// Looking for a path between Sample 35 and consumer double[] 88.
-					{
-						// Guard to check that at most one copy of the code is executed for a given random
-						// variable instance.
-						boolean[][] guard$sample35put89 = guard$sample35put89$global;
-						{
-							for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-								if((var33 == j$var61)) {
-									if((j$var61 == 0)) {
-										for(int i = 0; i < n; i += 1) {
-											for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
-												// Set the flags to false
-												guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
-										}
-									}
-								}
-							}
-						}
-						{
-							for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-								if((var33 == j$var61)) {
-									if((j$var61 == 1)) {
-										for(int i = 0; i < n; i += 1) {
-											for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
-												// Set the flags to false
-												guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
-										}
-									}
-								}
-							}
-						}
-						{
-							for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-								if((var33 == j$var61)) {
-									if((j$var61 == 2)) {
-										for(int i = 0; i < n; i += 1) {
-											for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
-												// Set the flags to false
-												guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
-										}
-									}
-								}
-							}
-						}
-						{
-							for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-								if((var33 == j$var61)) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										if((j$var61 == j$var85)) {
-											for(int i = 0; i < n; i += 1)
-												// Set the flags to false
-												guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
-										}
-									}
-								}
-							}
-						}
-						{
-							for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-								if((var33 == j$var61)) {
-									if((j$var61 == 0)) {
-										for(int i = 0; i < n; i += 1) {
-											for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-												if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
-													// The body will execute, so should not be executed again
-													guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
-													{
-														p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						{
-							for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-								if((var33 == j$var61)) {
-									if((j$var61 == 1)) {
-										for(int i = 0; i < n; i += 1) {
-											for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-												if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
-													// The body will execute, so should not be executed again
-													guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
-													{
-														p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						{
-							for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-								if((var33 == j$var61)) {
-									if((j$var61 == 2)) {
-										for(int i = 0; i < n; i += 1) {
-											for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-												if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
-													// The body will execute, so should not be executed again
-													guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
-													{
-														p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						{
-							for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-								if((var33 == j$var61)) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										if((j$var61 == j$var85)) {
-											for(int i = 0; i < n; i += 1) {
-												if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
-													// The body will execute, so should not be executed again
-													guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
-													{
-														p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				{
-					// Record the reached probability density.
-					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					
-					// An accumulator to allow the value for each distribution to be constructed before
-					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - 0.0) / Math.sqrt(10.0))) - (0.5 * Math.log(10.0))));
-					
-					// Processing random variable 92.
-					{
-						// Looking for a path between Sample 35 and consumer Bernoulli 92.
-						{
-							// Guard to check that at most one copy of the code is executed for a given random
-							// variable instance.
-							boolean[][] guard$sample35bernoulli93 = guard$sample35bernoulli93$global;
-							{
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-									if((var33 == j$var61)) {
-										if((j$var61 == 0)) {
-											for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-												for(int index$j$11_3 = 0; index$j$11_3 < k; index$j$11_3 += 1) {
-													if((j$var85 == index$j$11_3)) {
-														for(int i = 0; i < n; i += 1)
-															// Set the flags to false
-															guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-									if((var33 == j$var61)) {
-										if((j$var61 == 1)) {
-											for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-												for(int index$j$12_3 = 0; index$j$12_3 < k; index$j$12_3 += 1) {
-													if((j$var85 == index$j$12_3)) {
-														for(int i = 0; i < n; i += 1)
-															// Set the flags to false
-															guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-									if((var33 == j$var61)) {
-										if((j$var61 == 2)) {
-											for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-												for(int index$j$13_3 = 0; index$j$13_3 < k; index$j$13_3 += 1) {
-													if((j$var85 == index$j$13_3)) {
-														for(int i = 0; i < n; i += 1)
-															// Set the flags to false
-															guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-									if((var33 == j$var61)) {
-										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-											if((j$var61 == j$var85)) {
-												for(int index$j$14_3 = 0; index$j$14_3 < k; index$j$14_3 += 1) {
-													if((j$var85 == index$j$14_3)) {
-														for(int i = 0; i < n; i += 1)
-															// Set the flags to false
-															guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								double traceTempVariable$var62$15_1 = cv$currentValue;
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-									if((var33 == j$var61)) {
-										for(int i = 0; i < n; i += 1) {
-											double traceTempVariable$var69$15_4 = Math.exp((traceTempVariable$var62$15_1 * x[i][j$var61]));
-											if((j$var61 == 0)) {
-												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-													double traceTempVariable$var90$15_6 = (indicator[((i - 0) / 1)][j$var85] / ((traceTempVariable$var69$15_4 + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-													for(int index$j$15_7 = 0; index$j$15_7 < k; index$j$15_7 += 1) {
-														if((j$var85 == index$j$15_7)) {
-															if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
-																// The body will execute, so should not be executed again
-																guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
-																
-																// Processing sample task 94 of consumer random variable null.
-																{
-																	{
-																		// Set an accumulator to sum the probabilities for each possible configuration of
-																		// inputs.
-																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																		
-																		// Set an accumulator to record the consumer distributions not seen. Initially set
-																		// to 1 as seen values will be deducted from this value.
-																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																		{
-																			{
-																				{
-																					{
-																						{
-																							// Constructing a random variable input for use later.
-																							double var91 = (traceTempVariable$var90$15_6 + bias);
-																							
-																							// Record the probability of sample task 94 generating output with current configuration.
-																							if(((Math.log(1.0) + Math.log((y[i][index$j$15_7]?var91:(1.0 - var91)))) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((y[i][index$j$15_7]?var91:(1.0 - var91)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																							else {
-																								// If the second value is -infinity.
-																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((y[i][index$j$15_7]?var91:(1.0 - var91))));
-																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((y[i][index$j$15_7]?var91:(1.0 - var91)))))) + 1)) + (Math.log(1.0) + Math.log((y[i][index$j$15_7]?var91:(1.0 - var91)))));
-																							}
-																							
-																							// Recorded the probability of reaching sample task 94 with the current configuration.
-																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																						}
-																					}
-																				}
-																			}
-																		}
-																		
-																		// A check to ensure rounding of floating point values can never result in a negative
-																		// value.
-																		cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																		
-																		// Multiply (log space add) in the probability of the sample task to the overall probability
-																		// for this configuration of the source random variable.
-																		if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																			else
-																				cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								double traceTempVariable$var62$16_1 = cv$currentValue;
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-									if((var33 == j$var61)) {
-										for(int i = 0; i < n; i += 1) {
-											double traceTempVariable$var71$16_4 = Math.exp((traceTempVariable$var62$16_1 * x[i][j$var61]));
-											if((j$var61 == 1)) {
-												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-													double traceTempVariable$var90$16_6 = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + traceTempVariable$var71$16_4) + indicator[((i - 0) / 1)][2]));
-													for(int index$j$16_7 = 0; index$j$16_7 < k; index$j$16_7 += 1) {
-														if((j$var85 == index$j$16_7)) {
-															if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
-																// The body will execute, so should not be executed again
-																guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
-																
-																// Processing sample task 94 of consumer random variable null.
-																{
-																	{
-																		// Set an accumulator to sum the probabilities for each possible configuration of
-																		// inputs.
-																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																		
-																		// Set an accumulator to record the consumer distributions not seen. Initially set
-																		// to 1 as seen values will be deducted from this value.
-																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																		{
-																			{
-																				{
-																					{
-																						{
-																							// Constructing a random variable input for use later.
-																							double var91 = (traceTempVariable$var90$16_6 + bias);
-																							
-																							// Record the probability of sample task 94 generating output with current configuration.
-																							if(((Math.log(1.0) + Math.log((y[i][index$j$16_7]?var91:(1.0 - var91)))) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((y[i][index$j$16_7]?var91:(1.0 - var91)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																							else {
-																								// If the second value is -infinity.
-																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((y[i][index$j$16_7]?var91:(1.0 - var91))));
-																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((y[i][index$j$16_7]?var91:(1.0 - var91)))))) + 1)) + (Math.log(1.0) + Math.log((y[i][index$j$16_7]?var91:(1.0 - var91)))));
-																							}
-																							
-																							// Recorded the probability of reaching sample task 94 with the current configuration.
-																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																						}
-																					}
-																				}
-																			}
-																		}
-																		
-																		// A check to ensure rounding of floating point values can never result in a negative
-																		// value.
-																		cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																		
-																		// Multiply (log space add) in the probability of the sample task to the overall probability
-																		// for this configuration of the source random variable.
-																		if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																			else
-																				cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								double traceTempVariable$var62$17_1 = cv$currentValue;
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-									if((var33 == j$var61)) {
-										for(int i = 0; i < n; i += 1) {
-											double traceTempVariable$var74$17_4 = Math.exp((traceTempVariable$var62$17_1 * x[i][j$var61]));
-											if((j$var61 == 2)) {
-												for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-													double traceTempVariable$var90$17_6 = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + traceTempVariable$var74$17_4));
-													for(int index$j$17_7 = 0; index$j$17_7 < k; index$j$17_7 += 1) {
-														if((j$var85 == index$j$17_7)) {
-															if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
-																// The body will execute, so should not be executed again
-																guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
-																
-																// Processing sample task 94 of consumer random variable null.
-																{
-																	{
-																		// Set an accumulator to sum the probabilities for each possible configuration of
-																		// inputs.
-																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																		
-																		// Set an accumulator to record the consumer distributions not seen. Initially set
-																		// to 1 as seen values will be deducted from this value.
-																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																		{
-																			{
-																				{
-																					{
-																						{
-																							// Constructing a random variable input for use later.
-																							double var91 = (traceTempVariable$var90$17_6 + bias);
-																							
-																							// Record the probability of sample task 94 generating output with current configuration.
-																							if(((Math.log(1.0) + Math.log((y[i][index$j$17_7]?var91:(1.0 - var91)))) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((y[i][index$j$17_7]?var91:(1.0 - var91)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																							else {
-																								// If the second value is -infinity.
-																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((y[i][index$j$17_7]?var91:(1.0 - var91))));
-																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((y[i][index$j$17_7]?var91:(1.0 - var91)))))) + 1)) + (Math.log(1.0) + Math.log((y[i][index$j$17_7]?var91:(1.0 - var91)))));
-																							}
-																							
-																							// Recorded the probability of reaching sample task 94 with the current configuration.
-																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																						}
-																					}
-																				}
-																			}
-																		}
-																		
-																		// A check to ensure rounding of floating point values can never result in a negative
-																		// value.
-																		cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																		
-																		// Multiply (log space add) in the probability of the sample task to the overall probability
-																		// for this configuration of the source random variable.
-																		if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																			else
-																				cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-							{
-								double traceTempVariable$var62$18_1 = cv$currentValue;
-								for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-									if((var33 == j$var61)) {
-										for(int i = 0; i < n; i += 1) {
-											double traceTempVariable$var86$18_4 = Math.exp((traceTempVariable$var62$18_1 * x[i][j$var61]));
-											for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-												if((j$var61 == j$var85)) {
-													double traceTempVariable$var90$18_6 = (traceTempVariable$var86$18_4 / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-													for(int index$j$18_7 = 0; index$j$18_7 < k; index$j$18_7 += 1) {
-														if((j$var85 == index$j$18_7)) {
-															if(!guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
-																// The body will execute, so should not be executed again
-																guard$sample35bernoulli93[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
-																
-																// Processing sample task 94 of consumer random variable null.
-																{
-																	{
-																		// Set an accumulator to sum the probabilities for each possible configuration of
-																		// inputs.
-																		double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-																		
-																		// Set an accumulator to record the consumer distributions not seen. Initially set
-																		// to 1 as seen values will be deducted from this value.
-																		double cv$consumerDistributionProbabilityAccumulator = 1.0;
-																		{
-																			{
-																				{
-																					{
-																						{
-																							// Constructing a random variable input for use later.
-																							double var91 = (traceTempVariable$var90$18_6 + bias);
-																							
-																							// Record the probability of sample task 94 generating output with current configuration.
-																							if(((Math.log(1.0) + Math.log((y[i][index$j$18_7]?var91:(1.0 - var91)))) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((y[i][index$j$18_7]?var91:(1.0 - var91)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																							else {
-																								// If the second value is -infinity.
-																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((y[i][index$j$18_7]?var91:(1.0 - var91))));
-																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((y[i][index$j$18_7]?var91:(1.0 - var91)))))) + 1)) + (Math.log(1.0) + Math.log((y[i][index$j$18_7]?var91:(1.0 - var91)))));
-																							}
-																							
-																							// Recorded the probability of reaching sample task 94 with the current configuration.
-																							cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																						}
-																					}
-																				}
-																			}
-																		}
-																		
-																		// A check to ensure rounding of floating point values can never result in a negative
-																		// value.
-																		cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-																		
-																		// Multiply (log space add) in the probability of the sample task to the overall probability
-																		// for this configuration of the source random variable.
-																		if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-																			cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-																		else {
-																			// If the second value is -infinity.
-																			if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																				cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-																			else
-																				cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					
-					// Add the values for the source and any standard consumers for this configuration
-					// of arguments to the source.
-					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-					else {
-						// If the second value is -infinity.
-						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-							cv$stateProbabilityValue = cv$accumulatedProbabilities;
-						else
-							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-					}
-				}
-				
-				// Save the probability of the original value.
-				if((cv$valuePos == 0))
-					cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-				
-				// Save the probability of the proposed value.
-				else
-					cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-			}
-			
-			// The probability ration for the proposed value and the current value.
-			double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-			
-			// Test if the probability of the sample is sufficient to keep the value. This needs
-			// to be less than or equal as otherwise if the proposed value is not possible and
-			// the random value is 0 an impossible value will be accepted.
-			if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
-				// If it is not revert the changes.
-				// 
-				// Set the sample value
-				// Write out the value of the sample to a temporary variable prior to updating the
-				// intermediate variables.
-				double var34 = cv$originalValue;
-				
-				// Guards to ensure that weights is only updated when there is a valid path.
-				{
-					{
-						{
-							weights[var33] = var34;
-						}
-					}
-				}
-				
-				// Guards to ensure that indicator is only updated when there is a valid path.
-				// 
-				// Looking for a path between Sample 35 and consumer double[] 67.
-				{
-					{
-						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-							if((var33 == j$var61)) {
-								for(int i = 0; i < n; i += 1)
-									indicator[((i - 0) / 1)][j$var61] = Math.exp((weights[j$var61] * x[i][j$var61]));
-							}
-						}
-					}
-				}
-				
-				// Guards to ensure that p is only updated when there is a valid path.
-				// 
-				// Looking for a path between Sample 35 and consumer double[] 88.
-				{
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					boolean[][] guard$sample35put89 = guard$sample35put89$global;
-					{
-						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-							if((var33 == j$var61)) {
-								if((j$var61 == 0)) {
-									for(int i = 0; i < n; i += 1) {
-										for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
-											// Set the flags to false
-											guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
-									}
-								}
-							}
-						}
-					}
-					{
-						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-							if((var33 == j$var61)) {
-								if((j$var61 == 1)) {
-									for(int i = 0; i < n; i += 1) {
-										for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
-											// Set the flags to false
-											guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
-									}
-								}
-							}
-						}
-					}
-					{
-						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-							if((var33 == j$var61)) {
-								if((j$var61 == 2)) {
-									for(int i = 0; i < n; i += 1) {
-										for(int j$var85 = 0; j$var85 < k; j$var85 += 1)
-											// Set the flags to false
-											guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
-									}
-								}
-							}
-						}
-					}
-					{
-						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-							if((var33 == j$var61)) {
-								for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-									if((j$var61 == j$var85)) {
-										for(int i = 0; i < n; i += 1)
-											// Set the flags to false
-											guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = false;
-									}
-								}
-							}
-						}
-					}
-					{
-						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-							if((var33 == j$var61)) {
-								if((j$var61 == 0)) {
-									for(int i = 0; i < n; i += 1) {
-										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-											if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
-												// The body will execute, so should not be executed again
-												guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
-												{
-													p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					{
-						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-							if((var33 == j$var61)) {
-								if((j$var61 == 1)) {
-									for(int i = 0; i < n; i += 1) {
-										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-											if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
-												// The body will execute, so should not be executed again
-												guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
-												{
-													p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					{
-						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-							if((var33 == j$var61)) {
-								if((j$var61 == 2)) {
-									for(int i = 0; i < n; i += 1) {
-										for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-											if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
-												// The body will execute, so should not be executed again
-												guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
-												{
-													p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					{
-						for(int j$var61 = 0; j$var61 < k; j$var61 += 1) {
-							if((var33 == j$var61)) {
-								for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-									if((j$var61 == j$var85)) {
-										for(int i = 0; i < n; i += 1) {
-											if(!guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)]) {
-												// The body will execute, so should not be executed again
-												guard$sample35put89[((i - 0) / 1)][((j$var85 - 0) / 1)] = true;
-												{
-													p[((i - 0) / 1)][j$var85] = (indicator[((i - 0) / 1)][j$var85] / ((indicator[((i - 0) / 1)][0] + indicator[((i - 0) / 1)][1]) + indicator[((i - 0) / 1)][2]));
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 42 drawn from Gaussian 40. Inference was performed using Metropolis-Hastings.
-	private final void sample42() {
-		if(true) {
-			// Calculate the number of states to evaluate.
-			int cv$numStates = 0;
-			{
-				// Metropolis-Hastings
-				cv$numStates = Math.max(cv$numStates, 2);
-			}
-			
-			// The original value of the sample
-			double cv$originalValue = bias;
-			
-			// The probability of the random variable generating the originally sampled value
-			double cv$originalProbability = 0.0;
-			
-			// Calculate a proposed variance.
-			double cv$var = ((cv$originalValue * cv$originalValue) * (0.1 * 0.1));
-			
-			// Ensure the variance is at least 0.01
-			if((cv$var < (0.1 * 0.1)))
-				cv$var = (0.1 * 0.1);
-			
-			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-			
-			// The probability of the random variable generating the new sample value.
-			double cv$proposedProbability = 0.0;
-			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				// Initialize the summed probabilities to 0.
-				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
-				
-				// Initialize a counter to track the reached distributions.
-				double cv$reachedDistributionSourceRV = 0.0;
-				
-				// Initialize a log space accumulator to take the product of all the distribution
-				// probabilities.
-				double cv$accumulatedDistributionProbabilities = 0.0;
-				
-				// The value currently being tested
-				double cv$currentValue;
-				if((cv$valuePos == 0))
-					// Set the current value to the current state of the tree.
-					cv$currentValue = cv$originalValue;
-				else {
-					cv$currentValue = cv$proposedValue;
-					
-					// Update Sample and intermediate values
-					// 
-					// Write out the new value of the sample.
-					bias = cv$proposedValue;
-				}
-				{
-					// Record the reached probability density.
-					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
-					
-					// An accumulator to allow the value for each distribution to be constructed before
-					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$currentValue - 0.0) / Math.sqrt(10.0))) - (0.5 * Math.log(10.0))));
-					
-					// Processing random variable 92.
-					{
-						{
-							{
-								for(int i = 0; i < n; i += 1) {
-									for(int j$var85 = 0; j$var85 < k; j$var85 += 1) {
-										double traceTempVariable$bias$1_3 = cv$currentValue;
-										
-										// Processing sample task 94 of consumer random variable null.
-										{
-											{
-												// Set an accumulator to sum the probabilities for each possible configuration of
-												// inputs.
-												double cv$accumulatedConsumerProbabilities = Double.NEGATIVE_INFINITY;
-												
-												// Set an accumulator to record the consumer distributions not seen. Initially set
-												// to 1 as seen values will be deducted from this value.
-												double cv$consumerDistributionProbabilityAccumulator = 1.0;
-												{
-													{
-														{
-															{
-																{
-																	// Constructing a random variable input for use later.
-																	double var91 = (p[((i - 0) / 1)][j$var85] + traceTempVariable$bias$1_3);
-																	
-																	// Record the probability of sample task 94 generating output with current configuration.
-																	if(((Math.log(1.0) + Math.log((y[i][j$var85]?var91:(1.0 - var91)))) < cv$accumulatedConsumerProbabilities))
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + Math.log((y[i][j$var85]?var91:(1.0 - var91)))) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
-																	else {
-																		// If the second value is -infinity.
-																		if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																			cv$accumulatedConsumerProbabilities = (Math.log(1.0) + Math.log((y[i][j$var85]?var91:(1.0 - var91))));
-																		else
-																			cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + Math.log((y[i][j$var85]?var91:(1.0 - var91)))))) + 1)) + (Math.log(1.0) + Math.log((y[i][j$var85]?var91:(1.0 - var91)))));
-																	}
-																	
-																	// Recorded the probability of reaching sample task 94 with the current configuration.
-																	cv$consumerDistributionProbabilityAccumulator = (cv$consumerDistributionProbabilityAccumulator - 1.0);
-																}
-															}
-														}
-													}
-												}
-												
-												// A check to ensure rounding of floating point values can never result in a negative
-												// value.
-												cv$consumerDistributionProbabilityAccumulator = Math.max(cv$consumerDistributionProbabilityAccumulator, 0.0);
-												
-												// Multiply (log space add) in the probability of the sample task to the overall probability
-												// for this configuration of the source random variable.
-												if((Math.log(cv$consumerDistributionProbabilityAccumulator) < cv$accumulatedConsumerProbabilities))
-													cv$accumulatedProbabilities = ((Math.log((Math.exp((Math.log(cv$consumerDistributionProbabilityAccumulator) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities) + cv$accumulatedProbabilities);
-												else {
-													// If the second value is -infinity.
-													if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-														cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
-													else
-														cv$accumulatedProbabilities = ((Math.log((Math.exp((cv$accumulatedConsumerProbabilities - Math.log(cv$consumerDistributionProbabilityAccumulator))) + 1)) + Math.log(cv$consumerDistributionProbabilityAccumulator)) + cv$accumulatedProbabilities);
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					
-					// Add the values for the source and any standard consumers for this configuration
-					// of arguments to the source.
-					if((cv$accumulatedProbabilities < cv$stateProbabilityValue))
-						cv$stateProbabilityValue = (Math.log((Math.exp((cv$accumulatedProbabilities - cv$stateProbabilityValue)) + 1)) + cv$stateProbabilityValue);
-					else {
-						// If the second value is -infinity.
-						if((cv$stateProbabilityValue == Double.NEGATIVE_INFINITY))
-							cv$stateProbabilityValue = cv$accumulatedProbabilities;
-						else
-							cv$stateProbabilityValue = (Math.log((Math.exp((cv$stateProbabilityValue - cv$accumulatedProbabilities)) + 1)) + cv$accumulatedProbabilities);
-					}
-				}
-				
-				// Save the probability of the original value.
-				if((cv$valuePos == 0))
-					cv$originalProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-				
-				// Save the probability of the proposed value.
-				else
-					cv$proposedProbability = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
-			}
-			
-			// The probability ration for the proposed value and the current value.
-			double cv$ratio = (cv$proposedProbability - cv$originalProbability);
-			
-			// Test if the probability of the sample is sufficient to keep the value. This needs
-			// to be less than or equal as otherwise if the proposed value is not possible and
-			// the random value is 0 an impossible value will be accepted.
-			if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio)))
-				// If it is not revert the changes.
-				// 
-				// Set the sample value
-				// 
-				// Write out the new value of the sample.
-				bias = cv$originalValue;
-		}
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -1571,6 +1786,11 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 			p = new double[((((x.length - 1) - 0) / 1) + 1)][];
 			for(int i = 0; i < x.length; i += 1)
 				p[((i - 0) / 1)] = new double[3];
+		}
+		
+		// Constructor for constrainedFlag$sample35
+		{
+			constrainedFlag$sample35 = new boolean[((((3 - 1) - 0) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample35
@@ -1700,31 +1920,29 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 		if(system$gibbsForward) {
 			for(int var33 = 0; var33 < k; var33 += 1) {
 				if(!fixedFlag$sample35)
-					sample35(var33);
+					inferSample35(var33);
 			}
 			if(!fixedFlag$sample42)
-				sample42();
+				inferSample42();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			if(!fixedFlag$sample42)
-				sample42();
+				inferSample42();
 			for(int var33 = (k - ((((k - 1) - 0) % 1) + 1)); var33 >= ((0 - 1) + 1); var33 -= 1) {
 				if(!fixedFlag$sample35)
-					sample35(var33);
+					inferSample35(var33);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		k = 3;
-		n = x.length;
+		for(int var33 = 0; var33 < k; var33 += 1) {
+			if(!constrainedFlag$sample35[((var33 - 0) / 1)])
+				drawValueSample35(var33);
+		}
+		if(!constrainedFlag$sample42)
+			drawValueSample42();
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -1751,6 +1969,18 @@ final class LogitRegressionTest$SingleThreadCPU extends org.sandwood.runtime.int
 					logProbability$sample94[((i - 0) / 1)][((j$var85 - 0) / 1)] = Double.NaN;
 			}
 		}
+	}
+
+	// Method for initializing the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		k = 3;
+		n = x.length;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample35$1 = 0; index$constrainedFlag$sample35$1 < constrainedFlag$sample35.length; index$constrainedFlag$sample35$1 += 1)
+			constrainedFlag$sample35[index$constrainedFlag$sample35$1] = true;
 	}
 
 	// Construct the evidence probabilities.

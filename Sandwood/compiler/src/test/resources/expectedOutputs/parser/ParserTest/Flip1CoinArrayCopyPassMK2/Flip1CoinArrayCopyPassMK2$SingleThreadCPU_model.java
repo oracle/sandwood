@@ -10,6 +10,7 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 	private double a;
 	private double b;
 	private double[] bias;
+	private boolean constrainedFlag$sample10 = true;
 	private boolean fixedFlag$sample10 = false;
 	private boolean fixedProbFlag$sample10 = false;
 	private boolean fixedProbFlag$sample31 = false;
@@ -49,10 +50,9 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 
 	// Setter for bias.
 	@Override
-	public final void set$bias(double[] cv$value) {
+	public final void set$bias(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
-		// Set bias
 		bias = cv$value;
 		
 		// Unset the fixed probability flag for sample 10 as it depends on bias.
@@ -70,10 +70,11 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 
 	// Setter for fixedFlag$sample10.
 	@Override
-	public final void set$fixedFlag$sample10(boolean cv$value) {
+	public final void set$fixedFlag$sample10(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample10 including if probabilities
 		// need to be updated.
 		fixedFlag$sample10 = cv$value;
+		constrainedFlag$sample10 = (fixedFlag$sample10 || constrainedFlag$sample10);
 		
 		// Should the probability of sample 10 be set to fixed. This will only every change
 		// the flag to false.
@@ -98,8 +99,7 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 
 	// Setter for flipsMeasured.
 	@Override
-	public final void set$flipsMeasured(boolean[] cv$value) {
-		// Set flipsMeasured
+	public final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
 		flipsMeasured = cv$value;
 	}
 
@@ -141,8 +141,146 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 
 	// Setter for samples.
 	@Override
-	public final void set$samples(int cv$value) {
+	public final void set$samples(int cv$value, boolean allocated$) {
 		samples = cv$value;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample10
+	private final void drawValueSample10() {
+		bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
+		
+		// Guards to ensure that bias is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 10 and consumer double[] 28.
+		{
+			{
+				if((0 == 0)) {
+					for(int i = 0; i < samples; i += 1)
+						bias[(i + 1)] = bias[0];
+				}
+			}
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 10 drawn from Beta 9. Inference was performed using a Beta to Bernoulli/Binomial
+	// conjugate prior.
+	private final void inferSample10() {
+		if(true) {
+			constrainedFlag$sample10 = false;
+			
+			// Local variable to record the number of true samples.
+			int cv$sum = 0;
+			
+			// Local variable to record the number of samples.
+			int cv$count = 0;
+			{
+				// Processing random variable 30.
+				{
+					// Looking for a path between Sample 10 and consumer Bernoulli 30.
+					{
+						{
+							for(int i = 0; i < samples; i += 1) {
+								if((0 == i)) {
+									// Processing sample task 31 of consumer random variable bernoulli.
+									{
+										{
+											// Flag recording if this sample task of the consuming random variable is constrained.
+											boolean cv$sampleConstrained = true;
+											if(cv$sampleConstrained) {
+												// Mark that the sample has observed constrained data.
+												constrainedFlag$sample10 = true;
+												{
+													{
+														{
+															{
+																{
+																	// Include the value sampled by task 31 from random variable bernoulli.
+																	// Increment the number of samples.
+																	cv$count = (cv$count + 1);
+																	
+																	// If the sample value was positive increase the count
+																	if(flips[i])
+																		cv$sum = (cv$sum + 1);
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						{
+							if((0 == 0)) {
+								for(int i = 0; i < samples; i += 1) {
+									for(int index$i$2_2 = 0; index$i$2_2 < samples; index$i$2_2 += 1) {
+										if(((i + 1) == index$i$2_2)) {
+											// Processing sample task 31 of consumer random variable bernoulli.
+											{
+												{
+													// Flag recording if this sample task of the consuming random variable is constrained.
+													boolean cv$sampleConstrained = true;
+													if(cv$sampleConstrained) {
+														// Mark that the sample has observed constrained data.
+														constrainedFlag$sample10 = true;
+														{
+															{
+																{
+																	{
+																		{
+																			// Include the value sampled by task 31 from random variable bernoulli.
+																			// Increment the number of samples.
+																			cv$count = (cv$count + 1);
+																			
+																			// If the sample value was positive increase the count
+																			if(flips[index$i$2_2])
+																				cv$sum = (cv$sum + 1);
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample10) {
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
+				
+				// Guards to ensure that bias is only updated when there is a valid path.
+				{
+					{
+						{
+							bias[0] = var10;
+						}
+					}
+				}
+				
+				// Guards to ensure that bias is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 10 and consumer double[] 28.
+				{
+					{
+						if((0 == 0)) {
+							for(int i = 0; i < samples; i += 1)
+								bias[(i + 1)] = bias[0];
+						}
+					}
+				}
+			}
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample10 using sampled
@@ -275,7 +413,7 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 								double var29 = bias[i];
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?var29:(1.0 - var29))));
+								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var29) && (var29 <= 1.0))?Math.log((cv$sampleValue?var29:(1.0 - var29))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -353,112 +491,6 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 			// Add probability to model
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 10 drawn from Beta 9. Inference was performed using a Beta to Bernoulli/Binomial
-	// conjugate prior.
-	private final void sample10() {
-		if(true) {
-			// Local variable to record the number of true samples.
-			int cv$sum = 0;
-			
-			// Local variable to record the number of samples.
-			int cv$count = 0;
-			{
-				// Processing random variable 30.
-				{
-					// Looking for a path between Sample 10 and consumer Bernoulli 30.
-					{
-						{
-							for(int i = 0; i < samples; i += 1) {
-								if((0 == i)) {
-									// Processing sample task 31 of consumer random variable bernoulli.
-									{
-										{
-											{
-												{
-													{
-														{
-															{
-																// Include the value sampled by task 31 from random variable bernoulli.
-																// Increment the number of samples.
-																cv$count = (cv$count + 1);
-																
-																// If the sample value was positive increase the count
-																if(flips[i])
-																	cv$sum = (cv$sum + 1);
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-						{
-							if((0 == 0)) {
-								for(int i = 0; i < samples; i += 1) {
-									for(int index$i$2_2 = 0; index$i$2_2 < samples; index$i$2_2 += 1) {
-										if(((i + 1) == index$i$2_2)) {
-											// Processing sample task 31 of consumer random variable bernoulli.
-											{
-												{
-													{
-														{
-															{
-																{
-																	{
-																		// Include the value sampled by task 31 from random variable bernoulli.
-																		// Increment the number of samples.
-																		cv$count = (cv$count + 1);
-																		
-																		// If the sample value was positive increase the count
-																		if(flips[index$i$2_2])
-																			cv$sum = (cv$sum + 1);
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
-			
-			// Guards to ensure that bias is only updated when there is a valid path.
-			{
-				{
-					{
-						bias[0] = var10;
-					}
-				}
-			}
-			
-			// Guards to ensure that bias is only updated when there is a valid path.
-			// 
-			// Looking for a path between Sample 10 and consumer double[] 28.
-			{
-				{
-					if((0 == 0)) {
-						for(int i = 0; i < samples; i += 1)
-							bias[(i + 1)] = bias[0];
-					}
-				}
-			}
 		}
 	}
 
@@ -559,24 +591,18 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample10)
-				sample10();
+				inferSample10();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			if(!fixedFlag$sample10)
-				sample10();
+				inferSample10();
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		a = 1.0;
-		b = 1.0;
+		if(!constrainedFlag$sample10)
+			drawValueSample10();
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -599,6 +625,14 @@ final class Flip1CoinArrayCopyPassMK2$SingleThreadCPU extends org.sandwood.runti
 			for(int i = 0; i < samples; i += 1)
 				logProbability$sample31[((i - 0) / 1)] = Double.NaN;
 		}
+	}
+
+	// Method for initializing the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		a = 1.0;
+		b = 1.0;
 	}
 
 	// Construct the evidence probabilities.

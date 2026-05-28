@@ -7,6 +7,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements PoissonDecayMK1$CoreInterface {
 	private double a;
 	private double b;
+	private boolean constrainedFlag$sample6 = true;
 	private int[] decay;
 	private int[] decayDetected;
 	private boolean fixedFlag$sample6 = false;
@@ -33,7 +34,7 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final void set$a(double cv$value) {
+	public final void set$a(double cv$value, boolean allocated$) {
 		a = cv$value;
 	}
 
@@ -43,7 +44,7 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final void set$b(double cv$value) {
+	public final void set$b(double cv$value, boolean allocated$) {
 		b = cv$value;
 	}
 
@@ -58,7 +59,7 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final void set$decayDetected(int[] cv$value) {
+	public final void set$decayDetected(int[] cv$value, boolean allocated$) {
 		decayDetected = cv$value;
 	}
 
@@ -68,8 +69,9 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final void set$fixedFlag$sample6(boolean cv$value) {
+	public final void set$fixedFlag$sample6(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample6 = cv$value;
+		constrainedFlag$sample6 = (fixedFlag$sample6 || constrainedFlag$sample6);
 		fixedProbFlag$sample6 = (fixedFlag$sample6 && fixedProbFlag$sample6);
 		fixedProbFlag$sample19 = (fixedFlag$sample6 && fixedProbFlag$sample19);
 	}
@@ -80,7 +82,7 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final void set$length$decayDetected(int cv$value) {
+	public final void set$length$decayDetected(int cv$value, boolean allocated$) {
 		length$decayDetected = cv$value;
 	}
 
@@ -115,7 +117,7 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 	}
 
 	@Override
-	public final void set$rate(double cv$value) {
+	public final void set$rate(double cv$value, boolean allocated$) {
 		rate = cv$value;
 		fixedProbFlag$sample6 = false;
 		fixedProbFlag$sample19 = false;
@@ -124,6 +126,50 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 	@Override
 	public final int get$samples() {
 		return samples;
+	}
+
+	private final void drawValueSample6() {
+		rate = DistributionSampling.sampleGamma(RNG$, a, b);
+	}
+
+	private final void inferSample6() {
+		if(true) {
+			constrainedFlag$sample6 = false;
+			double cv$sum = 0.0;
+			int cv$count = 0;
+			{
+				{
+					{
+						{
+							{
+								{
+									for(int var18 = 0; var18 < samples; var18 += 1) {
+										boolean cv$sampleConstrained = true;
+										if(cv$sampleConstrained) {
+											constrainedFlag$sample6 = true;
+											{
+												{
+													{
+														{
+															{
+																cv$sum = (cv$sum + decay[var18]);
+																cv$count = (cv$count + 1);
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample6)
+				rate = Conjugates.sampleConjugateGammaPoisson(RNG$, a, b, cv$sum, cv$count);
+		}
 	}
 
 	private final void logProbabilityValue$sample19() {
@@ -233,30 +279,6 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 		}
 	}
 
-	private final void sample6() {
-		if(true) {
-			double cv$sum = 0.0;
-			int cv$count = 0;
-			{
-				{
-					{
-						{
-							{
-								{
-									for(int var18 = 0; var18 < samples; var18 += 1) {
-										cv$sum = (cv$sum + decay[var18]);
-										cv$count = (cv$count + 1);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			rate = Conjugates.sampleConjugateGammaPoisson(RNG$, a, b, cv$sum, cv$count);
-		}
-	}
-
 	@Override
 	public final void allocateScratch() {}
 
@@ -303,17 +325,14 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample6)
-				sample6();
+				inferSample6();
 		} else {
 			if(!fixedFlag$sample6)
-				sample6();
+				inferSample6();
 		}
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	@Override
-	public final void initializeConstants() {
-		samples = length$decayDetected;
+		if(!constrainedFlag$sample6)
+			drawValueSample6();
 	}
 
 	private final void initializeLogProbabilityFields() {
@@ -325,6 +344,11 @@ final class PoissonDecayMK1$SingleThreadCPU extends org.sandwood.runtime.interna
 		logProbability$decay = 0.0;
 		if(!fixedProbFlag$sample19)
 			logProbability$var19 = Double.NaN;
+	}
+
+	@Override
+	public final void initializeModel() {
+		samples = length$decayDetected;
 	}
 
 	@Override

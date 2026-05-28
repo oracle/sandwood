@@ -176,13 +176,11 @@ public class ConstraintMappingVisitor implements TreeVisitor {
                     if(!d.requiredScope.containsVar(desc))
                         toReturn.add(d);
             }
-            // Once we have met the first element that uses the values we must ensure that
-            // the
-            // initialisations are in the same scope, so it become the union of all
-            // constraints
-            // after that. This means that if the initialisation will be in the same scope
-            // or
-            // an outer scope.
+            /*
+             * Once we have met the first element that uses the values we must ensure that the initializations are in
+             * the same scope, so it become the union of all constraints after that. This means that if the
+             * initialization will be in the same scope or an outer scope.
+             */
             else if(!first) {
                 Set<ConstraintDescription> toRemove = new LinkedHashSet<>();
                 Set<ConstraintDescription> t2Constraints = mapping.get(t2);

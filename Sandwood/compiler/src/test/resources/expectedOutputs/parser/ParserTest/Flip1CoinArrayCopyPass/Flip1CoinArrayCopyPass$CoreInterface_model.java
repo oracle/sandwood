@@ -12,13 +12,13 @@ interface Flip1CoinArrayCopyPass$CoreInterface extends org.sandwood.runtime.inte
 	public double[] get$bias();
 
 	// Setter for bias.
-	public void set$bias(double[] cv$value);
+	public void set$bias(double[] cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample10.
 	public boolean get$fixedFlag$sample10();
 
 	// Setter for fixedFlag$sample10.
-	public void set$fixedFlag$sample10(boolean cv$value);
+	public void set$fixedFlag$sample10(boolean cv$value, boolean allocated$);
 
 	// Getter for flips.
 	public boolean[] get$flips();
@@ -27,7 +27,7 @@ interface Flip1CoinArrayCopyPass$CoreInterface extends org.sandwood.runtime.inte
 	public boolean[] get$flipsMeasured();
 
 	// Setter for flipsMeasured.
-	public void set$flipsMeasured(boolean[] cv$value);
+	public void set$flipsMeasured(boolean[] cv$value, boolean allocated$);
 
 	// Getter for logProbability$bernoulli.
 	public double[] get$logProbability$bernoulli();
@@ -42,5 +42,5 @@ interface Flip1CoinArrayCopyPass$CoreInterface extends org.sandwood.runtime.inte
 	public int get$samples();
 
 	// Setter for samples.
-	public void set$samples(int cv$value);
+	public void set$samples(int cv$value, boolean allocated$);
 }

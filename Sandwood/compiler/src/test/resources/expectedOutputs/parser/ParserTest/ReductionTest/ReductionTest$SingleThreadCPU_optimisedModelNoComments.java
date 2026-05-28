@@ -6,6 +6,9 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ReductionTest$CoreInterface {
 	private double[] bias;
+	private boolean[] constrainedFlag$sample30;
+	private boolean[] constrainedFlag$sample47;
+	private boolean[] constrainedFlag$sample62;
 	private double[] cv$var30$countGlobal;
 	private double[] cv$var61$stateProbabilityGlobal;
 	private boolean fixedFlag$sample30 = false;
@@ -46,7 +49,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$bias(double[] cv$value) {
+	public final void set$bias(double[] cv$value, boolean allocated$) {
 		bias = cv$value;
 		fixedProbFlag$sample47 = false;
 		fixedProbFlag$sample87 = false;
@@ -58,8 +61,12 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$fixedFlag$sample30(boolean cv$value) {
+	public final void set$fixedFlag$sample30(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample30 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample30$1 = 0; index$constrainedFlag$sample30$1 < constrainedFlag$sample30.length; index$constrainedFlag$sample30$1 += 1)
+				constrainedFlag$sample30[index$constrainedFlag$sample30$1] = cv$value;
+		}
 		fixedProbFlag$sample30 = (cv$value && fixedProbFlag$sample30);
 		fixedProbFlag$sample62 = (cv$value && fixedProbFlag$sample62);
 	}
@@ -70,8 +77,12 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$fixedFlag$sample47(boolean cv$value) {
+	public final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample47 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
+				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = cv$value;
+		}
 		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
 		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
 	}
@@ -82,8 +93,12 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$fixedFlag$sample62(boolean cv$value) {
+	public final void set$fixedFlag$sample62(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample62 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample62$1 = 0; index$constrainedFlag$sample62$1 < constrainedFlag$sample62.length; index$constrainedFlag$sample62$1 += 1)
+				constrainedFlag$sample62[index$constrainedFlag$sample62$1] = cv$value;
+		}
 		fixedProbFlag$sample62 = (cv$value && fixedProbFlag$sample62);
 		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
 	}
@@ -99,7 +114,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$flipsMeasured(boolean[] cv$value) {
+	public final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
 		flipsMeasured = cv$value;
 	}
 
@@ -109,7 +124,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$length$flipsMeasured(int cv$value) {
+	public final void set$length$flipsMeasured(int cv$value, boolean allocated$) {
 		length$flipsMeasured = cv$value;
 	}
 
@@ -149,7 +164,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$m(double[][] cv$value) {
+	public final void set$m(double[][] cv$value, boolean allocated$) {
 		m = cv$value;
 		fixedProbFlag$sample30 = false;
 		fixedProbFlag$sample62 = false;
@@ -161,7 +176,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$noCats(int cv$value) {
+	public final void set$noCats(int cv$value, boolean allocated$) {
 		noCats = cv$value;
 	}
 
@@ -181,7 +196,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$st(int[] cv$value) {
+	public final void set$st(int[] cv$value, boolean allocated$) {
 		st = cv$value;
 		fixedProbFlag$sample62 = false;
 		fixedProbFlag$sample87 = false;
@@ -190,6 +205,98 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final double[] get$v() {
 		return v;
+	}
+
+	private final void drawValueSample30(int var29) {
+		DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var29]);
+	}
+
+	private final void drawValueSample47(int var45) {
+		bias[var45] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	private final void drawValueSample62(int i$var58) {
+		st[i$var58] = DistributionSampling.sampleCategorical(RNG$, m[i$var58], noStates);
+	}
+
+	private final void inferSample30(int var29) {
+		constrainedFlag$sample30[var29] = false;
+		for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
+			cv$var30$countGlobal[cv$loopIndex] = 0.0;
+		if((fixedFlag$sample62 || constrainedFlag$sample62[var29])) {
+			constrainedFlag$sample30[var29] = true;
+			cv$var30$countGlobal[st[var29]] = (cv$var30$countGlobal[st[var29]] + 1.0);
+		}
+		if(constrainedFlag$sample30[var29])
+			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var30$countGlobal, m[var29], noStates);
+	}
+
+	private final void inferSample47(int var45) {
+		constrainedFlag$sample47[var45] = false;
+		int cv$sum = 0;
+		int cv$count = 0;
+		int reduceVar$var82$0 = 0;
+		for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
+			reduceVar$var82$0 = (reduceVar$var82$0 + st[cv$reduction78Index]);
+		if((var45 == reduceVar$var82$0)) {
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
+				constrainedFlag$sample47[var45] = true;
+				cv$count = (cv$count + 1);
+				if(flips[j$var73])
+					cv$sum = (cv$sum + 1);
+			}
+		}
+		if(constrainedFlag$sample47[var45])
+			bias[var45] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+	}
+
+	private final void inferSample62(int i$var58) {
+		constrainedFlag$sample62[i$var58] = false;
+		int cv$numStates = Math.max(0, noStates);
+		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
+			st[i$var58] = cv$valuePos;
+			double[] var59 = m[i$var58];
+			double cv$accumulatedProbabilities = (((((cv$valuePos < noStates) && (0 < noStates)) && (0.0 <= var59[cv$valuePos])) && (var59[cv$valuePos] <= 1.0))?Math.log(var59[cv$valuePos]):Double.NEGATIVE_INFINITY);
+			int reduceVar$var82$1 = 0;
+			for(int cv$reduction267Index = 0; cv$reduction267Index < i$var58; cv$reduction267Index += 1)
+				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction267Index]);
+			for(int cv$reduction267Index = (i$var58 + 1); cv$reduction267Index < noCats; cv$reduction267Index += 1)
+				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction267Index]);
+			reduceVar$var82$1 = (cv$valuePos + reduceVar$var82$1);
+			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
+				constrainedFlag$sample62[i$var58] = true;
+				double var83 = bias[reduceVar$var82$1];
+				cv$accumulatedProbabilities = ((((0.0 <= var83) && (var83 <= 1.0))?Math.log((flips[j$var73]?var83:(1.0 - var83))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			cv$var61$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
+		}
+		if(constrainedFlag$sample62[i$var58]) {
+			double cv$logSum;
+			double cv$lseMax = cv$var61$stateProbabilityGlobal[0];
+			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
+				double cv$lseElementValue = cv$var61$stateProbabilityGlobal[cv$lseIndex];
+				if((cv$lseMax < cv$lseElementValue))
+					cv$lseMax = cv$lseElementValue;
+			}
+			if((cv$lseMax == Double.NEGATIVE_INFINITY))
+				cv$logSum = Double.NEGATIVE_INFINITY;
+			else {
+				double cv$lseSum = 0.0;
+				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
+					cv$lseSum = (cv$lseSum + Math.exp((cv$var61$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+				cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
+			}
+			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					cv$var61$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
+			} else {
+				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
+					cv$var61$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var61$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+			}
+			for(int cv$indexName = cv$numStates; cv$indexName < cv$var61$stateProbabilityGlobal.length; cv$indexName += 1)
+				cv$var61$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			st[i$var58] = DistributionSampling.sampleCategorical(RNG$, cv$var61$stateProbabilityGlobal, cv$numStates);
+		}
 	}
 
 	private final void logProbabilityValue$sample30() {
@@ -235,7 +342,8 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			double cv$accumulator = 0.0;
 			for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
 				int cv$sampleValue = st[i$var58];
-				double cv$distributionAccumulator = (((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates))?Math.log(m[i$var58][cv$sampleValue]):Double.NEGATIVE_INFINITY);
+				double[] var59 = m[i$var58];
+				double cv$distributionAccumulator = ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var59[cv$sampleValue])) && (var59[cv$sampleValue] <= 1.0))?Math.log(var59[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$sample62[i$var58] = cv$distributionAccumulator;
 			}
@@ -263,7 +371,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 				for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
 					reduceVar$var82$2 = (reduceVar$var82$2 + st[cv$reduction78Index]);
 				double var83 = bias[reduceVar$var82$2];
-				double cv$distributionAccumulator = Math.log((flips[j$var73]?var83:(1.0 - var83)));
+				double cv$distributionAccumulator = (((0.0 <= var83) && (var83 <= 1.0))?Math.log((flips[j$var73]?var83:(1.0 - var83))):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$sample87[j$var73] = cv$distributionAccumulator;
 			}
@@ -279,73 +387,6 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			logProbability$$model = (logProbability$$model + cv$accumulator);
 			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
 		}
-	}
-
-	private final void sample30(int var29) {
-		for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-			cv$var30$countGlobal[cv$loopIndex] = 0.0;
-		cv$var30$countGlobal[st[var29]] = (cv$var30$countGlobal[st[var29]] + 1.0);
-		Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var30$countGlobal, m[var29], noStates);
-	}
-
-	private final void sample47(int var45) {
-		int cv$sum = 0;
-		int cv$count = 0;
-		int reduceVar$var82$0 = 0;
-		for(int cv$reduction78Index = 0; cv$reduction78Index < noCats; cv$reduction78Index += 1)
-			reduceVar$var82$0 = (reduceVar$var82$0 + st[cv$reduction78Index]);
-		if((var45 == reduceVar$var82$0)) {
-			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-				cv$count = (cv$count + 1);
-				if(flips[j$var73])
-					cv$sum = (cv$sum + 1);
-			}
-		}
-		bias[var45] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-	}
-
-	private final void sample62(int i$var58) {
-		int cv$numStates = Math.max(0, noStates);
-		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-			st[i$var58] = cv$valuePos;
-			double cv$accumulatedProbabilities = ((cv$valuePos < noStates)?Math.log(m[i$var58][cv$valuePos]):Double.NEGATIVE_INFINITY);
-			int reduceVar$var82$1 = 0;
-			for(int cv$reduction222Index = 0; cv$reduction222Index < i$var58; cv$reduction222Index += 1)
-				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction222Index]);
-			for(int cv$reduction222Index = (i$var58 + 1); cv$reduction222Index < noCats; cv$reduction222Index += 1)
-				reduceVar$var82$1 = (reduceVar$var82$1 + st[cv$reduction222Index]);
-			reduceVar$var82$1 = (cv$valuePos + reduceVar$var82$1);
-			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1) {
-				double var83 = bias[reduceVar$var82$1];
-				cv$accumulatedProbabilities = (Math.log((flips[j$var73]?var83:(1.0 - var83))) + cv$accumulatedProbabilities);
-			}
-			cv$var61$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
-		}
-		double cv$logSum;
-		double cv$lseMax = cv$var61$stateProbabilityGlobal[0];
-		for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
-			double cv$lseElementValue = cv$var61$stateProbabilityGlobal[cv$lseIndex];
-			if((cv$lseMax < cv$lseElementValue))
-				cv$lseMax = cv$lseElementValue;
-		}
-		if((cv$lseMax == Double.NEGATIVE_INFINITY))
-			cv$logSum = Double.NEGATIVE_INFINITY;
-		else {
-			double cv$lseSum = 0.0;
-			for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
-				cv$lseSum = (cv$lseSum + Math.exp((cv$var61$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
-			cv$logSum = (Math.log(cv$lseSum) + cv$lseMax);
-		}
-		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-				cv$var61$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
-		} else {
-			for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-				cv$var61$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var61$stateProbabilityGlobal[cv$indexName] - cv$logSum));
-		}
-		for(int cv$indexName = cv$numStates; cv$indexName < cv$var61$stateProbabilityGlobal.length; cv$indexName += 1)
-			cv$var61$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		st[i$var58] = DistributionSampling.sampleCategorical(RNG$, cv$var61$stateProbabilityGlobal, cv$numStates);
 	}
 
 	@Override
@@ -367,6 +408,9 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(!fixedFlag$sample62)
 			st = new int[noCats];
 		flips = new boolean[length$flipsMeasured];
+		constrainedFlag$sample47 = new boolean[length$flipsMeasured];
+		constrainedFlag$sample30 = new boolean[noCats];
+		constrainedFlag$sample62 = new boolean[noCats];
 		logProbability$sample62 = new double[noCats];
 		logProbability$sample87 = new double[length$flipsMeasured];
 		allocateScratch();
@@ -469,39 +513,43 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample30) {
 				for(int var29 = 0; var29 < noCats; var29 += 1)
-					sample30(var29);
+					inferSample30(var29);
 			}
 			if(!fixedFlag$sample47) {
 				for(int var45 = 0; var45 < noFlips; var45 += 1)
-					sample47(var45);
+					inferSample47(var45);
 			}
 			if(!fixedFlag$sample62) {
 				for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1)
-					sample62(i$var58);
+					inferSample62(i$var58);
 			}
 		} else {
 			if(!fixedFlag$sample62) {
 				for(int i$var58 = (noCats - 1); i$var58 >= 0; i$var58 -= 1)
-					sample62(i$var58);
+					inferSample62(i$var58);
 			}
 			if(!fixedFlag$sample47) {
 				for(int var45 = (noFlips - 1); var45 >= 0; var45 -= 1)
-					sample47(var45);
+					inferSample47(var45);
 			}
 			if(!fixedFlag$sample30) {
 				for(int var29 = (noCats - 1); var29 >= 0; var29 -= 1)
-					sample30(var29);
+					inferSample30(var29);
 			}
 		}
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	@Override
-	public final void initializeConstants() {
-		noFlips = length$flipsMeasured;
-		noStates = (length$flipsMeasured / noCats);
-		for(int i$var15 = 0; i$var15 < (length$flipsMeasured / noCats); i$var15 += 1)
-			v[i$var15] = 0.1;
+		for(int var29 = 0; var29 < noCats; var29 += 1) {
+			if(!constrainedFlag$sample30[var29])
+				drawValueSample30(var29);
+		}
+		for(int var45 = 0; var45 < noFlips; var45 += 1) {
+			if(!constrainedFlag$sample47[var45])
+				drawValueSample47(var45);
+		}
+		for(int i$var58 = 0; i$var58 < noCats; i$var58 += 1) {
+			if(!constrainedFlag$sample62[i$var58])
+				drawValueSample62(i$var58);
+		}
 	}
 
 	private final void initializeLogProbabilityFields() {
@@ -523,6 +571,20 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 			for(int j$var73 = 0; j$var73 < noFlips; j$var73 += 1)
 				logProbability$sample87[j$var73] = Double.NaN;
 		}
+	}
+
+	@Override
+	public final void initializeModel() {
+		noFlips = length$flipsMeasured;
+		noStates = (length$flipsMeasured / noCats);
+		for(int i$var15 = 0; i$var15 < (length$flipsMeasured / noCats); i$var15 += 1)
+			v[i$var15] = 0.1;
+		for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
+			constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+		for(int index$constrainedFlag$sample30$1 = 0; index$constrainedFlag$sample30$1 < constrainedFlag$sample30.length; index$constrainedFlag$sample30$1 += 1)
+			constrainedFlag$sample30[index$constrainedFlag$sample30$1] = true;
+		for(int index$constrainedFlag$sample62$1 = 0; index$constrainedFlag$sample62$1 < constrainedFlag$sample62.length; index$constrainedFlag$sample62$1 += 1)
+			constrainedFlag$sample62[index$constrainedFlag$sample62$1] = true;
 	}
 
 	@Override

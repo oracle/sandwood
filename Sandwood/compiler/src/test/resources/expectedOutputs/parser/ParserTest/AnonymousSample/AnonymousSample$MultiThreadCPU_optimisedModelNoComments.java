@@ -7,6 +7,9 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements AnonymousSample$CoreInterface {
 	private double[] amounts1;
 	private double[] amounts2;
+	private boolean constrainedFlag$sample15 = true;
+	private boolean constrainedFlag$sample21 = true;
+	private boolean constrainedFlag$sample9 = true;
 	private boolean fixedFlag$sample15 = false;
 	private boolean fixedFlag$sample21 = false;
 	private boolean fixedFlag$sample9 = false;
@@ -55,8 +58,9 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$fixedFlag$sample15(boolean cv$value) {
+	public final void set$fixedFlag$sample15(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample15 = cv$value;
+		constrainedFlag$sample15 = (cv$value || constrainedFlag$sample15);
 		fixedProbFlag$sample15 = (cv$value && fixedProbFlag$sample15);
 		fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
 	}
@@ -67,8 +71,9 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$fixedFlag$sample21(boolean cv$value) {
+	public final void set$fixedFlag$sample21(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample21 = cv$value;
+		constrainedFlag$sample21 = (cv$value || constrainedFlag$sample21);
 		fixedProbFlag$sample21 = (cv$value && fixedProbFlag$sample21);
 		fixedProbFlag$sample39 = (cv$value && fixedProbFlag$sample39);
 	}
@@ -79,8 +84,9 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$fixedFlag$sample9(boolean cv$value) {
+	public final void set$fixedFlag$sample9(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample9 = cv$value;
+		constrainedFlag$sample9 = (cv$value || constrainedFlag$sample9);
 		fixedProbFlag$sample9 = (cv$value && fixedProbFlag$sample9);
 		fixedProbFlag$sample35 = (cv$value && fixedProbFlag$sample35);
 		fixedProbFlag$sample39 = (cv$value && fixedProbFlag$sample39);
@@ -92,7 +98,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$length$obsAmounts1(int cv$value) {
+	public final void set$length$obsAmounts1(int cv$value, boolean allocated$) {
 		length$obsAmounts1 = cv$value;
 	}
 
@@ -137,7 +143,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$mean1(double cv$value) {
+	public final void set$mean1(double cv$value, boolean allocated$) {
 		mean1 = cv$value;
 		fixedProbFlag$sample15 = false;
 		fixedProbFlag$sample35 = false;
@@ -149,7 +155,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$mean2(double cv$value) {
+	public final void set$mean2(double cv$value, boolean allocated$) {
 		mean2 = cv$value;
 		fixedProbFlag$sample21 = false;
 		fixedProbFlag$sample39 = false;
@@ -166,7 +172,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$obsAmounts1(double[] cv$value) {
+	public final void set$obsAmounts1(double[] cv$value, boolean allocated$) {
 		obsAmounts1 = cv$value;
 	}
 
@@ -176,7 +182,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$obsAmounts2(double[] cv$value) {
+	public final void set$obsAmounts2(double[] cv$value, boolean allocated$) {
 		obsAmounts2 = cv$value;
 	}
 
@@ -186,11 +192,98 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 	}
 
 	@Override
-	public final void set$priorSigma2(double cv$value) {
+	public final void set$priorSigma2(double cv$value, boolean allocated$) {
 		priorSigma2 = cv$value;
 		fixedProbFlag$sample9 = false;
 		fixedProbFlag$sample35 = false;
 		fixedProbFlag$sample39 = false;
+	}
+
+	private final void drawValueSample15() {
+		mean1 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
+	}
+
+	private final void drawValueSample21() {
+		mean2 = ((DistributionSampling.sampleGaussian(RNG$) * 100.0) + 2000.0);
+	}
+
+	private final void drawValueSample9() {
+		priorSigma2 = ((DistributionSampling.sampleGaussian(RNG$) * 30.0) + 10000.0);
+	}
+
+	private final void inferSample15() {
+		constrainedFlag$sample15 = false;
+		double cv$sum = 0.0;
+		double cv$denominatorSquareSum = 0.0;
+		boolean cv$sigmaNotFound = true;
+		double cv$sigmaValue = 1.0;
+		for(int i = 0; i < n; i += 1) {
+			constrainedFlag$sample15 = true;
+			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
+			cv$sum = (cv$sum + amounts1[i]);
+			if(cv$sigmaNotFound) {
+				cv$sigmaValue = priorSigma2;
+				cv$sigmaNotFound = false;
+			}
+		}
+		if(constrainedFlag$sample15)
+			mean1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+	}
+
+	private final void inferSample21() {
+		constrainedFlag$sample21 = false;
+		double cv$sum = 0.0;
+		double cv$denominatorSquareSum = 0.0;
+		boolean cv$sigmaNotFound = true;
+		double cv$sigmaValue = 1.0;
+		for(int i = 0; i < n; i += 1) {
+			constrainedFlag$sample21 = true;
+			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
+			cv$sum = (cv$sum + var39[i]);
+			if(cv$sigmaNotFound) {
+				cv$sigmaValue = priorSigma2;
+				cv$sigmaNotFound = false;
+			}
+		}
+		if(constrainedFlag$sample21)
+			mean2 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+	}
+
+	private final void inferSample9() {
+		constrainedFlag$sample9 = false;
+		double cv$originalValue = priorSigma2;
+		double cv$originalProbability;
+		double cv$var = ((priorSigma2 * priorSigma2) * 0.010000000000000002);
+		if((cv$var < 0.010000000000000002))
+			cv$var = 0.010000000000000002;
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + priorSigma2);
+		{
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((priorSigma2 - 10000.0) / 30.0)) - 3.4011973816621555);
+			for(int i = 0; i < n; i += 1) {
+				constrainedFlag$sample9 = true;
+				cv$accumulatedProbabilities = (((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			for(int i = 0; i < n; i += 1) {
+				constrainedFlag$sample9 = true;
+				cv$accumulatedProbabilities = (((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			cv$originalProbability = cv$accumulatedProbabilities;
+		}
+		if(constrainedFlag$sample9) {
+			priorSigma2 = cv$proposedValue;
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((cv$proposedValue - 10000.0) / 30.0)) - 3.4011973816621555);
+			for(int i = 0; i < n; i += 1) {
+				constrainedFlag$sample9 = true;
+				cv$accumulatedProbabilities = (((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			for(int i = 0; i < n; i += 1) {
+				constrainedFlag$sample9 = true;
+				cv$accumulatedProbabilities = (((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+				priorSigma2 = cv$originalValue;
+		}
 	}
 
 	private final void logProbabilityValue$sample15() {
@@ -227,7 +320,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 		if(!fixedProbFlag$sample35) {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < n; i += 1) {
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5));
+				double cv$distributionAccumulator = ((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$sample35[i] = cv$distributionAccumulator;
 			}
@@ -249,7 +342,7 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 		if(!fixedProbFlag$sample39) {
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < n; i += 1) {
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5));
+				double cv$distributionAccumulator = ((0.0 < priorSigma2)?(DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2))) - (Math.log(priorSigma2) * 0.5)):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$sample39[i] = cv$distributionAccumulator;
 			}
@@ -282,64 +375,6 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 			if(fixedFlag$sample9)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$priorSigma2);
 		}
-	}
-
-	private final void sample15() {
-		double cv$sum = 0.0;
-		double cv$denominatorSquareSum = 0.0;
-		boolean cv$sigmaNotFound = true;
-		double cv$sigmaValue = 1.0;
-		for(int i = 0; i < n; i += 1) {
-			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
-			cv$sum = (cv$sum + amounts1[i]);
-			if(cv$sigmaNotFound) {
-				cv$sigmaValue = priorSigma2;
-				cv$sigmaNotFound = false;
-			}
-		}
-		mean1 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-	}
-
-	private final void sample21() {
-		double cv$sum = 0.0;
-		double cv$denominatorSquareSum = 0.0;
-		boolean cv$sigmaNotFound = true;
-		double cv$sigmaValue = 1.0;
-		for(int i = 0; i < n; i += 1) {
-			cv$denominatorSquareSum = (cv$denominatorSquareSum + 1.0);
-			cv$sum = (cv$sum + var39[i]);
-			if(cv$sigmaNotFound) {
-				cv$sigmaValue = priorSigma2;
-				cv$sigmaNotFound = false;
-			}
-		}
-		mean2 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 2000.0, 10000.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-	}
-
-	private final void sample9() {
-		double cv$originalValue = priorSigma2;
-		double cv$originalProbability;
-		double cv$var = ((priorSigma2 * priorSigma2) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + priorSigma2);
-		{
-			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((priorSigma2 - 10000.0) / 30.0)) - 3.4011973816621555);
-			for(int i = 0; i < n; i += 1)
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(priorSigma2))) + cv$accumulatedProbabilities) - (Math.log(priorSigma2) * 0.5));
-			for(int i = 0; i < n; i += 1)
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(priorSigma2))) + cv$accumulatedProbabilities) - (Math.log(priorSigma2) * 0.5));
-			cv$originalProbability = cv$accumulatedProbabilities;
-		}
-		priorSigma2 = cv$proposedValue;
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian(((cv$proposedValue - 10000.0) / 30.0)) - 3.4011973816621555);
-		for(int i = 0; i < n; i += 1)
-			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((amounts1[i] - mean1) / Math.sqrt(cv$proposedValue))) + cv$accumulatedProbabilities) - (Math.log(cv$proposedValue) * 0.5));
-		for(int i = 0; i < n; i += 1)
-			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((var39[i] - mean2) / Math.sqrt(cv$proposedValue))) + cv$accumulatedProbabilities) - (Math.log(cv$proposedValue) * 0.5));
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			priorSigma2 = cv$originalValue;
 	}
 
 	@Override
@@ -426,25 +461,26 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample9)
-				sample9();
+				inferSample9();
 			if(!fixedFlag$sample15)
-				sample15();
+				inferSample15();
 			if(!fixedFlag$sample21)
-				sample21();
+				inferSample21();
 		} else {
 			if(!fixedFlag$sample21)
-				sample21();
+				inferSample21();
 			if(!fixedFlag$sample15)
-				sample15();
+				inferSample15();
 			if(!fixedFlag$sample9)
-				sample9();
+				inferSample9();
 		}
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	@Override
-	public final void initializeConstants() {
-		n = length$obsAmounts1;
+		if(!constrainedFlag$sample9)
+			drawValueSample9();
+		if(!constrainedFlag$sample15)
+			drawValueSample15();
+		if(!constrainedFlag$sample21)
+			drawValueSample21();
 	}
 
 	private final void initializeLogProbabilityFields() {
@@ -467,6 +503,11 @@ final class AnonymousSample$MultiThreadCPU extends org.sandwood.runtime.internal
 			for(int i = 0; i < n; i += 1)
 				logProbability$sample39[i] = Double.NaN;
 		}
+	}
+
+	@Override
+	public final void initializeModel() {
+		n = length$obsAmounts1;
 	}
 
 	@Override

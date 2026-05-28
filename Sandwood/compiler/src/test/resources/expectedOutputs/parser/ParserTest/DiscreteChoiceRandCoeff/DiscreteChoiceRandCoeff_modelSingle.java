@@ -25,7 +25,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$b(value);
+            system$c.set$b(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample28(fixed);
+                system$c.set$fixedFlag$sample28(fixed, allocated);
             }
         }
 
@@ -59,7 +59,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$beta(value);
+            system$c.set$beta(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -69,7 +69,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample47(fixed);
+                system$c.set$fixedFlag$sample47(fixed, allocated);
             }
         }
 
@@ -141,8 +141,8 @@ public final class DiscreteChoiceRandCoeff extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample21(fixed);
-                system$c.set$fixedFlag$sample47(fixed);
+                system$c.set$fixedFlag$sample21(fixed, allocated);
+                system$c.set$fixedFlag$sample47(fixed, allocated);
             }
         }
 
@@ -170,7 +170,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$sigma(value);
+            system$c.set$sigma(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -180,7 +180,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample34(fixed);
+                system$c.set$fixedFlag$sample34(fixed, allocated);
             }
         }
 
@@ -204,7 +204,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$ut(value);
+            system$c.set$ut(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -214,7 +214,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample21(fixed);
+                system$c.set$fixedFlag$sample21(fixed, allocated);
             }
         }
 
@@ -243,7 +243,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
         }
 
         @Override
-        protected void setValueInternal(int[][] value) { system$c.set$Prices(value); }
+        protected void setValueInternal(int[][] value) { system$c.set$Prices(value, allocated); }
     };
 
     /**
@@ -260,7 +260,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noObs(value); }
+        protected void setValueInternal(int value) { system$c.set$noObs(value, allocated); }
     };
 
     /**
@@ -277,7 +277,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noProducts(value); }
+        protected void setValueInternal(int value) { system$c.set$noProducts(value, allocated); }
     };
 
     /**
@@ -296,7 +296,7 @@ public final class DiscreteChoiceRandCoeff extends Model {
         }
 
         @Override
-        protected void setValueInternal(int[] value) { system$c.set$ObsChoices(value); }
+        protected void setValueInternal(int[] value) { system$c.set$ObsChoices(value, allocated); }
     };
 
     /**
@@ -384,30 +384,31 @@ public final class DiscreteChoiceRandCoeff extends Model {
     private void transferData(DiscreteChoiceRandCoeff$CoreInterface oldCore, DiscreteChoiceRandCoeff$CoreInterface newCore) {
         //Model inputs
         if(Prices.isSet())
-            newCore.set$Prices(oldCore.get$Prices());
+            newCore.set$Prices(oldCore.get$Prices(), false);
         if(noObs.isSet())
-            newCore.set$noObs(oldCore.get$noObs());
+            newCore.set$noObs(oldCore.get$noObs(), false);
         if(noProducts.isSet())
-            newCore.set$noProducts(oldCore.get$noProducts());
+            newCore.set$noProducts(oldCore.get$noProducts(), false);
+
         //Observed scalars
         if(ObsChoices.isSet())
-            newCore.set$ObsChoices(oldCore.get$ObsChoices());
+            newCore.set$ObsChoices(oldCore.get$ObsChoices(), false);
 
         //ComputedVariables
         if($b.isSet())
-            newCore.set$b(oldCore.get$b());
+            newCore.set$b(oldCore.get$b(), false);
         if($beta.isSet())
-            newCore.set$beta(oldCore.get$beta());
+            newCore.set$beta(oldCore.get$beta(), false);
         if($sigma.isSet())
-            newCore.set$sigma(oldCore.get$sigma());
+            newCore.set$sigma(oldCore.get$sigma(), false);
         if($ut.isSet())
-            newCore.set$ut(oldCore.get$ut());
+            newCore.set$ut(oldCore.get$ut(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
-        newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28());
-        newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34());
-        newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47());
+        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21(), false);
+        newCore.set$fixedFlag$sample28(oldCore.get$fixedFlag$sample28(), false);
+        newCore.set$fixedFlag$sample34(oldCore.get$fixedFlag$sample34(), false);
+        newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47(), false);
     }
 
     /**

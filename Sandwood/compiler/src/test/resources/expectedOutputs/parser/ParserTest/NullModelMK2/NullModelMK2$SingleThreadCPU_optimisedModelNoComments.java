@@ -5,6 +5,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements NullModelMK2$CoreInterface {
 	private double bias;
+	private boolean constrainedFlag$sample10 = true;
 	private double eta;
 	private boolean fixedFlag$sample10 = false;
 	private boolean fixedProbFlag$sample10 = false;
@@ -30,7 +31,7 @@ final class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		bias = cv$value;
 		fixedProbFlag$sample10 = false;
 		fixedProbFlag$sample12 = false;
@@ -42,7 +43,7 @@ final class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$eta(double cv$value) {
+	public final void set$eta(double cv$value, boolean allocated$) {
 		eta = cv$value;
 	}
 
@@ -52,8 +53,9 @@ final class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$fixedFlag$sample10(boolean cv$value) {
+	public final void set$fixedFlag$sample10(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample10 = cv$value;
+		constrainedFlag$sample10 = (cv$value || constrainedFlag$sample10);
 		fixedProbFlag$sample10 = (cv$value && fixedProbFlag$sample10);
 		fixedProbFlag$sample12 = (cv$value && fixedProbFlag$sample12);
 	}
@@ -94,7 +96,7 @@ final class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$observedPositiveCount(int cv$value) {
+	public final void set$observedPositiveCount(int cv$value, boolean allocated$) {
 		observedPositiveCount = cv$value;
 	}
 
@@ -104,13 +106,33 @@ final class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$observedSampleCount(int cv$value) {
+	public final void set$observedSampleCount(int cv$value, boolean allocated$) {
 		observedSampleCount = cv$value;
 	}
 
 	@Override
 	public final int get$positiveCount() {
 		return positiveCount;
+	}
+
+	private final void drawValueSample10() {
+		bias = (min + ((1.0 - min) * DistributionSampling.sampleUniform(RNG$)));
+	}
+
+	private final void inferSample10() {
+		constrainedFlag$sample10 = false;
+		double cv$originalValue = bias;
+		double cv$var = ((bias * bias) * 0.010000000000000002);
+		if((cv$var < 0.010000000000000002))
+			cv$var = 0.010000000000000002;
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
+		constrainedFlag$sample10 = true;
+		double cv$originalProbability = (DistributionSampling.logProbabilityBinomial(positiveCount, bias, observedSampleCount) + (((min <= bias) && (bias < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
+		bias = cv$proposedValue;
+		constrainedFlag$sample10 = true;
+		double cv$ratio = ((DistributionSampling.logProbabilityBinomial(positiveCount, cv$proposedValue, observedSampleCount) + (((min <= cv$proposedValue) && (cv$proposedValue < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY)) - cv$originalProbability);
+		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+			bias = cv$originalValue;
 	}
 
 	private final void logProbabilityValue$sample10() {
@@ -141,19 +163,6 @@ final class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$$model = (logProbability$$model + logProbability$positiveCount);
 			logProbability$$evidence = (logProbability$$evidence + logProbability$positiveCount);
 		}
-	}
-
-	private final void sample10() {
-		double cv$originalValue = bias;
-		double cv$var = ((bias * bias) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + bias);
-		double cv$originalProbability = (DistributionSampling.logProbabilityBinomial(positiveCount, bias, observedSampleCount) + (((min <= bias) && (bias < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY));
-		bias = cv$proposedValue;
-		double cv$ratio = ((DistributionSampling.logProbabilityBinomial(positiveCount, cv$proposedValue, observedSampleCount) + (((min <= cv$proposedValue) && (cv$proposedValue < 1.0))?(-Math.log((1.0 - min))):Double.NEGATIVE_INFINITY)) - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			bias = cv$originalValue;
 	}
 
 	@Override
@@ -197,13 +206,10 @@ final class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void gibbsRound() {
 		if(!fixedFlag$sample10)
-			sample10();
+			inferSample10();
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	@Override
-	public final void initializeConstants() {
-		min = ((eta * 4.0) / 5.0);
+		if(!constrainedFlag$sample10)
+			drawValueSample10();
 	}
 
 	private final void initializeLogProbabilityFields() {
@@ -214,6 +220,11 @@ final class NullModelMK2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$binomial = 0.0;
 		if(!fixedProbFlag$sample12)
 			logProbability$positiveCount = Double.NaN;
+	}
+
+	@Override
+	public final void initializeModel() {
+		min = ((eta * 4.0) / 5.0);
 	}
 
 	@Override

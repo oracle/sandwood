@@ -8,6 +8,7 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample8 = true;
 	private int count1;
 	private int count2;
 	private boolean fixedFlag$sample11 = false;
@@ -39,7 +40,7 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for bias.
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
 		bias = cv$value;
@@ -74,7 +75,7 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for fixedFlag$sample11.
 	@Override
-	public final void set$fixedFlag$sample11(boolean cv$value) {
+	public final void set$fixedFlag$sample11(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample11 = cv$value;
 	}
 
@@ -86,7 +87,7 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for fixedFlag$sample12.
 	@Override
-	public final void set$fixedFlag$sample12(boolean cv$value) {
+	public final void set$fixedFlag$sample12(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample12 = cv$value;
 	}
 
@@ -98,10 +99,13 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for fixedFlag$sample8.
 	@Override
-	public final void set$fixedFlag$sample8(boolean cv$value) {
+	public final void set$fixedFlag$sample8(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample8 including if probabilities
 		// need to be updated.
 		fixedFlag$sample8 = cv$value;
+		
+		// Substituted "fixedFlag$sample8" with its value "cv$value".
+		constrainedFlag$sample8 = (cv$value || constrainedFlag$sample8);
 		
 		// Should the probability of sample 8 be set to fixed. This will only every change
 		// the flag to false.
@@ -166,7 +170,7 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for obs1.
 	@Override
-	public final void set$obs1(int cv$value) {
+	public final void set$obs1(int cv$value, boolean allocated$) {
 		obs1 = cv$value;
 	}
 
@@ -178,7 +182,7 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for obs2.
 	@Override
-	public final void set$obs2(int cv$value) {
+	public final void set$obs2(int cv$value, boolean allocated$) {
 		obs2 = cv$value;
 	}
 
@@ -186,6 +190,41 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final int get$total() {
 		return total;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample8
+	private final void drawValueSample8() {
+		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 8 drawn from Beta 7. Inference was performed using a Beta to Bernoulli/Binomial
+	// conjugate prior.
+	private final void inferSample8() {
+		constrainedFlag$sample8 = false;
+		
+		// Processing random variable 10.
+		// 
+		// Processing sample task 11 of consumer random variable binomial.
+		// 
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample8 = true;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample8 = true;
+		
+		// Write out the new value of the sample.
+		// 
+		// Include the value sampled by task 12 from random variable binomial.
+		// 
+		// Increment the number of booleans sampled.
+		// 
+		// Include the value sampled by task 11 from random variable binomial.
+		// 
+		// Increment the number of booleans sampled.
+		// 
+		// Local variable to record the number of samples.
+		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, (count1 + count2), 200);
 	}
 
 	// Calculate the probability of the samples represented by sample11 using sampled
@@ -456,30 +495,6 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 8 drawn from Beta 7. Inference was performed using a Beta to Bernoulli/Binomial
-	// conjugate prior.
-	private final void sample8() {
-		// Write out the new value of the sample.
-		// 
-		// Processing sample task 12 of consumer random variable binomial.
-		// 
-		// Include the value sampled by task 12 from random variable binomial.
-		// 
-		// Increment the number of booleans sampled.
-		// 
-		// Processing random variable 10.
-		// 
-		// Processing sample task 11 of consumer random variable binomial.
-		// 
-		// Include the value sampled by task 11 from random variable binomial.
-		// 
-		// Increment the number of booleans sampled.
-		// 
-		// Local variable to record the number of samples.
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, (count1 + count2), 200);
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -547,16 +562,13 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample8)
-			sample8();
+			inferSample8();
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample8)
+			drawValueSample8();
 	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
@@ -576,6 +588,11 @@ final class Flip1CoinMK20$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample12)
 			logProbability$count2 = Double.NaN;
 	}
+
+	// Method for initializing the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override

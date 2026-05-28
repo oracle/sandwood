@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -10,6 +10,7 @@ package org.sandwood.compiler.trees.transformationTree.visitors.variableTracking
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ public class VarDef {
      * is provided describing the assignment and the for loops that have to be entered after the assignment to reach
      * this location.
      */
-    private final Set<AssignmentDesc> currentAssignments = new HashSet<>();
+    private final Set<AssignmentDesc> currentAssignments = new LinkedHashSet<>();
     /**
      * The location this variable was declared at. For the current use this could be replaced with a boolean to record
      * if the variable was global or not.
@@ -150,7 +151,7 @@ public class VarDef {
     }
 
     public Set<TreeID> writeLocations() {
-        Set<TreeID> s = new HashSet<>();
+        Set<TreeID> s = new LinkedHashSet<>();
         for(AssignmentDesc a:currentAssignments)
             s.add(a.assignmentLocation());
         return s;

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -338,14 +338,14 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             sb.append("        //Model inputs\n");
             for(VariableName name:modelInputs) {
                 sb.append("        if(" + name + ".isSet())\n");
-                sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "());\n");
+                sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "(), false);\n");
             }
         }
         if(!observedOnlyInputs.isEmpty()) {
-            sb.append("        //Observed scalars\n");
+            sb.append("\n        //Observed scalars\n");
             for(VariableName name:observedOnlyInputs) {
                 sb.append("        if(" + name + ".isSet())\n");
-                sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "());\n");
+                sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "(), false);\n");
             }
         }
 
@@ -355,13 +355,13 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
                 VariableName lengthName = VariableNames.lengthName(name);
                 VariableName lengthUniqueName = traces.getVariable(lengthName).getUniqueVarDesc().name;
                 sb.append("        if(" + name + ".isSet()) {\n");
-                sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "());\n");
+                sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "(), false);\n");
                 sb.append("            newCore" + setMethod(lengthUniqueName) + "(oldCore" + getMethod(lengthUniqueName)
-                        + "());\n");
+                        + "(), false);\n");
                 sb.append("        }\n");
                 sb.append("        else if(" + name + ".shapeSet())\n");
                 sb.append("            newCore" + setMethod(lengthUniqueName) + "(oldCore" + getMethod(lengthUniqueName)
-                        + "());\n");
+                        + "(), false);\n");
             }
         }
 
@@ -378,7 +378,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             for(VariableName name:computedVariables) {
                 if(fieldDescs.get(name).fieldType.setter) {
                     sb.append("        if($" + name + ".isSet())\n");
-                    sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "());\n");
+                    sb.append("            newCore" + setMethod(name) + "(oldCore" + getMethod(name) + "(), false);\n");
                 }
             }
         }
@@ -397,7 +397,8 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
             PriorityQueue<VariableDescription<BooleanVariable>> p = new PriorityQueue<>(flags);
             while(!p.isEmpty()) {
                 VariableDescription<BooleanVariable> flag = p.poll();
-                sb.append("        newCore" + setMethod(flag.name) + "(oldCore" + getMethod(flag.name) + "());\n");
+                sb.append(
+                        "        newCore" + setMethod(flag.name) + "(oldCore" + getMethod(flag.name) + "(), false);\n");
             }
         }
 
@@ -1062,7 +1063,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         if(ft.setter) {
             sb.append("        @Override\n");
             sb.append("        protected void setValueInternal(" + javaType + " value) {\n");
-            sb.append("            " + coreName + setMethod(fieldName) + "(value);\n");
+            sb.append("            " + coreName + setMethod(fieldName) + "(value, allocated);\n");
             sb.append("            intermediatesPrimed = false;\n");
             sb.append("        }\n\n");
 
@@ -1168,7 +1169,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
         } else {
             sb.append("            synchronized(model) {\n");
             for(VariableDescription<BooleanVariable> flag:flags)
-                sb.append("                " + coreName + setMethod(flag.name) + "(fixed);\n");
+                sb.append("                " + coreName + setMethod(flag.name) + "(fixed, allocated);\n");
             sb.append("            }\n");
         }
         sb.append("        }\n\n");
@@ -1356,7 +1357,7 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
         sb.append("        @Override\n");
         sb.append("        protected void setValueInternal(" + javaType + " value) { " + coreName
-                + setMethod(uniqueName) + "(value); }\n");
+                + setMethod(uniqueName) + "(value, allocated); }\n");
 
         sb.append("    };\n\n");
 
@@ -1428,21 +1429,21 @@ public class OutputSandwoodClassWrapper extends OutputSandwoodClass {
 
         sb.append("        @Override\n");
         sb.append("        public void setValueInternal(" + javaType + " value) {\n" + "            " + coreName
-                + setMethod(uniqueName) + "(value);\n");
+                + setMethod(uniqueName) + "(value, allocated);\n");
 
         VariableName lengthName = VariableNames.lengthName(fieldName);
         VariableName lengthUniqueName = traces.getVariable(lengthName).getUniqueVarDesc().name;
 
         if(simple)
-            sb.append("            " + coreName + setMethod(lengthUniqueName) + "(value.length);\n");
+            sb.append("            " + coreName + setMethod(lengthUniqueName) + "(value.length, allocated);\n");
         else
             sb.append("            " + coreName + setMethod(lengthUniqueName) + "("
-                    + ((dims == 0) ? "value.length" : "getDims(value)") + ");\n");
+                    + ((dims == 0) ? "value.length" : "getDims(value)") + ", allocated);\n");
         sb.append("        }\n\n");
 
         sb.append("        @Override\n");
         sb.append("        public void setShapeInternal(" + shapeType + " shape) {\n" + "            " + coreName
-                + setMethod(lengthUniqueName) + "(shape);\n" + "        }\n\n");
+                + setMethod(lengthUniqueName) + "(shape, allocated);\n" + "        }\n\n");
 
         sb.append("        @Override\n");
         sb.append("        public " + shapeType + " getShape() {\n" + "            return " + coreName

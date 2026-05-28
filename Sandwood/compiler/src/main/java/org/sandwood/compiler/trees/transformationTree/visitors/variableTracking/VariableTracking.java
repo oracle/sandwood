@@ -150,10 +150,10 @@ public class VariableTracking {
 
     public boolean effectivelyFinal(VariableDescription<?> desc, TreeID declaration) {
         assert (declaration != TreeID.global);
-        Set<TreeID> initialisations = effectivelyFinal.get(desc);
-        if(initialisations == null)
+        Set<TreeID> initializations = effectivelyFinal.get(desc);
+        if(initializations == null)
             return false;
-        return initialisations.contains(declaration);
+        return initializations.contains(declaration);
     }
 
     /**

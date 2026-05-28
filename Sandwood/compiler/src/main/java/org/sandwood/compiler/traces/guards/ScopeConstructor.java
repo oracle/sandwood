@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -105,7 +105,7 @@ public class ScopeConstructor {
 
     public enum Direction {
         FORWARDS,
-        BACKWARDS;
+        BACKWARDS; 
     }
 
     public enum Guards {
@@ -1543,10 +1543,10 @@ public class ScopeConstructor {
     }
 
     private void addTree(ScopeDescription targetScope, int position, TreeBuilder treeBuilder) {
-        TreeBuilderInfo treeBuilderInfo = new TreeBuilderInfo(targetScope, tasks);
+        TreeBuilderInfo treeBuilderInfo = new TreeBuilderInfo(targetScope, tasks, compilationCtx);
 
         // Apply the required substitutions
-        treeBuilderInfo.applySubstitutions(position, compilationCtx);
+        treeBuilderInfo.applySubstitutions(position);
 
         // Create a new scope to construct the user provided tree in.
         compilationCtx.pushExploredDistSamples(targetScope.getExistingSamples());
@@ -1558,7 +1558,7 @@ public class ScopeConstructor {
         compilationCtx.popExploredDistSamples();
 
         // Remove the set substitutions
-        treeBuilderInfo.removeSubstitutions(compilationCtx);
+        treeBuilderInfo.removeSubstitutions();
 
         if(!treeBuilderInfo.backTraceInfo.traceConstructedCorrectly())
             throw new CompilerException(

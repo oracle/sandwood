@@ -87,7 +87,7 @@ public final class AnonymousSample extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$mean1(value);
+            system$c.set$mean1(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -97,7 +97,7 @@ public final class AnonymousSample extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample15(fixed);
+                system$c.set$fixedFlag$sample15(fixed, allocated);
             }
         }
 
@@ -121,7 +121,7 @@ public final class AnonymousSample extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$mean2(value);
+            system$c.set$mean2(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -131,7 +131,7 @@ public final class AnonymousSample extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample21(fixed);
+                system$c.set$fixedFlag$sample21(fixed, allocated);
             }
         }
 
@@ -155,7 +155,7 @@ public final class AnonymousSample extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$priorSigma2(value);
+            system$c.set$priorSigma2(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -165,7 +165,7 @@ public final class AnonymousSample extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample9(fixed);
+                system$c.set$fixedFlag$sample9(fixed, allocated);
             }
         }
 
@@ -196,7 +196,7 @@ public final class AnonymousSample extends Model {
         }
 
         @Override
-        protected void setValueInternal(double[] value) { system$c.set$obsAmounts2(value); }
+        protected void setValueInternal(double[] value) { system$c.set$obsAmounts2(value, allocated); }
     };
 
     /**
@@ -214,13 +214,13 @@ public final class AnonymousSample extends Model {
 
         @Override
         public void setValueInternal(double[] value) {
-            system$c.set$obsAmounts1(value);
-            system$c.set$length$obsAmounts1(value.length);
+            system$c.set$obsAmounts1(value, allocated);
+            system$c.set$length$obsAmounts1(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$obsAmounts1(shape);
+            system$c.set$length$obsAmounts1(shape, allocated);
         }
 
         @Override
@@ -301,30 +301,31 @@ public final class AnonymousSample extends Model {
     }
 
     private void transferData(AnonymousSample$CoreInterface oldCore, AnonymousSample$CoreInterface newCore) {
+
         //Observed scalars
         if(obsAmounts2.isSet())
-            newCore.set$obsAmounts2(oldCore.get$obsAmounts2());
+            newCore.set$obsAmounts2(oldCore.get$obsAmounts2(), false);
 
         //Observed arrays
         if(obsAmounts1.isSet()) {
-            newCore.set$obsAmounts1(oldCore.get$obsAmounts1());
-            newCore.set$length$obsAmounts1(oldCore.get$length$obsAmounts1());
+            newCore.set$obsAmounts1(oldCore.get$obsAmounts1(), false);
+            newCore.set$length$obsAmounts1(oldCore.get$length$obsAmounts1(), false);
         }
         else if(obsAmounts1.shapeSet())
-            newCore.set$length$obsAmounts1(oldCore.get$length$obsAmounts1());
+            newCore.set$length$obsAmounts1(oldCore.get$length$obsAmounts1(), false);
 
         //ComputedVariables
         if($mean1.isSet())
-            newCore.set$mean1(oldCore.get$mean1());
+            newCore.set$mean1(oldCore.get$mean1(), false);
         if($mean2.isSet())
-            newCore.set$mean2(oldCore.get$mean2());
+            newCore.set$mean2(oldCore.get$mean2(), false);
         if($priorSigma2.isSet())
-            newCore.set$priorSigma2(oldCore.get$priorSigma2());
+            newCore.set$priorSigma2(oldCore.get$priorSigma2(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample15(oldCore.get$fixedFlag$sample15());
-        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21());
-        newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9());
+        newCore.set$fixedFlag$sample15(oldCore.get$fixedFlag$sample15(), false);
+        newCore.set$fixedFlag$sample21(oldCore.get$fixedFlag$sample21(), false);
+        newCore.set$fixedFlag$sample9(oldCore.get$fixedFlag$sample9(), false);
     }
 
     /**

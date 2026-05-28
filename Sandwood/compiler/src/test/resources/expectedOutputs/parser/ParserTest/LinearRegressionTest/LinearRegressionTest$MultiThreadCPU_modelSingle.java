@@ -8,6 +8,9 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean[] constrainedFlag$sample24;
+	private boolean constrainedFlag$sample31 = true;
+	private boolean constrainedFlag$sample35 = true;
 	private boolean fixedFlag$sample24 = false;
 	private boolean fixedFlag$sample31 = false;
 	private boolean fixedFlag$sample35 = false;
@@ -45,7 +48,7 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for bias.
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
 		bias = cv$value;
@@ -65,10 +68,17 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for fixedFlag$sample24.
 	@Override
-	public final void set$fixedFlag$sample24(boolean cv$value) {
+	public final void set$fixedFlag$sample24(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample24 including if probabilities
 		// need to be updated.
 		fixedFlag$sample24 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
+				constrainedFlag$sample24[index$constrainedFlag$sample24$1] = fixedFlag$sample24;
+		}
 		
 		// Should the probability of sample 24 be set to fixed. This will only every change
 		// the flag to false.
@@ -87,10 +97,11 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for fixedFlag$sample31.
 	@Override
-	public final void set$fixedFlag$sample31(boolean cv$value) {
+	public final void set$fixedFlag$sample31(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample31 including if probabilities
 		// need to be updated.
 		fixedFlag$sample31 = cv$value;
+		constrainedFlag$sample31 = (fixedFlag$sample31 || constrainedFlag$sample31);
 		
 		// Should the probability of sample 31 be set to fixed. This will only every change
 		// the flag to false.
@@ -109,10 +120,11 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for fixedFlag$sample35.
 	@Override
-	public final void set$fixedFlag$sample35(boolean cv$value) {
+	public final void set$fixedFlag$sample35(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample35 including if probabilities
 		// need to be updated.
 		fixedFlag$sample35 = cv$value;
+		constrainedFlag$sample35 = (fixedFlag$sample35 || constrainedFlag$sample35);
 		
 		// Should the probability of sample 35 be set to fixed. This will only every change
 		// the flag to false.
@@ -179,7 +191,7 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for tau.
 	@Override
-	public final void set$tau(double cv$value) {
+	public final void set$tau(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of tau including if probabilities need to be
 		// updated.
 		tau = cv$value;
@@ -199,10 +211,9 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for weights.
 	@Override
-	public final void set$weights(double[] cv$value) {
+	public final void set$weights(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of weights including if probabilities need to
 		// be updated.
-		// Set weights
 		weights = cv$value;
 		
 		// Unset the fixed probability flag for sample 24 as it depends on weights.
@@ -220,8 +231,7 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for x.
 	@Override
-	public final void set$x(double[][] cv$value) {
-		// Set x
+	public final void set$x(double[][] cv$value, boolean allocated$) {
 		x = cv$value;
 	}
 
@@ -239,9 +249,359 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 
 	// Setter for yMeasured.
 	@Override
-	public final void set$yMeasured(double[] cv$value) {
-		// Set yMeasured
+	public final void set$yMeasured(double[] cv$value, boolean allocated$) {
 		yMeasured = cv$value;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample24
+	private final void drawValueSample24(int var23) {
+		weights[var23] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		
+		// Guards to ensure that phi is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 24 and consumer double[] 60.
+		{
+			{
+				for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+					if((var23 == j$var55)) {
+						for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
+							phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+					}
+				}
+			}
+		}
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample31
+	private final void drawValueSample31() {
+		bias = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample35
+	private final void drawValueSample35() {
+		tau = DistributionSampling.sampleInverseGamma(RNG$, 3.0, 1.0);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 24 drawn from Gaussian 12. Inference was performed using a Gaussian
+	// to Gaussian conjugate prior.
+	private final void inferSample24(int var23) {
+		if(true) {
+			constrainedFlag$sample24[((var23 - 0) / 1)] = false;
+			
+			// State to record the weighting of each sample that is consumed. This is the:
+			// sum of the sample denominator*(the sample value - the sample nominator).
+			double cv$sum = 0.0;
+			
+			// State for storing the sum of the squares of the sample denominators.
+			double cv$denominatorSquareSum = 0.0;
+			
+			// Flag to record if we have a value for Sigma.
+			boolean cv$sigmaNotFound = true;
+			
+			// State for the value of sigma once we find it.
+			double cv$sigmaValue = 1.0;
+			{
+				// Processing random variable 72.
+				{
+					// Looking for a path between Sample 24 and consumer Gaussian 72.
+					{
+						{
+							for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+								if((var23 == j$var55)) {
+									for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+										if(((0 <= j$var55) && (j$var55 < k))) {
+											// Processing sample task 74 of consumer random variable null.
+											{
+												{
+													// Flag recording if this sample task of the consuming random variable is constrained.
+													boolean cv$sampleConstrained = true;
+													if(cv$sampleConstrained) {
+														// Mark that the sample has observed constrained data.
+														constrainedFlag$sample24[((var23 - 0) / 1)] = true;
+														{
+															{
+																{
+																	{
+																		{
+																			// State for tracking the changes that happen to the sampled value between it being
+																			// consumed and it being produced.
+																			double cv$denominator = 1.0;
+																			double cv$numerator = 0.0;
+																			cv$numerator = (cv$numerator * x[i$var45][j$var55]);
+																			cv$denominator = (cv$denominator * x[i$var45][j$var55]);
+																			if((0 < k)) {
+																				// Reduction of array phi
+																				// 
+																				// A generated name to prevent name collisions if the reduction is implemented more
+																				// than once in inference and probability code. Initialize the variable to the unit
+																				// value
+																				double reduceVar$var70$6 = 0.0;
+																				
+																				// Reduce for every value except a masked value which will be skipped.
+																				for(int cv$reduction429Index = 0; cv$reduction429Index < j$var55; cv$reduction429Index += 1) {
+																					// Set the left hand term of the reduction function to the return variable value.
+																					double i$var67 = reduceVar$var70$6;
+																					
+																					// Set the right hand term to a value from the array phi
+																					double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction429Index];
+																					
+																					// Execute the reduction function, saving the result into the return value.
+																					// 
+																					// Copy the result of the reduction into the variable returned by the reduction.
+																					reduceVar$var70$6 = (i$var67 + j$var68);
+																				}
+																				for(int cv$reduction429Index = (j$var55 + 1); cv$reduction429Index < k; cv$reduction429Index += 1) {
+																					// Set the left hand term of the reduction function to the return variable value.
+																					double i$var67 = reduceVar$var70$6;
+																					
+																					// Set the right hand term to a value from the array phi
+																					double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction429Index];
+																					
+																					// Execute the reduction function, saving the result into the return value.
+																					// 
+																					// Copy the result of the reduction into the variable returned by the reduction.
+																					reduceVar$var70$6 = (i$var67 + j$var68);
+																				}
+																				double cv$reduced65 = reduceVar$var70$6;
+																				cv$numerator = (cv$numerator + cv$reduced65);
+																			}
+																			cv$numerator = (cv$numerator + bias);
+																			
+																			// Record the value of a sample generated by a consuming sample 74 of random variable
+																			// var72.
+																			// 
+																			// Add the denominator squared to the sample denominator
+																			cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+																			
+																			// Add the weighting of the sample to the sum.
+																			cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
+																			
+																			// If we have not got the value of sigma yet record it and set a flag so it is not
+																			// recorded again.
+																			if(cv$sigmaNotFound) {
+																				cv$sigmaValue = tau;
+																				cv$sigmaNotFound = false;
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample24[((var23 - 0) / 1)]) {
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				double var24 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+				
+				// Guards to ensure that weights is only updated when there is a valid path.
+				{
+					{
+						{
+							weights[var23] = var24;
+						}
+					}
+				}
+				
+				// Guards to ensure that phi is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 24 and consumer double[] 60.
+				{
+					{
+						for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
+							if((var23 == j$var55)) {
+								for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
+									phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 31 drawn from Gaussian 30. Inference was performed using a Gaussian
+	// to Gaussian conjugate prior.
+	private final void inferSample31() {
+		if(true) {
+			constrainedFlag$sample31 = false;
+			
+			// State to record the weighting of each sample that is consumed. This is the:
+			// sum of the sample denominator*(the sample value - the sample nominator).
+			double cv$sum = 0.0;
+			
+			// State for storing the sum of the squares of the sample denominators.
+			double cv$denominatorSquareSum = 0.0;
+			
+			// Flag to record if we have a value for Sigma.
+			boolean cv$sigmaNotFound = true;
+			
+			// State for the value of sigma once we find it.
+			double cv$sigmaValue = 1.0;
+			{
+				// Processing random variable 72.
+				{
+					{
+						{
+							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+								// Flag recording if this sample task of the consuming random variable is constrained.
+								boolean cv$sampleConstrained = true;
+								if(cv$sampleConstrained) {
+									// Mark that the sample has observed constrained data.
+									constrainedFlag$sample31 = true;
+									{
+										{
+											{
+												{
+													{
+														// State for tracking the changes that happen to the sampled value between it being
+														// consumed and it being produced.
+														double cv$denominator = 1.0;
+														double cv$numerator = 0.0;
+														
+														// Reduction of array phi
+														// 
+														// A generated name to prevent name collisions if the reduction is implemented more
+														// than once in inference and probability code. Initialize the variable to the unit
+														// value
+														double reduceVar$var70$7 = 0.0;
+														
+														// For each index in the array to be reduced
+														for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+															// Set the left hand term of the reduction function to the return variable value.
+															double i$var67 = reduceVar$var70$7;
+															
+															// Set the right hand term to a value from the array phi
+															double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+															
+															// Execute the reduction function, saving the result into the return value.
+															// 
+															// Copy the result of the reduction into the variable returned by the reduction.
+															reduceVar$var70$7 = (i$var67 + j$var68);
+														}
+														cv$numerator = (reduceVar$var70$7 + cv$numerator);
+														
+														// Record the value of a sample generated by a consuming sample 74 of random variable
+														// var72.
+														// 
+														// Add the denominator squared to the sample denominator
+														cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
+														
+														// Add the weighting of the sample to the sum.
+														cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
+														
+														// If we have not got the value of sigma yet record it and set a flag so it is not
+														// recorded again.
+														if(cv$sigmaNotFound) {
+															cv$sigmaValue = tau;
+															cv$sigmaNotFound = false;
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample31)
+				// Write out the new value of the sample.
+				bias = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 35 drawn from InverseGamma 34. Inference was performed using a Inverse
+	// Gamma to Gaussian conjugate prior.
+	private final void inferSample35() {
+		if(true) {
+			constrainedFlag$sample35 = false;
+			
+			// Variable to track the sum of the difference between the samples and the random
+			// variables mean squared.
+			double cv$sum = 0.0;
+			
+			// Variable to record the number of samples from consuming random variables.
+			int cv$count = 0;
+			{
+				// Processing random variable 72.
+				{
+					{
+						{
+							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
+								// Flag recording if this sample task of the consuming random variable is constrained.
+								boolean cv$sampleConstrained = true;
+								if(cv$sampleConstrained) {
+									// Mark that the sample has observed constrained data.
+									constrainedFlag$sample35 = true;
+									{
+										{
+											{
+												{
+													{
+														// Reduction of array phi
+														// 
+														// A generated name to prevent name collisions if the reduction is implemented more
+														// than once in inference and probability code. Initialize the variable to the unit
+														// value
+														double reduceVar$var70$8 = 0.0;
+														
+														// For each index in the array to be reduced
+														for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
+															// Set the left hand term of the reduction function to the return variable value.
+															double i$var67 = reduceVar$var70$8;
+															
+															// Set the right hand term to a value from the array phi
+															double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
+															
+															// Execute the reduction function, saving the result into the return value.
+															// 
+															// Copy the result of the reduction into the variable returned by the reduction.
+															reduceVar$var70$8 = (i$var67 + j$var68);
+														}
+														
+														// The mean parameter for Gaussian var72.
+														double cv$var72$mu = (reduceVar$var70$8 + bias);
+														
+														// Consume sample task 74 from random variable var72.
+														// 
+														// The difference between the mean parameter and the value sampled from the Gaussian.
+														double cv$var72$diff = (cv$var72$mu - y[i$var45]);
+														
+														// Include this sample by adding the square of the difference to the sum.
+														cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
+														
+														// Increment the number of samples in the calculation.
+														cv$count = (cv$count + 1);
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample35)
+				// Write out the new value of the sample.
+				tau = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 3.0, 1.0, cv$sum, cv$count);
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample24 using sampled
@@ -275,7 +635,7 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 								double var11 = 10.0;
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var10) / Math.sqrt(var11))) - (0.5 * Math.log(var11))));
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var11)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var10) / Math.sqrt(var11))) - (0.5 * Math.log(var11))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -393,7 +753,7 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 							double var29 = 10.0;
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var28) / Math.sqrt(var29))) - (0.5 * Math.log(var29))));
+							double cv$weightedProbability = (Math.log(1.0) + ((0.0 < var29)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var28) / Math.sqrt(var29))) - (0.5 * Math.log(var29))):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -609,7 +969,7 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 								double var71 = (reduceVar$var70$9 + bias);
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var71) / Math.sqrt(tau))) - (0.5 * Math.log(tau))));
+								double cv$weightedProbability = (Math.log(1.0) + ((0.0 < tau)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - var71) / Math.sqrt(tau))) - (0.5 * Math.log(tau))):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -689,283 +1049,6 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 24 drawn from Gaussian 12. Inference was performed using a Gaussian
-	// to Gaussian conjugate prior.
-	private final void sample24(int var23) {
-		if(true) {
-			// State to record the weighting of each sample that is consumed. This is the:
-			// sum of the sample denominator*(the sample value - the sample nominator).
-			double cv$sum = 0.0;
-			
-			// State for storing the sum of the squares of the sample denominators.
-			double cv$denominatorSquareSum = 0.0;
-			
-			// Flag to record if we have a value for Sigma.
-			boolean cv$sigmaNotFound = true;
-			
-			// State for the value of sigma once we find it.
-			double cv$sigmaValue = 1.0;
-			{
-				// Processing random variable 72.
-				{
-					// Looking for a path between Sample 24 and consumer Gaussian 72.
-					{
-						{
-							for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-								if((var23 == j$var55)) {
-									for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-										if(((0 <= j$var55) && (j$var55 < k))) {
-											// Processing sample task 74 of consumer random variable null.
-											{
-												{
-													{
-														{
-															{
-																{
-																	{
-																		// State for tracking the changes that happen to the sampled value between it being
-																		// consumed and it being produced.
-																		double cv$denominator = 1.0;
-																		double cv$numerator = 0.0;
-																		cv$numerator = (cv$numerator * x[i$var45][j$var55]);
-																		cv$denominator = (cv$denominator * x[i$var45][j$var55]);
-																		if((0 < k)) {
-																			// Reduction of array phi
-																			// 
-																			// A generated name to prevent name collisions if the reduction is implemented more
-																			// than once in inference and probability code. Initialize the variable to the unit
-																			// value
-																			double reduceVar$var70$6 = 0.0;
-																			
-																			// Reduce for every value except a masked value which will be skipped.
-																			for(int cv$reduction368Index = 0; cv$reduction368Index < j$var55; cv$reduction368Index += 1) {
-																				// Set the left hand term of the reduction function to the return variable value.
-																				double i$var67 = reduceVar$var70$6;
-																				
-																				// Set the right hand term to a value from the array phi
-																				double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction368Index];
-																				
-																				// Execute the reduction function, saving the result into the return value.
-																				// 
-																				// Copy the result of the reduction into the variable returned by the reduction.
-																				reduceVar$var70$6 = (i$var67 + j$var68);
-																			}
-																			for(int cv$reduction368Index = (j$var55 + 1); cv$reduction368Index < k; cv$reduction368Index += 1) {
-																				// Set the left hand term of the reduction function to the return variable value.
-																				double i$var67 = reduceVar$var70$6;
-																				
-																				// Set the right hand term to a value from the array phi
-																				double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction368Index];
-																				
-																				// Execute the reduction function, saving the result into the return value.
-																				// 
-																				// Copy the result of the reduction into the variable returned by the reduction.
-																				reduceVar$var70$6 = (i$var67 + j$var68);
-																			}
-																			double cv$reduced65 = reduceVar$var70$6;
-																			cv$numerator = (cv$numerator + cv$reduced65);
-																		}
-																		cv$numerator = (cv$numerator + bias);
-																		
-																		// Record the value of a sample generated by a consuming sample 74 of random variable
-																		// var72.
-																		// 
-																		// Add the denominator squared to the sample denominator
-																		cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-																		
-																		// Add the weighting of the sample to the sum.
-																		cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
-																		
-																		// If we have not got the value of sigma yet record it and set a flag so it is not
-																		// recorded again.
-																		if(cv$sigmaNotFound) {
-																			cv$sigmaValue = tau;
-																			cv$sigmaNotFound = false;
-																		}
-																	}
-																}
-															}
-														}
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			double var24 = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-			
-			// Guards to ensure that weights is only updated when there is a valid path.
-			{
-				{
-					{
-						weights[var23] = var24;
-					}
-				}
-			}
-			
-			// Guards to ensure that phi is only updated when there is a valid path.
-			// 
-			// Looking for a path between Sample 24 and consumer double[] 60.
-			{
-				{
-					for(int j$var55 = 0; j$var55 < k; j$var55 += 1) {
-						if((var23 == j$var55)) {
-							for(int i$var45 = 0; i$var45 < n; i$var45 += 1)
-								phi[((i$var45 - 0) / 1)][j$var55] = (weights[j$var55] * x[i$var45][j$var55]);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 31 drawn from Gaussian 30. Inference was performed using a Gaussian
-	// to Gaussian conjugate prior.
-	private final void sample31() {
-		if(true) {
-			// State to record the weighting of each sample that is consumed. This is the:
-			// sum of the sample denominator*(the sample value - the sample nominator).
-			double cv$sum = 0.0;
-			
-			// State for storing the sum of the squares of the sample denominators.
-			double cv$denominatorSquareSum = 0.0;
-			
-			// Flag to record if we have a value for Sigma.
-			boolean cv$sigmaNotFound = true;
-			
-			// State for the value of sigma once we find it.
-			double cv$sigmaValue = 1.0;
-			{
-				// Processing random variable 72.
-				{
-					{
-						{
-							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-								// State for tracking the changes that happen to the sampled value between it being
-								// consumed and it being produced.
-								double cv$denominator = 1.0;
-								double cv$numerator = 0.0;
-								
-								// Reduction of array phi
-								// 
-								// A generated name to prevent name collisions if the reduction is implemented more
-								// than once in inference and probability code. Initialize the variable to the unit
-								// value
-								double reduceVar$var70$7 = 0.0;
-								
-								// For each index in the array to be reduced
-								for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
-									// Set the left hand term of the reduction function to the return variable value.
-									double i$var67 = reduceVar$var70$7;
-									
-									// Set the right hand term to a value from the array phi
-									double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
-									
-									// Execute the reduction function, saving the result into the return value.
-									// 
-									// Copy the result of the reduction into the variable returned by the reduction.
-									reduceVar$var70$7 = (i$var67 + j$var68);
-								}
-								cv$numerator = (reduceVar$var70$7 + cv$numerator);
-								
-								// Record the value of a sample generated by a consuming sample 74 of random variable
-								// var72.
-								// 
-								// Add the denominator squared to the sample denominator
-								cv$denominatorSquareSum = (cv$denominatorSquareSum + (cv$denominator * cv$denominator));
-								
-								// Add the weighting of the sample to the sum.
-								cv$sum = (cv$sum + (cv$denominator * (y[i$var45] - cv$numerator)));
-								
-								// If we have not got the value of sigma yet record it and set a flag so it is not
-								// recorded again.
-								if(cv$sigmaNotFound) {
-									cv$sigmaValue = tau;
-									cv$sigmaNotFound = false;
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			// Write out the new value of the sample.
-			bias = Conjugates.sampleConjugateGaussianGaussian(RNG$, 0.0, 10.0, cv$sigmaValue, cv$sum, cv$denominatorSquareSum);
-		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 35 drawn from InverseGamma 34. Inference was performed using a Inverse
-	// Gamma to Gaussian conjugate prior.
-	private final void sample35() {
-		if(true) {
-			// Variable to track the sum of the difference between the samples and the random
-			// variables mean squared.
-			double cv$sum = 0.0;
-			
-			// Variable to record the number of samples from consuming random variables.
-			int cv$count = 0;
-			{
-				// Processing random variable 72.
-				{
-					{
-						{
-							for(int i$var45 = 0; i$var45 < n; i$var45 += 1) {
-								// Reduction of array phi
-								// 
-								// A generated name to prevent name collisions if the reduction is implemented more
-								// than once in inference and probability code. Initialize the variable to the unit
-								// value
-								double reduceVar$var70$8 = 0.0;
-								
-								// For each index in the array to be reduced
-								for(int cv$reduction65Index = 0; cv$reduction65Index < k; cv$reduction65Index += 1) {
-									// Set the left hand term of the reduction function to the return variable value.
-									double i$var67 = reduceVar$var70$8;
-									
-									// Set the right hand term to a value from the array phi
-									double j$var68 = phi[((i$var45 - 0) / 1)][cv$reduction65Index];
-									
-									// Execute the reduction function, saving the result into the return value.
-									// 
-									// Copy the result of the reduction into the variable returned by the reduction.
-									reduceVar$var70$8 = (i$var67 + j$var68);
-								}
-								
-								// The mean parameter for Gaussian var72.
-								double cv$var72$mu = (reduceVar$var70$8 + bias);
-								
-								// Consume sample task 74 from random variable var72.
-								// 
-								// The difference between the mean parameter and the value sampled from the Gaussian.
-								double cv$var72$diff = (cv$var72$mu - y[i$var45]);
-								
-								// Include this sample by adding the square of the difference to the sum.
-								cv$sum = (cv$sum + (cv$var72$diff * cv$var72$diff));
-								
-								// Increment the number of samples in the calculation.
-								cv$count = (cv$count + 1);
-							}
-						}
-					}
-				}
-			}
-			
-			// Write out the new value of the sample.
-			tau = Conjugates.sampleConjugateInverseGammaGaussian(RNG$, 3.0, 1.0, cv$sum, cv$count);
-		}
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -993,6 +1076,11 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 			phi = new double[((((x.length - 1) - 0) / 1) + 1)][];
 			for(int i$var45 = 0; i$var45 < x.length; i$var45 += 1)
 				phi[((i$var45 - 0) / 1)] = new double[x[0].length];
+		}
+		
+		// Constructor for constrainedFlag$sample24
+		{
+			constrainedFlag$sample24 = new boolean[((((x[0].length - 1) - 0) / 1) + 1)];
 		}
 		
 		// Constructor for logProbability$sample24
@@ -1287,35 +1375,35 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 		if(system$gibbsForward) {
 			for(int var23 = 0; var23 < k; var23 += 1) {
 				if(!fixedFlag$sample24)
-					sample24(var23);
+					inferSample24(var23);
 			}
 			if(!fixedFlag$sample31)
-				sample31();
+				inferSample31();
 			if(!fixedFlag$sample35)
-				sample35();
+				inferSample35();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			if(!fixedFlag$sample35)
-				sample35();
+				inferSample35();
 			if(!fixedFlag$sample31)
-				sample31();
+				inferSample31();
 			for(int var23 = (k - ((((k - 1) - 0) % 1) + 1)); var23 >= ((0 - 1) + 1); var23 -= 1) {
 				if(!fixedFlag$sample24)
-					sample24(var23);
+					inferSample24(var23);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		n = x.length;
-		k = x[0].length;
+		for(int var23 = 0; var23 < k; var23 += 1) {
+			if(!constrainedFlag$sample24[((var23 - 0) / 1)])
+				drawValueSample24(var23);
+		}
+		if(!constrainedFlag$sample31)
+			drawValueSample31();
+		if(!constrainedFlag$sample35)
+			drawValueSample35();
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -1340,6 +1428,18 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 		logProbability$y = 0.0;
 		if(!fixedProbFlag$sample74)
 			logProbability$var73 = Double.NaN;
+	}
+
+	// Method for initializing the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		n = x.length;
+		k = x[0].length;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
+			constrainedFlag$sample24[index$constrainedFlag$sample24$1] = true;
 	}
 
 	// Construct the evidence probabilities.

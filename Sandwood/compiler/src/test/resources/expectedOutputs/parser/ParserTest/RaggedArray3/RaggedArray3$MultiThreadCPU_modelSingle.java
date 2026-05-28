@@ -8,6 +8,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	
 	// Declare the variables for the model.
 	private double[][] a;
+	private boolean constrainedFlag$sample39 = true;
 	private double[] cv$var37$countGlobal;
 	private double[] d;
 	private boolean fixedFlag$sample39 = false;
@@ -42,9 +43,8 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for d.
 	@Override
-	public final void set$d(double[] cv$value) {
+	public final void set$d(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of d including if probabilities need to be updated.
-		// Set d
 		d = cv$value;
 		
 		// Unset the fixed probability flag for sample 39 as it depends on d.
@@ -62,10 +62,11 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for fixedFlag$sample39.
 	@Override
-	public final void set$fixedFlag$sample39(boolean cv$value) {
+	public final void set$fixedFlag$sample39(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample39 including if probabilities
 		// need to be updated.
 		fixedFlag$sample39 = cv$value;
+		constrainedFlag$sample39 = (fixedFlag$sample39 || constrainedFlag$sample39);
 		
 		// Should the probability of sample 39 be set to fixed. This will only every change
 		// the flag to false.
@@ -84,7 +85,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for length$obs_measured.
 	@Override
-	public final void set$length$obs_measured(int cv$value) {
+	public final void set$length$obs_measured(int cv$value, boolean allocated$) {
 		length$obs_measured = cv$value;
 	}
 
@@ -126,8 +127,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for obs_measured.
 	@Override
-	public final void set$obs_measured(int[] cv$value) {
-		// Set obs_measured
+	public final void set$obs_measured(int[] cv$value, boolean allocated$) {
 		obs_measured = cv$value;
 	}
 
@@ -139,8 +139,138 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for y.
 	@Override
-	public final void set$y(int cv$value) {
+	public final void set$y(int cv$value, boolean allocated$) {
 		y = cv$value;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample39
+	private final void drawValueSample39() {
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_16 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			{
+				if((0 == y))
+					lengthCV$a$37_16 = 2;
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			{
+				if((1 == y))
+					lengthCV$a$37_16 = 3;
+			}
+		}
+		DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_16, d);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 39 drawn from Dirichlet 36. Inference was performed using a Dirichlet
+	// to Categorical conjugate prior.
+	private final void inferSample39() {
+		if(true) {
+			constrainedFlag$sample39 = false;
+			
+			// A reference local to the function for the sample variable.
+			double[] cv$targetLocal = d;
+			
+			// A local reference to the scratch space.
+			double[] cv$countLocal = cv$var37$countGlobal;
+			
+			// Allocate a local variable to hold the length of the array.
+			int lengthCV$a$37_14 = -1;
+			
+			// calculate array length.
+			// 
+			// Looking for a path between Put 17 and consumer double[] 35.
+			{
+				{
+					if((0 == y))
+						lengthCV$a$37_14 = 2;
+				}
+			}
+			
+			// Looking for a path between Put 35 and consumer double[] 35.
+			{
+				{
+					if((1 == y))
+						lengthCV$a$37_14 = 3;
+				}
+			}
+			
+			// Get the length of the array
+			int cv$arrayLength = lengthCV$a$37_14;
+			
+			// Initialize the array values to 0.
+			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
+				cv$countLocal[cv$loopIndex] = 0.0;
+			{
+				// Processing random variable 38.
+				{
+					{
+						{
+							// Processing sample task 53 of consumer random variable null.
+							{
+								{
+									for(int var50 = 0; var50 < length$obs_measured; var50 += 1) {
+										// Flag recording if this sample task of the consuming random variable is constrained.
+										boolean cv$sampleConstrained = true;
+										if(cv$sampleConstrained) {
+											// Mark that the sample has observed constrained data.
+											constrainedFlag$sample39 = true;
+											{
+												{
+													{
+														{
+															{
+																// Increment the sample counter with the value sampled by sample task 53 of random
+																// variable var38
+																cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample39) {
+				// Allocate a local variable to hold the length of the array.
+				int lengthCV$a$37_15 = -1;
+				
+				// calculate array length.
+				// 
+				// Looking for a path between Put 17 and consumer double[] 35.
+				{
+					{
+						if((0 == y))
+							lengthCV$a$37_15 = 2;
+					}
+				}
+				
+				// Looking for a path between Put 35 and consumer double[] 35.
+				{
+					{
+						if((1 == y))
+							lengthCV$a$37_15 = 3;
+					}
+				}
+				
+				// Calculate the new sample value
+				// 
+				// Calculate a new sample value and write it into cv$targetLocal.
+				Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal, lengthCV$a$37_15);
+			}
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample39 using sampled
@@ -170,7 +300,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 							double[] var35 = a[y];
 							
 							// Allocate a local variable to hold the length of the array.
-							int lengthCV$a$37_15 = -1;
+							int lengthCV$a$37_17 = -1;
 							
 							// calculate array length.
 							// 
@@ -178,7 +308,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 							{
 								{
 									if((0 == y))
-										lengthCV$a$37_15 = 2;
+										lengthCV$a$37_17 = 2;
 								}
 							}
 							
@@ -186,12 +316,12 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 							{
 								{
 									if((1 == y))
-										lengthCV$a$37_15 = 3;
+										lengthCV$a$37_17 = 3;
 								}
 							}
 							
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, var35, lengthCV$a$37_15));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityDirichlet(cv$sampleValue, var35, lengthCV$a$37_17));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -288,7 +418,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 						{
 							{
 								// Allocate a local variable to hold the length of the array.
-								int lengthCV$a$37_16 = -1;
+								int lengthCV$a$37_18 = -1;
 								
 								// calculate array length.
 								// 
@@ -296,7 +426,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 								{
 									{
 										if((0 == y))
-											lengthCV$a$37_16 = 2;
+											lengthCV$a$37_18 = 2;
 									}
 								}
 								
@@ -304,12 +434,12 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 								{
 									{
 										if((1 == y))
-											lengthCV$a$37_16 = 3;
+											lengthCV$a$37_18 = 3;
 									}
 								}
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_16))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < lengthCV$a$37_18)) && (0 < lengthCV$a$37_18)) && (0.0 <= d[cv$sampleValue])) && (d[cv$sampleValue] <= 1.0))?Math.log(d[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -389,91 +519,6 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 39 drawn from Dirichlet 36. Inference was performed using a Dirichlet
-	// to Categorical conjugate prior.
-	private final void sample39() {
-		if(true) {
-			// A reference local to the function for the sample variable.
-			double[] cv$targetLocal = d;
-			
-			// A local reference to the scratch space.
-			double[] cv$countLocal = cv$var37$countGlobal;
-			
-			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$37_13 = -1;
-			
-			// calculate array length.
-			// 
-			// Looking for a path between Put 17 and consumer double[] 35.
-			{
-				{
-					if((0 == y))
-						lengthCV$a$37_13 = 2;
-				}
-			}
-			
-			// Looking for a path between Put 35 and consumer double[] 35.
-			{
-				{
-					if((1 == y))
-						lengthCV$a$37_13 = 3;
-				}
-			}
-			
-			// Get the length of the array
-			int cv$arrayLength = lengthCV$a$37_13;
-			
-			// Initialize the array values to 0.
-			for(int cv$loopIndex = 0; cv$loopIndex < cv$arrayLength; cv$loopIndex += 1)
-				cv$countLocal[cv$loopIndex] = 0.0;
-			{
-				// Processing random variable 38.
-				{
-					{
-						{
-							// Processing sample task 53 of consumer random variable null.
-							{
-								{
-									for(int var50 = 0; var50 < length$obs_measured; var50 += 1)
-										// Increment the sample counter with the value sampled by sample task 53 of random
-										// variable var38
-										cv$countLocal[obs[var50]] = (cv$countLocal[obs[var50]] + 1.0);
-								}
-							}
-						}
-					}
-				}
-			}
-			
-			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$37_14 = -1;
-			
-			// calculate array length.
-			// 
-			// Looking for a path between Put 17 and consumer double[] 35.
-			{
-				{
-					if((0 == y))
-						lengthCV$a$37_14 = 2;
-				}
-			}
-			
-			// Looking for a path between Put 35 and consumer double[] 35.
-			{
-				{
-					if((1 == y))
-						lengthCV$a$37_14 = 3;
-				}
-			}
-			
-			// Calculate the new sample value
-			// 
-			// Calculate a new sample value and write it into cv$targetLocal.
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, a[y], cv$countLocal, cv$targetLocal, lengthCV$a$37_14);
-		}
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -505,7 +550,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Constructor for d
 			{
 				// Allocate a local variable to hold the length of the array.
-				int lengthCV$a$37_12 = -1;
+				int lengthCV$a$37_13 = -1;
 				
 				// calculate array length.
 				// 
@@ -513,7 +558,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				{
 					{
 						if((0 == y))
-							lengthCV$a$37_12 = 2;
+							lengthCV$a$37_13 = 2;
 					}
 				}
 				
@@ -521,10 +566,10 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				{
 					{
 						if((1 == y))
-							lengthCV$a$37_12 = 3;
+							lengthCV$a$37_13 = 3;
 					}
 				}
-				d = new double[lengthCV$a$37_12];
+				d = new double[lengthCV$a$37_13];
 			}
 		}
 		
@@ -540,106 +585,6 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$37_17 = -1;
-		
-		// calculate array length.
-		// 
-		// Looking for a path between Put 17 and consumer double[] 35.
-		{
-			{
-				if((0 == y)) {
-					if(!fixedFlag$sample39)
-						lengthCV$a$37_17 = 2;
-				}
-			}
-		}
-		
-		// Looking for a path between Put 35 and consumer double[] 35.
-		{
-			{
-				if((1 == y)) {
-					if(!fixedFlag$sample39)
-						lengthCV$a$37_17 = 3;
-				}
-			}
-		}
-		if(!fixedFlag$sample39)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_17, d);
-		
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$37_18 = -1;
-		
-		// calculate array length.
-		// 
-		// Looking for a path between Put 17 and consumer double[] 35.
-		{
-			{
-				if((0 == y))
-					lengthCV$a$37_18 = 2;
-			}
-		}
-		
-		// Looking for a path between Put 35 and consumer double[] 35.
-		{
-			{
-				if((1 == y))
-					lengthCV$a$37_18 = 3;
-			}
-		}
-		
-		// Alternative name for lengthCV$a$37_18 to make it effectively final.
-		int lengthCV$a$37_18$1 = lengthCV$a$37_18;
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, length$obs_measured, 1,
-			(int forStart$var50, int forEnd$var50, int threadID$var50, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int var50 = forStart$var50; var50 < forEnd$var50; var50 += 1)
-						obs[var50] = DistributionSampling.sampleCategorical(RNG$1, d, lengthCV$a$37_18$1);
-			}
-		);
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Fixed intermediate variables are primed. Distributions are calculated
-	// and stored.
-	@Override
-	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$37_23 = -1;
-		
-		// calculate array length.
-		// 
-		// Looking for a path between Put 17 and consumer double[] 35.
-		{
-			{
-				if((0 == y)) {
-					if(!fixedFlag$sample39)
-						lengthCV$a$37_23 = 2;
-				}
-			}
-		}
-		
-		// Looking for a path between Put 35 and consumer double[] 35.
-		{
-			{
-				if((1 == y)) {
-					if(!fixedFlag$sample39)
-						lengthCV$a$37_23 = 3;
-				}
-			}
-		}
-		if(!fixedFlag$sample39)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_23, d);
-	}
-
-	// Method to execute the model code conventionally with priming of fixed intermediate
-	// variables.
-	@Override
-	public final void forwardGenerationPrime() {
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$a$37_19 = -1;
 		
@@ -704,9 +649,42 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationValuesNoOutputs() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_25 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_25 = 2;
+				}
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_25 = 3;
+				}
+			}
+		}
+		if(!fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_25, d);
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$a$37_21 = -1;
 		
@@ -733,13 +711,7 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 		if(!fixedFlag$sample39)
 			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_21, d);
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
-	// to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputsPrime() {
+		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$a$37_22 = -1;
 		
@@ -748,9 +720,49 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Looking for a path between Put 17 and consumer double[] 35.
 		{
 			{
+				if((0 == y))
+					lengthCV$a$37_22 = 2;
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			{
+				if((1 == y))
+					lengthCV$a$37_22 = 3;
+			}
+		}
+		
+		// Alternative name for lengthCV$a$37_22 to make it effectively final.
+		int lengthCV$a$37_22$1 = lengthCV$a$37_22;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, length$obs_measured, 1,
+			(int forStart$var50, int forEnd$var50, int threadID$var50, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var50 = forStart$var50; var50 < forEnd$var50; var50 += 1)
+						obs[var50] = DistributionSampling.sampleCategorical(RNG$1, d, lengthCV$a$37_22$1);
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_23 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			{
 				if((0 == y)) {
 					if(!fixedFlag$sample39)
-						lengthCV$a$37_22 = 2;
+						lengthCV$a$37_23 = 2;
 				}
 			}
 		}
@@ -760,12 +772,45 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			{
 				if((1 == y)) {
 					if(!fixedFlag$sample39)
-						lengthCV$a$37_22 = 3;
+						lengthCV$a$37_23 = 3;
 				}
 			}
 		}
 		if(!fixedFlag$sample39)
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_22, d);
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_23, d);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$37_24 = -1;
+		
+		// calculate array length.
+		// 
+		// Looking for a path between Put 17 and consumer double[] 35.
+		{
+			{
+				if((0 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_24 = 2;
+				}
+			}
+		}
+		
+		// Looking for a path between Put 35 and consumer double[] 35.
+		{
+			{
+				if((1 == y)) {
+					if(!fixedFlag$sample39)
+						lengthCV$a$37_24 = 3;
+				}
+			}
+		}
+		if(!fixedFlag$sample39)
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$37_24, d);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -774,29 +819,18 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample39)
-				sample39();
+				inferSample39();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			if(!fixedFlag$sample39)
-				sample39();
+				inferSample39();
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		double[] var6 = a[0];
-		var6[0] = 0.4;
-		var6[1] = 0.6;
-		double[] var19 = a[1];
-		var19[0] = 0.2;
-		var19[1] = 0.3;
-		var19[2] = 0.5;
+		if(!constrainedFlag$sample39)
+			drawValueSample39();
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -814,6 +848,19 @@ final class RaggedArray3$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample53)
 			logProbability$var51 = Double.NaN;
+	}
+
+	// Method for initializing the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		double[] var6 = a[0];
+		var6[0] = 0.4;
+		var6[1] = 0.6;
+		double[] var19 = a[1];
+		var19[0] = 0.2;
+		var19[1] = 0.3;
+		var19[2] = 0.5;
 	}
 
 	// Construct the evidence probabilities.

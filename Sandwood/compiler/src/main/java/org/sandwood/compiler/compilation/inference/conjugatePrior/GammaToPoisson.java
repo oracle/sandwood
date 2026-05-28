@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -233,7 +233,7 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
     protected void finalize(GammaToPoissonData funcData, CompilationContext compilationCtx) {}
 
     @Override
-    protected ScopeConstructor getBackTraceScope(GammaToPoissonData funcData) {
+    protected ScopeConstructor getBackTraceScope(GammaToPoissonData funcData, CompilationContext compilationCtx) {
         return funcData.targetScope;
     }
 
@@ -243,7 +243,8 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
     }
 
     @Override
-    protected void addDistributionProbabilities(GammaToPoissonData funcData, CompilationContext compilationCtx) {
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, GammaToPoissonData funcData,
+            CompilationContext compilationCtx) {
         throw new CompilerException("Unable to merge distributions in Gamma to Poisson inference method.");
     }
 

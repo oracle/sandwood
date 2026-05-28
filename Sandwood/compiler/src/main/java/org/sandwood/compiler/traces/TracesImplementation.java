@@ -57,6 +57,8 @@ public class TracesImplementation extends Traces {
     private final Map<RandomVariable<?, ?>, List<Set<TraceHandle>>> randomTraces = new HashMap<>();
     // Set of all terminal variables
     private final Set<Variable<?>> terminalVariables = new HashSet<>();
+    // A set containing all sample tasks that generate a terminal value.
+    private final Set<SampleTask<?, ?>> terminalSampleTasks = new HashSet<>();
     // Set of all variables fixed to an observed value
     private final Set<Variable<?>> observedVariables = new HashSet<>();
     // Set of inputs used to construct values in the model that are not observed to
@@ -1288,6 +1290,7 @@ public class TracesImplementation extends Traces {
                     sampleTraces.add(handle);
 
                     observedSampleTasks.add(sourceSample);
+                    terminalSampleTasks.remove(sourceSample);
                 }
 
                 addToVarToSample(sink, sourceRV);
@@ -1439,7 +1442,10 @@ public class TracesImplementation extends Traces {
                         if(d.argPos == 0) {
                             conditionalGuard = d;
                             Map<ProducingDataflowTask<?>, Set<TraceHandle>> m = conditionalTraceTasks
-                                    .computeIfAbsent(sourceSample, k -> new LinkedHashMap<>());
+                                    .computeIfAbsent(sourceSample, k -> {
+                                        terminalSampleTasks.remove(k);
+                                        return new LinkedHashMap<>();
+                                    });
                             Set<TraceHandle> traces = m.computeIfAbsent(d.task, k -> new HashSet<>());
                             Trace trace = handle.getTrace();
                             while(trace.peek() != d)
@@ -1468,7 +1474,10 @@ public class TracesImplementation extends Traces {
                         if(d.argPos == 3) {
                             conditionalGuard = d;
                             Map<ProducingDataflowTask<?>, Set<TraceHandle>> m = conditionalTraceTasks
-                                    .computeIfAbsent(sourceSample, k -> new LinkedHashMap<>());
+                                    .computeIfAbsent(sourceSample, k -> {
+                                        terminalSampleTasks.remove(k);
+                                        return new LinkedHashMap<>();
+                                    });
                             Set<TraceHandle> traces = m.computeIfAbsent(d.task, k -> new HashSet<>());
                             Trace trace = handle.getTrace();
                             while(trace.peek() != d)
@@ -1695,8 +1704,12 @@ public class TracesImplementation extends Traces {
 
                     if(conditionalGuard == null) {
                         Map<RandomVariable<?, ?>, Set<TraceHandle>> rvTraces = tracesRVToSampleTask
-                                .computeIfAbsent(sourceSample, k -> new LinkedHashMap<>());
+                                .computeIfAbsent(sourceSample, k -> {
+                                    terminalSampleTasks.remove(k);
+                                    return new LinkedHashMap<>();
+                                });
                         Set<TraceHandle> traces = rvTraces.computeIfAbsent(sink, k -> new LinkedHashSet<>());
+
                         traces.add(handle);
                     }
                 }
@@ -2079,19 +2092,25 @@ public class TracesImplementation extends Traces {
                 RandomVariable<?, ?> sourceRV = sourceSample.randomVariable;
                 addIntermediates(handle);
                 allSampleTasks.add(sourceSample);
+                if(!observedSampleTasks.contains(sourceSample) && !tracesRVToSampleTask.containsKey(sourceSample)
+                        && !conditionalTraceTasks.containsKey(sourceSample))
+                    terminalSampleTasks.add(sourceSample);
                 sink = sink.getCurrentInstance();
                 findTerminalVariables(handle);
                 addToVarToSample(sink, sourceRV);
                 addVariableSource(handle, sourceSample);
 
-                SplitTrace splitTrace = splitTrace(handle);
+                // Populate sampleToRVTraces and intermediateChildrenTraces
+                Set<TraceHandle> setSampleVariableTraces = sampleVariableTraces.computeIfAbsent(sourceRV,
+                        k -> new HashSet<>());
 
+                SplitTrace splitTrace = splitTrace(handle);
                 TraceHandle toSampleHandle = TraceHandle.getTraceHandle(splitTrace.toSample);
-                SampleTraceDesc intermediateDesc = sampleTrace.get(sourceSample);
-                if(intermediateDesc == null) {
-                    intermediateDesc = new SampleTraceDesc(splitTrace.sampleVar, toSampleHandle);
-                    sampleTrace.put(sourceSample, intermediateDesc);
-                }
+                setSampleVariableTraces.add(toSampleHandle);
+                addToVarToSample(splitTrace.sampleVar, sourceRV);
+
+                sampleTrace.computeIfAbsent(sourceSample,
+                        k -> new SampleTraceDesc(splitTrace.sampleVar, toSampleHandle));
                 break;
             }
             case CONSTRUCT_INPUT: {
@@ -2283,7 +2302,7 @@ public class TracesImplementation extends Traces {
     }
 
     @Override
-    public Set<SampleTask<?, ?>> getObservedSampleTasks() {
+    public Set<SampleTask<?, ?>> getAllObservedSampleTasks() {
         return observedSampleTasks;
     }
 
@@ -2397,5 +2416,20 @@ public class TracesImplementation extends Traces {
     @Override
     public Set<SampleTask<?, ?>> getFixableTasks() {
         return fixableTasks;
+    }
+
+    @Override
+    public boolean isFixableTask(SampleTask<?, ?> task) {
+        return fixableTasks.contains(task);
+    }
+
+    @Override
+    public Set<SampleTask<?, ?>> getAllTerminalSamples() {
+        return terminalSampleTasks;
+    }
+
+    @Override
+    public boolean isTerminal(SampleTask<?, ?> sTask) {
+        return terminalSampleTasks.contains(sTask);
     }
 }

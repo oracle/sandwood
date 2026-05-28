@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK16$CoreInterface {
 	private double bias;
+	private boolean constrainedFlag$sample14 = true;
 	private boolean flip;
 	private boolean flipMeasured;
 	private double guard;
@@ -26,7 +27,7 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		bias = cv$value;
 	}
 
@@ -36,7 +37,7 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$flipMeasured(boolean cv$value) {
+	public final void set$flipMeasured(boolean cv$value, boolean allocated$) {
 		flipMeasured = cv$value;
 	}
 
@@ -46,7 +47,7 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$guard(double cv$value) {
+	public final void set$guard(double cv$value, boolean allocated$) {
 		guard = cv$value;
 	}
 
@@ -63,6 +64,49 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final double get$logProbability$bernoulli() {
 		return logProbability$bernoulli;
+	}
+
+	private final void drawValueSample14() {
+		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	private final void inferSample14() {
+		if(true) {
+			constrainedFlag$sample14 = false;
+			int cv$sum = 0;
+			int cv$count = 0;
+			{
+				{
+					{
+						{
+							{
+								{
+									boolean cv$sampleConstrained = true;
+									if(cv$sampleConstrained) {
+										constrainedFlag$sample14 = true;
+										{
+											{
+												{
+													{
+														{
+															cv$count = (cv$count + 1);
+															if(flip)
+																cv$sum = (cv$sum + 1);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample14)
+				bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		}
 	}
 
 	private final void logProbabilityValue$sample14() {
@@ -118,7 +162,7 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 					boolean cv$sampleValue = flip;
 					{
 						{
-							double cv$weightedProbability = (Math.log(1.0) + Math.log((cv$sampleValue?bias:(1.0 - bias))));
+							double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= bias) && (bias <= 1.0))?Math.log((cv$sampleValue?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
 							if((cv$weightedProbability < cv$distributionAccumulator))
 								cv$distributionAccumulator = (Math.log((Math.exp((cv$weightedProbability - cv$distributionAccumulator)) + 1)) + cv$distributionAccumulator);
 							else {
@@ -145,39 +189,6 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 		logProbability$$model = (logProbability$$model + cv$accumulator);
 		logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-	}
-
-	private final void sample14() {
-		if(true) {
-			int cv$sum = 0;
-			int cv$count = 0;
-			{
-				{
-					{
-						{
-							{
-								{
-									{
-										{
-											{
-												{
-													{
-														cv$count = (cv$count + 1);
-														if(flip)
-															cv$sum = (cv$sum + 1);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		}
 	}
 
 	@Override
@@ -224,16 +235,17 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			if(Double.isNaN(guard))
-				sample14();
+				inferSample14();
 		} else {
 			if(Double.isNaN(guard))
-				sample14();
+				inferSample14();
 		}
 		system$gibbsForward = !system$gibbsForward;
+		if(Double.isNaN(guard)) {
+			if(!constrainedFlag$sample14)
+				drawValueSample14();
+		}
 	}
-
-	@Override
-	public final void initializeConstants() {}
 
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
@@ -242,6 +254,9 @@ final class Flip1CoinMK16$SingleThreadCPU extends org.sandwood.runtime.internal.
 		logProbability$bernoulli = Double.NaN;
 		logProbability$sample16 = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

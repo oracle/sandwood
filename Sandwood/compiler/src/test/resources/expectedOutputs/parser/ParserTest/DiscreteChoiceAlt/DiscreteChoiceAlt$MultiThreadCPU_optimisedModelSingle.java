@@ -8,6 +8,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 	// Declare the variables for the model.
 	private int[] ObsChoices;
 	private int[] choices;
+	private boolean[] constrainedFlag$sample24;
 	private double[] exped;
 	private boolean fixedFlag$sample24 = false;
 	private boolean fixedProbFlag$sample24 = false;
@@ -41,8 +42,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 
 	// Setter for ObsChoices.
 	@Override
-	public final void set$ObsChoices(int[] cv$value) {
-		// Set ObsChoices
+	public final void set$ObsChoices(int[] cv$value, boolean allocated$) {
 		ObsChoices = cv$value;
 	}
 
@@ -66,10 +66,18 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 
 	// Setter for fixedFlag$sample24.
 	@Override
-	public final void set$fixedFlag$sample24(boolean cv$value) {
+	public final void set$fixedFlag$sample24(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample24 including if probabilities
 		// need to be updated.
 		fixedFlag$sample24 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
+				// Substituted "fixedFlag$sample24" with its value "cv$value".
+				constrainedFlag$sample24[index$constrainedFlag$sample24$1] = cv$value;
+		}
 		
 		// Should the probability of sample 24 be set to fixed. This will only every change
 		// the flag to false.
@@ -134,7 +142,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 
 	// Setter for noObs.
 	@Override
-	public final void set$noObs(int cv$value) {
+	public final void set$noObs(int cv$value, boolean allocated$) {
 		noObs = cv$value;
 	}
 
@@ -146,7 +154,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 
 	// Setter for noProducts.
 	@Override
-	public final void set$noProducts(int cv$value) {
+	public final void set$noProducts(int cv$value, boolean allocated$) {
 		noProducts = cv$value;
 	}
 
@@ -170,10 +178,9 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 
 	// Setter for ut.
 	@Override
-	public final void set$ut(double[] cv$value) {
+	public final void set$ut(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of ut including if probabilities need to be
 		// updated.
-		// Set ut
 		ut = cv$value;
 		
 		// Unset the fixed probability flag for sample 24 as it depends on ut.
@@ -181,6 +188,357 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 		
 		// Unset the fixed probability flag for sample 78 as it depends on ut.
 		fixedProbFlag$sample78 = false;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample24
+	private final void drawValueSample24(int i$var18) {
+		ut[i$var18] = (DistributionSampling.sampleGaussian(RNG$) * 3.1622776601683795);
+		
+		// Guards to ensure that exped is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 24 and consumer double[] 39.
+		// 
+		// Substituted "i$var36" with its value "i$var18".
+		exped[i$var18] = Math.exp(ut[i$var18]);
+		
+		// Guards to ensure that sum is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 24 and consumer double 50.
+		// 
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$13 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array exped
+			reduceVar$sum$13 = (reduceVar$sum$13 + exped[cv$reduction44Index]);
+		
+		// Write out the new sample value.
+		sum = reduceVar$sum$13;
+		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+			// Set the flags to false
+			// 
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			guard$sample24put65$global[i$var61] = false;
+		
+		// Set the flags to false
+		// 
+		// Guard to check that at most one copy of the code is executed for a given random
+		// variable instance.
+		// 
+		// Substituted "i$var61" with its value "i$var18".
+		guard$sample24put65$global[i$var18] = false;
+		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			if(!guard$sample24put65$global[i$var61]) {
+				// The body will execute, so should not be executed again
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample24put65$global[i$var61] = true;
+				
+				// sum's comment
+				// Write out the new sample value.
+				prob[i$var61] = (exped[i$var61] / reduceVar$sum$13);
+			}
+		}
+		
+		// Substituted "i$var36" with its value "i$var18".
+		// 
+		// Substituted "i$var61" with its value "i$var18".
+		if(!guard$sample24put65$global[i$var18]) {
+			// The body will execute, so should not be executed again
+			// 
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			// 
+			// Substituted "i$var61" with its value "i$var18".
+			guard$sample24put65$global[i$var18] = true;
+			
+			// Substituted "i$var61" with its value "i$var18".
+			// 
+			// sum's comment
+			// Write out the new sample value.
+			prob[i$var18] = (exped[i$var18] / reduceVar$sum$13);
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 24 drawn from Gaussian 23. Inference was performed using Metropolis-Hastings.
+	private final void inferSample24(int i$var18) {
+		constrainedFlag$sample24[(i$var18 - 1)] = false;
+		
+		// The original value of the sample
+		double cv$originalValue = ut[i$var18];
+		
+		// This value is not used before it is set again, so removing the value declaration.
+		// 
+		// The probability of the random variable generating the originally sampled value
+		double cv$originalProbability;
+		
+		// Calculate a proposed variance.
+		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
+		
+		// Ensure the variance is at least 0.01
+		if((cv$var < 0.010000000000000002))
+			cv$var = 0.010000000000000002;
+		
+		// The proposed new value for the sample
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		{
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Set the current value to the current state of the tree.
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
+			for(int var76 = 0; var76 < noObs; var76 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample24[(i$var18 - 1)] = true;
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 78 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			cv$originalProbability = cv$accumulatedProbabilities;
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample24[(i$var18 - 1)]) {
+			// Guards to ensure that ut is only updated when there is a valid path.
+			ut[i$var18] = cv$proposedValue;
+			
+			// Guards to ensure that exped is only updated when there is a valid path.
+			// 
+			// Looking for a path between Sample 24 and consumer double[] 39.
+			// 
+			// Substituted "i$var36" with its value "i$var18".
+			exped[i$var18] = Math.exp(ut[i$var18]);
+			
+			// Guards to ensure that sum is only updated when there is a valid path.
+			// 
+			// Looking for a path between Sample 24 and consumer double 50.
+			// 
+			// Reduction of array exped
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			double reduceVar$sum$10 = 0.0;
+			
+			// For each index in the array to be reduced
+			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// j's comment
+				// Set the right hand term to a value from the array exped
+				reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction44Index]);
+			
+			// Write out the new sample value.
+			sum = reduceVar$sum$10;
+			for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample24put65$global[i$var61] = false;
+			
+			// Set the flags to false
+			// 
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			// 
+			// Substituted "i$var61" with its value "i$var18".
+			guard$sample24put65$global[i$var18] = false;
+			for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				if(!guard$sample24put65$global[i$var61]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample24put65$global[i$var61] = true;
+					
+					// sum's comment
+					// Write out the new sample value.
+					prob[i$var61] = (exped[i$var61] / reduceVar$sum$10);
+				}
+			}
+			
+			// Substituted "i$var36" with its value "i$var18".
+			// 
+			// Substituted "i$var61" with its value "i$var18".
+			if(!guard$sample24put65$global[i$var18]) {
+				// The body will execute, so should not be executed again
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				// 
+				// Substituted "i$var61" with its value "i$var18".
+				guard$sample24put65$global[i$var18] = true;
+				
+				// Substituted "i$var61" with its value "i$var18".
+				// 
+				// sum's comment
+				// Write out the new sample value.
+				prob[i$var18] = (exped[i$var18] / reduceVar$sum$10);
+			}
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
+			for(int var76 = 0; var76 < noObs; var76 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample24[(i$var18 - 1)] = true;
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 78 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// Guards to ensure that ut is only updated when there is a valid path.
+				// 
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				ut[i$var18] = cv$originalValue;
+				
+				// Guards to ensure that exped is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 24 and consumer double[] 39.
+				// 
+				// Substituted "i$var36" with its value "i$var18".
+				exped[i$var18] = Math.exp(ut[i$var18]);
+				
+				// Guards to ensure that sum is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 24 and consumer double 50.
+				// 
+				// Reduction of array exped
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				double reduceVar$sum$12 = 0.0;
+				
+				// For each index in the array to be reduced
+				for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
+					// Execute the reduction function, saving the result into the return value.
+					// 
+					// Copy the result of the reduction into the variable returned by the reduction.
+					// 
+					// j's comment
+					// Set the right hand term to a value from the array exped
+					reduceVar$sum$12 = (reduceVar$sum$12 + exped[cv$reduction44Index]);
+				
+				// Write out the new sample value.
+				sum = reduceVar$sum$12;
+				for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+					// Set the flags to false
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample24put65$global[i$var61] = false;
+				
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				// 
+				// Substituted "i$var61" with its value "i$var18".
+				guard$sample24put65$global[i$var18] = false;
+				for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					if(!guard$sample24put65$global[i$var61]) {
+						// The body will execute, so should not be executed again
+						// 
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						guard$sample24put65$global[i$var61] = true;
+						
+						// sum's comment
+						// Write out the new sample value.
+						prob[i$var61] = (exped[i$var61] / reduceVar$sum$12);
+					}
+				}
+				
+				// Substituted "i$var36" with its value "i$var18".
+				// 
+				// Substituted "i$var61" with its value "i$var18".
+				if(!guard$sample24put65$global[i$var18]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					// 
+					// Substituted "i$var61" with its value "i$var18".
+					guard$sample24put65$global[i$var18] = true;
+					
+					// Substituted "i$var61" with its value "i$var18".
+					// 
+					// sum's comment
+					// Write out the new sample value.
+					prob[i$var18] = (exped[i$var18] / reduceVar$sum$12);
+				}
+			}
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample24 using sampled
@@ -341,7 +699,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts))?Math.log(prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts)) && (0 < noProducts)) && (0.0 <= prob[cv$sampleValue])) && (prob[cv$sampleValue] <= 1.0))?Math.log(prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
@@ -395,266 +753,6 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 24 drawn from Gaussian 23. Inference was performed using Metropolis-Hastings.
-	private final void sample24(int i$var18) {
-		// The original value of the sample
-		double cv$originalValue = ut[i$var18];
-		
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The probability of the random variable generating the originally sampled value
-		double cv$originalProbability;
-		
-		// Calculate a proposed variance.
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
-		
-		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
-		
-		// The proposed new value for the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-		
-		// Unrolled loop
-		{
-			// An accumulator to allow the value for each distribution to be constructed before
-			// it is added to the index probabilities.
-			// 
-			// Set the current value to the current state of the tree.
-			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 3.1622776601683795)) - 1.151292546497023);
-			
-			// Processing sample task 78 of consumer random variable null.
-			for(int var76 = 0; var76 < noObs; var76 += 1)
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 78 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-			
-			// Initialize a log space accumulator to take the product of all the distribution
-			// probabilities.
-			// 
-			// Record the reached probability density.
-			// 
-			// Initialize a counter to track the reached distributions.
-			cv$originalProbability = cv$accumulatedProbabilities;
-		}
-		
-		// Guards to ensure that ut is only updated when there is a valid path.
-		ut[i$var18] = cv$proposedValue;
-		
-		// Guards to ensure that exped is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 24 and consumer double[] 39.
-		// 
-		// Substituted "i$var36" with its value "i$var18".
-		exped[i$var18] = Math.exp(ut[i$var18]);
-		
-		// Guards to ensure that sum is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 24 and consumer double 50.
-		// 
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$9 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// j's comment
-			// Set the right hand term to a value from the array exped
-			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction44Index]);
-		
-		// Write out the new sample value.
-		sum = reduceVar$sum$9;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
-			// Set the flags to false
-			// 
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			guard$sample24put65$global[i$var61] = false;
-		
-		// Set the flags to false
-		// 
-		// Guard to check that at most one copy of the code is executed for a given random
-		// variable instance.
-		// 
-		// Substituted "i$var61" with its value "i$var18".
-		guard$sample24put65$global[i$var18] = false;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			if(!guard$sample24put65$global[i$var61]) {
-				// The body will execute, so should not be executed again
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample24put65$global[i$var61] = true;
-				
-				// sum's comment
-				// Write out the new sample value.
-				prob[i$var61] = (exped[i$var61] / reduceVar$sum$9);
-			}
-		}
-		
-		// Substituted "i$var36" with its value "i$var18".
-		// 
-		// Substituted "i$var61" with its value "i$var18".
-		if(!guard$sample24put65$global[i$var18]) {
-			// The body will execute, so should not be executed again
-			// 
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			// 
-			// Substituted "i$var61" with its value "i$var18".
-			guard$sample24put65$global[i$var18] = true;
-			
-			// Substituted "i$var61" with its value "i$var18".
-			// 
-			// sum's comment
-			// Write out the new sample value.
-			prob[i$var18] = (exped[i$var18] / reduceVar$sum$9);
-		}
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 3.1622776601683795)) - 1.151292546497023);
-		
-		// Processing sample task 78 of consumer random variable null.
-		for(int var76 = 0; var76 < noObs; var76 += 1)
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 78 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			cv$accumulatedProbabilities = ((((0.0 <= choices[var76]) && (choices[var76] < noProducts))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
-			// Guards to ensure that ut is only updated when there is a valid path.
-			// 
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			ut[i$var18] = cv$originalValue;
-			
-			// Guards to ensure that exped is only updated when there is a valid path.
-			// 
-			// Looking for a path between Sample 24 and consumer double[] 39.
-			// 
-			// Substituted "i$var36" with its value "i$var18".
-			exped[i$var18] = Math.exp(ut[i$var18]);
-			
-			// Guards to ensure that sum is only updated when there is a valid path.
-			// 
-			// Looking for a path between Sample 24 and consumer double 50.
-			// 
-			// Reduction of array exped
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$sum$11 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array exped
-				reduceVar$sum$11 = (reduceVar$sum$11 + exped[cv$reduction44Index]);
-			
-			// Write out the new sample value.
-			sum = reduceVar$sum$11;
-			for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
-				// Set the flags to false
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample24put65$global[i$var61] = false;
-			
-			// Set the flags to false
-			// 
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			// 
-			// Substituted "i$var61" with its value "i$var18".
-			guard$sample24put65$global[i$var18] = false;
-			for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				if(!guard$sample24put65$global[i$var61]) {
-					// The body will execute, so should not be executed again
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					guard$sample24put65$global[i$var61] = true;
-					
-					// sum's comment
-					// Write out the new sample value.
-					prob[i$var61] = (exped[i$var61] / reduceVar$sum$11);
-				}
-			}
-			
-			// Substituted "i$var36" with its value "i$var18".
-			// 
-			// Substituted "i$var61" with its value "i$var18".
-			if(!guard$sample24put65$global[i$var18]) {
-				// The body will execute, so should not be executed again
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				// 
-				// Substituted "i$var61" with its value "i$var18".
-				guard$sample24put65$global[i$var18] = true;
-				
-				// Substituted "i$var61" with its value "i$var18".
-				// 
-				// sum's comment
-				// Write out the new sample value.
-				prob[i$var18] = (exped[i$var18] / reduceVar$sum$11);
-			}
-		}
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -688,6 +786,9 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 		// Constructor for choices
 		choices = new int[noObs];
 		
+		// Constructor for constrainedFlag$sample24
+		constrainedFlag$sample24 = new boolean[(noProducts - 1)];
+		
 		// Constructor for logProbability$sample24
 		logProbability$sample24 = new double[(noProducts - 1)];
 		
@@ -698,216 +799,6 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample24) {
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 1, noProducts, 1,
-				(int forStart$i$var18, int forEnd$i$var18, int threadID$i$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var18 = forStart$i$var18; i$var18 < forEnd$i$var18; i$var18 += 1)
-							ut[i$var18] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
-				}
-			);
-			
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var36 = forStart$i$var36; i$var36 < forEnd$i$var36; i$var36 += 1)
-							exped[i$var36] = Math.exp(ut[i$var36]);
-				}
-			);
-			
-			// Reduction of array exped
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$sum$12 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// j's comment
-				// Set the right hand term to a value from the array exped
-				reduceVar$sum$12 = (reduceVar$sum$12 + exped[cv$reduction44Index]);
-			sum = reduceVar$sum$12;
-			
-			// Alternative name for reduceVar$sum$12 to make it effectively final.
-			double reduceVar$sum$12$1 = reduceVar$sum$12;
-			
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noProducts, 1,
-				(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
-							// Substituted "sum" with its value "reduceVar$sum$12".
-							prob[i$var61] = (exped[i$var61] / reduceVar$sum$12$1);
-				}
-			);
-		}
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noObs, 1,
-			(int forStart$var76, int forEnd$var76, int threadID$var76, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int var76 = forStart$var76; var76 < forEnd$var76; var76 += 1)
-						choices[var76] = DistributionSampling.sampleCategorical(RNG$1, prob, noProducts);
-			}
-		);
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Fixed intermediate variables are primed. Distributions are calculated
-	// and stored.
-	@Override
-	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample24)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 1, noProducts, 1,
-				(int forStart$i$var18, int forEnd$i$var18, int threadID$i$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var18 = forStart$i$var18; i$var18 < forEnd$i$var18; i$var18 += 1)
-							ut[i$var18] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
-				}
-			);
-
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int i$var36 = forStart$i$var36; i$var36 < forEnd$i$var36; i$var36 += 1)
-						exped[i$var36] = Math.exp(ut[i$var36]);
-			}
-		);
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$16 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// j's comment
-			// Set the right hand term to a value from the array exped
-			reduceVar$sum$16 = (reduceVar$sum$16 + exped[cv$reduction44Index]);
-		sum = reduceVar$sum$16;
-		
-		// Alternative name for reduceVar$sum$16 to make it effectively final.
-		double reduceVar$sum$16$1 = reduceVar$sum$16;
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
-						// Substituted "sum" with its value "reduceVar$sum$16".
-						prob[i$var61] = (exped[i$var61] / reduceVar$sum$16$1);
-			}
-		);
-	}
-
-	// Method to execute the model code conventionally with priming of fixed intermediate
-	// variables.
-	@Override
-	public final void forwardGenerationPrime() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample24)
-			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 1, noProducts, 1,
-				(int forStart$i$var18, int forEnd$i$var18, int threadID$i$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
-					
-						// Inner loop for running batches of iterations, each batch has its own random number
-						// generator.
-						for(int i$var18 = forStart$i$var18; i$var18 < forEnd$i$var18; i$var18 += 1)
-							ut[i$var18] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
-				}
-			);
-
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int i$var36 = forStart$i$var36; i$var36 < forEnd$i$var36; i$var36 += 1)
-						exped[i$var36] = Math.exp(ut[i$var36]);
-			}
-		);
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$13 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// j's comment
-			// Set the right hand term to a value from the array exped
-			reduceVar$sum$13 = (reduceVar$sum$13 + exped[cv$reduction44Index]);
-		sum = reduceVar$sum$13;
-		
-		// Alternative name for reduceVar$sum$13 to make it effectively final.
-		double reduceVar$sum$13$1 = reduceVar$sum$13;
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noProducts, 1,
-			(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
-						// Substituted "sum" with its value "reduceVar$sum$13".
-						prob[i$var61] = (exped[i$var61] / reduceVar$sum$13$1);
-			}
-		);
-		
-		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noObs, 1,
-			(int forStart$var76, int forEnd$var76, int threadID$var76, org.sandwood.random.internal.Rng RNG$1) -> { 
-				
-					// Inner loop for running batches of iterations, each batch has its own random number
-					// generator.
-					for(int var76 = forStart$var76; var76 < forEnd$var76; var76 += 1)
-						choices[var76] = DistributionSampling.sampleCategorical(RNG$1, prob, noProducts);
-			}
-		);
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputs() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample24) {
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -963,13 +854,87 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 				}
 			);
 		}
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noObs, 1,
+			(int forStart$var76, int forEnd$var76, int threadID$var76, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var76 = forStart$var76; var76 < forEnd$var76; var76 += 1)
+						choices[var76] = DistributionSampling.sampleCategorical(RNG$1, prob, noProducts);
+			}
+		);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
-	// to single values.
+	// observed values. Fixed intermediate variables are primed. Distributions are calculated
+	// and stored.
 	@Override
-	public final void forwardGenerationValuesNoOutputsPrime() {
+	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample24)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 1, noProducts, 1,
+				(int forStart$i$var18, int forEnd$i$var18, int threadID$i$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int i$var18 = forStart$i$var18; i$var18 < forEnd$i$var18; i$var18 += 1)
+							ut[i$var18] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+				}
+			);
+
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var36 = forStart$i$var36; i$var36 < forEnd$i$var36; i$var36 += 1)
+						exped[i$var36] = Math.exp(ut[i$var36]);
+			}
+		);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$18 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array exped
+			reduceVar$sum$18 = (reduceVar$sum$18 + exped[cv$reduction44Index]);
+		sum = reduceVar$sum$18;
+		
+		// Alternative name for reduceVar$sum$18 to make it effectively final.
+		double reduceVar$sum$18$1 = reduceVar$sum$18;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
+						// Substituted "sum" with its value "reduceVar$sum$18".
+						prob[i$var61] = (exped[i$var61] / reduceVar$sum$18$1);
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample24)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -1027,6 +992,142 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 						prob[i$var61] = (exped[i$var61] / reduceVar$sum$15$1);
 			}
 		);
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noObs, 1,
+			(int forStart$var76, int forEnd$var76, int threadID$var76, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int var76 = forStart$var76; var76 < forEnd$var76; var76 += 1)
+						choices[var76] = DistributionSampling.sampleCategorical(RNG$1, prob, noProducts);
+			}
+		);
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample24) {
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 1, noProducts, 1,
+				(int forStart$i$var18, int forEnd$i$var18, int threadID$i$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int i$var18 = forStart$i$var18; i$var18 < forEnd$i$var18; i$var18 += 1)
+							ut[i$var18] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+				}
+			);
+			
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noProducts, 1,
+				(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int i$var36 = forStart$i$var36; i$var36 < forEnd$i$var36; i$var36 += 1)
+							exped[i$var36] = Math.exp(ut[i$var36]);
+				}
+			);
+			
+			// Reduction of array exped
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			double reduceVar$sum$16 = 0.0;
+			
+			// For each index in the array to be reduced
+			for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// j's comment
+				// Set the right hand term to a value from the array exped
+				reduceVar$sum$16 = (reduceVar$sum$16 + exped[cv$reduction44Index]);
+			sum = reduceVar$sum$16;
+			
+			// Alternative name for reduceVar$sum$16 to make it effectively final.
+			double reduceVar$sum$16$1 = reduceVar$sum$16;
+			
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 0, noProducts, 1,
+				(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
+							// Substituted "sum" with its value "reduceVar$sum$16".
+							prob[i$var61] = (exped[i$var61] / reduceVar$sum$16$1);
+				}
+			);
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample24)
+			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+			parallelFor(RNG$, 1, noProducts, 1,
+				(int forStart$i$var18, int forEnd$i$var18, int threadID$i$var18, org.sandwood.random.internal.Rng RNG$1) -> { 
+					
+						// Inner loop for running batches of iterations, each batch has its own random number
+						// generator.
+						for(int i$var18 = forStart$i$var18; i$var18 < forEnd$i$var18; i$var18 += 1)
+							ut[i$var18] = (DistributionSampling.sampleGaussian(RNG$1) * 3.1622776601683795);
+				}
+			);
+
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$i$var36, int forEnd$i$var36, int threadID$i$var36, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var36 = forStart$i$var36; i$var36 < forEnd$i$var36; i$var36 += 1)
+						exped[i$var36] = Math.exp(ut[i$var36]);
+			}
+		);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$17 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// j's comment
+			// Set the right hand term to a value from the array exped
+			reduceVar$sum$17 = (reduceVar$sum$17 + exped[cv$reduction44Index]);
+		sum = reduceVar$sum$17;
+		
+		// Alternative name for reduceVar$sum$17 to make it effectively final.
+		double reduceVar$sum$17$1 = reduceVar$sum$17;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, noProducts, 1,
+			(int forStart$i$var61, int forEnd$i$var61, int threadID$i$var61, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
+						// Substituted "sum" with its value "reduceVar$sum$17".
+						prob[i$var61] = (exped[i$var61] / reduceVar$sum$17$1);
+			}
+		);
 	}
 
 	// Method to execute one round of Gibbs sampling.
@@ -1037,24 +1138,21 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 			// Infer the samples in chronological order.
 			if(system$gibbsForward) {
 				for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
-					sample24(i$var18);
+					inferSample24(i$var18);
 			}
 			// Infer the samples in reverse chronological order.
 			else {
 				for(int i$var18 = (noProducts - 1); i$var18 >= 1; i$var18 -= 1)
-					sample24(i$var18);
+					inferSample24(i$var18);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		ut[0] = 0.0;
+		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
+			if(!constrainedFlag$sample24[(i$var18 - 1)])
+				drawValueSample24(i$var18);
+		}
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -1078,6 +1176,17 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 		logProbability$choices = 0.0;
 		if(!fixedProbFlag$sample78)
 			logProbability$var77 = Double.NaN;
+	}
+
+	// Method for initializing the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		ut[0] = 0.0;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
+			constrainedFlag$sample24[index$constrainedFlag$sample24$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -1162,7 +1271,7 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		double reduceVar$sum$17 = 0.0;
+		double reduceVar$sum$19 = 0.0;
 		
 		// For each index in the array to be reduced
 		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1)
@@ -1172,11 +1281,11 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// j's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$17 = (reduceVar$sum$17 + exped[cv$reduction44Index]);
-		sum = reduceVar$sum$17;
+			reduceVar$sum$19 = (reduceVar$sum$19 + exped[cv$reduction44Index]);
+		sum = reduceVar$sum$19;
 		
-		// Alternative name for reduceVar$sum$17 to make it effectively final.
-		double reduceVar$sum$17$1 = reduceVar$sum$17;
+		// Alternative name for reduceVar$sum$19 to make it effectively final.
+		double reduceVar$sum$19$1 = reduceVar$sum$19;
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
 		parallelFor(RNG$, 0, noProducts, 1,
@@ -1185,8 +1294,8 @@ final class DiscreteChoiceAlt$MultiThreadCPU extends org.sandwood.runtime.intern
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i$var61 = forStart$i$var61; i$var61 < forEnd$i$var61; i$var61 += 1)
-						// Substituted "sum" with its value "reduceVar$sum$17".
-						prob[i$var61] = (exped[i$var61] / reduceVar$sum$17$1);
+						// Substituted "sum" with its value "reduceVar$sum$19".
+						prob[i$var61] = (exped[i$var61] / reduceVar$sum$19$1);
 			}
 		);
 	}

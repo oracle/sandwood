@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class AlternativeModelMK3$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements AlternativeModelMK3$CoreInterface {
 	private double bias;
+	private boolean constrainedFlag$sample6 = true;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample6 = false;
 	private boolean fixedProbFlag$sample8 = false;
@@ -29,7 +30,7 @@ final class AlternativeModelMK3$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		bias = cv$value;
 		fixedProbFlag$sample6 = false;
 		fixedProbFlag$sample8 = false;
@@ -41,8 +42,9 @@ final class AlternativeModelMK3$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$fixedFlag$sample6(boolean cv$value) {
+	public final void set$fixedFlag$sample6(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample6 = cv$value;
+		constrainedFlag$sample6 = (fixedFlag$sample6 || constrainedFlag$sample6);
 		fixedProbFlag$sample6 = (fixedFlag$sample6 && fixedProbFlag$sample6);
 		fixedProbFlag$sample8 = (fixedFlag$sample6 && fixedProbFlag$sample8);
 	}
@@ -78,7 +80,7 @@ final class AlternativeModelMK3$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$observedPositiveCount(int cv$value) {
+	public final void set$observedPositiveCount(int cv$value, boolean allocated$) {
 		observedPositiveCount = cv$value;
 	}
 
@@ -88,13 +90,55 @@ final class AlternativeModelMK3$MultiThreadCPU extends org.sandwood.runtime.inte
 	}
 
 	@Override
-	public final void set$observedSampleCount(int cv$value) {
+	public final void set$observedSampleCount(int cv$value, boolean allocated$) {
 		observedSampleCount = cv$value;
 	}
 
 	@Override
 	public final int get$positiveCount() {
 		return positiveCount;
+	}
+
+	private final void drawValueSample6() {
+		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	private final void inferSample6() {
+		if(true) {
+			constrainedFlag$sample6 = false;
+			int cv$sum = 0;
+			int cv$count = 0;
+			{
+				{
+					{
+						{
+							{
+								{
+									boolean cv$sampleConstrained = true;
+									if(cv$sampleConstrained) {
+										constrainedFlag$sample6 = true;
+										{
+											{
+												{
+													{
+														{
+															cv$count = (cv$count + observedSampleCount);
+															cv$sum = (cv$sum + positiveCount);
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			if(constrainedFlag$sample6)
+				bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+		}
 	}
 
 	private final void logProbabilityValue$sample6() {
@@ -197,38 +241,6 @@ final class AlternativeModelMK3$MultiThreadCPU extends org.sandwood.runtime.inte
 		}
 	}
 
-	private final void sample6() {
-		if(true) {
-			int cv$sum = 0;
-			int cv$count = 0;
-			{
-				{
-					{
-						{
-							{
-								{
-									{
-										{
-											{
-												{
-													{
-														cv$count = (cv$count + observedSampleCount);
-														cv$sum = (cv$sum + positiveCount);
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-		}
-	}
-
 	@Override
 	public final void allocateScratch() {}
 
@@ -271,16 +283,15 @@ final class AlternativeModelMK3$MultiThreadCPU extends org.sandwood.runtime.inte
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample6)
-				sample6();
+				inferSample6();
 		} else {
 			if(!fixedFlag$sample6)
-				sample6();
+				inferSample6();
 		}
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample6)
+			drawValueSample6();
 	}
-
-	@Override
-	public final void initializeConstants() {}
 
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
@@ -291,6 +302,9 @@ final class AlternativeModelMK3$MultiThreadCPU extends org.sandwood.runtime.inte
 		if(!fixedProbFlag$sample8)
 			logProbability$positiveCount = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

@@ -479,7 +479,7 @@ public class SubstituteKnownValuesTransformer extends Transformer {
      */
     private final Stack<TransSequential> parents = new Stack<>();
     /**
-     * A map of trees that need to become initialisations to the comments that need to go with these initialisations.
+     * A map of trees that need to become initializations to the comments that need to go with these initializations.
      */
     private final Map<TransTreeVoid, String> initializations = new HashMap<>();
     /**
@@ -1085,7 +1085,7 @@ public class SubstituteKnownValuesTransformer extends Transformer {
      */
     private TransTreeVoid transformTree(TransSequential tree) {
         TransTreeVoid toReturn;
-        // Push the block onto the stack of parents before starting so initialisation
+        // Push the block onto the stack of parents before starting so initialization
         // statements can access it.
         parents.push(tree);
         toReturn = tree.applyTransformation(this);
@@ -1095,7 +1095,7 @@ public class SubstituteKnownValuesTransformer extends Transformer {
     }
 
     /**
-     * Transform the initialisation of an unset variable.
+     * Transform the initialization of an unset variable.
      * 
      * @param tree The tree to transform.
      * @return The transformed tree.
@@ -1111,15 +1111,15 @@ public class SubstituteKnownValuesTransformer extends Transformer {
             return TransTree.nop();
         else
         // If the next tree to write to this value is a store, flag the store
-        // to be converted into an initialisation, and record the comment to go
-        // from the initialisation to go with it.
+        // to be converted into an initialization, and record the comment to go
+        // from the initialization to go with it.
         if(nextWrittenTo.type == TransTreeType.STORE) {
             initializations.put(nextWrittenTo, tree.getComment());
             return TransTree.nop();
         } else {
             // Otherwise the first store to this variable is embedded in another
             // scope such as an if or a for loop. If this is the case we still need
-            // the initialisation, so just return the tree.
+            // the initialization, so just return the tree.
             return tree;
         }
     }
@@ -1129,7 +1129,7 @@ public class SubstituteKnownValuesTransformer extends Transformer {
      * 
      * @param tree The tree that currently initializes the variable.
      * @param desc The description of the variable.
-     * @return The first tree after the initialisation that writes to this variable. Null if there are no more trees
+     * @return The first tree after the initialization that writes to this variable. Null if there are no more trees
      *         writing to this variable.
      */
     private TransTreeVoid nextWrittenTo(TransTreeVoid tree, VariableDescription<?> desc) {
@@ -1138,7 +1138,7 @@ public class SubstituteKnownValuesTransformer extends Transformer {
          * directly embedded in each other we don't need to look any deeper to find all the statements that can execute
          * with the named variable in scope.
          */
-        // Return null if this initialisation is not in a sequential tree.
+        // Return null if this initialization is not in a sequential tree.
         if(parents.isEmpty())
             return null;
 
@@ -1153,7 +1153,7 @@ public class SubstituteKnownValuesTransformer extends Transformer {
             // tree.
             if(initializationPassed && vars.written(t).contains(desc))
                 return t;
-            // If this tree equals the initialising tree set the flag to mark the variable
+            // If this tree equals the initializing tree set the flag to mark the variable
             // as initialized.
             if(tree == t)
                 initializationPassed = true;
@@ -1267,7 +1267,7 @@ public class SubstituteKnownValuesTransformer extends Transformer {
     }
 
     /**
-     * Method to transform an initialisation tree.
+     * Method to transform an initialization tree.
      * 
      * @param tree The tree to transform.
      * @return The transformed tree.
@@ -1318,7 +1318,7 @@ public class SubstituteKnownValuesTransformer extends Transformer {
                     if(nextWrittenTo == null)
                         return TransTree.nop();
                     else {
-                        // If the next write is a store in this scope flag that to be an initialisation
+                        // If the next write is a store in this scope flag that to be an initialization
                         // storing the comment, and return a NOP for this tree.
                         if(nextWrittenTo.type == TransTreeType.STORE) {
                             initializations.put(nextWrittenTo, tree.getComment());
@@ -1333,7 +1333,7 @@ public class SubstituteKnownValuesTransformer extends Transformer {
                     }
                     // If the value is only read once add it to the set of possible substitutions.
                     // If this substitution is
-                    // used the initialisation will be removed on the next pass.
+                    // used the initialization will be removed on the next pass.
                 case ONCE: {
                     substitutes.add(idName, value, tree.id, tree.getComment(), false);
                     return TransTree.initializeVariable(tree.varDesc, value, tree.getComment());
@@ -1422,7 +1422,7 @@ public class SubstituteKnownValuesTransformer extends Transformer {
         // Check if this update invalidates any of our set substitutions.
         substitutes.removeDependantSubstitutions(tree.varDesc, false);
 
-        // Modify output to an initialisation if this tree has been flagged for
+        // Modify output to an initialization if this tree has been flagged for
         // conversion.
         if(initializations.containsKey(tree)) {
             if(toReturn.type == TransTreeType.NOP)

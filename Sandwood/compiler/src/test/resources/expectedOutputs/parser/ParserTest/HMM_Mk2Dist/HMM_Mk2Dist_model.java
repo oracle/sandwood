@@ -25,7 +25,7 @@ public final class HMM_Mk2Dist extends Model {
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$bias(value);
+            system$c.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -40,7 +40,7 @@ public final class HMM_Mk2Dist extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample57(fixed);
+                system$c.set$fixedFlag$sample57(fixed, allocated);
             }
         }
 
@@ -100,7 +100,7 @@ public final class HMM_Mk2Dist extends Model {
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$initialState(value);
+            system$c.set$initialState(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -110,7 +110,7 @@ public final class HMM_Mk2Dist extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample80(fixed);
+                system$c.set$fixedFlag$sample80(fixed, allocated);
             }
         }
 
@@ -134,7 +134,7 @@ public final class HMM_Mk2Dist extends Model {
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$m(value);
+            system$c.set$m(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -149,7 +149,7 @@ public final class HMM_Mk2Dist extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample42(fixed);
+                system$c.set$fixedFlag$sample42(fixed, allocated);
             }
         }
 
@@ -173,7 +173,7 @@ public final class HMM_Mk2Dist extends Model {
 
         @Override
         protected void setValueInternal(int[][] value) {
-            system$c.set$st(value);
+            system$c.set$st(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -188,8 +188,8 @@ public final class HMM_Mk2Dist extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample126(fixed);
-                system$c.set$fixedFlag$sample95(fixed);
+                system$c.set$fixedFlag$sample126(fixed, allocated);
+                system$c.set$fixedFlag$sample95(fixed, allocated);
             }
         }
 
@@ -217,7 +217,7 @@ public final class HMM_Mk2Dist extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$weights(value);
+            system$c.set$weights(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -227,7 +227,7 @@ public final class HMM_Mk2Dist extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample78(fixed);
+                system$c.set$fixedFlag$sample78(fixed, allocated);
             }
         }
 
@@ -256,7 +256,7 @@ public final class HMM_Mk2Dist extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noEvents(value); }
+        protected void setValueInternal(int value) { system$c.set$noEvents(value, allocated); }
     };
 
     /**
@@ -273,7 +273,7 @@ public final class HMM_Mk2Dist extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noStates(value); }
+        protected void setValueInternal(int value) { system$c.set$noStates(value, allocated); }
     };
 
     /**
@@ -293,13 +293,13 @@ public final class HMM_Mk2Dist extends Model {
 
         @Override
         public void setValueInternal(int[][] value) {
-            system$c.set$eventsMeasured(value);
-            system$c.set$length$eventsMeasured(getDims(value));
+            system$c.set$eventsMeasured(value, allocated);
+            system$c.set$length$eventsMeasured(getDims(value), allocated);
         }
 
         @Override
         public void setShapeInternal(int[] shape) {
-            system$c.set$length$eventsMeasured(shape);
+            system$c.set$length$eventsMeasured(shape, allocated);
         }
 
         @Override
@@ -398,37 +398,37 @@ public final class HMM_Mk2Dist extends Model {
     private void transferData(HMM_Mk2Dist$CoreInterface oldCore, HMM_Mk2Dist$CoreInterface newCore) {
         //Model inputs
         if(noEvents.isSet())
-            newCore.set$noEvents(oldCore.get$noEvents());
+            newCore.set$noEvents(oldCore.get$noEvents(), false);
         if(noStates.isSet())
-            newCore.set$noStates(oldCore.get$noStates());
+            newCore.set$noStates(oldCore.get$noStates(), false);
 
         //Observed arrays
         if(eventsMeasured.isSet()) {
-            newCore.set$eventsMeasured(oldCore.get$eventsMeasured());
-            newCore.set$length$eventsMeasured(oldCore.get$length$eventsMeasured());
+            newCore.set$eventsMeasured(oldCore.get$eventsMeasured(), false);
+            newCore.set$length$eventsMeasured(oldCore.get$length$eventsMeasured(), false);
         }
         else if(eventsMeasured.shapeSet())
-            newCore.set$length$eventsMeasured(oldCore.get$length$eventsMeasured());
+            newCore.set$length$eventsMeasured(oldCore.get$length$eventsMeasured(), false);
 
         //ComputedVariables
         if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias());
+            newCore.set$bias(oldCore.get$bias(), false);
         if($initialState.isSet())
-            newCore.set$initialState(oldCore.get$initialState());
+            newCore.set$initialState(oldCore.get$initialState(), false);
         if($m.isSet())
-            newCore.set$m(oldCore.get$m());
+            newCore.set$m(oldCore.get$m(), false);
         if($st.isSet())
-            newCore.set$st(oldCore.get$st());
+            newCore.set$st(oldCore.get$st(), false);
         if($weights.isSet())
-            newCore.set$weights(oldCore.get$weights());
+            newCore.set$weights(oldCore.get$weights(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample126(oldCore.get$fixedFlag$sample126());
-        newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
-        newCore.set$fixedFlag$sample57(oldCore.get$fixedFlag$sample57());
-        newCore.set$fixedFlag$sample78(oldCore.get$fixedFlag$sample78());
-        newCore.set$fixedFlag$sample80(oldCore.get$fixedFlag$sample80());
-        newCore.set$fixedFlag$sample95(oldCore.get$fixedFlag$sample95());
+        newCore.set$fixedFlag$sample126(oldCore.get$fixedFlag$sample126(), false);
+        newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42(), false);
+        newCore.set$fixedFlag$sample57(oldCore.get$fixedFlag$sample57(), false);
+        newCore.set$fixedFlag$sample78(oldCore.get$fixedFlag$sample78(), false);
+        newCore.set$fixedFlag$sample80(oldCore.get$fixedFlag$sample80(), false);
+        newCore.set$fixedFlag$sample95(oldCore.get$fixedFlag$sample95(), false);
     }
 
     /**

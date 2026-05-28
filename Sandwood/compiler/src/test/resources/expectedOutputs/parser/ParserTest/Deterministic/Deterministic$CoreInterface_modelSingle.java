@@ -6,7 +6,7 @@ interface Deterministic$CoreInterface extends org.sandwood.runtime.internal.mode
 	public int[] get$a();
 
 	// Setter for a.
-	public void set$a(int[] cv$value);
+	public void set$a(int[] cv$value, boolean allocated$);
 
 	// Getter for b.
 	public int[] get$b();
@@ -15,13 +15,13 @@ interface Deterministic$CoreInterface extends org.sandwood.runtime.internal.mode
 	public boolean get$fixedFlag$sample29();
 
 	// Setter for fixedFlag$sample29.
-	public void set$fixedFlag$sample29(boolean cv$value);
+	public void set$fixedFlag$sample29(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample55.
 	public boolean get$fixedFlag$sample55();
 
 	// Setter for fixedFlag$sample55.
-	public void set$fixedFlag$sample55(boolean cv$value);
+	public void set$fixedFlag$sample55(boolean cv$value, boolean allocated$);
 
 	// Getter for flips.
 	public boolean[] get$flips();
@@ -30,7 +30,7 @@ interface Deterministic$CoreInterface extends org.sandwood.runtime.internal.mode
 	public boolean[] get$flipsMeasured();
 
 	// Setter for flipsMeasured.
-	public void set$flipsMeasured(boolean[] cv$value);
+	public void set$flipsMeasured(boolean[] cv$value, boolean allocated$);
 
 	// Getter for logProbability$a.
 	public double get$logProbability$a();
@@ -48,13 +48,13 @@ interface Deterministic$CoreInterface extends org.sandwood.runtime.internal.mode
 	public double[][] get$m();
 
 	// Setter for m.
-	public void set$m(double[][] cv$value);
+	public void set$m(double[][] cv$value, boolean allocated$);
 
 	// Getter for n.
 	public int get$n();
 
 	// Setter for n.
-	public void set$n(int cv$value);
+	public void set$n(int cv$value, boolean allocated$);
 
 	// Getter for states.
 	public int get$states();

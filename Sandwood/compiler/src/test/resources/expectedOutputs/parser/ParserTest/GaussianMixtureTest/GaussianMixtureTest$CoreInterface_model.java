@@ -9,19 +9,19 @@ interface GaussianMixtureTest$CoreInterface extends org.sandwood.runtime.interna
 	public boolean get$fixedFlag$sample17();
 
 	// Setter for fixedFlag$sample17.
-	public void set$fixedFlag$sample17(boolean cv$value);
+	public void set$fixedFlag$sample17(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample34.
 	public boolean get$fixedFlag$sample34();
 
 	// Setter for fixedFlag$sample34.
-	public void set$fixedFlag$sample34(boolean cv$value);
+	public void set$fixedFlag$sample34(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample52.
 	public boolean get$fixedFlag$sample52();
 
 	// Setter for fixedFlag$sample52.
-	public void set$fixedFlag$sample52(boolean cv$value);
+	public void set$fixedFlag$sample52(boolean cv$value, boolean allocated$);
 
 	// Getter for k.
 	public int get$k();
@@ -30,7 +30,7 @@ interface GaussianMixtureTest$CoreInterface extends org.sandwood.runtime.interna
 	public int get$length$xMeasured();
 
 	// Setter for length$xMeasured.
-	public void set$length$xMeasured(int cv$value);
+	public void set$length$xMeasured(int cv$value, boolean allocated$);
 
 	// Getter for logProbability$mu.
 	public double get$logProbability$mu();
@@ -48,19 +48,19 @@ interface GaussianMixtureTest$CoreInterface extends org.sandwood.runtime.interna
 	public double[] get$mu();
 
 	// Setter for mu.
-	public void set$mu(double[] cv$value);
+	public void set$mu(double[] cv$value, boolean allocated$);
 
 	// Getter for phi.
 	public double[] get$phi();
 
 	// Setter for phi.
-	public void set$phi(double[] cv$value);
+	public void set$phi(double[] cv$value, boolean allocated$);
 
 	// Getter for sigma.
 	public double[] get$sigma();
 
 	// Setter for sigma.
-	public void set$sigma(double[] cv$value);
+	public void set$sigma(double[] cv$value, boolean allocated$);
 
 	// Getter for x.
 	public double[] get$x();
@@ -69,11 +69,11 @@ interface GaussianMixtureTest$CoreInterface extends org.sandwood.runtime.interna
 	public double[] get$xMeasured();
 
 	// Setter for xMeasured.
-	public void set$xMeasured(double[] cv$value);
+	public void set$xMeasured(double[] cv$value, boolean allocated$);
 
 	// Getter for z.
 	public int[] get$z();
 
 	// Setter for z.
-	public void set$z(int[] cv$value);
+	public void set$z(int[] cv$value, boolean allocated$);
 }

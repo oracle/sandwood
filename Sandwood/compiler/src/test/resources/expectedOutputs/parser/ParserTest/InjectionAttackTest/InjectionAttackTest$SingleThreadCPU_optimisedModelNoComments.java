@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements InjectionAttackTest$CoreInterface {
 	private double bias;
+	private boolean constrainedFlag$sample6 = true;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample6 = false;
 	private boolean fixedProbFlag$sample8 = false;
@@ -29,7 +30,7 @@ final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		bias = cv$value;
 		fixedProbFlag$sample6 = false;
 		fixedProbFlag$sample8 = false;
@@ -41,8 +42,9 @@ final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$fixedFlag$sample6(boolean cv$value) {
+	public final void set$fixedFlag$sample6(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample6 = cv$value;
+		constrainedFlag$sample6 = (cv$value || constrainedFlag$sample6);
 		fixedProbFlag$sample6 = (cv$value && fixedProbFlag$sample6);
 		fixedProbFlag$sample8 = (cv$value && fixedProbFlag$sample8);
 	}
@@ -78,7 +80,7 @@ final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$observedPositiveCount(int cv$value) {
+	public final void set$observedPositiveCount(int cv$value, boolean allocated$) {
 		observedPositiveCount = cv$value;
 	}
 
@@ -88,13 +90,23 @@ final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.int
 	}
 
 	@Override
-	public final void set$observedSampleCount(int cv$value) {
+	public final void set$observedSampleCount(int cv$value, boolean allocated$) {
 		observedSampleCount = cv$value;
 	}
 
 	@Override
 	public final int get$positiveCount() {
 		return positiveCount;
+	}
+
+	private final void drawValueSample6() {
+		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	private final void inferSample6() {
+		constrainedFlag$sample6 = false;
+		constrainedFlag$sample6 = true;
+		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, positiveCount, observedSampleCount);
 	}
 
 	private final void logProbabilityValue$sample6() {
@@ -125,10 +137,6 @@ final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.int
 			logProbability$$model = (logProbability$$model + logProbability$positiveCount);
 			logProbability$$evidence = (logProbability$$evidence + logProbability$positiveCount);
 		}
-	}
-
-	private final void sample6() {
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, positiveCount, observedSampleCount);
 	}
 
 	@Override
@@ -172,12 +180,11 @@ final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.int
 	@Override
 	public final void gibbsRound() {
 		if(!fixedFlag$sample6)
-			sample6();
+			inferSample6();
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample6)
+			drawValueSample6();
 	}
-
-	@Override
-	public final void initializeConstants() {}
 
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
@@ -188,6 +195,9 @@ final class InjectionAttackTest$SingleThreadCPU extends org.sandwood.runtime.int
 		if(!fixedProbFlag$sample8)
 			logProbability$positiveCount = Double.NaN;
 	}
+
+	@Override
+	public final void initializeModel() {}
 
 	@Override
 	public final void logEvidenceProbabilities() {

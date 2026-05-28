@@ -8,6 +8,7 @@ final class Flip1CoinMK1b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	private double a;
 	private double b;
 	private double bias;
+	private boolean constrainedFlag$sample6 = true;
 	private boolean fixedFlag$sample6 = false;
 	private boolean fixedProbFlag$sample19 = false;
 	private boolean fixedProbFlag$sample6 = false;
@@ -33,7 +34,7 @@ final class Flip1CoinMK1b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$a(double cv$value) {
+	public final void set$a(double cv$value, boolean allocated$) {
 		a = cv$value;
 	}
 
@@ -43,7 +44,7 @@ final class Flip1CoinMK1b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$b(double cv$value) {
+	public final void set$b(double cv$value, boolean allocated$) {
 		b = cv$value;
 	}
 
@@ -53,7 +54,7 @@ final class Flip1CoinMK1b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		bias = cv$value;
 		fixedProbFlag$sample6 = false;
 		fixedProbFlag$sample19 = false;
@@ -65,8 +66,9 @@ final class Flip1CoinMK1b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$fixedFlag$sample6(boolean cv$value) {
+	public final void set$fixedFlag$sample6(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample6 = cv$value;
+		constrainedFlag$sample6 = (cv$value || constrainedFlag$sample6);
 		fixedProbFlag$sample6 = (cv$value && fixedProbFlag$sample6);
 		fixedProbFlag$sample19 = (cv$value && fixedProbFlag$sample19);
 	}
@@ -82,7 +84,7 @@ final class Flip1CoinMK1b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$flipsMeasured(boolean[] cv$value) {
+	public final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
 		flipsMeasured = cv$value;
 	}
 
@@ -92,7 +94,7 @@ final class Flip1CoinMK1b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	}
 
 	@Override
-	public final void set$length$flipsMeasured(int cv$value) {
+	public final void set$length$flipsMeasured(int cv$value, boolean allocated$) {
 		length$flipsMeasured = cv$value;
 	}
 
@@ -126,11 +128,29 @@ final class Flip1CoinMK1b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		return samples;
 	}
 
+	private final void drawValueSample6() {
+		bias = DistributionSampling.sampleBeta(RNG$, a, b);
+	}
+
+	private final void inferSample6() {
+		constrainedFlag$sample6 = false;
+		int cv$sum = 0;
+		int cv$count = 0;
+		for(int var18 = 0; var18 < samples; var18 += 1) {
+			constrainedFlag$sample6 = true;
+			cv$count = (cv$count + 1);
+			if(flips[var18])
+				cv$sum = (cv$sum + 1);
+		}
+		if(constrainedFlag$sample6)
+			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
+	}
+
 	private final void logProbabilityValue$sample19() {
 		if(!fixedProbFlag$sample19) {
 			double cv$sampleAccumulator = 0.0;
 			for(int var18 = 0; var18 < samples; var18 += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[var18]?bias:(1.0 - bias))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias) && (bias <= 1.0))?Math.log((flips[var18]?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
 			logProbability$bernoulli = cv$sampleAccumulator;
 			logProbability$var19 = cv$sampleAccumulator;
 			logProbability$flips = (logProbability$flips + cv$sampleAccumulator);
@@ -158,17 +178,6 @@ final class Flip1CoinMK1b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			if(fixedFlag$sample6)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
 		}
-	}
-
-	private final void sample6() {
-		int cv$sum = 0;
-		int cv$count = 0;
-		for(int var18 = 0; var18 < samples; var18 += 1) {
-			cv$count = (cv$count + 1);
-			if(flips[var18])
-				cv$sum = (cv$sum + 1);
-		}
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
 	}
 
 	@Override
@@ -224,13 +233,10 @@ final class Flip1CoinMK1b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final void gibbsRound() {
 		if(!fixedFlag$sample6)
-			sample6();
+			inferSample6();
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	@Override
-	public final void initializeConstants() {
-		samples = length$flipsMeasured;
+		if(!constrainedFlag$sample6)
+			drawValueSample6();
 	}
 
 	private final void initializeLogProbabilityFields() {
@@ -242,6 +248,11 @@ final class Flip1CoinMK1b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample19)
 			logProbability$var19 = Double.NaN;
+	}
+
+	@Override
+	public final void initializeModel() {
+		samples = length$flipsMeasured;
 	}
 
 	@Override

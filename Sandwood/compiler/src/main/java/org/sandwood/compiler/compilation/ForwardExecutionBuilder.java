@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -207,7 +207,7 @@ public class ForwardExecutionBuilder {
         // NOTE Get parent is required to avoid tests that stop code generation at
         // intermediate
         // values.
-        if(!intermediate.isDeterministic() || compilationCtx.phase == CompilationPhase.INITIALIZATION_OF_CONSTANTS) {
+        if(!intermediate.isDeterministic() || compilationCtx.phase == CompilationPhase.INITIALIZATION_OF_MODEL) {
             // If a sequence of put tasks find the value being assigned so scope constraints are not included.
             Variable<?> v = intermediate;
             ProducingDataflowTask<?> p = v.getParent();
@@ -269,7 +269,7 @@ public class ForwardExecutionBuilder {
         });
     }
 
-    private static <A extends Variable<A>> void forwardVariableBody(Variable<A> v, CompilationContext compilationCtx) {
+    public static <A extends Variable<A>> void forwardVariableBody(Variable<A> v, CompilationContext compilationCtx) {
         IRTreeReturn<A> returnBody = v.getParent().getForwardIR(compilationCtx);
 
         // Typically this will be if the value is from a sample task and is written to an intermediate array.

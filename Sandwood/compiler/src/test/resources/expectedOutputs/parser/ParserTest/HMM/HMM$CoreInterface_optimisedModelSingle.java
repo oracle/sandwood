@@ -6,31 +6,31 @@ interface HMM$CoreInterface extends org.sandwood.runtime.internal.model.CoreMode
 	public double[] get$bias();
 
 	// Setter for bias.
-	public void set$bias(double[] cv$value);
+	public void set$bias(double[] cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample28.
 	public boolean get$fixedFlag$sample28();
 
 	// Setter for fixedFlag$sample28.
-	public void set$fixedFlag$sample28(boolean cv$value);
+	public void set$fixedFlag$sample28(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample45.
 	public boolean get$fixedFlag$sample45();
 
 	// Setter for fixedFlag$sample45.
-	public void set$fixedFlag$sample45(boolean cv$value);
+	public void set$fixedFlag$sample45(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample53.
 	public boolean get$fixedFlag$sample53();
 
 	// Setter for fixedFlag$sample53.
-	public void set$fixedFlag$sample53(boolean cv$value);
+	public void set$fixedFlag$sample53(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample71.
 	public boolean get$fixedFlag$sample71();
 
 	// Setter for fixedFlag$sample71.
-	public void set$fixedFlag$sample71(boolean cv$value);
+	public void set$fixedFlag$sample71(boolean cv$value, boolean allocated$);
 
 	// Getter for flips.
 	public boolean[] get$flips();
@@ -39,7 +39,7 @@ interface HMM$CoreInterface extends org.sandwood.runtime.internal.model.CoreMode
 	public int get$length$measured();
 
 	// Setter for length$measured.
-	public void set$length$measured(int cv$value);
+	public void set$length$measured(int cv$value, boolean allocated$);
 
 	// Getter for logProbability$bias.
 	public double get$logProbability$bias();
@@ -57,13 +57,13 @@ interface HMM$CoreInterface extends org.sandwood.runtime.internal.model.CoreMode
 	public double[][] get$m();
 
 	// Setter for m.
-	public void set$m(double[][] cv$value);
+	public void set$m(double[][] cv$value, boolean allocated$);
 
 	// Getter for measured.
 	public boolean[] get$measured();
 
 	// Setter for measured.
-	public void set$measured(boolean[] cv$value);
+	public void set$measured(boolean[] cv$value, boolean allocated$);
 
 	// Getter for samples.
 	public int get$samples();
@@ -72,13 +72,13 @@ interface HMM$CoreInterface extends org.sandwood.runtime.internal.model.CoreMode
 	public int[] get$st();
 
 	// Setter for st.
-	public void set$st(int[] cv$value);
+	public void set$st(int[] cv$value, boolean allocated$);
 
 	// Getter for states.
 	public int get$states();
 
 	// Setter for states.
-	public void set$states(int cv$value);
+	public void set$states(int cv$value, boolean allocated$);
 
 	// Getter for v.
 	public double[] get$v();

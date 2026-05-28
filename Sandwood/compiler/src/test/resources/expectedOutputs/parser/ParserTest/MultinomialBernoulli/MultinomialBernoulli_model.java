@@ -56,7 +56,7 @@ public final class MultinomialBernoulli extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$p(value);
+            system$c.set$p(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -66,7 +66,7 @@ public final class MultinomialBernoulli extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample17(fixed);
+                system$c.set$fixedFlag$sample17(fixed, allocated);
             }
         }
 
@@ -90,7 +90,7 @@ public final class MultinomialBernoulli extends Model {
 
         @Override
         protected void setValueInternal(int[] value) {
-            system$c.set$prior(value);
+            system$c.set$prior(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -100,7 +100,7 @@ public final class MultinomialBernoulli extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample20(fixed);
+                system$c.set$fixedFlag$sample20(fixed, allocated);
             }
         }
 
@@ -132,13 +132,13 @@ public final class MultinomialBernoulli extends Model {
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$observed(value);
-            system$c.set$length$observed(value.length);
+            system$c.set$observed(value, allocated);
+            system$c.set$length$observed(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$observed(shape);
+            system$c.set$length$observed(shape, allocated);
         }
 
         @Override
@@ -251,21 +251,21 @@ public final class MultinomialBernoulli extends Model {
 
         //Observed arrays
         if(observed.isSet()) {
-            newCore.set$observed(oldCore.get$observed());
-            newCore.set$length$observed(oldCore.get$length$observed());
+            newCore.set$observed(oldCore.get$observed(), false);
+            newCore.set$length$observed(oldCore.get$length$observed(), false);
         }
         else if(observed.shapeSet())
-            newCore.set$length$observed(oldCore.get$length$observed());
+            newCore.set$length$observed(oldCore.get$length$observed(), false);
 
         //ComputedVariables
         if($p.isSet())
-            newCore.set$p(oldCore.get$p());
+            newCore.set$p(oldCore.get$p(), false);
         if($prior.isSet())
-            newCore.set$prior(oldCore.get$prior());
+            newCore.set$prior(oldCore.get$prior(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
-        newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20());
+        newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17(), false);
+        newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20(), false);
     }
 
     /**

@@ -6,6 +6,7 @@ import org.sandwood.runtime.model.ExecutionTarget;
 
 final class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements Flip1CoinMK2b$CoreInterface {
 	private double bias;
+	private boolean constrainedFlag$sample5 = true;
 	private boolean fixedFlag$sample5 = false;
 	private boolean fixedProbFlag$sample19 = false;
 	private boolean fixedProbFlag$sample5 = false;
@@ -41,7 +42,7 @@ final class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		bias = cv$value;
 		fixedProbFlag$sample5 = false;
 		fixedProbFlag$sample19 = false;
@@ -53,8 +54,9 @@ final class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$fixedFlag$sample5(boolean cv$value) {
+	public final void set$fixedFlag$sample5(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample5 = cv$value;
+		constrainedFlag$sample5 = (cv$value || constrainedFlag$sample5);
 		fixedProbFlag$sample5 = (cv$value && fixedProbFlag$sample5);
 		fixedProbFlag$sample19 = (cv$value && fixedProbFlag$sample19);
 	}
@@ -70,7 +72,7 @@ final class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$flipsMeasured(boolean[] cv$value) {
+	public final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
 		flipsMeasured = cv$value;
 	}
 
@@ -80,7 +82,7 @@ final class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.
 	}
 
 	@Override
-	public final void set$length$flipsMeasured(int cv$value) {
+	public final void set$length$flipsMeasured(int cv$value, boolean allocated$) {
 		length$flipsMeasured = cv$value;
 	}
 
@@ -114,11 +116,29 @@ final class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		return samples;
 	}
 
+	private final void drawValueSample5() {
+		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	private final void inferSample5() {
+		constrainedFlag$sample5 = false;
+		int cv$sum = 0;
+		int cv$count = 0;
+		for(int i = 0; i < samples; i += 1) {
+			constrainedFlag$sample5 = true;
+			cv$count = (cv$count + 1);
+			if(flips[i])
+				cv$sum = (cv$sum + 1);
+		}
+		if(constrainedFlag$sample5)
+			bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+	}
+
 	private final void logProbabilityValue$sample19() {
 		if(!fixedProbFlag$sample19) {
 			double cv$sampleAccumulator = 0.0;
 			for(int i = 0; i < samples; i += 1)
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[i]?bias:(1.0 - bias))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias) && (bias <= 1.0))?Math.log((flips[i]?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY));
 			logProbability$bernoulli = cv$sampleAccumulator;
 			logProbability$var19 = cv$sampleAccumulator;
 			logProbability$flips = (logProbability$flips + cv$sampleAccumulator);
@@ -146,17 +166,6 @@ final class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			if(fixedFlag$sample5)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$bias);
 		}
-	}
-
-	private final void sample5() {
-		int cv$sum = 0;
-		int cv$count = 0;
-		for(int i = 0; i < samples; i += 1) {
-			cv$count = (cv$count + 1);
-			if(flips[i])
-				cv$sum = (cv$sum + 1);
-		}
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	@Override
@@ -204,13 +213,10 @@ final class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.
 	@Override
 	public final void gibbsRound() {
 		if(!fixedFlag$sample5)
-			sample5();
+			inferSample5();
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	@Override
-	public final void initializeConstants() {
-		samples = length$flipsMeasured;
+		if(!constrainedFlag$sample5)
+			drawValueSample5();
 	}
 
 	private final void initializeLogProbabilityFields() {
@@ -222,6 +228,11 @@ final class Flip1CoinMK2b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample19)
 			logProbability$var19 = Double.NaN;
+	}
+
+	@Override
+	public final void initializeModel() {
+		samples = length$flipsMeasured;
 	}
 
 	@Override

@@ -42,8 +42,8 @@ public final class Flip1CoinMK18 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample11(fixed);
-                system$c.set$fixedFlag$sample17(fixed);
+                system$c.set$fixedFlag$sample11(fixed, allocated);
+                system$c.set$fixedFlag$sample17(fixed, allocated);
             }
         }
 
@@ -102,7 +102,7 @@ public final class Flip1CoinMK18 extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$q(value);
+            system$c.set$q(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -112,7 +112,7 @@ public final class Flip1CoinMK18 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample11(fixed);
+                system$c.set$fixedFlag$sample11(fixed, allocated);
             }
         }
 
@@ -136,7 +136,7 @@ public final class Flip1CoinMK18 extends Model {
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$t(value);
+            system$c.set$t(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -146,7 +146,7 @@ public final class Flip1CoinMK18 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample17(fixed);
+                system$c.set$fixedFlag$sample17(fixed, allocated);
             }
         }
 
@@ -175,7 +175,7 @@ public final class Flip1CoinMK18 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$a(value); }
+        protected void setValueInternal(int value) { system$c.set$a(value, allocated); }
     };
 
     /**
@@ -192,7 +192,7 @@ public final class Flip1CoinMK18 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$b(value); }
+        protected void setValueInternal(int value) { system$c.set$b(value, allocated); }
     };
 
     /**
@@ -209,7 +209,7 @@ public final class Flip1CoinMK18 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$c(value); }
+        protected void setValueInternal(int value) { system$c.set$c(value, allocated); }
     };
 
     /**
@@ -226,7 +226,7 @@ public final class Flip1CoinMK18 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$samples(value); }
+        protected void setValueInternal(int value) { system$c.set$samples(value, allocated); }
     };
 
     /**
@@ -245,7 +245,7 @@ public final class Flip1CoinMK18 extends Model {
         }
 
         @Override
-        protected void setValueInternal(boolean[] value) { system$c.set$flipsMeasured(value); }
+        protected void setValueInternal(boolean[] value) { system$c.set$flipsMeasured(value, allocated); }
     };
 
     /**
@@ -348,26 +348,27 @@ public final class Flip1CoinMK18 extends Model {
     private void transferData(Flip1CoinMK18$CoreInterface oldCore, Flip1CoinMK18$CoreInterface newCore) {
         //Model inputs
         if(a.isSet())
-            newCore.set$a(oldCore.get$a());
+            newCore.set$a(oldCore.get$a(), false);
         if(b.isSet())
-            newCore.set$b(oldCore.get$b());
+            newCore.set$b(oldCore.get$b(), false);
         if(c.isSet())
-            newCore.set$c(oldCore.get$c());
+            newCore.set$c(oldCore.get$c(), false);
         if(samples.isSet())
-            newCore.set$samples(oldCore.get$samples());
+            newCore.set$samples(oldCore.get$samples(), false);
+
         //Observed scalars
         if(flipsMeasured.isSet())
-            newCore.set$flipsMeasured(oldCore.get$flipsMeasured());
+            newCore.set$flipsMeasured(oldCore.get$flipsMeasured(), false);
 
         //ComputedVariables
         if($q.isSet())
-            newCore.set$q(oldCore.get$q());
+            newCore.set$q(oldCore.get$q(), false);
         if($t.isSet())
-            newCore.set$t(oldCore.get$t());
+            newCore.set$t(oldCore.get$t(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11());
-        newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17());
+        newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11(), false);
+        newCore.set$fixedFlag$sample17(oldCore.get$fixedFlag$sample17(), false);
     }
 
     /**

@@ -6,19 +6,19 @@ interface HMM_Mk2Dist$CoreInterface extends org.sandwood.runtime.internal.model.
 	public double[][] get$bias();
 
 	// Setter for bias.
-	public void set$bias(double[][] cv$value);
+	public void set$bias(double[][] cv$value, boolean allocated$);
 
 	// Getter for distribution$sample126.
 	public double[][][] get$distribution$sample126();
 
 	// Setter for distribution$sample126.
-	public void set$distribution$sample126(double[][][] cv$value);
+	public void set$distribution$sample126(double[][][] cv$value, boolean allocated$);
 
 	// Getter for distribution$sample95.
 	public double[][] get$distribution$sample95();
 
 	// Setter for distribution$sample95.
-	public void set$distribution$sample95(double[][] cv$value);
+	public void set$distribution$sample95(double[][] cv$value, boolean allocated$);
 
 	// Getter for events.
 	public int[][] get$events();
@@ -27,55 +27,55 @@ interface HMM_Mk2Dist$CoreInterface extends org.sandwood.runtime.internal.model.
 	public int[][] get$eventsMeasured();
 
 	// Setter for eventsMeasured.
-	public void set$eventsMeasured(int[][] cv$value);
+	public void set$eventsMeasured(int[][] cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample126.
 	public boolean get$fixedFlag$sample126();
 
 	// Setter for fixedFlag$sample126.
-	public void set$fixedFlag$sample126(boolean cv$value);
+	public void set$fixedFlag$sample126(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample42.
 	public boolean get$fixedFlag$sample42();
 
 	// Setter for fixedFlag$sample42.
-	public void set$fixedFlag$sample42(boolean cv$value);
+	public void set$fixedFlag$sample42(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample57.
 	public boolean get$fixedFlag$sample57();
 
 	// Setter for fixedFlag$sample57.
-	public void set$fixedFlag$sample57(boolean cv$value);
+	public void set$fixedFlag$sample57(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample78.
 	public boolean get$fixedFlag$sample78();
 
 	// Setter for fixedFlag$sample78.
-	public void set$fixedFlag$sample78(boolean cv$value);
+	public void set$fixedFlag$sample78(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample80.
 	public boolean get$fixedFlag$sample80();
 
 	// Setter for fixedFlag$sample80.
-	public void set$fixedFlag$sample80(boolean cv$value);
+	public void set$fixedFlag$sample80(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample95.
 	public boolean get$fixedFlag$sample95();
 
 	// Setter for fixedFlag$sample95.
-	public void set$fixedFlag$sample95(boolean cv$value);
+	public void set$fixedFlag$sample95(boolean cv$value, boolean allocated$);
 
 	// Getter for initialState.
 	public int get$initialState();
 
 	// Setter for initialState.
-	public void set$initialState(int cv$value);
+	public void set$initialState(int cv$value, boolean allocated$);
 
 	// Getter for length$eventsMeasured.
 	public int[] get$length$eventsMeasured();
 
 	// Setter for length$eventsMeasured.
-	public void set$length$eventsMeasured(int[] cv$value);
+	public void set$length$eventsMeasured(int[] cv$value, boolean allocated$);
 
 	// Getter for logProbability$bias.
 	public double get$logProbability$bias();
@@ -99,19 +99,19 @@ interface HMM_Mk2Dist$CoreInterface extends org.sandwood.runtime.internal.model.
 	public double[][] get$m();
 
 	// Setter for m.
-	public void set$m(double[][] cv$value);
+	public void set$m(double[][] cv$value, boolean allocated$);
 
 	// Getter for noEvents.
 	public int get$noEvents();
 
 	// Setter for noEvents.
-	public void set$noEvents(int cv$value);
+	public void set$noEvents(int cv$value, boolean allocated$);
 
 	// Getter for noStates.
 	public int get$noStates();
 
 	// Setter for noStates.
-	public void set$noStates(int cv$value);
+	public void set$noStates(int cv$value, boolean allocated$);
 
 	// Getter for samples.
 	public int get$samples();
@@ -120,7 +120,7 @@ interface HMM_Mk2Dist$CoreInterface extends org.sandwood.runtime.internal.model.
 	public int[][] get$st();
 
 	// Setter for st.
-	public void set$st(int[][] cv$value);
+	public void set$st(int[][] cv$value, boolean allocated$);
 
 	// Getter for v.
 	public double[] get$v();
@@ -132,5 +132,5 @@ interface HMM_Mk2Dist$CoreInterface extends org.sandwood.runtime.internal.model.
 	public double[] get$weights();
 
 	// Setter for weights.
-	public void set$weights(double[] cv$value);
+	public void set$weights(double[] cv$value, boolean allocated$);
 }

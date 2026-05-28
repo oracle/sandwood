@@ -6,13 +6,13 @@ interface AlternativeModelMK3$CoreInterface extends org.sandwood.runtime.interna
 	public double get$bias();
 
 	// Setter for bias.
-	public void set$bias(double cv$value);
+	public void set$bias(double cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample6.
 	public boolean get$fixedFlag$sample6();
 
 	// Setter for fixedFlag$sample6.
-	public void set$fixedFlag$sample6(boolean cv$value);
+	public void set$fixedFlag$sample6(boolean cv$value, boolean allocated$);
 
 	// Getter for logProbability$bias.
 	public double get$logProbability$bias();
@@ -27,13 +27,13 @@ interface AlternativeModelMK3$CoreInterface extends org.sandwood.runtime.interna
 	public int get$observedPositiveCount();
 
 	// Setter for observedPositiveCount.
-	public void set$observedPositiveCount(int cv$value);
+	public void set$observedPositiveCount(int cv$value, boolean allocated$);
 
 	// Getter for observedSampleCount.
 	public int get$observedSampleCount();
 
 	// Setter for observedSampleCount.
-	public void set$observedSampleCount(int cv$value);
+	public void set$observedSampleCount(int cv$value, boolean allocated$);
 
 	// Getter for positiveCount.
 	public int get$positiveCount();

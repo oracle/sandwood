@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -67,7 +67,7 @@ public class CompilationContext {
     public enum AuxFunctionType {
         VAR_ALLOCATOR("allocator"),
         SCRATCH_ALLOCATOR("allocateScratch"),
-        INITIALIZE("initializeConstants"),
+        INITIALIZE("initializeModel"),
         INITIALIZE_LOG_PROBABILITY_FIELDS("initializeLogProbabilityFields"),
         SET_INTERMEDIATES("setIntermediates"),
         GIBBS_ROUND("gibbsRound"),
@@ -92,12 +92,12 @@ public class CompilationContext {
         INFERENCE,
         LOG_PROBABILITY_VALUE,
         LOG_PROBABILITY_DISTRIBUTIONS,
-        FIXED_SAMPLE_PROBABILITY
+        SAMPLE
     }
 
     public enum CompilationPhase {
         MAIN_METHODS,
-        INITIALIZATION_OF_CONSTANTS,
+        INITIALIZATION_OF_MODEL,
         ALLOCATION
     }
 
@@ -159,7 +159,6 @@ public class CompilationContext {
         PRIVATE_PROBABILITY(Getter.NONE, Setter.NONE, false, Visibility.PRIVATE, Observed.FREE),
         PUBLIC_PROBABILITY(Getter.REQUIRED, Setter.NONE, false, Visibility.PUBLIC, Observed.FREE),
         USER_FLAG(Getter.REQUIRED, Setter.REQUIRED, false, Visibility.PUBLIC, Observed.FREE),
-
         INPUT(Getter.REQUIRED, Setter.REQUIRED, false, Visibility.PUBLIC, Observed.FREE),
 
         PRIVATE_FREE_INTERMEDIATE(Getter.NONE, Setter.NONE, false, Visibility.PRIVATE, Observed.FREE),
@@ -610,6 +609,8 @@ public class CompilationContext {
      */
     private final Stack<Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>>> exploredDistSamples = new Stack<>();
 
+    private final List<IRTreeVoid> arrayInitializations = new ArrayList<>();
+
     public CompilationContext(CompilationOptions options, Traces traces, ExecutionType target) {
         this.traces = traces;
         this.target = target;
@@ -813,7 +814,7 @@ public class CompilationContext {
         return classFields;
     }
 
-    // Calls initialisation tracking.
+    // Calls initialization tracking.
     public <A extends Variable<A>> Variable<A> getInitializedVariable(Variable<A> v) {
         return scopeState.getInitializedVariable(v);
     }
@@ -1105,5 +1106,13 @@ public class CompilationContext {
 
     public void popExploredDistSamples() {
         exploredDistSamples.pop();
+    }
+
+    public void addArrayInitilisation(IRTreeVoid t) {
+        arrayInitializations.add(t);
+    }
+
+    public List<IRTreeVoid> getArrayInitilisations() {
+        return arrayInitializations;
     }
 }

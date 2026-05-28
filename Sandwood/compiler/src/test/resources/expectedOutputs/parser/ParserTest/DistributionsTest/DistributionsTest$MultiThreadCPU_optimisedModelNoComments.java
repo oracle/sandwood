@@ -6,6 +6,8 @@ import org.sandwood.runtime.model.ExecutionTarget;
 final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements DistributionsTest$CoreInterface {
 	private double b0;
 	private double b1;
+	private boolean constrainedFlag$sample11 = true;
+	private boolean constrainedFlag$sample7 = true;
 	private boolean fixedFlag$sample11 = false;
 	private boolean fixedFlag$sample7 = false;
 	private boolean fixedProbFlag$sample11 = false;
@@ -33,7 +35,7 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final void set$b0(double cv$value) {
+	public final void set$b0(double cv$value, boolean allocated$) {
 		b0 = cv$value;
 		fixedProbFlag$sample7 = false;
 		fixedProbFlag$sample27 = false;
@@ -45,7 +47,7 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final void set$b1(double cv$value) {
+	public final void set$b1(double cv$value, boolean allocated$) {
 		b1 = cv$value;
 		fixedProbFlag$sample11 = false;
 		fixedProbFlag$sample27 = false;
@@ -57,8 +59,9 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final void set$fixedFlag$sample11(boolean cv$value) {
+	public final void set$fixedFlag$sample11(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample11 = cv$value;
+		constrainedFlag$sample11 = (cv$value || constrainedFlag$sample11);
 		fixedProbFlag$sample11 = (cv$value && fixedProbFlag$sample11);
 		fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
 	}
@@ -69,8 +72,9 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final void set$fixedFlag$sample7(boolean cv$value) {
+	public final void set$fixedFlag$sample7(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample7 = cv$value;
+		constrainedFlag$sample7 = (cv$value || constrainedFlag$sample7);
 		fixedProbFlag$sample7 = (cv$value && fixedProbFlag$sample7);
 		fixedProbFlag$sample27 = (cv$value && fixedProbFlag$sample27);
 	}
@@ -111,7 +115,7 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final void set$x(double[] cv$value) {
+	public final void set$x(double[] cv$value, boolean allocated$) {
 		x = cv$value;
 	}
 
@@ -126,8 +130,74 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 	}
 
 	@Override
-	public final void set$yMeasured(double[] cv$value) {
+	public final void set$yMeasured(double[] cv$value, boolean allocated$) {
 		yMeasured = cv$value;
+	}
+
+	private final void drawValueSample11() {
+		b1 = DistributionSampling.sampleHalfCauchy(RNG$, 1.0, 5.0);
+	}
+
+	private final void drawValueSample7() {
+		b0 = DistributionSampling.sampleCauchy(RNG$, 0.0, 2.0);
+	}
+
+	private final void inferSample11() {
+		constrainedFlag$sample11 = false;
+		double cv$originalValue = b1;
+		double cv$originalProbability;
+		double cv$var = ((b1 * b1) * 0.010000000000000002);
+		if((cv$var < 0.010000000000000002))
+			cv$var = 0.010000000000000002;
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b1);
+		{
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(b1, 1.0, 5.0);
+			for(int i = 0; i < noSamples; i += 1) {
+				constrainedFlag$sample11 = true;
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (b1 * x[i]))) + cv$accumulatedProbabilities);
+			}
+			cv$originalProbability = cv$accumulatedProbabilities;
+		}
+		if(constrainedFlag$sample11) {
+			b1 = cv$proposedValue;
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(cv$proposedValue, 1.0, 5.0);
+			for(int i = 0; i < noSamples; i += 1) {
+				constrainedFlag$sample11 = true;
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (cv$proposedValue * x[i]))) + cv$accumulatedProbabilities);
+			}
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+				b1 = cv$originalValue;
+		}
+	}
+
+	private final void inferSample7() {
+		constrainedFlag$sample7 = false;
+		double cv$originalValue = b0;
+		double cv$originalProbability;
+		double cv$var = ((b0 * b0) * 0.010000000000000002);
+		if((cv$var < 0.010000000000000002))
+			cv$var = 0.010000000000000002;
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b0);
+		{
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(b0, 0.0, 2.0);
+			for(int i = 0; i < noSamples; i += 1) {
+				constrainedFlag$sample7 = true;
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (b1 * x[i]))) + cv$accumulatedProbabilities);
+			}
+			cv$originalProbability = cv$accumulatedProbabilities;
+		}
+		if(constrainedFlag$sample7) {
+			b0 = cv$proposedValue;
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(cv$proposedValue, 0.0, 2.0);
+			for(int i = 0; i < noSamples; i += 1) {
+				constrainedFlag$sample7 = true;
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (cv$proposedValue + (b1 * x[i]))) + cv$accumulatedProbabilities);
+			}
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+				b0 = cv$originalValue;
+		}
 	}
 
 	private final void logProbabilityValue$sample11() {
@@ -180,50 +250,6 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			if(fixedFlag$sample7)
 				logProbability$$evidence = (logProbability$$evidence + logProbability$b0);
 		}
-	}
-
-	private final void sample11() {
-		double cv$originalValue = b1;
-		double cv$originalProbability;
-		double cv$var = ((b1 * b1) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b1);
-		{
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(b1, 1.0, 5.0);
-			for(int i = 0; i < noSamples; i += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (b1 * x[i]))) + cv$accumulatedProbabilities);
-			cv$originalProbability = cv$accumulatedProbabilities;
-		}
-		b1 = cv$proposedValue;
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityHalfCauchy(cv$proposedValue, 1.0, 5.0);
-		for(int i = 0; i < noSamples; i += 1)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (cv$proposedValue * x[i]))) + cv$accumulatedProbabilities);
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			b1 = cv$originalValue;
-	}
-
-	private final void sample7() {
-		double cv$originalValue = b0;
-		double cv$originalProbability;
-		double cv$var = ((b0 * b0) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + b0);
-		{
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(b0, 0.0, 2.0);
-			for(int i = 0; i < noSamples; i += 1)
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (b0 + (b1 * x[i]))) + cv$accumulatedProbabilities);
-			cv$originalProbability = cv$accumulatedProbabilities;
-		}
-		b0 = cv$proposedValue;
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityCauchy(cv$proposedValue, 0.0, 2.0);
-		for(int i = 0; i < noSamples; i += 1)
-			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityStudentT(y[i], (cv$proposedValue + (b1 * x[i]))) + cv$accumulatedProbabilities);
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
-			b0 = cv$originalValue;
 	}
 
 	@Override
@@ -291,21 +317,20 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 	public final void gibbsRound() {
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample7)
-				sample7();
+				inferSample7();
 			if(!fixedFlag$sample11)
-				sample11();
+				inferSample11();
 		} else {
 			if(!fixedFlag$sample11)
-				sample11();
+				inferSample11();
 			if(!fixedFlag$sample7)
-				sample7();
+				inferSample7();
 		}
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	@Override
-	public final void initializeConstants() {
-		noSamples = x.length;
+		if(!constrainedFlag$sample7)
+			drawValueSample7();
+		if(!constrainedFlag$sample11)
+			drawValueSample11();
 	}
 
 	private final void initializeLogProbabilityFields() {
@@ -320,6 +345,11 @@ final class DistributionsTest$MultiThreadCPU extends org.sandwood.runtime.intern
 			for(int i = 0; i < noSamples; i += 1)
 				logProbability$sample27[i] = Double.NaN;
 		}
+	}
+
+	@Override
+	public final void initializeModel() {
+		noSamples = x.length;
 	}
 
 	@Override

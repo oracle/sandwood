@@ -10,6 +10,7 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 	private int[][] ObsSales;
 	private int[][] Sales;
 	private int T;
+	private boolean[] constrainedFlag$sample26;
 	private double[] exped;
 	private double[] expedNorm;
 	private boolean fixedFlag$sample26 = false;
@@ -49,8 +50,7 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 
 	// Setter for Avail.
 	@Override
-	public final void set$Avail(int[][] cv$value) {
-		// Set Avail
+	public final void set$Avail(int[][] cv$value, boolean allocated$) {
 		Avail = cv$value;
 	}
 
@@ -62,8 +62,7 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 
 	// Setter for ObsSales.
 	@Override
-	public final void set$ObsSales(int[][] cv$value) {
-		// Set ObsSales
+	public final void set$ObsSales(int[][] cv$value, boolean allocated$) {
 		ObsSales = cv$value;
 	}
 
@@ -81,7 +80,7 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 
 	// Setter for T.
 	@Override
-	public final void set$T(int cv$value) {
+	public final void set$T(int cv$value, boolean allocated$) {
 		T = cv$value;
 	}
 
@@ -105,10 +104,18 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 
 	// Setter for fixedFlag$sample26.
 	@Override
-	public final void set$fixedFlag$sample26(boolean cv$value) {
+	public final void set$fixedFlag$sample26(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample26 including if probabilities
 		// need to be updated.
 		fixedFlag$sample26 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
+				// Substituted "fixedFlag$sample26" with its value "cv$value".
+				constrainedFlag$sample26[index$constrainedFlag$sample26$1] = cv$value;
+		}
 		
 		// Should the probability of sample 26 be set to fixed. This will only every change
 		// the flag to false.
@@ -173,7 +180,7 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 
 	// Setter for noProducts.
 	@Override
-	public final void set$noProducts(int cv$value) {
+	public final void set$noProducts(int cv$value, boolean allocated$) {
 		noProducts = cv$value;
 	}
 
@@ -185,7 +192,7 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 
 	// Setter for r.
 	@Override
-	public final void set$r(double cv$value) {
+	public final void set$r(double cv$value, boolean allocated$) {
 		r = cv$value;
 	}
 
@@ -209,10 +216,9 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 
 	// Setter for ut.
 	@Override
-	public final void set$ut(double[] cv$value) {
+	public final void set$ut(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of ut including if probabilities need to be
 		// updated.
-		// Set ut
 		ut = cv$value;
 		
 		// Unset the fixed probability flag for sample 26 as it depends on ut.
@@ -220,6 +226,1237 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 		
 		// Unset the fixed probability flag for sample 157 as it depends on ut.
 		fixedProbFlag$sample157 = false;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample26
+	private final void drawValueSample26(int j$var20) {
+		ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
+		
+		// Guards to ensure that exped is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 26 and consumer double[] 41.
+		// 
+		// Substituted "j$var38" with its value "j$var20".
+		exped[j$var20] = Math.exp(ut[j$var20]);
+		
+		// Guards to ensure that sum is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 26 and consumer double 52.
+		// 
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$4 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// l$var50's comment
+			// Set the right hand term to a value from the array exped
+			reduceVar$sum$4 = (reduceVar$sum$4 + exped[cv$reduction46Index]);
+		
+		// Write out the new sample value.
+		sum = reduceVar$sum$4;
+		
+		// Guards to ensure that expedNorm is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 26 and consumer double[] 67.
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			// Set the flags to false
+			// 
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			guard$sample26put68$global[j$var63] = false;
+		
+		// Set the flags to false
+		// 
+		// Guard to check that at most one copy of the code is executed for a given random
+		// variable instance.
+		// 
+		// Substituted "j$var63" with its value "j$var20".
+		guard$sample26put68$global[j$var20] = false;
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			if(!guard$sample26put68$global[j$var63]) {
+				// The body will execute, so should not be executed again
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample26put68$global[j$var63] = true;
+				
+				// sum's comment
+				// Write out the new sample value.
+				expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$4));
+			}
+		}
+		
+		// Substituted "j$var38" with its value "j$var20".
+		// 
+		// Substituted "j$var63" with its value "j$var20".
+		if(!guard$sample26put68$global[j$var20]) {
+			// The body will execute, so should not be executed again
+			// 
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			// 
+			// Substituted "j$var63" with its value "j$var20".
+			guard$sample26put68$global[j$var20] = true;
+			
+			// Substituted "j$var63" with its value "j$var20".
+			// 
+			// sum's comment
+			// Write out the new sample value.
+			expedNorm[j$var20] = (exped[j$var20] / (r * reduceVar$sum$4));
+		}
+		
+		// Guards to ensure that weekly_ut is only updated when there is a valid path.
+		// 
+		// Looking for a path between Sample 26 and consumer double[] 128.
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample26put131$global[t$var112][j$var63] = false;
+		}
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+			// Set the flags to false
+			// 
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			// 
+			// Substituted "j$var63" with its value "j$var20".
+			guard$sample26put131$global[t$var112][j$var20] = false;
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				if(!guard$sample26put131$global[t$var112][j$var63]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26put131$global[t$var112][j$var63] = true;
+					
+					// Substituted "j$var123" with its value "j$var63".
+					weekly_ut[t$var112][j$var63] = (expedNorm[j$var63] * Avail[t$var112][j$var63]);
+				}
+			}
+		}
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			// 
+			// Substituted "j$var63" with its value "j$var20".
+			if(!guard$sample26put131$global[t$var112][j$var20]) {
+				// The body will execute, so should not be executed again
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				// 
+				// Substituted "j$var63" with its value "j$var20".
+				guard$sample26put131$global[t$var112][j$var20] = true;
+				
+				// Substituted "j$var123" with its value "j$var63".
+				// 
+				// Substituted "j$var63" with its value "j$var20".
+				weekly_ut[t$var112][j$var20] = (expedNorm[j$var20] * Avail[t$var112][j$var20]);
+			}
+		}
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				// 
+				// Substituted "j$var147" with its value "j$var63".
+				guard$sample26put154$global[t$var112][j$var63] = false;
+		}
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample26put154$global[t$var112][j$var147] = false;
+		}
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+			// Set the flags to false
+			// 
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			// 
+			// j$var147's comment
+			// Substituted "j$var63" with its value "j$var20".
+			guard$sample26put154$global[t$var112][j$var20] = false;
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				if(!guard$sample26put154$global[t$var112][j$var147]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26put154$global[t$var112][j$var147] = true;
+					
+					// Reduction of array weekly_ut
+					// 
+					// A generated name to prevent name collisions if the reduction is implemented more
+					// than once in inference and probability code. Initialize the variable to the unit
+					// value
+					double reduceVar$denom$10 = 0.0;
+					
+					// For each index in the array to be reduced
+					for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+						// Execute the reduction function, saving the result into the return value.
+						// 
+						// Copy the result of the reduction into the variable returned by the reduction.
+						// 
+						// l$var136's comment
+						// Set the right hand term to a value from the array weekly_ut
+						reduceVar$denom$10 = (reduceVar$denom$10 + weekly_ut[t$var112][cv$reduction136Index]);
+					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$10);
+				}
+			}
+		}
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				// 
+				// Substituted "j$var147" with its value "j$var63".
+				if(!guard$sample26put154$global[t$var112][j$var63]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					// 
+					// Substituted "j$var147" with its value "j$var63".
+					guard$sample26put154$global[t$var112][j$var63] = true;
+					
+					// Reduction of array weekly_ut
+					// 
+					// A generated name to prevent name collisions if the reduction is implemented more
+					// than once in inference and probability code. Initialize the variable to the unit
+					// value
+					double reduceVar$denom$11 = 0.0;
+					
+					// For each index in the array to be reduced
+					for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+						// Execute the reduction function, saving the result into the return value.
+						// 
+						// Copy the result of the reduction into the variable returned by the reduction.
+						// 
+						// l$var136's comment
+						// Set the right hand term to a value from the array weekly_ut
+						reduceVar$denom$11 = (reduceVar$denom$11 + weekly_ut[t$var112][cv$reduction136Index]);
+					
+					// Substituted "j$var147" with its value "j$var63".
+					weekly_rates[t$var112][j$var63] = (weekly_ut[t$var112][j$var63] / reduceVar$denom$11);
+				}
+			}
+		}
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				if(!guard$sample26put154$global[t$var112][j$var147]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26put154$global[t$var112][j$var147] = true;
+					
+					// Reduction of array weekly_ut
+					// 
+					// A generated name to prevent name collisions if the reduction is implemented more
+					// than once in inference and probability code. Initialize the variable to the unit
+					// value
+					double reduceVar$denom$12 = 0.0;
+					
+					// For each index in the array to be reduced
+					for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+						// Execute the reduction function, saving the result into the return value.
+						// 
+						// Copy the result of the reduction into the variable returned by the reduction.
+						// 
+						// l$var136's comment
+						// Set the right hand term to a value from the array weekly_ut
+						reduceVar$denom$12 = (reduceVar$denom$12 + weekly_ut[t$var112][cv$reduction136Index]);
+					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$12);
+				}
+			}
+		}
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			// 
+			// j$var147's comment
+			// Substituted "j$var63" with its value "j$var20".
+			if(!guard$sample26put154$global[t$var112][j$var20]) {
+				// The body will execute, so should not be executed again
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				// 
+				// j$var147's comment
+				// Substituted "j$var63" with its value "j$var20".
+				guard$sample26put154$global[t$var112][j$var20] = true;
+				
+				// Reduction of array weekly_ut
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				double reduceVar$denom$13 = 0.0;
+				
+				// For each index in the array to be reduced
+				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+					// Execute the reduction function, saving the result into the return value.
+					// 
+					// Copy the result of the reduction into the variable returned by the reduction.
+					// 
+					// l$var136's comment
+					// Set the right hand term to a value from the array weekly_ut
+					reduceVar$denom$13 = (reduceVar$denom$13 + weekly_ut[t$var112][cv$reduction136Index]);
+				
+				// j$var147's comment
+				// Substituted "j$var63" with its value "j$var20".
+				weekly_rates[t$var112][j$var20] = (weekly_ut[t$var112][j$var20] / reduceVar$denom$13);
+			}
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 26 drawn from Gaussian 25. Inference was performed using Metropolis-Hastings.
+	private final void inferSample26(int j$var20) {
+		constrainedFlag$sample26[(j$var20 - 1)] = false;
+		
+		// The original value of the sample
+		double cv$originalValue = ut[j$var20];
+		
+		// This value is not used before it is set again, so removing the value declaration.
+		// 
+		// The probability of the random variable generating the originally sampled value
+		double cv$originalProbability;
+		
+		// Calculate a proposed variance.
+		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
+		
+		// Ensure the variance is at least 0.01
+		if((cv$var < 0.010000000000000002))
+			cv$var = 0.010000000000000002;
+		
+		// The proposed new value for the sample
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		{
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Set the current value to the current state of the tree.
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 1.4142135623730951)) - 0.34657359027997264);
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample26multinomial156$global[t$var112] = false;
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample26multinomial156$global[t$var112]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26multinomial156$global[t$var112] = true;
+					
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 157 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+					// Declaration comment was:
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
+					// 
+					// Constructing a random variable input for use later.
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+				}
+			}
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				// Substituted "j$var123" with its value "j$var63".
+				if(!guard$sample26multinomial156$global[t$var112]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26multinomial156$global[t$var112] = true;
+					
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 157 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+					// Declaration comment was:
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
+					// 
+					// Constructing a random variable input for use later.
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+				}
+			}
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample26multinomial156$global[t$var112]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26multinomial156$global[t$var112] = true;
+					
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 157 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+					// Declaration comment was:
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
+					// 
+					// Constructing a random variable input for use later.
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+				}
+			}
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample26multinomial156$global[t$var112]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26multinomial156$global[t$var112] = true;
+					
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 157 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+					// Declaration comment was:
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
+					// 
+					// Constructing a random variable input for use later.
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+				}
+			}
+			
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			cv$originalProbability = cv$accumulatedProbabilities;
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample26[(j$var20 - 1)]) {
+			// Guards to ensure that ut is only updated when there is a valid path.
+			ut[j$var20] = cv$proposedValue;
+			
+			// Guards to ensure that exped is only updated when there is a valid path.
+			// 
+			// Looking for a path between Sample 26 and consumer double[] 41.
+			// 
+			// Substituted "j$var38" with its value "j$var20".
+			exped[j$var20] = Math.exp(ut[j$var20]);
+			
+			// Guards to ensure that sum is only updated when there is a valid path.
+			// 
+			// Looking for a path between Sample 26 and consumer double 52.
+			// 
+			// Reduction of array exped
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			double reduceVar$sum$0 = 0.0;
+			
+			// For each index in the array to be reduced
+			for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// l$var50's comment
+				// Set the right hand term to a value from the array exped
+				reduceVar$sum$0 = (reduceVar$sum$0 + exped[cv$reduction46Index]);
+			
+			// Write out the new sample value.
+			sum = reduceVar$sum$0;
+			
+			// Guards to ensure that expedNorm is only updated when there is a valid path.
+			// 
+			// Looking for a path between Sample 26 and consumer double[] 67.
+			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample26put68$global[j$var63] = false;
+			
+			// Set the flags to false
+			// 
+			// Guard to check that at most one copy of the code is executed for a given random
+			// variable instance.
+			// 
+			// Substituted "j$var63" with its value "j$var20".
+			guard$sample26put68$global[j$var20] = false;
+			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				if(!guard$sample26put68$global[j$var63]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26put68$global[j$var63] = true;
+					
+					// sum's comment
+					// Write out the new sample value.
+					expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$0));
+				}
+			}
+			
+			// Substituted "j$var38" with its value "j$var20".
+			// 
+			// Substituted "j$var63" with its value "j$var20".
+			if(!guard$sample26put68$global[j$var20]) {
+				// The body will execute, so should not be executed again
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				// 
+				// Substituted "j$var63" with its value "j$var20".
+				guard$sample26put68$global[j$var20] = true;
+				
+				// Substituted "j$var63" with its value "j$var20".
+				// 
+				// sum's comment
+				// Write out the new sample value.
+				expedNorm[j$var20] = (exped[j$var20] / (r * reduceVar$sum$0));
+			}
+			
+			// Guards to ensure that weekly_ut is only updated when there is a valid path.
+			// 
+			// Looking for a path between Sample 26 and consumer double[] 128.
+			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+					// Set the flags to false
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26put131$global[t$var112][j$var63] = false;
+			}
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				// 
+				// Substituted "j$var63" with its value "j$var20".
+				guard$sample26put131$global[t$var112][j$var20] = false;
+			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					if(!guard$sample26put131$global[t$var112][j$var63]) {
+						// The body will execute, so should not be executed again
+						// 
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						guard$sample26put131$global[t$var112][j$var63] = true;
+						
+						// Substituted "j$var123" with its value "j$var63".
+						weekly_ut[t$var112][j$var63] = (expedNorm[j$var63] * Avail[t$var112][j$var63]);
+					}
+				}
+			}
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				// 
+				// Substituted "j$var63" with its value "j$var20".
+				if(!guard$sample26put131$global[t$var112][j$var20]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					// 
+					// Substituted "j$var63" with its value "j$var20".
+					guard$sample26put131$global[t$var112][j$var20] = true;
+					
+					// Substituted "j$var123" with its value "j$var63".
+					// 
+					// Substituted "j$var63" with its value "j$var20".
+					weekly_ut[t$var112][j$var20] = (expedNorm[j$var20] * Avail[t$var112][j$var20]);
+				}
+			}
+			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+					// Set the flags to false
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					// 
+					// Substituted "j$var147" with its value "j$var63".
+					guard$sample26put154$global[t$var112][j$var63] = false;
+			}
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+					// Set the flags to false
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26put154$global[t$var112][j$var147] = false;
+			}
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				// 
+				// j$var147's comment
+				// Substituted "j$var63" with its value "j$var20".
+				guard$sample26put154$global[t$var112][j$var20] = false;
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					if(!guard$sample26put154$global[t$var112][j$var147]) {
+						// The body will execute, so should not be executed again
+						// 
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						guard$sample26put154$global[t$var112][j$var147] = true;
+						
+						// Reduction of array weekly_ut
+						// 
+						// A generated name to prevent name collisions if the reduction is implemented more
+						// than once in inference and probability code. Initialize the variable to the unit
+						// value
+						double reduceVar$denom$0 = 0.0;
+						
+						// For each index in the array to be reduced
+						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+							// Execute the reduction function, saving the result into the return value.
+							// 
+							// Copy the result of the reduction into the variable returned by the reduction.
+							// 
+							// l$var136's comment
+							// Set the right hand term to a value from the array weekly_ut
+							reduceVar$denom$0 = (reduceVar$denom$0 + weekly_ut[t$var112][cv$reduction136Index]);
+						weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$0);
+					}
+				}
+			}
+			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					// 
+					// Substituted "j$var147" with its value "j$var63".
+					if(!guard$sample26put154$global[t$var112][j$var63]) {
+						// The body will execute, so should not be executed again
+						// 
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						// 
+						// Substituted "j$var147" with its value "j$var63".
+						guard$sample26put154$global[t$var112][j$var63] = true;
+						
+						// Reduction of array weekly_ut
+						// 
+						// A generated name to prevent name collisions if the reduction is implemented more
+						// than once in inference and probability code. Initialize the variable to the unit
+						// value
+						double reduceVar$denom$1 = 0.0;
+						
+						// For each index in the array to be reduced
+						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+							// Execute the reduction function, saving the result into the return value.
+							// 
+							// Copy the result of the reduction into the variable returned by the reduction.
+							// 
+							// l$var136's comment
+							// Set the right hand term to a value from the array weekly_ut
+							reduceVar$denom$1 = (reduceVar$denom$1 + weekly_ut[t$var112][cv$reduction136Index]);
+						
+						// Substituted "j$var147" with its value "j$var63".
+						weekly_rates[t$var112][j$var63] = (weekly_ut[t$var112][j$var63] / reduceVar$denom$1);
+					}
+				}
+			}
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					if(!guard$sample26put154$global[t$var112][j$var147]) {
+						// The body will execute, so should not be executed again
+						// 
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						guard$sample26put154$global[t$var112][j$var147] = true;
+						
+						// Reduction of array weekly_ut
+						// 
+						// A generated name to prevent name collisions if the reduction is implemented more
+						// than once in inference and probability code. Initialize the variable to the unit
+						// value
+						double reduceVar$denom$2 = 0.0;
+						
+						// For each index in the array to be reduced
+						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+							// Execute the reduction function, saving the result into the return value.
+							// 
+							// Copy the result of the reduction into the variable returned by the reduction.
+							// 
+							// l$var136's comment
+							// Set the right hand term to a value from the array weekly_ut
+							reduceVar$denom$2 = (reduceVar$denom$2 + weekly_ut[t$var112][cv$reduction136Index]);
+						weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$2);
+					}
+				}
+			}
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				// 
+				// j$var147's comment
+				// Substituted "j$var63" with its value "j$var20".
+				if(!guard$sample26put154$global[t$var112][j$var20]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					// 
+					// j$var147's comment
+					// Substituted "j$var63" with its value "j$var20".
+					guard$sample26put154$global[t$var112][j$var20] = true;
+					
+					// Reduction of array weekly_ut
+					// 
+					// A generated name to prevent name collisions if the reduction is implemented more
+					// than once in inference and probability code. Initialize the variable to the unit
+					// value
+					double reduceVar$denom$3 = 0.0;
+					
+					// For each index in the array to be reduced
+					for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+						// Execute the reduction function, saving the result into the return value.
+						// 
+						// Copy the result of the reduction into the variable returned by the reduction.
+						// 
+						// l$var136's comment
+						// Set the right hand term to a value from the array weekly_ut
+						reduceVar$denom$3 = (reduceVar$denom$3 + weekly_ut[t$var112][cv$reduction136Index]);
+					
+					// j$var147's comment
+					// Substituted "j$var63" with its value "j$var20".
+					weekly_rates[t$var112][j$var20] = (weekly_ut[t$var112][j$var20] / reduceVar$denom$3);
+				}
+			}
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 1.4142135623730951)) - 0.34657359027997264);
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				guard$sample26multinomial156$global[t$var112] = false;
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample26multinomial156$global[t$var112]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26multinomial156$global[t$var112] = true;
+					
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 157 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+					// Declaration comment was:
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
+					// 
+					// Constructing a random variable input for use later.
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+				}
+			}
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				// Substituted "j$var123" with its value "j$var63".
+				if(!guard$sample26multinomial156$global[t$var112]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26multinomial156$global[t$var112] = true;
+					
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 157 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+					// Declaration comment was:
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
+					// 
+					// Constructing a random variable input for use later.
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+				}
+			}
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample26multinomial156$global[t$var112]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26multinomial156$global[t$var112] = true;
+					
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 157 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+					// Declaration comment was:
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
+					// 
+					// Constructing a random variable input for use later.
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+				}
+			}
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				// Constraints moved from conditionals in inner loops/scopes/etc.
+				if(!guard$sample26multinomial156$global[t$var112]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26multinomial156$global[t$var112] = true;
+					
+					// Mark that the sample has observed constrained data.
+					constrainedFlag$sample26[(j$var20 - 1)] = true;
+					
+					// A check to ensure rounding of floating point values can never result in a negative
+					// value.
+					// 
+					// Recorded the probability of reaching sample task 157 with the current configuration.
+					// 
+					// Set an accumulator to record the consumer distributions not seen. Initially set
+					// to 1 as seen values will be deducted from this value.
+					// 
+					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+					// Declaration comment was:
+					// Set an accumulator to sum the probabilities for each possible configuration of
+					// inputs.
+					// 
+					// Constructing a random variable input for use later.
+					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
+				}
+			}
+			
+			// The probability ration for the proposed value and the current value.
+			// 
+			// Initialize a log space accumulator to take the product of all the distribution
+			// probabilities.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				// If it is not revert the changes.
+				// 
+				// Set the sample value
+				// Guards to ensure that ut is only updated when there is a valid path.
+				// 
+				// Write out the value of the sample to a temporary variable prior to updating the
+				// intermediate variables.
+				ut[j$var20] = cv$originalValue;
+				
+				// Guards to ensure that exped is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 26 and consumer double[] 41.
+				// 
+				// Substituted "j$var38" with its value "j$var20".
+				exped[j$var20] = Math.exp(ut[j$var20]);
+				
+				// Guards to ensure that sum is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 26 and consumer double 52.
+				// 
+				// Reduction of array exped
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				double reduceVar$sum$3 = 0.0;
+				
+				// For each index in the array to be reduced
+				for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+					// Execute the reduction function, saving the result into the return value.
+					// 
+					// Copy the result of the reduction into the variable returned by the reduction.
+					// 
+					// l$var50's comment
+					// Set the right hand term to a value from the array exped
+					reduceVar$sum$3 = (reduceVar$sum$3 + exped[cv$reduction46Index]);
+				
+				// Write out the new sample value.
+				sum = reduceVar$sum$3;
+				
+				// Guards to ensure that expedNorm is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 26 and consumer double[] 67.
+				for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+					// Set the flags to false
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					guard$sample26put68$global[j$var63] = false;
+				
+				// Set the flags to false
+				// 
+				// Guard to check that at most one copy of the code is executed for a given random
+				// variable instance.
+				// 
+				// Substituted "j$var63" with its value "j$var20".
+				guard$sample26put68$global[j$var20] = false;
+				for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					if(!guard$sample26put68$global[j$var63]) {
+						// The body will execute, so should not be executed again
+						// 
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						guard$sample26put68$global[j$var63] = true;
+						
+						// sum's comment
+						// Write out the new sample value.
+						expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$3));
+					}
+				}
+				
+				// Substituted "j$var38" with its value "j$var20".
+				// 
+				// Substituted "j$var63" with its value "j$var20".
+				if(!guard$sample26put68$global[j$var20]) {
+					// The body will execute, so should not be executed again
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					// 
+					// Substituted "j$var63" with its value "j$var20".
+					guard$sample26put68$global[j$var20] = true;
+					
+					// Substituted "j$var63" with its value "j$var20".
+					// 
+					// sum's comment
+					// Write out the new sample value.
+					expedNorm[j$var20] = (exped[j$var20] / (r * reduceVar$sum$3));
+				}
+				
+				// Guards to ensure that weekly_ut is only updated when there is a valid path.
+				// 
+				// Looking for a path between Sample 26 and consumer double[] 128.
+				for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+					for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+						// Set the flags to false
+						// 
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						guard$sample26put131$global[t$var112][j$var63] = false;
+				}
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+					// Set the flags to false
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					// 
+					// Substituted "j$var63" with its value "j$var20".
+					guard$sample26put131$global[t$var112][j$var20] = false;
+				for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+					for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						if(!guard$sample26put131$global[t$var112][j$var63]) {
+							// The body will execute, so should not be executed again
+							// 
+							// Guard to check that at most one copy of the code is executed for a given random
+							// variable instance.
+							guard$sample26put131$global[t$var112][j$var63] = true;
+							
+							// Substituted "j$var123" with its value "j$var63".
+							weekly_ut[t$var112][j$var63] = (expedNorm[j$var63] * Avail[t$var112][j$var63]);
+						}
+					}
+				}
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					// 
+					// Substituted "j$var63" with its value "j$var20".
+					if(!guard$sample26put131$global[t$var112][j$var20]) {
+						// The body will execute, so should not be executed again
+						// 
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						// 
+						// Substituted "j$var63" with its value "j$var20".
+						guard$sample26put131$global[t$var112][j$var20] = true;
+						
+						// Substituted "j$var123" with its value "j$var63".
+						// 
+						// Substituted "j$var63" with its value "j$var20".
+						weekly_ut[t$var112][j$var20] = (expedNorm[j$var20] * Avail[t$var112][j$var20]);
+					}
+				}
+				for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+					for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+						// Set the flags to false
+						// 
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						// 
+						// Substituted "j$var147" with its value "j$var63".
+						guard$sample26put154$global[t$var112][j$var63] = false;
+				}
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+					for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+						// Set the flags to false
+						// 
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						guard$sample26put154$global[t$var112][j$var147] = false;
+				}
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+					// Set the flags to false
+					// 
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					// 
+					// j$var147's comment
+					// Substituted "j$var63" with its value "j$var20".
+					guard$sample26put154$global[t$var112][j$var20] = false;
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+					for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						if(!guard$sample26put154$global[t$var112][j$var147]) {
+							// The body will execute, so should not be executed again
+							// 
+							// Guard to check that at most one copy of the code is executed for a given random
+							// variable instance.
+							guard$sample26put154$global[t$var112][j$var147] = true;
+							
+							// Reduction of array weekly_ut
+							// 
+							// A generated name to prevent name collisions if the reduction is implemented more
+							// than once in inference and probability code. Initialize the variable to the unit
+							// value
+							double reduceVar$denom$6 = 0.0;
+							
+							// For each index in the array to be reduced
+							for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+								// Execute the reduction function, saving the result into the return value.
+								// 
+								// Copy the result of the reduction into the variable returned by the reduction.
+								// 
+								// l$var136's comment
+								// Set the right hand term to a value from the array weekly_ut
+								reduceVar$denom$6 = (reduceVar$denom$6 + weekly_ut[t$var112][cv$reduction136Index]);
+							weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$6);
+						}
+					}
+				}
+				for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
+					for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						// 
+						// Substituted "j$var147" with its value "j$var63".
+						if(!guard$sample26put154$global[t$var112][j$var63]) {
+							// The body will execute, so should not be executed again
+							// 
+							// Guard to check that at most one copy of the code is executed for a given random
+							// variable instance.
+							// 
+							// Substituted "j$var147" with its value "j$var63".
+							guard$sample26put154$global[t$var112][j$var63] = true;
+							
+							// Reduction of array weekly_ut
+							// 
+							// A generated name to prevent name collisions if the reduction is implemented more
+							// than once in inference and probability code. Initialize the variable to the unit
+							// value
+							double reduceVar$denom$7 = 0.0;
+							
+							// For each index in the array to be reduced
+							for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+								// Execute the reduction function, saving the result into the return value.
+								// 
+								// Copy the result of the reduction into the variable returned by the reduction.
+								// 
+								// l$var136's comment
+								// Set the right hand term to a value from the array weekly_ut
+								reduceVar$denom$7 = (reduceVar$denom$7 + weekly_ut[t$var112][cv$reduction136Index]);
+							
+							// Substituted "j$var147" with its value "j$var63".
+							weekly_rates[t$var112][j$var63] = (weekly_ut[t$var112][j$var63] / reduceVar$denom$7);
+						}
+					}
+				}
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+					for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						if(!guard$sample26put154$global[t$var112][j$var147]) {
+							// The body will execute, so should not be executed again
+							// 
+							// Guard to check that at most one copy of the code is executed for a given random
+							// variable instance.
+							guard$sample26put154$global[t$var112][j$var147] = true;
+							
+							// Reduction of array weekly_ut
+							// 
+							// A generated name to prevent name collisions if the reduction is implemented more
+							// than once in inference and probability code. Initialize the variable to the unit
+							// value
+							double reduceVar$denom$8 = 0.0;
+							
+							// For each index in the array to be reduced
+							for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+								// Execute the reduction function, saving the result into the return value.
+								// 
+								// Copy the result of the reduction into the variable returned by the reduction.
+								// 
+								// l$var136's comment
+								// Set the right hand term to a value from the array weekly_ut
+								reduceVar$denom$8 = (reduceVar$denom$8 + weekly_ut[t$var112][cv$reduction136Index]);
+							weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$8);
+						}
+					}
+				}
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+					// Guard to check that at most one copy of the code is executed for a given random
+					// variable instance.
+					// 
+					// j$var147's comment
+					// Substituted "j$var63" with its value "j$var20".
+					if(!guard$sample26put154$global[t$var112][j$var20]) {
+						// The body will execute, so should not be executed again
+						// 
+						// Guard to check that at most one copy of the code is executed for a given random
+						// variable instance.
+						// 
+						// j$var147's comment
+						// Substituted "j$var63" with its value "j$var20".
+						guard$sample26put154$global[t$var112][j$var20] = true;
+						
+						// Reduction of array weekly_ut
+						// 
+						// A generated name to prevent name collisions if the reduction is implemented more
+						// than once in inference and probability code. Initialize the variable to the unit
+						// value
+						double reduceVar$denom$9 = 0.0;
+						
+						// For each index in the array to be reduced
+						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+							// Execute the reduction function, saving the result into the return value.
+							// 
+							// Copy the result of the reduction into the variable returned by the reduction.
+							// 
+							// l$var136's comment
+							// Set the right hand term to a value from the array weekly_ut
+							reduceVar$denom$9 = (reduceVar$denom$9 + weekly_ut[t$var112][cv$reduction136Index]);
+						
+						// j$var147's comment
+						// Substituted "j$var63" with its value "j$var20".
+						weekly_rates[t$var112][j$var20] = (weekly_ut[t$var112][j$var20] / reduceVar$denom$9);
+					}
+				}
+			}
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample157 using sampled
@@ -438,911 +1675,6 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 26 drawn from Gaussian 25. Inference was performed using Metropolis-Hastings.
-	private final void sample26(int j$var20) {
-		// The original value of the sample
-		double cv$originalValue = ut[j$var20];
-		
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The probability of the random variable generating the originally sampled value
-		double cv$originalProbability;
-		
-		// Calculate a proposed variance.
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
-		
-		// Ensure the variance is at least 0.01
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
-		
-		// The proposed new value for the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-		
-		// Unrolled loop
-		{
-			// An accumulator to allow the value for each distribution to be constructed before
-			// it is added to the index probabilities.
-			// 
-			// Set the current value to the current state of the tree.
-			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$originalValue / 1.4142135623730951)) - 0.34657359027997264);
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				// Set the flags to false
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample26multinomial156$global[t$var112] = false;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample26multinomial156$global[t$var112]) {
-					// The body will execute, so should not be executed again
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					guard$sample26multinomial156$global[t$var112] = true;
-					
-					// A check to ensure rounding of floating point values can never result in a negative
-					// value.
-					// 
-					// Recorded the probability of reaching sample task 157 with the current configuration.
-					// 
-					// Set an accumulator to record the consumer distributions not seen. Initially set
-					// to 1 as seen values will be deducted from this value.
-					// 
-					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-					// Declaration comment was:
-					// Processing sample task 157 of consumer random variable null.
-					// 
-					// Set an accumulator to sum the probabilities for each possible configuration of
-					// inputs.
-					// 
-					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
-				}
-			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				// Substituted "j$var123" with its value "j$var63".
-				if(!guard$sample26multinomial156$global[t$var112]) {
-					// The body will execute, so should not be executed again
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					guard$sample26multinomial156$global[t$var112] = true;
-					
-					// A check to ensure rounding of floating point values can never result in a negative
-					// value.
-					// 
-					// Recorded the probability of reaching sample task 157 with the current configuration.
-					// 
-					// Set an accumulator to record the consumer distributions not seen. Initially set
-					// to 1 as seen values will be deducted from this value.
-					// 
-					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-					// Declaration comment was:
-					// Processing sample task 157 of consumer random variable null.
-					// 
-					// Set an accumulator to sum the probabilities for each possible configuration of
-					// inputs.
-					// 
-					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
-				}
-			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample26multinomial156$global[t$var112]) {
-					// The body will execute, so should not be executed again
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					guard$sample26multinomial156$global[t$var112] = true;
-					
-					// A check to ensure rounding of floating point values can never result in a negative
-					// value.
-					// 
-					// Recorded the probability of reaching sample task 157 with the current configuration.
-					// 
-					// Set an accumulator to record the consumer distributions not seen. Initially set
-					// to 1 as seen values will be deducted from this value.
-					// 
-					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-					// Declaration comment was:
-					// Processing sample task 157 of consumer random variable null.
-					// 
-					// Set an accumulator to sum the probabilities for each possible configuration of
-					// inputs.
-					// 
-					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
-				}
-			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(!guard$sample26multinomial156$global[t$var112])
-					// A check to ensure rounding of floating point values can never result in a negative
-					// value.
-					// 
-					// Recorded the probability of reaching sample task 157 with the current configuration.
-					// 
-					// Set an accumulator to record the consumer distributions not seen. Initially set
-					// to 1 as seen values will be deducted from this value.
-					// 
-					// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-					// Declaration comment was:
-					// Processing sample task 157 of consumer random variable null.
-					// 
-					// Set an accumulator to sum the probabilities for each possible configuration of
-					// inputs.
-					// 
-					// Constructing a random variable input for use later.
-					cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
-			}
-			
-			// Initialize a log space accumulator to take the product of all the distribution
-			// probabilities.
-			// 
-			// Record the reached probability density.
-			// 
-			// Initialize a counter to track the reached distributions.
-			cv$originalProbability = cv$accumulatedProbabilities;
-		}
-		
-		// Guards to ensure that ut is only updated when there is a valid path.
-		ut[j$var20] = cv$proposedValue;
-		
-		// Guards to ensure that exped is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 26 and consumer double[] 41.
-		// 
-		// Substituted "j$var38" with its value "j$var20".
-		exped[j$var20] = Math.exp(ut[j$var20]);
-		
-		// Guards to ensure that sum is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 26 and consumer double 52.
-		// 
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$0 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// l$var50's comment
-			// Set the right hand term to a value from the array exped
-			reduceVar$sum$0 = (reduceVar$sum$0 + exped[cv$reduction46Index]);
-		
-		// Write out the new sample value.
-		sum = reduceVar$sum$0;
-		
-		// Guards to ensure that expedNorm is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 26 and consumer double[] 67.
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-			// Set the flags to false
-			// 
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			guard$sample26put68$global[j$var63] = false;
-		
-		// Set the flags to false
-		// 
-		// Guard to check that at most one copy of the code is executed for a given random
-		// variable instance.
-		// 
-		// Substituted "j$var63" with its value "j$var20".
-		guard$sample26put68$global[j$var20] = false;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			if(!guard$sample26put68$global[j$var63]) {
-				// The body will execute, so should not be executed again
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample26put68$global[j$var63] = true;
-				
-				// sum's comment
-				// Write out the new sample value.
-				expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$0));
-			}
-		}
-		
-		// Substituted "j$var38" with its value "j$var20".
-		// 
-		// Substituted "j$var63" with its value "j$var20".
-		if(!guard$sample26put68$global[j$var20]) {
-			// The body will execute, so should not be executed again
-			// 
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			// 
-			// Substituted "j$var63" with its value "j$var20".
-			guard$sample26put68$global[j$var20] = true;
-			
-			// Substituted "j$var63" with its value "j$var20".
-			// 
-			// sum's comment
-			// Write out the new sample value.
-			expedNorm[j$var20] = (exped[j$var20] / (r * reduceVar$sum$0));
-		}
-		
-		// Guards to ensure that weekly_ut is only updated when there is a valid path.
-		// 
-		// Looking for a path between Sample 26 and consumer double[] 128.
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				// Set the flags to false
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample26put131$global[t$var112][j$var63] = false;
-		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-			// Set the flags to false
-			// 
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			// 
-			// Substituted "j$var63" with its value "j$var20".
-			guard$sample26put131$global[t$var112][j$var20] = false;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				if(!guard$sample26put131$global[t$var112][j$var63]) {
-					// The body will execute, so should not be executed again
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					guard$sample26put131$global[t$var112][j$var63] = true;
-					
-					// Substituted "j$var123" with its value "j$var63".
-					weekly_ut[t$var112][j$var63] = (expedNorm[j$var63] * Avail[t$var112][j$var63]);
-				}
-			}
-		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			// 
-			// Substituted "j$var63" with its value "j$var20".
-			if(!guard$sample26put131$global[t$var112][j$var20]) {
-				// The body will execute, so should not be executed again
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				// 
-				// Substituted "j$var63" with its value "j$var20".
-				guard$sample26put131$global[t$var112][j$var20] = true;
-				
-				// Substituted "j$var123" with its value "j$var63".
-				// 
-				// Substituted "j$var63" with its value "j$var20".
-				weekly_ut[t$var112][j$var20] = (expedNorm[j$var20] * Avail[t$var112][j$var20]);
-			}
-		}
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				// Set the flags to false
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				// 
-				// Substituted "j$var147" with its value "j$var63".
-				guard$sample26put154$global[t$var112][j$var63] = false;
-		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-				// Set the flags to false
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample26put154$global[t$var112][j$var147] = false;
-		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-			// Set the flags to false
-			// 
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			// 
-			// j$var147's comment
-			// Substituted "j$var63" with its value "j$var20".
-			guard$sample26put154$global[t$var112][j$var20] = false;
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				if(!guard$sample26put154$global[t$var112][j$var147]) {
-					// The body will execute, so should not be executed again
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					guard$sample26put154$global[t$var112][j$var147] = true;
-					
-					// Reduction of array weekly_ut
-					// 
-					// A generated name to prevent name collisions if the reduction is implemented more
-					// than once in inference and probability code. Initialize the variable to the unit
-					// value
-					double reduceVar$denom$0 = 0.0;
-					
-					// For each index in the array to be reduced
-					for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-						// Execute the reduction function, saving the result into the return value.
-						// 
-						// Copy the result of the reduction into the variable returned by the reduction.
-						// 
-						// l$var136's comment
-						// Set the right hand term to a value from the array weekly_ut
-						reduceVar$denom$0 = (reduceVar$denom$0 + weekly_ut[t$var112][cv$reduction136Index]);
-					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$0);
-				}
-			}
-		}
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				// 
-				// Substituted "j$var147" with its value "j$var63".
-				if(!guard$sample26put154$global[t$var112][j$var63]) {
-					// The body will execute, so should not be executed again
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					// 
-					// Substituted "j$var147" with its value "j$var63".
-					guard$sample26put154$global[t$var112][j$var63] = true;
-					
-					// Reduction of array weekly_ut
-					// 
-					// A generated name to prevent name collisions if the reduction is implemented more
-					// than once in inference and probability code. Initialize the variable to the unit
-					// value
-					double reduceVar$denom$1 = 0.0;
-					
-					// For each index in the array to be reduced
-					for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-						// Execute the reduction function, saving the result into the return value.
-						// 
-						// Copy the result of the reduction into the variable returned by the reduction.
-						// 
-						// l$var136's comment
-						// Set the right hand term to a value from the array weekly_ut
-						reduceVar$denom$1 = (reduceVar$denom$1 + weekly_ut[t$var112][cv$reduction136Index]);
-					
-					// Substituted "j$var147" with its value "j$var63".
-					weekly_rates[t$var112][j$var63] = (weekly_ut[t$var112][j$var63] / reduceVar$denom$1);
-				}
-			}
-		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				if(!guard$sample26put154$global[t$var112][j$var147]) {
-					// The body will execute, so should not be executed again
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					guard$sample26put154$global[t$var112][j$var147] = true;
-					
-					// Reduction of array weekly_ut
-					// 
-					// A generated name to prevent name collisions if the reduction is implemented more
-					// than once in inference and probability code. Initialize the variable to the unit
-					// value
-					double reduceVar$denom$2 = 0.0;
-					
-					// For each index in the array to be reduced
-					for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-						// Execute the reduction function, saving the result into the return value.
-						// 
-						// Copy the result of the reduction into the variable returned by the reduction.
-						// 
-						// l$var136's comment
-						// Set the right hand term to a value from the array weekly_ut
-						reduceVar$denom$2 = (reduceVar$denom$2 + weekly_ut[t$var112][cv$reduction136Index]);
-					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$2);
-				}
-			}
-		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			// 
-			// j$var147's comment
-			// Substituted "j$var63" with its value "j$var20".
-			if(!guard$sample26put154$global[t$var112][j$var20]) {
-				// The body will execute, so should not be executed again
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				// 
-				// j$var147's comment
-				// Substituted "j$var63" with its value "j$var20".
-				guard$sample26put154$global[t$var112][j$var20] = true;
-				
-				// Reduction of array weekly_ut
-				// 
-				// A generated name to prevent name collisions if the reduction is implemented more
-				// than once in inference and probability code. Initialize the variable to the unit
-				// value
-				double reduceVar$denom$3 = 0.0;
-				
-				// For each index in the array to be reduced
-				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-					// Execute the reduction function, saving the result into the return value.
-					// 
-					// Copy the result of the reduction into the variable returned by the reduction.
-					// 
-					// l$var136's comment
-					// Set the right hand term to a value from the array weekly_ut
-					reduceVar$denom$3 = (reduceVar$denom$3 + weekly_ut[t$var112][cv$reduction136Index]);
-				
-				// j$var147's comment
-				// Substituted "j$var63" with its value "j$var20".
-				weekly_rates[t$var112][j$var20] = (weekly_ut[t$var112][j$var20] / reduceVar$denom$3);
-			}
-		}
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityGaussian((cv$proposedValue / 1.4142135623730951)) - 0.34657359027997264);
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-			// Set the flags to false
-			// 
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			guard$sample26multinomial156$global[t$var112] = false;
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!guard$sample26multinomial156$global[t$var112]) {
-				// The body will execute, so should not be executed again
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample26multinomial156$global[t$var112] = true;
-				
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 157 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Processing sample task 157 of consumer random variable null.
-				// 
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				// 
-				// Constructing a random variable input for use later.
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
-			}
-		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			// Substituted "j$var123" with its value "j$var63".
-			if(!guard$sample26multinomial156$global[t$var112]) {
-				// The body will execute, so should not be executed again
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample26multinomial156$global[t$var112] = true;
-				
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 157 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Processing sample task 157 of consumer random variable null.
-				// 
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				// 
-				// Constructing a random variable input for use later.
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
-			}
-		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!guard$sample26multinomial156$global[t$var112]) {
-				// The body will execute, so should not be executed again
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample26multinomial156$global[t$var112] = true;
-				
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 157 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Processing sample task 157 of consumer random variable null.
-				// 
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				// 
-				// Constructing a random variable input for use later.
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
-			}
-		}
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!guard$sample26multinomial156$global[t$var112]) {
-				// The body will execute, so should not be executed again
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample26multinomial156$global[t$var112] = true;
-				
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 157 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Processing sample task 157 of consumer random variable null.
-				// 
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				// 
-				// Constructing a random variable input for use later.
-				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityMultinomial(Sales[t$var112], weekly_rates[t$var112], noProducts, sales_sum[t$var112]) + cv$accumulatedProbabilities);
-			}
-		}
-		
-		// The probability ration for the proposed value and the current value.
-		// 
-		// Initialize a log space accumulator to take the product of all the distribution
-		// probabilities.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			// If it is not revert the changes.
-			// 
-			// Set the sample value
-			// Guards to ensure that ut is only updated when there is a valid path.
-			// 
-			// Write out the value of the sample to a temporary variable prior to updating the
-			// intermediate variables.
-			ut[j$var20] = cv$originalValue;
-			
-			// Guards to ensure that exped is only updated when there is a valid path.
-			// 
-			// Looking for a path between Sample 26 and consumer double[] 41.
-			// 
-			// Substituted "j$var38" with its value "j$var20".
-			exped[j$var20] = Math.exp(ut[j$var20]);
-			
-			// Guards to ensure that sum is only updated when there is a valid path.
-			// 
-			// Looking for a path between Sample 26 and consumer double 52.
-			// 
-			// Reduction of array exped
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$sum$3 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// l$var50's comment
-				// Set the right hand term to a value from the array exped
-				reduceVar$sum$3 = (reduceVar$sum$3 + exped[cv$reduction46Index]);
-			
-			// Write out the new sample value.
-			sum = reduceVar$sum$3;
-			
-			// Guards to ensure that expedNorm is only updated when there is a valid path.
-			// 
-			// Looking for a path between Sample 26 and consumer double[] 67.
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-				// Set the flags to false
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				guard$sample26put68$global[j$var63] = false;
-			
-			// Set the flags to false
-			// 
-			// Guard to check that at most one copy of the code is executed for a given random
-			// variable instance.
-			// 
-			// Substituted "j$var63" with its value "j$var20".
-			guard$sample26put68$global[j$var20] = false;
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				if(!guard$sample26put68$global[j$var63]) {
-					// The body will execute, so should not be executed again
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					guard$sample26put68$global[j$var63] = true;
-					
-					// sum's comment
-					// Write out the new sample value.
-					expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$3));
-				}
-			}
-			
-			// Substituted "j$var38" with its value "j$var20".
-			// 
-			// Substituted "j$var63" with its value "j$var20".
-			if(!guard$sample26put68$global[j$var20]) {
-				// The body will execute, so should not be executed again
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				// 
-				// Substituted "j$var63" with its value "j$var20".
-				guard$sample26put68$global[j$var20] = true;
-				
-				// Substituted "j$var63" with its value "j$var20".
-				// 
-				// sum's comment
-				// Write out the new sample value.
-				expedNorm[j$var20] = (exped[j$var20] / (r * reduceVar$sum$3));
-			}
-			
-			// Guards to ensure that weekly_ut is only updated when there is a valid path.
-			// 
-			// Looking for a path between Sample 26 and consumer double[] 128.
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-					// Set the flags to false
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					guard$sample26put131$global[t$var112][j$var63] = false;
-			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				// Set the flags to false
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				// 
-				// Substituted "j$var63" with its value "j$var20".
-				guard$sample26put131$global[t$var112][j$var20] = false;
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					if(!guard$sample26put131$global[t$var112][j$var63]) {
-						// The body will execute, so should not be executed again
-						// 
-						// Guard to check that at most one copy of the code is executed for a given random
-						// variable instance.
-						guard$sample26put131$global[t$var112][j$var63] = true;
-						
-						// Substituted "j$var123" with its value "j$var63".
-						weekly_ut[t$var112][j$var63] = (expedNorm[j$var63] * Avail[t$var112][j$var63]);
-					}
-				}
-			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				// 
-				// Substituted "j$var63" with its value "j$var20".
-				if(!guard$sample26put131$global[t$var112][j$var20]) {
-					// The body will execute, so should not be executed again
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					// 
-					// Substituted "j$var63" with its value "j$var20".
-					guard$sample26put131$global[t$var112][j$var20] = true;
-					
-					// Substituted "j$var123" with its value "j$var63".
-					// 
-					// Substituted "j$var63" with its value "j$var20".
-					weekly_ut[t$var112][j$var20] = (expedNorm[j$var20] * Avail[t$var112][j$var20]);
-				}
-			}
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-					// Set the flags to false
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					// 
-					// Substituted "j$var147" with its value "j$var63".
-					guard$sample26put154$global[t$var112][j$var63] = false;
-			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-					// Set the flags to false
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					guard$sample26put154$global[t$var112][j$var147] = false;
-			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
-				// Set the flags to false
-				// 
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				// 
-				// j$var147's comment
-				// Substituted "j$var63" with its value "j$var20".
-				guard$sample26put154$global[t$var112][j$var20] = false;
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					if(!guard$sample26put154$global[t$var112][j$var147]) {
-						// The body will execute, so should not be executed again
-						// 
-						// Guard to check that at most one copy of the code is executed for a given random
-						// variable instance.
-						guard$sample26put154$global[t$var112][j$var147] = true;
-						
-						// Reduction of array weekly_ut
-						// 
-						// A generated name to prevent name collisions if the reduction is implemented more
-						// than once in inference and probability code. Initialize the variable to the unit
-						// value
-						double reduceVar$denom$6 = 0.0;
-						
-						// For each index in the array to be reduced
-						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-							// Execute the reduction function, saving the result into the return value.
-							// 
-							// Copy the result of the reduction into the variable returned by the reduction.
-							// 
-							// l$var136's comment
-							// Set the right hand term to a value from the array weekly_ut
-							reduceVar$denom$6 = (reduceVar$denom$6 + weekly_ut[t$var112][cv$reduction136Index]);
-						weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$6);
-					}
-				}
-			}
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1) {
-				for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					// 
-					// Substituted "j$var147" with its value "j$var63".
-					if(!guard$sample26put154$global[t$var112][j$var63]) {
-						// The body will execute, so should not be executed again
-						// 
-						// Guard to check that at most one copy of the code is executed for a given random
-						// variable instance.
-						// 
-						// Substituted "j$var147" with its value "j$var63".
-						guard$sample26put154$global[t$var112][j$var63] = true;
-						
-						// Reduction of array weekly_ut
-						// 
-						// A generated name to prevent name collisions if the reduction is implemented more
-						// than once in inference and probability code. Initialize the variable to the unit
-						// value
-						double reduceVar$denom$7 = 0.0;
-						
-						// For each index in the array to be reduced
-						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-							// Execute the reduction function, saving the result into the return value.
-							// 
-							// Copy the result of the reduction into the variable returned by the reduction.
-							// 
-							// l$var136's comment
-							// Set the right hand term to a value from the array weekly_ut
-							reduceVar$denom$7 = (reduceVar$denom$7 + weekly_ut[t$var112][cv$reduction136Index]);
-						
-						// Substituted "j$var147" with its value "j$var63".
-						weekly_rates[t$var112][j$var63] = (weekly_ut[t$var112][j$var63] / reduceVar$denom$7);
-					}
-				}
-			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1) {
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					if(!guard$sample26put154$global[t$var112][j$var147]) {
-						// The body will execute, so should not be executed again
-						// 
-						// Guard to check that at most one copy of the code is executed for a given random
-						// variable instance.
-						guard$sample26put154$global[t$var112][j$var147] = true;
-						
-						// Reduction of array weekly_ut
-						// 
-						// A generated name to prevent name collisions if the reduction is implemented more
-						// than once in inference and probability code. Initialize the variable to the unit
-						// value
-						double reduceVar$denom$8 = 0.0;
-						
-						// For each index in the array to be reduced
-						for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-							// Execute the reduction function, saving the result into the return value.
-							// 
-							// Copy the result of the reduction into the variable returned by the reduction.
-							// 
-							// l$var136's comment
-							// Set the right hand term to a value from the array weekly_ut
-							reduceVar$denom$8 = (reduceVar$denom$8 + weekly_ut[t$var112][cv$reduction136Index]);
-						weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$8);
-					}
-				}
-			}
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				// Guard to check that at most one copy of the code is executed for a given random
-				// variable instance.
-				// 
-				// j$var147's comment
-				// Substituted "j$var63" with its value "j$var20".
-				if(!guard$sample26put154$global[t$var112][j$var20]) {
-					// The body will execute, so should not be executed again
-					// 
-					// Guard to check that at most one copy of the code is executed for a given random
-					// variable instance.
-					// 
-					// j$var147's comment
-					// Substituted "j$var63" with its value "j$var20".
-					guard$sample26put154$global[t$var112][j$var20] = true;
-					
-					// Reduction of array weekly_ut
-					// 
-					// A generated name to prevent name collisions if the reduction is implemented more
-					// than once in inference and probability code. Initialize the variable to the unit
-					// value
-					double reduceVar$denom$9 = 0.0;
-					
-					// For each index in the array to be reduced
-					for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-						// Execute the reduction function, saving the result into the return value.
-						// 
-						// Copy the result of the reduction into the variable returned by the reduction.
-						// 
-						// l$var136's comment
-						// Set the right hand term to a value from the array weekly_ut
-						reduceVar$denom$9 = (reduceVar$denom$9 + weekly_ut[t$var112][cv$reduction136Index]);
-					
-					// j$var147's comment
-					// Substituted "j$var63" with its value "j$var20".
-					weekly_rates[t$var112][j$var20] = (weekly_ut[t$var112][j$var20] / reduceVar$denom$9);
-				}
-			}
-		}
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -1428,6 +1760,9 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 		for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
 			weekly_ut[t$var112] = new double[noProducts];
 		
+		// Constructor for constrainedFlag$sample26
+		constrainedFlag$sample26 = new boolean[(noProducts - 1)];
+		
 		// Constructor for logProbability$sample26
 		logProbability$sample26 = new double[(noProducts - 1)];
 		
@@ -1450,7 +1785,7 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$sum$4 = 0.0;
+			double reduceVar$sum$5 = 0.0;
 			
 			// For each index in the array to be reduced
 			for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
@@ -1458,11 +1793,11 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// l$var50's comment
 				// Set the right hand term to a value from the array exped
-				reduceVar$sum$4 = (reduceVar$sum$4 + exped[cv$reduction46Index]);
-			sum = reduceVar$sum$4;
+				reduceVar$sum$5 = (reduceVar$sum$5 + exped[cv$reduction46Index]);
+			sum = reduceVar$sum$5;
 			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-				// Substituted "sum" with its value "reduceVar$sum$4".
-				expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$4));
+				// Substituted "sum" with its value "reduceVar$sum$5".
+				expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$5));
 		}
 		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1475,7 +1810,7 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 				// A generated name to prevent name collisions if the reduction is implemented more
 				// than once in inference and probability code. Initialize the variable to the unit
 				// value
-				double reduceVar$denom$10 = 0.0;
+				double reduceVar$denom$14 = 0.0;
 				
 				// For each index in the array to be reduced
 				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
@@ -1483,9 +1818,9 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 					// 
 					// l$var136's comment
 					// Set the right hand term to a value from the array weekly_ut
-					reduceVar$denom$10 = (reduceVar$denom$10 + weekly_ut[t$var112][cv$reduction136Index]);
+					reduceVar$denom$14 = (reduceVar$denom$14 + weekly_ut[t$var112][cv$reduction136Index]);
 				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$10);
+					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$14);
 			}
 			
 			// Substituted "weekly_sales" with its value "Sales[t$var112]".
@@ -1498,6 +1833,177 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
+				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
+		}
+		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
+			exped[j$var38] = Math.exp(ut[j$var38]);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$9 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// l$var50's comment
+			// Set the right hand term to a value from the array exped
+			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction46Index]);
+		sum = reduceVar$sum$9;
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			// Substituted "sum" with its value "reduceVar$sum$9".
+			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$9));
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+			
+			// Reduction of array weekly_ut
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			double reduceVar$denom$18 = 0.0;
+			
+			// For each index in the array to be reduced
+			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// l$var136's comment
+				// Set the right hand term to a value from the array weekly_ut
+				reduceVar$denom$18 = (reduceVar$denom$18 + weekly_ut[t$var112][cv$reduction136Index]);
+			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$18);
+		}
+	}
+
+	// Method to execute the model code conventionally with priming of fixed intermediate
+	// variables.
+	@Override
+	public final void forwardGenerationPrime() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
+				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
+		}
+		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
+			exped[j$var38] = Math.exp(ut[j$var38]);
+		
+		// Reduction of array exped
+		// 
+		// A generated name to prevent name collisions if the reduction is implemented more
+		// than once in inference and probability code. Initialize the variable to the unit
+		// value
+		double reduceVar$sum$6 = 0.0;
+		
+		// For each index in the array to be reduced
+		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+			// Execute the reduction function, saving the result into the return value.
+			// 
+			// Copy the result of the reduction into the variable returned by the reduction.
+			// 
+			// l$var50's comment
+			// Set the right hand term to a value from the array exped
+			reduceVar$sum$6 = (reduceVar$sum$6 + exped[cv$reduction46Index]);
+		sum = reduceVar$sum$6;
+		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+			// Substituted "sum" with its value "reduceVar$sum$6".
+			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$6));
+		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+				weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+			
+			// Reduction of array weekly_ut
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			double reduceVar$denom$15 = 0.0;
+			
+			// For each index in the array to be reduced
+			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// l$var136's comment
+				// Set the right hand term to a value from the array weekly_ut
+				reduceVar$denom$15 = (reduceVar$denom$15 + weekly_ut[t$var112][cv$reduction136Index]);
+			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$15);
+			
+			// Substituted "weekly_sales" with its value "Sales[t$var112]".
+			DistributionSampling.sampleMultinomial(RNG$, weekly_rates[t$var112], noProducts, sales_sum[t$var112], Sales[t$var112]);
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Distributions are collapsed to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputs() {
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(!fixedFlag$sample26) {
+			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
+				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
+			for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
+				exped[j$var38] = Math.exp(ut[j$var38]);
+			
+			// Reduction of array exped
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			double reduceVar$sum$7 = 0.0;
+			
+			// For each index in the array to be reduced
+			for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// l$var50's comment
+				// Set the right hand term to a value from the array exped
+				reduceVar$sum$7 = (reduceVar$sum$7 + exped[cv$reduction46Index]);
+			sum = reduceVar$sum$7;
+			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
+				// Substituted "sum" with its value "reduceVar$sum$7".
+				expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$7));
+			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
+				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
+					weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
+				
+				// Reduction of array weekly_ut
+				// 
+				// A generated name to prevent name collisions if the reduction is implemented more
+				// than once in inference and probability code. Initialize the variable to the unit
+				// value
+				double reduceVar$denom$16 = 0.0;
+				
+				// For each index in the array to be reduced
+				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
+					// Copy the result of the reduction into the variable returned by the reduction.
+					// 
+					// l$var136's comment
+					// Set the right hand term to a value from the array weekly_ut
+					reduceVar$denom$16 = (reduceVar$denom$16 + weekly_ut[t$var112][cv$reduction136Index]);
+				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
+					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$16);
+			}
+		}
+	}
+
+	// Method to execute the model code conventionally, excluding the elements that generate
+	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
+	// to single values.
+	@Override
+	public final void forwardGenerationValuesNoOutputsPrime() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample26) {
 			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
@@ -1535,7 +2041,7 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$denom$14 = 0.0;
+			double reduceVar$denom$17 = 0.0;
 			
 			// For each index in the array to be reduced
 			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
@@ -1545,180 +2051,9 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// l$var136's comment
 				// Set the right hand term to a value from the array weekly_ut
-				reduceVar$denom$14 = (reduceVar$denom$14 + weekly_ut[t$var112][cv$reduction136Index]);
+				reduceVar$denom$17 = (reduceVar$denom$17 + weekly_ut[t$var112][cv$reduction136Index]);
 			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$14);
-		}
-	}
-
-	// Method to execute the model code conventionally with priming of fixed intermediate
-	// variables.
-	@Override
-	public final void forwardGenerationPrime() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample26) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
-		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$5 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// l$var50's comment
-			// Set the right hand term to a value from the array exped
-			reduceVar$sum$5 = (reduceVar$sum$5 + exped[cv$reduction46Index]);
-		sum = reduceVar$sum$5;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-			// Substituted "sum" with its value "reduceVar$sum$5".
-			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$5));
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-				weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-			
-			// Reduction of array weekly_ut
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$denom$11 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// l$var136's comment
-				// Set the right hand term to a value from the array weekly_ut
-				reduceVar$denom$11 = (reduceVar$denom$11 + weekly_ut[t$var112][cv$reduction136Index]);
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$11);
-			
-			// Substituted "weekly_sales" with its value "Sales[t$var112]".
-			DistributionSampling.sampleMultinomial(RNG$, weekly_rates[t$var112], noProducts, sales_sum[t$var112], Sales[t$var112]);
-		}
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Distributions are collapsed to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputs() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample26) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
-			for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-				exped[j$var38] = Math.exp(ut[j$var38]);
-			
-			// Reduction of array exped
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$sum$6 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// l$var50's comment
-				// Set the right hand term to a value from the array exped
-				reduceVar$sum$6 = (reduceVar$sum$6 + exped[cv$reduction46Index]);
-			sum = reduceVar$sum$6;
-			for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-				// Substituted "sum" with its value "reduceVar$sum$6".
-				expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$6));
-			for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-				for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-					weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-				
-				// Reduction of array weekly_ut
-				// 
-				// A generated name to prevent name collisions if the reduction is implemented more
-				// than once in inference and probability code. Initialize the variable to the unit
-				// value
-				double reduceVar$denom$12 = 0.0;
-				
-				// For each index in the array to be reduced
-				for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-					// Copy the result of the reduction into the variable returned by the reduction.
-					// 
-					// l$var136's comment
-					// Set the right hand term to a value from the array weekly_ut
-					reduceVar$denom$12 = (reduceVar$denom$12 + weekly_ut[t$var112][cv$reduction136Index]);
-				for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-					weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$12);
-			}
-		}
-	}
-
-	// Method to execute the model code conventionally, excluding the elements that generate
-	// observed values. Fixed intermediate variables are primed. Distributions are collapsed
-	// to single values.
-	@Override
-	public final void forwardGenerationValuesNoOutputsPrime() {
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample26) {
-			for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-				ut[j$var20] = (DistributionSampling.sampleGaussian(RNG$) * 1.4142135623730951);
-		}
-		for(int j$var38 = 0; j$var38 < noProducts; j$var38 += 1)
-			exped[j$var38] = Math.exp(ut[j$var38]);
-		
-		// Reduction of array exped
-		// 
-		// A generated name to prevent name collisions if the reduction is implemented more
-		// than once in inference and probability code. Initialize the variable to the unit
-		// value
-		double reduceVar$sum$7 = 0.0;
-		
-		// For each index in the array to be reduced
-		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
-			// Execute the reduction function, saving the result into the return value.
-			// 
-			// Copy the result of the reduction into the variable returned by the reduction.
-			// 
-			// l$var50's comment
-			// Set the right hand term to a value from the array exped
-			reduceVar$sum$7 = (reduceVar$sum$7 + exped[cv$reduction46Index]);
-		sum = reduceVar$sum$7;
-		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-			// Substituted "sum" with its value "reduceVar$sum$7".
-			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$7));
-		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
-			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
-				weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
-			
-			// Reduction of array weekly_ut
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			double reduceVar$denom$13 = 0.0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// l$var136's comment
-				// Set the right hand term to a value from the array weekly_ut
-				reduceVar$denom$13 = (reduceVar$denom$13 + weekly_ut[t$var112][cv$reduction136Index]);
-			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$13);
+				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$17);
 		}
 	}
 
@@ -1730,42 +2065,20 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 			// Infer the samples in chronological order.
 			if(system$gibbsForward) {
 				for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1)
-					sample26(j$var20);
+					inferSample26(j$var20);
 			}
 			// Infer the samples in reverse chronological order.
 			else {
 				for(int j$var20 = (noProducts - 1); j$var20 >= 1; j$var20 -= 1)
-					sample26(j$var20);
+					inferSample26(j$var20);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		ut[0] = 0.0;
-		for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
-			// Reduction of array week_sales
-			// 
-			// A generated name to prevent name collisions if the reduction is implemented more
-			// than once in inference and probability code. Initialize the variable to the unit
-			// value
-			int reduceVar$var88$0 = 0;
-			
-			// For each index in the array to be reduced
-			for(int cv$reduction84Index = 0; cv$reduction84Index < ObsSales[t$var78].length; cv$reduction84Index += 1)
-				// Execute the reduction function, saving the result into the return value.
-				// 
-				// Copy the result of the reduction into the variable returned by the reduction.
-				// 
-				// l$var86's comment
-				// Set the right hand term to a value from the array week_sales
-				reduceVar$var88$0 = (reduceVar$var88$0 + ObsSales[t$var78][cv$reduction84Index]);
-			sales_sum[t$var78] = reduceVar$var88$0;
+		for(int j$var20 = 1; j$var20 < noProducts; j$var20 += 1) {
+			if(!constrainedFlag$sample26[(j$var20 - 1)])
+				drawValueSample26(j$var20);
 		}
 	}
 
@@ -1790,6 +2103,36 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 		logProbability$Sales = 0.0;
 		if(!fixedProbFlag$sample157)
 			logProbability$weekly_sales = Double.NaN;
+	}
+
+	// Method for initializing the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		ut[0] = 0.0;
+		for(int t$var78 = 0; t$var78 < T; t$var78 += 1) {
+			// Reduction of array week_sales
+			// 
+			// A generated name to prevent name collisions if the reduction is implemented more
+			// than once in inference and probability code. Initialize the variable to the unit
+			// value
+			int reduceVar$var88$0 = 0;
+			
+			// For each index in the array to be reduced
+			for(int cv$reduction84Index = 0; cv$reduction84Index < ObsSales[t$var78].length; cv$reduction84Index += 1)
+				// Execute the reduction function, saving the result into the return value.
+				// 
+				// Copy the result of the reduction into the variable returned by the reduction.
+				// 
+				// l$var86's comment
+				// Set the right hand term to a value from the array week_sales
+				reduceVar$var88$0 = (reduceVar$var88$0 + ObsSales[t$var78][cv$reduction84Index]);
+			sales_sum[t$var78] = reduceVar$var88$0;
+		}
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
+			constrainedFlag$sample26[index$constrainedFlag$sample26$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -1871,7 +2214,7 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 		// A generated name to prevent name collisions if the reduction is implemented more
 		// than once in inference and probability code. Initialize the variable to the unit
 		// value
-		double reduceVar$sum$9 = 0.0;
+		double reduceVar$sum$10 = 0.0;
 		
 		// For each index in the array to be reduced
 		for(int cv$reduction46Index = 0; cv$reduction46Index < noProducts; cv$reduction46Index += 1)
@@ -1881,11 +2224,11 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 			// 
 			// l$var50's comment
 			// Set the right hand term to a value from the array exped
-			reduceVar$sum$9 = (reduceVar$sum$9 + exped[cv$reduction46Index]);
-		sum = reduceVar$sum$9;
+			reduceVar$sum$10 = (reduceVar$sum$10 + exped[cv$reduction46Index]);
+		sum = reduceVar$sum$10;
 		for(int j$var63 = 0; j$var63 < noProducts; j$var63 += 1)
-			// Substituted "sum" with its value "reduceVar$sum$9".
-			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$9));
+			// Substituted "sum" with its value "reduceVar$sum$10".
+			expedNorm[j$var63] = (exped[j$var63] / (r * reduceVar$sum$10));
 		for(int t$var112 = 0; t$var112 < T; t$var112 += 1) {
 			for(int j$var123 = 0; j$var123 < noProducts; j$var123 += 1)
 				weekly_ut[t$var112][j$var123] = (expedNorm[j$var123] * Avail[t$var112][j$var123]);
@@ -1895,7 +2238,7 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 			// A generated name to prevent name collisions if the reduction is implemented more
 			// than once in inference and probability code. Initialize the variable to the unit
 			// value
-			double reduceVar$denom$15 = 0.0;
+			double reduceVar$denom$19 = 0.0;
 			
 			// For each index in the array to be reduced
 			for(int cv$reduction136Index = 0; cv$reduction136Index < noProducts; cv$reduction136Index += 1)
@@ -1905,9 +2248,9 @@ final class Vulcano2012basic$SingleThreadCPU extends org.sandwood.runtime.intern
 				// 
 				// l$var136's comment
 				// Set the right hand term to a value from the array weekly_ut
-				reduceVar$denom$15 = (reduceVar$denom$15 + weekly_ut[t$var112][cv$reduction136Index]);
+				reduceVar$denom$19 = (reduceVar$denom$19 + weekly_ut[t$var112][cv$reduction136Index]);
 			for(int j$var147 = 0; j$var147 < noProducts; j$var147 += 1)
-				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$15);
+				weekly_rates[t$var112][j$var147] = (weekly_ut[t$var112][j$var147] / reduceVar$denom$19);
 		}
 	}
 

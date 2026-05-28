@@ -10,6 +10,7 @@ final class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.m
 	// Declare the variables for the model.
 	private double[] bias;
 	private int coins;
+	private boolean[] constrainedFlag$sample18;
 	private boolean fixedFlag$sample18 = false;
 	private boolean fixedProbFlag$sample18 = false;
 	private boolean fixedProbFlag$sample31 = false;
@@ -37,8 +38,7 @@ final class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for bias.
 	@Override
-	public final void set$bias(double[] cv$value) {
-		// Set bias
+	public final void set$bias(double[] cv$value, boolean allocated$) {
 		bias = cv$value;
 	}
 
@@ -56,10 +56,18 @@ final class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for fixedFlag$sample18.
 	@Override
-	public final void set$fixedFlag$sample18(boolean cv$value) {
+	public final void set$fixedFlag$sample18(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample18 including if probabilities
 		// need to be updated.
 		fixedFlag$sample18 = cv$value;
+		
+		// If the model has been allocated update the constraints flags
+		if(allocated$) {
+			// Set all the values in the array
+			for(int index$constrainedFlag$sample18$1 = 0; index$constrainedFlag$sample18$1 < constrainedFlag$sample18.length; index$constrainedFlag$sample18$1 += 1)
+				// Substituted "fixedFlag$sample18" with its value "cv$value".
+				constrainedFlag$sample18[index$constrainedFlag$sample18$1] = cv$value;
+		}
 		
 		// Should the probability of sample 18 be set to fixed. This will only every change
 		// the flag to false.
@@ -88,8 +96,7 @@ final class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for flipsMeasured.
 	@Override
-	public final void set$flipsMeasured(boolean[][] cv$value) {
-		// Set flipsMeasured
+	public final void set$flipsMeasured(boolean[][] cv$value, boolean allocated$) {
 		flipsMeasured = cv$value;
 	}
 
@@ -137,9 +144,46 @@ final class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for shape.
 	@Override
-	public final void set$shape(int[] cv$value) {
-		// Set shape
+	public final void set$shape(int[] cv$value, boolean allocated$) {
 		shape = cv$value;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample18
+	private final void drawValueSample18(int j, int threadID$cv$j, Rng RNG$) {
+		bias[j] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 18 drawn from beta. Inference was performed using a Beta to Bernoulli/Binomial
+	// conjugate prior.
+	private final void inferSample18(int j, int threadID$cv$j, Rng RNG$) {
+		constrainedFlag$sample18[j] = false;
+		
+		// Local variable to record the number of true samples.
+		int cv$sum = 0;
+		
+		// Local variable to record the number of samples.
+		int cv$count = 0;
+		
+		// Processing random variable 20.
+		// 
+		// Processing sample task 31 of consumer random variable bernoulli.
+		for(int var30 = 0; var30 < shape[j]; var30 += 1) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample18[j] = true;
+			
+			// Include the value sampled by task 31 from random variable bernoulli.
+			// 
+			// Increment the number of samples.
+			cv$count = (cv$count + 1);
+			
+			// If the sample value was positive increase the count
+			if(flips[j][var30])
+				cv$sum = (cv$sum + 1);
+		}
+		if(constrainedFlag$sample18[j])
+			// Write out the new value of the sample.
+			bias[j] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Calculate the probability of the samples represented by sample18 using sampled
@@ -267,7 +311,7 @@ final class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.m
 					// Store the value of the function call, so the function call is only made once.
 					// 
 					// The sample value to calculate the probability of generating
-					cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((flips[j][var30]?bias[j]:(1.0 - bias[j]))));
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= bias[j]) && (bias[j] <= 1.0))?Math.log((flips[j][var30]?bias[j]:(1.0 - bias[j]))):Double.NEGATIVE_INFINITY));
 				}
 			}
 			
@@ -339,33 +383,6 @@ final class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 18 drawn from beta. Inference was performed using a Beta to Bernoulli/Binomial
-	// conjugate prior.
-	private final void sample18(int j, int threadID$cv$j, Rng RNG$) {
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// Local variable to record the number of samples.
-		int cv$count = 0;
-		
-		// Processing random variable 20.
-		// 
-		// Processing sample task 31 of consumer random variable bernoulli.
-		for(int var30 = 0; var30 < shape[j]; var30 += 1) {
-			// Include the value sampled by task 31 from random variable bernoulli.
-			// Increment the number of samples.
-			cv$count = (cv$count + 1);
-			
-			// If the sample value was positive increase the count
-			if(flips[j][var30])
-				cv$sum = (cv$sum + 1);
-		}
-		
-		// Write out the new value of the sample.
-		bias[j] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -384,6 +401,9 @@ final class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedFlag$sample18)
 			// Constructor for bias
 			bias = new double[shape.length];
+		
+		// Constructor for constrainedFlag$sample18
+		constrainedFlag$sample18 = new boolean[shape.length];
 	}
 
 	// Method to execute the model code conventionally.
@@ -522,7 +542,7 @@ final class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							// Inner loop for running batches of iterations, each batch has its own random number
 							// generator.
 							for(int j = forStart$j; j < forEnd$j; j += 1)
-								sample18(j, threadID$j, RNG$1);
+								inferSample18(j, threadID$j, RNG$1);
 					}
 				);
 			// Infer the samples in reverse chronological order.
@@ -534,20 +554,26 @@ final class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.m
 							// Inner loop for running batches of iterations, each batch has its own random number
 							// generator.
 							for(int j = forStart$j; j < forEnd$j; j += 1)
-								sample18(j, threadID$j, RNG$1);
+								inferSample18(j, threadID$j, RNG$1);
 					}
 				);
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		coins = shape.length;
+		
+		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
+		parallelFor(RNG$, 0, coins, 1,
+			(int forStart$j, int forEnd$j, int threadID$j, org.sandwood.random.internal.Rng RNG$1) -> { 
+				
+					// Inner loop for running batches of iterations, each batch has its own random number
+					// generator.
+					for(int j = forStart$j; j < forEnd$j; j += 1) {
+						if(!constrainedFlag$sample18[j])
+							drawValueSample18(j, threadID$j, RNG$1);
+					}
+			}
+		);
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -567,6 +593,17 @@ final class Flip2CoinsMK6$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		logProbability$flips = 0.0;
 		if(!fixedProbFlag$sample31)
 			logProbability$var31 = Double.NaN;
+	}
+
+	// Method for initializing the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		coins = shape.length;
+		
+		// Set all the values in the array
+		for(int index$constrainedFlag$sample18$1 = 0; index$constrainedFlag$sample18$1 < constrainedFlag$sample18.length; index$constrainedFlag$sample18$1 += 1)
+			constrainedFlag$sample18[index$constrainedFlag$sample18$1] = true;
 	}
 
 	// Construct the evidence probabilities.

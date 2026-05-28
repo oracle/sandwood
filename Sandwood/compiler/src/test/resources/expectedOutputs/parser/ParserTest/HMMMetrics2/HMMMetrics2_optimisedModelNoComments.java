@@ -25,7 +25,7 @@ public final class HMMMetrics2 extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$initialStateDistribution(value);
+            system$c.set$initialStateDistribution(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -35,7 +35,7 @@ public final class HMMMetrics2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample19(fixed);
+                system$c.set$fixedFlag$sample19(fixed, allocated);
             }
         }
 
@@ -59,7 +59,7 @@ public final class HMMMetrics2 extends Model {
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$m(value);
+            system$c.set$m(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -74,7 +74,7 @@ public final class HMMMetrics2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample32(fixed);
+                system$c.set$fixedFlag$sample32(fixed, allocated);
             }
         }
 
@@ -134,7 +134,7 @@ public final class HMMMetrics2 extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$metric_mean(value);
+            system$c.set$metric_mean(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -144,7 +144,7 @@ public final class HMMMetrics2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample52(fixed);
+                system$c.set$fixedFlag$sample52(fixed, allocated);
             }
         }
 
@@ -168,7 +168,7 @@ public final class HMMMetrics2 extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$metric_valid_bias(value);
+            system$c.set$metric_valid_bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -178,7 +178,7 @@ public final class HMMMetrics2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample84(fixed);
+                system$c.set$fixedFlag$sample84(fixed, allocated);
             }
         }
 
@@ -238,7 +238,7 @@ public final class HMMMetrics2 extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$metric_var(value);
+            system$c.set$metric_var(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -248,7 +248,7 @@ public final class HMMMetrics2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample68(fixed);
+                system$c.set$fixedFlag$sample68(fixed, allocated);
             }
         }
 
@@ -272,7 +272,7 @@ public final class HMMMetrics2 extends Model {
 
         @Override
         protected void setValueInternal(int[][] value) {
-            system$c.set$st(value);
+            system$c.set$st(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -287,8 +287,8 @@ public final class HMMMetrics2 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample104(fixed);
-                system$c.set$fixedFlag$sample123(fixed);
+                system$c.set$fixedFlag$sample104(fixed, allocated);
+                system$c.set$fixedFlag$sample123(fixed, allocated);
             }
         }
 
@@ -321,7 +321,7 @@ public final class HMMMetrics2 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noStates(value); }
+        protected void setValueInternal(int value) { system$c.set$noStates(value, allocated); }
     };
 
     /**
@@ -340,7 +340,7 @@ public final class HMMMetrics2 extends Model {
         }
 
         @Override
-        protected void setValueInternal(boolean[][] value) { system$c.set$metric_valid(value); }
+        protected void setValueInternal(boolean[][] value) { system$c.set$metric_valid(value, allocated); }
     };
 
     /**
@@ -358,13 +358,13 @@ public final class HMMMetrics2 extends Model {
 
         @Override
         public void setValueInternal(double[][] value) {
-            system$c.set$metric(value);
-            system$c.set$length$metric(getDims(value));
+            system$c.set$metric(value, allocated);
+            system$c.set$length$metric(getDims(value), allocated);
         }
 
         @Override
         public void setShapeInternal(int[] shape) {
-            system$c.set$length$metric(shape);
+            system$c.set$length$metric(shape, allocated);
         }
 
         @Override
@@ -465,41 +465,42 @@ public final class HMMMetrics2 extends Model {
     private void transferData(HMMMetrics2$CoreInterface oldCore, HMMMetrics2$CoreInterface newCore) {
         //Model inputs
         if(noStates.isSet())
-            newCore.set$noStates(oldCore.get$noStates());
+            newCore.set$noStates(oldCore.get$noStates(), false);
+
         //Observed scalars
         if(metric_valid.isSet())
-            newCore.set$metric_valid(oldCore.get$metric_valid());
+            newCore.set$metric_valid(oldCore.get$metric_valid(), false);
 
         //Observed arrays
         if(metric.isSet()) {
-            newCore.set$metric(oldCore.get$metric());
-            newCore.set$length$metric(oldCore.get$length$metric());
+            newCore.set$metric(oldCore.get$metric(), false);
+            newCore.set$length$metric(oldCore.get$length$metric(), false);
         }
         else if(metric.shapeSet())
-            newCore.set$length$metric(oldCore.get$length$metric());
+            newCore.set$length$metric(oldCore.get$length$metric(), false);
 
         //ComputedVariables
         if($initialStateDistribution.isSet())
-            newCore.set$initialStateDistribution(oldCore.get$initialStateDistribution());
+            newCore.set$initialStateDistribution(oldCore.get$initialStateDistribution(), false);
         if($m.isSet())
-            newCore.set$m(oldCore.get$m());
+            newCore.set$m(oldCore.get$m(), false);
         if($metric_mean.isSet())
-            newCore.set$metric_mean(oldCore.get$metric_mean());
+            newCore.set$metric_mean(oldCore.get$metric_mean(), false);
         if($metric_valid_bias.isSet())
-            newCore.set$metric_valid_bias(oldCore.get$metric_valid_bias());
+            newCore.set$metric_valid_bias(oldCore.get$metric_valid_bias(), false);
         if($metric_var.isSet())
-            newCore.set$metric_var(oldCore.get$metric_var());
+            newCore.set$metric_var(oldCore.get$metric_var(), false);
         if($st.isSet())
-            newCore.set$st(oldCore.get$st());
+            newCore.set$st(oldCore.get$st(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample104(oldCore.get$fixedFlag$sample104());
-        newCore.set$fixedFlag$sample123(oldCore.get$fixedFlag$sample123());
-        newCore.set$fixedFlag$sample19(oldCore.get$fixedFlag$sample19());
-        newCore.set$fixedFlag$sample32(oldCore.get$fixedFlag$sample32());
-        newCore.set$fixedFlag$sample52(oldCore.get$fixedFlag$sample52());
-        newCore.set$fixedFlag$sample68(oldCore.get$fixedFlag$sample68());
-        newCore.set$fixedFlag$sample84(oldCore.get$fixedFlag$sample84());
+        newCore.set$fixedFlag$sample104(oldCore.get$fixedFlag$sample104(), false);
+        newCore.set$fixedFlag$sample123(oldCore.get$fixedFlag$sample123(), false);
+        newCore.set$fixedFlag$sample19(oldCore.get$fixedFlag$sample19(), false);
+        newCore.set$fixedFlag$sample32(oldCore.get$fixedFlag$sample32(), false);
+        newCore.set$fixedFlag$sample52(oldCore.get$fixedFlag$sample52(), false);
+        newCore.set$fixedFlag$sample68(oldCore.get$fixedFlag$sample68(), false);
+        newCore.set$fixedFlag$sample84(oldCore.get$fixedFlag$sample84(), false);
     }
 
     /**

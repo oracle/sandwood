@@ -9,19 +9,19 @@ interface Conditional3$CoreInterface extends org.sandwood.runtime.internal.model
 	public boolean get$fixedFlag$sample16();
 
 	// Setter for fixedFlag$sample16.
-	public void set$fixedFlag$sample16(boolean cv$value);
+	public void set$fixedFlag$sample16(boolean cv$value, boolean allocated$);
 
 	// Getter for fixedFlag$sample4.
 	public boolean get$fixedFlag$sample4();
 
 	// Setter for fixedFlag$sample4.
-	public void set$fixedFlag$sample4(boolean cv$value);
+	public void set$fixedFlag$sample4(boolean cv$value, boolean allocated$);
 
 	// Getter for guard.
 	public boolean get$guard();
 
 	// Setter for guard.
-	public void set$guard(boolean cv$value);
+	public void set$guard(boolean cv$value, boolean allocated$);
 
 	// Getter for logProbability$bernoulli.
 	public double get$logProbability$bernoulli();
@@ -39,7 +39,7 @@ interface Conditional3$CoreInterface extends org.sandwood.runtime.internal.model
 	public double get$observedValue();
 
 	// Setter for observedValue.
-	public void set$observedValue(double cv$value);
+	public void set$observedValue(double cv$value, boolean allocated$);
 
 	// Getter for value.
 	public double get$value();
@@ -48,5 +48,5 @@ interface Conditional3$CoreInterface extends org.sandwood.runtime.internal.model
 	public double get$var14();
 
 	// Setter for var14.
-	public void set$var14(double cv$value);
+	public void set$var14(double cv$value, boolean allocated$);
 }

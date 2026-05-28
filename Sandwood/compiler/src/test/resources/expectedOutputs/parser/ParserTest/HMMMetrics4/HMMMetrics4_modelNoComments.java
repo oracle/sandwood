@@ -25,7 +25,7 @@ public final class HMMMetrics4 extends Model {
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$current_metric_mean(value);
+            system$c.set$current_metric_mean(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -40,7 +40,7 @@ public final class HMMMetrics4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample134(fixed);
+                system$c.set$fixedFlag$sample134(fixed, allocated);
             }
         }
 
@@ -64,7 +64,7 @@ public final class HMMMetrics4 extends Model {
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$current_metric_valid_bias(value);
+            system$c.set$current_metric_valid_bias(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -79,7 +79,7 @@ public final class HMMMetrics4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample190(fixed);
+                system$c.set$fixedFlag$sample190(fixed, allocated);
             }
         }
 
@@ -103,7 +103,7 @@ public final class HMMMetrics4 extends Model {
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$current_metric_var(value);
+            system$c.set$current_metric_var(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -118,7 +118,7 @@ public final class HMMMetrics4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample162(fixed);
+                system$c.set$fixedFlag$sample162(fixed, allocated);
             }
         }
 
@@ -142,7 +142,7 @@ public final class HMMMetrics4 extends Model {
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$initialStateDistribution(value);
+            system$c.set$initialStateDistribution(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -152,7 +152,7 @@ public final class HMMMetrics4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample20(fixed);
+                system$c.set$fixedFlag$sample20(fixed, allocated);
             }
         }
 
@@ -176,7 +176,7 @@ public final class HMMMetrics4 extends Model {
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$m(value);
+            system$c.set$m(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -191,7 +191,7 @@ public final class HMMMetrics4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample33(fixed);
+                system$c.set$fixedFlag$sample33(fixed, allocated);
             }
         }
 
@@ -287,7 +287,7 @@ public final class HMMMetrics4 extends Model {
 
         @Override
         protected void setValueInternal(int[][] value) {
-            system$c.set$st(value);
+            system$c.set$st(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -302,8 +302,8 @@ public final class HMMMetrics4 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample57(fixed);
-                system$c.set$fixedFlag$sample76(fixed);
+                system$c.set$fixedFlag$sample57(fixed, allocated);
+                system$c.set$fixedFlag$sample76(fixed, allocated);
             }
         }
 
@@ -336,7 +336,7 @@ public final class HMMMetrics4 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$max_metric(value); }
+        protected void setValueInternal(int value) { system$c.set$max_metric(value, allocated); }
     };
 
     /**
@@ -353,7 +353,7 @@ public final class HMMMetrics4 extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noStates(value); }
+        protected void setValueInternal(int value) { system$c.set$noStates(value, allocated); }
     };
 
     /**
@@ -372,7 +372,7 @@ public final class HMMMetrics4 extends Model {
         }
 
         @Override
-        protected void setValueInternal(boolean[][][] value) { system$c.set$metric_valid(value); }
+        protected void setValueInternal(boolean[][][] value) { system$c.set$metric_valid(value, allocated); }
     };
 
     /**
@@ -390,13 +390,13 @@ public final class HMMMetrics4 extends Model {
 
         @Override
         public void setValueInternal(double[][][] value) {
-            system$c.set$metric(value);
-            system$c.set$length$metric(getDims(value));
+            system$c.set$metric(value, allocated);
+            system$c.set$length$metric(getDims(value), allocated);
         }
 
         @Override
         public void setShapeInternal(int[][] shape) {
-            system$c.set$length$metric(shape);
+            system$c.set$length$metric(shape, allocated);
         }
 
         @Override
@@ -507,43 +507,44 @@ public final class HMMMetrics4 extends Model {
     private void transferData(HMMMetrics4$CoreInterface oldCore, HMMMetrics4$CoreInterface newCore) {
         //Model inputs
         if(max_metric.isSet())
-            newCore.set$max_metric(oldCore.get$max_metric());
+            newCore.set$max_metric(oldCore.get$max_metric(), false);
         if(noStates.isSet())
-            newCore.set$noStates(oldCore.get$noStates());
+            newCore.set$noStates(oldCore.get$noStates(), false);
+
         //Observed scalars
         if(metric_valid.isSet())
-            newCore.set$metric_valid(oldCore.get$metric_valid());
+            newCore.set$metric_valid(oldCore.get$metric_valid(), false);
 
         //Observed arrays
         if(metric.isSet()) {
-            newCore.set$metric(oldCore.get$metric());
-            newCore.set$length$metric(oldCore.get$length$metric());
+            newCore.set$metric(oldCore.get$metric(), false);
+            newCore.set$length$metric(oldCore.get$length$metric(), false);
         }
         else if(metric.shapeSet())
-            newCore.set$length$metric(oldCore.get$length$metric());
+            newCore.set$length$metric(oldCore.get$length$metric(), false);
 
         //ComputedVariables
         if($current_metric_mean.isSet())
-            newCore.set$current_metric_mean(oldCore.get$current_metric_mean());
+            newCore.set$current_metric_mean(oldCore.get$current_metric_mean(), false);
         if($current_metric_valid_bias.isSet())
-            newCore.set$current_metric_valid_bias(oldCore.get$current_metric_valid_bias());
+            newCore.set$current_metric_valid_bias(oldCore.get$current_metric_valid_bias(), false);
         if($current_metric_var.isSet())
-            newCore.set$current_metric_var(oldCore.get$current_metric_var());
+            newCore.set$current_metric_var(oldCore.get$current_metric_var(), false);
         if($initialStateDistribution.isSet())
-            newCore.set$initialStateDistribution(oldCore.get$initialStateDistribution());
+            newCore.set$initialStateDistribution(oldCore.get$initialStateDistribution(), false);
         if($m.isSet())
-            newCore.set$m(oldCore.get$m());
+            newCore.set$m(oldCore.get$m(), false);
         if($st.isSet())
-            newCore.set$st(oldCore.get$st());
+            newCore.set$st(oldCore.get$st(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample134(oldCore.get$fixedFlag$sample134());
-        newCore.set$fixedFlag$sample162(oldCore.get$fixedFlag$sample162());
-        newCore.set$fixedFlag$sample190(oldCore.get$fixedFlag$sample190());
-        newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20());
-        newCore.set$fixedFlag$sample33(oldCore.get$fixedFlag$sample33());
-        newCore.set$fixedFlag$sample57(oldCore.get$fixedFlag$sample57());
-        newCore.set$fixedFlag$sample76(oldCore.get$fixedFlag$sample76());
+        newCore.set$fixedFlag$sample134(oldCore.get$fixedFlag$sample134(), false);
+        newCore.set$fixedFlag$sample162(oldCore.get$fixedFlag$sample162(), false);
+        newCore.set$fixedFlag$sample190(oldCore.get$fixedFlag$sample190(), false);
+        newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20(), false);
+        newCore.set$fixedFlag$sample33(oldCore.get$fixedFlag$sample33(), false);
+        newCore.set$fixedFlag$sample57(oldCore.get$fixedFlag$sample57(), false);
+        newCore.set$fixedFlag$sample76(oldCore.get$fixedFlag$sample76(), false);
     }
 
     /**

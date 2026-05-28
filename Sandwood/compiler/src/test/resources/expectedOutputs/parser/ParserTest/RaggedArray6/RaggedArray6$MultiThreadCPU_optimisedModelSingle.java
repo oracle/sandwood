@@ -8,6 +8,8 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 	// Declare the variables for the model.
 	private double[][] a;
 	private double[] b;
+	private boolean constrainedFlag$sample47 = true;
+	private boolean constrainedFlag$sample50 = true;
 	private double[] cv$var45$stateProbabilityGlobal;
 	private double[] d;
 	private boolean fixedFlag$sample47 = false;
@@ -51,9 +53,8 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for d.
 	@Override
-	public final void set$d(double[] cv$value) {
+	public final void set$d(double[] cv$value, boolean allocated$) {
 		// Set flags for all the side effects of d including if probabilities need to be updated.
-		// Set d
 		d = cv$value;
 		
 		// Unset the fixed probability flag for sample 50 as it depends on d.
@@ -71,10 +72,13 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for fixedFlag$sample47.
 	@Override
-	public final void set$fixedFlag$sample47(boolean cv$value) {
+	public final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample47 including if probabilities
 		// need to be updated.
 		fixedFlag$sample47 = cv$value;
+		
+		// Substituted "fixedFlag$sample47" with its value "cv$value".
+		constrainedFlag$sample47 = (cv$value || constrainedFlag$sample47);
 		
 		// Should the probability of sample 47 be set to fixed. This will only every change
 		// the flag to false.
@@ -103,10 +107,13 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for fixedFlag$sample50.
 	@Override
-	public final void set$fixedFlag$sample50(boolean cv$value) {
+	public final void set$fixedFlag$sample50(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample50 including if probabilities
 		// need to be updated.
 		fixedFlag$sample50 = cv$value;
+		
+		// Substituted "fixedFlag$sample50" with its value "cv$value".
+		constrainedFlag$sample50 = (cv$value || constrainedFlag$sample50);
 		
 		// Should the probability of sample 50 be set to fixed. This will only every change
 		// the flag to false.
@@ -129,7 +136,7 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for length$obs_measured.
 	@Override
-	public final void set$length$obs_measured(int cv$value) {
+	public final void set$length$obs_measured(int cv$value, boolean allocated$) {
 		length$obs_measured = cv$value;
 	}
 
@@ -177,8 +184,7 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for obs_measured.
 	@Override
-	public final void set$obs_measured(boolean[] cv$value) {
-		// Set obs_measured
+	public final void set$obs_measured(boolean[] cv$value, boolean allocated$) {
 		obs_measured = cv$value;
 	}
 
@@ -190,7 +196,7 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 
 	// Setter for y.
 	@Override
-	public final void set$y(int cv$value) {
+	public final void set$y(int cv$value, boolean allocated$) {
 		// Set flags for all the side effects of y including if probabilities need to be updated.
 		y = cv$value;
 		
@@ -202,6 +208,498 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		
 		// Unset the fixed probability flag for sample 65 as it depends on y.
 		fixedProbFlag$sample65 = false;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample47
+	private final void drawValueSample47() {
+		y = DistributionSampling.sampleCategorical(RNG$, b, 2);
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample50
+	private final void drawValueSample50() {
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$48_15 = -1;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((0 == y))
+			lengthCV$a$48_15 = 2;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((1 == y))
+			lengthCV$a$48_15 = 3;
+		DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_15, d);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 47 drawn from Categorical 44. Inference was performed using variable
+	// marginalization.
+	private final void inferSample47() {
+		constrainedFlag$sample47 = false;
+		{
+			// Write out the new value of the sample.
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			y = 0;
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "0".
+			double cv$accumulatedProbabilities = (((0.0 <= b[0]) && (b[0] <= 1.0))?Math.log(b[0]):Double.NEGATIVE_INFINITY);
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((fixedFlag$sample50 || constrainedFlag$sample50)) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample47 = true;
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 50 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				// 
+				// Constructing a random variable input for use later.
+				// 
+				// Value of the variable at this index
+				// 
+				// Substituted "cv$valuePos" with its value "0".
+				cv$accumulatedProbabilities = (DistributionSampling.logProbabilityDirichlet(d, a[0], 2) + cv$accumulatedProbabilities);
+			}
+			
+			// Processing sample task 65 of consumer random variable null.
+			for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample47 = true;
+				
+				// Constructing a random variable input for use later.
+				// 
+				// Value of the variable at this index
+				// 
+				// Substituted "cv$valuePos" with its value "0".
+				double var49 = d[0];
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 65 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((0.0 <= var49) && (var49 <= 1.0))?Math.log((obs[var62]?var49:(1.0 - var49))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// Save the calculated index value into the array of index value probabilities
+			// 
+			// Get a local reference to the scratch space.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			cv$var45$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
+		}
+		
+		// Write out the new value of the sample.
+		// 
+		// Value of the variable at this index
+		// 
+		// Substituted "cv$valuePos" with its value "1".
+		y = 1;
+		
+		// An accumulator to allow the value for each distribution to be constructed before
+		// it is added to the index probabilities.
+		// 
+		// Value of the variable at this index
+		// 
+		// Substituted "cv$valuePos" with its value "1".
+		double cv$accumulatedProbabilities = (((0.0 <= b[1]) && (b[1] <= 1.0))?Math.log(b[1]):Double.NEGATIVE_INFINITY);
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((fixedFlag$sample50 || constrainedFlag$sample50)) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample47 = true;
+			
+			// A check to ensure rounding of floating point values can never result in a negative
+			// value.
+			// 
+			// Recorded the probability of reaching sample task 50 with the current configuration.
+			// 
+			// Set an accumulator to record the consumer distributions not seen. Initially set
+			// to 1 as seen values will be deducted from this value.
+			// 
+			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+			// Declaration comment was:
+			// Set an accumulator to sum the probabilities for each possible configuration of
+			// inputs.
+			// 
+			// Constructing a random variable input for use later.
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "1".
+			cv$accumulatedProbabilities = (DistributionSampling.logProbabilityDirichlet(d, a[1], 3) + cv$accumulatedProbabilities);
+		}
+		
+		// Processing sample task 65 of consumer random variable null.
+		for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
+			// Mark that the sample has observed constrained data.
+			constrainedFlag$sample47 = true;
+			
+			// Constructing a random variable input for use later.
+			// 
+			// Value of the variable at this index
+			// 
+			// Substituted "cv$valuePos" with its value "1".
+			double var49 = d[1];
+			
+			// A check to ensure rounding of floating point values can never result in a negative
+			// value.
+			// 
+			// Recorded the probability of reaching sample task 65 with the current configuration.
+			// 
+			// Set an accumulator to record the consumer distributions not seen. Initially set
+			// to 1 as seen values will be deducted from this value.
+			// 
+			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+			// Declaration comment was:
+			// Set an accumulator to sum the probabilities for each possible configuration of
+			// inputs.
+			cv$accumulatedProbabilities = ((((0.0 <= var49) && (var49 <= 1.0))?Math.log((obs[var62]?var49:(1.0 - var49))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+		}
+		
+		// Save the calculated index value into the array of index value probabilities
+		// 
+		// Get a local reference to the scratch space.
+		// 
+		// Record the reached probability density.
+		// 
+		// Initialize a counter to track the reached distributions.
+		cv$var45$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
+		if(constrainedFlag$sample47) {
+			// This value is not used before it is set again, so removing the value declaration.
+			// 
+			// The sum of all the probabilities in log space
+			double cv$logSum;
+			
+			// Sum all the values
+			// 
+			// Initialize the max to the first element.
+			// 
+			// Get a local reference to the scratch space.
+			double cv$lseMax = cv$var45$stateProbabilityGlobal[0];
+			
+			// Unrolled loop
+			// 
+			// Get a local reference to the scratch space.
+			double cv$lseElementValue = cv$var45$stateProbabilityGlobal[1];
+			if((cv$lseMax < cv$lseElementValue))
+				cv$lseMax = cv$lseElementValue;
+			
+			// If the maximum value is -infinity return -infinity.
+			if((cv$lseMax == Double.NEGATIVE_INFINITY))
+				cv$logSum = Double.NEGATIVE_INFINITY;
+			
+			// Sum the values in the array.
+			else
+				// Increment the value of the target, moving the value back into log space.
+				// 
+				// The sum of all the probabilities in log space
+				// 
+				// Get a local reference to the scratch space.
+				// 
+				// Get a local reference to the scratch space.
+				// 
+				// Initialize the sum of the array elements
+				cv$logSum = (Math.log((Math.exp((cv$var45$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var45$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+			
+			// If all the sum is zero, just share the probability evenly.
+			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
+				// Unrolled loop
+				// Get a local reference to the scratch space.
+				cv$var45$stateProbabilityGlobal[0] = 0.5;
+				
+				// Get a local reference to the scratch space.
+				cv$var45$stateProbabilityGlobal[1] = 0.5;
+			} else {
+				// Unrolled loop
+				// Get a local reference to the scratch space.
+				cv$var45$stateProbabilityGlobal[0] = Math.exp((cv$var45$stateProbabilityGlobal[0] - cv$logSum));
+				
+				// Get a local reference to the scratch space.
+				cv$var45$stateProbabilityGlobal[1] = Math.exp((cv$var45$stateProbabilityGlobal[1] - cv$logSum));
+			}
+			
+			// Set array values that are not computed for the input to negative infinity.
+			// 
+			// Get a local reference to the scratch space.
+			for(int cv$indexName = 2; cv$indexName < cv$var45$stateProbabilityGlobal.length; cv$indexName += 1)
+				// Get a local reference to the scratch space.
+				cv$var45$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			
+			// Write out the new value of the sample.
+			// 
+			// cv$numStates's comment
+			// variable marginalization
+			y = DistributionSampling.sampleCategorical(RNG$, cv$var45$stateProbabilityGlobal, 2);
+		}
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 50 drawn from Dirichlet 47. Inference was performed using Metropolis-Hastings.
+	private final void inferSample50() {
+		constrainedFlag$sample50 = false;
+		
+		// This value is not used before it is set again, so removing the value declaration.
+		// 
+		// Calculate the probability of the random variable generating the original sampled
+		// value.
+		double cv$originalProbability;
+		
+		// Allocate a local variable to hold the length of the array.
+		int lengthCV$a$48_13 = -1;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((0 == y))
+			lengthCV$a$48_13 = 2;
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if((1 == y))
+			lengthCV$a$48_13 = 3;
+		
+		// Pick a value in the array to adjust.
+		int cv$indexToChange = (int)((double)lengthCV$a$48_13 * DistributionSampling.sampleUniform(RNG$));
+		
+		// Pick how much the value should be moved by. Initially this value is proposed as
+		// a ratio of the current magnitude of the value, we will check to make sure the adjustment
+		// will not make this value too large or other values too small and adjust if required
+		// before it is applied.
+		double cv$movementRatio = ((DistributionSampling.sampleBeta(RNG$, 5, 5) * 1.9999) - 1);
+		
+		// Calculate how much we are going to move the array index cv$indexToChange the by.
+		// 
+		// Allocate space for the proposed change to be stored as an absolute value
+		double cv$proposedDifference;
+		
+		// Test if we are increasing or decreasing the value at the index. For each case calculate
+		// the maximum valid adjustment.
+		if((cv$movementRatio < 0))
+			// The maximum reduction of the array at the index without going below 0 is the value
+			// of the array at that index.
+			// 
+			// A reference local to the function for the sample variable.
+			cv$proposedDifference = d[cv$indexToChange];
+		else {
+			// Calculate the maximum magnitude of the proposed index change.
+			// Initially set the maximum to the amount that the value we are changing could increase
+			// without exceeding 1
+			// 
+			// A reference local to the function for the sample variable.
+			cv$proposedDifference = (1.0 - d[cv$indexToChange]);
+			
+			// For the array values up to the index we are going to change calculate the maximum
+			// move possible.
+			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1) {
+				// Calculate the maximum change value that the value at array index cv$loopIndex could
+				// support. Based on moving all other values by an equal amount.
+				// 
+				// A reference local to the function for the sample variable.
+				double cv$temp = (d[cv$loopIndex] * (lengthCV$a$48_13 - 1));
+				
+				// If the maximum move is less than the proposed move update the move size.
+				if((cv$temp < cv$proposedDifference))
+					cv$proposedDifference = cv$temp;
+			}
+			
+			// For the array values after the index we are going to change calculate the maximum
+			// move possible.
+			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$48_13; cv$loopIndex += 1) {
+				// Calculate the maximum change value that the value at array index cv$loopIndex could
+				// support. Based on moving all other values by an equal amount.
+				// 
+				// A reference local to the function for the sample variable.
+				double cv$temp = (d[cv$loopIndex] * (lengthCV$a$48_13 - 1));
+				
+				// If this is less than the proposed increase, change the proposed increase to this
+				// value.
+				if((cv$temp < cv$proposedDifference))
+					cv$proposedDifference = cv$temp;
+			}
+		}
+		
+		// Multiply the maximum adjustment by the adjustment ratio to get the actual adjustment
+		// we are going to make.
+		cv$proposedDifference = (cv$movementRatio * cv$proposedDifference);
+		
+		// Calculate how much each of the other indexes needs to be adjusted by in order to
+		// maintain that the sum of the indexes is 1.
+		double cv$rebalanceValue = (cv$proposedDifference / (lengthCV$a$48_13 - 1));
+		{
+			// Allocate a local variable to hold the length of the array.
+			int lengthCV$a$48_14 = -1;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((0 == y))
+				lengthCV$a$48_14 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$48_14 = 3;
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Constructing a random variable input for use later.
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_14);
+			
+			// Processing random variable 50.
+			// 
+			// Processing sample task 65 of consumer random variable null.
+			for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample50 = true;
+				
+				// Constructing a random variable input for use later.
+				double var49 = d[y];
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 65 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((0.0 <= var49) && (var49 <= 1.0))?Math.log((obs[var62]?var49:(1.0 - var49))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// Initialize an accumulator to take the product of all the distribution probabilities
+			// in log space.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			cv$originalProbability = cv$accumulatedProbabilities;
+		}
+		
+		// Constraints moved from conditionals in inner loops/scopes/etc.
+		if(constrainedFlag$sample50) {
+			// Update Sample and intermediate values
+			// 
+			// Update the sample value
+			// 
+			// Update all the indexes up to the index selected.
+			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
+				// A reference local to the function for the sample variable.
+				d[cv$loopIndex] = (d[cv$loopIndex] - cv$rebalanceValue);
+			
+			// Update the selected index.
+			// 
+			// A reference local to the function for the sample variable.
+			d[cv$indexToChange] = (d[cv$indexToChange] + cv$proposedDifference);
+			
+			// Update all the indexes after the index we selected.
+			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$48_13; cv$loopIndex += 1)
+				// A reference local to the function for the sample variable.
+				d[cv$loopIndex] = (d[cv$loopIndex] - cv$rebalanceValue);
+			
+			// Allocate a local variable to hold the length of the array.
+			int lengthCV$a$48_14 = -1;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((0 == y))
+				lengthCV$a$48_14 = 2;
+			
+			// Constraints moved from conditionals in inner loops/scopes/etc.
+			if((1 == y))
+				lengthCV$a$48_14 = 3;
+			
+			// An accumulator to allow the value for each distribution to be constructed before
+			// it is added to the index probabilities.
+			// 
+			// Constructing a random variable input for use later.
+			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_14);
+			
+			// Processing sample task 65 of consumer random variable null.
+			for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
+				// Mark that the sample has observed constrained data.
+				constrainedFlag$sample50 = true;
+				
+				// Constructing a random variable input for use later.
+				double var49 = d[y];
+				
+				// A check to ensure rounding of floating point values can never result in a negative
+				// value.
+				// 
+				// Recorded the probability of reaching sample task 65 with the current configuration.
+				// 
+				// Set an accumulator to record the consumer distributions not seen. Initially set
+				// to 1 as seen values will be deducted from this value.
+				// 
+				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
+				// Declaration comment was:
+				// Set an accumulator to sum the probabilities for each possible configuration of
+				// inputs.
+				cv$accumulatedProbabilities = ((((0.0 <= var49) && (var49 <= 1.0))?Math.log((obs[var62]?var49:(1.0 - var49))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			
+			// Ratio of the probability of proposed and original sample values
+			// 
+			// Initialize an accumulator to take the product of all the distribution probabilities
+			// in log space.
+			// 
+			// Record the reached probability density.
+			// 
+			// Initialize a counter to track the reached distributions.
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			
+			// Test if the probability of the sample is sufficient to keep the value. This needs
+			// to be less than or equal as otherwise if the proposed value is not possible and
+			// the random value is 0 an impossible value will be accepted.
+			// 
+			// Substituted "cv$valuePos" with its value "1".
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				// If it is not revert the sample value and intermediates to their original values.
+				// 
+				// Set the sample value
+				// 
+				// Calculate the new sample value
+				// 
+				// Update the sample value
+				// Update all the indexes up to the index selected.
+				for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
+					// A reference local to the function for the sample variable.
+					d[cv$loopIndex] = (d[cv$loopIndex] + cv$rebalanceValue);
+				
+				// Update the selected index.
+				// 
+				// A reference local to the function for the sample variable.
+				d[cv$indexToChange] = (d[cv$indexToChange] - cv$proposedDifference);
+				
+				// Update all the indexes after the index we selected.
+				for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$48_13; cv$loopIndex += 1)
+					// A reference local to the function for the sample variable.
+					d[cv$loopIndex] = (d[cv$loopIndex] + cv$rebalanceValue);
+			}
+		}
 	}
 
 	// Calculate the probability of the samples represented by sample47 using sampled
@@ -234,7 +732,7 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((0.0 <= y) && (y < 2))?Math.log(b[y]):Double.NEGATIVE_INFINITY);
+			double cv$distributionAccumulator = (((((0.0 <= y) && (y < 2)) && (0.0 <= b[y])) && (b[y] <= 1.0))?Math.log(b[y]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
 			logProbability$y = cv$distributionAccumulator;
@@ -301,15 +799,15 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedProbFlag$sample50) {
 			// Generating probabilities for sample task
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$48_14 = -1;
+			int lengthCV$a$48_16 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
-				lengthCV$a$48_14 = 2;
+				lengthCV$a$48_16 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((1 == y))
-				lengthCV$a$48_14 = 3;
+				lengthCV$a$48_16 = 3;
 			
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -334,7 +832,7 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_14);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_16);
 			
 			// Store the sample task probability
 			logProbability$d = cv$distributionAccumulator;
@@ -426,7 +924,7 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + Math.log((obs[var62]?var49:(1.0 - var49))));
+				cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var49) && (var49 <= 1.0))?Math.log((obs[var62]?var49:(1.0 - var49))):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
@@ -480,478 +978,6 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 47 drawn from Categorical 44. Inference was performed using variable
-	// marginalization.
-	private final void sample47() {
-		{
-			// Write out the new value of the sample.
-			// 
-			// Value of the variable at this index
-			// 
-			// Substituted "cv$valuePos" with its value "0".
-			y = 0;
-			
-			// Variable declaration of cv$accumulatedProbabilities moved.
-			// Declaration comment was:
-			// This value is not used before it is set again, so removing the value declaration.
-			// 
-			// An accumulator to allow the value for each distribution to be constructed before
-			// it is added to the index probabilities.
-			// 
-			// Value of the variable at this index
-			// 
-			// Substituted "cv$valuePos" with its value "0".
-			// 
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 50 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// An accumulator to allow the value for each distribution to be constructed before
-			// it is added to the index probabilities.
-			// 
-			// Value of the variable at this index
-			// 
-			// Substituted "cv$valuePos" with its value "0".
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Processing sample task 50 of consumer random variable null.
-			// 
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			// 
-			// Constructing a random variable input for use later.
-			// 
-			// Value of the variable at this index
-			// 
-			// Substituted "cv$valuePos" with its value "0".
-			double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityDirichlet(d, a[0], 2) + Math.log(b[0]));
-			
-			// Processing sample task 65 of consumer random variable null.
-			for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
-				// Constructing a random variable input for use later.
-				// 
-				// Processing random variable 50.
-				// 
-				// Value of the variable at this index
-				// 
-				// Substituted "cv$valuePos" with its value "0".
-				double var49 = d[0];
-				
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 65 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				cv$accumulatedProbabilities = (Math.log((obs[var62]?var49:(1.0 - var49))) + cv$accumulatedProbabilities);
-			}
-			
-			// Save the calculated index value into the array of index value probabilities
-			// 
-			// Get a local reference to the scratch space.
-			// 
-			// Record the reached probability density.
-			// 
-			// Initialize a counter to track the reached distributions.
-			cv$var45$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
-		}
-		
-		// Write out the new value of the sample.
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "1".
-		y = 1;
-		
-		// Variable declaration of cv$accumulatedProbabilities moved.
-		// Declaration comment was:
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "1".
-		// 
-		// A check to ensure rounding of floating point values can never result in a negative
-		// value.
-		// 
-		// Recorded the probability of reaching sample task 50 with the current configuration.
-		// 
-		// Set an accumulator to record the consumer distributions not seen. Initially set
-		// to 1 as seen values will be deducted from this value.
-		// 
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "1".
-		// 
-		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-		// Declaration comment was:
-		// Processing sample task 50 of consumer random variable null.
-		// 
-		// Set an accumulator to sum the probabilities for each possible configuration of
-		// inputs.
-		// 
-		// Constructing a random variable input for use later.
-		// 
-		// Value of the variable at this index
-		// 
-		// Substituted "cv$valuePos" with its value "1".
-		double cv$accumulatedProbabilities = (DistributionSampling.logProbabilityDirichlet(d, a[1], 3) + Math.log(b[1]));
-		
-		// Processing sample task 65 of consumer random variable null.
-		for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
-			// Constructing a random variable input for use later.
-			// 
-			// Processing random variable 50.
-			// 
-			// Value of the variable at this index
-			// 
-			// Substituted "cv$valuePos" with its value "1".
-			double var49 = d[1];
-			
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 65 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			cv$accumulatedProbabilities = (Math.log((obs[var62]?var49:(1.0 - var49))) + cv$accumulatedProbabilities);
-		}
-		
-		// Save the calculated index value into the array of index value probabilities
-		// 
-		// Get a local reference to the scratch space.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		cv$var45$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
-		
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// The sum of all the probabilities in log space
-		double cv$logSum;
-		
-		// Sum all the values
-		// 
-		// Initialize the max to the first element.
-		// 
-		// Get a local reference to the scratch space.
-		double cv$lseMax = cv$var45$stateProbabilityGlobal[0];
-		
-		// Unrolled loop
-		// 
-		// Get a local reference to the scratch space.
-		double cv$lseElementValue = cv$var45$stateProbabilityGlobal[1];
-		if((cv$lseMax < cv$lseElementValue))
-			cv$lseMax = cv$lseElementValue;
-		
-		// If the maximum value is -infinity return -infinity.
-		if((cv$lseMax == Double.NEGATIVE_INFINITY))
-			cv$logSum = Double.NEGATIVE_INFINITY;
-		
-		// Sum the values in the array.
-		else
-			// Increment the value of the target, moving the value back into log space.
-			// 
-			// The sum of all the probabilities in log space
-			// 
-			// Get a local reference to the scratch space.
-			// 
-			// Get a local reference to the scratch space.
-			// 
-			// Initialize the sum of the array elements
-			cv$logSum = (Math.log((Math.exp((cv$var45$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var45$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
-		
-		// If all the sum is zero, just share the probability evenly.
-		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
-			// Unrolled loop
-			// Get a local reference to the scratch space.
-			cv$var45$stateProbabilityGlobal[0] = 0.5;
-			
-			// Get a local reference to the scratch space.
-			cv$var45$stateProbabilityGlobal[1] = 0.5;
-		} else {
-			// Unrolled loop
-			// Get a local reference to the scratch space.
-			cv$var45$stateProbabilityGlobal[0] = Math.exp((cv$var45$stateProbabilityGlobal[0] - cv$logSum));
-			
-			// Get a local reference to the scratch space.
-			cv$var45$stateProbabilityGlobal[1] = Math.exp((cv$var45$stateProbabilityGlobal[1] - cv$logSum));
-		}
-		
-		// Set array values that are not computed for the input to negative infinity.
-		// 
-		// Get a local reference to the scratch space.
-		for(int cv$indexName = 2; cv$indexName < cv$var45$stateProbabilityGlobal.length; cv$indexName += 1)
-			// Get a local reference to the scratch space.
-			cv$var45$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
-		
-		// Write out the new value of the sample.
-		// 
-		// cv$numStates's comment
-		// variable marginalization
-		y = DistributionSampling.sampleCategorical(RNG$, cv$var45$stateProbabilityGlobal, 2);
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 50 drawn from Dirichlet 47. Inference was performed using Metropolis-Hastings.
-	private final void sample50() {
-		// This value is not used before it is set again, so removing the value declaration.
-		// 
-		// Calculate the probability of the random variable generating the original sampled
-		// value.
-		double cv$originalProbability;
-		
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$48_12 = -1;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 == y))
-			lengthCV$a$48_12 = 2;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == y))
-			lengthCV$a$48_12 = 3;
-		
-		// Pick a value in the array to adjust.
-		int cv$indexToChange = (int)((double)lengthCV$a$48_12 * DistributionSampling.sampleUniform(RNG$));
-		
-		// Pick how much the value should be moved by. Initially this value is proposed as
-		// a ratio of the current magnitude of the value, we will check to make sure the adjustment
-		// will not make this value too large or other values too small and adjust if required
-		// before it is applied.
-		double cv$movementRatio = ((DistributionSampling.sampleBeta(RNG$, 5, 5) * 1.9999) - 1);
-		
-		// Calculate how much we are going to move the array index cv$indexToChange the by.
-		// 
-		// Allocate space for the proposed change to be stored as an absolute value
-		double cv$proposedDifference;
-		
-		// Test if we are increasing or decreasing the value at the index. For each case calculate
-		// the maximum valid adjustment.
-		if((cv$movementRatio < 0))
-			// The maximum reduction of the array at the index without going below 0 is the value
-			// of the array at that index.
-			// 
-			// A reference local to the function for the sample variable.
-			cv$proposedDifference = d[cv$indexToChange];
-		else {
-			// Calculate the maximum magnitude of the proposed index change.
-			// Initially set the maximum to the amount that the value we are changing could increase
-			// without exceeding 1
-			// 
-			// A reference local to the function for the sample variable.
-			cv$proposedDifference = (1.0 - d[cv$indexToChange]);
-			
-			// For the array values up to the index we are going to change calculate the maximum
-			// move possible.
-			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1) {
-				// Calculate the maximum change value that the value at array index cv$loopIndex could
-				// support. Based on moving all other values by an equal amount.
-				// 
-				// A reference local to the function for the sample variable.
-				double cv$temp = (d[cv$loopIndex] * (lengthCV$a$48_12 - 1));
-				
-				// If the maximum move is less than the proposed move update the move size.
-				if((cv$temp < cv$proposedDifference))
-					cv$proposedDifference = cv$temp;
-			}
-			
-			// For the array values after the index we are going to change calculate the maximum
-			// move possible.
-			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$48_12; cv$loopIndex += 1) {
-				// Calculate the maximum change value that the value at array index cv$loopIndex could
-				// support. Based on moving all other values by an equal amount.
-				// 
-				// A reference local to the function for the sample variable.
-				double cv$temp = (d[cv$loopIndex] * (lengthCV$a$48_12 - 1));
-				
-				// If this is less than the proposed increase, change the proposed increase to this
-				// value.
-				if((cv$temp < cv$proposedDifference))
-					cv$proposedDifference = cv$temp;
-			}
-		}
-		
-		// Multiply the maximum adjustment by the adjustment ratio to get the actual adjustment
-		// we are going to make.
-		cv$proposedDifference = (cv$movementRatio * cv$proposedDifference);
-		
-		// Calculate how much each of the other indexes needs to be adjusted by in order to
-		// maintain that the sum of the indexes is 1.
-		double cv$rebalanceValue = (cv$proposedDifference / (lengthCV$a$48_12 - 1));
-		{
-			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$48_13 = -1;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == y))
-				lengthCV$a$48_13 = 2;
-			
-			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == y))
-				lengthCV$a$48_13 = 3;
-			
-			// An accumulator to allow the value for each distribution to be constructed before
-			// it is added to the index probabilities.
-			// 
-			// Constructing a random variable input for use later.
-			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_13);
-			
-			// Processing random variable 50.
-			// 
-			// Processing sample task 65 of consumer random variable null.
-			for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
-				// Constructing a random variable input for use later.
-				double var49 = d[y];
-				
-				// A check to ensure rounding of floating point values can never result in a negative
-				// value.
-				// 
-				// Recorded the probability of reaching sample task 65 with the current configuration.
-				// 
-				// Set an accumulator to record the consumer distributions not seen. Initially set
-				// to 1 as seen values will be deducted from this value.
-				// 
-				// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-				// Declaration comment was:
-				// Set an accumulator to sum the probabilities for each possible configuration of
-				// inputs.
-				cv$accumulatedProbabilities = (Math.log((obs[var62]?var49:(1.0 - var49))) + cv$accumulatedProbabilities);
-			}
-			
-			// Initialize an accumulator to take the product of all the distribution probabilities
-			// in log space.
-			// 
-			// Record the reached probability density.
-			// 
-			// Initialize a counter to track the reached distributions.
-			cv$originalProbability = cv$accumulatedProbabilities;
-		}
-		
-		// Update Sample and intermediate values
-		// 
-		// Update the sample value
-		// 
-		// Update all the indexes up to the index selected.
-		for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
-			// A reference local to the function for the sample variable.
-			d[cv$loopIndex] = (d[cv$loopIndex] - cv$rebalanceValue);
-		
-		// Update the selected index.
-		// 
-		// A reference local to the function for the sample variable.
-		d[cv$indexToChange] = (d[cv$indexToChange] + cv$proposedDifference);
-		
-		// Update all the indexes after the index we selected.
-		for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$48_12; cv$loopIndex += 1)
-			// A reference local to the function for the sample variable.
-			d[cv$loopIndex] = (d[cv$loopIndex] - cv$rebalanceValue);
-		
-		// Allocate a local variable to hold the length of the array.
-		int lengthCV$a$48_13 = -1;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 == y))
-			lengthCV$a$48_13 = 2;
-		
-		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == y))
-			lengthCV$a$48_13 = 3;
-		
-		// An accumulator to allow the value for each distribution to be constructed before
-		// it is added to the index probabilities.
-		// 
-		// Constructing a random variable input for use later.
-		double cv$accumulatedProbabilities = DistributionSampling.logProbabilityDirichlet(d, a[y], lengthCV$a$48_13);
-		
-		// Processing random variable 50.
-		// 
-		// Processing sample task 65 of consumer random variable null.
-		for(int var62 = 0; var62 < length$obs_measured; var62 += 1) {
-			// Constructing a random variable input for use later.
-			double var49 = d[y];
-			
-			// A check to ensure rounding of floating point values can never result in a negative
-			// value.
-			// 
-			// Recorded the probability of reaching sample task 65 with the current configuration.
-			// 
-			// Set an accumulator to record the consumer distributions not seen. Initially set
-			// to 1 as seen values will be deducted from this value.
-			// 
-			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
-			// Declaration comment was:
-			// Set an accumulator to sum the probabilities for each possible configuration of
-			// inputs.
-			cv$accumulatedProbabilities = (Math.log((obs[var62]?var49:(1.0 - var49))) + cv$accumulatedProbabilities);
-		}
-		
-		// Test if the probability of the sample is sufficient to keep the value. This needs
-		// to be less than or equal as otherwise if the proposed value is not possible and
-		// the random value is 0 an impossible value will be accepted.
-		// 
-		// Ratio of the probability of proposed and original sample values
-		// 
-		// Variable declaration of cv$proposedProbability moved.
-		// Declaration comment was:
-		// The probability of the random variable generating the new sample value.
-		// 
-		// Initialize an accumulator to take the product of all the distribution probabilities
-		// in log space.
-		// 
-		// Record the reached probability density.
-		// 
-		// Initialize a counter to track the reached distributions.
-		if(((cv$accumulatedProbabilities - cv$originalProbability) <= Math.log(DistributionSampling.sampleUniform(RNG$)))) {
-			// If it is not revert the sample value and intermediates to their original values.
-			// 
-			// Set the sample value
-			// 
-			// Calculate the new sample value
-			// 
-			// Update the sample value
-			// Update all the indexes up to the index selected.
-			for(int cv$loopIndex = 0; cv$loopIndex < cv$indexToChange; cv$loopIndex += 1)
-				// A reference local to the function for the sample variable.
-				d[cv$loopIndex] = (d[cv$loopIndex] + cv$rebalanceValue);
-			
-			// Update the selected index.
-			// 
-			// A reference local to the function for the sample variable.
-			d[cv$indexToChange] = (d[cv$indexToChange] - cv$proposedDifference);
-			
-			// Update all the indexes after the index we selected.
-			for(int cv$loopIndex = (cv$indexToChange + 1); cv$loopIndex < lengthCV$a$48_12; cv$loopIndex += 1)
-				// A reference local to the function for the sample variable.
-				d[cv$loopIndex] = (d[cv$loopIndex] + cv$rebalanceValue);
-		}
-	}
-
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -980,16 +1006,16 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedFlag$sample50) {
 			// Constructor for d
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$48_10 = -1;
+			int lengthCV$a$48_11 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
-				lengthCV$a$48_10 = 2;
+				lengthCV$a$48_11 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((1 == y))
-				lengthCV$a$48_10 = 3;
-			d = new double[lengthCV$a$48_10];
+				lengthCV$a$48_11 = 3;
+			d = new double[lengthCV$a$48_11];
 		}
 		
 		// Constructor for obs
@@ -1008,16 +1034,16 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample50) {
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$48_15 = -1;
+			int lengthCV$a$48_17 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
-				lengthCV$a$48_15 = 2;
+				lengthCV$a$48_17 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((1 == y))
-				lengthCV$a$48_15 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_15, d);
+				lengthCV$a$48_17 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_17, d);
 		}
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -1043,16 +1069,16 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample50) {
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$48_19 = -1;
+			int lengthCV$a$48_21 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
-				lengthCV$a$48_19 = 2;
+				lengthCV$a$48_21 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((1 == y))
-				lengthCV$a$48_19 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_19, d);
+				lengthCV$a$48_21 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_21, d);
 		}
 	}
 
@@ -1066,16 +1092,16 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample50) {
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$48_16 = -1;
+			int lengthCV$a$48_18 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
-				lengthCV$a$48_16 = 2;
+				lengthCV$a$48_18 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((1 == y))
-				lengthCV$a$48_16 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_16, d);
+				lengthCV$a$48_18 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_18, d);
 		}
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
@@ -1100,16 +1126,16 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample50) {
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$48_17 = -1;
+			int lengthCV$a$48_19 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
-				lengthCV$a$48_17 = 2;
+				lengthCV$a$48_19 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((1 == y))
-				lengthCV$a$48_17 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_17, d);
+				lengthCV$a$48_19 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_19, d);
 		}
 	}
 
@@ -1124,16 +1150,16 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample50) {
 			// Allocate a local variable to hold the length of the array.
-			int lengthCV$a$48_18 = -1;
+			int lengthCV$a$48_20 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((0 == y))
-				lengthCV$a$48_18 = 2;
+				lengthCV$a$48_20 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
 			if((1 == y))
-				lengthCV$a$48_18 = 3;
-			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_18, d);
+				lengthCV$a$48_20 = 3;
+			DistributionSampling.sampleDirichlet(RNG$, a[y], lengthCV$a$48_20, d);
 		}
 	}
 
@@ -1143,35 +1169,24 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		// Infer the samples in chronological order.
 		if(system$gibbsForward) {
 			if(!fixedFlag$sample47)
-				sample47();
+				inferSample47();
 			if(!fixedFlag$sample50)
-				sample50();
+				inferSample50();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
 			if(!fixedFlag$sample50)
-				sample50();
+				inferSample50();
 			if(!fixedFlag$sample47)
-				sample47();
+				inferSample47();
 		}
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
-	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {
-		double[] var5 = a[0];
-		var5[0] = 0.4;
-		var5[1] = 0.6;
-		double[] var18 = a[1];
-		var18[0] = 0.2;
-		var18[1] = 0.3;
-		var18[2] = 0.5;
-		b[0] = 0.35;
-		b[1] = 0.65;
+		if(!constrainedFlag$sample47)
+			drawValueSample47();
+		if(!constrainedFlag$sample50)
+			drawValueSample50();
 	}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
@@ -1191,6 +1206,21 @@ final class RaggedArray6$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 		logProbability$obs = 0.0;
 		if(!fixedProbFlag$sample65)
 			logProbability$var63 = Double.NaN;
+	}
+
+	// Method for initializing the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {
+		double[] var5 = a[0];
+		var5[0] = 0.4;
+		var5[1] = 0.6;
+		double[] var18 = a[1];
+		var18[0] = 0.2;
+		var18[1] = 0.3;
+		var18[2] = 0.5;
+		b[0] = 0.35;
+		b[1] = 0.65;
 	}
 
 	// Construct the evidence probabilities.

@@ -25,7 +25,7 @@ public final class LDATest extends Model {
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$phi(value);
+            system$c.set$phi(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -40,7 +40,7 @@ public final class LDATest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample42(fixed);
+                system$c.set$fixedFlag$sample42(fixed, allocated);
             }
         }
 
@@ -64,7 +64,7 @@ public final class LDATest extends Model {
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$theta(value);
+            system$c.set$theta(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -79,7 +79,7 @@ public final class LDATest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample58(fixed);
+                system$c.set$fixedFlag$sample58(fixed, allocated);
             }
         }
 
@@ -139,7 +139,7 @@ public final class LDATest extends Model {
 
         @Override
         protected void setValueInternal(int[][] value) {
-            system$c.set$z(value);
+            system$c.set$z(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -173,7 +173,7 @@ public final class LDATest extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noTopics(value); }
+        protected void setValueInternal(int value) { system$c.set$noTopics(value, allocated); }
     };
 
     /**
@@ -190,7 +190,7 @@ public final class LDATest extends Model {
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$vocabSize(value); }
+        protected void setValueInternal(int value) { system$c.set$vocabSize(value, allocated); }
     };
 
     /**
@@ -210,13 +210,13 @@ public final class LDATest extends Model {
 
         @Override
         public void setValueInternal(int[][] value) {
-            system$c.set$documents(value);
-            system$c.set$length$documents(getDims(value));
+            system$c.set$documents(value, allocated);
+            system$c.set$length$documents(getDims(value), allocated);
         }
 
         @Override
         public void setShapeInternal(int[] shape) {
-            system$c.set$length$documents(shape);
+            system$c.set$length$documents(shape, allocated);
         }
 
         @Override
@@ -313,29 +313,29 @@ public final class LDATest extends Model {
     private void transferData(LDATest$CoreInterface oldCore, LDATest$CoreInterface newCore) {
         //Model inputs
         if(noTopics.isSet())
-            newCore.set$noTopics(oldCore.get$noTopics());
+            newCore.set$noTopics(oldCore.get$noTopics(), false);
         if(vocabSize.isSet())
-            newCore.set$vocabSize(oldCore.get$vocabSize());
+            newCore.set$vocabSize(oldCore.get$vocabSize(), false);
 
         //Observed arrays
         if(documents.isSet()) {
-            newCore.set$documents(oldCore.get$documents());
-            newCore.set$length$documents(oldCore.get$length$documents());
+            newCore.set$documents(oldCore.get$documents(), false);
+            newCore.set$length$documents(oldCore.get$length$documents(), false);
         }
         else if(documents.shapeSet())
-            newCore.set$length$documents(oldCore.get$length$documents());
+            newCore.set$length$documents(oldCore.get$length$documents(), false);
 
         //ComputedVariables
         if($phi.isSet())
-            newCore.set$phi(oldCore.get$phi());
+            newCore.set$phi(oldCore.get$phi(), false);
         if($theta.isSet())
-            newCore.set$theta(oldCore.get$theta());
+            newCore.set$theta(oldCore.get$theta(), false);
         if($z.isSet())
-            newCore.set$z(oldCore.get$z());
+            newCore.set$z(oldCore.get$z(), false);
 
         //Set fixed flags
-        newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42());
-        newCore.set$fixedFlag$sample58(oldCore.get$fixedFlag$sample58());
+        newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42(), false);
+        newCore.set$fixedFlag$sample58(oldCore.get$fixedFlag$sample58(), false);
     }
 
     /**

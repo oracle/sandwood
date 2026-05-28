@@ -1321,9 +1321,9 @@ public class VariableTrackingVisitor implements TreeVisitor {
     }
 
     /**
-     * Method to visit an initialisation tree, adding this value to the scope and marking the value as written too.
+     * Method to visit an initialization tree, adding this value to the scope and marking the value as written too.
      * 
-     * @param tree The initialisation tree
+     * @param tree The initialization tree
      */
     private void getVariableTracking(TransInitialize<?> tree) {
 

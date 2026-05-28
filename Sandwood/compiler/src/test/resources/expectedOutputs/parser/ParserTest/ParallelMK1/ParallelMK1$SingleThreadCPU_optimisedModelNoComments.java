@@ -4,6 +4,7 @@ import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
 final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements ParallelMK1$CoreInterface {
+	private boolean[] constrainedFlag$sample20;
 	private boolean fixedFlag$sample20 = false;
 	private boolean fixedProbFlag$sample20 = false;
 	private boolean fixedProbFlag$sample24 = false;
@@ -32,8 +33,12 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$fixedFlag$sample20(boolean cv$value) {
+	public final void set$fixedFlag$sample20(boolean cv$value, boolean allocated$) {
 		fixedFlag$sample20 = cv$value;
+		if(allocated$) {
+			for(int index$constrainedFlag$sample20$1 = 0; index$constrainedFlag$sample20$1 < constrainedFlag$sample20.length; index$constrainedFlag$sample20$1 += 1)
+				constrainedFlag$sample20[index$constrainedFlag$sample20$1] = cv$value;
+		}
 		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
 		fixedProbFlag$sample24 = (cv$value && fixedProbFlag$sample24);
 	}
@@ -49,7 +54,7 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$indirection(double[] cv$value) {
+	public final void set$indirection(double[] cv$value, boolean allocated$) {
 		indirection = cv$value;
 	}
 
@@ -59,7 +64,7 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$length$observed(int cv$value) {
+	public final void set$length$observed(int cv$value, boolean allocated$) {
 		length$observed = cv$value;
 	}
 
@@ -89,7 +94,7 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$observed(double[] cv$value) {
+	public final void set$observed(double[] cv$value, boolean allocated$) {
 		observed = cv$value;
 	}
 
@@ -99,8 +104,61 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 	}
 
 	@Override
-	public final void set$sample(double[] cv$value) {
+	public final void set$sample(double[] cv$value, boolean allocated$) {
 		sample = cv$value;
+	}
+
+	private final void drawValueSample20(int i) {
+		sample[i] = DistributionSampling.sampleUniform(RNG$);
+		indirection[i] = sample[i];
+	}
+
+	private final void inferSample20(int i) {
+		constrainedFlag$sample20[i] = false;
+		double cv$originalValue = sample[i];
+		double cv$originalProbability;
+		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
+		if((cv$var < 0.010000000000000002))
+			cv$var = 0.010000000000000002;
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		{
+			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			guard$sample20gaussian23$global[i] = false;
+			if(!guard$sample20gaussian23$global[i]) {
+				guard$sample20gaussian23$global[i] = true;
+				constrainedFlag$sample20[i] = true;
+				double var22 = indirection[i];
+				cv$accumulatedProbabilities = (((0.0 < var22)?(DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(var22))) - (Math.log(var22) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			if(!guard$sample20gaussian23$global[i]) {
+				guard$sample20gaussian23$global[i] = true;
+				constrainedFlag$sample20[i] = true;
+				cv$accumulatedProbabilities = (((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			cv$originalProbability = cv$accumulatedProbabilities;
+		}
+		if(constrainedFlag$sample20[i]) {
+			sample[i] = cv$proposedValue;
+			indirection[i] = cv$proposedValue;
+			double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
+			guard$sample20gaussian23$global[i] = false;
+			if(!guard$sample20gaussian23$global[i]) {
+				guard$sample20gaussian23$global[i] = true;
+				constrainedFlag$sample20[i] = true;
+				double var22 = indirection[i];
+				cv$accumulatedProbabilities = (((0.0 < var22)?(DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(var22))) - (Math.log(var22) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			if(!guard$sample20gaussian23$global[i]) {
+				guard$sample20gaussian23$global[i] = true;
+				constrainedFlag$sample20[i] = true;
+				cv$accumulatedProbabilities = (((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			}
+			double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
+				sample[i] = cv$originalValue;
+				indirection[i] = sample[i];
+			}
+		}
 	}
 
 	private final void logProbabilityValue$sample20() {
@@ -135,7 +193,7 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			double cv$accumulator = 0.0;
 			for(int i = 0; i < length$observed; i += 1) {
 				double var22 = indirection[i];
-				double cv$distributionAccumulator = (DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var22))) - (Math.log(var22) * 0.5));
+				double cv$distributionAccumulator = ((0.0 < var22)?(DistributionSampling.logProbabilityGaussian(((generated[i] - sample[i]) / Math.sqrt(var22))) - (Math.log(var22) * 0.5)):Double.NEGATIVE_INFINITY);
 				cv$accumulator = (cv$accumulator + cv$distributionAccumulator);
 				logProbability$sample24[i] = cv$distributionAccumulator;
 			}
@@ -153,45 +211,6 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		}
 	}
 
-	private final void sample20(int i) {
-		double cv$originalValue = sample[i];
-		double cv$originalProbability;
-		double cv$var = ((cv$originalValue * cv$originalValue) * 0.010000000000000002);
-		if((cv$var < 0.010000000000000002))
-			cv$var = 0.010000000000000002;
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
-		{
-			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-			guard$sample20gaussian23$global[i] = false;
-			if(!guard$sample20gaussian23$global[i]) {
-				guard$sample20gaussian23$global[i] = true;
-				double var22 = indirection[i];
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(var22))) + cv$accumulatedProbabilities) - (Math.log(var22) * 0.5));
-			}
-			if(!guard$sample20gaussian23$global[i])
-				cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$originalValue) / Math.sqrt(cv$originalValue))) + cv$accumulatedProbabilities) - (Math.log(cv$originalValue) * 0.5));
-			cv$originalProbability = cv$accumulatedProbabilities;
-		}
-		sample[i] = cv$proposedValue;
-		indirection[i] = cv$proposedValue;
-		double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < 1.0))?0.0:Double.NEGATIVE_INFINITY);
-		guard$sample20gaussian23$global[i] = false;
-		if(!guard$sample20gaussian23$global[i]) {
-			guard$sample20gaussian23$global[i] = true;
-			double var22 = indirection[i];
-			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(var22))) + cv$accumulatedProbabilities) - (Math.log(var22) * 0.5));
-		}
-		if(!guard$sample20gaussian23$global[i]) {
-			guard$sample20gaussian23$global[i] = true;
-			cv$accumulatedProbabilities = ((DistributionSampling.logProbabilityGaussian(((generated[i] - cv$proposedValue) / Math.sqrt(cv$proposedValue))) + cv$accumulatedProbabilities) - (Math.log(cv$proposedValue) * 0.5));
-		}
-		double cv$ratio = (cv$accumulatedProbabilities - cv$originalProbability);
-		if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio))) {
-			sample[i] = cv$originalValue;
-			indirection[i] = sample[i];
-		}
-	}
-
 	@Override
 	public final void allocateScratch() {
 		guard$sample20gaussian23$global = new boolean[length$observed];
@@ -203,6 +222,7 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		indirection = new double[length$observed];
 		if(!fixedFlag$sample20)
 			sample = new double[length$observed];
+		constrainedFlag$sample20 = new boolean[length$observed];
 		logProbability$sample20 = new double[length$observed];
 		logProbability$sample24 = new double[length$observed];
 		allocateScratch();
@@ -262,17 +282,18 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		if(!fixedFlag$sample20) {
 			if(system$gibbsForward) {
 				for(int i = 0; i < length$observed; i += 1)
-					sample20(i);
+					inferSample20(i);
 			} else {
 				for(int i = (length$observed - 1); i >= 0; i -= 1)
-					sample20(i);
+					inferSample20(i);
 			}
 		}
 		system$gibbsForward = !system$gibbsForward;
+		for(int i = 0; i < length$observed; i += 1) {
+			if(!constrainedFlag$sample20[i])
+				drawValueSample20(i);
+		}
 	}
-
-	@Override
-	public final void initializeConstants() {}
 
 	private final void initializeLogProbabilityFields() {
 		logProbability$$model = 0.0;
@@ -288,6 +309,12 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 			for(int i = 0; i < length$observed; i += 1)
 				logProbability$sample24[i] = Double.NaN;
 		}
+	}
+
+	@Override
+	public final void initializeModel() {
+		for(int index$constrainedFlag$sample20$1 = 0; index$constrainedFlag$sample20$1 < constrainedFlag$sample20.length; index$constrainedFlag$sample20$1 += 1)
+			constrainedFlag$sample20[index$constrainedFlag$sample20$1] = true;
 	}
 
 	@Override

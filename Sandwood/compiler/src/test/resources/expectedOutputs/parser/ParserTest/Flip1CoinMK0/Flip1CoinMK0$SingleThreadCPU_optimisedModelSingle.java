@@ -8,6 +8,7 @@ final class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	
 	// Declare the variables for the model.
 	private double bias;
+	private boolean constrainedFlag$sample5 = true;
 	private boolean fixedFlag$sample5 = false;
 	private boolean fixedProbFlag$sample5 = false;
 	private boolean fixedProbFlag$sample7 = false;
@@ -32,7 +33,7 @@ final class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for bias.
 	@Override
-	public final void set$bias(double cv$value) {
+	public final void set$bias(double cv$value, boolean allocated$) {
 		// Set flags for all the side effects of bias including if probabilities need to be
 		// updated.
 		bias = cv$value;
@@ -52,10 +53,13 @@ final class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for fixedFlag$sample5.
 	@Override
-	public final void set$fixedFlag$sample5(boolean cv$value) {
+	public final void set$fixedFlag$sample5(boolean cv$value, boolean allocated$) {
 		// Set flags for all the side effects of fixedFlag$sample5 including if probabilities
 		// need to be updated.
 		fixedFlag$sample5 = cv$value;
+		
+		// Substituted "fixedFlag$sample5" with its value "cv$value".
+		constrainedFlag$sample5 = (cv$value || constrainedFlag$sample5);
 		
 		// Should the probability of sample 5 be set to fixed. This will only every change
 		// the flag to false.
@@ -84,7 +88,7 @@ final class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.m
 
 	// Setter for flipMeasured.
 	@Override
-	public final void set$flipMeasured(boolean cv$value) {
+	public final void set$flipMeasured(boolean cv$value, boolean allocated$) {
 		flipMeasured = cv$value;
 	}
 
@@ -116,6 +120,38 @@ final class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	@Override
 	public final double get$logProbability$flip() {
 		return logProbability$flip;
+	}
+
+	// Pick a value from the distribution for the unconditioned variable from sample5
+	private final void drawValueSample5() {
+		bias = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+	}
+
+	// Method to perform the inference steps to calculate new values for the samples generated
+	// by sample task 5 drawn from Beta 4. Inference was performed using a Beta to Bernoulli/Binomial
+	// conjugate prior.
+	private final void inferSample5() {
+		constrainedFlag$sample5 = false;
+		
+		// Local variable to record the number of true samples.
+		int cv$sum = 0;
+		
+		// Mark that the sample has observed constrained data.
+		constrainedFlag$sample5 = true;
+		
+		// If the sample value was positive increase the count
+		if(flip)
+			// Local variable to record the number of true samples.
+			cv$sum = 1;
+		
+		// Write out the new value of the sample.
+		// 
+		// Include the value sampled by task 7 from random variable bernoulli.
+		// 
+		// Increment the number of samples.
+		// 
+		// Local variable to record the number of samples.
+		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, 1);
 	}
 
 	// Calculate the probability of the samples represented by sample5 using sampled values.
@@ -235,7 +271,7 @@ final class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = Math.log((flip?bias:(1.0 - bias)));
+			double cv$distributionAccumulator = (((0.0 <= bias) && (bias <= 1.0))?Math.log((flip?bias:(1.0 - bias))):Double.NEGATIVE_INFINITY);
 			
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
@@ -293,32 +329,6 @@ final class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			// Variable declaration of cv$accumulator moved.
 			logProbability$$evidence = (logProbability$$evidence + logProbability$flip);
 		}
-	}
-
-	// Method to perform the inference steps to calculate new values for the samples generated
-	// by sample task 5 drawn from Beta 4. Inference was performed using a Beta to Bernoulli/Binomial
-	// conjugate prior.
-	private final void sample5() {
-		// Local variable to record the number of true samples.
-		int cv$sum = 0;
-		
-		// If the sample value was positive increase the count
-		if(flip)
-			// Local variable to record the number of true samples.
-			cv$sum = 1;
-		
-		// Write out the new value of the sample.
-		// 
-		// Processing random variable 6.
-		// 
-		// Processing sample task 7 of consumer random variable bernoulli.
-		// 
-		// Include the value sampled by task 7 from random variable bernoulli.
-		// 
-		// Increment the number of samples.
-		// 
-		// Local variable to record the number of samples.
-		bias = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, 1);
 	}
 
 	// Method to allocate space temporary variables used by the inference methods. Allocating
@@ -379,16 +389,13 @@ final class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.m
 	public final void gibbsRound() {
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		if(!fixedFlag$sample5)
-			sample5();
+			inferSample5();
 		
 		// Reverse the direction of execution for the next iteration
 		system$gibbsForward = !system$gibbsForward;
+		if(!constrainedFlag$sample5)
+			drawValueSample5();
 	}
-
-	// Method for initialising the model into a valid state before commencing inference
-	// etc.
-	@Override
-	public final void initializeConstants() {}
 
 	// A method to initialize all the probabilities in the model to 0/Log(1) ready for
 	// the current probabilities to be calculated by calculating the probability of each
@@ -406,6 +413,11 @@ final class Flip1CoinMK0$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		if(!fixedProbFlag$sample7)
 			logProbability$flip = Double.NaN;
 	}
+
+	// Method for initializing the model into a valid state before commencing inference
+	// etc.
+	@Override
+	public final void initializeModel() {}
 
 	// Construct the evidence probabilities.
 	@Override
