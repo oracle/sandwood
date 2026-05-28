@@ -96,7 +96,7 @@ final class DistributionTest4$SingleThreadCPU extends org.sandwood.runtime.inter
 		fixedFlag$sample27 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample27$1 = 0; index$constrainedFlag$sample27$1 < constrainedFlag$sample27.length; index$constrainedFlag$sample27$1 += 1)
-				constrainedFlag$sample27[index$constrainedFlag$sample27$1] = true;
+				constrainedFlag$sample27[index$constrainedFlag$sample27$1] = fixedFlag$sample27;
 		}
 		fixedProbFlag$sample27 = (fixedFlag$sample27 && fixedProbFlag$sample27);
 		fixedProbFlag$sample53 = (fixedFlag$sample27 && fixedProbFlag$sample53);

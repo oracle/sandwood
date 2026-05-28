@@ -1160,7 +1160,7 @@ final class AnonymousSample$SingleThreadCPU extends org.sandwood.runtime.interna
 		}
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

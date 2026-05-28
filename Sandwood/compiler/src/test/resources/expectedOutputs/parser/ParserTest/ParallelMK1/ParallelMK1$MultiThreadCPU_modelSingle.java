@@ -46,7 +46,7 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample20$1 = 0; index$constrainedFlag$sample20$1 < constrainedFlag$sample20.length; index$constrainedFlag$sample20$1 += 1)
-				constrainedFlag$sample20[index$constrainedFlag$sample20$1] = true;
+				constrainedFlag$sample20[index$constrainedFlag$sample20$1] = fixedFlag$sample20;
 		}
 		
 		// Should the probability of sample 20 be set to fixed. This will only every change
@@ -910,7 +910,7 @@ final class ParallelMK1$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			logProbability$var24 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

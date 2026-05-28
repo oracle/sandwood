@@ -82,7 +82,8 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample30$1 = 0; index$constrainedFlag$sample30$1 < constrainedFlag$sample30.length; index$constrainedFlag$sample30$1 += 1)
-				constrainedFlag$sample30[index$constrainedFlag$sample30$1] = true;
+				// Substituted "fixedFlag$sample30" with its value "cv$value".
+				constrainedFlag$sample30[index$constrainedFlag$sample30$1] = cv$value;
 		}
 		
 		// Should the probability of sample 30 be set to fixed. This will only every change
@@ -115,7 +116,8 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
-				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+				// Substituted "fixedFlag$sample47" with its value "cv$value".
+				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = cv$value;
 		}
 		
 		// Should the probability of sample 47 be set to fixed. This will only every change
@@ -148,7 +150,8 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample62$1 = 0; index$constrainedFlag$sample62$1 < constrainedFlag$sample62.length; index$constrainedFlag$sample62$1 += 1)
-				constrainedFlag$sample62[index$constrainedFlag$sample62$1] = true;
+				// Substituted "fixedFlag$sample62" with its value "cv$value".
+				constrainedFlag$sample62[index$constrainedFlag$sample62$1] = cv$value;
 		}
 		
 		// Should the probability of sample 62 be set to fixed. This will only every change
@@ -1215,7 +1218,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

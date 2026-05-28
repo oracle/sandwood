@@ -83,7 +83,8 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
-				constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
+				// Substituted "fixedFlag$sample42" with its value "cv$value".
+				constrainedFlag$sample42[index$constrainedFlag$sample42$1] = cv$value;
 		}
 		
 		// Should the probability of sample 42 be set to fixed. This will only every change
@@ -110,7 +111,8 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
-				constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
+				// Substituted "fixedFlag$sample58" with its value "cv$value".
+				constrainedFlag$sample58[index$constrainedFlag$sample58$1] = cv$value;
 		}
 		
 		// Should the probability of sample 58 be set to fixed. This will only every change
@@ -999,7 +1001,7 @@ final class LDATest$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

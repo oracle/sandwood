@@ -97,7 +97,7 @@ public abstract class ModelTestSkeleton {
 
     }
 
-    protected boolean forwardInitialisationRequired = true;
+    protected boolean forwardInitializationRequired = true;
 
     protected abstract CompilationDesc buildClass(CompilationOptions opts);
 
@@ -488,7 +488,7 @@ public abstract class ModelTestSkeleton {
     private void forwardTestModel(Class<?> cls, Model m, ExecutionTarget target) throws IllegalAccessException,
             NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IOException {
         initializeRandom(m);
-        assertFalse(forwardInitialisationRequired && m.readyExecute());
+        assertFalse(forwardInitializationRequired && m.readyExecute());
         initializeClassForward(cls, m);
         assertTrue(m.readyExecute());
 

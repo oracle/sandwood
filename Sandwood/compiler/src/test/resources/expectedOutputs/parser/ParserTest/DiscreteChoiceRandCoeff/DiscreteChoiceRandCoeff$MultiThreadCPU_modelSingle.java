@@ -139,7 +139,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample21$1 = 0; index$constrainedFlag$sample21$1 < constrainedFlag$sample21.length; index$constrainedFlag$sample21$1 += 1)
-				constrainedFlag$sample21[index$constrainedFlag$sample21$1] = true;
+				constrainedFlag$sample21[index$constrainedFlag$sample21$1] = fixedFlag$sample21;
 		}
 		
 		// Should the probability of sample 21 be set to fixed. This will only every change
@@ -214,7 +214,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
-				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = fixedFlag$sample47;
 		}
 		
 		// Should the probability of sample 47 be set to fixed. This will only every change
@@ -3440,7 +3440,7 @@ final class DiscreteChoiceRandCoeff$MultiThreadCPU extends org.sandwood.runtime.
 			logProbability$var102 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

@@ -197,7 +197,8 @@ final class NoisyOr$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample233$1 = 0; index$constrainedFlag$sample233$1 < constrainedFlag$sample233.length; index$constrainedFlag$sample233$1 += 1)
-				constrainedFlag$sample233[index$constrainedFlag$sample233$1] = true;
+				// Substituted "fixedFlag$sample233" with its value "cv$value".
+				constrainedFlag$sample233[index$constrainedFlag$sample233$1] = cv$value;
 		}
 		
 		// Should the probability of sample 233 be set to fixed. This will only every change
@@ -230,7 +231,8 @@ final class NoisyOr$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample248$1 = 0; index$constrainedFlag$sample248$1 < constrainedFlag$sample248.length; index$constrainedFlag$sample248$1 += 1)
-				constrainedFlag$sample248[index$constrainedFlag$sample248$1] = true;
+				// Substituted "fixedFlag$sample248" with its value "cv$value".
+				constrainedFlag$sample248[index$constrainedFlag$sample248$1] = cv$value;
 		}
 		
 		// Should the probability of sample 248 be set to fixed. This will only every change
@@ -263,7 +265,8 @@ final class NoisyOr$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample263$1 = 0; index$constrainedFlag$sample263$1 < constrainedFlag$sample263.length; index$constrainedFlag$sample263$1 += 1)
-				constrainedFlag$sample263[index$constrainedFlag$sample263$1] = true;
+				// Substituted "fixedFlag$sample263" with its value "cv$value".
+				constrainedFlag$sample263[index$constrainedFlag$sample263$1] = cv$value;
 		}
 		
 		// Should the probability of sample 263 be set to fixed. This will only every change
@@ -296,7 +299,8 @@ final class NoisyOr$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample278$1 = 0; index$constrainedFlag$sample278$1 < constrainedFlag$sample278.length; index$constrainedFlag$sample278$1 += 1)
-				constrainedFlag$sample278[index$constrainedFlag$sample278$1] = true;
+				// Substituted "fixedFlag$sample278" with its value "cv$value".
+				constrainedFlag$sample278[index$constrainedFlag$sample278$1] = cv$value;
 		}
 		
 		// Should the probability of sample 278 be set to fixed. This will only every change
@@ -329,7 +333,8 @@ final class NoisyOr$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample293$1 = 0; index$constrainedFlag$sample293$1 < constrainedFlag$sample293.length; index$constrainedFlag$sample293$1 += 1)
-				constrainedFlag$sample293[index$constrainedFlag$sample293$1] = true;
+				// Substituted "fixedFlag$sample293" with its value "cv$value".
+				constrainedFlag$sample293[index$constrainedFlag$sample293$1] = cv$value;
 		}
 		
 		// Should the probability of sample 293 be set to fixed. This will only every change
@@ -391,7 +396,8 @@ final class NoisyOr$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample308$1 = 0; index$constrainedFlag$sample308$1 < constrainedFlag$sample308.length; index$constrainedFlag$sample308$1 += 1)
-				constrainedFlag$sample308[index$constrainedFlag$sample308$1] = true;
+				// Substituted "fixedFlag$sample308" with its value "cv$value".
+				constrainedFlag$sample308[index$constrainedFlag$sample308$1] = cv$value;
 		}
 		
 		// Should the probability of sample 308 be set to fixed. This will only every change
@@ -7036,7 +7042,7 @@ final class NoisyOr$SingleThreadCPU extends org.sandwood.runtime.internal.model.
 		}
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

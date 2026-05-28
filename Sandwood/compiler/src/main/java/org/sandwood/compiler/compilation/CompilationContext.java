@@ -609,7 +609,7 @@ public class CompilationContext {
      */
     private final Stack<Map<DistributionSampleTask<?, ?>, List<DistSampleDesc<?>>>> exploredDistSamples = new Stack<>();
 
-    private final List<IRTreeVoid> arrayInitialisations = new ArrayList<>();
+    private final List<IRTreeVoid> arrayInitializations = new ArrayList<>();
 
     public CompilationContext(CompilationOptions options, Traces traces, ExecutionType target) {
         this.traces = traces;
@@ -814,7 +814,7 @@ public class CompilationContext {
         return classFields;
     }
 
-    // Calls initialisation tracking.
+    // Calls initialization tracking.
     public <A extends Variable<A>> Variable<A> getInitializedVariable(Variable<A> v) {
         return scopeState.getInitializedVariable(v);
     }
@@ -1109,10 +1109,10 @@ public class CompilationContext {
     }
 
     public void addArrayInitilisation(IRTreeVoid t) {
-        arrayInitialisations.add(t);
+        arrayInitializations.add(t);
     }
 
     public List<IRTreeVoid> getArrayInitilisations() {
-        return arrayInitialisations;
+        return arrayInitializations;
     }
 }

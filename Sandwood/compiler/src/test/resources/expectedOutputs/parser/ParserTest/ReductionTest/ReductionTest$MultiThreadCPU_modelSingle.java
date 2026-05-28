@@ -83,7 +83,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample30$1 = 0; index$constrainedFlag$sample30$1 < constrainedFlag$sample30.length; index$constrainedFlag$sample30$1 += 1)
-				constrainedFlag$sample30[index$constrainedFlag$sample30$1] = true;
+				constrainedFlag$sample30[index$constrainedFlag$sample30$1] = fixedFlag$sample30;
 		}
 		
 		// Should the probability of sample 30 be set to fixed. This will only every change
@@ -112,7 +112,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
-				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = fixedFlag$sample47;
 		}
 		
 		// Should the probability of sample 47 be set to fixed. This will only every change
@@ -141,7 +141,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample62$1 = 0; index$constrainedFlag$sample62$1 < constrainedFlag$sample62.length; index$constrainedFlag$sample62$1 += 1)
-				constrainedFlag$sample62[index$constrainedFlag$sample62$1] = true;
+				constrainedFlag$sample62[index$constrainedFlag$sample62$1] = fixedFlag$sample62;
 		}
 		
 		// Should the probability of sample 62 be set to fixed. This will only every change
@@ -1691,7 +1691,7 @@ final class ReductionTest$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$var85 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

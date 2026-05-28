@@ -92,7 +92,7 @@ final class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
-				constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
+				constrainedFlag$sample28[index$constrainedFlag$sample28$1] = fixedFlag$sample28;
 		}
 		
 		// Should the probability of sample 28 be set to fixed. This will only every change
@@ -144,7 +144,7 @@ final class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
-				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = fixedFlag$sample47;
 		}
 		
 		// Should the probability of sample 47 be set to fixed. This will only every change
@@ -200,7 +200,7 @@ final class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample71$1 = 0; index$constrainedFlag$sample71$1 < constrainedFlag$sample71.length; index$constrainedFlag$sample71$1 += 1)
-				constrainedFlag$sample71[index$constrainedFlag$sample71$1] = true;
+				constrainedFlag$sample71[index$constrainedFlag$sample71$1] = fixedFlag$sample71;
 		}
 		
 		// Should the probability of sample 71 be set to fixed. This will only every change
@@ -2137,7 +2137,7 @@ final class HMM_Paper$SingleThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

@@ -109,7 +109,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 		fixedFlag$sample21 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample21$1 = 0; index$constrainedFlag$sample21$1 < constrainedFlag$sample21.length; index$constrainedFlag$sample21$1 += 1)
-				constrainedFlag$sample21[index$constrainedFlag$sample21$1] = true;
+				constrainedFlag$sample21[index$constrainedFlag$sample21$1] = cv$value;
 		}
 		fixedProbFlag$sample21 = (cv$value && fixedProbFlag$sample21);
 		fixedProbFlag$sample103 = (cv$value && fixedProbFlag$sample103);
@@ -151,7 +151,7 @@ final class DiscreteChoiceRandCoeff$SingleThreadCPU extends org.sandwood.runtime
 		fixedFlag$sample47 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
-				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = cv$value;
 		}
 		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
 		fixedProbFlag$sample103 = (cv$value && fixedProbFlag$sample103);

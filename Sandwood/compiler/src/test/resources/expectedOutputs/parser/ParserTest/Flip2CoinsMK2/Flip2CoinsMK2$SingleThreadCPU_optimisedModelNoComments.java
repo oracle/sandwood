@@ -77,7 +77,7 @@ final class Flip2CoinsMK2$SingleThreadCPU extends org.sandwood.runtime.internal.
 		fixedFlag$sample20 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample20$1 = 0; index$constrainedFlag$sample20$1 < constrainedFlag$sample20.length; index$constrainedFlag$sample20$1 += 1)
-				constrainedFlag$sample20[index$constrainedFlag$sample20$1] = true;
+				constrainedFlag$sample20[index$constrainedFlag$sample20$1] = cv$value;
 		}
 		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
 		fixedProbFlag$sample45 = (cv$value && fixedProbFlag$sample45);

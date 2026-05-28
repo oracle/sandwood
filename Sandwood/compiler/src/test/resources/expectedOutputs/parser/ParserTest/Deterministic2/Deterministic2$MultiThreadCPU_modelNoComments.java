@@ -77,7 +77,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 		fixedFlag$sample29 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample29$1 = 0; index$constrainedFlag$sample29$1 < constrainedFlag$sample29.length; index$constrainedFlag$sample29$1 += 1)
-				constrainedFlag$sample29[index$constrainedFlag$sample29$1] = true;
+				constrainedFlag$sample29[index$constrainedFlag$sample29$1] = fixedFlag$sample29;
 		}
 		fixedProbFlag$sample29 = (fixedFlag$sample29 && fixedProbFlag$sample29);
 		fixedProbFlag$sample55 = (fixedFlag$sample29 && fixedProbFlag$sample55);
@@ -93,7 +93,7 @@ final class Deterministic2$MultiThreadCPU extends org.sandwood.runtime.internal.
 		fixedFlag$sample55 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample55$1 = 0; index$constrainedFlag$sample55$1 < constrainedFlag$sample55.length; index$constrainedFlag$sample55$1 += 1)
-				constrainedFlag$sample55[index$constrainedFlag$sample55$1] = true;
+				constrainedFlag$sample55[index$constrainedFlag$sample55$1] = fixedFlag$sample55;
 		}
 		fixedProbFlag$sample55 = (fixedFlag$sample55 && fixedProbFlag$sample55);
 		fixedProbFlag$sample75 = (fixedFlag$sample55 && fixedProbFlag$sample75);

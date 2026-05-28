@@ -177,7 +177,7 @@ public class TraceArrayRestrictions {
         final boolean passValues;
 
         /**
-         * The initialisation state of variables in the final scopes if any final scopes have been created.
+         * The initialization state of variables in the final scopes if any final scopes have been created.
          */
         final InitializedState finalInitializationState;
 

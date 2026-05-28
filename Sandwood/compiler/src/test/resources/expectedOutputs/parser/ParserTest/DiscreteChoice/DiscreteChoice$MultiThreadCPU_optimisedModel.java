@@ -75,7 +75,8 @@ final class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
-				constrainedFlag$sample24[index$constrainedFlag$sample24$1] = true;
+				// Substituted "fixedFlag$sample24" with its value "cv$value".
+				constrainedFlag$sample24[index$constrainedFlag$sample24$1] = cv$value;
 		}
 		
 		// Should the probability of sample 24 be set to fixed. This will only every change
@@ -1159,7 +1160,7 @@ final class DiscreteChoice$MultiThreadCPU extends org.sandwood.runtime.internal.
 			logProbability$var77 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

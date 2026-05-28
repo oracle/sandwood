@@ -70,7 +70,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		fixedFlag$sample34 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample34$1 = 0; index$constrainedFlag$sample34$1 < constrainedFlag$sample34.length; index$constrainedFlag$sample34$1 += 1)
-				constrainedFlag$sample34[index$constrainedFlag$sample34$1] = true;
+				constrainedFlag$sample34[index$constrainedFlag$sample34$1] = fixedFlag$sample34;
 		}
 		fixedProbFlag$sample34 = (fixedFlag$sample34 && fixedProbFlag$sample34);
 	}
@@ -85,7 +85,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		fixedFlag$sample52 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample52$1 = 0; index$constrainedFlag$sample52$1 < constrainedFlag$sample52.length; index$constrainedFlag$sample52$1 += 1)
-				constrainedFlag$sample52[index$constrainedFlag$sample52$1] = true;
+				constrainedFlag$sample52[index$constrainedFlag$sample52$1] = fixedFlag$sample52;
 		}
 		fixedProbFlag$sample52 = (fixedFlag$sample52 && fixedProbFlag$sample52);
 	}

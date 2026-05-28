@@ -87,7 +87,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample34$1 = 0; index$constrainedFlag$sample34$1 < constrainedFlag$sample34.length; index$constrainedFlag$sample34$1 += 1)
-				constrainedFlag$sample34[index$constrainedFlag$sample34$1] = true;
+				constrainedFlag$sample34[index$constrainedFlag$sample34$1] = fixedFlag$sample34;
 		}
 		
 		// Should the probability of sample 34 be set to fixed. This will only every change
@@ -112,7 +112,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample52$1 = 0; index$constrainedFlag$sample52$1 < constrainedFlag$sample52.length; index$constrainedFlag$sample52$1 += 1)
-				constrainedFlag$sample52[index$constrainedFlag$sample52$1] = true;
+				constrainedFlag$sample52[index$constrainedFlag$sample52$1] = fixedFlag$sample52;
 		}
 		
 		// Should the probability of sample 52 be set to fixed. This will only every change
@@ -1726,7 +1726,7 @@ final class GaussianMixtureTest$MultiThreadCPU extends org.sandwood.runtime.inte
 			logProbability$sample72[((i$var66 - 0) / 1)] = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

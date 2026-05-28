@@ -64,7 +64,7 @@ final class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		fixedFlag$sample28 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
-				constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
+				constrainedFlag$sample28[index$constrainedFlag$sample28$1] = fixedFlag$sample28;
 		}
 		fixedProbFlag$sample28 = (fixedFlag$sample28 && fixedProbFlag$sample28);
 		fixedProbFlag$sample69 = (fixedFlag$sample28 && fixedProbFlag$sample69);
@@ -80,7 +80,7 @@ final class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		fixedFlag$sample45 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample45$1 = 0; index$constrainedFlag$sample45$1 < constrainedFlag$sample45.length; index$constrainedFlag$sample45$1 += 1)
-				constrainedFlag$sample45[index$constrainedFlag$sample45$1] = true;
+				constrainedFlag$sample45[index$constrainedFlag$sample45$1] = fixedFlag$sample45;
 		}
 		fixedProbFlag$sample45 = (fixedFlag$sample45 && fixedProbFlag$sample45);
 		fixedProbFlag$sample84 = (fixedFlag$sample45 && fixedProbFlag$sample84);
@@ -96,7 +96,7 @@ final class HMMTestPart2$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		fixedFlag$sample69 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample69$1 = 0; index$constrainedFlag$sample69$1 < constrainedFlag$sample69.length; index$constrainedFlag$sample69$1 += 1)
-				constrainedFlag$sample69[index$constrainedFlag$sample69$1] = true;
+				constrainedFlag$sample69[index$constrainedFlag$sample69$1] = fixedFlag$sample69;
 		}
 		fixedProbFlag$sample69 = (fixedFlag$sample69 && fixedProbFlag$sample69);
 		fixedProbFlag$sample84 = (fixedFlag$sample69 && fixedProbFlag$sample84);

@@ -64,7 +64,7 @@ final class Flip2CoinsMK9$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample18$1 = 0; index$constrainedFlag$sample18$1 < constrainedFlag$sample18.length; index$constrainedFlag$sample18$1 += 1)
-				constrainedFlag$sample18[index$constrainedFlag$sample18$1] = true;
+				constrainedFlag$sample18[index$constrainedFlag$sample18$1] = fixedFlag$sample18;
 		}
 		
 		// Should the probability of sample 18 be set to fixed. This will only every change
@@ -571,7 +571,7 @@ final class Flip2CoinsMK9$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

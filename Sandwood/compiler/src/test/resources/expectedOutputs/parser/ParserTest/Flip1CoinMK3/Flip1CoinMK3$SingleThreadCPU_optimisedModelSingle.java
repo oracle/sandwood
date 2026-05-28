@@ -457,7 +457,7 @@ final class Flip1CoinMK3$SingleThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$var23 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

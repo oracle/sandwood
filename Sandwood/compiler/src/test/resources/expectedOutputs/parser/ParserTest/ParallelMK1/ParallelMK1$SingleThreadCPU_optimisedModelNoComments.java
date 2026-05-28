@@ -37,7 +37,7 @@ final class ParallelMK1$SingleThreadCPU extends org.sandwood.runtime.internal.mo
 		fixedFlag$sample20 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample20$1 = 0; index$constrainedFlag$sample20$1 < constrainedFlag$sample20.length; index$constrainedFlag$sample20$1 += 1)
-				constrainedFlag$sample20[index$constrainedFlag$sample20$1] = true;
+				constrainedFlag$sample20[index$constrainedFlag$sample20$1] = cv$value;
 		}
 		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
 		fixedProbFlag$sample24 = (cv$value && fixedProbFlag$sample24);

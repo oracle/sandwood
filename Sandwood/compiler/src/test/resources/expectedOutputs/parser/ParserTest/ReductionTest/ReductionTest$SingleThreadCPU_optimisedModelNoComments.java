@@ -65,7 +65,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		fixedFlag$sample30 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample30$1 = 0; index$constrainedFlag$sample30$1 < constrainedFlag$sample30.length; index$constrainedFlag$sample30$1 += 1)
-				constrainedFlag$sample30[index$constrainedFlag$sample30$1] = true;
+				constrainedFlag$sample30[index$constrainedFlag$sample30$1] = cv$value;
 		}
 		fixedProbFlag$sample30 = (cv$value && fixedProbFlag$sample30);
 		fixedProbFlag$sample62 = (cv$value && fixedProbFlag$sample62);
@@ -81,7 +81,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		fixedFlag$sample47 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
-				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = true;
+				constrainedFlag$sample47[index$constrainedFlag$sample47$1] = cv$value;
 		}
 		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
 		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
@@ -97,7 +97,7 @@ final class ReductionTest$SingleThreadCPU extends org.sandwood.runtime.internal.
 		fixedFlag$sample62 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample62$1 = 0; index$constrainedFlag$sample62$1 < constrainedFlag$sample62.length; index$constrainedFlag$sample62$1 += 1)
-				constrainedFlag$sample62[index$constrainedFlag$sample62$1] = true;
+				constrainedFlag$sample62[index$constrainedFlag$sample62$1] = cv$value;
 		}
 		fixedProbFlag$sample62 = (cv$value && fixedProbFlag$sample62);
 		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);

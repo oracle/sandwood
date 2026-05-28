@@ -150,7 +150,8 @@ final class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			for(int index$constrainedFlag$sample126$1 = 0; index$constrainedFlag$sample126$1 < constrainedFlag$sample126.length; index$constrainedFlag$sample126$1 += 1) {
 				boolean[] cv$constrainedFlag$sample126$1 = constrainedFlag$sample126[index$constrainedFlag$sample126$1];
 				for(int index$constrainedFlag$sample126$2 = 0; index$constrainedFlag$sample126$2 < cv$constrainedFlag$sample126$1.length; index$constrainedFlag$sample126$2 += 1)
-					cv$constrainedFlag$sample126$1[index$constrainedFlag$sample126$2] = true;
+					// Substituted "fixedFlag$sample126" with its value "cv$value".
+					cv$constrainedFlag$sample126$1[index$constrainedFlag$sample126$2] = cv$value;
 			}
 		}
 		
@@ -184,7 +185,8 @@ final class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
-				constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
+				// Substituted "fixedFlag$sample42" with its value "cv$value".
+				constrainedFlag$sample42[index$constrainedFlag$sample42$1] = cv$value;
 		}
 		
 		// Should the probability of sample 42 be set to fixed. This will only every change
@@ -223,7 +225,8 @@ final class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample57$1 = 0; index$constrainedFlag$sample57$1 < constrainedFlag$sample57.length; index$constrainedFlag$sample57$1 += 1)
-				constrainedFlag$sample57[index$constrainedFlag$sample57$1] = true;
+				// Substituted "fixedFlag$sample57" with its value "cv$value".
+				constrainedFlag$sample57[index$constrainedFlag$sample57$1] = cv$value;
 		}
 		
 		// Should the probability of sample 57 be set to fixed. This will only every change
@@ -314,7 +317,8 @@ final class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample95$1 = 0; index$constrainedFlag$sample95$1 < constrainedFlag$sample95.length; index$constrainedFlag$sample95$1 += 1)
-				constrainedFlag$sample95[index$constrainedFlag$sample95$1] = true;
+				// Substituted "fixedFlag$sample95" with its value "cv$value".
+				constrainedFlag$sample95[index$constrainedFlag$sample95$1] = cv$value;
 		}
 		
 		// Should the probability of sample 95 be set to fixed. This will only every change
@@ -3690,7 +3694,7 @@ final class HMM_Mk2Dist$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			logProbability$var155 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

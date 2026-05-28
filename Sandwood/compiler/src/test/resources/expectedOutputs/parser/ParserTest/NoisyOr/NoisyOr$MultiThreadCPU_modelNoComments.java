@@ -147,7 +147,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedFlag$sample233 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample233$1 = 0; index$constrainedFlag$sample233$1 < constrainedFlag$sample233.length; index$constrainedFlag$sample233$1 += 1)
-				constrainedFlag$sample233[index$constrainedFlag$sample233$1] = true;
+				constrainedFlag$sample233[index$constrainedFlag$sample233$1] = fixedFlag$sample233;
 		}
 		fixedProbFlag$sample233 = (fixedFlag$sample233 && fixedProbFlag$sample233);
 		fixedProbFlag$sample430 = (fixedFlag$sample233 && fixedProbFlag$sample430);
@@ -163,7 +163,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedFlag$sample248 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample248$1 = 0; index$constrainedFlag$sample248$1 < constrainedFlag$sample248.length; index$constrainedFlag$sample248$1 += 1)
-				constrainedFlag$sample248[index$constrainedFlag$sample248$1] = true;
+				constrainedFlag$sample248[index$constrainedFlag$sample248$1] = fixedFlag$sample248;
 		}
 		fixedProbFlag$sample248 = (fixedFlag$sample248 && fixedProbFlag$sample248);
 		fixedProbFlag$sample430 = (fixedFlag$sample248 && fixedProbFlag$sample430);
@@ -179,7 +179,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedFlag$sample263 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample263$1 = 0; index$constrainedFlag$sample263$1 < constrainedFlag$sample263.length; index$constrainedFlag$sample263$1 += 1)
-				constrainedFlag$sample263[index$constrainedFlag$sample263$1] = true;
+				constrainedFlag$sample263[index$constrainedFlag$sample263$1] = fixedFlag$sample263;
 		}
 		fixedProbFlag$sample263 = (fixedFlag$sample263 && fixedProbFlag$sample263);
 		fixedProbFlag$sample430 = (fixedFlag$sample263 && fixedProbFlag$sample430);
@@ -195,7 +195,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedFlag$sample278 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample278$1 = 0; index$constrainedFlag$sample278$1 < constrainedFlag$sample278.length; index$constrainedFlag$sample278$1 += 1)
-				constrainedFlag$sample278[index$constrainedFlag$sample278$1] = true;
+				constrainedFlag$sample278[index$constrainedFlag$sample278$1] = fixedFlag$sample278;
 		}
 		fixedProbFlag$sample278 = (fixedFlag$sample278 && fixedProbFlag$sample278);
 		fixedProbFlag$sample430 = (fixedFlag$sample278 && fixedProbFlag$sample430);
@@ -211,7 +211,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedFlag$sample293 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample293$1 = 0; index$constrainedFlag$sample293$1 < constrainedFlag$sample293.length; index$constrainedFlag$sample293$1 += 1)
-				constrainedFlag$sample293[index$constrainedFlag$sample293$1] = true;
+				constrainedFlag$sample293[index$constrainedFlag$sample293$1] = fixedFlag$sample293;
 		}
 		fixedProbFlag$sample293 = (fixedFlag$sample293 && fixedProbFlag$sample293);
 		fixedProbFlag$sample430 = (fixedFlag$sample293 && fixedProbFlag$sample430);
@@ -240,7 +240,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedFlag$sample308 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample308$1 = 0; index$constrainedFlag$sample308$1 < constrainedFlag$sample308.length; index$constrainedFlag$sample308$1 += 1)
-				constrainedFlag$sample308[index$constrainedFlag$sample308$1] = true;
+				constrainedFlag$sample308[index$constrainedFlag$sample308$1] = fixedFlag$sample308;
 		}
 		fixedProbFlag$sample308 = (fixedFlag$sample308 && fixedProbFlag$sample308);
 		fixedProbFlag$sample430 = (fixedFlag$sample308 && fixedProbFlag$sample430);

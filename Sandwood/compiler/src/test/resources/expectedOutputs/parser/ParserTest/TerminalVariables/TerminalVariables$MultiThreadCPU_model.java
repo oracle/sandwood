@@ -7625,7 +7625,7 @@ final class TerminalVariables$MultiThreadCPU extends org.sandwood.runtime.intern
 			logProbability$terminalVariable = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

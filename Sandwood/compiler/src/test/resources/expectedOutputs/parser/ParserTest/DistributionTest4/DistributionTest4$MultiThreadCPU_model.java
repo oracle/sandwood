@@ -121,7 +121,7 @@ final class DistributionTest4$MultiThreadCPU extends org.sandwood.runtime.intern
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample27$1 = 0; index$constrainedFlag$sample27$1 < constrainedFlag$sample27.length; index$constrainedFlag$sample27$1 += 1)
-				constrainedFlag$sample27[index$constrainedFlag$sample27$1] = true;
+				constrainedFlag$sample27[index$constrainedFlag$sample27$1] = fixedFlag$sample27;
 		}
 		
 		// Should the probability of sample 27 be set to fixed. This will only every change
@@ -15650,7 +15650,7 @@ final class DistributionTest4$MultiThreadCPU extends org.sandwood.runtime.intern
 		}
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

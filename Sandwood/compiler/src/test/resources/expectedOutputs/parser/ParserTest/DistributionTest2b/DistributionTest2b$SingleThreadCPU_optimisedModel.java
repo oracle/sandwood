@@ -100,7 +100,8 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample23$1 = 0; index$constrainedFlag$sample23$1 < constrainedFlag$sample23.length; index$constrainedFlag$sample23$1 += 1)
-				constrainedFlag$sample23[index$constrainedFlag$sample23$1] = true;
+				// Substituted "fixedFlag$sample23" with its value "cv$value".
+				constrainedFlag$sample23[index$constrainedFlag$sample23$1] = cv$value;
 		}
 		
 		// Should the probability of sample 23 be set to fixed. This will only every change
@@ -2443,7 +2444,7 @@ final class DistributionTest2b$SingleThreadCPU extends org.sandwood.runtime.inte
 			logProbability$sample43[j] = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

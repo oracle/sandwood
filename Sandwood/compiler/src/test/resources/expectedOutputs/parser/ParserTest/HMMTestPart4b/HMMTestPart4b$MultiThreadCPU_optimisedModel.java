@@ -90,7 +90,8 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 				for(int index$constrainedFlag$sample122$2 = 0; index$constrainedFlag$sample122$2 < cv$constrainedFlag$sample122$1.length; index$constrainedFlag$sample122$2 += 1) {
 					boolean[] cv$constrainedFlag$sample122$2 = cv$constrainedFlag$sample122$1[index$constrainedFlag$sample122$2];
 					for(int index$constrainedFlag$sample122$3 = 0; index$constrainedFlag$sample122$3 < cv$constrainedFlag$sample122$2.length; index$constrainedFlag$sample122$3 += 1)
-						cv$constrainedFlag$sample122$2[index$constrainedFlag$sample122$3] = true;
+						// Substituted "fixedFlag$sample122" with its value "cv$value".
+						cv$constrainedFlag$sample122$2[index$constrainedFlag$sample122$3] = cv$value;
 				}
 			}
 		}
@@ -125,7 +126,8 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
-				constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
+				// Substituted "fixedFlag$sample28" with its value "cv$value".
+				constrainedFlag$sample28[index$constrainedFlag$sample28$1] = cv$value;
 		}
 		
 		// Should the probability of sample 28 be set to fixed. This will only every change
@@ -164,7 +166,8 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample45$1 = 0; index$constrainedFlag$sample45$1 < constrainedFlag$sample45.length; index$constrainedFlag$sample45$1 += 1)
-				constrainedFlag$sample45[index$constrainedFlag$sample45$1] = true;
+				// Substituted "fixedFlag$sample45" with its value "cv$value".
+				constrainedFlag$sample45[index$constrainedFlag$sample45$1] = cv$value;
 		}
 		
 		// Should the probability of sample 45 be set to fixed. This will only every change
@@ -2132,7 +2135,7 @@ final class HMMTestPart4b$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		}
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

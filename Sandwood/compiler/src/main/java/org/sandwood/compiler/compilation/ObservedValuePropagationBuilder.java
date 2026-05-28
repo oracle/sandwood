@@ -233,7 +233,7 @@ public class ObservedValuePropagationBuilder {
     private static IRTreeVoid initializeConstants(CompilationContext compilationCtx) {
         IRTreeVoid t1;
         // Set the phase
-            compilationCtx.phase = CompilationPhase.INITIALIZATION_OF_MODEL;
+        compilationCtx.phase = CompilationPhase.INITIALIZATION_OF_MODEL;
         // Clear function dependent values to prevent pollution from one context to
         // another.
         compilationCtx.initialize();

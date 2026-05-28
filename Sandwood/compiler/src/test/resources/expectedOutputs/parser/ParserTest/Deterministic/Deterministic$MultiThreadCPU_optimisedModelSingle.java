@@ -81,7 +81,8 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample29$1 = 0; index$constrainedFlag$sample29$1 < constrainedFlag$sample29.length; index$constrainedFlag$sample29$1 += 1)
-				constrainedFlag$sample29[index$constrainedFlag$sample29$1] = true;
+				// Substituted "fixedFlag$sample29" with its value "cv$value".
+				constrainedFlag$sample29[index$constrainedFlag$sample29$1] = cv$value;
 		}
 		
 		// Should the probability of sample 29 be set to fixed. This will only every change
@@ -114,7 +115,8 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample55$1 = 0; index$constrainedFlag$sample55$1 < constrainedFlag$sample55.length; index$constrainedFlag$sample55$1 += 1)
-				constrainedFlag$sample55[index$constrainedFlag$sample55$1] = true;
+				// Substituted "fixedFlag$sample55" with its value "cv$value".
+				constrainedFlag$sample55[index$constrainedFlag$sample55$1] = cv$value;
 		}
 		
 		// Should the probability of sample 55 be set to fixed. This will only every change
@@ -1073,7 +1075,7 @@ final class Deterministic$MultiThreadCPU extends org.sandwood.runtime.internal.m
 			logProbability$var74 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

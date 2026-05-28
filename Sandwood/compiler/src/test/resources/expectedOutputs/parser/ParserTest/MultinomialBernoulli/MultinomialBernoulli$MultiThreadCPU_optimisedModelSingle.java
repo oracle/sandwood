@@ -1243,7 +1243,7 @@ final class MultinomialBernoulli$MultiThreadCPU extends org.sandwood.runtime.int
 			logProbability$var72 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

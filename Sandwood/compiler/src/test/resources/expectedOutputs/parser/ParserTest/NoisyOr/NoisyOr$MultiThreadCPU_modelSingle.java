@@ -186,7 +186,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample233$1 = 0; index$constrainedFlag$sample233$1 < constrainedFlag$sample233.length; index$constrainedFlag$sample233$1 += 1)
-				constrainedFlag$sample233[index$constrainedFlag$sample233$1] = true;
+				constrainedFlag$sample233[index$constrainedFlag$sample233$1] = fixedFlag$sample233;
 		}
 		
 		// Should the probability of sample 233 be set to fixed. This will only every change
@@ -215,7 +215,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample248$1 = 0; index$constrainedFlag$sample248$1 < constrainedFlag$sample248.length; index$constrainedFlag$sample248$1 += 1)
-				constrainedFlag$sample248[index$constrainedFlag$sample248$1] = true;
+				constrainedFlag$sample248[index$constrainedFlag$sample248$1] = fixedFlag$sample248;
 		}
 		
 		// Should the probability of sample 248 be set to fixed. This will only every change
@@ -244,7 +244,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample263$1 = 0; index$constrainedFlag$sample263$1 < constrainedFlag$sample263.length; index$constrainedFlag$sample263$1 += 1)
-				constrainedFlag$sample263[index$constrainedFlag$sample263$1] = true;
+				constrainedFlag$sample263[index$constrainedFlag$sample263$1] = fixedFlag$sample263;
 		}
 		
 		// Should the probability of sample 263 be set to fixed. This will only every change
@@ -273,7 +273,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample278$1 = 0; index$constrainedFlag$sample278$1 < constrainedFlag$sample278.length; index$constrainedFlag$sample278$1 += 1)
-				constrainedFlag$sample278[index$constrainedFlag$sample278$1] = true;
+				constrainedFlag$sample278[index$constrainedFlag$sample278$1] = fixedFlag$sample278;
 		}
 		
 		// Should the probability of sample 278 be set to fixed. This will only every change
@@ -302,7 +302,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample293$1 = 0; index$constrainedFlag$sample293$1 < constrainedFlag$sample293.length; index$constrainedFlag$sample293$1 += 1)
-				constrainedFlag$sample293[index$constrainedFlag$sample293$1] = true;
+				constrainedFlag$sample293[index$constrainedFlag$sample293$1] = fixedFlag$sample293;
 		}
 		
 		// Should the probability of sample 293 be set to fixed. This will only every change
@@ -354,7 +354,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample308$1 = 0; index$constrainedFlag$sample308$1 < constrainedFlag$sample308.length; index$constrainedFlag$sample308$1 += 1)
-				constrainedFlag$sample308[index$constrainedFlag$sample308$1] = true;
+				constrainedFlag$sample308[index$constrainedFlag$sample308$1] = fixedFlag$sample308;
 		}
 		
 		// Should the probability of sample 308 be set to fixed. This will only every change
@@ -7714,7 +7714,7 @@ final class NoisyOr$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		}
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

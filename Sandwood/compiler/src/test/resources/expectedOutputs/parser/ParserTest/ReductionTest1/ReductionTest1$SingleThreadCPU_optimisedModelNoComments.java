@@ -78,7 +78,7 @@ final class ReductionTest1$SingleThreadCPU extends org.sandwood.runtime.internal
 			for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1) {
 				boolean[] cv$constrainedFlag$sample101$1 = constrainedFlag$sample101[index$constrainedFlag$sample101$1];
 				for(int index$constrainedFlag$sample101$2 = 0; index$constrainedFlag$sample101$2 < cv$constrainedFlag$sample101$1.length; index$constrainedFlag$sample101$2 += 1)
-					cv$constrainedFlag$sample101$1[index$constrainedFlag$sample101$2] = true;
+					cv$constrainedFlag$sample101$1[index$constrainedFlag$sample101$2] = cv$value;
 			}
 		}
 		fixedProbFlag$sample101 = (cv$value && fixedProbFlag$sample101);

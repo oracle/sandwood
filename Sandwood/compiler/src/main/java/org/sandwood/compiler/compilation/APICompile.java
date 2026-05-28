@@ -8,6 +8,7 @@
 
 package org.sandwood.compiler.compilation;
 
+import static org.sandwood.compiler.trees.irTree.IRTree.and;
 import static org.sandwood.compiler.trees.irTree.IRTree.constant;
 import static org.sandwood.compiler.trees.irTree.IRTree.functionCall;
 import static org.sandwood.compiler.trees.irTree.IRTree.ifElse;
@@ -183,7 +184,7 @@ public class APICompile {
                 evidenceProbabilities(compilationCtx);
                 constructProbabilities(compilationCtx);
 
-                constructInitialisation(compilationCtx);
+                constructInitialization(compilationCtx);
                 constructAllocators(compilationCtx);
 
                 constructSetIntermediates(forwardVariables, compilationCtx);
@@ -324,7 +325,7 @@ public class APICompile {
 
                 if(compilationCtx.traces.isFixableTask(s)) {
                     VariableDescription<BooleanVariable> fixedFlag = VariableNames.fixedFlagName(s);
-                    setter = TreeUtils.setArray(altFlagName, or(load(fixedFlag), constant(true)));
+                    setter = TreeUtils.setArray(altFlagName, and(load(fixedFlag), constant(true)));
                     IRTreeReturn<BooleanVariable> guard = load(VariableNames.allocatedFlag());
                     setter = ifElse(guard, setter, "If the model has been allocated update the constraints flags");
                     compilationCtx.addSetSideEffect(fixedFlag, setter);
@@ -933,7 +934,7 @@ public class APICompile {
                         + "Fixed intermediate variables are primed. Distributions are calculated and stored.");
     }
 
-    private static void constructInitialisation(CompilationContext compilationCtx) {
+    private static void constructInitialization(CompilationContext compilationCtx) {
         // Clear function dependent values to prevent pollution from one context to
         // another.
         compilationCtx.initialize();
@@ -954,7 +955,7 @@ public class APICompile {
 
         IRTreeVoid body = compilationCtx.getOutermostScopeTree();
         compilationCtx.addFunction(AuxFunctionType.INITIALIZE, Visibility.PUBLIC, new ArgDesc[0], body, true,
-                "Method for initialising the model into a valid state before commencing inference etc.");
+                "Method for initializing the model into a valid state before commencing inference etc.");
 
         compilationCtx.popIsSerial();
     }

@@ -380,7 +380,7 @@ public abstract class Traces {
     public abstract Set<SampleTask<?, ?>> getAllIntermediateSamples();
 
     /**
-     * Method to return all the sample tasks whose output is nether observed, or consumed by other Random Variables.
+     * Method to return all the sample tasks whose output is neither observed, or consumed by other Random Variables.
      * 
      * @return
      */

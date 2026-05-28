@@ -204,7 +204,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample113$1 = 0; index$constrainedFlag$sample113$1 < constrainedFlag$sample113.length; index$constrainedFlag$sample113$1 += 1)
-				constrainedFlag$sample113[index$constrainedFlag$sample113$1] = true;
+				constrainedFlag$sample113[index$constrainedFlag$sample113$1] = fixedFlag$sample113;
 		}
 		
 		// Should the probability of sample 113 be set to fixed. This will only every change
@@ -233,7 +233,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample130$1 = 0; index$constrainedFlag$sample130$1 < constrainedFlag$sample130.length; index$constrainedFlag$sample130$1 += 1)
-				constrainedFlag$sample130[index$constrainedFlag$sample130$1] = true;
+				constrainedFlag$sample130[index$constrainedFlag$sample130$1] = fixedFlag$sample130;
 		}
 		
 		// Should the probability of sample 130 be set to fixed. This will only every change
@@ -262,7 +262,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample147$1 = 0; index$constrainedFlag$sample147$1 < constrainedFlag$sample147.length; index$constrainedFlag$sample147$1 += 1)
-				constrainedFlag$sample147[index$constrainedFlag$sample147$1] = true;
+				constrainedFlag$sample147[index$constrainedFlag$sample147$1] = fixedFlag$sample147;
 		}
 		
 		// Should the probability of sample 147 be set to fixed. This will only every change
@@ -291,7 +291,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample164$1 = 0; index$constrainedFlag$sample164$1 < constrainedFlag$sample164.length; index$constrainedFlag$sample164$1 += 1)
-				constrainedFlag$sample164[index$constrainedFlag$sample164$1] = true;
+				constrainedFlag$sample164[index$constrainedFlag$sample164$1] = fixedFlag$sample164;
 		}
 		
 		// Should the probability of sample 164 be set to fixed. This will only every change
@@ -320,7 +320,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample30$1 = 0; index$constrainedFlag$sample30$1 < constrainedFlag$sample30.length; index$constrainedFlag$sample30$1 += 1)
-				constrainedFlag$sample30[index$constrainedFlag$sample30$1] = true;
+				constrainedFlag$sample30[index$constrainedFlag$sample30$1] = fixedFlag$sample30;
 		}
 		
 		// Should the probability of sample 30 be set to fixed. This will only every change
@@ -407,7 +407,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample57$1 = 0; index$constrainedFlag$sample57$1 < constrainedFlag$sample57.length; index$constrainedFlag$sample57$1 += 1)
-				constrainedFlag$sample57[index$constrainedFlag$sample57$1] = true;
+				constrainedFlag$sample57[index$constrainedFlag$sample57$1] = fixedFlag$sample57;
 		}
 		
 		// Should the probability of sample 57 be set to fixed. This will only every change
@@ -444,7 +444,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample77$1 = 0; index$constrainedFlag$sample77$1 < constrainedFlag$sample77.length; index$constrainedFlag$sample77$1 += 1)
-				constrainedFlag$sample77[index$constrainedFlag$sample77$1] = true;
+				constrainedFlag$sample77[index$constrainedFlag$sample77$1] = fixedFlag$sample77;
 		}
 		
 		// Should the probability of sample 77 be set to fixed. This will only every change
@@ -473,7 +473,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample95$1 = 0; index$constrainedFlag$sample95$1 < constrainedFlag$sample95.length; index$constrainedFlag$sample95$1 += 1)
-				constrainedFlag$sample95[index$constrainedFlag$sample95$1] = true;
+				constrainedFlag$sample95[index$constrainedFlag$sample95$1] = fixedFlag$sample95;
 		}
 		
 		// Should the probability of sample 95 be set to fixed. This will only every change
@@ -20467,7 +20467,7 @@ final class HMMMetrics$MultiThreadCPU extends org.sandwood.runtime.internal.mode
 		}
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

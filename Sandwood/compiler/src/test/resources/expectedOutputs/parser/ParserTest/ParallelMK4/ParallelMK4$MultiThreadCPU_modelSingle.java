@@ -48,7 +48,7 @@ final class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			for(int index$constrainedFlag$sample61$1 = 0; index$constrainedFlag$sample61$1 < constrainedFlag$sample61.length; index$constrainedFlag$sample61$1 += 1) {
 				boolean[] cv$constrainedFlag$sample61$1 = constrainedFlag$sample61[index$constrainedFlag$sample61$1];
 				for(int index$constrainedFlag$sample61$2 = 0; index$constrainedFlag$sample61$2 < cv$constrainedFlag$sample61$1.length; index$constrainedFlag$sample61$2 += 1)
-					cv$constrainedFlag$sample61$1[index$constrainedFlag$sample61$2] = true;
+					cv$constrainedFlag$sample61$1[index$constrainedFlag$sample61$2] = fixedFlag$sample61;
 			}
 		}
 		
@@ -1140,7 +1140,7 @@ final class ParallelMK4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			logProbability$var101 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

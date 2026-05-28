@@ -1740,7 +1740,7 @@ final class DistributionTest1b$SingleThreadCPU extends org.sandwood.runtime.inte
 			logProbability$v = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {}

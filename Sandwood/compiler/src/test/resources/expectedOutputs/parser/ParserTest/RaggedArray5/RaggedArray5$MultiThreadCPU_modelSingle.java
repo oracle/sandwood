@@ -943,7 +943,7 @@ final class RaggedArray5$MultiThreadCPU extends org.sandwood.runtime.internal.mo
 			logProbability$var52 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

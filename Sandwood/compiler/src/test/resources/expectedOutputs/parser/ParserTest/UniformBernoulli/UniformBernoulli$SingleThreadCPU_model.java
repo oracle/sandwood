@@ -618,7 +618,7 @@ final class UniformBernoulli$SingleThreadCPU extends org.sandwood.runtime.intern
 			logProbability$var19 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

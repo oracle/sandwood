@@ -526,7 +526,7 @@ public class TreeUtils {
     }
 
     /**
-     * Method for initialising part of an array based on an array element.
+     * Method for initializing part of an array based on an array element.
      * 
      * @param tree           The IRTree to set the value as it is constructed so far.
      * @param e              The element describing the part of the array we want to initialize.

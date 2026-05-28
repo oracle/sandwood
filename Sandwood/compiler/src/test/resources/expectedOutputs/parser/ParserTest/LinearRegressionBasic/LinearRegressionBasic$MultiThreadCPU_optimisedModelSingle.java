@@ -931,7 +931,7 @@ final class LinearRegressionBasic$MultiThreadCPU extends org.sandwood.runtime.in
 			logProbability$var31 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

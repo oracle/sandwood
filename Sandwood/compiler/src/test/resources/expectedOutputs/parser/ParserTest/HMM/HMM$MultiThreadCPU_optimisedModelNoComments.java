@@ -70,7 +70,7 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		fixedFlag$sample28 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
-				constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
+				constrainedFlag$sample28[index$constrainedFlag$sample28$1] = cv$value;
 		}
 		fixedProbFlag$sample28 = (cv$value && fixedProbFlag$sample28);
 		fixedProbFlag$sample53 = (cv$value && fixedProbFlag$sample53);
@@ -87,7 +87,7 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		fixedFlag$sample45 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample45$1 = 0; index$constrainedFlag$sample45$1 < constrainedFlag$sample45.length; index$constrainedFlag$sample45$1 += 1)
-				constrainedFlag$sample45[index$constrainedFlag$sample45$1] = true;
+				constrainedFlag$sample45[index$constrainedFlag$sample45$1] = cv$value;
 		}
 		fixedProbFlag$sample45 = (cv$value && fixedProbFlag$sample45);
 		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
@@ -117,7 +117,7 @@ final class HMM$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreM
 		fixedFlag$sample71 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample71$1 = 0; index$constrainedFlag$sample71$1 < constrainedFlag$sample71.length; index$constrainedFlag$sample71$1 += 1)
-				constrainedFlag$sample71[index$constrainedFlag$sample71$1] = true;
+				constrainedFlag$sample71[index$constrainedFlag$sample71$1] = cv$value;
 		}
 		fixedProbFlag$sample71 = (cv$value && fixedProbFlag$sample71);
 		fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);

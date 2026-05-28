@@ -71,7 +71,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedFlag$sample42 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
-				constrainedFlag$sample42[index$constrainedFlag$sample42$1] = true;
+				constrainedFlag$sample42[index$constrainedFlag$sample42$1] = cv$value;
 		}
 		fixedProbFlag$sample42 = (cv$value && fixedProbFlag$sample42);
 	}
@@ -86,7 +86,7 @@ final class LDATest$MultiThreadCPU extends org.sandwood.runtime.internal.model.C
 		fixedFlag$sample58 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
-				constrainedFlag$sample58[index$constrainedFlag$sample58$1] = true;
+				constrainedFlag$sample58[index$constrainedFlag$sample58$1] = cv$value;
 		}
 		fixedProbFlag$sample58 = (cv$value && fixedProbFlag$sample58);
 	}

@@ -99,7 +99,7 @@ final class Vulcano2012basic2$MultiThreadCPU extends org.sandwood.runtime.intern
 		fixedFlag$sample26 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
-				constrainedFlag$sample26[index$constrainedFlag$sample26$1] = true;
+				constrainedFlag$sample26[index$constrainedFlag$sample26$1] = fixedFlag$sample26;
 		}
 		fixedProbFlag$sample26 = (fixedFlag$sample26 && fixedProbFlag$sample26);
 		fixedProbFlag$sample149 = (fixedFlag$sample26 && fixedProbFlag$sample149);

@@ -245,7 +245,9 @@ public class ProbabilityFunction {
                         break;
                     }
                     case PUT: {
-                        assert d.argPos == 2 : "Traces that are not putting a value into an array should have been filtered out by this point.";
+                        if(d.argPos != 2)
+                            throw new CompilerException("Traces that are not putting a value into an array should "
+                                    + "have been filtered out by this point.");
                         // Record the sample value is now in an array
                         arrayEntered = true;
 
@@ -367,7 +369,7 @@ public class ProbabilityFunction {
         final VariableDescription<A> sampleVariableName;
         final boolean sampleSkippable;
 
-        // Store the code for initialising intermediate variable probabilities.
+        // Store the code for initializing intermediate variable probabilities.
         final Set<WrappedTree<IRTree, IRTreeVoid>> toInitialize;
 
         final boolean useDistributions;
@@ -539,7 +541,7 @@ public class ProbabilityFunction {
             VariableType.BooleanVariable, true);
 
     public static void probabilityFunctions(CompilationContext compilationCtx) {
-        // Store the code for initialising intermediate variable probabilities.
+        // Store the code for initializing intermediate variable probabilities.
         Set<WrappedTree<IRTree, IRTreeVoid>> toInitialize = new LinkedHashSet<>();
 
         // Construct a field for the overall model. This field needs to be public as it
@@ -559,10 +561,10 @@ public class ProbabilityFunction {
             if(sampleTask.isDistribution() || sampleTask.randomVariable.isDistribution())
                 constructProbabilityMethod(sampleTask, toInitialize, true, compilationCtx);
         }
-        constructIntermediateProbabilityInitialisationFunction(toInitialize, compilationCtx);
+        constructIntermediateProbabilityInitializationFunction(toInitialize, compilationCtx);
     }
 
-    private static void constructIntermediateProbabilityInitialisationFunction(
+    private static void constructIntermediateProbabilityInitializationFunction(
             Set<WrappedTree<IRTree, IRTreeVoid>> toInitialize, CompilationContext compilationCtx) {
         /*
          * Collect all the variables. The map is used so that at a later stage we can initialize only the variables that
@@ -659,12 +661,12 @@ public class ProbabilityFunction {
         if(funcData.fixableProb) {
             funcData.compilationCtx.addConstructedClassField(funcData.fixedProbFlagName, constant(false));
 
-            // Set the initialisation
+            // Set the initialization
             IRTreeReturn<BooleanVariable> guard = negateBoolean(load(funcData.fixedProbFlagName));
             funcData.toInitialize
                     .add(new WrappedTree<IRTree, IRTreeVoid>(ifElse(guard, sampleAllocation, Tree.NoComment)));
         } else {
-            // Set the initialisation
+            // Set the initialization
             funcData.toInitialize.add(new WrappedTree<IRTree, IRTreeVoid>(sampleAllocation));
         }
 

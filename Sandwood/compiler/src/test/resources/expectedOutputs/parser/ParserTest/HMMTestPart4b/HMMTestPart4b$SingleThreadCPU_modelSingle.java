@@ -90,7 +90,7 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 				for(int index$constrainedFlag$sample122$2 = 0; index$constrainedFlag$sample122$2 < cv$constrainedFlag$sample122$1.length; index$constrainedFlag$sample122$2 += 1) {
 					boolean[] cv$constrainedFlag$sample122$2 = cv$constrainedFlag$sample122$1[index$constrainedFlag$sample122$2];
 					for(int index$constrainedFlag$sample122$3 = 0; index$constrainedFlag$sample122$3 < cv$constrainedFlag$sample122$2.length; index$constrainedFlag$sample122$3 += 1)
-						cv$constrainedFlag$sample122$2[index$constrainedFlag$sample122$3] = true;
+						cv$constrainedFlag$sample122$2[index$constrainedFlag$sample122$3] = fixedFlag$sample122;
 				}
 			}
 		}
@@ -121,7 +121,7 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample28$1 = 0; index$constrainedFlag$sample28$1 < constrainedFlag$sample28.length; index$constrainedFlag$sample28$1 += 1)
-				constrainedFlag$sample28[index$constrainedFlag$sample28$1] = true;
+				constrainedFlag$sample28[index$constrainedFlag$sample28$1] = fixedFlag$sample28;
 		}
 		
 		// Should the probability of sample 28 be set to fixed. This will only every change
@@ -154,7 +154,7 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample45$1 = 0; index$constrainedFlag$sample45$1 < constrainedFlag$sample45.length; index$constrainedFlag$sample45$1 += 1)
-				constrainedFlag$sample45[index$constrainedFlag$sample45$1] = true;
+				constrainedFlag$sample45[index$constrainedFlag$sample45$1] = fixedFlag$sample45;
 		}
 		
 		// Should the probability of sample 45 be set to fixed. This will only every change
@@ -1913,7 +1913,7 @@ final class HMMTestPart4b$SingleThreadCPU extends org.sandwood.runtime.internal.
 			logProbability$var184 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

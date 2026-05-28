@@ -192,7 +192,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
             // If there are no traces return the current target scope
             if(observationTraces == null) {
-                initialiseConstrainedFlags(targetScope, compilationCtx);
+                initializeConstrainedFlags(targetScope, compilationCtx);
                 return targetScope;
             }
 
@@ -216,12 +216,12 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
             // Construct a new target scope that will only execute if none of the observed variables are reachable.
             IfElseScopeConstructors observationScopes = targetScope.addCondition(negateBoolean(load(observationGuard)));
 
-            // Initialise the constrained variable flag
-            initialiseConstrainedFlags(observationScopes, compilationCtx);
+            // Initialize the constrained variable flag
+            initializeConstrainedFlags(observationScopes, compilationCtx);
             return observationScopes.ifScopeConstructor();
         }
 
-        private void initialiseConstrainedFlags(ScopeConstructor targetScope, CompilationContext compilationCtx) {
+        private void initializeConstrainedFlags(ScopeConstructor targetScope, CompilationContext compilationCtx) {
             targetScope.addTree((TreeBuilderInfo info) -> {
                 IRTreeVoid t = TreeUtils.setIsConstrained(sampleDesc.sample, constant(false), IRTree.NoComment,
                         compilationCtx);
@@ -229,7 +229,7 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
             });
         }
 
-        private void initialiseConstrainedFlags(IfElseScopeConstructors observationScopes,
+        private void initializeConstrainedFlags(IfElseScopeConstructors observationScopes,
                 CompilationContext compilationCtx) {
             observationScopes.ifScopeConstructor().addTree((TreeBuilderInfo info) -> {
                 IRTreeVoid t = TreeUtils.setIsConstrained(sampleDesc.sample, constant(false), IRTree.NoComment,

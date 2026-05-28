@@ -44,7 +44,7 @@ public class Flip1CoinMK1 extends ModelTestSkeleton {
      */
 
     public Flip1CoinMK1() throws SandwoodJsonException, IOException {
-        forwardInitialisationRequired = false;
+        forwardInitializationRequired = false;
     }
 
     @Override

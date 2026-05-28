@@ -81,7 +81,7 @@ final class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample29$1 = 0; index$constrainedFlag$sample29$1 < constrainedFlag$sample29.length; index$constrainedFlag$sample29$1 += 1)
-				constrainedFlag$sample29[index$constrainedFlag$sample29$1] = true;
+				constrainedFlag$sample29[index$constrainedFlag$sample29$1] = fixedFlag$sample29;
 		}
 		
 		// Should the probability of sample 29 be set to fixed. This will only every change
@@ -110,7 +110,7 @@ final class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.
 		if(allocated$) {
 			// Set all the values in the array
 			for(int index$constrainedFlag$sample55$1 = 0; index$constrainedFlag$sample55$1 < constrainedFlag$sample55.length; index$constrainedFlag$sample55$1 += 1)
-				constrainedFlag$sample55[index$constrainedFlag$sample55$1] = true;
+				constrainedFlag$sample55[index$constrainedFlag$sample55$1] = fixedFlag$sample55;
 		}
 		
 		// Should the probability of sample 55 be set to fixed. This will only every change
@@ -1253,7 +1253,7 @@ final class Deterministic$SingleThreadCPU extends org.sandwood.runtime.internal.
 		}
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {

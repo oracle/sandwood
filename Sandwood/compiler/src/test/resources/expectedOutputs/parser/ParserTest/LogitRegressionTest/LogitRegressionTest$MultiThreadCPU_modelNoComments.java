@@ -57,7 +57,7 @@ final class LogitRegressionTest$MultiThreadCPU extends org.sandwood.runtime.inte
 		fixedFlag$sample35 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample35$1 = 0; index$constrainedFlag$sample35$1 < constrainedFlag$sample35.length; index$constrainedFlag$sample35$1 += 1)
-				constrainedFlag$sample35[index$constrainedFlag$sample35$1] = true;
+				constrainedFlag$sample35[index$constrainedFlag$sample35$1] = fixedFlag$sample35;
 		}
 		fixedProbFlag$sample35 = (fixedFlag$sample35 && fixedProbFlag$sample35);
 		fixedProbFlag$sample94 = (fixedFlag$sample35 && fixedProbFlag$sample94);

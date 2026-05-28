@@ -60,7 +60,7 @@ final class LinearRegressionTest$MultiThreadCPU extends org.sandwood.runtime.int
 		fixedFlag$sample24 = cv$value;
 		if(allocated$) {
 			for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
-				constrainedFlag$sample24[index$constrainedFlag$sample24$1] = true;
+				constrainedFlag$sample24[index$constrainedFlag$sample24$1] = cv$value;
 		}
 		fixedProbFlag$sample24 = (cv$value && fixedProbFlag$sample24);
 		fixedProbFlag$sample74 = (cv$value && fixedProbFlag$sample74);
