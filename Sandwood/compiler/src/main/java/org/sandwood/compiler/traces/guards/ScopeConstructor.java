@@ -1511,7 +1511,7 @@ public class ScopeConstructor {
                 .globalGuardName(guardDesc.varDesc,
                         VariableType.getType(VariableType.BooleanVariable, guardDesc.scopes.size()));
         // Get the parallel scope, null if this code is not executed in parallel.
-        ParForTask parallelScope = getParallelScope(tasks.get(getConstraintCount() - 1).scope());
+        ParForTask parallelScope = getParallelScope(tasks.get(0).scope());
         allocateGlobalState(guardDesc.scopes, globalGuardName, parallelScope);
 
         addTree((TreeBuilderInfo info) -> compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(
