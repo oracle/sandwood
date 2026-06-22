@@ -81,7 +81,7 @@ class CompilerTest {
     }
 
     // Set temporary and target directories.
-    File targetDir;
+    private File targetDir;
 
     @ParameterizedTest
     @MethodSource("getFileNameArgs")
