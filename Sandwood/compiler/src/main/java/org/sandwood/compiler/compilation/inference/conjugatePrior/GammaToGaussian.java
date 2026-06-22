@@ -86,13 +86,12 @@ public class GammaToGaussian
      * @return The function call to generate a sample value for this function data.
      */
     @Override
-    protected IRTreeReturn<DoubleVariable> calculateSampleValue(CompilationContext compilationCtx,
-            GammaToGaussianData funcData) {
+    protected IRTreeReturn<DoubleVariable> calculateSampleValue(GammaToGaussianData funcData) {
         // TODO adjust this so it traces back to find the constructor, and get the values from them. This will allow
         // arrays of random variables.
         // Get the arguments constructed
-        IRTreeReturn<DoubleVariable> alpha = funcData.sourceRandom.alpha.getForwardIR(compilationCtx);
-        IRTreeReturn<DoubleVariable> beta = funcData.sourceRandom.beta.getForwardIR(compilationCtx);
+        IRTreeReturn<DoubleVariable> alpha = funcData.sourceRandom.alpha.getForwardIR(funcData.compilationCtx);
+        IRTreeReturn<DoubleVariable> beta = funcData.sourceRandom.beta.getForwardIR(funcData.compilationCtx);
 
         // Construct a tree to construct the sample variable.
         IRTreeReturn<DoubleVariable> mean = IRTree.functionCallReturn(FunctionType.CONJUGATE_SAMPLE,
@@ -108,31 +107,32 @@ public class GammaToGaussian
      * @param funcData       The function data for this inference function.
      */
     @Override
-    protected void constructFunctionVariables(GammaToGaussianData funcData, CompilationContext compilationCtx) {
+    protected void constructFunctionVariables(GammaToGaussianData funcData) {
         funcData.targetScope.addTree((TreeBuilderInfo info) -> {
             // add a trees to initialize the temporary variables.
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName,
+                    constant(0.0),
                     "Variable to track the sum of the difference between the samples and the random variables mean squared."));
 
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countName, constant(0),
-                    "Variable to record how many samples have been included in this calculation."));
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.countName,
+                    constant(0), "Variable to record how many samples have been included in this calculation."));
         });
     }
 
     @Override
     protected void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer,
-            GammaToGaussianData funcData, CompilationContext compilationCtx) {
+            GammaToGaussianData funcData) {
         VariableDescription<DoubleVariable> muName = VariableNames.calcVarName(consumer, "mu",
                 VariableType.DoubleVariable);
-        compilationCtx.addTreeToScope(consumer.getParent().scope(),
-                initializeVariable(muName, ((Gaussian) consumer).mean.getForwardIR(compilationCtx),
+        info.compilationCtx.addTreeToScope(consumer.getParent().scope(),
+                initializeVariable(muName, ((Gaussian) consumer).mean.getForwardIR(info.compilationCtx),
                         "The mean parameter for Gaussian " + consumer.getVarDesc() + "."));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     protected void getObservationToSampleIR(SampleTask<?, ?> task, IRTreeReturn<?> current,
-            GammaToGaussianData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
+            GammaToGaussianData funcData, TreeBuilderInfo info) {
         VariableDescription<DoubleVariable> muName = VariableNames.calcVarName(task.randomVariable, "mu",
                 VariableType.DoubleVariable);
         VariableDescription<DoubleVariable> diffName = VariableNames.calcVarName(task.randomVariable, "diff",
@@ -148,7 +148,7 @@ public class GammaToGaussian
         trees.add(store(funcData.countName, addII(load(funcData.countName), constant(1)),
                 "Increment the number of samples in the calculation."));
 
-        compilationCtx.addTreeToScope(task.scope(), sequential(trees, "Consume sample task " + task.id()
+        info.compilationCtx.addTreeToScope(task.scope(), sequential(trees, "Consume sample task " + task.id()
                 + " from random variable " + task.randomVariable.getVarDesc() + "."));
     }
 
@@ -249,37 +249,32 @@ public class GammaToGaussian
     }
 
     @Override // No global state, so nothing to do here.
-    protected void allocateGlobalState(CompilationContext compilationCtx, GammaToGaussianData funcData) {}
+    protected void allocateGlobalState(GammaToGaussianData funcData) {}
 
     @Override
     protected void getDistributionSampleIR(DistributionSampleTask<?, ?> s,
-            IRTreeReturn<DoubleVariable> sourceProbability, GammaToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+            IRTreeReturn<DoubleVariable> sourceProbability, GammaToGaussianData funcData, TreeBuilderInfo info) {
         throw new CompilerException("Distribution samples are not yet supported in this inference "
                 + "technique. If this has been reached there is a bug in the compiler.");
     }
 
     @Override
-    protected void getPerSourceConfigStartIR(GammaToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerSourceConfigStartIR(GammaToGaussianData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerSourceConfigEndIR(GammaToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerSourceConfigEndIR(GammaToGaussianData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerConsumerStartIR(GammaToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerConsumerStartIR(GammaToGaussianData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerConsumerEndIR(GammaToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerConsumerEndIR(GammaToGaussianData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void finalize(GammaToGaussianData funcData, CompilationContext compilationCtx) {}
+    protected void finalize(GammaToGaussianData funcData) {}
 
     @Override
-    protected ScopeConstructor getBackTraceScope(GammaToGaussianData funcData, CompilationContext compilationCtx) {
+    protected ScopeConstructor getBackTraceScope(GammaToGaussianData funcData) {
         return funcData.targetScope;
     }
 
@@ -289,31 +284,27 @@ public class GammaToGaussian
     }
 
     @Override
-    protected void addDistributionProbabilities(ScopeConstructor targetScope, GammaToGaussianData funcData,
-            CompilationContext compilationCtx) {
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, GammaToGaussianData funcData) {
         throw new CompilerException("Unable to merge distributions in this inference method.");
     }
 
     @Override
-    protected void backTraceScopeStartIR(GammaToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void backTraceScopeStartIR(GammaToGaussianData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void backTraceScopeEndIR(GammaToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void backTraceScopeEndIR(GammaToGaussianData funcData, TreeBuilderInfo info) {}
 
     @Override
     protected void getPerDistributedSampleStartIR(GammaToGaussianData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {}
+            TreeBuilderInfo info) {}
 
     @Override
     protected void getPerDistributedSampleEndIR(GammaToGaussianData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {}
+            TreeBuilderInfo info) {}
 
     @Override
     protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
-            IRTreeReturn<C> current, ScalarVariable<D> input, GammaToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+            IRTreeReturn<C> current, ScalarVariable<D> input, GammaToGaussianData funcData, TreeBuilderInfo info) {
         throw new CompilerException("Unable to infer conditional guards in a conjugate prior.");
     }
 }

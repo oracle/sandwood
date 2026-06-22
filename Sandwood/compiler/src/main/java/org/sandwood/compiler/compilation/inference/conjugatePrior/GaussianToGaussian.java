@@ -119,13 +119,12 @@ public class GaussianToGaussian
      * @return The intermediate representation tree for generating a sample value based on the function data.
      */
     @Override
-    protected IRTreeReturn<DoubleVariable> calculateSampleValue(CompilationContext compilationCtx,
-            GaussianToGaussianData funcData) {
+    protected IRTreeReturn<DoubleVariable> calculateSampleValue(GaussianToGaussianData funcData) {
         // TODO adjust this so we trace back to find the constructor, and get the values
         // from them. This will allow us to have arrays of random variables.
         // Get the arguments constructed
-        IRTreeReturn<DoubleVariable> mean0 = funcData.sourceRandom.mean.getForwardIR(compilationCtx);
-        IRTreeReturn<DoubleVariable> variance0 = funcData.sourceRandom.variance.getForwardIR(compilationCtx);
+        IRTreeReturn<DoubleVariable> mean0 = funcData.sourceRandom.mean.getForwardIR(funcData.compilationCtx);
+        IRTreeReturn<DoubleVariable> variance0 = funcData.sourceRandom.variance.getForwardIR(funcData.compilationCtx);
 
         // Construct a tree to construct the sample variable.
         IRTreeReturn<DoubleVariable> mean = IRTree.functionCallReturn(FunctionType.CONJUGATE_SAMPLE,
@@ -141,24 +140,25 @@ public class GaussianToGaussian
      * @param funcData       The function data for this function inference method.
      */
     @Override
-    protected void constructFunctionVariables(GaussianToGaussianData funcData, CompilationContext compilationCtx) {
+    protected void constructFunctionVariables(GaussianToGaussianData funcData) {
         // add a trees to initialize the temporary variables.
         funcData.targetScope.addTree((TreeBuilderInfo info) -> {
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName, constant(0.0),
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sumName,
+                    constant(0.0),
                     "State to record the weighting of each sample that is consumed. This is the:\nsum of the sample denominator*(the sample value - the sample nominator)."));
-            compilationCtx.addTreeToScope(GlobalScope.scope,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     IRTree.initializeVariable(funcData.denominatorSquareSumName, constant(0.0),
                             "State for storing the sum of the squares of the sample denominators."));
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sigmaNotFoundName,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sigmaNotFoundName,
                     constant(true), "Flag to record if we have a value for Sigma."));
-            compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sigmaValueName,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope, IRTree.initializeVariable(funcData.sigmaValueName,
                     constant(1.0), "State for the value of sigma once we find it."));
         });
     }
 
     @Override
     protected void getConsumerRVInputIR(TreeBuilderInfo info, RandomVariable<?, ?> consumer,
-            GaussianToGaussianData funcData, CompilationContext compilationCtx) {
+            GaussianToGaussianData funcData) {
 
         // Get the trace of operations between the consuming random variable, and the
         // sample task.
@@ -169,9 +169,9 @@ public class GaussianToGaussian
 
         IRTreeVoid denomInit = initializeVariable(funcData.denominatorName, constant(1.0),
                 "State for tracking the changes that happen to the sampled value between it being consumed and it being produced.");
-        compilationCtx.addTreeToScope(consumer.getParent().scope(), denomInit);
+        funcData.compilationCtx.addTreeToScope(consumer.getParent().scope(), denomInit);
         IRTreeVoid numeratorInit = initializeVariable(funcData.numeratorName, constant(0.0), Tree.NoComment);
-        compilationCtx.addTreeToScope(consumer.getParent().scope(), numeratorInit);
+        funcData.compilationCtx.addTreeToScope(consumer.getParent().scope(), numeratorInit);
 
         // Stack to record which index we are currently working on.
         Stack<IRTreeReturn<IntVariable>> indexes = new Stack<>();
@@ -191,28 +191,30 @@ public class GaussianToGaussian
                     Add<?, ?, ?> a = (Add<?, ?, ?>) t;
                     if(d.argPos == 0) {
                         if(a.right.getType() == VariableType.IntVariable) {
-                            IRTreeReturn<IntVariable> rightTree = ((IntVariable) a.right).getForwardIR(compilationCtx);
+                            IRTreeReturn<IntVariable> rightTree = ((IntVariable) a.right)
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = addDI(load(funcData.numeratorName), rightTree);
-                            compilationCtx.addTreeToScope(a.scope(),
+                            funcData.compilationCtx.addTreeToScope(a.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                         } else {
                             IRTreeReturn<DoubleVariable> rightTree = ((DoubleVariable) a.right)
-                                    .getForwardIR(compilationCtx);
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = addDD(load(funcData.numeratorName), rightTree);
-                            compilationCtx.addTreeToScope(a.scope(),
+                            funcData.compilationCtx.addTreeToScope(a.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                         }
                     } else {
                         if(a.left.getType() == VariableType.IntVariable) {
-                            IRTreeReturn<IntVariable> leftTree = ((IntVariable) a.left).getForwardIR(compilationCtx);
+                            IRTreeReturn<IntVariable> leftTree = ((IntVariable) a.left)
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = addID(leftTree, load(funcData.numeratorName));
-                            compilationCtx.addTreeToScope(a.scope(),
+                            funcData.compilationCtx.addTreeToScope(a.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                         } else {
                             IRTreeReturn<DoubleVariable> leftTree = ((DoubleVariable) a.left)
-                                    .getForwardIR(compilationCtx);
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = addDD(leftTree, load(funcData.numeratorName));
-                            compilationCtx.addTreeToScope(a.scope(),
+                            funcData.compilationCtx.addTreeToScope(a.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                         }
                     }
@@ -223,48 +225,49 @@ public class GaussianToGaussian
                     if(d.argPos == 0) {
                         if(div.right.getType() == VariableType.IntVariable) {
                             IRTreeReturn<IntVariable> rightTree = ((IntVariable) div.right)
-                                    .getForwardIR(compilationCtx);
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = divideDI(load(funcData.numeratorName),
                                     rightTree);
-                            compilationCtx.addTreeToScope(div.scope(),
+                            funcData.compilationCtx.addTreeToScope(div.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                             IRTreeReturn<DoubleVariable> denominatorTerm = divideDI(load(funcData.denominatorName),
                                     rightTree);
-                            compilationCtx.addTreeToScope(div.scope(),
+                            funcData.compilationCtx.addTreeToScope(div.scope(),
                                     store(funcData.denominatorName, denominatorTerm, Tree.NoComment));
                         } else {
                             IRTreeReturn<DoubleVariable> rightTree = ((DoubleVariable) div.right)
-                                    .getForwardIR(compilationCtx);
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = divideDD(load(funcData.numeratorName),
                                     rightTree);
-                            compilationCtx.addTreeToScope(div.scope(),
+                            funcData.compilationCtx.addTreeToScope(div.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                             IRTreeReturn<DoubleVariable> denominatorTerm = divideDD(load(funcData.denominatorName),
                                     rightTree);
-                            compilationCtx.addTreeToScope(div.scope(),
+                            funcData.compilationCtx.addTreeToScope(div.scope(),
                                     store(funcData.denominatorName, denominatorTerm, Tree.NoComment));
                         }
                     } else {
                         if(div.left.getType() == VariableType.IntVariable) {
-                            IRTreeReturn<IntVariable> leftTree = ((IntVariable) div.left).getForwardIR(compilationCtx);
+                            IRTreeReturn<IntVariable> leftTree = ((IntVariable) div.left)
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = divideID(leftTree,
                                     load(funcData.numeratorName));
-                            compilationCtx.addTreeToScope(div.scope(),
+                            funcData.compilationCtx.addTreeToScope(div.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                             IRTreeReturn<DoubleVariable> denominatorTerm = divideID(leftTree,
                                     load(funcData.denominatorName));
-                            compilationCtx.addTreeToScope(div.scope(),
+                            funcData.compilationCtx.addTreeToScope(div.scope(),
                                     store(funcData.denominatorName, denominatorTerm, Tree.NoComment));
                         } else {
                             IRTreeReturn<DoubleVariable> leftTree = ((DoubleVariable) div.left)
-                                    .getForwardIR(compilationCtx);
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = divideDD(leftTree,
                                     load(funcData.numeratorName));
-                            compilationCtx.addTreeToScope(div.scope(),
+                            funcData.compilationCtx.addTreeToScope(div.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                             IRTreeReturn<DoubleVariable> denominatorTerm = divideDD(leftTree,
                                     load(funcData.denominatorName));
-                            compilationCtx.addTreeToScope(div.scope(),
+                            funcData.compilationCtx.addTreeToScope(div.scope(),
                                     store(funcData.denominatorName, denominatorTerm, Tree.NoComment));
                         }
                     }
@@ -277,48 +280,50 @@ public class GaussianToGaussian
                     Multiply<?, ?, ?> m = (Multiply<?, ?, ?>) t;
                     if(d.argPos == 0) {
                         if(m.right.getType() == VariableType.IntVariable) {
-                            IRTreeReturn<IntVariable> rightTree = ((IntVariable) m.right).getForwardIR(compilationCtx);
+                            IRTreeReturn<IntVariable> rightTree = ((IntVariable) m.right)
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = multiplyDI(load(funcData.numeratorName),
                                     rightTree);
-                            compilationCtx.addTreeToScope(m.scope(),
+                            funcData.compilationCtx.addTreeToScope(m.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                             IRTreeReturn<DoubleVariable> denominatorTerm = multiplyDI(load(funcData.denominatorName),
                                     rightTree);
-                            compilationCtx.addTreeToScope(m.scope(),
+                            funcData.compilationCtx.addTreeToScope(m.scope(),
                                     store(funcData.denominatorName, denominatorTerm, Tree.NoComment));
                         } else {
                             IRTreeReturn<DoubleVariable> rightTree = ((DoubleVariable) m.right)
-                                    .getForwardIR(compilationCtx);
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = multiplyDD(load(funcData.numeratorName),
                                     rightTree);
-                            compilationCtx.addTreeToScope(m.scope(),
+                            funcData.compilationCtx.addTreeToScope(m.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                             IRTreeReturn<DoubleVariable> denominatorTerm = multiplyDD(load(funcData.denominatorName),
                                     rightTree);
-                            compilationCtx.addTreeToScope(m.scope(),
+                            funcData.compilationCtx.addTreeToScope(m.scope(),
                                     store(funcData.denominatorName, denominatorTerm, Tree.NoComment));
                         }
                     } else {
                         if(m.left.getType() == VariableType.IntVariable) {
-                            IRTreeReturn<IntVariable> leftTree = ((IntVariable) m.left).getForwardIR(compilationCtx);
+                            IRTreeReturn<IntVariable> leftTree = ((IntVariable) m.left)
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = multiplyID(leftTree,
                                     load(funcData.numeratorName));
-                            compilationCtx.addTreeToScope(m.scope(),
+                            funcData.compilationCtx.addTreeToScope(m.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                             IRTreeReturn<DoubleVariable> denominatorTerm = multiplyID(leftTree,
                                     load(funcData.denominatorName));
-                            compilationCtx.addTreeToScope(m.scope(),
+                            funcData.compilationCtx.addTreeToScope(m.scope(),
                                     store(funcData.denominatorName, denominatorTerm, Tree.NoComment));
                         } else {
                             IRTreeReturn<DoubleVariable> leftTree = ((DoubleVariable) m.left)
-                                    .getForwardIR(compilationCtx);
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = multiplyDD(leftTree,
                                     load(funcData.numeratorName));
-                            compilationCtx.addTreeToScope(m.scope(),
+                            funcData.compilationCtx.addTreeToScope(m.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                             IRTreeReturn<DoubleVariable> denominatorTerm = multiplyDD(leftTree,
                                     load(funcData.denominatorName));
-                            compilationCtx.addTreeToScope(m.scope(),
+                            funcData.compilationCtx.addTreeToScope(m.scope(),
                                     store(funcData.denominatorName, denominatorTerm, Tree.NoComment));
                         }
                     }
@@ -327,49 +332,51 @@ public class GaussianToGaussian
                 case NEGATE: {
                     Negate<?> n = (Negate<?>) t;
                     IRTreeReturn<DoubleVariable> numeratorTerm = negate(load(funcData.numeratorName));
-                    compilationCtx.addTreeToScope(n.scope(),
+                    funcData.compilationCtx.addTreeToScope(n.scope(),
                             store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                     IRTreeReturn<DoubleVariable> denominatorTerm = negate(load(funcData.denominatorName));
-                    compilationCtx.addTreeToScope(n.scope(),
+                    funcData.compilationCtx.addTreeToScope(n.scope(),
                             store(funcData.denominatorName, denominatorTerm, Tree.NoComment));
                 }
                     break;
                 case PUT:
                     if(d.argPos == 2) {
                         PutTask<?> pt = (PutTask<?>) t;
-                        indexes.push(pt.index.getForwardIR(compilationCtx));
+                        indexes.push(pt.index.getForwardIR(funcData.compilationCtx));
                     }
                     break;
                 case SUBTRACTION: {
                     Subtract<?, ?, ?> s = (Subtract<?, ?, ?>) t;
                     if(d.argPos == 0) {
                         if(s.right.getType() == VariableType.IntVariable) {
-                            IRTreeReturn<IntVariable> rightTree = ((IntVariable) s.right).getForwardIR(compilationCtx);
+                            IRTreeReturn<IntVariable> rightTree = ((IntVariable) s.right)
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = subtractDI(load(funcData.numeratorName),
                                     rightTree);
-                            compilationCtx.addTreeToScope(s.scope(),
+                            funcData.compilationCtx.addTreeToScope(s.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                         } else {
                             IRTreeReturn<DoubleVariable> rightTree = ((DoubleVariable) s.right)
-                                    .getForwardIR(compilationCtx);
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = subtractDD(load(funcData.numeratorName),
                                     rightTree);
-                            compilationCtx.addTreeToScope(s.scope(),
+                            funcData.compilationCtx.addTreeToScope(s.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                         }
                     } else {
                         if(s.left.getType() == VariableType.IntVariable) {
-                            IRTreeReturn<IntVariable> leftTree = ((IntVariable) s.left).getForwardIR(compilationCtx);
+                            IRTreeReturn<IntVariable> leftTree = ((IntVariable) s.left)
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = subtractID(leftTree,
                                     load(funcData.numeratorName));
-                            compilationCtx.addTreeToScope(s.scope(),
+                            funcData.compilationCtx.addTreeToScope(s.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                         } else {
                             IRTreeReturn<DoubleVariable> leftTree = ((DoubleVariable) s.left)
-                                    .getForwardIR(compilationCtx);
+                                    .getForwardIR(funcData.compilationCtx);
                             IRTreeReturn<DoubleVariable> numeratorTerm = subtractDD(leftTree,
                                     load(funcData.numeratorName));
-                            compilationCtx.addTreeToScope(s.scope(),
+                            funcData.compilationCtx.addTreeToScope(s.scope(),
                                     store(funcData.numeratorName, numeratorTerm, Tree.NoComment));
                         }
                     }
@@ -388,10 +395,10 @@ public class GaussianToGaussian
                             throw new CompilerException(
                                     "It is currently not possible to track through the end value for a reduction range.");
                         case 2: // Empty Value
-                            reduceEmptyValue(ri, compilationCtx);
+                            reduceEmptyValue(ri, funcData.compilationCtx);
                             break;
                         default: // one of the inputs.
-                            reduceArrayValue(ri, indexes.pop(), compilationCtx);
+                            reduceArrayValue(ri, indexes.pop(), funcData.compilationCtx);
                             break;
                     }
                     break;
@@ -399,8 +406,8 @@ public class GaussianToGaussian
                 case REDUCTION_RETURN: {
                     ReductionReturnTask<?> rrt = (ReductionReturnTask<?>) t;
                     ReductionScope<?> reductionScope = rrt.getReductionScope();
-                    compilationCtx.removeScopeSubstitute(reductionScope);
-                    compilationCtx.removeSubstitute(reductionScope.j);
+                    funcData.compilationCtx.removeScopeSubstitute(reductionScope);
+                    funcData.compilationCtx.removeSubstitute(reductionScope.j);
                     break;
                 }
                 case COPY:
@@ -441,7 +448,7 @@ public class GaussianToGaussian
     @SuppressWarnings("unchecked")
     @Override
     protected void getObservationToSampleIR(SampleTask<?, ?> task, IRTreeReturn<?> current,
-            GaussianToGaussianData funcData, TreeBuilderInfo info, CompilationContext compilationCtx) {
+            GaussianToGaussianData funcData, TreeBuilderInfo info) {
         List<IRTreeVoid> trees = new ArrayList<>();
         trees.add(store(funcData.denominatorSquareSumName,
                 addDD(load(funcData.denominatorSquareSumName),
@@ -453,13 +460,13 @@ public class GaussianToGaussian
                                 subtractDD((IRTreeReturn<DoubleVariable>) current, load(funcData.numeratorName)))),
                 "Add the weighting of the sample to the sum."));
 
-        trees.add(ifElse(load(funcData.sigmaNotFoundName), sequential(Tree.NoComment,
-                store(funcData.sigmaValueName, ((Gaussian) task.randomVariable).variance.getForwardIR(compilationCtx),
-                        Tree.NoComment),
-                store(funcData.sigmaNotFoundName, constant(false), Tree.NoComment)),
+        trees.add(ifElse(load(funcData.sigmaNotFoundName),
+                sequential(Tree.NoComment, store(funcData.sigmaValueName,
+                        ((Gaussian) task.randomVariable).variance.getForwardIR(info.compilationCtx), Tree.NoComment),
+                        store(funcData.sigmaNotFoundName, constant(false), Tree.NoComment)),
                 "If we have not got the value of sigma yet record it and set a flag so it is not recorded again."));
 
-        compilationCtx.addTreeToScope(task.scope(),
+        info.compilationCtx.addTreeToScope(task.scope(),
                 sequential(trees, "Record the value of a sample generated by a consuming sample " + task.id()
                         + " of random variable " + task.randomVariable.getVarDesc() + "."));
     }
@@ -574,37 +581,32 @@ public class GaussianToGaussian
     }
 
     @Override // No global state, so nothing to do here.
-    protected void allocateGlobalState(CompilationContext compilationCtx, GaussianToGaussianData funcData) {}
+    protected void allocateGlobalState(GaussianToGaussianData funcData) {}
 
     @Override
     protected void getDistributionSampleIR(DistributionSampleTask<?, ?> s,
-            IRTreeReturn<DoubleVariable> sourceProbability, GaussianToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+            IRTreeReturn<DoubleVariable> sourceProbability, GaussianToGaussianData funcData, TreeBuilderInfo info) {
         throw new CompilerException("Distribution samples are not yet supported for Gaussian to Gaussian inference. "
                 + "If this has been reached there is a bug in the compiler.");
     }
 
     @Override
-    protected void getPerSourceConfigStartIR(GaussianToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerSourceConfigStartIR(GaussianToGaussianData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerSourceConfigEndIR(GaussianToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerSourceConfigEndIR(GaussianToGaussianData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerConsumerStartIR(GaussianToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerConsumerStartIR(GaussianToGaussianData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void getPerConsumerEndIR(GaussianToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void getPerConsumerEndIR(GaussianToGaussianData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void finalize(GaussianToGaussianData funcData, CompilationContext compilationCtx) {}
+    protected void finalize(GaussianToGaussianData funcData) {}
 
     @Override
-    protected ScopeConstructor getBackTraceScope(GaussianToGaussianData funcData, CompilationContext compilationCtx) {
+    protected ScopeConstructor getBackTraceScope(GaussianToGaussianData funcData) {
         return funcData.targetScope;
     }
 
@@ -614,31 +616,27 @@ public class GaussianToGaussian
     }
 
     @Override
-    protected void addDistributionProbabilities(ScopeConstructor targetScope, GaussianToGaussianData funcData,
-            CompilationContext compilationCtx) {
+    protected void addDistributionProbabilities(ScopeConstructor targetScope, GaussianToGaussianData funcData) {
         throw new CompilerException("Unable to merge distributions in Gaussian Gaussian inference.");
     }
 
     @Override
-    protected void backTraceScopeStartIR(GaussianToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void backTraceScopeStartIR(GaussianToGaussianData funcData, TreeBuilderInfo info) {}
 
     @Override
-    protected void backTraceScopeEndIR(GaussianToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {}
+    protected void backTraceScopeEndIR(GaussianToGaussianData funcData, TreeBuilderInfo info) {}
 
     @Override
     protected void getPerDistributedSampleStartIR(GaussianToGaussianData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {}
+            TreeBuilderInfo info) {}
 
     @Override
     protected void getPerDistributedSampleEndIR(GaussianToGaussianData funcData, DistributionSampleTask<?, ?> s,
-            TreeBuilderInfo info, CompilationContext compilationCtx) {}
+            TreeBuilderInfo info) {}
 
     @Override
     protected <C extends ScalarVariable<C>, D extends ScalarVariable<D>> void getDeterministicObservationToConditionalIR(
-            IRTreeReturn<C> current, ScalarVariable<D> input, GaussianToGaussianData funcData, TreeBuilderInfo info,
-            CompilationContext compilationCtx) {
+            IRTreeReturn<C> current, ScalarVariable<D> input, GaussianToGaussianData funcData, TreeBuilderInfo info) {
         throw new CompilerException("Unable to infer conditional guards in a conjugate prior.");
     }
 }

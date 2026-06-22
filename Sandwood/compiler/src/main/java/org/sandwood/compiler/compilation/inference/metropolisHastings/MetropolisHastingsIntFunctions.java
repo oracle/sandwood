@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -62,8 +62,7 @@ public class MetropolisHastingsIntFunctions<B extends RandomVariable<IntVariable
      * Method to select a proposed value.
      */
     @Override
-    protected void getProposedValue(MetropolisHastingsData<IntVariable, B> funcData,
-            CompilationContext compilationCtx) {
+    protected void getProposedValue(MetropolisHastingsData<IntVariable, B> funcData) {
         VariableDescription<DoubleVariable> varName = VariableNames.calcVarName("var", VariableType.DoubleVariable,
                 true);
         VariableDescription<DoubleVariable> offsetName = VariableNames.calcVarName("offset",
@@ -74,17 +73,17 @@ public class MetropolisHastingsIntFunctions<B extends RandomVariable<IntVariable
         IRTreeReturn<DoubleVariable> proposedVar = multiplyID(
                 multiplyII(load(funcData.originalValueName), load(funcData.originalValueName)),
                 multiplyDD(constant(fractionOfCurrentValue), constant(fractionOfCurrentValue)));
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(varName, proposedVar, "Calculate a proposed variance."));
 
         // Ensure it is not too small
         IRTreeReturn<BooleanVariable> guard = lessThan(load(varName), constant(1.0));
         IRTreeVoid ifStmt = store(varName, constant(1.0), Tree.NoComment);
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
                 IRTree.ifElse(guard, ifStmt, "Ensure the variance is at least 1"));
 
         // Sample a Gaussian distribution based on it.
-        compilationCtx.addTreeToScope(GlobalScope.scope,
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(
                         offsetName, functionCallReturn(FunctionType.SAMPLE, VariableType.DoubleVariable,
                                 VariableType.Gaussian, constant(0.0), load(varName)),
@@ -95,14 +94,15 @@ public class MetropolisHastingsIntFunctions<B extends RandomVariable<IntVariable
         IRTreeReturn<DoubleVariable> ifValue = subtractDI(load(offsetName), constant(1));
         IRTreeReturn<DoubleVariable> elseValue = addDI(load(offsetName), constant(1));
         IRTreeReturn<DoubleVariable> offset = conditionalAssignment(guard, ifValue, elseValue);
-        compilationCtx.addTreeToScope(GlobalScope.scope, store(offsetName, offset, "Make sure the offset is not 0"));
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope,
+                store(offsetName, offset, "Make sure the offset is not 0"));
 
         // Construct the proposed value
         IRTreeReturn<IntVariable> proposedValueTree = addII(load(funcData.originalValueName),
                 castToInteger(load(offsetName)));
         IRTreeVoid proposedValueTreeInit = initializeVariable(funcData.proposedValueName, proposedValueTree,
                 "The proposed new value for the sample");
-        compilationCtx.addTreeToScope(GlobalScope.scope, proposedValueTreeInit);
+        funcData.compilationCtx.addTreeToScope(GlobalScope.scope, proposedValueTreeInit);
     }
 
     @Override

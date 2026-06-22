@@ -105,7 +105,7 @@ public class ScopeConstructor {
 
     public enum Direction {
         FORWARDS,
-        BACKWARDS; 
+        BACKWARDS;
     }
 
     public enum Guards {
@@ -969,7 +969,7 @@ public class ScopeConstructor {
                 // array for it.
                 if(guardDesc.scopes.isEmpty()) {
                     VariableDescription<BooleanVariable> varDesc = guardDesc.varDesc;
-                    addTree((TreeBuilderInfo info) -> compilationCtx.addTreeToScope(GlobalScope.scope,
+                    addTree((TreeBuilderInfo info) -> info.compilationCtx.addTreeToScope(GlobalScope.scope,
                             initializeVariable(varDesc, constant(false),
                                     "Guard to check that at most one copy of the code is executed for a given set of loop iterations.")));
                 } else {
@@ -1514,7 +1514,7 @@ public class ScopeConstructor {
         ParForTask parallelScope = getParallelScope(tasks.get(getConstraintCount() - 1).scope());
         allocateGlobalState(guardDesc.scopes, globalGuardName, parallelScope);
 
-        addTree((TreeBuilderInfo info) -> compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(
+        addTree((TreeBuilderInfo info) -> info.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(
                 VariableNames.altTypeName(guardDesc.varDesc, globalGuardName.type),
                 loadGlobalField(globalGuardName, parallelScope),
                 "Guard to check that at most one copy of the code is executed for a given random variable instance.")));
@@ -1526,7 +1526,7 @@ public class ScopeConstructor {
             List<IRTreeReturn<IntVariable>> indexes = constructGuardScopes(guardDesc.scopes);
 
             // Then use tree utils to place the value.
-            compilationCtx.addTreeToScope(GlobalScope.scope,
+            info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     TreeUtils.putIndirectValue(guardDesc.varDesc, indexes, constant(false), "Set the flags to false"));
         });
     }

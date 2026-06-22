@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -29,29 +29,29 @@ public abstract class InferenceGeneratorScalar<A extends ScalarVariable<A>, B ex
     }
 
     @Override
-    protected void addSampleValueTree(FuncData funcData, CompilationContext compilationCtx) {
-        IRTreeReturn<A> sampleValue = calculateSampleValue(compilationCtx, funcData);
-        funcData.sampleDesc.updateSample(sampleValue, compilationCtx);
+    protected void addSampleValueTree(FuncData funcData) {
+        IRTreeReturn<A> sampleValue = calculateSampleValue(funcData);
+        funcData.sampleDesc.updateSample(sampleValue, funcData.compilationCtx);
     }
 
-    protected abstract IRTreeReturn<A> calculateSampleValue(CompilationContext compilationCtx, FuncData funcData);
+    protected abstract IRTreeReturn<A> calculateSampleValue(FuncData funcData);
 
     // Methods passing through to the subclasses. this provides a point where we can add in code that should be executed
     // for all scalar values, but not for arrays.
     @Override
-    protected void allocateGlobalStateInternal(CompilationContext compilationCtx, FuncData funcData) {
-        CompilationPhase phase = compilationCtx.phase;
-        compilationCtx.phase = CompilationPhase.ALLOCATION;
-        allocateGlobalState(compilationCtx, funcData);
-        compilationCtx.phase = phase;
+    protected void allocateGlobalStateInternal(FuncData funcData) {
+        CompilationPhase phase = funcData.compilationCtx.phase;
+        funcData.compilationCtx.phase = CompilationPhase.ALLOCATION;
+        allocateGlobalState(funcData);
+        funcData.compilationCtx.phase = phase;
     }
 
-    protected abstract void allocateGlobalState(CompilationContext compilationCtx, FuncData funcData);
+    protected abstract void allocateGlobalState(FuncData funcData);
 
     @Override
-    protected void constructFunctionVariablesInternal(FuncData funcData, CompilationContext compilationCtx) {
-        constructFunctionVariables(funcData, compilationCtx);
+    protected void constructFunctionVariablesInternal(FuncData funcData) {
+        constructFunctionVariables(funcData);
     }
 
-    protected abstract void constructFunctionVariables(FuncData funcData, CompilationContext compilationCtx);
+    protected abstract void constructFunctionVariables(FuncData funcData);
 }
