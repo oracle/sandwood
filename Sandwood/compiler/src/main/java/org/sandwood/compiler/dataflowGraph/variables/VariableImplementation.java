@@ -204,15 +204,14 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     @Override
     public VariableDescription<A> getVarDesc() {
         String alias = instanceHandle().getAlias();
-        boolean isSubArray = getType().isArray() && ((ArrayVariable<?>)this).isSubArray();
+        boolean isSubArray = getType().isArray() && ((ArrayVariable<?>) this).isSubArray();
         if(alias != null) {
-            if(isIntermediate() || (isSample() && ! isSubArray) || parent.getType() == DFType.CONSTRUCT_INPUT)
+            if(isIntermediate() || (isSample() && !isSubArray) || parent.getType() == DFType.CONSTRUCT_INPUT)
                 return new GlobalVariableDescription<>(alias, getType(), false);
             else
                 return new LocalVariableDescription<>(alias, getType(), false);
-        }
-        else {
-            if(isSample() && ! isSubArray)
+        } else {
+            if(isSample() && !isSubArray)
                 return new GlobalVariableDescription<>("var" + getHandleId(), getType(), true);
             else
                 return new LocalVariableDescription<>("var" + getHandleId(), getType(), true);
@@ -562,8 +561,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
         if(this == i) {
             intermediateVariable = true;
             uniqueName = VariableNames.makeGlobal(uniqueName);
-        }
-        else
+        } else
             i.setIntermediate();
     }
 
@@ -793,7 +791,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
         var.add(this);
         return Variable.collectInputVariable(var, stopTypes);
     }
-    
+
     /**
      * Method to get the observation status of a variable.
      * 

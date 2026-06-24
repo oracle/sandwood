@@ -107,15 +107,18 @@ public class ScopeConstructor {
 
     public enum Direction {
         FORWARDS,
-        BACKWARDS; }
+        BACKWARDS;
+    }
 
     public enum Guards {
         GUARDS,
-        NO_GUARDS; }
+        NO_GUARDS;
+    }
 
     public enum Values {
         PASS_VALUES,
-        IGNORE_VALUES; }
+        IGNORE_VALUES;
+    }
 
     private static class GuardDesc {
         // Name for the guard that will ensure the body of this code is only executed once. If there is only 1 trace

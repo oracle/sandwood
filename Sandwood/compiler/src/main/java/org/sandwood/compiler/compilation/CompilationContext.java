@@ -352,7 +352,7 @@ public class CompilationContext {
                 unorderedConstructors.add(IRTree.treeScope(constructor, "Constructor for " + fieldName));
             else
                 orderedConstructors
-                .add(new VarConstructor(v, IRTree.treeScope(constructor, "Constructor for " + fieldName)));
+                        .add(new VarConstructor(v, IRTree.treeScope(constructor, "Constructor for " + fieldName)));
         }
 
         public void addScratchConstructor(ScratchVariableDescription<?> fieldName, IRTreeVoid constructor) {

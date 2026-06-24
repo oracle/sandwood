@@ -10,7 +10,7 @@ package org.sandwood.compiler.dataflowGraph.variables;
 
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 
-public class GlobalVariableDescription<A extends Variable<A>> extends ClassVariableDescription<A> {
+public final class GlobalVariableDescription<A extends Variable<A>> extends ClassVariableDescription<A> {
 
     public GlobalVariableDescription(String name, Type<A> type, boolean comment) {
         this(new VariableName(name, comment), type);

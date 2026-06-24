@@ -10,7 +10,7 @@ package org.sandwood.compiler.dataflowGraph.variables;
 
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 
-public class ScratchVariableDescription<A extends Variable<A>> extends ClassVariableDescription<A> {
+public final class ScratchVariableDescription<A extends Variable<A>> extends ClassVariableDescription<A> {
 
     public ScratchVariableDescription(String name, Type<A> type, boolean comment) {
         this(new VariableName(name, comment), type);
