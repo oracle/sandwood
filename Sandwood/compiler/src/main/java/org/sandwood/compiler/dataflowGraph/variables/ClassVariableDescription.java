@@ -10,8 +10,9 @@ package org.sandwood.compiler.dataflowGraph.variables;
 
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 
-public abstract class ClassVariableDescription<A extends Variable<A>> extends VariableDescription<A> {
-    
+public abstract sealed class ClassVariableDescription<A extends Variable<A>> extends VariableDescription<A>
+        permits GlobalVariableDescription, ScratchVariableDescription {
+
     ClassVariableDescription(VariableName name, Type<A> type) {
         super(name, type);
     }

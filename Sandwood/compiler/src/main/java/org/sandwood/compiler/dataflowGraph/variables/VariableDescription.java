@@ -23,7 +23,8 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
  * @author djgoodma
  *
  */
-public abstract class VariableDescription<A extends Variable<A>> implements Comparable<VariableDescription<?>> {
+public abstract sealed class VariableDescription<A extends Variable<A>> implements Comparable<VariableDescription<?>>
+        permits ClassVariableDescription, LocalVariableDescription {
     /**
      * The name of the variable.
      */
@@ -70,6 +71,6 @@ public abstract class VariableDescription<A extends Variable<A>> implements Comp
     public int compareTo(VariableDescription<?> o) {
         return name.compareTo(o.name);
     }
-    
+
     public abstract <B extends Variable<B>> VariableDescription<B> alternativeType(Type<B> type);
 }
