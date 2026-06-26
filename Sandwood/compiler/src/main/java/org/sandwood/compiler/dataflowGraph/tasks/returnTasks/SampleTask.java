@@ -11,7 +11,7 @@ package org.sandwood.compiler.dataflowGraph.tasks.returnTasks;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTaskImplementation;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.VariableName;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
@@ -39,7 +39,7 @@ public abstract class SampleTask<A extends Variable<A>, B extends RandomVariable
 
     public abstract Type<A> getBaseType();
 
-    public VariableDescription<A> getUniqueVarDesc() {
-        return new VariableDescription<>("sample" + id(), getBaseType(), false);
+    public VariableName getSampleName() {
+        return new VariableName("sample" + id(), false);
     }
 }

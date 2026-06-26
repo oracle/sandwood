@@ -27,6 +27,7 @@ import org.sandwood.compiler.compilation.inference.InferenceGeneratorArrayProb;
 import org.sandwood.compiler.compilation.util.TreeUtils;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -59,10 +60,10 @@ public abstract class MetropolisHastingsArrayFunctions<A extends Variable<A>, B 
         }
     }
 
-    private static final VariableDescription<DoubleVariable> originalProbabilityName = VariableNames
-            .calcVarName("originalProbability", VariableType.DoubleVariable, true);
-    private static final VariableDescription<DoubleVariable> proposedProbabilityName = VariableNames
-            .calcVarName("proposedProbability", VariableType.DoubleVariable, true);
+    private static final LocalVariableDescription<DoubleVariable> originalProbabilityName = VariableNames
+            .localCalcVarName("originalProbability", VariableType.DoubleVariable, true);
+    private static final LocalVariableDescription<DoubleVariable> proposedProbabilityName = VariableNames
+            .localCalcVarName("proposedProbability", VariableType.DoubleVariable, true);
 
     @Override
     protected String getInferenceType() {
@@ -137,7 +138,7 @@ public abstract class MetropolisHastingsArrayFunctions<A extends Variable<A>, B 
     @Override
     protected void addSampleValueTree(MetropolisHastingsArrayData<A, B> funcData) {
 
-        VariableDescription<DoubleVariable> ratioName = VariableNames.calcVarName("ratio", VariableType.DoubleVariable,
+        LocalVariableDescription<DoubleVariable> ratioName = VariableNames.localCalcVarName("ratio", VariableType.DoubleVariable,
                 true);
         IRTreeReturn<DoubleVariable> ratio = subtractDD(load(proposedProbabilityName), load(originalProbabilityName));
         funcData.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(ratioName, ratio,

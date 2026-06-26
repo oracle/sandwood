@@ -8,7 +8,7 @@
 
 package org.sandwood.compiler.trees.irTree;
 
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.trees.irTree.transformations.TreeTransformation;
 import org.sandwood.compiler.trees.transformationTree.TransTree;
@@ -22,12 +22,12 @@ public class IRFor extends IRTreeVoid {
     public final IRTreeReturn<IntVariable> start;
     public final IRTreeReturn<IntVariable> end;
     public final IRTreeReturn<IntVariable> step;
-    public final VariableDescription<IntVariable> indexDesc;
+    public final LocalVariableDescription<IntVariable> indexDesc;
     public final boolean parallel;
     public final boolean incrementing;
 
     IRFor(IRTreeVoid body, IRTreeReturn<IntVariable> start, IRTreeReturn<IntVariable> end,
-            IRTreeReturn<IntVariable> step, VariableDescription<IntVariable> indexDesc, boolean parallel,
+            IRTreeReturn<IntVariable> step, LocalVariableDescription<IntVariable> indexDesc, boolean parallel,
             boolean incrementing, String comment) {
         super(IRTreeType.FOR, comment);
         this.body = body;

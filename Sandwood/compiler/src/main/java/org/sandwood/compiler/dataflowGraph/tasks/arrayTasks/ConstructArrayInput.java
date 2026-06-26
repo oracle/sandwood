@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -15,7 +15,6 @@ import org.sandwood.compiler.compilation.CompilationContext;
 import org.sandwood.compiler.dataflowGraph.tasks.ArrayProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.ConstructInput;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.ArrayType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
@@ -85,16 +84,11 @@ public class ConstructArrayInput<A extends Variable<A>> extends ConstructInput<A
         // Calculate the dimension of the input array
         int arrayDim = getOutputType().getDepth();
 
-        if(arrayDim == 1) // TODO tidy up the creation and removal of VariableName's here.
-            shapeVar = Variable.observeInt(
-                    VariableNames.lengthName(new VariableDescription<>(name, VariableType.IntVariable, false)).name
-                            .getName(),
-                    getLocation());
+        if(arrayDim == 1) 
+            shapeVar = Variable.observeInt(VariableNames.lengthName(name), getLocation());
         else {
             ArrayType<?> lengthType = (ArrayType<?>) VariableType.getType(VariableType.IntVariable, arrayDim - 1);
-            shapeVar = Variable.observeArray(
-                    VariableNames.lengthName(new VariableDescription<>(name, lengthType, false)).name.getName(),
-                    lengthType, getLocation());
+            shapeVar = Variable.observeArray(VariableNames.lengthName(name), lengthType, getLocation());
         }
     }
 }

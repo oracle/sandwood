@@ -58,8 +58,7 @@ public class IRProxyTreeSeq extends IRTreeVoid {
     }
 
     public static void testTree(IRTree t, IRTree start) {
-        if(t == start)
-            System.out.println("There is a cycle in the IRTree structure");
+        assert t != start;
         // This is the only way to get a cycle, so if there is a cycle it starts here.
         if(t.type == IRTreeType.PROXY_SEQ) {
             List<IRTreeVoid> proxyTrees = ((IRProxyTreeSeq) t).trees;

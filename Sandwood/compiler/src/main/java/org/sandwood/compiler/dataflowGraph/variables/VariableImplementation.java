@@ -204,10 +204,18 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     @Override
     public VariableDescription<A> getVarDesc() {
         String alias = instanceHandle().getAlias();
-        if(alias != null)
-            return new VariableDescription<>(alias, getType(), false);
-        else
-            return new VariableDescription<>("var" + getHandleId(), getType(), true);
+        boolean isSubArray = getType().isArray() && ((ArrayVariable<?>) this).isSubArray();
+        if(alias != null) {
+            if(isIntermediate() || (isSample() && !isSubArray) || parent.getType() == DFType.CONSTRUCT_INPUT)
+                return new GlobalVariableDescription<>(alias, getType(), false);
+            else
+                return new LocalVariableDescription<>(alias, getType(), false);
+        } else {
+            if(isSample() && !isSubArray)
+                return new GlobalVariableDescription<>("var" + getHandleId(), getType(), true);
+            else
+                return new LocalVariableDescription<>("var" + getHandleId(), getType(), true);
+        }
     }
 
     /**
@@ -228,8 +236,10 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     private void constructUniqueName(Type<A> type) {
         Variable<?> i = instanceHandle();
         String alias = (i != null) ? i.getAlias() : this.alias;
-
-        uniqueName = VariableNames.variableName(alias, getHandleId(), type, false);
+        if(parent.getType() == DFType.CONSTRUCT_INPUT)
+            uniqueName = VariableNames.globalVariableName(alias, getHandleId(), type);
+        else
+            uniqueName = VariableNames.localVariableName(alias, getHandleId(), type, false);
     }
 
     /**
@@ -297,11 +307,11 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     }
 
     @Override
-    public void setUniqueVarDesc(VariableDescription<A> varDesc) {
-        if(this == instanceHandle() || instanceHandle() == null) {
-            this.uniqueName = varDesc;
-        } else
-            instanceHandle().setUniqueVarDesc(varDesc);
+    public void setUniqueVarDesc(VariableDescription<A> uniqueName) {
+        if(this == instanceHandle() || instanceHandle() == null)
+            this.uniqueName = uniqueName;
+        else
+            instanceHandle().setUniqueVarDesc(uniqueName);
     }
 
     /**
@@ -548,9 +558,10 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
     @Override
     public void setIntermediate() {
         Variable<A> i = instanceHandle();
-        if(this == i)
+        if(this == i) {
             intermediateVariable = true;
-        else
+            uniqueName = VariableNames.makeGlobal(uniqueName);
+        } else
             i.setIntermediate();
     }
 
@@ -780,7 +791,7 @@ public abstract class VariableImplementation<A extends Variable<A>> implements V
         var.add(this);
         return Variable.collectInputVariable(var, stopTypes);
     }
-    
+
     /**
      * Method to get the observation status of a variable.
      * 

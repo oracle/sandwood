@@ -33,7 +33,7 @@ import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.RandomVariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
@@ -61,11 +61,11 @@ public class BetaToBernoulliBinomial
             extends InferenceGeneratorScalar.ScalarFunctionData<DoubleVariable, Beta> {
         // Names for the different variables that will be needed to construct for this
         // function.s
-        final VariableDescription<IntVariable> noTrueName;
-        final VariableDescription<IntVariable> noTrialsName;
+        final LocalVariableDescription<IntVariable> noTrueName;
+        final LocalVariableDescription<IntVariable> noTrialsName;
 
-        final VariableDescription<DoubleVariable> noTrueNameDis;
-        final VariableDescription<DoubleVariable> noTrialsNameDis;
+        final LocalVariableDescription<DoubleVariable> noTrueNameDis;
+        final LocalVariableDescription<DoubleVariable> noTrialsNameDis;
 
         final boolean distributedConsumers;
 
@@ -73,11 +73,11 @@ public class BetaToBernoulliBinomial
                 CompilationContext compilationCtx) {
             super(sample, false, compilationCtx);
 
-            noTrueName = VariableNames.calcVarName("sum", VariableType.IntVariable, true);
-            noTrialsName = VariableNames.calcVarName("count", VariableType.IntVariable, true);
+            noTrueName = VariableNames.localCalcVarName("sum", VariableType.IntVariable, true);
+            noTrialsName = VariableNames.localCalcVarName("count", VariableType.IntVariable, true);
 
-            noTrueNameDis = VariableNames.calcVarName("sum", VariableType.DoubleVariable, true);
-            noTrialsNameDis = VariableNames.calcVarName("count", VariableType.DoubleVariable, true);
+            noTrueNameDis = VariableNames.localCalcVarName("sum", VariableType.DoubleVariable, true);
+            noTrialsNameDis = VariableNames.localCalcVarName("count", VariableType.DoubleVariable, true);
 
             boolean distributed = false;
             for(RandomVariable<?, ?> consumingRV:consumingRVs)
@@ -253,8 +253,8 @@ public class BetaToBernoulliBinomial
     protected void getDistributionSampleIR(DistributionSampleTask<?, ?> task,
             IRTreeReturn<DoubleVariable> sourceProbability, BetaToBernoulliBinomialData funcData,
             TreeBuilderInfo info) {
-        VariableDescription<DoubleVariable> distributionProbability = VariableNames
-                .calcVarName("distributionProbability", VariableType.DoubleVariable, true);
+        LocalVariableDescription<DoubleVariable> distributionProbability = VariableNames
+                .localCalcVarName("distributionProbability", VariableType.DoubleVariable, true);
         info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(distributionProbability, multiplyDD(sourceProbability, info.probability),
                         "The probability of reaching the consumer with this set of consumer arguments"));
@@ -274,9 +274,9 @@ public class BetaToBernoulliBinomial
                     addDD(load(funcData.noTrialsNameDis),
                             multiplyDI(load(distributionProbability), load(binomial.length))),
                     "Increment the number of booleans sampled.");
-            VariableDescription<DoubleVariable> accumulator = VariableNames.calcVarName("accumulator",
+            LocalVariableDescription<DoubleVariable> accumulator = VariableNames.localCalcVarName("accumulator",
                     VariableType.DoubleVariable, true);
-            VariableDescription<IntVariable> indexName = VariableNames.indexName(distribution.getUniqueVarDesc());
+            LocalVariableDescription<IntVariable> indexName = VariableNames.indexName(distribution.getUniqueVarDesc());
             List<IRTreeVoid> scopedTrees = new ArrayList<>();
             scopedTrees.add(initializeVariable(accumulator, constant(0.0),
                     "An accumulator to calculate the probable number of true booleans"));

@@ -28,7 +28,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Gamma;
@@ -51,16 +51,16 @@ public class GammaToPoisson extends InferenceGeneratorScalar<DoubleVariable, Gam
             extends InferenceGeneratorScalar.ScalarFunctionData<DoubleVariable, Gamma> {
         // Names for the different variables that need to be construct for this
         // function.
-        final VariableDescription<DoubleVariable> sumName;
-        final VariableDescription<IntVariable> countName;
-        final VariableDescription<DoubleVariable> countNameDis;
+        final LocalVariableDescription<DoubleVariable> sumName;
+        final LocalVariableDescription<IntVariable> countName;
+        final LocalVariableDescription<DoubleVariable> countNameDis;
         final boolean distributedConsumers;
 
         protected GammaToPoissonData(SampleTask<DoubleVariable, Gamma> sample, CompilationContext compilationCtx) {
             super(sample, false, compilationCtx);
-            sumName = VariableNames.calcVarName("sum", VariableType.DoubleVariable, true);
-            countName = VariableNames.calcVarName("count", VariableType.IntVariable, true);
-            countNameDis = VariableNames.calcVarName("count", VariableType.DoubleVariable, true);
+            sumName = VariableNames.localCalcVarName("sum", VariableType.DoubleVariable, true);
+            countName = VariableNames.localCalcVarName("count", VariableType.IntVariable, true);
+            countNameDis = VariableNames.localCalcVarName("count", VariableType.DoubleVariable, true);
 
             boolean distributed = false;
             for(RandomVariable<?, ?> consumingRV:consumingRVs)

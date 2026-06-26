@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.rng.RandomNumberGenerator;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
 import org.sandwood.compiler.trees.transformationTree.transformers.Transformer;
@@ -19,26 +20,29 @@ import org.sandwood.compiler.trees.transformationTree.visitors.TreeVisitor;
 
 public class TransParFor extends TransTreeVoid {
 
-    private final int parDepth;
+    private final TransTreeReturn<RandomNumberGenerator> rng;
     private final TransTreeReturn<IntVariable> start, end, step;
     private final TransParForLambda body;
 
-    private TransParFor(int parDepth, TransTreeReturn<IntVariable> start, TransTreeReturn<IntVariable> end,
-            TransTreeReturn<IntVariable> step, TransParForLambda body, String comment) {
-        super(TransTreeType.FORK_JOIN_FOR, start.size() + step.size() + end.size() + body.size() + 1, comment);
-        this.parDepth = parDepth;
+    private TransParFor(TransTreeReturn<RandomNumberGenerator> rng, TransTreeReturn<IntVariable> start,
+            TransTreeReturn<IntVariable> end, TransTreeReturn<IntVariable> step, TransParForLambda body,
+            String comment) {
+        super(TransTreeType.FORK_JOIN_FOR, rng.size() + start.size() + step.size() + end.size() + body.size() + 1,
+                comment);
+        this.rng = rng;
         this.start = start;
         this.end = end;
         this.step = step;
         this.body = body;
     }
 
-    public static TransTreeVoid getParFor(int parDepth, TransTreeReturn<IntVariable> start,
-            TransTreeReturn<IntVariable> end, TransTreeReturn<IntVariable> step, TransTreeVoid body, String comment) {
+    public static TransTreeVoid getParFor(TransTreeReturn<RandomNumberGenerator> rng,
+            TransTreeReturn<IntVariable> start, TransTreeReturn<IntVariable> end, TransTreeReturn<IntVariable> step,
+            TransTreeVoid body, String comment) {
         if(body.type == TransTreeType.NOP)
             return body;
         else
-            return new TransParFor(parDepth, start, end, step, (TransParForLambda) body, comment);
+            return new TransParFor(rng, start, end, step, (TransParForLambda) body, comment);
     }
 
     @Override
@@ -62,12 +66,13 @@ public class TransParFor extends TransTreeVoid {
 
     @Override
     public TransTreeVoid applyTransformationInternal(Transformer t) {
-        return getParFor(parDepth, t.transform(start), t.transform(end), t.transform(step), t.transform(body), comment);
+        return getParFor(t.transform(rng), t.transform(start), t.transform(end), t.transform(step), t.transform(body),
+                comment);
     }
 
     @Override
     public OutputTree toOutputTreeInternal() {
-        return OutputTree.ForkJoinFor(parDepth, start.toOutputTreeReturnInternal(),
+        return OutputTree.ForkJoinFor(rng.toOutputTreeReturnInternal(), start.toOutputTreeReturnInternal(),
                 end.collapseConstants().toOutputTreeReturnInternal(), step.toOutputTreeReturnInternal(),
                 body.toOutputTreeInternal(), comment);
     }

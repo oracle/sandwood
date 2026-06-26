@@ -22,6 +22,7 @@ import org.sandwood.compiler.dataflowGraph.tasks.ArrayProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -46,7 +47,7 @@ public class GetNumberTask<A extends NumberVariable<A>> extends GetTask<A> imple
     @Override
     public IRTreeReturn<A> getMax(CompilationContext compilationCtx) {
         compilationCtx.enterScope(scope());
-        VariableDescription<A> max = VariableNames.calcVarName(output, "max", getOutputType());
+        LocalVariableDescription<A> max = VariableNames.localCalcVarName(output, "max", getOutputType());
 
         ArrayProducingDataflowTask<?> source = array.getSource();
         if(source.getType() == DFType.CONSTRUCT_INPUT) {
@@ -79,7 +80,7 @@ public class GetNumberTask<A extends NumberVariable<A>> extends GetTask<A> imple
                 IRTreeReturn<IntVariable> start = IRTree.max(IRTree.constant(0), index.getMin(compilationCtx));
                 IRTreeReturn<IntVariable> end = IRTree.min(array.getLength(compilationCtx),
                         IRTree.addII(index.getMax(compilationCtx), IRTree.constant(1)));
-                VariableDescription<IntVariable> indexDesc = VariableNames.calcVarName(output, "maxIndex",
+                LocalVariableDescription<IntVariable> indexDesc = VariableNames.localCalcVarName(output, "maxIndex",
                         VariableType.IntVariable);
                 t = IRTree.store(max, IRTree.max(IRTree.load(max), IRTree.arrayGet(arrayTree, IRTree.load(indexDesc))),
                         Tree.NoComment);
@@ -124,7 +125,7 @@ public class GetNumberTask<A extends NumberVariable<A>> extends GetTask<A> imple
     @Override
     public IRTreeReturn<A> getMin(CompilationContext compilationCtx) {
         compilationCtx.enterScope(scope());
-        VariableDescription<A> min = VariableNames.calcVarName(getOutput(), "min", getOutputType());
+        LocalVariableDescription<A> min = VariableNames.localCalcVarName(getOutput(), "min", getOutputType());
 
         ArrayProducingDataflowTask<?> source = array.getSource();
         if(source.getType() == DFType.CONSTRUCT_INPUT) {
@@ -158,7 +159,7 @@ public class GetNumberTask<A extends NumberVariable<A>> extends GetTask<A> imple
                 IRTreeReturn<IntVariable> end = IRTree.min(
                         IRTree.getIntField(array.getForwardIR(compilationCtx), "length"),
                         IRTree.addII(index.getMax(compilationCtx), IRTree.constant(1)));
-                VariableDescription<IntVariable> indexDesc = VariableNames.calcVarName(output, "maxIndex",
+                LocalVariableDescription<IntVariable> indexDesc = VariableNames.localCalcVarName(output, "maxIndex",
                         VariableType.IntVariable);
                 t = IRTree.store(min, IRTree.min(IRTree.load(min), IRTree.arrayGet(arrayTree, IRTree.load(indexDesc))),
                         Tree.NoComment);
@@ -209,7 +210,7 @@ public class GetNumberTask<A extends NumberVariable<A>> extends GetTask<A> imple
 
         IRTreeReturn<ArrayVariable<ArrayVariable<B>>> outerArrayTree = getInputArrayTree(outerArray, substitutions, tag,
                 id - 1, compilationCtx);
-        VariableDescription<ArrayVariable<B>> innerName = VariableNames.calcVarName(output, tag + "Array" + id,
+        LocalVariableDescription<ArrayVariable<B>> innerName = VariableNames.localCalcVarName(output, tag + "Array" + id,
                 array.getType());
         IntVariable arrayIndex = desc.getIndex();
         Scope arrayScope = desc.getScope();
@@ -226,11 +227,11 @@ public class GetNumberTask<A extends NumberVariable<A>> extends GetTask<A> imple
                     IRTree.addII(index.getMax(compilationCtx), IRTree.constant(1)));
 
             // Construct local value names to hold them
-            VariableDescription<IntVariable> startDesc = VariableNames.calcVarName(output, tag + "Start" + id,
+            LocalVariableDescription<IntVariable> startDesc = VariableNames.localCalcVarName(output, tag + "Start" + id,
                     VariableType.IntVariable);
-            VariableDescription<IntVariable> endDesc = VariableNames.calcVarName(output, tag + "End" + id,
+            LocalVariableDescription<IntVariable> endDesc = VariableNames.localCalcVarName(output, tag + "End" + id,
                     VariableType.IntVariable);
-            VariableDescription<IntVariable> indexDesc = VariableNames.calcVarName(output, tag + "Index" + id,
+            LocalVariableDescription<IntVariable> indexDesc = VariableNames.localCalcVarName(output, tag + "Index" + id,
                     VariableType.IntVariable);
 
             // Add the value to the scope

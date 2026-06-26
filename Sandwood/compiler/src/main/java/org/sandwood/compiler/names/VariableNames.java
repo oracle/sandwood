@@ -12,6 +12,9 @@ import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
+import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.ScratchVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
@@ -24,13 +27,11 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.BooleanVari
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 
-//TODO Separate this out so that we have regular names and global names, and only global names can be used to create class fields.
-
 public final class VariableNames {
     private VariableNames() {}
 
-    public static <A extends Variable<A>> VariableDescription<A> internalName(VariableDescription<A> varDesc) {
-        return new VariableDescription<>(Name.prefix + varDesc, varDesc.type, varDesc.name.comment);
+    public static <A extends Variable<A>> GlobalVariableDescription<A> internalName(VariableDescription<A> varDesc) {
+        return new GlobalVariableDescription<>(Name.prefix + varDesc, varDesc.type, varDesc.name.comment);
     }
 
     public static VariableName internalName(VariableName name) {
@@ -47,27 +48,30 @@ public final class VariableNames {
 
     private static final String rng = "RNG" + Name.prefix;
 
-    public static VariableDescription<RandomNumberGenerator> rngName(int depth) {
-        if(depth == 0)
-            return new VariableDescription<>(rng, VariableType.RNG, true);
-        else
-            return new VariableDescription<>(rng + depth, VariableType.RNG, true);
+    public static GlobalVariableDescription<RandomNumberGenerator> rngName() {
+        return new GlobalVariableDescription<>(rng, VariableType.RNG, true);
+    }
+
+    public static LocalVariableDescription<RandomNumberGenerator> rngName(int depth) {
+        assert (depth > 0);
+        return new LocalVariableDescription<>(rng + depth, VariableType.RNG, true);
     }
 
     private static final String threadId = "threadID" + Name.prefix;
 
-    public static VariableDescription<IntVariable> threadIdName(VariableName name) {
-        return new VariableDescription<>(threadId + name, VariableType.IntVariable, name.comment);
+    public static LocalVariableDescription<IntVariable> threadIdName(VariableName name) {
+        return new LocalVariableDescription<>(threadId + name, VariableType.IntVariable, name.comment);
     }
 
     private static final String logProbability = "logProbability" + Name.prefix;
 
-    public static VariableDescription<DoubleVariable> logProbabilityName(VariableDescription<?> varDesc) {
-        return new VariableDescription<>(logProbability + varDesc, VariableType.DoubleVariable, varDesc.name.comment);
+    public static GlobalVariableDescription<DoubleVariable> logProbabilityName(VariableDescription<?> varDesc) {
+        return new GlobalVariableDescription<>(logProbability + varDesc, VariableType.DoubleVariable,
+                varDesc.name.comment);
     }
 
-    public static VariableDescription<DoubleVariable> logProbabilityName(VariableName name) {
-        return new VariableDescription<>(logProbability + name, VariableType.DoubleVariable, name.comment);
+    public static GlobalVariableDescription<DoubleVariable> logProbabilityName(VariableName name) {
+        return new GlobalVariableDescription<>(logProbability + name, VariableType.DoubleVariable, name.comment);
     }
 
     private static final String fixedSampleProbability = "fixedSampleDistProbability" + Name.prefix;
@@ -82,8 +86,8 @@ public final class VariableNames {
         return name.getName().startsWith(lengthPrefix);
     }
 
-    public static VariableDescription<IntVariable> lengthName(VariableDescription<?> varDesc) {
-        return new VariableDescription<>(lengthPrefix + varDesc, VariableType.IntVariable, varDesc.name.comment);
+    public static String lengthName(String varName) {
+        return lengthPrefix + varName;
     }
 
     public static VariableName lengthName(VariableName name) {
@@ -92,17 +96,12 @@ public final class VariableNames {
 
     private static final String lengthCVPrefix = "lengthCV" + Name.prefix;
 
-    public static VariableDescription<IntVariable> lengthCVName(VariableName name, int taskId, int tag) {
-        return new VariableDescription<>(lengthCVPrefix + name + Name.prefix + taskId + "_" + tag,
+    public static LocalVariableDescription<IntVariable> lengthCVName(VariableName name, int taskId, int tag) {
+        return new LocalVariableDescription<>(lengthCVPrefix + name + Name.prefix + taskId + "_" + tag,
                 VariableType.IntVariable, true);
     }
 
     private static final String shape = "Shape";
-
-    public static <A extends Variable<A>> VariableDescription<A> shapeName(VariableDescription<?> varDesc,
-            Type<A> type) {
-        return new VariableDescription<>(varDesc + shape, type, varDesc.name.comment);
-    }
 
     public static VariableName shapeName(VariableName name) {
         return new VariableName(name + shape, name.comment);
@@ -110,35 +109,52 @@ public final class VariableNames {
 
     private static final String calcVar = "cv" + Name.prefix;
 
-    public static <A extends Variable<A>> VariableDescription<A> calcVarName(Variable<?> v, String postfix,
+    public static <A extends Variable<A>> LocalVariableDescription<A> localCalcVarName(Variable<?> v, String postfix,
             Type<A> type) {
-        return VariableNames.calcVarName("var" + v.getId() + Name.prefix + postfix, type, true);
+        return localCalcVarName("var" + v.getId() + Name.prefix + postfix, type, true);
     }
 
-    // TODO remove the generated flag from here and set it to a static true.
-    public static <A extends Variable<A>> VariableDescription<A> calcVarName(String name, Type<A> type,
+    // TODO remove the generated flag from here and replace it with an enumeration so that it is clear what is being
+    // set. This will encourage it to be used correctly.
+    public static <A extends Variable<A>> LocalVariableDescription<A> localCalcVarName(String name, Type<A> type,
             boolean generated) {
-        return new VariableDescription<>(calcVar + name, type, generated);
+        return new LocalVariableDescription<>(calcVar + name, type, generated);
     }
 
-    public static <A extends Variable<A>> VariableDescription<A> calcVarName(String name1, String name2, Type<A> type,
-            boolean generated) {
-        return new VariableDescription<>(calcVar + name1 + Name.prefix + name2, type, generated);
-    }
-
-    public static <A extends Variable<A>> VariableDescription<A> calcVarName(String name1, String name2, String name3,
+    public static <A extends Variable<A>> LocalVariableDescription<A> localCalcVarName(String name1, String name2,
             Type<A> type, boolean generated) {
-        return new VariableDescription<>(calcVar + name1 + Name.prefix + name2 + Name.prefix + name3, type, generated);
+        return new LocalVariableDescription<>(calcVar + name1 + Name.prefix + name2, type, generated);
     }
 
-    public static <A extends Variable<A>> VariableDescription<A> calcVarName(VariableDescription<?> varDesc,
+    public static <A extends Variable<A>> LocalVariableDescription<A> localCalcVarName(String name1, String name2,
+            String name3, Type<A> type, boolean generated) {
+        return new LocalVariableDescription<>(calcVar + name1 + Name.prefix + name2 + Name.prefix + name3, type,
+                generated);
+    }
+
+    public static <A extends Variable<A>> LocalVariableDescription<A> localCalcVarName(VariableDescription<?> varDesc,
             Type<A> type) {
-        return new VariableDescription<>(calcVar + varDesc, type, varDesc.name.comment);
+        return new LocalVariableDescription<>(calcVar + varDesc, type, varDesc.name.comment);
     }
 
-    public static <A extends Variable<A>> VariableDescription<A> calcVarName(VariableDescription<?> varDesc,
+    public static <A extends Variable<A>> LocalVariableDescription<A> localCalcVarName(VariableDescription<?> varDesc,
             String postfix, Type<A> type) {
-        return new VariableDescription<>(calcVar + varDesc + Name.prefix + postfix, type, varDesc.name.comment);
+        return new LocalVariableDescription<>(calcVar + varDesc + Name.prefix + postfix, type, varDesc.name.comment);
+    }
+
+    public static <A extends Variable<A>> ScratchVariableDescription<A> globalScratchVarName(Variable<?> v, String postfix,
+            Type<A> type) {
+        return globalScratchVarName("var" + v.getId() + Name.prefix + postfix, type, true);
+    }
+
+    public static <A extends Variable<A>> ScratchVariableDescription<A> globalScratchVarName(String name, Type<A> type,
+            boolean generated) {
+        return new ScratchVariableDescription<>(calcVar + name, type, generated);
+    }
+
+    public static <A extends Variable<A>> ScratchVariableDescription<A> globalScratchVarName(String name1, String name2,
+            Type<A> type, boolean generated) {
+        return new ScratchVariableDescription<>(calcVar + name1 + Name.prefix + name2, type, generated);
     }
 
     public static VariableName calcVarName(VariableName name) {
@@ -151,36 +167,37 @@ public final class VariableNames {
 
     private static final String scopeVar = "scopeVariable" + Name.prefix;
 
-    public static <A extends Variable<A>> VariableDescription<A> scopeVarName(String name, Type<A> type) {
-        return new VariableDescription<>(scopeVar + name, type, true);
+    public static <A extends Variable<A>> LocalVariableDescription<A> scopeVarName(String name, Type<A> type) {
+        return new LocalVariableDescription<>(scopeVar + name, type, true);
     }
 
     private static final String distTempVar = "distributionTempVariable" + Name.prefix;
 
-    public static <A extends Variable<A>> VariableDescription<A> distributionTempName(VariableName name, int id,
+    public static <A extends Variable<A>> LocalVariableDescription<A> distributionTempName(VariableName name, int id,
             Type<A> type) {
-        return new VariableDescription<>(distTempVar + name + Name.prefix + id, type, true);
+        return new LocalVariableDescription<>(distTempVar + name + Name.prefix + id, type, true);
     }
 
     private static final String traceTempVar = "traceTempVariable" + Name.prefix;
 
-    public static <A extends Variable<A>> VariableDescription<A> traceTempName(VariableName name, int globalId,
+    public static <A extends Variable<A>> LocalVariableDescription<A> traceTempName(VariableName name, int globalId,
             int localId, Type<A> type) {
-        return new VariableDescription<>(traceTempVar + name + Name.prefix + globalId + "_" + localId, type, true);
+        return new LocalVariableDescription<>(traceTempVar + name + Name.prefix + globalId + "_" + localId, type, true);
     }
 
     private static final String reduceTempVar = "reduceVar" + Name.prefix;
 
-    public static <A extends Variable<A>> VariableDescription<A> reduceName(Variable<A> returnVar, int id) {
+    public static <A extends Variable<A>> LocalVariableDescription<A> reduceName(Variable<A> returnVar, int id) {
         VariableDescription<A> desc = returnVar.getUniqueVarDesc();
-        return new VariableDescription<>(reduceTempVar + desc.name + Name.prefix + id, desc.type, true);
+        return new LocalVariableDescription<>(reduceTempVar + desc.name + Name.prefix + id, desc.type, true);
     }
 
     private static final String fixedFlag = "fixedFlag" + Name.prefix;
 
-    public static VariableDescription<BooleanVariable> fixedFlagName(SampleTask<?, ?> task) {
-        VariableDescription<?> varDesc = task.getUniqueVarDesc();
-        return new VariableDescription<>(fixedFlag + varDesc, VariableType.BooleanVariable, varDesc.name.comment);
+    public static GlobalVariableDescription<BooleanVariable> fixedFlagName(SampleTask<?, ?> task) {
+        VariableName sampleName = task.getSampleName();
+        return new GlobalVariableDescription<>(fixedFlag + sampleName, VariableType.BooleanVariable,
+                sampleName.comment);
     }
 
     /**
@@ -189,78 +206,88 @@ public final class VariableNames {
      */
     private static final String constrainedFlag = "constrainedFlag" + Name.prefix;
 
-    public static VariableDescription<BooleanVariable> constrainedFlagName(SampleTask<?, ?> task) {
-        VariableDescription<?> varDesc = task.getUniqueVarDesc();
-        return new VariableDescription<BooleanVariable>(constrainedFlag + varDesc, VariableType.BooleanVariable, false);
+    public static GlobalVariableDescription<BooleanVariable> constrainedFlagName(SampleTask<?, ?> task) {
+        VariableName sampleName = task.getSampleName();
+        return new GlobalVariableDescription<BooleanVariable>(constrainedFlag + sampleName,
+                VariableType.BooleanVariable, false);
     }
 
     private static final String fixedProbFlag = "fixedProbFlag" + Name.prefix;
 
-    public static VariableDescription<BooleanVariable> getProbabilityFixedFlag(SampleTask<?, ?> task) {
-        VariableDescription<?> varDesc = task.getUniqueVarDesc();
-        return new VariableDescription<>(fixedProbFlag + varDesc, VariableType.BooleanVariable, varDesc.name.comment);
+    public static GlobalVariableDescription<BooleanVariable> getProbabilityFixedFlag(SampleTask<?, ?> task) {
+        VariableName sampleName = task.getSampleName();
+        return new GlobalVariableDescription<>(fixedProbFlag + sampleName, VariableType.BooleanVariable,
+                sampleName.comment);
     }
 
     private static final String index = "index" + Name.prefix;
 
-    public static VariableDescription<IntVariable> indexName(VariableDescription<?> desc) {
-        return new VariableDescription<>(index + desc.name, VariableType.IntVariable, desc.name.comment);
+    public static LocalVariableDescription<IntVariable> indexName(VariableDescription<?> desc) {
+        return new LocalVariableDescription<>(index + desc.name, VariableType.IntVariable, desc.name.comment);
     }
 
-    public static VariableDescription<IntVariable> indexName(VariableDescription<?> desc, String id) {
-        return new VariableDescription<>(index + desc.name + Name.prefix + id, VariableType.IntVariable,
+    public static LocalVariableDescription<IntVariable> indexName(VariableDescription<?> desc, String id) {
+        return new LocalVariableDescription<>(index + desc.name + Name.prefix + id, VariableType.IntVariable,
                 desc.name.comment);
     }
 
-    public static VariableDescription<IntVariable> indexName(VariableName name, String id) {
-        return new VariableDescription<>(index + name + Name.prefix + id, VariableType.IntVariable, name.comment);
+    public static LocalVariableDescription<IntVariable> indexName(VariableName name, String id) {
+        return new LocalVariableDescription<>(index + name + Name.prefix + id, VariableType.IntVariable, name.comment);
     }
 
-    public static <A extends Variable<A>> VariableDescription<A> variableName(String alias, int id, Type<A> type,
-            boolean generated) {
-        if(alias != null)
-            return new VariableDescription<>(alias + Name.prefix + "var" + id, type, generated);
+    public static <A extends Variable<A>> LocalVariableDescription<A> localVariableName(String alias, int id,
+            Type<A> type, boolean generated) {
+        if(alias == null)
+            return new LocalVariableDescription<>(Name.prefix + "var" + id, type, generated);
         else
-            return new VariableDescription<>(Name.prefix + "var" + id, type, generated);
+            return new LocalVariableDescription<>(alias + Name.prefix + "var" + id, type, generated);
+    }
+
+    public static <A extends Variable<A>> GlobalVariableDescription<A> globalVariableName(String alias, int id,
+            Type<A> type) {
+        assert alias != null;
+        return new GlobalVariableDescription<>(alias + Name.prefix + "var" + id, type, false);
     }
 
     private static final String forEnd = "forEnd" + Name.prefix;
 
-    public static VariableDescription<IntVariable> parForEnd(VariableDescription<IntVariable> varDesc) {
-        return new VariableDescription<>(forEnd + varDesc, varDesc.type, varDesc.name.comment);
+    public static LocalVariableDescription<IntVariable> parForEnd(VariableDescription<IntVariable> varDesc) {
+        return new LocalVariableDescription<>(forEnd + varDesc, varDesc.type, varDesc.name.comment);
     }
 
     private static final String forStart = "forStart" + Name.prefix;
 
-    public static VariableDescription<IntVariable> parForStart(VariableDescription<IntVariable> varDesc) {
-        return new VariableDescription<>(forStart + varDesc, varDesc.type, varDesc.name.comment);
+    public static LocalVariableDescription<IntVariable> parForStart(VariableDescription<IntVariable> varDesc) {
+        return new LocalVariableDescription<>(forStart + varDesc, varDesc.type, varDesc.name.comment);
     }
 
     private static final String distribution = "distribution" + Name.prefix;
 
-    public static VariableDescription<ArrayVariable<DoubleVariable>> distribution(DistributionSampleTask<?, ?> sTask) {
-        VariableDescription<?> varDesc = sTask.getUniqueVarDesc();
-        return new VariableDescription<>(distribution + varDesc, VariableType.arrayType(VariableType.DoubleVariable),
-                varDesc.name.comment);
+    public static GlobalVariableDescription<ArrayVariable<DoubleVariable>> distribution(
+            DistributionSampleTask<?, ?> sTask) {
+        VariableName sampleName = sTask.getSampleName();
+        return new GlobalVariableDescription<>(distribution + sampleName,
+                VariableType.arrayType(VariableType.DoubleVariable), sampleName.comment);
     }
 
-    public static VariableDescription<DoubleVariable> distributionAccumulator(RandomVariable<?, ?> rv) {
-        return new VariableDescription<>(distribution + "randomVariable" + Name.prefix + rv.getId() + "accumulator",
-                VariableType.DoubleVariable, false);
+    public static LocalVariableDescription<DoubleVariable> distributionAccumulator(RandomVariable<?, ?> rv) {
+        return new LocalVariableDescription<>(
+                distribution + "randomVariable" + Name.prefix + rv.getId() + "accumulator", VariableType.DoubleVariable,
+                false);
     }
 
     private static final String guard = "guard" + Name.prefix;
 
-    public static <A extends Variable<A>> VariableDescription<A> guardName(DataflowTask<?> start, DataflowTask<?> end,
-            int id, Type<A> type) {
+    public static LocalVariableDescription<BooleanVariable> guardName(DataflowTask<?> start, DataflowTask<?> end,
+            int id) {
         if(id == 1)
-            return new VariableDescription<>(
-                    guard + typeToName(start.getType()) + start.id() + typeToName(end.getType()) + end.id(), type,
-                    true);
+            return new LocalVariableDescription<>(
+                    guard + typeToName(start.getType()) + start.id() + typeToName(end.getType()) + end.id(),
+                    VariableType.BooleanVariable, true);
         else
-            return new VariableDescription<>(
-                    guard + typeToName(start.getType()) + start.id() + typeToName(end.getType()) + end.id() + id, type,
-                    true);
+            return new LocalVariableDescription<>(
+                    guard + typeToName(start.getType()) + start.id() + typeToName(end.getType()) + end.id() + id,
+                    VariableType.BooleanVariable, true);
 
     }
 
@@ -285,39 +312,39 @@ public final class VariableNames {
         return varDesc.name.getName().startsWith(guard);
     }
 
-    public static <A extends Variable<A>> VariableDescription<A> globalGuardName(VariableDescription<?> varDesc,
+    public static <A extends Variable<A>> ScratchVariableDescription<A> globalGuardName(VariableDescription<?> varDesc,
             Type<A> type) {
-        return new VariableDescription<>(varDesc + Name.prefix + "global", type, true);
+        return new ScratchVariableDescription<>(varDesc + Name.prefix + "global", type, true);
     }
 
-    public static <A extends Variable<A>> VariableDescription<A> altTypeName(VariableDescription<?> varDesc,
-            Type<A> type) {
-        return new VariableDescription<>(varDesc.name.getName(), type, varDesc.name.comment);
+    public static <V extends Variable<V>> LocalVariableDescription<V> lambdaSubstitute(VariableDescription<V> desc,
+            int id) {
+        return new LocalVariableDescription<>(desc + Name.prefix + id, desc.type, true);
     }
 
-    public static <V extends Variable<V>> VariableDescription<V> lambdaSubstitute(VariableDescription<V> desc, int id) {
-        return new VariableDescription<>(desc + Name.prefix + id, desc.type, true);
-    }
-
-    public static <V extends Variable<V>> VariableDescription<V> scopedCopySubstitute(Variable<V> v, int id) {
+    public static <V extends Variable<V>> LocalVariableDescription<V> scopedCopySubstitute(Variable<V> v, int id) {
         VariableDescription<V> desc = v.getUniqueVarDesc();
-        return new VariableDescription<>("sc" + Name.prefix + desc + Name.prefix + id, desc.type, true);
+        return new LocalVariableDescription<>("sc" + Name.prefix + desc + Name.prefix + id, desc.type, true);
     }
 
-    public static <A extends Variable<A>> VariableDescription<ArrayVariable<ArrayVariable<A>>> subarrayName(int suffix,
-            Type<ArrayVariable<ArrayVariable<A>>> type) {
-        return new VariableDescription<>("subarray" + Name.prefix + suffix, type, true);
+    public static <A extends Variable<A>> LocalVariableDescription<ArrayVariable<ArrayVariable<A>>> subarrayName(
+            int suffix, Type<ArrayVariable<ArrayVariable<A>>> type) {
+        return new LocalVariableDescription<>("subarray" + Name.prefix + suffix, type, true);
     }
 
-    public static VariableDescription<BooleanVariable> observedGuard(Variable<?> v) {
-        return new VariableDescription<>("observationGuard" + Name.prefix + v.getUniqueVarDesc().name,
+    public static LocalVariableDescription<BooleanVariable> observedGuard(Variable<?> v) {
+        return new LocalVariableDescription<>("observationGuard" + Name.prefix + v.getUniqueVarDesc().name,
                 VariableType.BooleanVariable, true);
     }
 
-    private static final VariableDescription<BooleanVariable> allocatedFlag = new VariableDescription<>(
+    private static final LocalVariableDescription<BooleanVariable> allocatedFlag = new LocalVariableDescription<>(
             "allocated" + Name.prefix, VariableType.BooleanVariable, true);
 
-    public static VariableDescription<BooleanVariable> allocatedFlag() {
+    public static LocalVariableDescription<BooleanVariable> allocatedFlag() {
         return allocatedFlag;
+    }
+
+    public static <A extends Variable<A>> GlobalVariableDescription<A> makeGlobal(VariableDescription<A> varDesc) {
+        return new GlobalVariableDescription<A>(varDesc.name, varDesc.type);
     }
 }

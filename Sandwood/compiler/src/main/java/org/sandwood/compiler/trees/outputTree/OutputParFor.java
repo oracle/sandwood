@@ -11,19 +11,20 @@ package org.sandwood.compiler.trees.outputTree;
 import java.util.Map;
 import java.util.Set;
 
+import org.sandwood.compiler.dataflowGraph.variables.rng.RandomNumberGenerator;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.names.VariableNames;
 
 public class OutputParFor extends OutputTree {
 
-    private final int parDepth;
+    private final OutputTreeReturn<RandomNumberGenerator> rng;
     private final OutputTreeReturn<IntVariable> start, end, step;
     private final OutputTree body;
 
-    public OutputParFor(int parDepth, OutputTreeReturn<IntVariable> start, OutputTreeReturn<IntVariable> end,
+    public OutputParFor(OutputTreeReturn<RandomNumberGenerator> rng, OutputTreeReturn<IntVariable> start, OutputTreeReturn<IntVariable> end,
             OutputTreeReturn<IntVariable> step, OutputTree body, String comment) {
         super(OutputTreeType.FORK_JOIN_FOR, true, comment);
-        this.parDepth = parDepth;
+        this.rng = rng;
         this.start = start;
         this.end = end;
         this.step = step;
@@ -32,7 +33,9 @@ public class OutputParFor extends OutputTree {
 
     @Override
     protected void toJavaInternal(StringBuilder sb, int indent, Set<String> requiredImports) {
-        sb.append("parallelFor(" + VariableNames.rngName(parDepth) + ", ");
+        sb.append("parallelFor(");
+        rng.toJava(sb, indent, requiredImports);
+        sb.append(", ");
         start.toJava(sb, indent, requiredImports);
         sb.append(", ");
         end.toJava(sb, indent, requiredImports);
@@ -61,7 +64,7 @@ public class OutputParFor extends OutputTree {
         OutputTreeReturn<IntVariable> end2 = end.copy(results);
         OutputTreeReturn<IntVariable> step2 = step.copy(results);
         OutputTree body2 = body.copy(results);
-        OutputParFor copy = new OutputParFor(parDepth, start2, end2, step2, body2, comment);
+        OutputParFor copy = new OutputParFor(rng, start2, end2, step2, body2, comment);
         results.put(this, copy);
         return copy;
     }
