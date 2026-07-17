@@ -1,36 +1,215 @@
 package org.sandwood.compiler.tests.parser;
 
-import org.sandwood.runtime.model.Model;
-import org.sandwood.runtime.model.ExecutionTarget;
-import org.sandwood.runtime.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import java.util.HashMap;
+import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
-
-import java.util.Map;
-import java.util.HashMap;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.ModelInternal;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
+import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import org.sandwood.runtime.model.ExecutionTarget;
+import org.sandwood.runtime.model.variables.*;
 
 /**
-  * Class representing the Sandwood model LDATest This is the class that
-  * all user interactions with the model should occur through.
-  */
-public final class LDATest extends Model {
+ * Class representing the Sandwood model LDATest This is the class that all user interactions
+ * with the model should occur through.
+ */
+public final class LDATest extends ModelInternal<LDATest.State> {
+	final class State extends CoreModelState {
+double[] alpha;
+		double[] beta;
+		boolean[] constrainedFlag$sample42;
+		boolean[] constrainedFlag$sample58;
+		boolean[][] constrainedFlag$sample90;
+		int[][] documents;
+		boolean fixedFlag$sample42 = false;
+		boolean fixedFlag$sample58 = false;
+		boolean fixedProbFlag$sample42 = false;
+		boolean fixedProbFlag$sample58 = false;
+		int[] length$documents;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$phi;
+		double[][] logProbability$sample90;
+		double[][] logProbability$sample93;
+		double logProbability$theta;
+		double logProbability$var42;
+		double logProbability$var57;
+		double logProbability$w;
+		int noTopics;
+		double[][] phi;
+		boolean system$gibbsForward = true;
+		double[][] theta;
+		int vocabSize;
+		int[][] w;
+		int[][] z;
 
-    private LDATest$CoreInterface system$c = new LDATest$SingleThreadCPU(ExecutionTarget.singleThread);
+		@Override
+		public final void allocate() {
+			alpha = new double[noTopics];
+			beta = new double[vocabSize];
+			if(!fixedFlag$sample42) {
+				phi = new double[noTopics][];
+				for(int var41 = 0; var41 < noTopics; var41 += 1)
+					phi[var41] = new double[vocabSize];
+			}
+			if(!fixedFlag$sample58) {
+				theta = new double[length$documents.length][];
+				for(int var56 = 0; var56 < length$documents.length; var56 += 1)
+					theta[var56] = new double[noTopics];
+			}
+			w = new int[length$documents.length][];
+			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+				w[i$var71] = new int[length$documents[i$var71]];
+			z = new int[length$documents.length][];
+			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+				z[i$var71] = new int[length$documents[i$var71]];
+			constrainedFlag$sample90 = new boolean[length$documents.length][];
+			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+				constrainedFlag$sample90[i$var71] = new boolean[length$documents[i$var71]];
+			constrainedFlag$sample42 = new boolean[noTopics];
+			constrainedFlag$sample58 = new boolean[length$documents.length];
+			logProbability$sample90 = new double[length$documents.length][];
+			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+				logProbability$sample90[i$var71] = new double[length$documents[i$var71]];
+			logProbability$sample93 = new double[length$documents.length][];
+			for(int i$var71 = 0; i$var71 < length$documents.length; i$var71 += 1)
+				logProbability$sample93[i$var71] = new double[length$documents[i$var71]];
+		}
+
+		final double[] get$alpha() {
+			return alpha;
+		}
+
+		final double[] get$beta() {
+			return beta;
+		}
+
+		final int[][] get$documents() {
+			return documents;
+		}
+
+		final void set$documents(int[][] cv$value, boolean allocated$) {
+			documents = cv$value;
+		}
+
+		final boolean get$fixedFlag$sample42() {
+			return fixedFlag$sample42;
+		}
+
+		final void set$fixedFlag$sample42(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample42 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample42$1 = 0; index$constrainedFlag$sample42$1 < constrainedFlag$sample42.length; index$constrainedFlag$sample42$1 += 1)
+					constrainedFlag$sample42[index$constrainedFlag$sample42$1] = cv$value;
+			}
+			fixedProbFlag$sample42 = (cv$value && fixedProbFlag$sample42);
+		}
+
+		final boolean get$fixedFlag$sample58() {
+			return fixedFlag$sample58;
+		}
+
+		final void set$fixedFlag$sample58(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample58 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample58$1 = 0; index$constrainedFlag$sample58$1 < constrainedFlag$sample58.length; index$constrainedFlag$sample58$1 += 1)
+					constrainedFlag$sample58[index$constrainedFlag$sample58$1] = cv$value;
+			}
+			fixedProbFlag$sample58 = (cv$value && fixedProbFlag$sample58);
+		}
+
+		final int[] get$length$documents() {
+			return length$documents;
+		}
+
+		final void set$length$documents(int[] cv$value, boolean allocated$) {
+			length$documents = cv$value;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$phi() {
+			return logProbability$phi;
+		}
+
+		final double get$logProbability$theta() {
+			return logProbability$theta;
+		}
+
+		final double get$logProbability$w() {
+			return logProbability$w;
+		}
+
+		final int get$noTopics() {
+			return noTopics;
+		}
+
+		final void set$noTopics(int cv$value, boolean allocated$) {
+			noTopics = cv$value;
+		}
+
+		final double[][] get$phi() {
+			return phi;
+		}
+
+		final void set$phi(double[][] cv$value, boolean allocated$) {
+			phi = cv$value;
+			fixedProbFlag$sample42 = false;
+		}
+
+		final double[][] get$theta() {
+			return theta;
+		}
+
+		final void set$theta(double[][] cv$value, boolean allocated$) {
+			theta = cv$value;
+			fixedProbFlag$sample58 = false;
+		}
+
+		final int get$vocabSize() {
+			return vocabSize;
+		}
+
+		final void set$vocabSize(int cv$value, boolean allocated$) {
+			vocabSize = cv$value;
+		}
+
+		final int[][] get$w() {
+			return w;
+		}
+
+		final int[][] get$z() {
+			return z;
+		}
+
+		final void set$z(int[][] cv$value, boolean allocated$) {
+			z = cv$value;
+		}
+	}
 
     private final ComputedObjectArrayInternal<double[]> $phi = new ComputedObjectArrayInternal<double[]>(this, "phi", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$phi(); }
+        public double[][] getValue() { return state.get$phi(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$phi(value, allocated);
+            state.set$phi(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$phi(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$phi(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -40,36 +219,34 @@ public final class LDATest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample42(fixed, allocated);
+                state.set$fixedFlag$sample42(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample42())
+            if(state.get$fixedFlag$sample42())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing phi of type double[][] from the Sandwood model 
-     */
+	/** Computed variable representing phi of type double[][] from the Sandwood model. */
     public final ComputedObjectArray<double[]> phi = $phi;
 
     private final ComputedObjectArrayInternal<double[]> $theta = new ComputedObjectArrayInternal<double[]>(this, "theta", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$theta(); }
+        public double[][] getValue() { return state.get$theta(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$theta(value, allocated);
+            state.set$theta(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$theta(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$theta(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -79,27 +256,27 @@ public final class LDATest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample58(fixed, allocated);
+                state.set$fixedFlag$sample58(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample58())
+            if(state.get$fixedFlag$sample58())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing theta of type double[][] from the Sandwood model 
-     */
+	/**
+	 * Computed variable representing theta of type double[][] from the Sandwood model.
+	 */
     public final ComputedObjectArray<double[]> theta = $theta;
 
     private final ComputedObjectArrayInternal<int[]> $w = new ComputedObjectArrayInternal<int[]>(this, "w", false, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] getValue() { return system$c.get$w(); }
+        public int[][] getValue() { return state.get$w(); }
 
         @Override
         protected void setValueInternal(int[][] value) {}
@@ -110,7 +287,7 @@ public final class LDATest extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$w(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$w(); }
 
         @Override
         public int[][][] constructArray(int iterations) {
@@ -128,18 +305,16 @@ public final class LDATest extends Model {
         }
     };
 
-    /**
-     * Computed variable representing w of type int[][] from the Sandwood model 
-     */
+	/** Computed variable representing w of type int[][] from the Sandwood model. */
     public final ComputedObjectArray<int[]> w = $w;
 
     private final ComputedObjectArrayInternal<int[]> $z = new ComputedObjectArrayInternal<int[]>(this, "z", true, true, true, ProbabilityType.SKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] getValue() { return system$c.get$z(); }
+        public int[][] getValue() { return state.get$z(); }
 
         @Override
         protected void setValueInternal(int[][] value) {
-            system$c.set$z(value, allocated);
+            state.set$z(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -168,34 +343,30 @@ public final class LDATest extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$noTopics();
+                return state.get$noTopics();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noTopics(value, allocated); }
+        protected void setValueInternal(int value) { state.set$noTopics(value, allocated); }
     };
 
-    /**
-     * Observed variable representing noTopics of type int from the Sandwood model 
-     */
+	/** Observed variable representing noTopics of type int from the Sandwood model. */
     public final ObservedInteger noTopics = $noTopics;
 
     private final ObservedIntegerInternal $vocabSize = new ObservedIntegerInternal(this, "vocabSize") {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$vocabSize();
+                return state.get$vocabSize();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$vocabSize(value, allocated); }
+        protected void setValueInternal(int value) { state.set$vocabSize(value, allocated); }
     };
 
-    /**
-     * Observed variable representing vocabSize of type int from the Sandwood model 
-     */
+	/** Observed variable representing vocabSize of type int from the Sandwood model. */
     public final ObservedInteger vocabSize = $vocabSize;
 
     private Map<String, ObservedVariableInternal> $modelInputs = new HashMap<>();
@@ -204,24 +375,24 @@ public final class LDATest extends Model {
         @Override
         public int[][] getValue() {
             synchronized(model) {
-                return system$c.get$documents();
+                return state.get$documents();
             }
         }
 
         @Override
         public void setValueInternal(int[][] value) {
-            system$c.set$documents(value, allocated);
-            system$c.set$length$documents(getDims(value), allocated);
+            state.set$documents(value, allocated);
+            state.set$length$documents(getDims(value), allocated);
         }
 
         @Override
         public void setShapeInternal(int[] shape) {
-            system$c.set$length$documents(shape, allocated);
+            state.set$length$documents(shape, allocated);
         }
 
         @Override
         public int[] getShape() {
-            return system$c.get$length$documents();
+            return state.get$length$documents();
         }
         private final int[] getDims(int[][] v1) {
             int[] s1 = new int[v1.length];
@@ -233,21 +404,20 @@ public final class LDATest extends Model {
         }
     };
 
-    /**
-     * Observed variable representing documents of type int[][] from the Sandwood model 
-     */
+	/**
+	 * Observed variable representing documents of type int[][] from the Sandwood model.
+	 */
     public final ObservedObjectArrayShapeable<int[], int[]> documents = $documents;
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
     private HasProbabilityInternal[] $probabilityVariables = {$phi, $theta, $w};
 
-    //Constructors
-    /**
-     * A constructor for a model where no variable values are set.
-     */
+    // Constructors
+	/** A constructor for a model where no variable values are set. */
     public LDATest() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("phi", $phi);
         $computedVariables.put("theta", $theta);
@@ -260,31 +430,34 @@ public final class LDATest extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("documents", $documents);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
-    }
-    /**
-      * A constructor to set all the required values in the model to infer values. These
-      * will be values in an untrained model so this will only generate values from the
-      * default distributions described in the model.
-      * @param noTopics The value to set noTopics to.
-      * @param vocabSize The value to set vocabSize to.
-      * @param documentsShape An integer array describing the shape of variable documents to use in the model when generating results.
-      */
 
+        LDATest$SingleThreadCPU core = new LDATest$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+    }
+
+	/**
+	 * A constructor to set all the required values in the model to infer values. These
+	 * will be values in an untrained model so this will only generate values from the
+	 * default distributions described in the model.
+	 * @param noTopics The value to set noTopics to.
+	 * @param vocabSize The value to set vocabSize to.
+	 * @param documentsShape An integer array describing the shape of variable documents
+	 *                       to use in the model when generating results.
+	 */
     public LDATest(int noTopics, int vocabSize, int[] documentsShape) {
         this();
         this.$noTopics.setValue(noTopics);
         this.$vocabSize.setValue(vocabSize);
         this.$documents.setShape(documentsShape);
     }
-    /**
-      * A constructor to set all the required values in the model to infer the model
-      * parameters, or to generate probabilities for the model.
-      * @param noTopics The value to set noTopics to.
-      * @param vocabSize The value to set vocabSize to.
-      * @param documents The value to set documents to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer the model parameters,
+	 * or to generate probabilities for the model.
+	 * @param noTopics The value to set noTopics to.
+	 * @param vocabSize The value to set vocabSize to
+	 * @param documents The value to set documents to
+	 */
     public LDATest(int noTopics, int vocabSize, int[][] documents) {
         this();
         this.noTopics.setValue(noTopics);
@@ -293,68 +466,35 @@ public final class LDATest extends Model {
     }
     
     @Override
-    protected LDATest$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        LDATest$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new LDATest$SingleThreadCPU(target);
-                break;
+                return new LDATest$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new LDATest$MultiThreadCPU(target);
-                break;
+                return new LDATest$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
     }
 
-    private void transferData(LDATest$CoreInterface oldCore, LDATest$CoreInterface newCore) {
-        //Model inputs
-        if(noTopics.isSet())
-            newCore.set$noTopics(oldCore.get$noTopics(), false);
-        if(vocabSize.isSet())
-            newCore.set$vocabSize(oldCore.get$vocabSize(), false);
-
-        //Observed arrays
-        if(documents.isSet()) {
-            newCore.set$documents(oldCore.get$documents(), false);
-            newCore.set$length$documents(oldCore.get$length$documents(), false);
-        }
-        else if(documents.shapeSet())
-            newCore.set$length$documents(oldCore.get$length$documents(), false);
-
-        //ComputedVariables
-        if($phi.isSet())
-            newCore.set$phi(oldCore.get$phi(), false);
-        if($theta.isSet())
-            newCore.set$theta(oldCore.get$theta(), false);
-        if($z.isSet())
-            newCore.set$z(oldCore.get$z(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample42(oldCore.get$fixedFlag$sample42(), false);
-        newCore.set$fixedFlag$sample58(oldCore.get$fixedFlag$sample58(), false);
-    }
-
-    /**
-     * A class to hold all the values required to perform a value inference on the model.
-     */
+	/**
+	 * A class to hold all the values required to perform a value inference on the model.
+	 */
     public static class InferValueInputs {
-        /** Field holding the value of model input noTopics */
+		/** Field holding the value of model input noTopics */
         public final int noTopics;
-        /** Field holding the value of model input vocabSize */
+		/** Field holding the value of model input vocabSize */
         public final int vocabSize;
-        /** Field holding the shape of model input documents */
+		/** Field holding the shape of model input documents */
         public final int[] documentsShape;
 
-        /**
-          * A constructor taking all the values required to set up the model to infer variables.
-          * @param noTopics The value to set noTopics to.
-          * @param vocabSize The value to set vocabSize to.
-          * @param documentsShape An integer array describing the shape of variable documents to use in the model when generating results.
-          */
+		/**
+		 * A constructor taking all the values required to set up the model to infer variables.
+		 * @param noTopics The value to set noTopics to.
+		 * @param vocabSize The value to set vocabSize to.
+		 * @param documentsShape An integer array describing the shape of variable documents
+		 *                       to use in the model when generating results.
+		 */
         public InferValueInputs(int noTopics, int vocabSize, int[] documentsShape) {
             this.noTopics = noTopics;
             this.vocabSize = vocabSize;
@@ -362,41 +502,38 @@ public final class LDATest extends Model {
         }
     }
 
-    /**
-     * A class to hold all the inputs for the model. It can be used to parameterize inference of the model probabilities
-     * and probability calculations.
-     */
+	/**
+	 * A class to hold all the inputs for the model. It can be used to parameterize inference
+	 * of the model probabilities and probability calculations.
+	 */
     public static class AllInputs {
-        /** Field holding the value of model input noTopics */
+		/** Field holding the value of model input noTopics */
         public final int noTopics;
-        /** Field holding the value of model input vocabSize */
+		/** Field holding the value of model input vocabSize */
         public final int vocabSize;
-        /** Field holding the value of model input documents */
+		/** Field holding the value of model input documents */
         public final int[][] documents;
 
-        /**
-          * A constructor to take all the required values by the model to infer the model
-          * parameters, or to generate probabilities for the model.
-          * @param noTopics The value to set noTopics to.
-          * @param vocabSize The value to set vocabSize to.
-          * @param documents The value to set documents to.
-          */
+		/**
+		 * A constructor to take all the required values by the model to infer the model parameters,
+		 * or to generate probabilities for the model.
+		 * @param noTopics The value to set noTopics to.
+		 * @param vocabSize The value to set vocabSize to.
+		 * @param documents The value to set documents to.
+		 */
         public AllInputs(int noTopics, int vocabSize, int[][] documents) {
             this.noTopics = noTopics;
             this.vocabSize = vocabSize;
             this.documents = documents;
         }
     }
-
-    /**
-     * A class to hold all the outputs from the model after an infer values step.
-     */
+	/** A class to hold all the outputs from the model after an infer values step. */
     public static class InferredValueOutputs {
-        /** Field holding the value of phi after a convention execution step.*/
+		/** Field holding the value of phi after a convention execution step. */
         public final double[][] phi;
-        /** Field holding the value of theta after a convention execution step.*/
+		/** Field holding the value of theta after a convention execution step. */
         public final double[][] theta;
-        /** Field holding the value of w after a convention execution step.*/
+		/** Field holding the value of w after a convention execution step. */
         public final int[][] w;
 
         InferredValueOutputs(LDATest system$model) {
@@ -406,16 +543,17 @@ public final class LDATest extends Model {
         }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class LogProbabilities {
         private final double $logModelProbability;
-        /** Field holding the log probability of computed variable phi */
+		/** Field holding the log probability of computed variable phi */
         public final double phi;
-        /** Field holding the log probability of computed variable theta */
+		/** Field holding the log probability of computed variable theta */
         public final double theta;
-        /** Field holding the log probability of computed variable w */
+		/** Field holding the log probability of computed variable w */
         public final double w;
 
         LogProbabilities(LDATest system$model) {
@@ -425,21 +563,24 @@ public final class LDATest extends Model {
             this.w = system$model.w.getLogProbability();
         }
 
-        /** Method to return log probability of the whole model 
-         *  @return The log probability of the whole model. */
+		/**
+		 * Method to return log probability of the whole model
+		 * @return The log probability of the whole model.
+		 */
         public double getModelProbability() { return $logModelProbability; }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class Probabilities {
         private final double $modelProbability;
-        /** Field holding the probability of computed variable phi */
+		/** Field holding the probability of computed variable phi */
         public final double phi;
-        /** Field holding the probability of computed variable theta */
+		/** Field holding the probability of computed variable theta */
         public final double theta;
-        /** Field holding the probability of computed variable w */
+		/** Field holding the probability of computed variable w */
         public final double w;
 
         Probabilities(LDATest system$model) {
@@ -449,18 +590,18 @@ public final class LDATest extends Model {
             this.w = system$model.w.getProbability();
         }
 
-        /** Method to return probability of the whole model 
-         *  @return The probability of the whole model. */
+		/**
+		 * Method to return probability of the whole model
+		 * @return The probability of the whole model.
+		 */
         public double getModelProbability() { return $modelProbability; }
     }
 
-    /**
-     * A class to hold all the outputs from the model after an infer model call.
-     */
+	/** A class to hold all the outputs from the model after an infer model call. */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of phi after an infer model call. */
+		/** Field holding the MAP or Sample value of phi after an infer model call. */
         public final double[][][] phi;
-        /** Field holding the MAP or Sample value of theta after an infer model call. */
+		/** Field holding the MAP or Sample value of theta after an infer model call. */
         public final double[][][] theta;
 
         InferredModelOutputs(LDATest system$model) {
@@ -469,11 +610,12 @@ public final class LDATest extends Model {
         }
     }
 
-    /**
-     * Perform a single pass generating values from the model.
-     * @param inputs An object containing the parameters required to run inference on the model.
-     * @return An object containing the values computed by the inference step.
-     */
+	/**
+	 * Perform a single pass generating values from the model.
+	 * @param inputs An object containing the parameters required to run inference on
+	 *               the model.
+	 * @return An object containing the values computed by the inference step.
+	 */
     public InferredValueOutputs execute(InferValueInputs inputs) {
         this.noTopics.setValue(inputs.noTopics);
         this.vocabSize.setValue(inputs.vocabSize);
@@ -482,12 +624,13 @@ public final class LDATest extends Model {
         return new InferredValueOutputs(this);
     }
 
-    /**
-     * Infer the values of the different elements of the model.
-     * @param iterations The number of iterations to perform when inferring the values.
-     * @param inputs An object containing the parameters required to generate the model parameters.
-     * @return An object containing the computed values for the model.
-     */
+	/**
+	 * Infer the values of the different elements of the model.
+	 * @param iterations The number of iterations to perform when inferring the values.
+	 * @param inputs An object containing the parameters required to generate the model
+	 *               parameters.
+	 * @return An object containing the computed values for the model.
+	 */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
         this.noTopics.setValue(inputs.noTopics);
         this.vocabSize.setValue(inputs.vocabSize);
@@ -496,12 +639,13 @@ public final class LDATest extends Model {
         return new InferredModelOutputs(this);
     }
 
-    /**
-     * Generate the probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
         this.noTopics.setValue(inputs.noTopics);
         this.vocabSize.setValue(inputs.vocabSize);
@@ -510,16 +654,19 @@ public final class LDATest extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.noTopics.setValue(inputs.noTopics);
         this.vocabSize.setValue(inputs.vocabSize);
@@ -528,18 +675,23 @@ public final class LDATest extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.noTopics.setValue(inputs.noTopics);
         this.vocabSize.setValue(inputs.vocabSize);
@@ -548,12 +700,13 @@ public final class LDATest extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Generate the log probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the log probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
         this.noTopics.setValue(inputs.noTopics);
         this.vocabSize.setValue(inputs.vocabSize);
@@ -562,16 +715,19 @@ public final class LDATest extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.noTopics.setValue(inputs.noTopics);
         this.vocabSize.setValue(inputs.vocabSize);
@@ -580,18 +736,23 @@ public final class LDATest extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.noTopics.setValue(inputs.noTopics);
         this.vocabSize.setValue(inputs.vocabSize);
@@ -600,4 +761,3 @@ public final class LDATest extends Model {
         return new LogProbabilities(this);
     }
 }
-//END OF CODE

@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -11,9 +11,8 @@ package org.sandwood.compiler.trees.outputTree;
 import java.util.Map;
 import java.util.Set;
 
-import org.sandwood.compiler.dataflowGraph.variables.rng.RandomNumberGenerator;
+import org.sandwood.compiler.dataflowGraph.variables.internal.RandomNumberGenerator;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
-import org.sandwood.compiler.names.VariableNames;
 
 public class OutputParFor extends OutputTree {
 
@@ -21,8 +20,8 @@ public class OutputParFor extends OutputTree {
     private final OutputTreeReturn<IntVariable> start, end, step;
     private final OutputTree body;
 
-    public OutputParFor(OutputTreeReturn<RandomNumberGenerator> rng, OutputTreeReturn<IntVariable> start, OutputTreeReturn<IntVariable> end,
-            OutputTreeReturn<IntVariable> step, OutputTree body, String comment) {
+    public OutputParFor(OutputTreeReturn<RandomNumberGenerator> rng, OutputTreeReturn<IntVariable> start,
+            OutputTreeReturn<IntVariable> end, OutputTreeReturn<IntVariable> step, OutputTree body, String comment) {
         super(OutputTreeType.FORK_JOIN_FOR, true, comment);
         this.rng = rng;
         this.start = start;

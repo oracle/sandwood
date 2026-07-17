@@ -1,13 +1,14 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 
 package org.sandwood.compiler.trees.transformationTree.transformers;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
@@ -19,6 +20,10 @@ import org.sandwood.compiler.trees.transformationTree.TransTreeVoid;
 public abstract class Transformer {
 
     public Set<TransTree<?>> visitedNodes;
+
+    protected Transformer() {
+        visitedNodes = new HashSet<>();
+    }
 
     public <T extends TransTree<T>> T transform(TransTree<T> transTree, Set<TransTree<?>> visitedNodes) {
         this.visitedNodes = visitedNodes;

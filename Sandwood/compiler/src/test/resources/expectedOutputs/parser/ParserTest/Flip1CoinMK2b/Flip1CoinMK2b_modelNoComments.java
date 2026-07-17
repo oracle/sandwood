@@ -1,61 +1,158 @@
 package org.sandwood.compiler.tests.parser;
 
-import org.sandwood.runtime.model.Model;
-import org.sandwood.runtime.model.ExecutionTarget;
-import org.sandwood.runtime.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import java.util.HashMap;
+import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
-
-import java.util.Map;
-import java.util.HashMap;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.ModelInternal;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
+import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import org.sandwood.runtime.model.ExecutionTarget;
+import org.sandwood.runtime.model.variables.*;
 
 /**
-  * Class representing the Sandwood model Flip1CoinMK2b This is the class that
-  * all user interactions with the model should occur through.
-  */
-public final class Flip1CoinMK2b extends Model {
+ * Class representing the Sandwood model Flip1CoinMK2b This is the class that all
+ * user interactions with the model should occur through.
+ */
+public final class Flip1CoinMK2b extends ModelInternal<Flip1CoinMK2b.State> {
+	final class State extends CoreModelState {
+double a;
+		double b;
+		double bias;
+		boolean constrainedFlag$sample5 = true;
+		boolean fixedFlag$sample5 = false;
+		boolean fixedProbFlag$sample19 = false;
+		boolean fixedProbFlag$sample5 = false;
+		boolean[] flips;
+		boolean[] flipsMeasured;
+		int length$flipsMeasured;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$bernoulli;
+		double logProbability$bias;
+		double logProbability$flips;
+		double logProbability$var19;
+		int samples;
+		boolean system$gibbsForward = true;
 
-    private Flip1CoinMK2b$CoreInterface system$c = new Flip1CoinMK2b$SingleThreadCPU(ExecutionTarget.singleThread);
+		@Override
+		public final void allocate() {
+			flips = new boolean[length$flipsMeasured];
+		}
+
+		final double get$a() {
+			return a;
+		}
+
+		final double get$b() {
+			return b;
+		}
+
+		final double get$bias() {
+			return bias;
+		}
+
+		final void set$bias(double cv$value, boolean allocated$) {
+			bias = cv$value;
+			fixedProbFlag$sample5 = false;
+			fixedProbFlag$sample19 = false;
+		}
+
+		final boolean get$fixedFlag$sample5() {
+			return fixedFlag$sample5;
+		}
+
+		final void set$fixedFlag$sample5(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample5 = cv$value;
+			constrainedFlag$sample5 = (fixedFlag$sample5 || constrainedFlag$sample5);
+			fixedProbFlag$sample5 = (fixedFlag$sample5 && fixedProbFlag$sample5);
+			fixedProbFlag$sample19 = (fixedFlag$sample5 && fixedProbFlag$sample19);
+		}
+
+		final boolean[] get$flips() {
+			return flips;
+		}
+
+		final boolean[] get$flipsMeasured() {
+			return flipsMeasured;
+		}
+
+		final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
+			flipsMeasured = cv$value;
+		}
+
+		final int get$length$flipsMeasured() {
+			return length$flipsMeasured;
+		}
+
+		final void set$length$flipsMeasured(int cv$value, boolean allocated$) {
+			length$flipsMeasured = cv$value;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$bernoulli() {
+			return logProbability$bernoulli;
+		}
+
+		final double get$logProbability$bias() {
+			return logProbability$bias;
+		}
+
+		final double get$logProbability$flips() {
+			return logProbability$flips;
+		}
+
+		final int get$samples() {
+			return samples;
+		}
+	}
 
     private final ComputedDoubleInternal $bias = new ComputedDoubleInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$bias(); }
+        public double getValue() { return state.get$bias(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$bias(value, allocated);
+            state.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$bias(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$bias(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample5(fixed, allocated);
+                state.set$fixedFlag$sample5(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample5())
+            if(state.get$fixedFlag$sample5())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing bias of type double from the Sandwood model 
-     */
+	/** Computed variable representing bias of type double from the Sandwood model. */
     public final ComputedDouble bias = $bias;
 
     private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$flips(); }
+        public boolean[] getValue() { return state.get$flips(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -66,7 +163,7 @@ public final class Flip1CoinMK2b extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flips(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flips(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -79,9 +176,7 @@ public final class Flip1CoinMK2b extends Model {
         }
     };
 
-    /**
-     * Computed variable representing flips of type boolean[] from the Sandwood model 
-     */
+	/** Computed variable representing flips of type boolean[] from the Sandwood model. */
     public final ComputedBooleanArray flips = $flips;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
@@ -92,30 +187,31 @@ public final class Flip1CoinMK2b extends Model {
         @Override
         public boolean[] getValue() {
             synchronized(model) {
-                return system$c.get$flipsMeasured();
+                return state.get$flipsMeasured();
             }
         }
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$flipsMeasured(value, allocated);
-            system$c.set$length$flipsMeasured(value.length, allocated);
+            state.set$flipsMeasured(value, allocated);
+            state.set$length$flipsMeasured(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$flipsMeasured(shape, allocated);
+            state.set$length$flipsMeasured(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$flipsMeasured();
+            return state.get$length$flipsMeasured();
         }
     };
 
-    /**
-     * Observed variable representing flipsMeasured of type boolean[] from the Sandwood model 
-     */
+	/**
+	 * Observed variable representing flipsMeasured of type boolean[] from the Sandwood
+	 * model.
+	 */
     public final ObservedBooleanArrayShapeable flipsMeasured = $flipsMeasured;
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
@@ -123,130 +219,104 @@ public final class Flip1CoinMK2b extends Model {
     private final RandomVariableInternal $bernoulli = new RandomVariableInternal(this, "bernoulli", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$bernoulli();
+            return state.get$logProbability$bernoulli();
         }
     };
 
-    /**
-     * Random variable representing bernoulli from the Sandwood model 
-     */
+	/** Random variable representing bernoulli from the Sandwood model. */
     public final RandomVariable bernoulli = $bernoulli;
 
     private HasProbabilityInternal[] $probabilityVariables = {$bias, $flips, $bernoulli};
 
-    //Constructors
-    /**
-     * A constructor for a model where no variable values are set.
-     */
+    // Constructors
+	/** A constructor for a model where no variable values are set. */
     public Flip1CoinMK2b() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("bias", $bias);
         $computedVariables.put("flips", $flips);
 
         //Observed array fields
         $shapedObservedValues.put("flipsMeasured", $flipsMeasured);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
-    }
-    /**
-      * A constructor to set all the required values in the model to infer values. These
-      * will be values in an untrained model so this will only generate values from the
-      * default distributions described in the model.
-      * @param flipsMeasuredShape An integer array describing the shape of variable flipsMeasured to use in the model when generating results.
-      */
 
+        Flip1CoinMK2b$SingleThreadCPU core = new Flip1CoinMK2b$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+    }
+
+	/**
+	 * A constructor to set all the required values in the model to infer values. These
+	 * will be values in an untrained model so this will only generate values from the
+	 * default distributions described in the model.
+	 * @param flipsMeasuredShape An integer array describing the shape of variable flipsMeasured
+	 *                           to use in the model when generating results.
+	 */
     public Flip1CoinMK2b(int flipsMeasuredShape) {
         this();
         this.$flipsMeasured.setShape(flipsMeasuredShape);
     }
-    /**
-      * A constructor to set all the required values in the model to infer the model
-      * parameters, or to generate probabilities for the model.
-      * @param flipsMeasured The value to set flipsMeasured to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer the model parameters,
+	 * or to generate probabilities for the model.
+	 * @param flipsMeasured The value to set flipsMeasured to.
+	 */
     public Flip1CoinMK2b(boolean[] flipsMeasured) {
         this();
         this.flipsMeasured.setValue(flipsMeasured);
     }
     
     @Override
-    protected Flip1CoinMK2b$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        Flip1CoinMK2b$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new Flip1CoinMK2b$SingleThreadCPU(target);
-                break;
+                return new Flip1CoinMK2b$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new Flip1CoinMK2b$MultiThreadCPU(target);
-                break;
+                return new Flip1CoinMK2b$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
     }
 
-    private void transferData(Flip1CoinMK2b$CoreInterface oldCore, Flip1CoinMK2b$CoreInterface newCore) {
-
-        //Observed arrays
-        if(flipsMeasured.isSet()) {
-            newCore.set$flipsMeasured(oldCore.get$flipsMeasured(), false);
-            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured(), false);
-        }
-        else if(flipsMeasured.shapeSet())
-            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured(), false);
-
-        //ComputedVariables
-        if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5(), false);
-    }
-
-    /**
-     * A class to hold all the values required to perform a value inference on the model.
-     */
+	/**
+	 * A class to hold all the values required to perform a value inference on the model.
+	 */
     public static class InferValueInputs {
-        /** Field holding the shape of model input flipsMeasured */
+		/** Field holding the shape of model input flipsMeasured */
         public final int flipsMeasuredShape;
 
-        /**
-          * A constructor taking all the values required to set up the model to infer variables.
-          * @param flipsMeasuredShape An integer array describing the shape of variable flipsMeasured to use in the model when generating results.
-          */
+		/**
+		 * A constructor taking all the values required to set up the model to infer variables.
+		 * @param flipsMeasuredShape An integer array describing the shape of variable flipsMeasured
+		 *                           to use in the model when generating results.
+		 */
         public InferValueInputs(int flipsMeasuredShape) {
             this.flipsMeasuredShape = flipsMeasuredShape;
         }
     }
 
-    /**
-     * A class to hold all the inputs for the model. It can be used to parameterize inference of the model probabilities
-     * and probability calculations.
-     */
+	/**
+	 * A class to hold all the inputs for the model. It can be used to parameterize inference
+	 * of the model probabilities and probability calculations.
+	 */
     public static class AllInputs {
-        /** Field holding the value of model input flipsMeasured */
+		/** Field holding the value of model input flipsMeasured */
         public final boolean[] flipsMeasured;
 
-        /**
-          * A constructor to take all the required values by the model to infer the model
-          * parameters, or to generate probabilities for the model.
-          * @param flipsMeasured The value to set flipsMeasured to.
-          */
+		/**
+		 * A constructor to take all the required values by the model to infer the model parameters,
+		 * or to generate probabilities for the model.
+		 * @param flipsMeasured The value to set flipsMeasured to.
+		 */
         public AllInputs(boolean[] flipsMeasured) {
             this.flipsMeasured = flipsMeasured;
         }
     }
-
-    /**
-     * A class to hold all the outputs from the model after an infer values step.
-     */
+	/** A class to hold all the outputs from the model after an infer values step. */
     public static class InferredValueOutputs {
-        /** Field holding the value of bias after a convention execution step.*/
+		/** Field holding the value of bias after a convention execution step. */
         public final double bias;
-        /** Field holding the value of flips after a convention execution step.*/
+		/** Field holding the value of flips after a convention execution step. */
         public final boolean[] flips;
 
         InferredValueOutputs(Flip1CoinMK2b system$model) {
@@ -255,16 +325,17 @@ public final class Flip1CoinMK2b extends Model {
         }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class LogProbabilities {
         private final double $logModelProbability;
-        /** Field holding the log probability of random variable bernoulli */
+		/** Field holding the log probability of random variable bernoulli */
         public final double bernoulli;
-        /** Field holding the log probability of computed variable bias */
+		/** Field holding the log probability of computed variable bias */
         public final double bias;
-        /** Field holding the log probability of computed variable flips */
+		/** Field holding the log probability of computed variable flips */
         public final double flips;
 
         LogProbabilities(Flip1CoinMK2b system$model) {
@@ -274,21 +345,24 @@ public final class Flip1CoinMK2b extends Model {
             this.flips = system$model.flips.getLogProbability();
         }
 
-        /** Method to return log probability of the whole model 
-         *  @return The log probability of the whole model. */
+		/**
+		 * Method to return log probability of the whole model
+		 * @return The log probability of the whole model.
+		 */
         public double getModelProbability() { return $logModelProbability; }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class Probabilities {
         private final double $modelProbability;
-        /** Field holding the probability of random variable bernoulli */
+		/** Field holding the probability of random variable bernoulli */
         public final double bernoulli;
-        /** Field holding the probability of computed variable bias */
+		/** Field holding the probability of computed variable bias */
         public final double bias;
-        /** Field holding the probability of computed variable flips */
+		/** Field holding the probability of computed variable flips */
         public final double flips;
 
         Probabilities(Flip1CoinMK2b system$model) {
@@ -298,16 +372,16 @@ public final class Flip1CoinMK2b extends Model {
             this.flips = system$model.flips.getProbability();
         }
 
-        /** Method to return probability of the whole model 
-         *  @return The probability of the whole model. */
+		/**
+		 * Method to return probability of the whole model
+		 * @return The probability of the whole model.
+		 */
         public double getModelProbability() { return $modelProbability; }
     }
 
-    /**
-     * A class to hold all the outputs from the model after an infer model call.
-     */
+	/** A class to hold all the outputs from the model after an infer model call. */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of bias after an infer model call. */
+		/** Field holding the MAP or Sample value of bias after an infer model call. */
         public final double[] bias;
 
         InferredModelOutputs(Flip1CoinMK2b system$model) {
@@ -315,119 +389,138 @@ public final class Flip1CoinMK2b extends Model {
         }
     }
 
-    /**
-     * Perform a single pass generating values from the model.
-     * @param inputs An object containing the parameters required to run inference on the model.
-     * @return An object containing the values computed by the inference step.
-     */
+	/**
+	 * Perform a single pass generating values from the model.
+	 * @param inputs An object containing the parameters required to run inference on
+	 *               the model.
+	 * @return An object containing the values computed by the inference step.
+	 */
     public InferredValueOutputs execute(InferValueInputs inputs) {
         this.$flipsMeasured.setShape(inputs.flipsMeasuredShape);
         execute();
         return new InferredValueOutputs(this);
     }
 
-    /**
-     * Infer the values of the different elements of the model.
-     * @param iterations The number of iterations to perform when inferring the values.
-     * @param inputs An object containing the parameters required to generate the model parameters.
-     * @return An object containing the computed values for the model.
-     */
+	/**
+	 * Infer the values of the different elements of the model.
+	 * @param iterations The number of iterations to perform when inferring the values.
+	 * @param inputs An object containing the parameters required to generate the model
+	 *               parameters.
+	 * @return An object containing the computed values for the model.
+	 */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
 
-    /**
-     * Generate the probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
 
-    /**
-     * Generate the log probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the log probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }
 }
-//END OF CODE

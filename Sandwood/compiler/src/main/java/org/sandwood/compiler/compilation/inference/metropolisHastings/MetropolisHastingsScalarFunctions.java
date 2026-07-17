@@ -29,7 +29,6 @@ import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.auxillary.DataflowTaskArgDesc;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
@@ -193,8 +192,8 @@ public abstract class MetropolisHastingsScalarFunctions<A extends ScalarVariable
 
     @Override
     protected void addSampleValueTree(MetropolisHastingsData<A, B> funcData) {
-        LocalVariableDescription<DoubleVariable> ratioName = VariableNames.localCalcVarName("ratio", VariableType.DoubleVariable,
-                true);
+        LocalVariableDescription<DoubleVariable> ratioName = VariableNames.localCalcVarName("ratio",
+                VariableType.DoubleVariable, true);
         IRTreeReturn<DoubleVariable> ratio = subtractDD(load(proposedProbabilityName), load(originalProbabilityName));
         funcData.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(ratioName, ratio,
                 "The probability ration for the proposed value and the current value."));

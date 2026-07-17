@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface InjectionAttackTest$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface InjectionAttackTest$CoreInterface extends CoreModel {
 	public double get$bias();
 	public void set$bias(double cv$value, boolean allocated$);
 	public boolean get$fixedFlag$sample6();

@@ -29,7 +29,6 @@ import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.RandomVariable;
@@ -138,8 +137,8 @@ public abstract class MetropolisHastingsArrayFunctions<A extends Variable<A>, B 
     @Override
     protected void addSampleValueTree(MetropolisHastingsArrayData<A, B> funcData) {
 
-        LocalVariableDescription<DoubleVariable> ratioName = VariableNames.localCalcVarName("ratio", VariableType.DoubleVariable,
-                true);
+        LocalVariableDescription<DoubleVariable> ratioName = VariableNames.localCalcVarName("ratio",
+                VariableType.DoubleVariable, true);
         IRTreeReturn<DoubleVariable> ratio = subtractDD(load(proposedProbabilityName), load(originalProbabilityName));
         funcData.compilationCtx.addTreeToScope(GlobalScope.scope, initializeVariable(ratioName, ratio,
                 "Ratio of the probability of proposed and original sample values"));

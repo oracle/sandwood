@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -30,7 +30,7 @@ import org.sandwood.compiler.compilation.ChildFirstClassLoader;
 import org.sandwood.compiler.compilation.util.CompilationDesc;
 import org.sandwood.compiler.compilation.util.CompileUtils;
 import org.sandwood.compiler.tests.util.CompilerState;
-import org.sandwood.compiler.trees.outputTree.OutputSandwoodClass;
+import org.sandwood.compiler.trees.outputTree.OutputSandwoodOuterClass;
 import org.sandwood.runtime.model.Model;
 import org.sandwood.runtime.model.RetentionPolicy;
 import org.sandwood.runtime.model.variables.ComputedVariable;
@@ -54,7 +54,7 @@ public abstract class ModelTestSkeleton {
         try {
             CompilationOptions opts = new CompilationOptions();
             opts.setCalculateIndividualProbabilities();
-            List<OutputSandwoodClass> classes = buildClass(opts).classes;
+            List<OutputSandwoodOuterClass> classes = buildClass(opts).classes;
             opts.setTargetDirectory(tempDir);
             DiagnosticCollector<JavaFileObject> diagnostics = CompileUtils.compileToJava(opts, classes);
             if(!diagnostics.getDiagnostics().isEmpty()) {
@@ -93,21 +93,21 @@ public abstract class ModelTestSkeleton {
             Field f = cls.getField(variable);
             Object variableObj = f.get(m);
 
-                ComputedVariable c = (ComputedVariable) variableObj;
-                assertEquals(c.isFixed(), Immutability.FREE);
-                assertEquals(c.getRetentionPolicy(), RetentionPolicy.SAMPLE);
-                
-                c.setFixed(true);
-                assertEquals(c.isFixed(), Immutability.FIXED);
-                assertEquals(c.getRetentionPolicy(), RetentionPolicy.NA);
-                
-                c.setRetentionPolicy(RetentionPolicy.MAP);
-                assertEquals(c.isFixed(), Immutability.FIXED);
-                assertEquals(c.getRetentionPolicy(), RetentionPolicy.NA);
-                
-                c.setFixed(false);
-                assertEquals(c.isFixed(), Immutability.FREE);
-                assertEquals(c.getRetentionPolicy(), RetentionPolicy.MAP);
+            ComputedVariable c = (ComputedVariable) variableObj;
+            assertEquals(c.isFixed(), Immutability.FREE);
+            assertEquals(c.getRetentionPolicy(), RetentionPolicy.SAMPLE);
+
+            c.setFixed(true);
+            assertEquals(c.isFixed(), Immutability.FIXED);
+            assertEquals(c.getRetentionPolicy(), RetentionPolicy.NA);
+
+            c.setRetentionPolicy(RetentionPolicy.MAP);
+            assertEquals(c.isFixed(), Immutability.FIXED);
+            assertEquals(c.getRetentionPolicy(), RetentionPolicy.NA);
+
+            c.setFixed(false);
+            assertEquals(c.isFixed(), Immutability.FREE);
+            assertEquals(c.getRetentionPolicy(), RetentionPolicy.MAP);
         }
     }
 

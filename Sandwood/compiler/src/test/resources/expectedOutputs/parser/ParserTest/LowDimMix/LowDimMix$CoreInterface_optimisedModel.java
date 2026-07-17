@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface LowDimMix$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface LowDimMix$CoreInterface extends CoreModel {
 
 	// Getter for N.
 	public int get$N();

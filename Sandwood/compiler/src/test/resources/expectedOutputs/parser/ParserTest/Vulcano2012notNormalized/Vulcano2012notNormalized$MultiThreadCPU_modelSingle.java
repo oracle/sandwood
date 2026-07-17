@@ -2449,7 +2449,7 @@ class Vulcano2012notNormalized$MultiThreadCPU extends org.sandwood.runtime.inter
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeConstants() {}

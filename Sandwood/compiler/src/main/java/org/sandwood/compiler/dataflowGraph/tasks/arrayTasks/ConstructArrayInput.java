@@ -23,7 +23,6 @@ import org.sandwood.compiler.dataflowGraph.variables.auxillary.VariableWrapper;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.names.VariableNames;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
-import org.sandwood.compiler.trees.irTree.IRTree;
 import org.sandwood.compiler.trees.irTree.IRTreeReturn;
 
 public class ConstructArrayInput<A extends Variable<A>> extends ConstructInput<ArrayVariable<A>>
@@ -61,30 +60,31 @@ public class ConstructArrayInput<A extends Variable<A>> extends ConstructInput<A
     @Override
     public IRTreeReturn<IntVariable> getLength(CompilationContext compilationCtx) {
         if(shapeVar == null)
-            return IRTree.getIntField(output.getForwardIR(compilationCtx), "length");
+            return ArrayVariable.getLengthTree(output.getForwardIR(compilationCtx));
         else {
-            if(shapeVar.getType().isArray())
-                return IRTree.getIntField(shapeVar.getForwardIR(compilationCtx), "length");
-            else
+            if(shapeVar.getType().isArray()) {
+                ArrayVariable<?> arrayShapeVar = (ArrayVariable<?>) shapeVar;
+                return ArrayVariable.getLengthTree(arrayShapeVar.getForwardIR(compilationCtx));
+            } else
                 return ((IntVariable) shapeVar).getForwardIR(compilationCtx);
         }
     }
 
     @Override
     public IRTreeReturn<IntVariable> getMaxLength(CompilationContext compilationCtx) {
-        return IRTree.getIntField(output.getForwardIR(compilationCtx), "length");
+        return ArrayVariable.getLengthTree(output.getForwardIR(compilationCtx));
     }
 
     @Override
     public IRTreeReturn<IntVariable> getMinLength(CompilationContext compilationCtx) {
-        return IRTree.getIntField(output.getForwardIR(compilationCtx), "length");
+        return ArrayVariable.getLengthTree(output.getForwardIR(compilationCtx));
     }
 
     public void constuctShapeVaraible() {
         // Calculate the dimension of the input array
         int arrayDim = getOutputType().getDepth();
 
-        if(arrayDim == 1) 
+        if(arrayDim == 1)
             shapeVar = Variable.observeInt(VariableNames.lengthName(name), getLocation());
         else {
             ArrayType<?> lengthType = (ArrayType<?>) VariableType.getType(VariableType.IntVariable, arrayDim - 1);

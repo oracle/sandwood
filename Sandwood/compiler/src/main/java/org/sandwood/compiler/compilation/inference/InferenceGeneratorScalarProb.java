@@ -42,8 +42,6 @@ import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
-import org.sandwood.compiler.dataflowGraph.variables.ClassVariableDescription;
-import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.ScratchVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
@@ -134,8 +132,8 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
     private final static VariableDescription<IntVariable> valuePosName = VariableNames.localCalcVarName("valuePos",
             VariableType.IntVariable, false);
 
-    protected final static LocalVariableDescription<IntVariable> numStatesName = VariableNames.localCalcVarName("numStates",
-            VariableType.IntVariable, false);
+    protected final static LocalVariableDescription<IntVariable> numStatesName = VariableNames
+            .localCalcVarName("numStates", VariableType.IntVariable, false);
 
     // Flags for the different variables that we will need to construct for this
     // function.
@@ -153,7 +151,8 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
 
     // Accumulator for all the consumer sample distributions calculated so far.
     private final static LocalVariableDescription<ArrayVariable<DoubleVariable>> consumerSampleDistributionAccumulator = VariableNames
-            .localCalcVarName("accumulatedConsumerDistributions", VariableType.arrayType(VariableType.DoubleVariable), true);
+            .localCalcVarName("accumulatedConsumerDistributions", VariableType.arrayType(VariableType.DoubleVariable),
+                    true);
 
     // An accumulator for the combined distribution probabilities calculated so far.
     private final static LocalVariableDescription<DoubleVariable> distributionProbabilityAccumulator = VariableNames
@@ -238,7 +237,8 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
                         "A local array to hold the accumulated distributions of "
                                 + "the sample tasks for each configuration of distributions."));
 
-        LocalVariableDescription<IntVariable> indexName = VariableNames.localCalcVarName("i", VariableType.IntVariable, true);
+        LocalVariableDescription<IntVariable> indexName = VariableNames.localCalcVarName("i", VariableType.IntVariable,
+                true);
         IRTreeVoid body = arrayPut(load(consumerSampleDistributionAccumulator), load(indexName), constant(0.0),
                 Tree.NoComment);
         IRTreeVoid loop = IRTree.forStmt(body, constant(0), disRV.getNumStates().getForwardIR(funcData.compilationCtx),
@@ -267,7 +267,8 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
 
         // Start constructing the body of the for loop
         IRTreeVoid[] bodyStmts = new IRTreeVoid[3];
-        LocalVariableDescription<IntVariable> indexName = VariableNames.localCalcVarName("i", VariableType.IntVariable, true);
+        LocalVariableDescription<IntVariable> indexName = VariableNames.localCalcVarName("i", VariableType.IntVariable,
+                true);
 
         // Normalise the calculated distribution value.
         LocalVariableDescription<DoubleVariable> normalisedName = VariableNames.localCalcVarName("normalisedDistValue",
@@ -451,7 +452,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
             return pTree;
 
         Variable<C> pInit = compilationCtx.addInitialized(p);
-        LocalVariableDescription<C> pName = (LocalVariableDescription<C>)pInit.getUniqueVarDesc();
+        LocalVariableDescription<C> pName = (LocalVariableDescription<C>) pInit.getUniqueVarDesc();
         compilationCtx.addTreeToScope(p.scope(),
                 initializeVariable(pName, pTree, "Constructing a random variable input for use later."));
         return IRTree.load(pName);
@@ -475,8 +476,7 @@ public abstract class InferenceGeneratorScalarProb<A extends ScalarVariable<A>, 
                 Variable.namedVariable(numStatesName), Variable.intVariable(1), valuePosName, Tree.NoComment, true);
         SampleTask<A, B> sample = funcData.sampleDesc.sample;
         if(sample.isDistribution())
-            target = target.updateDistribution((DistributionSampleTask<A, ?>) sample, sample.getOutput(),
-                    currentValue);
+            target = target.updateDistribution((DistributionSampleTask<A, ?>) sample, sample.getOutput(), currentValue);
 
         return target;
     }

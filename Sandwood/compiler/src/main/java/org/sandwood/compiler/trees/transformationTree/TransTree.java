@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -19,6 +19,7 @@ import java.util.Set;
 import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.compilation.ExternalFunction;
 import org.sandwood.compiler.compilation.FunctionType;
+import org.sandwood.compiler.dataflowGraph.variables.ObjectVariable;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -51,12 +52,14 @@ import org.sandwood.compiler.trees.transformationTree.binop.TransMultiply;
 import org.sandwood.compiler.trees.transformationTree.binop.TransOr;
 import org.sandwood.compiler.trees.transformationTree.binop.TransRemainder;
 import org.sandwood.compiler.trees.transformationTree.binop.TransSubtract;
+import org.sandwood.compiler.trees.transformationTree.transformers.AccessRedirection;
 import org.sandwood.compiler.trees.transformationTree.transformers.ApplyConstantsTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.ApplyConstraintsTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.CollapseConstantsTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.CollapseUnrequiredForLoopsTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.CopyTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.ExtractCommonContraintsTransformer;
+import org.sandwood.compiler.trees.transformationTree.transformers.LocalRng;
 import org.sandwood.compiler.trees.transformationTree.transformers.LoopUnrollingTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.MoveConstraintsOutTransformer;
 import org.sandwood.compiler.trees.transformationTree.transformers.MoveNegationTransformer;
@@ -165,9 +168,22 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
         RV_FUNCTION_CALL,
         RV_FUNCTION_CALL_RETURN,
         SCOPE,
+        SET_FIELD,
         SEQUENTIAL,
         STORE,
         SUBTRACT
+    }
+
+    public enum TreeLocation {
+        STATE,
+        SCRATCH,
+        CORE,
+        UNKNOWN
+    }
+
+    public enum RNGLocation {
+        LOCAL,
+        GLOBAL
     }
 
     public final TransTreeType type;
@@ -278,7 +294,7 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
     }
 
     public T applyConstants(Map<VariableDescription<?>, TransTreeReturn<?>> constants) {
-        return applyConstants(constants, new HashSet<>());
+        return new ApplyConstantsTransformer(constants).transform(this);
     }
 
     private T applyConstants(Map<VariableDescription<?>, TransTreeReturn<?>> constants,
@@ -397,7 +413,7 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
     public T collapseConstants() {
         CollapseConstantsTransformer c = new CollapseConstantsTransformer(new ArgDesc[0],
                 KnownValuesTrans.constructKnownValues(), this);
-        return c.transform(this, new HashSet<>());
+        return c.transform(this);
     }
 
     protected T collapseConstants(ArgDesc<?>[] args, KnownValuesTrans knownValues, Set<TransTree<?>> visitedNodes) {
@@ -453,18 +469,20 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
 
     public abstract OutputTree toOutputTreeInternal();
 
-    public OutputTree toOutputTree(ExecutionType target) {
-        switch(target) {
-            case SingleThreadCPU:
-                return toOutputTreeInternal();
-            case MultiThreadCPU:
-                T tree = new ParallelIndexes().transform(this, new HashSet<>());
-                tree = new ParFor(tree.getVariableTracking()).transform(tree, new HashSet<>());
-                return tree.toOutputTreeInternal();
-            case GPU:
-            default:
-                throw new CompilerException("Unable to transform for target: " + target);
-        }
+    public OutputTree toOutputTree(RNGLocation rngLocation, TreeLocation treeLocation, ExecutionType target) {
+        TransTree<T> tree = switch(target) {
+            case SingleThreadCPU -> this;
+            case MultiThreadCPU -> {
+                T t = new ParallelIndexes().transform(this);
+                if(rngLocation == RNGLocation.LOCAL)
+                    t = new LocalRng().transform(t);
+                yield new ParFor(t.getVariableTracking()).transform(t);
+            }
+            case GPU -> throw new CompilerException("Unable to transform for target: " + target);
+        };
+        AccessRedirection ar = new AccessRedirection(treeLocation);
+        tree = ar.transform(tree);
+        return tree.toOutputTreeInternal();
     }
 
     @Override
@@ -546,8 +564,14 @@ public abstract class TransTree<T extends TransTree<T>> extends Tree<TransTree<?
         return new TransLocalFunctionCallReturn<>(outputType, name, args);
     }
 
-    public static TransGetIntField getIntField(TransTreeReturn<?> tree, String name) {
-        return new TransGetIntField(tree, name);
+    public static <A extends ObjectVariable<A>, X extends Variable<X>> TransGetField<A, X> getField(
+            TransTreeReturn<A> tree, VariableDescription<X> fieldDesc) {
+        return new TransGetField<>(tree, fieldDesc);
+    }
+
+    public static <A extends ObjectVariable<A>, X extends Variable<X>> TransSetField<A, X> setField(
+            TransTreeReturn<A> tree, VariableDescription<X> fieldDesc, TransTreeReturn<X> value, String comment) {
+        return new TransSetField<>(tree, fieldDesc, value, comment);
     }
 
     public static TransTreeVoid ifElse(TransTreeReturn<BooleanVariable> condition, TransTreeVoid ifBody, String comment,

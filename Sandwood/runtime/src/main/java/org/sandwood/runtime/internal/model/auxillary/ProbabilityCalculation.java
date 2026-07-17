@@ -8,12 +8,12 @@
 
 package org.sandwood.runtime.internal.model.auxillary;
 
-import org.sandwood.runtime.internal.model.CoreModel;
+import org.sandwood.runtime.internal.model.CoreModelBase;
 import org.sandwood.runtime.internal.model.variables.HasProbabilityInternal;
 import org.sandwood.runtime.internal.numericTools.LogSumExponential;
 
 public class ProbabilityCalculation {
-    public static double generateLogProbabilities(int iterations, CoreModel core, HasProbabilityInternal[] vars) {
+    public static double generateLogProbabilities(int iterations, CoreModelBase<?,?> core, HasProbabilityInternal[] vars) {
         double modelProbability = 0;
         if(iterations > 0) { // Ensure we have enough iterations
             for(HasProbabilityInternal v:vars)
@@ -27,7 +27,7 @@ public class ProbabilityCalculation {
         return modelProbability;
     }
 
-    private static double iterateLog(int iterations, CoreModel core, HasProbabilityInternal[] vars) {
+    private static double iterateLog(int iterations, CoreModelBase<?,?> core, HasProbabilityInternal[] vars) {
         LogSumExponential logProbabilitySum = new LogSumExponential();
 
         // TODO we might need to add batching here to ensure the difference between sum
@@ -44,7 +44,7 @@ public class ProbabilityCalculation {
     }
 
     public static double generateLogProbabilities(double percentageDifference, int iterations, int maxIterations,
-            CoreModel core, HasProbabilityInternal[] vars) {
+            CoreModelBase<?,?> core, HasProbabilityInternal[] vars) {
         LogSumExponential logProbabilitySum = new LogSumExponential();
 
         // Incremented so that we only need to compare rations. (max-min)/min < p ==

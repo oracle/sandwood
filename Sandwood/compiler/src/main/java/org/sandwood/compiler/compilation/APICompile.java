@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -78,7 +78,6 @@ import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVaria
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.IntVariable;
 import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.ScalarVariable;
 import org.sandwood.compiler.exceptions.SandwoodModelException;
-import org.sandwood.compiler.names.ClassName;
 import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.names.ModelClassName;
 import org.sandwood.compiler.names.PackageName;
@@ -105,7 +104,6 @@ import org.sandwood.compiler.trees.irTree.transformations.ReverseTreeTransformat
 import org.sandwood.compiler.trees.irTree.util.KnownValuesIR;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClassGenerated;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClassWrapper;
-import org.sandwood.compiler.trees.outputTree.OutputSandwoodInterfaceGenerated;
 import org.sandwood.compiler.trees.transformationTree.TransSandwoodClassGenerated;
 
 public class APICompile {
@@ -139,7 +137,6 @@ public class APICompile {
         try {
             PackageName targetPackageName = new PackageName(packageName);
             ModelClassName className = ModelClassName.modelName(modelName, helperClasses);
-            ClassName modelInterface = className.interfaceName();
 
             // Start the compilation of the model.
             Traces traces = TracesImplementation.getTraces(compDesc, vs);
@@ -163,9 +160,8 @@ public class APICompile {
             // If error free continue with the compilation
             CompilationContext compilationCtx = null; // TODO move this into the for loop and protect against cases with
             // no execution targets.
-            ClassName[] interfaces = { modelInterface };
 
-            Map<ExecutionType, IRSandwoodClassGenerated> irClasses = new LinkedHashMap<>();
+            Set<IRSandwoodClassGenerated> irClasses = new LinkedHashSet<>();
 
             for(ExecutionType target:ExecutionType.supportedTypes) {
                 compilationCtx = new CompilationContext(compilationOptions, traces, target);
@@ -191,27 +187,27 @@ public class APICompile {
                 constructSetIntermediates(forwardVariables, compilationCtx);
                 ObservedValuePropagationBuilder.constructPropagateObservedValues(compilationCtx);
 
-                IRSandwoodClassGenerated irCls = new IRSandwoodClassGenerated(className.backendName(target),
-                        targetPackageName, ClassName.coreBase(target), interfaces, compilationCtx.getClassFields(), compilationCtx.getScratchFields(),
+                IRSandwoodClassGenerated irClass = new IRSandwoodClassGenerated(target, className, targetPackageName,
+                        compilationCtx.getClassFields(), compilationCtx.getScratchFields(),
                         compilationCtx.getFunctions(), modelCode);
-                irClasses.put(target, irCls);
+                irClasses.add(irClass);
             }
 
             // Convert constructed classes to output classes in parallel.
             ForkJoinPool commonPool = ForkJoinPool.commonPool();
             List<RecursiveTask<OutputSandwoodClassGenerated>> tasks = new ArrayList<>();
             boolean optimise = compilationCtx.getOptimisation();
-            for(ExecutionType e:irClasses.keySet()) {
+            for(IRSandwoodClassGenerated irClass:irClasses) {
                 RecursiveTask<OutputSandwoodClassGenerated> task = new RecursiveTask<>() {
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     protected OutputSandwoodClassGenerated compute() {
-                        TransSandwoodClassGenerated transCls = irClasses.get(e).toTransformationTree();
+                        TransSandwoodClassGenerated transCls = irClass.toTransformationTree();
                         if(optimise)
                             transCls = transCls.applyOptimisations();
 
-                        return transCls.toOutputTree(e);
+                        return transCls.toOutputTree();
                     }
                 };
                 tasks.add(task);
@@ -221,9 +217,6 @@ public class APICompile {
                     task.invoke();
             }
 
-            compDesc.classes.add(new OutputSandwoodClassWrapper(className, targetPackageName, constructorArgs,
-                    compilationCtx.getClassFields(), traces, compDesc, comment, ExecutionType.supportedTypes));
-
             OutputSandwoodClassGenerated outputCls;
             Iterator<RecursiveTask<OutputSandwoodClassGenerated>> i = tasks.iterator();
             RecursiveTask<OutputSandwoodClassGenerated> task = i.next();
@@ -231,8 +224,10 @@ public class APICompile {
             outputCls = task.join();
 
             compDesc.classes.add(outputCls);
-            compDesc.classes.add(new OutputSandwoodInterfaceGenerated(outputCls, modelInterface, targetPackageName,
-                    ClassName.coreBase()));
+
+            compDesc.classes
+                    .add(OutputSandwoodClassWrapper.getClass(outputCls, className, targetPackageName, constructorArgs,
+                            compilationCtx.getClassFields(), traces, compDesc, comment, ExecutionType.supportedTypes));
 
             while(i.hasNext()) {
                 task = i.next();
@@ -321,7 +316,7 @@ public class APICompile {
                 IRTreeVoid allocator = TreeUtils.allocate(altFlagName, arrayDescs, compilationCtx);
                 compilationCtx.addInternalFlagClassField(altFlagName, allocator);
                 IRTreeVoid setter = TreeUtils.setArray(altFlagName, constant(true));
-                compilationCtx.addArrayInitilisation(setter);
+                compilationCtx.addArrayInitialization(setter);
 
                 if(compilationCtx.traces.isFixableTask(s)) {
                     GlobalVariableDescription<BooleanVariable> fixedFlag = VariableNames.fixedFlagName(s);
@@ -336,15 +331,16 @@ public class APICompile {
 
         // Inputs
         for(Variable<?> v:compilationCtx.traces.modelInputs())
-            compilationCtx.addClassInputField((GlobalVariableDescription<?>)v.getUniqueVarDesc(), v.getComment());
+            compilationCtx.addClassInputField((GlobalVariableDescription<?>) v.getUniqueVarDesc(), v.getComment());
 
         for(Variable<?> v:compilationCtx.traces.observedOnlyInputs())
-            compilationCtx.addClassInputField((GlobalVariableDescription<?>)v.getUniqueVarDesc(), v.getComment());
+            compilationCtx.addClassInputField((GlobalVariableDescription<?>) v.getUniqueVarDesc(), v.getComment());
 
         for(Variable<?> v:compilationCtx.traces.observedShapeableValues()) {
-            compilationCtx.addClassInputField((GlobalVariableDescription<?>)v.getUniqueVarDesc(), v.getComment());
+            compilationCtx.addClassInputField((GlobalVariableDescription<?>) v.getUniqueVarDesc(), v.getComment());
             Variable<?> shape = compilationCtx.traces.observedShapeVariable(v);
-            compilationCtx.addClassInputField((GlobalVariableDescription<?>)shape.getUniqueVarDesc(), shape.getComment());
+            compilationCtx.addClassInputField((GlobalVariableDescription<?>) shape.getUniqueVarDesc(),
+                    shape.getComment());
         }
     }
 
@@ -950,7 +946,7 @@ public class APICompile {
                     PrimingStatus.PRIMING, compilationCtx);
         }
 
-        for(IRTreeVoid t:compilationCtx.getArrayInitilisations())
+        for(IRTreeVoid t:compilationCtx.getArrayInitializations())
             compilationCtx.addTreeToScope(GlobalScope.scope, t);
 
         IRTreeVoid body = compilationCtx.getOutermostScopeTree();

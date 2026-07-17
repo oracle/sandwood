@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -17,6 +17,8 @@ import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Visibility;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
 import org.sandwood.compiler.trees.outputTree.OutputVoidFunction;
+import org.sandwood.compiler.trees.transformationTree.TransTree.TreeLocation;
+import org.sandwood.compiler.trees.transformationTree.transformers.Transformer;
 import org.sandwood.compiler.trees.transformationTree.util.KnownValuesTrans;
 
 public class TransVoidFunction extends TransFunction<TransTreeVoid> {
@@ -27,8 +29,9 @@ public class TransVoidFunction extends TransFunction<TransTreeVoid> {
     }
 
     @Override
-    public OutputVoidFunction toOutputTree(ExecutionType target) {
-        return OutputTree.voidFunction(visibility, name, args, body.toOutputTree(target), override, comment);
+    public OutputVoidFunction toOutputTree(TreeLocation treeLocation, ExecutionType target) {
+        return OutputTree.voidFunction(visibility, name, args, body.toOutputTree(localRng(args), treeLocation, target),
+                override, comment);
     }
 
     @Override
@@ -41,8 +44,13 @@ public class TransVoidFunction extends TransFunction<TransTreeVoid> {
     @Override
     protected TransFunction<?> applyConstants(Map<VariableDescription<?>, TransTreeReturn<?>> constants) {
         KnownValuesTrans newKnownValues = knownValues.applyOptimisations(args, constants);
-        TransTreeVoid newBody = body.applyOptimisations(args, constants, newKnownValues);
-        return new TransVoidFunction(visibility, name, args, newBody.applyConstants(constants), override, comment,
-                newKnownValues);
+        TransTreeVoid newBody = body.applyConstants(constants);
+        return new TransVoidFunction(visibility, name, args, newBody, override, comment, newKnownValues);
+    }
+
+    @Override
+    protected TransFunction<?> applyTransformation(Transformer t) {
+        TransTreeVoid newBody = t.transform(body);
+        return new TransVoidFunction(visibility, name, args, newBody, override, comment, knownValues);
     }
 }

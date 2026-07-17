@@ -1,153 +1,32 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.Flip1CoinArrayCopyPassMK2$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.Flip1CoinArrayCopyPassMK2.State;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements Flip1CoinArrayCopyPassMK2$CoreInterface {
-	
-	// Declare the variables for the model.
-	private double a;
-	private double b;
-	private double[] bias;
-	private boolean constrainedFlag$sample10 = true;
-	private boolean fixedFlag$sample10 = false;
-	private boolean fixedProbFlag$sample10 = false;
-	private boolean fixedProbFlag$sample31 = false;
-	private boolean[] flips;
-	private boolean[] flipsMeasured;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$bernoulli;
-	private double logProbability$bias;
-	private double logProbability$flips;
-	private double logProbability$var10;
-	private double logProbability$var31;
-	private int samples;
-	private boolean system$gibbsForward = true;
+final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	public Flip1CoinArrayCopyPassMK2$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {}
 	}
 
-	// Getter for a.
-	@Override
-	public final double get$a() {
-		return a;
-	}
 
-	// Getter for b.
-	@Override
-	public final double get$b() {
-		return b;
-	}
-
-	// Getter for bias.
-	@Override
-	public final double[] get$bias() {
-		return bias;
-	}
-
-	// Setter for bias.
-	@Override
-	public final void set$bias(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of bias including if probabilities need to be
-		// updated.
-		bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 10 as it depends on bias.
-		fixedProbFlag$sample10 = false;
-		
-		// Unset the fixed probability flag for sample 31 as it depends on bias.
-		fixedProbFlag$sample31 = false;
-	}
-
-	// Getter for fixedFlag$sample10.
-	@Override
-	public final boolean get$fixedFlag$sample10() {
-		return fixedFlag$sample10;
-	}
-
-	// Setter for fixedFlag$sample10.
-	@Override
-	public final void set$fixedFlag$sample10(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample10 including if probabilities
-		// need to be updated.
-		fixedFlag$sample10 = cv$value;
-		constrainedFlag$sample10 = (fixedFlag$sample10 || constrainedFlag$sample10);
-		
-		// Should the probability of sample 10 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample10 = (fixedFlag$sample10 && fixedProbFlag$sample10);
-		
-		// Should the probability of sample 31 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample31 = (fixedFlag$sample10 && fixedProbFlag$sample31);
-	}
-
-	// Getter for flips.
-	@Override
-	public final boolean[] get$flips() {
-		return flips;
-	}
-
-	// Getter for flipsMeasured.
-	@Override
-	public final boolean[] get$flipsMeasured() {
-		return flipsMeasured;
-	}
-
-	// Setter for flipsMeasured.
-	@Override
-	public final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
-		flipsMeasured = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$bernoulli.
-	@Override
-	public final double get$logProbability$bernoulli() {
-		return logProbability$bernoulli;
-	}
-
-	// Getter for logProbability$bias.
-	@Override
-	public final double get$logProbability$bias() {
-		return logProbability$bias;
-	}
-
-	// Getter for logProbability$flips.
-	@Override
-	public final double get$logProbability$flips() {
-		return logProbability$flips;
-	}
-
-	// Getter for samples.
-	@Override
-	public final int get$samples() {
-		return samples;
-	}
-
-	// Setter for samples.
-	@Override
-	public final void set$samples(int cv$value, boolean allocated$) {
-		samples = cv$value;
+	public Flip1CoinArrayCopyPassMK2$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample10
 	private final void drawValueSample10() {
-		bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
+		state.bias[0] = DistributionSampling.sampleBeta(state.RNG$, state.a, state.b);
 		
 		// Guards to ensure that bias is only updated when there is a valid path.
 		// 
@@ -155,8 +34,8 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 		{
 			{
 				if((0 == 0)) {
-					for(int i = 0; i < samples; i += 1)
-						bias[(i + 1)] = bias[0];
+					for(int i = 0; i < state.samples; i += 1)
+						state.bias[(i + 1)] = state.bias[0];
 				}
 			}
 		}
@@ -167,7 +46,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	// conjugate prior.
 	private final void inferSample10() {
 		if(true) {
-			constrainedFlag$sample10 = false;
+			state.constrainedFlag$sample10 = false;
 			
 			// Local variable to record the number of true samples.
 			int cv$sum = 0;
@@ -180,7 +59,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 					// Looking for a path between Sample 10 and consumer Bernoulli 30.
 					{
 						{
-							for(int i = 0; i < samples; i += 1) {
+							for(int i = 0; i < state.samples; i += 1) {
 								if((0 == i)) {
 									// Processing sample task 31 of consumer random variable bernoulli.
 									{
@@ -189,7 +68,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 											boolean cv$sampleConstrained = true;
 											if(cv$sampleConstrained) {
 												// Mark that the sample has observed constrained data.
-												constrainedFlag$sample10 = true;
+												state.constrainedFlag$sample10 = true;
 												{
 													{
 														{
@@ -200,7 +79,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 																	cv$count = (cv$count + 1);
 																	
 																	// If the sample value was positive increase the count
-																	if(flips[i])
+																	if(state.flips[i])
 																		cv$sum = (cv$sum + 1);
 																}
 															}
@@ -215,8 +94,8 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 						}
 						{
 							if((0 == 0)) {
-								for(int i = 0; i < samples; i += 1) {
-									for(int index$i$2_2 = 0; index$i$2_2 < samples; index$i$2_2 += 1) {
+								for(int i = 0; i < state.samples; i += 1) {
+									for(int index$i$2_2 = 0; index$i$2_2 < state.samples; index$i$2_2 += 1) {
 										if(((i + 1) == index$i$2_2)) {
 											// Processing sample task 31 of consumer random variable bernoulli.
 											{
@@ -225,7 +104,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 													boolean cv$sampleConstrained = true;
 													if(cv$sampleConstrained) {
 														// Mark that the sample has observed constrained data.
-														constrainedFlag$sample10 = true;
+														state.constrainedFlag$sample10 = true;
 														{
 															{
 																{
@@ -236,7 +115,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 																			cv$count = (cv$count + 1);
 																			
 																			// If the sample value was positive increase the count
-																			if(flips[index$i$2_2])
+																			if(state.flips[index$i$2_2])
 																				cv$sum = (cv$sum + 1);
 																		}
 																	}
@@ -254,16 +133,16 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 					}
 				}
 			}
-			if(constrainedFlag$sample10) {
+			if(state.constrainedFlag$sample10) {
 				// Write out the value of the sample to a temporary variable prior to updating the
 				// intermediate variables.
-				double var10 = Conjugates.sampleConjugateBetaBinomial(RNG$, a, b, cv$sum, cv$count);
+				double var10 = Conjugates.sampleConjugateBetaBinomial(state.RNG$, state.a, state.b, cv$sum, cv$count);
 				
 				// Guards to ensure that bias is only updated when there is a valid path.
 				{
 					{
 						{
-							bias[0] = var10;
+							state.bias[0] = var10;
 						}
 					}
 				}
@@ -274,8 +153,8 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 				{
 					{
 						if((0 == 0)) {
-							for(int i = 0; i < samples; i += 1)
-								bias[(i + 1)] = bias[0];
+							for(int i = 0; i < state.samples; i += 1)
+								state.bias[(i + 1)] = state.bias[0];
 						}
 					}
 				}
@@ -288,7 +167,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	private final void logProbabilityValue$sample10() {
 		// Determine if we need to calculate the values for sample task 10 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample10) {
+		if(!state.fixedProbFlag$sample10) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -304,11 +183,11 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			{
 				{
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = bias[0];
+					double cv$sampleValue = state.bias[0];
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, a, b));
+							double cv$weightedProbability = (Math.log(1.0) + DistributionSampling.logProbabilityBeta(cv$sampleValue, state.a, state.b));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -343,22 +222,22 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$var10 = cv$sampleProbability;
+			state.logProbability$var10 = cv$sampleProbability;
 			
 			// Update the variable probability
-			logProbability$bias = (logProbability$bias + cv$accumulator);
+			state.logProbability$bias = (state.logProbability$bias + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample10)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample10)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample10 = fixedFlag$sample10;
+			state.fixedProbFlag$sample10 = state.fixedFlag$sample10;
 		} else {
 			// Using cached values.
 			// 
@@ -366,20 +245,20 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$var10;
+			double cv$sampleValue = state.logProbability$var10;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$bias = (logProbability$bias + cv$accumulator);
+			state.logProbability$bias = (state.logProbability$bias + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample10)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample10)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -388,7 +267,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	private final void logProbabilityValue$sample31() {
 		// Determine if we need to calculate the values for sample task 31 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample31) {
+		if(!state.fixedProbFlag$sample31) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -398,7 +277,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < samples; i += 1) {
+			for(int i = 0; i < state.samples; i += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -407,10 +286,10 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 				{
 					{
 						// The sample value to calculate the probability of generating
-						boolean cv$sampleValue = flips[i];
+						boolean cv$sampleValue = state.flips[i];
 						{
 							{
-								double var29 = bias[i];
+								double var29 = state.bias[i];
 								
 								// Store the value of the function call, so the function call is only made once.
 								double cv$weightedProbability = (Math.log(1.0) + (((0.0 <= var29) && (var29 <= 1.0))?Math.log((cv$sampleValue?var29:(1.0 - var29))):Double.NEGATIVE_INFINITY));
@@ -451,24 +330,24 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			// of all instances of the random variable.
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			if(cv$sampleReached)
-				logProbability$bernoulli = cv$sampleAccumulator;
+				state.logProbability$bernoulli = cv$sampleAccumulator;
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var31 = cv$accumulator;
+				state.logProbability$var31 = cv$accumulator;
 			
 			// Update the variable probability
-			logProbability$flips = (logProbability$flips + cv$accumulator);
+			state.logProbability$flips = (state.logProbability$flips + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample31 = fixedFlag$sample10;
+			state.fixedProbFlag$sample31 = state.fixedFlag$sample10;
 		} else {
 			// Using cached values.
 			// 
@@ -479,63 +358,40 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i = 0; i < samples; i += 1)
+			for(int i = 0; i < state.samples; i += 1)
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var31;
+			double cv$sampleValue = state.logProbability$var31;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			if(cv$sampleReached)
-				logProbability$bernoulli = cv$rvAccumulator;
+				state.logProbability$bernoulli = cv$rvAccumulator;
 			
 			// Update the variable probability
-			logProbability$flips = (logProbability$flips + cv$accumulator);
+			state.logProbability$flips = (state.logProbability$flips + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
-		}
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// If bias has not been set already allocate space.
-		if(!fixedFlag$sample10) {
-			// Constructor for bias
-			{
-				bias = new double[(samples + 1)];
-			}
-		}
-		
-		// Constructor for flips
-		{
-			flips = new boolean[samples];
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample10)
-			bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
+		if(!state.fixedFlag$sample10)
+			state.bias[0] = DistributionSampling.sampleBeta(state.RNG$, state.a, state.b);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, samples, 1,
+		parallelFor(state.RNG$, 0, state.samples, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample10)
-							bias[(i + 1)] = bias[0];
-						flips[i] = DistributionSampling.sampleBernoulli(RNG$1, bias[i]);
+						if(!state.fixedFlag$sample10)
+							state.bias[(i + 1)] = state.bias[0];
+						state.flips[i] = DistributionSampling.sampleBernoulli(RNG$1, state.bias[i]);
 					}
 			}
 		);
@@ -546,17 +402,17 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample10)
-			bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
+		if(!state.fixedFlag$sample10)
+			state.bias[0] = DistributionSampling.sampleBeta(state.RNG$, state.a, state.b);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, samples, 1,
+		parallelFor(state.RNG$, 0, state.samples, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1)
-						bias[(i + 1)] = bias[0];
+						state.bias[(i + 1)] = state.bias[0];
 			}
 		);
 	}
@@ -565,18 +421,18 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample10)
-			bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
+		if(!state.fixedFlag$sample10)
+			state.bias[0] = DistributionSampling.sampleBeta(state.RNG$, state.a, state.b);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, samples, 1,
+		parallelFor(state.RNG$, 0, state.samples, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1) {
-						bias[(i + 1)] = bias[0];
-						flips[i] = DistributionSampling.sampleBernoulli(RNG$1, bias[i]);
+						state.bias[(i + 1)] = state.bias[0];
+						state.flips[i] = DistributionSampling.sampleBernoulli(RNG$1, state.bias[i]);
 					}
 			}
 		);
@@ -586,18 +442,18 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample10)
-			bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
+		if(!state.fixedFlag$sample10)
+			state.bias[0] = DistributionSampling.sampleBeta(state.RNG$, state.a, state.b);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, samples, 1,
+		parallelFor(state.RNG$, 0, state.samples, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1) {
-						if(!fixedFlag$sample10)
-							bias[(i + 1)] = bias[0];
+						if(!state.fixedFlag$sample10)
+							state.bias[(i + 1)] = state.bias[0];
 					}
 			}
 		);
@@ -608,17 +464,17 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample10)
-			bias[0] = DistributionSampling.sampleBeta(RNG$, a, b);
+		if(!state.fixedFlag$sample10)
+			state.bias[0] = DistributionSampling.sampleBeta(state.RNG$, state.a, state.b);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, samples, 1,
+		parallelFor(state.RNG$, 0, state.samples, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1)
-						bias[(i + 1)] = bias[0];
+						state.bias[(i + 1)] = state.bias[0];
 			}
 		);
 	}
@@ -627,19 +483,19 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample10)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample10)
 				inferSample10();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample10)
+			if(!state.fixedFlag$sample10)
 				inferSample10();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample10)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample10)
 			drawValueSample10();
 	}
 
@@ -651,23 +507,23 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$bias = 0.0;
-		if(!fixedProbFlag$sample10)
-			logProbability$var10 = Double.NaN;
-		logProbability$bernoulli = Double.NaN;
-		logProbability$flips = 0.0;
-		if(!fixedProbFlag$sample31)
-			logProbability$var31 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$bias = 0.0;
+		if(!state.fixedProbFlag$sample10)
+			state.logProbability$var10 = Double.NaN;
+		state.logProbability$bernoulli = Double.NaN;
+		state.logProbability$flips = 0.0;
+		if(!state.fixedProbFlag$sample31)
+			state.logProbability$var31 = Double.NaN;
 	}
 
 	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		a = 1.0;
-		b = 1.0;
+		state.a = 1.0;
+		state.b = 1.0;
 	}
 
 	// Construct the evidence probabilities.
@@ -677,7 +533,7 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample10)
+		if(state.fixedFlag$sample10)
 			logProbabilityValue$sample10();
 		logProbabilityValue$sample31();
 	}
@@ -723,8 +579,8 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	@Override
 	public final void propagateObservedValues() {
 		// Deep copy between arrays
-		boolean[] cv$source1 = flipsMeasured;
-		boolean[] cv$target1 = flips;
+		boolean[] cv$source1 = state.flipsMeasured;
+		boolean[] cv$target1 = state.flips;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			cv$target1[cv$index1] = cv$source1[cv$index1];
@@ -737,13 +593,13 @@ final class Flip1CoinArrayCopyPassMK2$MultiThreadCPU extends org.sandwood.runtim
 	@Override
 	public final void setIntermediates() {
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, samples, 1,
+		parallelFor(state.RNG$, 0, state.samples, 1,
 			(int forStart$i, int forEnd$i, int threadID$i, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int i = forStart$i; i < forEnd$i; i += 1)
-						bias[(i + 1)] = bias[0];
+						state.bias[(i + 1)] = state.bias[0];
 			}
 		);
 	}

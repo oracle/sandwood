@@ -1,61 +1,249 @@
 package org.sandwood.compiler.tests.parser;
 
-import org.sandwood.runtime.model.Model;
-import org.sandwood.runtime.model.ExecutionTarget;
-import org.sandwood.runtime.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import java.util.HashMap;
+import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
-
-import java.util.Map;
-import java.util.HashMap;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.ModelInternal;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
+import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import org.sandwood.runtime.model.ExecutionTarget;
+import org.sandwood.runtime.model.variables.*;
 
 /**
-  * Class representing the Sandwood model ReductionTest This is the class that
-  * all user interactions with the model should occur through.
-  */
-public final class ReductionTest extends Model {
+ * Class representing the Sandwood model ReductionTest This is the class that all
+ * user interactions with the model should occur through.
+ */
+public final class ReductionTest extends ModelInternal<ReductionTest.State> {
+	final class State extends CoreModelState {
+double[] bias;
+		boolean[] constrainedFlag$sample30;
+		boolean[] constrainedFlag$sample47;
+		boolean[] constrainedFlag$sample62;
+		boolean fixedFlag$sample30 = false;
+		boolean fixedFlag$sample47 = false;
+		boolean fixedFlag$sample62 = false;
+		boolean fixedProbFlag$sample30 = false;
+		boolean fixedProbFlag$sample47 = false;
+		boolean fixedProbFlag$sample62 = false;
+		boolean fixedProbFlag$sample87 = false;
+		boolean[] flips;
+		boolean[] flipsMeasured;
+		int length$flipsMeasured;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$bias;
+		double logProbability$flips;
+		double logProbability$m;
+		double[] logProbability$sample62;
+		double[] logProbability$sample87;
+		double logProbability$st;
+		double logProbability$var30;
+		double logProbability$var46;
+		double[][] m;
+		int noCats;
+		int noFlips;
+		int noStates;
+		int[] st;
+		boolean system$gibbsForward = true;
+		double[] v;
 
-    private ReductionTest$CoreInterface system$c = new ReductionTest$SingleThreadCPU(ExecutionTarget.singleThread);
+		@Override
+		public final void allocate() {
+			v = new double[(length$flipsMeasured / noCats)];
+			if(!fixedFlag$sample30) {
+				m = new double[noCats][];
+				for(int var29 = 0; var29 < noCats; var29 += 1)
+					m[var29] = new double[(length$flipsMeasured / noCats)];
+			}
+			if(!fixedFlag$sample47)
+				bias = new double[length$flipsMeasured];
+			if(!fixedFlag$sample62)
+				st = new int[noCats];
+			flips = new boolean[length$flipsMeasured];
+			constrainedFlag$sample47 = new boolean[length$flipsMeasured];
+			constrainedFlag$sample30 = new boolean[noCats];
+			constrainedFlag$sample62 = new boolean[noCats];
+			logProbability$sample62 = new double[noCats];
+			logProbability$sample87 = new double[length$flipsMeasured];
+		}
+
+		final double[] get$bias() {
+			return bias;
+		}
+
+		final void set$bias(double[] cv$value, boolean allocated$) {
+			bias = cv$value;
+			fixedProbFlag$sample47 = false;
+			fixedProbFlag$sample87 = false;
+		}
+
+		final boolean get$fixedFlag$sample30() {
+			return fixedFlag$sample30;
+		}
+
+		final void set$fixedFlag$sample30(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample30 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample30$1 = 0; index$constrainedFlag$sample30$1 < constrainedFlag$sample30.length; index$constrainedFlag$sample30$1 += 1)
+					constrainedFlag$sample30[index$constrainedFlag$sample30$1] = cv$value;
+			}
+			fixedProbFlag$sample30 = (cv$value && fixedProbFlag$sample30);
+			fixedProbFlag$sample62 = (cv$value && fixedProbFlag$sample62);
+		}
+
+		final boolean get$fixedFlag$sample47() {
+			return fixedFlag$sample47;
+		}
+
+		final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample47 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample47$1 = 0; index$constrainedFlag$sample47$1 < constrainedFlag$sample47.length; index$constrainedFlag$sample47$1 += 1)
+					constrainedFlag$sample47[index$constrainedFlag$sample47$1] = cv$value;
+			}
+			fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
+			fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
+		}
+
+		final boolean get$fixedFlag$sample62() {
+			return fixedFlag$sample62;
+		}
+
+		final void set$fixedFlag$sample62(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample62 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample62$1 = 0; index$constrainedFlag$sample62$1 < constrainedFlag$sample62.length; index$constrainedFlag$sample62$1 += 1)
+					constrainedFlag$sample62[index$constrainedFlag$sample62$1] = cv$value;
+			}
+			fixedProbFlag$sample62 = (cv$value && fixedProbFlag$sample62);
+			fixedProbFlag$sample87 = (cv$value && fixedProbFlag$sample87);
+		}
+
+		final boolean[] get$flips() {
+			return flips;
+		}
+
+		final boolean[] get$flipsMeasured() {
+			return flipsMeasured;
+		}
+
+		final void set$flipsMeasured(boolean[] cv$value, boolean allocated$) {
+			flipsMeasured = cv$value;
+		}
+
+		final int get$length$flipsMeasured() {
+			return length$flipsMeasured;
+		}
+
+		final void set$length$flipsMeasured(int cv$value, boolean allocated$) {
+			length$flipsMeasured = cv$value;
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$bias() {
+			return logProbability$bias;
+		}
+
+		final double get$logProbability$flips() {
+			return logProbability$flips;
+		}
+
+		final double get$logProbability$m() {
+			return logProbability$m;
+		}
+
+		final double get$logProbability$st() {
+			return logProbability$st;
+		}
+
+		final double[][] get$m() {
+			return m;
+		}
+
+		final void set$m(double[][] cv$value, boolean allocated$) {
+			m = cv$value;
+			fixedProbFlag$sample30 = false;
+			fixedProbFlag$sample62 = false;
+		}
+
+		final int get$noCats() {
+			return noCats;
+		}
+
+		final void set$noCats(int cv$value, boolean allocated$) {
+			noCats = cv$value;
+		}
+
+		final int get$noFlips() {
+			return noFlips;
+		}
+
+		final int get$noStates() {
+			return noStates;
+		}
+
+		final int[] get$st() {
+			return st;
+		}
+
+		final void set$st(int[] cv$value, boolean allocated$) {
+			st = cv$value;
+			fixedProbFlag$sample62 = false;
+			fixedProbFlag$sample87 = false;
+		}
+
+		final double[] get$v() {
+			return v;
+		}
+	}
 
     private final ComputedDoubleArrayInternal $bias = new ComputedDoubleArrayInternal(this, "bias", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$bias(); }
+        public double[] getValue() { return state.get$bias(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$bias(value, allocated);
+            state.set$bias(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$bias(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$bias(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample47(fixed, allocated);
+                state.set$fixedFlag$sample47(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample47())
+            if(state.get$fixedFlag$sample47())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing bias of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing bias of type double[] from the Sandwood model. */
     public final ComputedDoubleArray bias = $bias;
 
     private final ComputedBooleanArrayInternal $flips = new ComputedBooleanArrayInternal(this, "flips", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$flips(); }
+        public boolean[] getValue() { return state.get$flips(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -66,7 +254,7 @@ public final class ReductionTest extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$flips(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$flips(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -79,23 +267,21 @@ public final class ReductionTest extends Model {
         }
     };
 
-    /**
-     * Computed variable representing flips of type boolean[] from the Sandwood model 
-     */
+	/** Computed variable representing flips of type boolean[] from the Sandwood model. */
     public final ComputedBooleanArray flips = $flips;
 
     private final ComputedObjectArrayInternal<double[]> $m = new ComputedObjectArrayInternal<double[]>(this, "m", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$m(); }
+        public double[][] getValue() { return state.get$m(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$m(value, allocated);
+            state.set$m(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$m(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$m(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -105,56 +291,52 @@ public final class ReductionTest extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample30(fixed, allocated);
+                state.set$fixedFlag$sample30(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample30())
+            if(state.get$fixedFlag$sample30())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing m of type double[][] from the Sandwood model 
-     */
+	/** Computed variable representing m of type double[][] from the Sandwood model. */
     public final ComputedObjectArray<double[]> m = $m;
 
     private final ComputedIntegerArrayInternal $st = new ComputedIntegerArrayInternal(this, "st", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$st(); }
+        public int[] getValue() { return state.get$st(); }
 
         @Override
         protected void setValueInternal(int[] value) {
-            system$c.set$st(value, allocated);
+            state.set$st(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$st(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$st(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample62(fixed, allocated);
+                state.set$fixedFlag$sample62(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample62())
+            if(state.get$fixedFlag$sample62())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing st of type int[] from the Sandwood model 
-     */
+	/** Computed variable representing st of type int[] from the Sandwood model. */
     public final ComputedIntegerArray st = $st;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
@@ -163,17 +345,15 @@ public final class ReductionTest extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$noCats();
+                return state.get$noCats();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noCats(value, allocated); }
+        protected void setValueInternal(int value) { state.set$noCats(value, allocated); }
     };
 
-    /**
-     * Observed variable representing noCats of type int from the Sandwood model 
-     */
+	/** Observed variable representing noCats of type int from the Sandwood model. */
     public final ObservedInteger noCats = $noCats;
 
     private Map<String, ObservedVariableInternal> $modelInputs = new HashMap<>();
@@ -182,42 +362,42 @@ public final class ReductionTest extends Model {
         @Override
         public boolean[] getValue() {
             synchronized(model) {
-                return system$c.get$flipsMeasured();
+                return state.get$flipsMeasured();
             }
         }
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$flipsMeasured(value, allocated);
-            system$c.set$length$flipsMeasured(value.length, allocated);
+            state.set$flipsMeasured(value, allocated);
+            state.set$length$flipsMeasured(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$flipsMeasured(shape, allocated);
+            state.set$length$flipsMeasured(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$flipsMeasured();
+            return state.get$length$flipsMeasured();
         }
     };
 
-    /**
-     * Observed variable representing flipsMeasured of type boolean[] from the Sandwood model 
-     */
+	/**
+	 * Observed variable representing flipsMeasured of type boolean[] from the Sandwood
+	 * model.
+	 */
     public final ObservedBooleanArrayShapeable flipsMeasured = $flipsMeasured;
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
     private HasProbabilityInternal[] $probabilityVariables = {$bias, $flips, $m, $st};
 
-    //Constructors
-    /**
-     * A constructor for a model where no variable values are set.
-     */
+    // Constructors
+	/** A constructor for a model where no variable values are set. */
     public ReductionTest() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("bias", $bias);
         $computedVariables.put("flips", $flips);
@@ -229,28 +409,31 @@ public final class ReductionTest extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("flipsMeasured", $flipsMeasured);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
-    }
-    /**
-      * A constructor to set all the required values in the model to infer values. These
-      * will be values in an untrained model so this will only generate values from the
-      * default distributions described in the model.
-      * @param flipsMeasuredShape An integer array describing the shape of variable flipsMeasured to use in the model when generating results.
-      * @param noCats The value to set noCats to.
-      */
 
+        ReductionTest$SingleThreadCPU core = new ReductionTest$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+    }
+
+	/**
+	 * A constructor to set all the required values in the model to infer values. These
+	 * will be values in an untrained model so this will only generate values from the
+	 * default distributions described in the model.
+	 * @param flipsMeasuredShape An integer array describing the shape of variable flipsMeasured
+	 *                           to use in the model when generating results.
+	 * @param noCats The value to set noCats to.
+	 */
     public ReductionTest(int flipsMeasuredShape, int noCats) {
         this();
         this.$noCats.setValue(noCats);
         this.$flipsMeasured.setShape(flipsMeasuredShape);
     }
-    /**
-      * A constructor to set all the required values in the model to infer the model
-      * parameters, or to generate probabilities for the model.
-      * @param flipsMeasured The value to set flipsMeasured to.
-      * @param noCats The value to set noCats to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer the model parameters,
+	 * or to generate probabilities for the model.
+	 * @param flipsMeasured The value to set flipsMeasured to.
+	 * @param noCats The value to set noCats to
+	 */
     public ReductionTest(boolean[] flipsMeasured, int noCats) {
         this();
         this.flipsMeasured.setValue(flipsMeasured);
@@ -258,103 +441,68 @@ public final class ReductionTest extends Model {
     }
     
     @Override
-    protected ReductionTest$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        ReductionTest$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new ReductionTest$SingleThreadCPU(target);
-                break;
+                return new ReductionTest$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new ReductionTest$MultiThreadCPU(target);
-                break;
+                return new ReductionTest$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
     }
 
-    private void transferData(ReductionTest$CoreInterface oldCore, ReductionTest$CoreInterface newCore) {
-        //Model inputs
-        if(noCats.isSet())
-            newCore.set$noCats(oldCore.get$noCats(), false);
-
-        //Observed arrays
-        if(flipsMeasured.isSet()) {
-            newCore.set$flipsMeasured(oldCore.get$flipsMeasured(), false);
-            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured(), false);
-        }
-        else if(flipsMeasured.shapeSet())
-            newCore.set$length$flipsMeasured(oldCore.get$length$flipsMeasured(), false);
-
-        //ComputedVariables
-        if($bias.isSet())
-            newCore.set$bias(oldCore.get$bias(), false);
-        if($m.isSet())
-            newCore.set$m(oldCore.get$m(), false);
-        if($st.isSet())
-            newCore.set$st(oldCore.get$st(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample30(oldCore.get$fixedFlag$sample30(), false);
-        newCore.set$fixedFlag$sample47(oldCore.get$fixedFlag$sample47(), false);
-        newCore.set$fixedFlag$sample62(oldCore.get$fixedFlag$sample62(), false);
-    }
-
-    /**
-     * A class to hold all the values required to perform a value inference on the model.
-     */
+	/**
+	 * A class to hold all the values required to perform a value inference on the model.
+	 */
     public static class InferValueInputs {
-        /** Field holding the shape of model input flipsMeasured */
+		/** Field holding the shape of model input flipsMeasured */
         public final int flipsMeasuredShape;
-        /** Field holding the value of model input noCats */
+		/** Field holding the value of model input noCats */
         public final int noCats;
 
-        /**
-          * A constructor taking all the values required to set up the model to infer variables.
-          * @param flipsMeasuredShape An integer array describing the shape of variable flipsMeasured to use in the model when generating results.
-          * @param noCats The value to set noCats to.
-          */
+		/**
+		 * A constructor taking all the values required to set up the model to infer variables.
+		 * @param flipsMeasuredShape An integer array describing the shape of variable flipsMeasured
+		 *                           to use in the model when generating results.
+		 * @param noCats The value to set noCats to.
+		 */
         public InferValueInputs(int flipsMeasuredShape, int noCats) {
             this.noCats = noCats;
             this.flipsMeasuredShape = flipsMeasuredShape;
         }
     }
 
-    /**
-     * A class to hold all the inputs for the model. It can be used to parameterize inference of the model probabilities
-     * and probability calculations.
-     */
+	/**
+	 * A class to hold all the inputs for the model. It can be used to parameterize inference
+	 * of the model probabilities and probability calculations.
+	 */
     public static class AllInputs {
-        /** Field holding the value of model input flipsMeasured */
+		/** Field holding the value of model input flipsMeasured */
         public final boolean[] flipsMeasured;
-        /** Field holding the value of model input noCats */
+		/** Field holding the value of model input noCats */
         public final int noCats;
 
-        /**
-          * A constructor to take all the required values by the model to infer the model
-          * parameters, or to generate probabilities for the model.
-          * @param flipsMeasured The value to set flipsMeasured to.
-          * @param noCats The value to set noCats to.
-          */
+		/**
+		 * A constructor to take all the required values by the model to infer the model parameters,
+		 * or to generate probabilities for the model.
+		 * @param flipsMeasured The value to set flipsMeasured to.
+		 * @param noCats The value to set noCats to.
+		 */
         public AllInputs(boolean[] flipsMeasured, int noCats) {
             this.flipsMeasured = flipsMeasured;
             this.noCats = noCats;
         }
     }
-
-    /**
-     * A class to hold all the outputs from the model after an infer values step.
-     */
+	/** A class to hold all the outputs from the model after an infer values step. */
     public static class InferredValueOutputs {
-        /** Field holding the value of bias after a convention execution step.*/
+		/** Field holding the value of bias after a convention execution step. */
         public final double[] bias;
-        /** Field holding the value of flips after a convention execution step.*/
+		/** Field holding the value of flips after a convention execution step. */
         public final boolean[] flips;
-        /** Field holding the value of m after a convention execution step.*/
+		/** Field holding the value of m after a convention execution step. */
         public final double[][] m;
-        /** Field holding the value of st after a convention execution step.*/
+		/** Field holding the value of st after a convention execution step. */
         public final int[] st;
 
         InferredValueOutputs(ReductionTest system$model) {
@@ -365,18 +513,19 @@ public final class ReductionTest extends Model {
         }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class LogProbabilities {
         private final double $logModelProbability;
-        /** Field holding the log probability of computed variable bias */
+		/** Field holding the log probability of computed variable bias */
         public final double bias;
-        /** Field holding the log probability of computed variable flips */
+		/** Field holding the log probability of computed variable flips */
         public final double flips;
-        /** Field holding the log probability of computed variable m */
+		/** Field holding the log probability of computed variable m */
         public final double m;
-        /** Field holding the log probability of computed variable st */
+		/** Field holding the log probability of computed variable st */
         public final double st;
 
         LogProbabilities(ReductionTest system$model) {
@@ -387,23 +536,26 @@ public final class ReductionTest extends Model {
             this.st = system$model.st.getLogProbability();
         }
 
-        /** Method to return log probability of the whole model 
-         *  @return The log probability of the whole model. */
+		/**
+		 * Method to return log probability of the whole model
+		 * @return The log probability of the whole model.
+		 */
         public double getModelProbability() { return $logModelProbability; }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class Probabilities {
         private final double $modelProbability;
-        /** Field holding the probability of computed variable bias */
+		/** Field holding the probability of computed variable bias */
         public final double bias;
-        /** Field holding the probability of computed variable flips */
+		/** Field holding the probability of computed variable flips */
         public final double flips;
-        /** Field holding the probability of computed variable m */
+		/** Field holding the probability of computed variable m */
         public final double m;
-        /** Field holding the probability of computed variable st */
+		/** Field holding the probability of computed variable st */
         public final double st;
 
         Probabilities(ReductionTest system$model) {
@@ -414,20 +566,20 @@ public final class ReductionTest extends Model {
             this.st = system$model.st.getProbability();
         }
 
-        /** Method to return probability of the whole model 
-         *  @return The probability of the whole model. */
+		/**
+		 * Method to return probability of the whole model
+		 * @return The probability of the whole model.
+		 */
         public double getModelProbability() { return $modelProbability; }
     }
 
-    /**
-     * A class to hold all the outputs from the model after an infer model call.
-     */
+	/** A class to hold all the outputs from the model after an infer model call. */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of bias after an infer model call. */
+		/** Field holding the MAP or Sample value of bias after an infer model call. */
         public final double[][] bias;
-        /** Field holding the MAP or Sample value of m after an infer model call. */
+		/** Field holding the MAP or Sample value of m after an infer model call. */
         public final double[][][] m;
-        /** Field holding the MAP or Sample value of st after an infer model call. */
+		/** Field holding the MAP or Sample value of st after an infer model call. */
         public final int[][] st;
 
         InferredModelOutputs(ReductionTest system$model) {
@@ -437,11 +589,12 @@ public final class ReductionTest extends Model {
         }
     }
 
-    /**
-     * Perform a single pass generating values from the model.
-     * @param inputs An object containing the parameters required to run inference on the model.
-     * @return An object containing the values computed by the inference step.
-     */
+	/**
+	 * Perform a single pass generating values from the model.
+	 * @param inputs An object containing the parameters required to run inference on
+	 *               the model.
+	 * @return An object containing the values computed by the inference step.
+	 */
     public InferredValueOutputs execute(InferValueInputs inputs) {
         this.noCats.setValue(inputs.noCats);
         this.$flipsMeasured.setShape(inputs.flipsMeasuredShape);
@@ -449,12 +602,13 @@ public final class ReductionTest extends Model {
         return new InferredValueOutputs(this);
     }
 
-    /**
-     * Infer the values of the different elements of the model.
-     * @param iterations The number of iterations to perform when inferring the values.
-     * @param inputs An object containing the parameters required to generate the model parameters.
-     * @return An object containing the computed values for the model.
-     */
+	/**
+	 * Infer the values of the different elements of the model.
+	 * @param iterations The number of iterations to perform when inferring the values.
+	 * @param inputs An object containing the parameters required to generate the model
+	 *               parameters.
+	 * @return An object containing the computed values for the model.
+	 */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
         this.noCats.setValue(inputs.noCats);
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
@@ -462,12 +616,13 @@ public final class ReductionTest extends Model {
         return new InferredModelOutputs(this);
     }
 
-    /**
-     * Generate the probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
         this.noCats.setValue(inputs.noCats);
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
@@ -475,16 +630,19 @@ public final class ReductionTest extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.noCats.setValue(inputs.noCats);
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
@@ -492,18 +650,23 @@ public final class ReductionTest extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.noCats.setValue(inputs.noCats);
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
@@ -511,12 +674,13 @@ public final class ReductionTest extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Generate the log probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the log probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
         this.noCats.setValue(inputs.noCats);
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
@@ -524,16 +688,19 @@ public final class ReductionTest extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.noCats.setValue(inputs.noCats);
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
@@ -541,18 +708,23 @@ public final class ReductionTest extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.noCats.setValue(inputs.noCats);
         this.$flipsMeasured.setValue(inputs.flipsMeasured);
@@ -560,4 +732,3 @@ public final class ReductionTest extends Model {
         return new LogProbabilities(this);
     }
 }
-//END OF CODE

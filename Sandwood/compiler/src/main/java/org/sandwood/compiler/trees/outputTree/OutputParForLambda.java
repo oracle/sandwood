@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -37,7 +37,7 @@ public class OutputParForLambda extends OutputTree {
     @Override
     protected void toJavaInternal(StringBuilder sb, int indent, Set<String> requiredImports) {
         sb.append("(int " + startDesc + ", int " + endDesc + ", int " + threadID + ", org.sandwood.random.internal.Rng "
-                + VariableNames.rngName(parDepth) + ") -> { \n");
+                + VariableNames.localRngName(parDepth) + ") -> { \n");
         addIndent(sb, indent + 1);
         body.toJava(sb, indent + 2, requiredImports);
         addIndent(sb, indent);

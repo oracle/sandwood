@@ -1,27 +1,240 @@
 package org.sandwood.compiler.tests.parser;
 
-import org.sandwood.runtime.model.Model;
-import org.sandwood.runtime.model.ExecutionTarget;
-import org.sandwood.runtime.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import java.util.HashMap;
+import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
-
-import java.util.Map;
-import java.util.HashMap;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.ModelInternal;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
+import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import org.sandwood.runtime.model.ExecutionTarget;
+import org.sandwood.runtime.model.variables.*;
 
 /**
-  * Class representing the Sandwood model ReductionTest1 This is the class that
-  * all user interactions with the model should occur through.
-  */
-public final class ReductionTest1 extends Model {
+ * Class representing the Sandwood model ReductionTest1 This is the class that all
+ * user interactions with the model should occur through.
+ */
+public final class ReductionTest1 extends ModelInternal<ReductionTest1.State> {
+	final class State extends CoreModelState {
 
-    private ReductionTest1$CoreInterface system$c = new ReductionTest1$SingleThreadCPU(ExecutionTarget.singleThread);
+		// Declare the variables for the model.
+		int[][] ObsArr;
+		int T;
+		double[][] TimeFeat;
+		int[][] arr;
+		boolean[][] constrainedFlag$sample101;
+		boolean fixedFlag$sample101 = false;
+		boolean fixedProbFlag$sample101 = false;
+		boolean fixedProbFlag$sample165 = false;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$arr;
+		double[][] logProbability$sample101;
+		double logProbability$sum_t;
+		double logProbability$time_coeff;
+		double logProbability$time_impact;
+		double logProbability$var158;
+		int n_ac;
+		double[][] sum_t;
+		boolean system$gibbsForward = true;
+		double[][] time_coeff;
+		int time_dim;
+		double[][][] time_impact;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// If time_coeff has not been set already allocate space.
+			if(!fixedFlag$sample101) {
+				// Constructor for time_coeff
+				time_coeff = new double[n_ac][];
+				for(int var18 = 0; var18 < n_ac; var18 += 1)
+					time_coeff[var18] = new double[TimeFeat[0].length];
+				for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
+					time_coeff[i$var80] = new double[TimeFeat[0].length];
+			}
+			
+			// Constructor for sum_t
+			sum_t = new double[T][];
+			for(int var31 = 0; var31 < T; var31 += 1)
+				sum_t[var31] = new double[n_ac];
+			
+			// Constructor for time_impact
+			time_impact = new double[T][][];
+			for(int var44 = 0; var44 < T; var44 += 1) {
+				double[][] subarray$0 = new double[n_ac][];
+				time_impact[var44] = subarray$0;
+				for(int var54 = 0; var54 < n_ac; var54 += 1)
+					subarray$0[var54] = new double[TimeFeat[0].length];
+			}
+			
+			// Constructor for arr
+			arr = new int[T][];
+			for(int var68 = 0; var68 < T; var68 += 1)
+				arr[var68] = new int[n_ac];
+			
+			// Constructor for constrainedFlag$sample101
+			constrainedFlag$sample101 = new boolean[n_ac][];
+			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
+				constrainedFlag$sample101[i$var80] = new boolean[TimeFeat[0].length];
+			
+			// Constructor for logProbability$sample101
+			logProbability$sample101 = new double[n_ac][];
+			for(int i$var80 = 0; i$var80 < n_ac; i$var80 += 1)
+				logProbability$sample101[i$var80] = new double[TimeFeat[0].length];
+		}
+
+		// Getter for ObsArr.
+		final int[][] get$ObsArr() {
+			return ObsArr;
+		}
+
+		// Setter for ObsArr.
+		final void set$ObsArr(int[][] cv$value, boolean allocated$) {
+			ObsArr = cv$value;
+		}
+
+		// Getter for T.
+		final int get$T() {
+			return T;
+		}
+
+		// Setter for T.
+		final void set$T(int cv$value, boolean allocated$) {
+			T = cv$value;
+		}
+
+		// Getter for TimeFeat.
+		final double[][] get$TimeFeat() {
+			return TimeFeat;
+		}
+
+		// Setter for TimeFeat.
+		final void set$TimeFeat(double[][] cv$value, boolean allocated$) {
+			TimeFeat = cv$value;
+		}
+
+		// Getter for arr.
+		final int[][] get$arr() {
+			return arr;
+		}
+
+		// Getter for fixedFlag$sample101.
+		final boolean get$fixedFlag$sample101() {
+			return fixedFlag$sample101;
+		}
+
+		// Setter for fixedFlag$sample101.
+		final void set$fixedFlag$sample101(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample101 including if probabilities
+			// need to be updated.
+			fixedFlag$sample101 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1) {
+					boolean[] cv$constrainedFlag$sample101$1 = constrainedFlag$sample101[index$constrainedFlag$sample101$1];
+					for(int index$constrainedFlag$sample101$2 = 0; index$constrainedFlag$sample101$2 < cv$constrainedFlag$sample101$1.length; index$constrainedFlag$sample101$2 += 1)
+						// Substituted "fixedFlag$sample101" with its value "cv$value".
+						cv$constrainedFlag$sample101$1[index$constrainedFlag$sample101$2] = cv$value;
+				}
+			}
+			
+			// Should the probability of sample 101 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample101" with its value "cv$value".
+			fixedProbFlag$sample101 = (cv$value && fixedProbFlag$sample101);
+			
+			// Should the probability of sample 165 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample101" with its value "cv$value".
+			fixedProbFlag$sample165 = (cv$value && fixedProbFlag$sample165);
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$arr.
+		final double get$logProbability$arr() {
+			return logProbability$arr;
+		}
+
+		// Getter for logProbability$sum_t.
+		final double get$logProbability$sum_t() {
+			return logProbability$sum_t;
+		}
+
+		// Getter for logProbability$time_coeff.
+		final double get$logProbability$time_coeff() {
+			return logProbability$time_coeff;
+		}
+
+		// Getter for logProbability$time_impact.
+		final double get$logProbability$time_impact() {
+			return logProbability$time_impact;
+		}
+
+		// Getter for n_ac.
+		final int get$n_ac() {
+			return n_ac;
+		}
+
+		// Setter for n_ac.
+		final void set$n_ac(int cv$value, boolean allocated$) {
+			n_ac = cv$value;
+		}
+
+		// Getter for sum_t.
+		final double[][] get$sum_t() {
+			return sum_t;
+		}
+
+		// Getter for time_coeff.
+		final double[][] get$time_coeff() {
+			return time_coeff;
+		}
+
+		// Setter for time_coeff.
+		final void set$time_coeff(double[][] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of time_coeff including if probabilities need
+			// to be updated.
+			time_coeff = cv$value;
+			
+			// Unset the fixed probability flag for sample 101 as it depends on time_coeff.
+			fixedProbFlag$sample101 = false;
+			
+			// Unset the fixed probability flag for sample 165 as it depends on time_coeff.
+			fixedProbFlag$sample165 = false;
+		}
+
+		// Getter for time_dim.
+		final int get$time_dim() {
+			return time_dim;
+		}
+
+		// Getter for time_impact.
+		final double[][][] get$time_impact() {
+			return time_impact;
+		}
+	}
 
     private final ComputedObjectArrayInternal<int[]> $arr = new ComputedObjectArrayInternal<int[]>(this, "arr", false, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] getValue() { return system$c.get$arr(); }
+        public int[][] getValue() { return state.get$arr(); }
 
         @Override
         protected void setValueInternal(int[][] value) {}
@@ -32,7 +245,7 @@ public final class ReductionTest1 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$arr(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$arr(); }
 
         @Override
         public int[][][] constructArray(int iterations) {
@@ -50,14 +263,12 @@ public final class ReductionTest1 extends Model {
         }
     };
 
-    /**
-     * Computed variable representing arr of type int[][] from the Sandwood model 
-     */
+	/** Computed variable representing arr of type int[][] from the Sandwood model. */
     public final ComputedObjectArray<int[]> arr = $arr;
 
     private final ComputedObjectArrayInternal<double[]> $sum_t = new ComputedObjectArrayInternal<double[]>(this, "sum_t", false, false, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$sum_t(); }
+        public double[][] getValue() { return state.get$sum_t(); }
 
         @Override
         protected void setValueInternal(double[][] value) {}
@@ -68,7 +279,7 @@ public final class ReductionTest1 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$sum_t(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$sum_t(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -78,36 +289,36 @@ public final class ReductionTest1 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample101(fixed, allocated);
+                state.set$fixedFlag$sample101(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample101())
+            if(state.get$fixedFlag$sample101())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing sum_t of type double[][] from the Sandwood model 
-     */
+	/**
+	 * Computed variable representing sum_t of type double[][] from the Sandwood model.
+	 */
     public final ComputedObjectArray<double[]> sum_t = $sum_t;
 
     private final ComputedObjectArrayInternal<double[]> $time_coeff = new ComputedObjectArrayInternal<double[]>(this, "time_coeff", true, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
-        public double[][] getValue() { return system$c.get$time_coeff(); }
+        public double[][] getValue() { return state.get$time_coeff(); }
 
         @Override
         protected void setValueInternal(double[][] value) {
-            system$c.set$time_coeff(value, allocated);
+            state.set$time_coeff(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$time_coeff(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$time_coeff(); }
 
         @Override
         public double[][][] constructArray(int iterations) {
@@ -117,27 +328,28 @@ public final class ReductionTest1 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample101(fixed, allocated);
+                state.set$fixedFlag$sample101(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample101())
+            if(state.get$fixedFlag$sample101())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing time_coeff of type double[][] from the Sandwood model 
-     */
+	/**
+	 * Computed variable representing time_coeff of type double[][] from the Sandwood
+	 * model.
+	 */
     public final ComputedObjectArray<double[]> time_coeff = $time_coeff;
 
     private final ComputedObjectArrayInternal<double[][]> $time_impact = new ComputedObjectArrayInternal<double[][]>(this, "time_impact", false, false, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 3) {
         @Override
-        public double[][][] getValue() { return system$c.get$time_impact(); }
+        public double[][][] getValue() { return state.get$time_impact(); }
 
         @Override
         protected void setValueInternal(double[][][] value) {}
@@ -148,7 +360,7 @@ public final class ReductionTest1 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$time_impact(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$time_impact(); }
 
         @Override
         public double[][][][] constructArray(int iterations) {
@@ -158,22 +370,23 @@ public final class ReductionTest1 extends Model {
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample101(fixed, allocated);
+                state.set$fixedFlag$sample101(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample101())
+            if(state.get$fixedFlag$sample101())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing time_impact of type double[][][] from the Sandwood model 
-     */
+	/**
+	 * Computed variable representing time_impact of type double[][][] from the Sandwood
+	 * model.
+	 */
     public final ComputedObjectArray<double[][]> time_impact = $time_impact;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
@@ -182,51 +395,47 @@ public final class ReductionTest1 extends Model {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$T();
+                return state.get$T();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$T(value, allocated); }
+        protected void setValueInternal(int value) { state.set$T(value, allocated); }
     };
 
-    /**
-     * Observed variable representing T of type int from the Sandwood model 
-     */
+	/** Observed variable representing T of type int from the Sandwood model. */
     public final ObservedInteger T = $T;
 
     private final ObservedObjectArrayInternal<double[]> $TimeFeat = new ObservedObjectArrayInternal<double[]>(this, "TimeFeat", org.sandwood.runtime.internal.model.util.BaseType.DOUBLE, 2) {
         @Override
         public double[][] getValue() {
             synchronized(model) {
-                return system$c.get$TimeFeat();
+                return state.get$TimeFeat();
             }
         }
 
         @Override
-        protected void setValueInternal(double[][] value) { system$c.set$TimeFeat(value, allocated); }
+        protected void setValueInternal(double[][] value) { state.set$TimeFeat(value, allocated); }
     };
 
-    /**
-     * Observed variable representing TimeFeat of type double[][] from the Sandwood model 
-     */
+	/**
+	 * Observed variable representing TimeFeat of type double[][] from the Sandwood model.
+	 */
     public final ObservedObjectArray<double[]> TimeFeat = $TimeFeat;
 
     private final ObservedIntegerInternal $n_ac = new ObservedIntegerInternal(this, "n_ac") {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$n_ac();
+                return state.get$n_ac();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$n_ac(value, allocated); }
+        protected void setValueInternal(int value) { state.set$n_ac(value, allocated); }
     };
 
-    /**
-     * Observed variable representing n_ac of type int from the Sandwood model 
-     */
+	/** Observed variable representing n_ac of type int from the Sandwood model. */
     public final ObservedInteger n_ac = $n_ac;
 
     private Map<String, ObservedVariableInternal> $modelInputs = new HashMap<>();
@@ -235,29 +444,26 @@ public final class ReductionTest1 extends Model {
         @Override
         public int[][] getValue() {
             synchronized(model) {
-                return system$c.get$ObsArr();
+                return state.get$ObsArr();
             }
         }
 
         @Override
-        protected void setValueInternal(int[][] value) { system$c.set$ObsArr(value, allocated); }
+        protected void setValueInternal(int[][] value) { state.set$ObsArr(value, allocated); }
     };
 
-    /**
-     * Observed variable representing ObsArr of type int[][] from the Sandwood model 
-     */
+	/** Observed variable representing ObsArr of type int[][] from the Sandwood model. */
     public final ObservedObjectArray<int[]> ObsArr = $ObsArr;
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
     private HasProbabilityInternal[] $probabilityVariables = {$arr, $sum_t, $time_coeff, $time_impact};
 
-    //Constructors
-    /**
-     * A constructor for a model where no variable values are set.
-     */
+    // Constructors
+	/** A constructor for a model where no variable values are set. */
     public ReductionTest1() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("arr", $arr);
         $computedVariables.put("sum_t", $sum_t);
@@ -271,32 +477,34 @@ public final class ReductionTest1 extends Model {
 
         //Observed scalar fields
         $regularObservedValues.put("ObsArr", $ObsArr);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
-    }
-    /**
-      * A constructor to set all the required values in the model to infer values. These
-      * will be values in an untrained model so this will only generate values from the
-      * default distributions described in the model.
-      * @param T The value to set T to.
-      * @param n_ac The value to set n_ac to.
-      * @param TimeFeat The value to set TimeFeat to.
-      */
 
+        ReductionTest1$SingleThreadCPU core = new ReductionTest1$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+    }
+
+	/**
+	 * A constructor to set all the required values in the model to infer values. These
+	 * will be values in an untrained model so this will only generate values from the
+	 * default distributions described in the model.
+	 * @param T The value to set T to.
+	 * @param n_ac The value to set n_ac to.
+	 * @param TimeFeat The value to set TimeFeat to.
+	 */
     public ReductionTest1(int T, int n_ac, double[][] TimeFeat) {
         this();
         this.$T.setValue(T);
         this.$TimeFeat.setValue(TimeFeat);
         this.$n_ac.setValue(n_ac);
     }
-    /**
-      * A constructor to set all the required values in the model to infer the model
-      * parameters, or to generate probabilities for the model.
-      * @param T The value to set T to.
-      * @param n_ac The value to set n_ac to.
-      * @param ObsArr The value to set ObsArr to.
-      * @param TimeFeat The value to set TimeFeat to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer the model parameters,
+	 * or to generate probabilities for the model.
+	 * @param T The value to set T to.
+	 * @param n_ac The value to set n_ac to
+	 * @param ObsArr The value to set ObsArr to
+	 * @param TimeFeat The value to set TimeFeat to
+	 */
     public ReductionTest1(int T, int n_ac, int[][] ObsArr, double[][] TimeFeat) {
         this();
         this.T.setValue(T);
@@ -306,61 +514,34 @@ public final class ReductionTest1 extends Model {
     }
     
     @Override
-    protected ReductionTest1$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        ReductionTest1$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new ReductionTest1$SingleThreadCPU(target);
-                break;
+                return new ReductionTest1$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new ReductionTest1$MultiThreadCPU(target);
-                break;
+                return new ReductionTest1$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
     }
 
-    private void transferData(ReductionTest1$CoreInterface oldCore, ReductionTest1$CoreInterface newCore) {
-        //Model inputs
-        if(T.isSet())
-            newCore.set$T(oldCore.get$T(), false);
-        if(TimeFeat.isSet())
-            newCore.set$TimeFeat(oldCore.get$TimeFeat(), false);
-        if(n_ac.isSet())
-            newCore.set$n_ac(oldCore.get$n_ac(), false);
-
-        //Observed scalars
-        if(ObsArr.isSet())
-            newCore.set$ObsArr(oldCore.get$ObsArr(), false);
-
-        //ComputedVariables
-        if($time_coeff.isSet())
-            newCore.set$time_coeff(oldCore.get$time_coeff(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample101(oldCore.get$fixedFlag$sample101(), false);
-    }
-
-    /**
-     * A class to hold all the values required to perform a value inference on the model.
-     */
+	/**
+	 * A class to hold all the values required to perform a value inference on the model.
+	 */
     public static class InferValueInputs {
-        /** Field holding the value of model input T */
+		/** Field holding the value of model input T */
         public final int T;
-        /** Field holding the value of model input n_ac */
+		/** Field holding the value of model input n_ac */
         public final int n_ac;
-        /** Field holding the value of model input TimeFeat */
+		/** Field holding the value of model input TimeFeat */
         public final double[][] TimeFeat;
 
-        /**
-          * A constructor taking all the values required to set up the model to infer variables.
-          * @param T The value to set T to.
-          * @param n_ac The value to set n_ac to.
-          * @param TimeFeat The value to set TimeFeat to.
-          */
+		/**
+		 * A constructor taking all the values required to set up the model to infer variables.
+		 * @param T The value to set T to.
+		 * @param n_ac The value to set n_ac to.
+		 * @param TimeFeat The value to set TimeFeat to.
+		 */
         public InferValueInputs(int T, int n_ac, double[][] TimeFeat) {
             this.T = T;
             this.TimeFeat = TimeFeat;
@@ -368,28 +549,28 @@ public final class ReductionTest1 extends Model {
         }
     }
 
-    /**
-     * A class to hold all the inputs for the model. It can be used to parameterize inference of the model probabilities
-     * and probability calculations.
-     */
+	/**
+	 * A class to hold all the inputs for the model. It can be used to parameterize inference
+	 * of the model probabilities and probability calculations.
+	 */
     public static class AllInputs {
-        /** Field holding the value of model input T */
+		/** Field holding the value of model input T */
         public final int T;
-        /** Field holding the value of model input n_ac */
+		/** Field holding the value of model input n_ac */
         public final int n_ac;
-        /** Field holding the value of model input ObsArr */
+		/** Field holding the value of model input ObsArr */
         public final int[][] ObsArr;
-        /** Field holding the value of model input TimeFeat */
+		/** Field holding the value of model input TimeFeat */
         public final double[][] TimeFeat;
 
-        /**
-          * A constructor to take all the required values by the model to infer the model
-          * parameters, or to generate probabilities for the model.
-          * @param T The value to set T to.
-          * @param n_ac The value to set n_ac to.
-          * @param ObsArr The value to set ObsArr to.
-          * @param TimeFeat The value to set TimeFeat to.
-          */
+		/**
+		 * A constructor to take all the required values by the model to infer the model parameters,
+		 * or to generate probabilities for the model.
+		 * @param T The value to set T to.
+		 * @param n_ac The value to set n_ac to.
+		 * @param ObsArr The value to set ObsArr to.
+		 * @param TimeFeat The value to set TimeFeat to.
+		 */
         public AllInputs(int T, int n_ac, int[][] ObsArr, double[][] TimeFeat) {
             this.T = T;
             this.n_ac = n_ac;
@@ -397,18 +578,15 @@ public final class ReductionTest1 extends Model {
             this.TimeFeat = TimeFeat;
         }
     }
-
-    /**
-     * A class to hold all the outputs from the model after an infer values step.
-     */
+	/** A class to hold all the outputs from the model after an infer values step. */
     public static class InferredValueOutputs {
-        /** Field holding the value of arr after a convention execution step.*/
+		/** Field holding the value of arr after a convention execution step. */
         public final int[][] arr;
-        /** Field holding the value of sum_t after a convention execution step.*/
+		/** Field holding the value of sum_t after a convention execution step. */
         public final double[][] sum_t;
-        /** Field holding the value of time_coeff after a convention execution step.*/
+		/** Field holding the value of time_coeff after a convention execution step. */
         public final double[][] time_coeff;
-        /** Field holding the value of time_impact after a convention execution step.*/
+		/** Field holding the value of time_impact after a convention execution step. */
         public final double[][][] time_impact;
 
         InferredValueOutputs(ReductionTest1 system$model) {
@@ -419,18 +597,19 @@ public final class ReductionTest1 extends Model {
         }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class LogProbabilities {
         private final double $logModelProbability;
-        /** Field holding the log probability of computed variable arr */
+		/** Field holding the log probability of computed variable arr */
         public final double arr;
-        /** Field holding the log probability of computed variable sum_t */
+		/** Field holding the log probability of computed variable sum_t */
         public final double sum_t;
-        /** Field holding the log probability of computed variable time_coeff */
+		/** Field holding the log probability of computed variable time_coeff */
         public final double time_coeff;
-        /** Field holding the log probability of computed variable time_impact */
+		/** Field holding the log probability of computed variable time_impact */
         public final double time_impact;
 
         LogProbabilities(ReductionTest1 system$model) {
@@ -441,23 +620,26 @@ public final class ReductionTest1 extends Model {
             this.time_impact = system$model.time_impact.getLogProbability();
         }
 
-        /** Method to return log probability of the whole model 
-         *  @return The log probability of the whole model. */
+		/**
+		 * Method to return log probability of the whole model
+		 * @return The log probability of the whole model.
+		 */
         public double getModelProbability() { return $logModelProbability; }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class Probabilities {
         private final double $modelProbability;
-        /** Field holding the probability of computed variable arr */
+		/** Field holding the probability of computed variable arr */
         public final double arr;
-        /** Field holding the probability of computed variable sum_t */
+		/** Field holding the probability of computed variable sum_t */
         public final double sum_t;
-        /** Field holding the probability of computed variable time_coeff */
+		/** Field holding the probability of computed variable time_coeff */
         public final double time_coeff;
-        /** Field holding the probability of computed variable time_impact */
+		/** Field holding the probability of computed variable time_impact */
         public final double time_impact;
 
         Probabilities(ReductionTest1 system$model) {
@@ -468,20 +650,20 @@ public final class ReductionTest1 extends Model {
             this.time_impact = system$model.time_impact.getProbability();
         }
 
-        /** Method to return probability of the whole model 
-         *  @return The probability of the whole model. */
+		/**
+		 * Method to return probability of the whole model
+		 * @return The probability of the whole model.
+		 */
         public double getModelProbability() { return $modelProbability; }
     }
 
-    /**
-     * A class to hold all the outputs from the model after an infer model call.
-     */
+	/** A class to hold all the outputs from the model after an infer model call. */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of sum_t after an infer model call. */
+		/** Field holding the MAP or Sample value of sum_t after an infer model call. */
         public final double[][][] sum_t;
-        /** Field holding the MAP or Sample value of time_coeff after an infer model call. */
+		/** Field holding the MAP or Sample value of time_coeff after an infer model call. */
         public final double[][][] time_coeff;
-        /** Field holding the MAP or Sample value of time_impact after an infer model call. */
+		/** Field holding the MAP or Sample value of time_impact after an infer model call. */
         public final double[][][][] time_impact;
 
         InferredModelOutputs(ReductionTest1 system$model) {
@@ -491,11 +673,12 @@ public final class ReductionTest1 extends Model {
         }
     }
 
-    /**
-     * Perform a single pass generating values from the model.
-     * @param inputs An object containing the parameters required to run inference on the model.
-     * @return An object containing the values computed by the inference step.
-     */
+	/**
+	 * Perform a single pass generating values from the model.
+	 * @param inputs An object containing the parameters required to run inference on
+	 *               the model.
+	 * @return An object containing the values computed by the inference step.
+	 */
     public InferredValueOutputs execute(InferValueInputs inputs) {
         this.T.setValue(inputs.T);
         this.TimeFeat.setValue(inputs.TimeFeat);
@@ -504,12 +687,13 @@ public final class ReductionTest1 extends Model {
         return new InferredValueOutputs(this);
     }
 
-    /**
-     * Infer the values of the different elements of the model.
-     * @param iterations The number of iterations to perform when inferring the values.
-     * @param inputs An object containing the parameters required to generate the model parameters.
-     * @return An object containing the computed values for the model.
-     */
+	/**
+	 * Infer the values of the different elements of the model.
+	 * @param iterations The number of iterations to perform when inferring the values.
+	 * @param inputs An object containing the parameters required to generate the model
+	 *               parameters.
+	 * @return An object containing the computed values for the model.
+	 */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
         this.T.setValue(inputs.T);
         this.TimeFeat.setValue(inputs.TimeFeat);
@@ -519,12 +703,13 @@ public final class ReductionTest1 extends Model {
         return new InferredModelOutputs(this);
     }
 
-    /**
-     * Generate the probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
         this.T.setValue(inputs.T);
         this.TimeFeat.setValue(inputs.TimeFeat);
@@ -534,16 +719,19 @@ public final class ReductionTest1 extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.T.setValue(inputs.T);
         this.TimeFeat.setValue(inputs.TimeFeat);
@@ -553,18 +741,23 @@ public final class ReductionTest1 extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.T.setValue(inputs.T);
         this.TimeFeat.setValue(inputs.TimeFeat);
@@ -574,12 +767,13 @@ public final class ReductionTest1 extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Generate the log probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the log probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
         this.T.setValue(inputs.T);
         this.TimeFeat.setValue(inputs.TimeFeat);
@@ -589,16 +783,19 @@ public final class ReductionTest1 extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.T.setValue(inputs.T);
         this.TimeFeat.setValue(inputs.TimeFeat);
@@ -608,18 +805,23 @@ public final class ReductionTest1 extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.T.setValue(inputs.T);
         this.TimeFeat.setValue(inputs.TimeFeat);
@@ -629,4 +831,3 @@ public final class ReductionTest1 extends Model {
         return new LogProbabilities(this);
     }
 }
-//END OF CODE

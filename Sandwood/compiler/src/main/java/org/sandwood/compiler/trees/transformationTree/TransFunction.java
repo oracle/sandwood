@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -12,10 +12,14 @@ import java.util.Map;
 
 import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
+import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.names.FunctionName;
 import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Visibility;
 import org.sandwood.compiler.trees.outputTree.OutputFunction;
+import org.sandwood.compiler.trees.transformationTree.TransTree.RNGLocation;
+import org.sandwood.compiler.trees.transformationTree.TransTree.TreeLocation;
+import org.sandwood.compiler.trees.transformationTree.transformers.Transformer;
 import org.sandwood.compiler.trees.transformationTree.util.KnownValuesTrans;
 
 public abstract class TransFunction<T extends TransTree<T>> {
@@ -39,16 +43,26 @@ public abstract class TransFunction<T extends TransTree<T>> {
         this.knownValues = knownValues;
     }
 
-    public abstract OutputFunction toOutputTree(ExecutionType target);
+    public abstract OutputFunction toOutputTree(TreeLocation treeLocation, ExecutionType target);
 
     public abstract TransFunction<T> applyOptimisations(Map<VariableDescription<?>, TransTreeReturn<?>> constants);
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        toOutputTree(ExecutionType.SingleThreadCPU).toJava(sb, 0);
+        toOutputTree(TreeLocation.UNKNOWN, ExecutionType.SingleThreadCPU).toJava(sb, 0);
         return sb.toString();
     }
 
+    protected RNGLocation localRng(ArgDesc<?>[] args) {
+        for(ArgDesc<?> a:args) {
+            if(a.varDesc.type == VariableType.RNG)
+                return RNGLocation.LOCAL;
+        }
+        return RNGLocation.GLOBAL;
+    }
+
     protected abstract TransFunction<?> applyConstants(Map<VariableDescription<?>, TransTreeReturn<?>> constants);
+
+    protected abstract TransFunction<?> applyTransformation(Transformer t);
 }

@@ -1,27 +1,313 @@
 package org.sandwood.compiler.tests.parser;
 
-import org.sandwood.runtime.model.Model;
-import org.sandwood.runtime.model.ExecutionTarget;
-import org.sandwood.runtime.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import java.util.HashMap;
+import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
-
-import java.util.Map;
-import java.util.HashMap;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.ModelInternal;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
+import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import org.sandwood.runtime.model.ExecutionTarget;
+import org.sandwood.runtime.model.variables.*;
 
 /**
-  * Class representing the Sandwood model DistributionTest4 This is the class that
-  * all user interactions with the model should occur through.
-  */
-public final class DistributionTest4 extends Model {
+ * Class representing the Sandwood model DistributionTest4 This is the class that
+ * all user interactions with the model should occur through.
+ */
+public final class DistributionTest4 extends ModelInternal<DistributionTest4.State> {
+	final class State extends CoreModelState {
 
-    private DistributionTest4$CoreInterface system$c = new DistributionTest4$SingleThreadCPU(ExecutionTarget.singleThread);
+		// Declare the variables for the model.
+		boolean constrainedFlag$sample11 = true;
+		boolean[] constrainedFlag$sample27;
+		boolean constrainedFlag$sample5 = true;
+		double[] distribution$sample11;
+		double[][] distribution$sample27;
+		double[] distribution$sample5;
+		boolean fixedFlag$sample11 = false;
+		boolean fixedFlag$sample27 = false;
+		boolean fixedFlag$sample5 = false;
+		boolean fixedProbFlag$sample11 = false;
+		boolean fixedProbFlag$sample27 = false;
+		boolean fixedProbFlag$sample5 = false;
+		boolean fixedProbFlag$sample53 = false;
+		int length$value;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double[] logProbability$sample27;
+		double[] logProbability$sample53;
+		double logProbability$v;
+		double logProbability$v1;
+		double logProbability$v2;
+		double logProbability$var11;
+		int size;
+		boolean system$gibbsForward = true;
+		boolean[] v;
+		int v1;
+		int[] v2;
+		boolean[] value;
+		double[] weightings;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// If v2 has not been set already allocate space.
+			if((!fixedFlag$sample11 || !fixedFlag$sample27)) {
+				// Constructor for v2
+				{
+					v2 = new int[(length$value + 1)];
+				}
+			}
+			
+			// Constructor for v
+			{
+				v = new boolean[length$value];
+			}
+			
+			// Constructor for distribution$sample5
+			{
+				distribution$sample5 = new double[weightings.length];
+			}
+			
+			// Constructor for distribution$sample11
+			{
+				distribution$sample11 = new double[weightings.length];
+			}
+			
+			// Constructor for distribution$sample27
+			{
+				distribution$sample27 = new double[((((length$value - 1) - 0) / 1) + 1)][];
+				for(int i = 0; i < length$value; i += 1)
+					distribution$sample27[((i - 0) / 1)] = new double[weightings.length];
+			}
+			
+			// Constructor for constrainedFlag$sample27
+			{
+				constrainedFlag$sample27 = new boolean[((((length$value - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for logProbability$sample27
+			{
+				logProbability$sample27 = new double[((((length$value - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for logProbability$sample53
+			{
+				logProbability$sample53 = new double[((((length$value - 1) - 0) / 1) + 1)];
+			}
+		}
+
+		// Getter for distribution$sample11.
+		final double[] get$distribution$sample11() {
+			return distribution$sample11;
+		}
+
+		// Setter for distribution$sample11.
+		final void set$distribution$sample11(double[] cv$value, boolean allocated$) {
+			distribution$sample11 = cv$value;
+		}
+
+		// Getter for distribution$sample27.
+		final double[][] get$distribution$sample27() {
+			return distribution$sample27;
+		}
+
+		// Setter for distribution$sample27.
+		final void set$distribution$sample27(double[][] cv$value, boolean allocated$) {
+			distribution$sample27 = cv$value;
+		}
+
+		// Getter for distribution$sample5.
+		final double[] get$distribution$sample5() {
+			return distribution$sample5;
+		}
+
+		// Setter for distribution$sample5.
+		final void set$distribution$sample5(double[] cv$value, boolean allocated$) {
+			distribution$sample5 = cv$value;
+		}
+
+		// Getter for fixedFlag$sample11.
+		final boolean get$fixedFlag$sample11() {
+			return fixedFlag$sample11;
+		}
+
+		// Setter for fixedFlag$sample11.
+		final void set$fixedFlag$sample11(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample11 including if probabilities
+			// need to be updated.
+			fixedFlag$sample11 = cv$value;
+			constrainedFlag$sample11 = (fixedFlag$sample11 || constrainedFlag$sample11);
+			
+			// Should the probability of sample 11 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample11 = (fixedFlag$sample11 && fixedProbFlag$sample11);
+			
+			// Should the probability of sample 53 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample53 = (fixedFlag$sample11 && fixedProbFlag$sample53);
+		}
+
+		// Getter for fixedFlag$sample27.
+		final boolean get$fixedFlag$sample27() {
+			return fixedFlag$sample27;
+		}
+
+		// Setter for fixedFlag$sample27.
+		final void set$fixedFlag$sample27(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample27 including if probabilities
+			// need to be updated.
+			fixedFlag$sample27 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample27$1 = 0; index$constrainedFlag$sample27$1 < constrainedFlag$sample27.length; index$constrainedFlag$sample27$1 += 1)
+					constrainedFlag$sample27[index$constrainedFlag$sample27$1] = fixedFlag$sample27;
+			}
+			
+			// Should the probability of sample 27 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample27 = (fixedFlag$sample27 && fixedProbFlag$sample27);
+			
+			// Should the probability of sample 53 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample53 = (fixedFlag$sample27 && fixedProbFlag$sample53);
+		}
+
+		// Getter for fixedFlag$sample5.
+		final boolean get$fixedFlag$sample5() {
+			return fixedFlag$sample5;
+		}
+
+		// Setter for fixedFlag$sample5.
+		final void set$fixedFlag$sample5(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample5 including if probabilities
+			// need to be updated.
+			fixedFlag$sample5 = cv$value;
+			constrainedFlag$sample5 = (fixedFlag$sample5 || constrainedFlag$sample5);
+			
+			// Should the probability of sample 5 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample5 = (fixedFlag$sample5 && fixedProbFlag$sample5);
+			
+			// Should the probability of sample 53 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample53 = (fixedFlag$sample5 && fixedProbFlag$sample53);
+		}
+
+		// Getter for length$value.
+		final int get$length$value() {
+			return length$value;
+		}
+
+		// Setter for length$value.
+		final void set$length$value(int cv$value, boolean allocated$) {
+			length$value = cv$value;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$v.
+		final double get$logProbability$v() {
+			return logProbability$v;
+		}
+
+		// Getter for logProbability$v1.
+		final double get$logProbability$v1() {
+			return logProbability$v1;
+		}
+
+		// Getter for logProbability$v2.
+		final double get$logProbability$v2() {
+			return logProbability$v2;
+		}
+
+		// Getter for size.
+		final int get$size() {
+			return size;
+		}
+
+		// Getter for v.
+		final boolean[] get$v() {
+			return v;
+		}
+
+		// Getter for v1.
+		final int get$v1() {
+			return v1;
+		}
+
+		// Setter for v1.
+		final void set$v1(int cv$value, boolean allocated$) {
+			// Set flags for all the side effects of v1 including if probabilities need to be
+			// updated.
+			v1 = cv$value;
+			
+			// Unset the fixed probability flag for sample 5 as it depends on v1.
+			fixedProbFlag$sample5 = false;
+			
+			// Unset the fixed probability flag for sample 53 as it depends on v1.
+			fixedProbFlag$sample53 = false;
+		}
+
+		// Getter for v2.
+		final int[] get$v2() {
+			return v2;
+		}
+
+		// Setter for v2.
+		final void set$v2(int[] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of v2 including if probabilities need to be
+			// updated.
+			v2 = cv$value;
+			
+			// Unset the fixed probability flag for sample 11 as it depends on v2.
+			fixedProbFlag$sample11 = false;
+			
+			// Unset the fixed probability flag for sample 27 as it depends on v2.
+			fixedProbFlag$sample27 = false;
+			
+			// Unset the fixed probability flag for sample 53 as it depends on v2.
+			fixedProbFlag$sample53 = false;
+		}
+
+		// Getter for value.
+		final boolean[] get$value() {
+			return value;
+		}
+
+		// Setter for value.
+		final void set$value(boolean[] cv$value, boolean allocated$) {
+			value = cv$value;
+		}
+
+		// Getter for weightings.
+		final double[] get$weightings() {
+			return weightings;
+		}
+
+		// Setter for weightings.
+		final void set$weightings(double[] cv$value, boolean allocated$) {
+			weightings = cv$value;
+		}
+	}
 
     private final ComputedBooleanArrayInternal $v = new ComputedBooleanArrayInternal(this, "v", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$v(); }
+        public boolean[] getValue() { return state.get$v(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {}
@@ -32,7 +318,7 @@ public final class DistributionTest4 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$v(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$v(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -45,70 +331,66 @@ public final class DistributionTest4 extends Model {
         }
     };
 
-    /**
-     * Computed variable representing v of type boolean[] from the Sandwood model 
-     */
+	/** Computed variable representing v of type boolean[] from the Sandwood model. */
     public final ComputedBooleanArray v = $v;
 
     private final ComputedIntegerInternal $v1 = new ComputedIntegerInternal(this, "v1", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int getValue() { return system$c.get$v1(); }
+        public int getValue() { return state.get$v1(); }
 
         @Override
         protected void setValueInternal(int value) {
-            system$c.set$v1(value, allocated);
+            state.set$v1(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$v1(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$v1(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample5(fixed, allocated);
+                state.set$fixedFlag$sample5(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample5())
+            if(state.get$fixedFlag$sample5())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing v1 of type int from the Sandwood model 
-     */
+	/** Computed variable representing v1 of type int from the Sandwood model. */
     public final ComputedInteger v1 = $v1;
 
     private final ComputedIntegerArrayInternal $v2 = new ComputedIntegerArrayInternal(this, "v2", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public int[] getValue() { return system$c.get$v2(); }
+        public int[] getValue() { return state.get$v2(); }
 
         @Override
         protected void setValueInternal(int[] value) {
-            system$c.set$v2(value, allocated);
+            state.set$v2(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$v2(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$v2(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample11(fixed, allocated);
-                system$c.set$fixedFlag$sample27(fixed, allocated);
+                state.set$fixedFlag$sample11(fixed, allocated);
+                state.set$fixedFlag$sample27(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            boolean fixedFlag$sample11 = system$c.get$fixedFlag$sample11();
-            boolean fixedFlag$sample27 = system$c.get$fixedFlag$sample27();
+            boolean fixedFlag$sample11 = state.get$fixedFlag$sample11();
+            boolean fixedFlag$sample27 = state.get$fixedFlag$sample27();
             if(fixedFlag$sample11 && fixedFlag$sample27)
                 return Immutability.FIXED;
             else if(fixedFlag$sample11 || fixedFlag$sample27)
@@ -118,9 +400,7 @@ public final class DistributionTest4 extends Model {
         }
     };
 
-    /**
-     * Computed variable representing v2 of type int[] from the Sandwood model 
-     */
+	/** Computed variable representing v2 of type int[] from the Sandwood model. */
     public final ComputedIntegerArray v2 = $v2;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
@@ -129,17 +409,17 @@ public final class DistributionTest4 extends Model {
         @Override
         public double[] getValue() {
             synchronized(model) {
-                return system$c.get$weightings();
+                return state.get$weightings();
             }
         }
 
         @Override
-        protected void setValueInternal(double[] value) { system$c.set$weightings(value, allocated); }
+        protected void setValueInternal(double[] value) { state.set$weightings(value, allocated); }
     };
 
-    /**
-     * Observed variable representing weightings of type double[] from the Sandwood model 
-     */
+	/**
+	 * Observed variable representing weightings of type double[] from the Sandwood model.
+	 */
     public final ObservedDoubleArray weightings = $weightings;
 
     private Map<String, ObservedVariableInternal> $modelInputs = new HashMap<>();
@@ -148,42 +428,39 @@ public final class DistributionTest4 extends Model {
         @Override
         public boolean[] getValue() {
             synchronized(model) {
-                return system$c.get$value();
+                return state.get$value();
             }
         }
 
         @Override
         public void setValueInternal(boolean[] value) {
-            system$c.set$value(value, allocated);
-            system$c.set$length$value(value.length, allocated);
+            state.set$value(value, allocated);
+            state.set$length$value(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$value(shape, allocated);
+            state.set$length$value(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$value();
+            return state.get$length$value();
         }
     };
 
-    /**
-     * Observed variable representing value of type boolean[] from the Sandwood model 
-     */
+	/** Observed variable representing value of type boolean[] from the Sandwood model. */
     public final ObservedBooleanArrayShapeable value = $value;
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
     private HasProbabilityInternal[] $probabilityVariables = {$v, $v1, $v2};
 
-    //Constructors
-    /**
-     * A constructor for a model where no variable values are set.
-     */
+    // Constructors
+	/** A constructor for a model where no variable values are set. */
     public DistributionTest4() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("v", $v);
         $computedVariables.put("v1", $v1);
@@ -194,28 +471,31 @@ public final class DistributionTest4 extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("value", $value);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
-    }
-    /**
-      * A constructor to set all the required values in the model to infer values. These
-      * will be values in an untrained model so this will only generate values from the
-      * default distributions described in the model.
-      * @param weightings The value to set weightings to.
-      * @param valueShape An integer array describing the shape of variable value to use in the model when generating results.
-      */
 
+        DistributionTest4$SingleThreadCPU core = new DistributionTest4$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+    }
+
+	/**
+	 * A constructor to set all the required values in the model to infer values. These
+	 * will be values in an untrained model so this will only generate values from the
+	 * default distributions described in the model.
+	 * @param weightings The value to set weightings to.
+	 * @param valueShape An integer array describing the shape of variable value to use
+	 *                   in the model when generating results.
+	 */
     public DistributionTest4(double[] weightings, int valueShape) {
         this();
         this.$weightings.setValue(weightings);
         this.$value.setShape(valueShape);
     }
-    /**
-      * A constructor to set all the required values in the model to infer the model
-      * parameters, or to generate probabilities for the model.
-      * @param weightings The value to set weightings to.
-      * @param value The value to set value to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer the model parameters,
+	 * or to generate probabilities for the model.
+	 * @param weightings The value to set weightings to.
+	 * @param value The value to set value to
+	 */
     public DistributionTest4(double[] weightings, boolean[] value) {
         this();
         this.weightings.setValue(weightings);
@@ -223,99 +503,66 @@ public final class DistributionTest4 extends Model {
     }
     
     @Override
-    protected DistributionTest4$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        DistributionTest4$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new DistributionTest4$SingleThreadCPU(target);
-                break;
+                return new DistributionTest4$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new DistributionTest4$MultiThreadCPU(target);
-                break;
+                return new DistributionTest4$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
     }
 
-    private void transferData(DistributionTest4$CoreInterface oldCore, DistributionTest4$CoreInterface newCore) {
-        //Model inputs
-        if(weightings.isSet())
-            newCore.set$weightings(oldCore.get$weightings(), false);
-
-        //Observed arrays
-        if(value.isSet()) {
-            newCore.set$value(oldCore.get$value(), false);
-            newCore.set$length$value(oldCore.get$length$value(), false);
-        }
-        else if(value.shapeSet())
-            newCore.set$length$value(oldCore.get$length$value(), false);
-
-        //ComputedVariables
-        if($v1.isSet())
-            newCore.set$v1(oldCore.get$v1(), false);
-        if($v2.isSet())
-            newCore.set$v2(oldCore.get$v2(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample11(oldCore.get$fixedFlag$sample11(), false);
-        newCore.set$fixedFlag$sample27(oldCore.get$fixedFlag$sample27(), false);
-        newCore.set$fixedFlag$sample5(oldCore.get$fixedFlag$sample5(), false);
-    }
-
-    /**
-     * A class to hold all the values required to perform a value inference on the model.
-     */
+	/**
+	 * A class to hold all the values required to perform a value inference on the model.
+	 */
     public static class InferValueInputs {
-        /** Field holding the value of model input weightings */
+		/** Field holding the value of model input weightings */
         public final double[] weightings;
-        /** Field holding the shape of model input value */
+		/** Field holding the shape of model input value */
         public final int valueShape;
 
-        /**
-          * A constructor taking all the values required to set up the model to infer variables.
-          * @param weightings The value to set weightings to.
-          * @param valueShape An integer array describing the shape of variable value to use in the model when generating results.
-          */
+		/**
+		 * A constructor taking all the values required to set up the model to infer variables.
+		 * @param weightings The value to set weightings to.
+		 * @param valueShape An integer array describing the shape of variable value to use
+		 *                   in the model when generating results.
+		 */
         public InferValueInputs(double[] weightings, int valueShape) {
             this.weightings = weightings;
             this.valueShape = valueShape;
         }
     }
 
-    /**
-     * A class to hold all the inputs for the model. It can be used to parameterize inference of the model probabilities
-     * and probability calculations.
-     */
+	/**
+	 * A class to hold all the inputs for the model. It can be used to parameterize inference
+	 * of the model probabilities and probability calculations.
+	 */
     public static class AllInputs {
-        /** Field holding the value of model input weightings */
+		/** Field holding the value of model input weightings */
         public final double[] weightings;
-        /** Field holding the value of model input value */
+		/** Field holding the value of model input value */
         public final boolean[] value;
 
-        /**
-          * A constructor to take all the required values by the model to infer the model
-          * parameters, or to generate probabilities for the model.
-          * @param weightings The value to set weightings to.
-          * @param value The value to set value to.
-          */
+		/**
+		 * A constructor to take all the required values by the model to infer the model parameters,
+		 * or to generate probabilities for the model.
+		 * @param weightings The value to set weightings to.
+		 * @param value The value to set value to.
+		 */
         public AllInputs(double[] weightings, boolean[] value) {
             this.weightings = weightings;
             this.value = value;
         }
     }
-
-    /**
-     * A class to hold all the outputs from the model after an infer values step.
-     */
+	/** A class to hold all the outputs from the model after an infer values step. */
     public static class InferredValueOutputs {
-        /** Field holding the value of v after a convention execution step.*/
+		/** Field holding the value of v after a convention execution step. */
         public final boolean[] v;
-        /** Field holding the value of v1 after a convention execution step.*/
+		/** Field holding the value of v1 after a convention execution step. */
         public final int v1;
-        /** Field holding the value of v2 after a convention execution step.*/
+		/** Field holding the value of v2 after a convention execution step. */
         public final int[] v2;
 
         InferredValueOutputs(DistributionTest4 system$model) {
@@ -325,16 +572,17 @@ public final class DistributionTest4 extends Model {
         }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class LogProbabilities {
         private final double $logModelProbability;
-        /** Field holding the log probability of computed variable v */
+		/** Field holding the log probability of computed variable v */
         public final double v;
-        /** Field holding the log probability of computed variable v1 */
+		/** Field holding the log probability of computed variable v1 */
         public final double v1;
-        /** Field holding the log probability of computed variable v2 */
+		/** Field holding the log probability of computed variable v2 */
         public final double v2;
 
         LogProbabilities(DistributionTest4 system$model) {
@@ -344,21 +592,24 @@ public final class DistributionTest4 extends Model {
             this.v2 = system$model.v2.getLogProbability();
         }
 
-        /** Method to return log probability of the whole model 
-         *  @return The log probability of the whole model. */
+		/**
+		 * Method to return log probability of the whole model
+		 * @return The log probability of the whole model.
+		 */
         public double getModelProbability() { return $logModelProbability; }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class Probabilities {
         private final double $modelProbability;
-        /** Field holding the probability of computed variable v */
+		/** Field holding the probability of computed variable v */
         public final double v;
-        /** Field holding the probability of computed variable v1 */
+		/** Field holding the probability of computed variable v1 */
         public final double v1;
-        /** Field holding the probability of computed variable v2 */
+		/** Field holding the probability of computed variable v2 */
         public final double v2;
 
         Probabilities(DistributionTest4 system$model) {
@@ -368,18 +619,18 @@ public final class DistributionTest4 extends Model {
             this.v2 = system$model.v2.getProbability();
         }
 
-        /** Method to return probability of the whole model 
-         *  @return The probability of the whole model. */
+		/**
+		 * Method to return probability of the whole model
+		 * @return The probability of the whole model.
+		 */
         public double getModelProbability() { return $modelProbability; }
     }
 
-    /**
-     * A class to hold all the outputs from the model after an infer model call.
-     */
+	/** A class to hold all the outputs from the model after an infer model call. */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of v1 after an infer model call. */
+		/** Field holding the MAP or Sample value of v1 after an infer model call. */
         public final int[] v1;
-        /** Field holding the MAP or Sample value of v2 after an infer model call. */
+		/** Field holding the MAP or Sample value of v2 after an infer model call. */
         public final int[][] v2;
 
         InferredModelOutputs(DistributionTest4 system$model) {
@@ -388,11 +639,12 @@ public final class DistributionTest4 extends Model {
         }
     }
 
-    /**
-     * Perform a single pass generating values from the model.
-     * @param inputs An object containing the parameters required to run inference on the model.
-     * @return An object containing the values computed by the inference step.
-     */
+	/**
+	 * Perform a single pass generating values from the model.
+	 * @param inputs An object containing the parameters required to run inference on
+	 *               the model.
+	 * @return An object containing the values computed by the inference step.
+	 */
     public InferredValueOutputs execute(InferValueInputs inputs) {
         this.weightings.setValue(inputs.weightings);
         this.$value.setShape(inputs.valueShape);
@@ -400,12 +652,13 @@ public final class DistributionTest4 extends Model {
         return new InferredValueOutputs(this);
     }
 
-    /**
-     * Infer the values of the different elements of the model.
-     * @param iterations The number of iterations to perform when inferring the values.
-     * @param inputs An object containing the parameters required to generate the model parameters.
-     * @return An object containing the computed values for the model.
-     */
+	/**
+	 * Infer the values of the different elements of the model.
+	 * @param iterations The number of iterations to perform when inferring the values.
+	 * @param inputs An object containing the parameters required to generate the model
+	 *               parameters.
+	 * @return An object containing the computed values for the model.
+	 */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
         this.weightings.setValue(inputs.weightings);
         this.$value.setValue(inputs.value);
@@ -413,12 +666,13 @@ public final class DistributionTest4 extends Model {
         return new InferredModelOutputs(this);
     }
 
-    /**
-     * Generate the probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
         this.weightings.setValue(inputs.weightings);
         this.$value.setValue(inputs.value);
@@ -426,16 +680,19 @@ public final class DistributionTest4 extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.weightings.setValue(inputs.weightings);
         this.$value.setValue(inputs.value);
@@ -443,18 +700,23 @@ public final class DistributionTest4 extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.weightings.setValue(inputs.weightings);
         this.$value.setValue(inputs.value);
@@ -462,12 +724,13 @@ public final class DistributionTest4 extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Generate the log probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the log probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
         this.weightings.setValue(inputs.weightings);
         this.$value.setValue(inputs.value);
@@ -475,16 +738,19 @@ public final class DistributionTest4 extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.weightings.setValue(inputs.weightings);
         this.$value.setValue(inputs.value);
@@ -492,18 +758,23 @@ public final class DistributionTest4 extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.weightings.setValue(inputs.weightings);
         this.$value.setValue(inputs.value);
@@ -511,4 +782,3 @@ public final class DistributionTest4 extends Model {
         return new LogProbabilities(this);
     }
 }
-//END OF CODE

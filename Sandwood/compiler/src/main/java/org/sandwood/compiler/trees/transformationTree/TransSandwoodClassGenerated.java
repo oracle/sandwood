@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -11,11 +11,9 @@ package org.sandwood.compiler.trees.transformationTree;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Set;
 import java.util.concurrent.RecursiveTask;
 
 import org.sandwood.common.execution.ExecutionType;
@@ -23,36 +21,38 @@ import org.sandwood.compiler.compilation.APICompile;
 import org.sandwood.compiler.compilation.CompilationContext.AuxFunctionType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableName;
-import org.sandwood.compiler.names.ClassName;
 import org.sandwood.compiler.names.FunctionName;
+import org.sandwood.compiler.names.ModelClassName;
 import org.sandwood.compiler.names.PackageName;
 import org.sandwood.compiler.trees.outputTree.OutputFunction;
 import org.sandwood.compiler.trees.outputTree.OutputSandwoodClassGenerated;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
+import org.sandwood.compiler.trees.transformationTree.TransTree.RNGLocation;
+import org.sandwood.compiler.trees.transformationTree.TransTree.TreeLocation;
 import org.sandwood.compiler.trees.transformationTree.visitors.TreeVisitor;
 
-public class TransSandwoodClassGenerated {
+public final class TransSandwoodClassGenerated {
 
-    private final ClassName name;
-    private final ClassName extendedClass;
-    private final ClassName[] interfaces;
+    private final ExecutionType target;
+    private final ModelClassName name;
     private final PackageName packageName;
     private final String modelCode;
     // Variable field name |-> Field Descriptor
     private final Map<FunctionName, TransFunction<?>> functions;
-    private final Map<VariableName, TransTreeVoid> fieldTrees;
+    private final Map<VariableName, TransTreeVoid> classFieldTrees, scratchFieldTrees;
     private final List<TransFunction<?>> gettersAndSetters;
 
-    public TransSandwoodClassGenerated(ClassName name, PackageName packageName, ClassName extendedClass,
-            ClassName[] interfaces, String modelCode, Map<FunctionName, TransFunction<?>> functions,
-            Map<VariableName, TransTreeVoid> fieldsTrees, List<TransFunction<?>> gettersAndSetters) {
+    public TransSandwoodClassGenerated(ExecutionType target, ModelClassName name, PackageName packageName,
+            String modelCode, Map<FunctionName, TransFunction<?>> functions,
+            Map<VariableName, TransTreeVoid> classFieldsTrees, Map<VariableName, TransTreeVoid> scratchFieldTrees,
+            List<TransFunction<?>> gettersAndSetters) {
+        this.target = target;
         this.name = name;
-        this.extendedClass = extendedClass;
-        this.interfaces = interfaces;
         this.packageName = packageName;
         this.modelCode = modelCode;
         this.functions = functions;
-        this.fieldTrees = fieldsTrees;
+        this.classFieldTrees = classFieldsTrees;
+        this.scratchFieldTrees = scratchFieldTrees;
         this.gettersAndSetters = gettersAndSetters;
     }
 
@@ -107,12 +107,12 @@ public class TransSandwoodClassGenerated {
             }
 
         // Remove unused fields
-        Map<VariableName, TransTreeVoid> fieldTrees = new HashMap<>(this.fieldTrees);
+        Map<VariableName, TransTreeVoid> fieldTrees = new HashMap<>(this.classFieldTrees);
         for(VariableDescription<?> desc:constants.keySet())
             fieldTrees.remove(desc.name);
 
-        return new TransSandwoodClassGenerated(name, packageName, extendedClass, interfaces, modelCode,
-                optimisedFunctions, fieldTrees, optimisedGettersAndSetters);
+        return new TransSandwoodClassGenerated(target, name, packageName, modelCode, optimisedFunctions,
+                classFieldTrees, scratchFieldTrees, optimisedGettersAndSetters);
     }
 
     private Map<VariableDescription<?>, TransTreeReturn<?>> getConstants(TransFunction<?> initialize) {
@@ -156,46 +156,39 @@ public class TransSandwoodClassGenerated {
         return constants;
     }
 
-    public OutputSandwoodClassGenerated toOutputTree(ExecutionType target) {
+    public OutputSandwoodClassGenerated toOutputTree() {
         // Turn the individual field declarations into a single tree.
-        PriorityQueue<VariableName> fieldNames = new PriorityQueue<>(fieldTrees.keySet());
-        List<TransTreeVoid> declarations = new ArrayList<>();
+        PriorityQueue<VariableName> fieldNames = new PriorityQueue<>(classFieldTrees.keySet());
+        List<TransTreeVoid> stateDeclarations = new ArrayList<>();
         while(!fieldNames.isEmpty())
-            declarations.add(fieldTrees.get(fieldNames.poll()));
-        OutputTree fieldsTree = TransTree.sequential(declarations, "Declare the variables for the model.")
-                .toOutputTree(target);
+            stateDeclarations.add(classFieldTrees.get(fieldNames.poll()));
+        OutputTree classFieldsTree = TransTree.sequential(stateDeclarations, "Declare the variables for the model.")
+                .toOutputTree(RNGLocation.GLOBAL, TreeLocation.STATE, target);
 
-        // Convert the functions.
-        PriorityQueue<FunctionName> samples = new PriorityQueue<>();
-        PriorityQueue<FunctionName> aux = new PriorityQueue<>();
+        List<TransTreeVoid> scratchDeclarations = new ArrayList<>();
+        fieldNames.addAll(scratchFieldTrees.keySet());
+        while(!fieldNames.isEmpty())
+            scratchDeclarations.add(scratchFieldTrees.get(fieldNames.poll()));
+        OutputTree scratchFieldsTree = TransTree
+                .sequential(scratchDeclarations, "Declare the scratch variables for the model.")
+                .toOutputTree(RNGLocation.GLOBAL, TreeLocation.SCRATCH, target);
 
-        Set<FunctionName> auxNames = new HashSet<>();
-        for(AuxFunctionType t:AuxFunctionType.values())
-            auxNames.add(t.functionName);
-
+        Map<FunctionName, OutputFunction> functionMap = new HashMap<>();
         for(FunctionName name:functions.keySet()) {
-            if(auxNames.contains(name))
-                aux.add(name);
+            TransFunction<?> f = functions.get(name);
+            if(name.equals(AuxFunctionType.VAR_ALLOCATOR.functionName))
+                functionMap.put(f.name, f.toOutputTree(TreeLocation.STATE, target));
+            else if(name.equals(AuxFunctionType.SCRATCH_ALLOCATOR.functionName))
+                functionMap.put(f.name, f.toOutputTree(TreeLocation.SCRATCH, target));
             else
-                samples.add(name);
+                functionMap.put(f.name, f.toOutputTree(TreeLocation.CORE, target));
         }
 
-        List<OutputFunction> functionList = new ArrayList<>();
-        while(!samples.isEmpty()) {
-            TransFunction<?> f = this.functions.get(samples.poll());
-            functionList.add(f.toOutputTree(target));
-        }
+        List<OutputFunction> outputGettersAndSetters = new ArrayList<>();
+        for(TransFunction<?> f:gettersAndSetters)
+            outputGettersAndSetters.add(f.toOutputTree(TreeLocation.STATE, target));
 
-        while(!aux.isEmpty()) {
-            TransFunction<?> f = this.functions.get(aux.poll());
-            functionList.add(f.toOutputTree(target));
-        }
-
-        List<OutputFunction> gettersAndSetters = new ArrayList<>();
-        for(TransFunction<?> f:this.gettersAndSetters)
-            gettersAndSetters.add(f.toOutputTree(target));
-
-        return new OutputSandwoodClassGenerated(name, packageName, extendedClass, interfaces, functionList, fieldsTree,
-                modelCode, gettersAndSetters);
+        return OutputSandwoodClassGenerated.getClass(target, name, packageName, functionMap, classFieldsTree,
+                scratchFieldsTree, modelCode, outputGettersAndSetters);
     }
 }

@@ -65,7 +65,7 @@ public class CompilationContext {
 
     // TODO Ensure that the names and function names match here and are appropriate.
     public enum AuxFunctionType {
-        VAR_ALLOCATOR("allocator"),
+        VAR_ALLOCATOR("allocate"),
         SCRATCH_ALLOCATOR("allocateScratch"),
         INITIALIZE("initializeModel"),
         INITIALIZE_LOG_PROBABILITY_FIELDS("initializeLogProbabilityFields"),
@@ -397,10 +397,6 @@ public class CompilationContext {
             }
 
             trees.addAll(unorderedConstructors);
-
-            if(!scratchConstructors.isEmpty())
-                trees.add(
-                        IRTree.functionCall(AuxFunctionType.SCRATCH_ALLOCATOR.functionName, "Allocate scratch space"));
 
             return IRTree.sequential(trees, Tree.NoComment);
         }
@@ -1104,11 +1100,11 @@ public class CompilationContext {
         exploredDistSamples.pop();
     }
 
-    public void addArrayInitilisation(IRTreeVoid t) {
+    public void addArrayInitialization(IRTreeVoid t) {
         arrayInitializations.add(t);
     }
 
-    public List<IRTreeVoid> getArrayInitilisations() {
+    public List<IRTreeVoid> getArrayInitializations() {
         return arrayInitializations;
     }
 }

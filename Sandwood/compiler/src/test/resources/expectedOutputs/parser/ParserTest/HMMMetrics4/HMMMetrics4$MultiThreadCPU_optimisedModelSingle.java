@@ -1,685 +1,216 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.HMMMetrics4$MultiThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.HMMMetrics4.State;
 import org.sandwood.random.internal.Rng;
+import org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.Conjugates;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.model.CoreModelMultiThreadCPU implements HMMMetrics4$CoreInterface {
-	
-	// Declare the variables for the model.
-	private boolean[][] constrainedFlag$sample134;
-	private boolean[][] constrainedFlag$sample162;
-	private boolean[][] constrainedFlag$sample190;
-	private boolean constrainedFlag$sample20 = true;
-	private boolean[] constrainedFlag$sample33;
-	private boolean[] constrainedFlag$sample57;
-	private boolean[][] constrainedFlag$sample76;
-	private double[][] current_metric_mean;
-	private double[][] current_metric_valid_bias;
-	private double[][] current_metric_var;
-	private double[][] cv$distributionAccumulator$var73;
-	private double[] cv$var20$countGlobal;
-	private double[][] cv$var33$countGlobal;
-	private double[][] cv$var55$stateProbabilityGlobal;
-	private double[][] cv$var74$stateProbabilityGlobal;
-	private double[][] distribution$sample57;
-	private double[][][] distribution$sample76;
-	private boolean fixedFlag$sample134 = false;
-	private boolean fixedFlag$sample162 = false;
-	private boolean fixedFlag$sample190 = false;
-	private boolean fixedFlag$sample20 = false;
-	private boolean fixedFlag$sample33 = false;
-	private boolean fixedFlag$sample57 = false;
-	private boolean fixedFlag$sample76 = false;
-	private boolean fixedProbFlag$sample134 = false;
-	private boolean fixedProbFlag$sample162 = false;
-	private boolean fixedProbFlag$sample190 = false;
-	private boolean fixedProbFlag$sample20 = false;
-	private boolean fixedProbFlag$sample241 = false;
-	private boolean fixedProbFlag$sample256 = false;
-	private boolean fixedProbFlag$sample33 = false;
-	private boolean fixedProbFlag$sample57 = false;
-	private boolean fixedProbFlag$sample76 = false;
-	private boolean[][][][] guard$sample57gaussian255$global;
-	private boolean[][][][] guard$sample76gaussian255$global;
-	private double[] initialStateDistribution;
-	private int[][] length$metric;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$current_metric_mean;
-	private double logProbability$current_metric_valid_bias;
-	private double logProbability$current_metric_var;
-	private double logProbability$initialStateDistribution;
-	private double logProbability$m;
-	private double logProbability$metric_g;
-	private double logProbability$metric_valid_g;
-	private double logProbability$metric_valid_inner;
-	private double logProbability$st;
-	private double logProbability$var130;
-	private double logProbability$var157;
-	private double logProbability$var184;
-	private double logProbability$var232;
-	private double logProbability$var245;
-	private double logProbability$var33;
-	private double logProbability$var55;
-	private double logProbability$var74;
-	private double[][] m;
-	private int max_metric;
-	private double[][][] metric;
-	private double[][][] metric_g;
-	private boolean[][][] metric_valid;
-	private boolean[][][] metric_valid_g;
-	private int noSamples;
-	private int noServers;
-	private int noStates;
-	private int[][] st;
-	private boolean system$gibbsForward = true;
-	private double[] v;
-	private double[][][] var245;
+final class HMMMetrics4$MultiThreadCPU extends CoreModelMultiThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	public HMMMetrics4$MultiThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
+		// Declare the scratch variables for the model.
+		double[][] cv$distributionAccumulator$var73;
+		double[] cv$var20$countGlobal;
+		double[][] cv$var33$countGlobal;
+		double[][] cv$var55$stateProbabilityGlobal;
+		double[][] cv$var74$stateProbabilityGlobal;
+		boolean[][][][] guard$sample57gaussian255$global;
+		boolean[][][][] guard$sample76gaussian255$global;
 
-	// Getter for current_metric_mean.
-	@Override
-	public final double[][] get$current_metric_mean() {
-		return current_metric_mean;
-	}
-
-	// Setter for current_metric_mean.
-	@Override
-	public final void set$current_metric_mean(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of current_metric_mean including if probabilities
-		// need to be updated.
-		current_metric_mean = cv$value;
-		
-		// Unset the fixed probability flag for sample 134 as it depends on current_metric_mean.
-		fixedProbFlag$sample134 = false;
-		
-		// Unset the fixed probability flag for sample 256 as it depends on current_metric_mean.
-		fixedProbFlag$sample256 = false;
-	}
-
-	// Getter for current_metric_valid_bias.
-	@Override
-	public final double[][] get$current_metric_valid_bias() {
-		return current_metric_valid_bias;
-	}
-
-	// Setter for current_metric_valid_bias.
-	@Override
-	public final void set$current_metric_valid_bias(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of current_metric_valid_bias including if probabilities
-		// need to be updated.
-		current_metric_valid_bias = cv$value;
-		
-		// Unset the fixed probability flag for sample 190 as it depends on current_metric_valid_bias.
-		fixedProbFlag$sample190 = false;
-		
-		// Unset the fixed probability flag for sample 241 as it depends on current_metric_valid_bias.
-		fixedProbFlag$sample241 = false;
-	}
-
-	// Getter for current_metric_var.
-	@Override
-	public final double[][] get$current_metric_var() {
-		return current_metric_var;
-	}
-
-	// Setter for current_metric_var.
-	@Override
-	public final void set$current_metric_var(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of current_metric_var including if probabilities
-		// need to be updated.
-		current_metric_var = cv$value;
-		
-		// Unset the fixed probability flag for sample 162 as it depends on current_metric_var.
-		fixedProbFlag$sample162 = false;
-		
-		// Unset the fixed probability flag for sample 256 as it depends on current_metric_var.
-		fixedProbFlag$sample256 = false;
-	}
-
-	// Getter for distribution$sample57.
-	@Override
-	public final double[][] get$distribution$sample57() {
-		return distribution$sample57;
-	}
-
-	// Setter for distribution$sample57.
-	@Override
-	public final void set$distribution$sample57(double[][] cv$value, boolean allocated$) {
-		distribution$sample57 = cv$value;
-	}
-
-	// Getter for distribution$sample76.
-	@Override
-	public final double[][][] get$distribution$sample76() {
-		return distribution$sample76;
-	}
-
-	// Setter for distribution$sample76.
-	@Override
-	public final void set$distribution$sample76(double[][][] cv$value, boolean allocated$) {
-		distribution$sample76 = cv$value;
-	}
-
-	// Getter for fixedFlag$sample134.
-	@Override
-	public final boolean get$fixedFlag$sample134() {
-		return fixedFlag$sample134;
-	}
-
-	// Setter for fixedFlag$sample134.
-	@Override
-	public final void set$fixedFlag$sample134(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample134 including if probabilities
-		// need to be updated.
-		fixedFlag$sample134 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample134$1 = 0; index$constrainedFlag$sample134$1 < constrainedFlag$sample134.length; index$constrainedFlag$sample134$1 += 1) {
-				boolean[] cv$constrainedFlag$sample134$1 = constrainedFlag$sample134[index$constrainedFlag$sample134$1];
-				for(int index$constrainedFlag$sample134$2 = 0; index$constrainedFlag$sample134$2 < cv$constrainedFlag$sample134$1.length; index$constrainedFlag$sample134$2 += 1)
-					cv$constrainedFlag$sample134$1[index$constrainedFlag$sample134$2] = true;
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for cv$var20$countGlobal
+			// 
+			// Allocation of cv$var20$countGlobal for single threaded execution
+			cv$var20$countGlobal = new double[state.noStates];
+			
+			// Constructor for cv$var33$countGlobal
+			{
+				// Allocation of cv$var33$countGlobal for multithreaded execution
+				// Get the thread count.
+				int cv$threadCount = threadCount();
+				
+				// Allocate an array to hold a copy per thread
+				cv$var33$countGlobal = new double[cv$threadCount][];
+				
+				// Populate the array with a copy per thread
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					cv$var33$countGlobal[cv$index] = new double[state.noStates];
 			}
-		}
-		
-		// Should the probability of sample 134 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample134" with its value "cv$value".
-		fixedProbFlag$sample134 = (cv$value && fixedProbFlag$sample134);
-		
-		// Should the probability of sample 256 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample134" with its value "cv$value".
-		fixedProbFlag$sample256 = (cv$value && fixedProbFlag$sample256);
-	}
-
-	// Getter for fixedFlag$sample162.
-	@Override
-	public final boolean get$fixedFlag$sample162() {
-		return fixedFlag$sample162;
-	}
-
-	// Setter for fixedFlag$sample162.
-	@Override
-	public final void set$fixedFlag$sample162(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample162 including if probabilities
-		// need to be updated.
-		fixedFlag$sample162 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample162$1 = 0; index$constrainedFlag$sample162$1 < constrainedFlag$sample162.length; index$constrainedFlag$sample162$1 += 1) {
-				boolean[] cv$constrainedFlag$sample162$1 = constrainedFlag$sample162[index$constrainedFlag$sample162$1];
-				for(int index$constrainedFlag$sample162$2 = 0; index$constrainedFlag$sample162$2 < cv$constrainedFlag$sample162$1.length; index$constrainedFlag$sample162$2 += 1)
-					cv$constrainedFlag$sample162$1[index$constrainedFlag$sample162$2] = true;
+			
+			// Constructor for cv$distributionAccumulator$var73
+			{
+				// Allocation of cv$distributionAccumulator$var73 for multithreaded execution
+				// 
+				// Get the thread count.
+				int cv$threadCount = threadCount();
+				
+				// Allocate an array to hold a copy per thread
+				cv$distributionAccumulator$var73 = new double[cv$threadCount][];
+				
+				// Populate the array with a copy per thread
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					// Variable to record the maximum value of Task Get 74. Initially set to the value
+					// of putTask 34.
+					cv$distributionAccumulator$var73[cv$index] = new double[state.noStates];
 			}
-		}
-		
-		// Should the probability of sample 162 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample162" with its value "cv$value".
-		fixedProbFlag$sample162 = (cv$value && fixedProbFlag$sample162);
-		
-		// Should the probability of sample 256 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample162" with its value "cv$value".
-		fixedProbFlag$sample256 = (cv$value && fixedProbFlag$sample256);
-	}
-
-	// Getter for fixedFlag$sample190.
-	@Override
-	public final boolean get$fixedFlag$sample190() {
-		return fixedFlag$sample190;
-	}
-
-	// Setter for fixedFlag$sample190.
-	@Override
-	public final void set$fixedFlag$sample190(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample190 including if probabilities
-		// need to be updated.
-		fixedFlag$sample190 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample190$1 = 0; index$constrainedFlag$sample190$1 < constrainedFlag$sample190.length; index$constrainedFlag$sample190$1 += 1) {
-				boolean[] cv$constrainedFlag$sample190$1 = constrainedFlag$sample190[index$constrainedFlag$sample190$1];
-				for(int index$constrainedFlag$sample190$2 = 0; index$constrainedFlag$sample190$2 < cv$constrainedFlag$sample190$1.length; index$constrainedFlag$sample190$2 += 1)
-					cv$constrainedFlag$sample190$1[index$constrainedFlag$sample190$2] = true;
+			
+			// Constructor for cv$var55$stateProbabilityGlobal
+			{
+				// Allocation of cv$var55$stateProbabilityGlobal for multithreaded execution
+				// Get the thread count.
+				int cv$threadCount = threadCount();
+				
+				// Allocate an array to hold a copy per thread
+				cv$var55$stateProbabilityGlobal = new double[cv$threadCount][];
+				
+				// Populate the array with a copy per thread
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					cv$var55$stateProbabilityGlobal[cv$index] = new double[state.noStates];
 			}
-		}
-		
-		// Should the probability of sample 190 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample190" with its value "cv$value".
-		fixedProbFlag$sample190 = (cv$value && fixedProbFlag$sample190);
-		
-		// Should the probability of sample 241 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample190" with its value "cv$value".
-		fixedProbFlag$sample241 = (cv$value && fixedProbFlag$sample241);
-	}
-
-	// Getter for fixedFlag$sample20.
-	@Override
-	public final boolean get$fixedFlag$sample20() {
-		return fixedFlag$sample20;
-	}
-
-	// Setter for fixedFlag$sample20.
-	@Override
-	public final void set$fixedFlag$sample20(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample20 including if probabilities
-		// need to be updated.
-		fixedFlag$sample20 = cv$value;
-		
-		// Substituted "fixedFlag$sample20" with its value "cv$value".
-		constrainedFlag$sample20 = (cv$value || constrainedFlag$sample20);
-		
-		// Should the probability of sample 20 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample20" with its value "cv$value".
-		fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
-		
-		// Should the probability of sample 57 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample20" with its value "cv$value".
-		fixedProbFlag$sample57 = (cv$value && fixedProbFlag$sample57);
-	}
-
-	// Getter for fixedFlag$sample33.
-	@Override
-	public final boolean get$fixedFlag$sample33() {
-		return fixedFlag$sample33;
-	}
-
-	// Setter for fixedFlag$sample33.
-	@Override
-	public final void set$fixedFlag$sample33(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample33 including if probabilities
-		// need to be updated.
-		fixedFlag$sample33 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample33$1 = 0; index$constrainedFlag$sample33$1 < constrainedFlag$sample33.length; index$constrainedFlag$sample33$1 += 1)
-				constrainedFlag$sample33[index$constrainedFlag$sample33$1] = true;
-		}
-		
-		// Should the probability of sample 33 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample33" with its value "cv$value".
-		fixedProbFlag$sample33 = (cv$value && fixedProbFlag$sample33);
-		
-		// Should the probability of sample 76 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample33" with its value "cv$value".
-		fixedProbFlag$sample76 = (cv$value && fixedProbFlag$sample76);
-	}
-
-	// Getter for fixedFlag$sample57.
-	@Override
-	public final boolean get$fixedFlag$sample57() {
-		return fixedFlag$sample57;
-	}
-
-	// Setter for fixedFlag$sample57.
-	@Override
-	public final void set$fixedFlag$sample57(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample57 including if probabilities
-		// need to be updated.
-		fixedFlag$sample57 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample57$1 = 0; index$constrainedFlag$sample57$1 < constrainedFlag$sample57.length; index$constrainedFlag$sample57$1 += 1)
-				constrainedFlag$sample57[index$constrainedFlag$sample57$1] = true;
-		}
-		
-		// Should the probability of sample 57 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample57" with its value "cv$value".
-		fixedProbFlag$sample57 = (cv$value && fixedProbFlag$sample57);
-		
-		// Should the probability of sample 76 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample57" with its value "cv$value".
-		fixedProbFlag$sample76 = (cv$value && fixedProbFlag$sample76);
-		
-		// Should the probability of sample 241 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample57" with its value "cv$value".
-		fixedProbFlag$sample241 = (cv$value && fixedProbFlag$sample241);
-		
-		// Should the probability of sample 256 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample57" with its value "cv$value".
-		fixedProbFlag$sample256 = (cv$value && fixedProbFlag$sample256);
-	}
-
-	// Getter for fixedFlag$sample76.
-	@Override
-	public final boolean get$fixedFlag$sample76() {
-		return fixedFlag$sample76;
-	}
-
-	// Setter for fixedFlag$sample76.
-	@Override
-	public final void set$fixedFlag$sample76(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample76 including if probabilities
-		// need to be updated.
-		fixedFlag$sample76 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample76$1 = 0; index$constrainedFlag$sample76$1 < constrainedFlag$sample76.length; index$constrainedFlag$sample76$1 += 1) {
-				boolean[] cv$constrainedFlag$sample76$1 = constrainedFlag$sample76[index$constrainedFlag$sample76$1];
-				for(int index$constrainedFlag$sample76$2 = 0; index$constrainedFlag$sample76$2 < cv$constrainedFlag$sample76$1.length; index$constrainedFlag$sample76$2 += 1)
-					cv$constrainedFlag$sample76$1[index$constrainedFlag$sample76$2] = true;
+			
+			// Constructor for guard$sample57gaussian255$global
+			{
+				// Calculate the largest index of server that is possible and allocate an array to
+				// hold the guard for each of these.
+				int cv$max_server = 0;
+				
+				// Calculate the largest index of timeStep that is possible and allocate an array
+				// to hold the guard for each of these.
+				int cv$max_timeStep$var226 = 0;
+				for(int sample$var196 = 0; sample$var196 < state.length$metric.length; sample$var196 += 1) {
+					if((0 < state.length$metric[0].length))
+						cv$max_timeStep$var226 = Math.max(cv$max_timeStep$var226, state.length$metric[sample$var196][0]);
+					cv$max_server = Math.max(cv$max_server, state.length$metric[0].length);
+				}
+				
+				// Variable declaration of cv$max_sample$var196 moved.
+				// Declaration comment was:
+				// Calculate the largest index of sample that is possible and allocate an array to
+				// hold the guard for each of these.
+				int cv$max_sample$var196 = state.length$metric.length;
+				
+				// Allocation of guard$sample57gaussian255$global for multithreaded execution
+				// 
+				// Get the thread count.
+				int cv$threadCount = threadCount();
+				
+				// Allocate an array to hold a copy per thread
+				guard$sample57gaussian255$global = new boolean[cv$threadCount][][][];
+				
+				// Populate the array with a copy per thread
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					guard$sample57gaussian255$global[cv$index] = new boolean[cv$max_sample$var196][cv$max_server][cv$max_timeStep$var226];
 			}
+			
+			// Constructor for cv$var74$stateProbabilityGlobal
+			{
+				// Allocation of cv$var74$stateProbabilityGlobal for multithreaded execution
+				// 
+				// Get the thread count.
+				int cv$threadCount = threadCount();
+				
+				// Allocate an array to hold a copy per thread
+				cv$var74$stateProbabilityGlobal = new double[cv$threadCount][];
+				
+				// Populate the array with a copy per thread
+				for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+					// Variable to record the maximum value of Task Get 74. Initially set to the value
+					// of putTask 34.
+					cv$var74$stateProbabilityGlobal[cv$index] = new double[state.noStates];
+			}
+			
+			// Constructor for guard$sample76gaussian255$global
+			// 
+			// Calculate the largest index of server that is possible and allocate an array to
+			// hold the guard for each of these.
+			int cv$max_server = 0;
+			
+			// Calculate the largest index of timeStep that is possible and allocate an array
+			// to hold the guard for each of these.
+			int cv$max_timeStep$var226 = 0;
+			for(int sample$var196 = 0; sample$var196 < state.length$metric.length; sample$var196 += 1) {
+				if((0 < state.length$metric[0].length))
+					cv$max_timeStep$var226 = Math.max(cv$max_timeStep$var226, state.length$metric[sample$var196][0]);
+				cv$max_server = Math.max(cv$max_server, state.length$metric[0].length);
+			}
+			
+			// Variable declaration of cv$max_sample$var196 moved.
+			// Declaration comment was:
+			// Calculate the largest index of sample that is possible and allocate an array to
+			// hold the guard for each of these.
+			int cv$max_sample$var196 = state.length$metric.length;
+			
+			// Allocation of guard$sample76gaussian255$global for multithreaded execution
+			// 
+			// Get the thread count.
+			int cv$threadCount = threadCount();
+			
+			// Allocate an array to hold a copy per thread
+			guard$sample76gaussian255$global = new boolean[cv$threadCount][][][];
+			
+			// Populate the array with a copy per thread
+			for(int cv$index = 0; cv$index < cv$threadCount; cv$index += 1)
+				guard$sample76gaussian255$global[cv$index] = new boolean[cv$max_sample$var196][cv$max_server][cv$max_timeStep$var226];
 		}
-		
-		// Should the probability of sample 76 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample76" with its value "cv$value".
-		fixedProbFlag$sample76 = (cv$value && fixedProbFlag$sample76);
-		
-		// Should the probability of sample 241 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample76" with its value "cv$value".
-		fixedProbFlag$sample241 = (cv$value && fixedProbFlag$sample241);
-		
-		// Should the probability of sample 256 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample76" with its value "cv$value".
-		fixedProbFlag$sample256 = (cv$value && fixedProbFlag$sample256);
 	}
 
-	// Getter for initialStateDistribution.
-	@Override
-	public final double[] get$initialStateDistribution() {
-		return initialStateDistribution;
-	}
 
-	// Setter for initialStateDistribution.
-	@Override
-	public final void set$initialStateDistribution(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of initialStateDistribution including if probabilities
-		// need to be updated.
-		initialStateDistribution = cv$value;
-		
-		// Unset the fixed probability flag for sample 20 as it depends on initialStateDistribution.
-		fixedProbFlag$sample20 = false;
-		
-		// Unset the fixed probability flag for sample 57 as it depends on initialStateDistribution.
-		fixedProbFlag$sample57 = false;
-	}
-
-	// Getter for length$metric.
-	@Override
-	public final int[][] get$length$metric() {
-		return length$metric;
-	}
-
-	// Setter for length$metric.
-	@Override
-	public final void set$length$metric(int[][] cv$value, boolean allocated$) {
-		length$metric = cv$value;
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$current_metric_mean.
-	@Override
-	public final double get$logProbability$current_metric_mean() {
-		return logProbability$current_metric_mean;
-	}
-
-	// Getter for logProbability$current_metric_valid_bias.
-	@Override
-	public final double get$logProbability$current_metric_valid_bias() {
-		return logProbability$current_metric_valid_bias;
-	}
-
-	// Getter for logProbability$current_metric_var.
-	@Override
-	public final double get$logProbability$current_metric_var() {
-		return logProbability$current_metric_var;
-	}
-
-	// Getter for logProbability$initialStateDistribution.
-	@Override
-	public final double get$logProbability$initialStateDistribution() {
-		return logProbability$initialStateDistribution;
-	}
-
-	// Getter for logProbability$m.
-	@Override
-	public final double get$logProbability$m() {
-		return logProbability$m;
-	}
-
-	// Getter for logProbability$metric_g.
-	@Override
-	public final double get$logProbability$metric_g() {
-		return logProbability$metric_g;
-	}
-
-	// Getter for logProbability$metric_valid_g.
-	@Override
-	public final double get$logProbability$metric_valid_g() {
-		return logProbability$metric_valid_g;
-	}
-
-	// Getter for logProbability$st.
-	@Override
-	public final double get$logProbability$st() {
-		return logProbability$st;
-	}
-
-	// Getter for m.
-	@Override
-	public final double[][] get$m() {
-		return m;
-	}
-
-	// Setter for m.
-	@Override
-	public final void set$m(double[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of m including if probabilities need to be updated.
-		m = cv$value;
-		
-		// Unset the fixed probability flag for sample 33 as it depends on m.
-		fixedProbFlag$sample33 = false;
-		
-		// Unset the fixed probability flag for sample 76 as it depends on m.
-		fixedProbFlag$sample76 = false;
-	}
-
-	// Getter for max_metric.
-	@Override
-	public final int get$max_metric() {
-		return max_metric;
-	}
-
-	// Setter for max_metric.
-	@Override
-	public final void set$max_metric(int cv$value, boolean allocated$) {
-		max_metric = cv$value;
-	}
-
-	// Getter for metric.
-	@Override
-	public final double[][][] get$metric() {
-		return metric;
-	}
-
-	// Setter for metric.
-	@Override
-	public final void set$metric(double[][][] cv$value, boolean allocated$) {
-		metric = cv$value;
-	}
-
-	// Getter for metric_g.
-	@Override
-	public final double[][][] get$metric_g() {
-		return metric_g;
-	}
-
-	// Getter for metric_valid.
-	@Override
-	public final boolean[][][] get$metric_valid() {
-		return metric_valid;
-	}
-
-	// Setter for metric_valid.
-	@Override
-	public final void set$metric_valid(boolean[][][] cv$value, boolean allocated$) {
-		metric_valid = cv$value;
-	}
-
-	// Getter for metric_valid_g.
-	@Override
-	public final boolean[][][] get$metric_valid_g() {
-		return metric_valid_g;
-	}
-
-	// Getter for noSamples.
-	@Override
-	public final int get$noSamples() {
-		return noSamples;
-	}
-
-	// Getter for noServers.
-	@Override
-	public final int get$noServers() {
-		return noServers;
-	}
-
-	// Getter for noStates.
-	@Override
-	public final int get$noStates() {
-		return noStates;
-	}
-
-	// Setter for noStates.
-	@Override
-	public final void set$noStates(int cv$value, boolean allocated$) {
-		noStates = cv$value;
-	}
-
-	// Getter for st.
-	@Override
-	public final int[][] get$st() {
-		return st;
-	}
-
-	// Setter for st.
-	@Override
-	public final void set$st(int[][] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of st including if probabilities need to be
-		// updated.
-		st = cv$value;
-		
-		// Unset the fixed probability flag for sample 57 as it depends on st.
-		fixedProbFlag$sample57 = false;
-		
-		// Unset the fixed probability flag for sample 76 as it depends on st.
-		fixedProbFlag$sample76 = false;
-		
-		// Unset the fixed probability flag for sample 241 as it depends on st.
-		fixedProbFlag$sample241 = false;
-		
-		// Unset the fixed probability flag for sample 256 as it depends on st.
-		fixedProbFlag$sample256 = false;
-	}
-
-	// Getter for v.
-	@Override
-	public final double[] get$v() {
-		return v;
+	public HMMMetrics4$MultiThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample134
 	private final void drawValueSample134(int var119, int var129, int threadID$cv$var129, Rng RNG$) {
-		current_metric_mean[var119][var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$));
+		state.current_metric_mean[var119][var129] = ((double)state.max_metric * DistributionSampling.sampleUniform(state.RNG$));
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample162
 	private final void drawValueSample162(int var146, int var156, int threadID$cv$var156, Rng RNG$) {
-		current_metric_var[var146][var156] = DistributionSampling.sampleInverseGamma(RNG$, 1.0, 1.0);
+		state.current_metric_var[var146][var156] = DistributionSampling.sampleInverseGamma(state.RNG$, 1.0, 1.0);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample190
 	private final void drawValueSample190(int var173, int var183, int threadID$cv$var183, Rng RNG$) {
-		current_metric_valid_bias[var173][var183] = DistributionSampling.sampleBeta(RNG$, 1.0, 1.0);
+		state.current_metric_valid_bias[var173][var183] = DistributionSampling.sampleBeta(state.RNG$, 1.0, 1.0);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample20
 	private final void drawValueSample20() {
-		DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, state.initialStateDistribution);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample33
 	private final void drawValueSample33(int var32, int threadID$cv$var32, Rng RNG$) {
-		DistributionSampling.sampleDirichlet(RNG$, v, noStates, m[var32]);
+		DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, state.m[var32]);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample57
 	private final void drawValueSample57(int sample$var45, int threadID$cv$sample$var45, Rng RNG$) {
-		st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$, initialStateDistribution, noStates);
+		state.st[sample$var45][0] = DistributionSampling.sampleCategorical(state.RNG$, state.initialStateDistribution, state.noStates);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample76
 	private final void drawValueSample76(int sample$var45, int timeStep$var66, int threadID$cv$sample$var45, Rng RNG$) {
-		st[sample$var45][timeStep$var66] = DistributionSampling.sampleCategorical(RNG$, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+		state.st[sample$var45][timeStep$var66] = DistributionSampling.sampleCategorical(state.RNG$, state.m[state.st[sample$var45][(timeStep$var66 - 1)]], state.noStates);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 134 drawn from Uniform 108. Inference was performed using Metropolis-Hastings.
 	private final void inferSample134(int var119, int var129, int threadID$cv$var129, Rng RNG$) {
-		constrainedFlag$sample134[var119][var129] = false;
+		state.constrainedFlag$sample134[var119][var129] = false;
 		
 		// The original value of the sample
-		double cv$originalValue = current_metric_mean[var119][var129];
+		double cv$originalValue = state.current_metric_mean[var119][var129];
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -694,25 +225,25 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			cv$var = 0.01;
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Constructing a random variable input for use later.
+									// Constructing a random variable input for use later.
 			// 
-			// Set the current value to the current state of the tree.
-			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue < (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
+									// Set the current value to the current state of the tree.
+			double cv$accumulatedProbabilities = (((0.0 <= cv$originalValue) && (cv$originalValue < (double)state.max_metric))?(-Math.log(state.max_metric)):Double.NEGATIVE_INFINITY);
 			
 			// Looking for a path between Sample 134 and consumer Gaussian 244.
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(((0 < length$metric[sample$var196][0]) && metric_valid_g[sample$var196][var119][0])) {
-					if(fixedFlag$sample57) {
+				if(((0 < state.length$metric[sample$var196][0]) && state.metric_valid_g[sample$var196][var119][0])) {
+					if(state.fixedFlag$sample57) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((var129 == st[sample$var196][0])) {
+						if((var129 == state.st[sample$var196][0])) {
 							// Mark that the sample has observed constrained data.
-							constrainedFlag$sample134[var119][var129] = true;
+							state.constrainedFlag$sample134[var119][var129] = true;
 							
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
@@ -721,19 +252,19 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Set an accumulator to record the consumer distributions not seen. Initially set
 							// to 1 as seen values will be deducted from this value.
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							int var156 = st[sample$var196][0];
+							int var156 = state.st[sample$var196][0];
 							
-							// Substituted "server" with its value "var119".
-							if(((0 <= var156) && (var156 < noStates))) {
+																					// Substituted "server" with its value "var119".
+							if(((0 <= var156) && (var156 < state.noStates))) {
 								// Constructing a random variable input for use later.
 								// 
-								// Substituted "server" with its value "var119".
-								double var243 = current_metric_var[var119][st[sample$var196][0]];
+																								// Substituted "server" with its value "var119".
+								double var243 = state.current_metric_var[var119][state.st[sample$var196][0]];
 								
-								// Substituted "server" with its value "var119".
+																								// Substituted "server" with its value "var119".
 								// 
 								// Set the current value to the current state of the tree.
-								cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
+								cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var119][0] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -764,27 +295,27 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Substituted "sample$var45" with its value "sample$var196".
 						// 
 						// Substituted "index$sample57$7" with its value "var129".
-						double cv$probabilitySample57Value8 = distribution$sample57[sample$var196][var129];
+						double cv$probabilitySample57Value8 = state.distribution$sample57[sample$var196][var129];
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample134[var119][var129] = true;
+						state.constrainedFlag$sample134[var119][var129] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "server" with its value "var119".
 						// 
 						// Substituted "index$sample57$7" with its value "var129".
-						double var243 = current_metric_var[var119][var129];
+						double var243 = state.current_metric_var[var119][var129];
 						
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Substituted "server" with its value "var119".
+																		// Substituted "server" with its value "var119".
 						// 
 						// Set the current value to the current state of the tree.
-						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
+						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var119][0] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
 						
 						// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 						// Declaration comment was:
@@ -814,19 +345,19 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						else {
 							// If the second value is -infinity.
 							// 
-							// Constructing a random variable input for use later.
+																					// Constructing a random variable input for use later.
 							// 
 							// Substituted "server" with its value "var119".
 							// 
 							// Substituted "index$sample57$7" with its value "var129".
 							// 
-							// Constructing a random variable input for use later.
+																					// Constructing a random variable input for use later.
 							// 
 							// Substituted "server" with its value "var119".
 							// 
 							// Substituted "index$sample57$7" with its value "var129".
 							// 
-							// Constructing a random variable input for use later.
+																					// Constructing a random variable input for use later.
 							// 
 							// Substituted "server" with its value "var119".
 							// 
@@ -839,15 +370,15 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					}
 				}
 			}
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int timeStep$var226 = 1; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int timeStep$var226 = 1; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 					// Substituted "server" with its value "var119".
-					if(metric_valid_g[sample$var196][var119][timeStep$var226]) {
-						if(fixedFlag$sample76) {
+					if(state.metric_valid_g[sample$var196][var119][timeStep$var226]) {
+						if(state.fixedFlag$sample76) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
-							if((var129 == st[sample$var196][timeStep$var226])) {
+							if((var129 == state.st[sample$var196][timeStep$var226])) {
 								// Mark that the sample has observed constrained data.
-								constrainedFlag$sample134[var119][var129] = true;
+								state.constrainedFlag$sample134[var119][var129] = true;
 								
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
@@ -856,19 +387,19 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								// Set an accumulator to record the consumer distributions not seen. Initially set
 								// to 1 as seen values will be deducted from this value.
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
-								int var156 = st[sample$var196][timeStep$var226];
+								int var156 = state.st[sample$var196][timeStep$var226];
 								
-								// Substituted "server" with its value "var119".
-								if(((0 <= var156) && (var156 < noStates))) {
+																								// Substituted "server" with its value "var119".
+								if(((0 <= var156) && (var156 < state.noStates))) {
 									// Constructing a random variable input for use later.
 									// 
 									// Substituted "server" with its value "var119".
-									double var243 = current_metric_var[var119][st[sample$var196][timeStep$var226]];
+									double var243 = state.current_metric_var[var119][state.st[sample$var196][timeStep$var226]];
 									
 									// Substituted "server" with its value "var119".
 									// 
 									// Set the current value to the current state of the tree.
-									cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
+									cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var119][timeStep$var226] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 									
 									// Recorded the probability of reaching sample task 256 with the current configuration.
 									// 
@@ -896,20 +427,20 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						} else {
 							// Update the probability of sampling this value from the distribution value.
 							// 
-							// Substituted "sample$var45" with its value "sample$var196".
+																					// Substituted "sample$var45" with its value "sample$var196".
 							// 
 							// Substituted "index$sample76$19" with its value "var129".
-							double cv$probabilitySample76Value20 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][var129];
+							double cv$probabilitySample76Value20 = state.distribution$sample76[sample$var196][(timeStep$var226 - 1)][var129];
 							
 							// Mark that the sample has observed constrained data.
-							constrainedFlag$sample134[var119][var129] = true;
+							state.constrainedFlag$sample134[var119][var129] = true;
 							
 							// Constructing a random variable input for use later.
 							// 
 							// Substituted "server" with its value "var119".
 							// 
 							// Substituted "index$sample76$19" with its value "var129".
-							double var243 = current_metric_var[var119][var129];
+							double var243 = state.current_metric_var[var119][var129];
 							
 							// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 							// Declaration comment was:
@@ -919,7 +450,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Substituted "server" with its value "var119".
 							// 
 							// Set the current value to the current state of the tree.
-							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
+							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var119][timeStep$var226] - cv$originalValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
 							
 							// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 							// Declaration comment was:
@@ -949,19 +480,19 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							else {
 								// If the second value is -infinity.
 								// 
-								// Constructing a random variable input for use later.
+																								// Constructing a random variable input for use later.
 								// 
 								// Substituted "server" with its value "var119".
 								// 
 								// Substituted "index$sample76$19" with its value "var129".
 								// 
-								// Constructing a random variable input for use later.
+																								// Constructing a random variable input for use later.
 								// 
 								// Substituted "server" with its value "var119".
 								// 
 								// Substituted "index$sample76$19" with its value "var129".
 								// 
-								// Constructing a random variable input for use later.
+																								// Constructing a random variable input for use later.
 								// 
 								// Substituted "server" with its value "var119".
 								// 
@@ -986,24 +517,24 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(constrainedFlag$sample134[var119][var129]) {
-			current_metric_mean[var119][var129] = cv$proposedValue;
+		if(state.constrainedFlag$sample134[var119][var129]) {
+			state.current_metric_mean[var119][var129] = cv$proposedValue;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Constructing a random variable input for use later.
-			double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY);
+									// Constructing a random variable input for use later.
+			double cv$accumulatedProbabilities = (((0.0 <= cv$proposedValue) && (cv$proposedValue < (double)state.max_metric))?(-Math.log(state.max_metric)):Double.NEGATIVE_INFINITY);
 			
 			// Looking for a path between Sample 134 and consumer Gaussian 244.
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(((0 < length$metric[sample$var196][0]) && metric_valid_g[sample$var196][var119][0])) {
-					if(fixedFlag$sample57) {
+				if(((0 < state.length$metric[sample$var196][0]) && state.metric_valid_g[sample$var196][var119][0])) {
+					if(state.fixedFlag$sample57) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((var129 == st[sample$var196][0])) {
+						if((var129 == state.st[sample$var196][0])) {
 							// Mark that the sample has observed constrained data.
-							constrainedFlag$sample134[var119][var129] = true;
+							state.constrainedFlag$sample134[var119][var129] = true;
 							
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
@@ -1012,17 +543,17 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Set an accumulator to record the consumer distributions not seen. Initially set
 							// to 1 as seen values will be deducted from this value.
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							int var156 = st[sample$var196][0];
+							int var156 = state.st[sample$var196][0];
 							
-							// Substituted "server" with its value "var119".
-							if(((0 <= var156) && (var156 < noStates))) {
+																					// Substituted "server" with its value "var119".
+							if(((0 <= var156) && (var156 < state.noStates))) {
 								// Constructing a random variable input for use later.
 								// 
-								// Substituted "server" with its value "var119".
-								double var243 = current_metric_var[var119][st[sample$var196][0]];
+																								// Substituted "server" with its value "var119".
+								double var243 = state.current_metric_var[var119][state.st[sample$var196][0]];
 								
-								// Substituted "server" with its value "var119".
-								cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
+																								// Substituted "server" with its value "var119".
+								cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var119][0] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -1053,25 +584,25 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Substituted "sample$var45" with its value "sample$var196".
 						// 
 						// Substituted "index$sample57$7" with its value "var129".
-						double cv$probabilitySample57Value8 = distribution$sample57[sample$var196][var129];
+						double cv$probabilitySample57Value8 = state.distribution$sample57[sample$var196][var129];
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample134[var119][var129] = true;
+						state.constrainedFlag$sample134[var119][var129] = true;
 						
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "server" with its value "var119".
 						// 
 						// Substituted "index$sample57$7" with its value "var129".
-						double var243 = current_metric_var[var119][var129];
+						double var243 = state.current_metric_var[var119][var129];
 						
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Substituted "server" with its value "var119".
-						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][0] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
+																		// Substituted "server" with its value "var119".
+						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var119][0] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
 						
 						// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 						// Declaration comment was:
@@ -1101,19 +632,19 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						else {
 							// If the second value is -infinity.
 							// 
-							// Constructing a random variable input for use later.
+																					// Constructing a random variable input for use later.
 							// 
 							// Substituted "server" with its value "var119".
 							// 
 							// Substituted "index$sample57$7" with its value "var129".
 							// 
-							// Constructing a random variable input for use later.
+																					// Constructing a random variable input for use later.
 							// 
 							// Substituted "server" with its value "var119".
 							// 
 							// Substituted "index$sample57$7" with its value "var129".
 							// 
-							// Constructing a random variable input for use later.
+																					// Constructing a random variable input for use later.
 							// 
 							// Substituted "server" with its value "var119".
 							// 
@@ -1126,15 +657,15 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					}
 				}
 			}
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int timeStep$var226 = 1; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int timeStep$var226 = 1; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 					// Substituted "server" with its value "var119".
-					if(metric_valid_g[sample$var196][var119][timeStep$var226]) {
-						if(fixedFlag$sample76) {
+					if(state.metric_valid_g[sample$var196][var119][timeStep$var226]) {
+						if(state.fixedFlag$sample76) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
-							if((var129 == st[sample$var196][timeStep$var226])) {
+							if((var129 == state.st[sample$var196][timeStep$var226])) {
 								// Mark that the sample has observed constrained data.
-								constrainedFlag$sample134[var119][var129] = true;
+								state.constrainedFlag$sample134[var119][var129] = true;
 								
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
@@ -1143,17 +674,17 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								// Set an accumulator to record the consumer distributions not seen. Initially set
 								// to 1 as seen values will be deducted from this value.
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
-								int var156 = st[sample$var196][timeStep$var226];
+								int var156 = state.st[sample$var196][timeStep$var226];
 								
-								// Substituted "server" with its value "var119".
-								if(((0 <= var156) && (var156 < noStates))) {
+																								// Substituted "server" with its value "var119".
+								if(((0 <= var156) && (var156 < state.noStates))) {
 									// Constructing a random variable input for use later.
 									// 
 									// Substituted "server" with its value "var119".
-									double var243 = current_metric_var[var119][st[sample$var196][timeStep$var226]];
+									double var243 = state.current_metric_var[var119][state.st[sample$var196][timeStep$var226]];
 									
 									// Substituted "server" with its value "var119".
-									cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
+									cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var119][timeStep$var226] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 									
 									// Recorded the probability of reaching sample task 256 with the current configuration.
 									// 
@@ -1181,20 +712,20 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						} else {
 							// Update the probability of sampling this value from the distribution value.
 							// 
-							// Substituted "sample$var45" with its value "sample$var196".
+																					// Substituted "sample$var45" with its value "sample$var196".
 							// 
 							// Substituted "index$sample76$19" with its value "var129".
-							double cv$probabilitySample76Value20 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][var129];
+							double cv$probabilitySample76Value20 = state.distribution$sample76[sample$var196][(timeStep$var226 - 1)][var129];
 							
 							// Mark that the sample has observed constrained data.
-							constrainedFlag$sample134[var119][var129] = true;
+							state.constrainedFlag$sample134[var119][var129] = true;
 							
 							// Constructing a random variable input for use later.
 							// 
 							// Substituted "server" with its value "var119".
 							// 
 							// Substituted "index$sample76$19" with its value "var129".
-							double var243 = current_metric_var[var119][var129];
+							double var243 = state.current_metric_var[var119][var129];
 							
 							// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 							// Declaration comment was:
@@ -1202,7 +733,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// inputs.
 							// 
 							// Substituted "server" with its value "var119".
-							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var119][timeStep$var226] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
+							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var119][timeStep$var226] - cv$proposedValue) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
 							
 							// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 							// Declaration comment was:
@@ -1232,19 +763,19 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							else {
 								// If the second value is -infinity.
 								// 
-								// Constructing a random variable input for use later.
+																								// Constructing a random variable input for use later.
 								// 
 								// Substituted "server" with its value "var119".
 								// 
 								// Substituted "index$sample76$19" with its value "var129".
 								// 
-								// Constructing a random variable input for use later.
+																								// Constructing a random variable input for use later.
 								// 
 								// Substituted "server" with its value "var119".
 								// 
 								// Substituted "index$sample76$19" with its value "var129".
 								// 
-								// Constructing a random variable input for use later.
+																								// Constructing a random variable input for use later.
 								// 
 								// Substituted "server" with its value "var119".
 								// 
@@ -1272,24 +803,24 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Test if the probability of the sample is sufficient to keep the value. This needs
 			// to be less than or equal as otherwise if the proposed value is not possible and
 			// the random value is 0 an impossible value will be accepted.
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(state.RNG$))) || Double.isNaN(cv$ratio)))
 				// If it is not revert the changes.
 				// 
 				// Set the sample value
 				// 
 				// Write out the value of the sample to a temporary variable prior to updating the
 				// intermediate variables.
-				current_metric_mean[var119][var129] = cv$originalValue;
+				state.current_metric_mean[var119][var129] = cv$originalValue;
 		}
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 162 drawn from InverseGamma 135. Inference was performed using Metropolis-Hastings.
 	private final void inferSample162(int var146, int var156, int threadID$cv$var156, Rng RNG$) {
-		constrainedFlag$sample162[var146][var156] = false;
+		state.constrainedFlag$sample162[var146][var156] = false;
 		
 		// The original value of the sample
-		double cv$originalValue = current_metric_var[var146][var156];
+		double cv$originalValue = state.current_metric_var[var146][var156];
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -1304,7 +835,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			cv$var = 0.01;
 		
 		// The proposed new value for the sample
-		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+		double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 		{
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
@@ -1313,14 +844,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$originalValue, 1.0, 1.0);
 			
 			// Looking for a path between Sample 162 and consumer Gaussian 244.
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(((0 < length$metric[sample$var196][0]) && metric_valid_g[sample$var196][var146][0])) {
-					if(fixedFlag$sample57) {
+				if(((0 < state.length$metric[sample$var196][0]) && state.metric_valid_g[sample$var196][var146][0])) {
+					if(state.fixedFlag$sample57) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((var156 == st[sample$var196][0])) {
+						if((var156 == state.st[sample$var196][0])) {
 							// Mark that the sample has observed constrained data.
-							constrainedFlag$sample162[var146][var156] = true;
+							state.constrainedFlag$sample162[var146][var156] = true;
 							
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
@@ -1329,14 +860,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Set an accumulator to record the consumer distributions not seen. Initially set
 							// to 1 as seen values will be deducted from this value.
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							int var129 = st[sample$var196][0];
+							int var129 = state.st[sample$var196][0];
 							
-							// Substituted "server" with its value "var146".
-							if(((0 <= var129) && (var129 < noStates))) {
-								// Substituted "server" with its value "var146".
+																					// Substituted "server" with its value "var146".
+							if(((0 <= var129) && (var129 < state.noStates))) {
+																								// Substituted "server" with its value "var146".
 								// 
-								// Set the current value to the current state of the tree.
-								cv$accumulatedConsumerProbabilities = ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY);
+																								// Set the current value to the current state of the tree.
+								cv$accumulatedConsumerProbabilities = ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var146][0] - state.current_metric_mean[var146][state.st[sample$var196][0]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY);
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -1367,26 +898,26 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Substituted "sample$var45" with its value "sample$var196".
 						// 
 						// Substituted "index$sample57$7" with its value "var156".
-						double cv$probabilitySample57Value8 = distribution$sample57[sample$var196][var156];
+						double cv$probabilitySample57Value8 = state.distribution$sample57[sample$var196][var156];
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample162[var146][var156] = true;
+						state.constrainedFlag$sample162[var146][var156] = true;
 						
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Substituted "server" with its value "var146".
+																		// Substituted "server" with its value "var146".
 						// 
-						// Set the current value to the current state of the tree.
+																		// Set the current value to the current state of the tree.
 						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "server" with its value "var146".
 						// 
 						// Substituted "index$sample57$7" with its value "var156".
-						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][var156]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY));
+						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var146][0] - state.current_metric_mean[var146][var156]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY));
 						
 						// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 						// Declaration comment was:
@@ -1416,9 +947,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						else {
 							// If the second value is -infinity.
 							// 
-							// The original value of the sample
+																					// The original value of the sample
 							// 
-							// The original value of the sample
+																					// The original value of the sample
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
 							else
@@ -1427,15 +958,15 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					}
 				}
 			}
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int timeStep$var226 = 1; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int timeStep$var226 = 1; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 					// Substituted "server" with its value "var146".
-					if(metric_valid_g[sample$var196][var146][timeStep$var226]) {
-						if(fixedFlag$sample76) {
+					if(state.metric_valid_g[sample$var196][var146][timeStep$var226]) {
+						if(state.fixedFlag$sample76) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
-							if((var156 == st[sample$var196][timeStep$var226])) {
+							if((var156 == state.st[sample$var196][timeStep$var226])) {
 								// Mark that the sample has observed constrained data.
-								constrainedFlag$sample162[var146][var156] = true;
+								state.constrainedFlag$sample162[var146][var156] = true;
 								
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
@@ -1444,18 +975,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								// Set an accumulator to record the consumer distributions not seen. Initially set
 								// to 1 as seen values will be deducted from this value.
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
-								int var129 = st[sample$var196][timeStep$var226];
+								int var129 = state.st[sample$var196][timeStep$var226];
 								
-								// Substituted "server" with its value "var146".
-								if(((0 <= var129) && (var129 < noStates))) {
+																								// Substituted "server" with its value "var146".
+								if(((0 <= var129) && (var129 < state.noStates))) {
 									// Substituted "server" with its value "var146".
 									// 
-									// Set the current value to the current state of the tree.
+																											// Set the current value to the current state of the tree.
 									// 
 									// Constructing a random variable input for use later.
 									// 
 									// Substituted "server" with its value "var146".
-									cv$accumulatedConsumerProbabilities = ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY);
+									cv$accumulatedConsumerProbabilities = ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var146][timeStep$var226] - state.current_metric_mean[var146][state.st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY);
 									
 									// Recorded the probability of reaching sample task 256 with the current configuration.
 									// 
@@ -1483,13 +1014,13 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						} else {
 							// Update the probability of sampling this value from the distribution value.
 							// 
-							// Substituted "sample$var45" with its value "sample$var196".
+																					// Substituted "sample$var45" with its value "sample$var196".
 							// 
 							// Substituted "index$sample76$19" with its value "var156".
-							double cv$probabilitySample76Value20 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][var156];
+							double cv$probabilitySample76Value20 = state.distribution$sample76[sample$var196][(timeStep$var226 - 1)][var156];
 							
 							// Mark that the sample has observed constrained data.
-							constrainedFlag$sample162[var146][var156] = true;
+							state.constrainedFlag$sample162[var146][var156] = true;
 							
 							// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 							// Declaration comment was:
@@ -1498,14 +1029,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// 
 							// Substituted "server" with its value "var146".
 							// 
-							// Set the current value to the current state of the tree.
+																					// Set the current value to the current state of the tree.
 							// 
 							// Constructing a random variable input for use later.
 							// 
 							// Substituted "server" with its value "var146".
 							// 
 							// Substituted "index$sample76$19" with its value "var156".
-							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][var156]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY));
+							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < cv$originalValue)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var146][timeStep$var226] - state.current_metric_mean[var146][var156]) / Math.sqrt(cv$originalValue))) - (Math.log(cv$originalValue) * 0.5)):Double.NEGATIVE_INFINITY));
 							
 							// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 							// Declaration comment was:
@@ -1535,9 +1066,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							else {
 								// If the second value is -infinity.
 								// 
-								// The original value of the sample
+																								// The original value of the sample
 								// 
-								// The original value of the sample
+																								// The original value of the sample
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
 								else
@@ -1558,22 +1089,22 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(constrainedFlag$sample162[var146][var156]) {
-			current_metric_var[var146][var156] = cv$proposedValue;
+		if(state.constrainedFlag$sample162[var146][var156]) {
+			state.current_metric_var[var146][var156] = cv$proposedValue;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			double cv$accumulatedProbabilities = DistributionSampling.logProbabilityInverseGamma(cv$proposedValue, 1.0, 1.0);
 			
 			// Looking for a path between Sample 162 and consumer Gaussian 244.
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if(((0 < length$metric[sample$var196][0]) && metric_valid_g[sample$var196][var146][0])) {
-					if(fixedFlag$sample57) {
+				if(((0 < state.length$metric[sample$var196][0]) && state.metric_valid_g[sample$var196][var146][0])) {
+					if(state.fixedFlag$sample57) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((var156 == st[sample$var196][0])) {
+						if((var156 == state.st[sample$var196][0])) {
 							// Mark that the sample has observed constrained data.
-							constrainedFlag$sample162[var146][var156] = true;
+							state.constrainedFlag$sample162[var146][var156] = true;
 							
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
@@ -1582,16 +1113,16 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Set an accumulator to record the consumer distributions not seen. Initially set
 							// to 1 as seen values will be deducted from this value.
 							double cv$consumerDistributionProbabilityAccumulator = 1.0;
-							int var129 = st[sample$var196][0];
+							int var129 = state.st[sample$var196][0];
 							
-							// Substituted "server" with its value "var146".
-							if(((0 <= var129) && (var129 < noStates))) {
-								// Substituted "server" with its value "var146".
+																					// Substituted "server" with its value "var146".
+							if(((0 <= var129) && (var129 < state.noStates))) {
+																								// Substituted "server" with its value "var146".
 								// 
 								// Constructing a random variable input for use later.
 								// 
-								// Substituted "server" with its value "var146".
-								cv$accumulatedConsumerProbabilities = ((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][st[sample$var196][0]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY);
+																								// Substituted "server" with its value "var146".
+								cv$accumulatedConsumerProbabilities = ((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var146][0] - state.current_metric_mean[var146][state.st[sample$var196][0]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY);
 								
 								// Recorded the probability of reaching sample task 256 with the current configuration.
 								// 
@@ -1622,24 +1153,24 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Substituted "sample$var45" with its value "sample$var196".
 						// 
 						// Substituted "index$sample57$7" with its value "var156".
-						double cv$probabilitySample57Value8 = distribution$sample57[sample$var196][var156];
+						double cv$probabilitySample57Value8 = state.distribution$sample57[sample$var196][var156];
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample162[var146][var156] = true;
+						state.constrainedFlag$sample162[var146][var156] = true;
 						
 						// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 						// Declaration comment was:
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Substituted "server" with its value "var146".
+																		// Substituted "server" with its value "var146".
 						// 
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "server" with its value "var146".
 						// 
 						// Substituted "index$sample57$7" with its value "var156".
-						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][0] - current_metric_mean[var146][var156]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY));
+						double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample57Value8) + ((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var146][0] - state.current_metric_mean[var146][var156]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY));
 						
 						// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 						// Declaration comment was:
@@ -1669,9 +1200,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						else {
 							// If the second value is -infinity.
 							// 
-							// The proposed new value for the sample
+																					// The proposed new value for the sample
 							// 
-							// The proposed new value for the sample
+																					// The proposed new value for the sample
 							if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 								cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
 							else
@@ -1680,15 +1211,15 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					}
 				}
 			}
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int timeStep$var226 = 1; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int timeStep$var226 = 1; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 					// Substituted "server" with its value "var146".
-					if(metric_valid_g[sample$var196][var146][timeStep$var226]) {
-						if(fixedFlag$sample76) {
+					if(state.metric_valid_g[sample$var196][var146][timeStep$var226]) {
+						if(state.fixedFlag$sample76) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
-							if((var156 == st[sample$var196][timeStep$var226])) {
+							if((var156 == state.st[sample$var196][timeStep$var226])) {
 								// Mark that the sample has observed constrained data.
-								constrainedFlag$sample162[var146][var156] = true;
+								state.constrainedFlag$sample162[var146][var156] = true;
 								
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
@@ -1697,16 +1228,16 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								// Set an accumulator to record the consumer distributions not seen. Initially set
 								// to 1 as seen values will be deducted from this value.
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
-								int var129 = st[sample$var196][timeStep$var226];
+								int var129 = state.st[sample$var196][timeStep$var226];
 								
-								// Substituted "server" with its value "var146".
-								if(((0 <= var129) && (var129 < noStates))) {
+																								// Substituted "server" with its value "var146".
+								if(((0 <= var129) && (var129 < state.noStates))) {
 									// Substituted "server" with its value "var146".
 									// 
 									// Constructing a random variable input for use later.
 									// 
 									// Substituted "server" with its value "var146".
-									cv$accumulatedConsumerProbabilities = ((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY);
+									cv$accumulatedConsumerProbabilities = ((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var146][timeStep$var226] - state.current_metric_mean[var146][state.st[sample$var196][timeStep$var226]]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY);
 									
 									// Recorded the probability of reaching sample task 256 with the current configuration.
 									// 
@@ -1734,13 +1265,13 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						} else {
 							// Update the probability of sampling this value from the distribution value.
 							// 
-							// Substituted "sample$var45" with its value "sample$var196".
+																					// Substituted "sample$var45" with its value "sample$var196".
 							// 
 							// Substituted "index$sample76$19" with its value "var156".
-							double cv$probabilitySample76Value20 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][var156];
+							double cv$probabilitySample76Value20 = state.distribution$sample76[sample$var196][(timeStep$var226 - 1)][var156];
 							
 							// Mark that the sample has observed constrained data.
-							constrainedFlag$sample162[var146][var156] = true;
+							state.constrainedFlag$sample162[var146][var156] = true;
 							
 							// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 							// Declaration comment was:
@@ -1754,7 +1285,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Substituted "server" with its value "var146".
 							// 
 							// Substituted "index$sample76$19" with its value "var156".
-							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][var146][timeStep$var226] - current_metric_mean[var146][var156]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY));
+							double cv$accumulatedConsumerProbabilities = (Math.log(cv$probabilitySample76Value20) + ((0.0 < cv$proposedValue)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][var146][timeStep$var226] - state.current_metric_mean[var146][var156]) / Math.sqrt(cv$proposedValue))) - (Math.log(cv$proposedValue) * 0.5)):Double.NEGATIVE_INFINITY));
 							
 							// Variable declaration of cv$consumerDistributionProbabilityAccumulator moved.
 							// Declaration comment was:
@@ -1784,9 +1315,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							else {
 								// If the second value is -infinity.
 								// 
-								// The proposed new value for the sample
+																								// The proposed new value for the sample
 								// 
-								// The proposed new value for the sample
+																								// The proposed new value for the sample
 								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
 									cv$accumulatedProbabilities = (Math.log(cv$consumerDistributionProbabilityAccumulator) + cv$accumulatedProbabilities);
 								else
@@ -1810,14 +1341,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Test if the probability of the sample is sufficient to keep the value. This needs
 			// to be less than or equal as otherwise if the proposed value is not possible and
 			// the random value is 0 an impossible value will be accepted.
-			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(RNG$))) || Double.isNaN(cv$ratio)))
+			if(((cv$ratio <= Math.log(DistributionSampling.sampleUniform(state.RNG$))) || Double.isNaN(cv$ratio)))
 				// If it is not revert the changes.
 				// 
 				// Set the sample value
 				// 
 				// Write out the value of the sample to a temporary variable prior to updating the
 				// intermediate variables.
-				current_metric_var[var146][var156] = cv$originalValue;
+				state.current_metric_var[var146][var156] = cv$originalValue;
 		}
 	}
 
@@ -1825,7 +1356,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// by sample task 190 drawn from Beta 162. Inference was performed using a Beta to
 	// Bernoulli/Binomial conjugate prior.
 	private final void inferSample190(int var173, int var183, int threadID$cv$var183, Rng RNG$) {
-		constrainedFlag$sample190[var173][var183] = false;
+		state.constrainedFlag$sample190[var173][var183] = false;
 		
 		// Local variable to record the number of true samples.
 		double cv$sum = 0.0;
@@ -1836,14 +1367,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Processing random variable 231.
 		// 
 		// Looking for a path between Sample 190 and consumer Bernoulli 231.
-		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
+		for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 < length$metric[sample$var196][0])) {
-				if(fixedFlag$sample57) {
+			if((0 < state.length$metric[sample$var196][0])) {
+				if(state.fixedFlag$sample57) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((var183 == st[sample$var196][0])) {
+					if((var183 == state.st[sample$var196][0])) {
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample190[var173][var183] = true;
+						state.constrainedFlag$sample190[var173][var183] = true;
 						
 						// Include the value sampled by task 241 from random variable var231.
 						// 
@@ -1852,8 +1383,8 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						
 						// If the sample value was positive increase the count
 						// 
-						// Substituted "server" with its value "var173".
-						if(metric_valid_g[sample$var196][var173][0])
+																		// Substituted "server" with its value "var173".
+						if(state.metric_valid_g[sample$var196][var173][0])
 							cv$sum = (cv$sum + 1.0);
 					}
 				} else {
@@ -1862,12 +1393,12 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// Substituted "sample$var45" with its value "sample$var196".
 					// 
 					// Substituted "index$sample57$6" with its value "var183".
-					double cv$probabilitySample57Value7 = distribution$sample57[sample$var196][var183];
+					double cv$probabilitySample57Value7 = state.distribution$sample57[sample$var196][var183];
 					
 					// Processing sample task 241 of consumer random variable null.
 					// 
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample190[var173][var183] = true;
+					state.constrainedFlag$sample190[var173][var183] = true;
 					
 					// Include the value sampled by task 241 from random variable var231.
 					// 
@@ -1876,21 +1407,21 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					
 					// If the sample value was positive increase the count
 					// 
-					// Substituted "server" with its value "var173".
-					if(metric_valid_g[sample$var196][var173][0])
+															// Substituted "server" with its value "var173".
+					if(state.metric_valid_g[sample$var196][var173][0])
 						cv$sum = (cv$sum + cv$probabilitySample57Value7);
 				}
 			}
 		}
-		for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-			for(int timeStep$var226 = 1; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-				if(fixedFlag$sample76) {
+		for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+			for(int timeStep$var226 = 1; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+				if(state.fixedFlag$sample76) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((var183 == st[sample$var196][timeStep$var226])) {
+					if((var183 == state.st[sample$var196][timeStep$var226])) {
 						// Processing sample task 241 of consumer random variable null.
 						// 
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample190[var173][var183] = true;
+						state.constrainedFlag$sample190[var173][var183] = true;
 						
 						// Include the value sampled by task 241 from random variable var231.
 						// 
@@ -1900,21 +1431,21 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// If the sample value was positive increase the count
 						// 
 						// Substituted "server" with its value "var173".
-						if(metric_valid_g[sample$var196][var173][timeStep$var226])
+						if(state.metric_valid_g[sample$var196][var173][timeStep$var226])
 							cv$sum = (cv$sum + 1.0);
 					}
 				} else {
 					// Update the probability of sampling this value from the distribution value.
 					// 
-					// Substituted "sample$var45" with its value "sample$var196".
+															// Substituted "sample$var45" with its value "sample$var196".
 					// 
 					// Substituted "index$sample76$18" with its value "var183".
-					double cv$probabilitySample76Value19 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][var183];
+					double cv$probabilitySample76Value19 = state.distribution$sample76[sample$var196][(timeStep$var226 - 1)][var183];
 					
 					// Processing sample task 241 of consumer random variable null.
 					// 
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample190[var173][var183] = true;
+					state.constrainedFlag$sample190[var173][var183] = true;
 					
 					// Include the value sampled by task 241 from random variable var231.
 					// 
@@ -1924,129 +1455,129 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// If the sample value was positive increase the count
 					// 
 					// Substituted "server" with its value "var173".
-					if(metric_valid_g[sample$var196][var173][timeStep$var226])
+					if(state.metric_valid_g[sample$var196][var173][timeStep$var226])
 						cv$sum = (cv$sum + cv$probabilitySample76Value19);
 				}
 			}
 		}
-		if(constrainedFlag$sample190[var173][var183])
+		if(state.constrainedFlag$sample190[var173][var183])
 			// Write out the value of the sample to a temporary variable prior to updating the
 			// intermediate variables.
-			current_metric_valid_bias[var173][var183] = Conjugates.sampleConjugateBetaBinomial(RNG$, 1.0, 1.0, cv$sum, cv$count);
+			state.current_metric_valid_bias[var173][var183] = Conjugates.sampleConjugateBetaBinomial(state.RNG$, 1.0, 1.0, cv$sum, cv$count);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 20 drawn from Dirichlet 19. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void inferSample20() {
-		constrainedFlag$sample20 = false;
+		state.constrainedFlag$sample20 = false;
 		
 		// Initialize the array values to 0.
 		// 
 		// Get the length of the array
-		for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
+		for(int cv$loopIndex = 0; cv$loopIndex < state.noStates; cv$loopIndex += 1)
 			// A local reference to the scratch space.
-			cv$var20$countGlobal[cv$loopIndex] = 0.0;
+			scratch.cv$var20$countGlobal[cv$loopIndex] = 0.0;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(fixedFlag$sample57) {
+		if(state.fixedFlag$sample57) {
 			// Processing random variable 54.
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 				// Processing sample task 57 of consumer random variable null.
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample20 = true;
+				state.constrainedFlag$sample20 = true;
 				
 				// Increment the sample counter with the value sampled by sample task 57 of random
 				// variable var54
 				// 
-				// A local reference to the scratch space.
-				cv$var20$countGlobal[st[sample$var45][0]] = (cv$var20$countGlobal[st[sample$var45][0]] + 1.0);
+												// A local reference to the scratch space.
+				scratch.cv$var20$countGlobal[state.st[sample$var45][0]] = (scratch.cv$var20$countGlobal[state.st[sample$var45][0]] + 1.0);
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		else {
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 				// Processing sample task 57 of consumer random variable null.
 				// 
 				// Merge the distribution probabilities into the count
 				// 
 				// Get the length of the array
-				for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-					// A local reference to the scratch space.
+				for(int cv$loopIndex = 0; cv$loopIndex < state.noStates; cv$loopIndex += 1)
+															// A local reference to the scratch space.
 					// 
 					// Add the probability of this argument configuration.
 					// 
 					// Declare and zero an accumulator for tracking the reached source probability space.
-					cv$var20$countGlobal[cv$loopIndex] = (cv$var20$countGlobal[cv$loopIndex] + distribution$sample57[sample$var45][cv$loopIndex]);
+					scratch.cv$var20$countGlobal[cv$loopIndex] = (scratch.cv$var20$countGlobal[cv$loopIndex] + state.distribution$sample57[sample$var45][cv$loopIndex]);
 			}
 		}
-		if(constrainedFlag$sample20)
+		if(state.constrainedFlag$sample20)
 			// Calculate the new sample value
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
-			// A reference local to the function for the sample variable.
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$var20$countGlobal, initialStateDistribution, noStates);
+									// A reference local to the function for the sample variable.
+			Conjugates.sampleConjugateDirichletCategorical(state.RNG$, state.v, scratch.cv$var20$countGlobal, state.initialStateDistribution, state.noStates);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 33 drawn from Dirichlet 21. Inference was performed using a Dirichlet
 	// to Categorical conjugate prior.
 	private final void inferSample33(int var32, int threadID$cv$var32, Rng RNG$) {
-		constrainedFlag$sample33[var32] = false;
+		state.constrainedFlag$sample33[var32] = false;
 		
 		// A local reference to the scratch space.
-		double[] cv$countLocal = cv$var33$countGlobal[threadID$cv$var32];
+		double[] cv$countLocal = scratch.cv$var33$countGlobal[threadID$cv$var32];
 		
 		// Initialize the array values to 0.
 		// 
 		// Get the length of the array
-		for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
+		for(int cv$loopIndex = 0; cv$loopIndex < state.noStates; cv$loopIndex += 1)
 			cv$countLocal[cv$loopIndex] = 0.0;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(fixedFlag$sample76) {
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+		if(state.fixedFlag$sample76) {
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 < length$metric[sample$var45][0])) {
-					if(fixedFlag$sample57) {
+				if((1 < state.length$metric[sample$var45][0])) {
+					if(state.fixedFlag$sample57) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((var32 == st[sample$var45][0])) {
+						if((var32 == state.st[sample$var45][0])) {
 							// Mark that the sample has observed constrained data.
-							constrainedFlag$sample33[var32] = true;
+							state.constrainedFlag$sample33[var32] = true;
 							
 							// Increment the sample counter with the value sampled by sample task 76 of random
 							// variable var73
 							// 
-							// Substituted "timeStep$var66" with its value "1".
-							cv$countLocal[st[sample$var45][1]] = (cv$countLocal[st[sample$var45][1]] + 1.0);
+																					// Substituted "timeStep$var66" with its value "1".
+							cv$countLocal[state.st[sample$var45][1]] = (cv$countLocal[state.st[sample$var45][1]] + 1.0);
 						}
 					} else {
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample33[var32] = true;
+						state.constrainedFlag$sample33[var32] = true;
 						
 						// Increment the sample counter with the value sampled by sample task 76 of random
 						// variable var73
 						// 
-						// Substituted "index$sample$4" with its value "sample$var45".
+																		// Substituted "index$sample$4" with its value "sample$var45".
 						// 
 						// Substituted "index$sample57$5" with its value "var32".
-						cv$countLocal[st[sample$var45][1]] = (cv$countLocal[st[sample$var45][1]] + distribution$sample57[sample$var45][var32]);
+						cv$countLocal[state.st[sample$var45][1]] = (cv$countLocal[state.st[sample$var45][1]] + state.distribution$sample57[sample$var45][var32]);
 					}
 				}
 			}
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-				for(int timeStep$var66 = 2; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
-					if((var32 == st[sample$var45][(timeStep$var66 - 1)])) {
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+				for(int timeStep$var66 = 2; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
+					if((var32 == state.st[sample$var45][(timeStep$var66 - 1)])) {
 						// Processing sample task 76 of consumer random variable null.
 						// 
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample33[var32] = true;
+						state.constrainedFlag$sample33[var32] = true;
 						
 						// Increment the sample counter with the value sampled by sample task 76 of random
 						// variable var73
-						cv$countLocal[st[sample$var45][timeStep$var66]] = (cv$countLocal[st[sample$var45][timeStep$var66]] + 1.0);
+						cv$countLocal[state.st[sample$var45][timeStep$var66]] = (cv$countLocal[state.st[sample$var45][timeStep$var66]] + 1.0);
 					}
 				}
 			}
@@ -2060,46 +1591,46 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// Constraints moved from conditionals in inner loops/scopes/etc.
 		else {
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 < length$metric[sample$var45][0])) {
-					if(fixedFlag$sample57) {
+				if((1 < state.length$metric[sample$var45][0])) {
+					if(state.fixedFlag$sample57) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((var32 == st[sample$var45][0])) {
+						if((var32 == state.st[sample$var45][0])) {
 							// Merge the distribution probabilities into the count
 							// 
 							// Get the length of the array
-							for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-								// The probability of reaching the consumer with this set of consumer arguments
+							for(int cv$loopIndex = 0; cv$loopIndex < state.noStates; cv$loopIndex += 1)
+																								// The probability of reaching the consumer with this set of consumer arguments
 								// 
 								// Add the probability of this argument configuration.
 								// 
 								// Declare and zero an accumulator for tracking the reached source probability space.
-								cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + distribution$sample76[sample$var45][0][cv$loopIndex]);
+								cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + state.distribution$sample76[sample$var45][0][cv$loopIndex]);
 						}
 					} else {
 						// The probability of reaching the consumer with this set of consumer arguments
 						// 
-						// Substituted "index$sample$41" with its value "sample$var45".
+																		// Substituted "index$sample$41" with its value "sample$var45".
 						// 
 						// Add the probability of this argument configuration.
 						// 
 						// Declare and zero an accumulator for tracking the reached source probability space.
 						// 
 						// Substituted "index$sample57$42" with its value "var32".
-						double cv$distributionProbability = distribution$sample57[sample$var45][var32];
+						double cv$distributionProbability = state.distribution$sample57[sample$var45][var32];
 						
 						// Merge the distribution probabilities into the count
 						// 
 						// Get the length of the array
-						for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
+						for(int cv$loopIndex = 0; cv$loopIndex < state.noStates; cv$loopIndex += 1)
 							// Substituted "timeStep$var66" with its value "1".
-							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample76[sample$var45][0][cv$loopIndex] * cv$distributionProbability));
+							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (state.distribution$sample76[sample$var45][0][cv$loopIndex] * cv$distributionProbability));
 					}
 				}
 			}
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+				for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 					int index$timeStep$52 = (timeStep$var66 - 1);
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2108,38 +1639,38 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					if((1 <= index$timeStep$52)) {
 						// The probability of reaching the consumer with this set of consumer arguments
 						// 
-						// Substituted "index$sample$51" with its value "sample$var45".
+																		// Substituted "index$sample$51" with its value "sample$var45".
 						// 
 						// Add the probability of this argument configuration.
 						// 
 						// Declare and zero an accumulator for tracking the reached source probability space.
 						// 
 						// Substituted "index$sample76$53" with its value "var32".
-						double cv$distributionProbability = distribution$sample76[sample$var45][(index$timeStep$52 - 1)][var32];
+						double cv$distributionProbability = state.distribution$sample76[sample$var45][(index$timeStep$52 - 1)][var32];
 						
 						// Merge the distribution probabilities into the count
 						// 
 						// Get the length of the array
-						for(int cv$loopIndex = 0; cv$loopIndex < noStates; cv$loopIndex += 1)
-							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (distribution$sample76[sample$var45][(timeStep$var66 - 1)][cv$loopIndex] * cv$distributionProbability));
+						for(int cv$loopIndex = 0; cv$loopIndex < state.noStates; cv$loopIndex += 1)
+							cv$countLocal[cv$loopIndex] = (cv$countLocal[cv$loopIndex] + (state.distribution$sample76[sample$var45][(timeStep$var66 - 1)][cv$loopIndex] * cv$distributionProbability));
 					}
 				}
 			}
 		}
-		if(constrainedFlag$sample33[var32])
+		if(state.constrainedFlag$sample33[var32])
 			// Calculate the new sample value
 			// 
 			// Calculate a new sample value and write it into cv$targetLocal.
 			// 
 			// A reference local to the function for the sample variable.
-			Conjugates.sampleConjugateDirichletCategorical(RNG$, v, cv$countLocal, m[var32], noStates);
+			Conjugates.sampleConjugateDirichletCategorical(state.RNG$, state.v, cv$countLocal, state.m[var32], state.noStates);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 57 drawn from Categorical 54. Inference was performed using variable
 	// marginalization.
 	private final void inferSample57(int sample$var45, int threadID$cv$sample$var45, Rng RNG$) {
-		constrainedFlag$sample57[sample$var45] = false;
+		state.constrainedFlag$sample57[sample$var45] = false;
 		
 		// Variable declaration of cv$numStates moved.
 		// Declaration comment was:
@@ -2147,12 +1678,12 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// 
 		// variable marginalization
 		// 
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
-		int cv$numStates = Math.max(0, noStates);
+		int cv$numStates = Math.max(0, state.noStates);
 		
 		// Get a local reference to the scratch space.
-		double[] cv$stateProbabilityLocal = cv$var55$stateProbabilityGlobal[threadID$cv$sample$var45];
+		double[] cv$stateProbabilityLocal = scratch.cv$var55$stateProbabilityGlobal[threadID$cv$sample$var45];
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// Initialize a log space accumulator to take the product of all the distribution
 			// probabilities.
@@ -2161,14 +1692,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
-			double cv$accumulatedProbabilities = (((((cv$valuePos < noStates) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$valuePos])) && (initialStateDistribution[cv$valuePos] <= 1.0))?Math.log(initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
+									// Value of the variable at this index
+			double cv$accumulatedProbabilities = (((((cv$valuePos < state.noStates) && (0 < state.noStates)) && (0.0 <= state.initialStateDistribution[cv$valuePos])) && (state.initialStateDistribution[cv$valuePos] <= 1.0))?Math.log(state.initialStateDistribution[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((fixedFlag$sample76 && (1 < length$metric[sample$var45][0]))) {
+			if((state.fixedFlag$sample76 && (1 < state.length$metric[sample$var45][0]))) {
 				// Looking for a path between Sample 57 and consumer Categorical 73.
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample57[sample$var45] = true;
+				state.constrainedFlag$sample57[sample$var45] = true;
 				
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
@@ -2182,14 +1713,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// the output of Sample task 57.
 				// 
 				// Value of the variable at this index
-				if((cv$valuePos < noStates)) {
+				if((cv$valuePos < state.noStates)) {
 					// Constructing a random variable input for use later.
 					// 
 					// Value of the variable at this index
-					double[] var72 = m[cv$valuePos];
+					double[] var72 = state.m[cv$valuePos];
 					
-					// Substituted "index$sample$2_2" with its value "sample$var45".
-					cv$accumulatedConsumerProbabilities = (((((0.0 <= st[sample$var45][1]) && (st[sample$var45][1] < noStates)) && (0.0 <= var72[st[sample$var45][1]])) && (var72[st[sample$var45][1]] <= 1.0))?Math.log(var72[st[sample$var45][1]]):Double.NEGATIVE_INFINITY);
+															// Substituted "index$sample$2_2" with its value "sample$var45".
+					cv$accumulatedConsumerProbabilities = (((((0.0 <= state.st[sample$var45][1]) && (state.st[sample$var45][1] < state.noStates)) && (0.0 <= var72[state.st[sample$var45][1]])) && (var72[state.st[sample$var45][1]] <= 1.0))?Math.log(var72[state.st[sample$var45][1]]):Double.NEGATIVE_INFINITY);
 					
 					// Recorded the probability of reaching sample task 76 with the current configuration.
 					// 
@@ -2216,12 +1747,12 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 < length$metric[sample$var45][0])) {
+			if((0 < state.length$metric[sample$var45][0])) {
 				// Looking for a path between Sample 57 and consumer Bernoulli 231.
-				for(int server = 0; server < noServers; server += 1) {
+				for(int server = 0; server < state.noServers; server += 1) {
 					// Processing sample task 241 of consumer random variable null.
 					// Mark that the sample has observed constrained data.
-					constrainedFlag$sample57[sample$var45] = true;
+					state.constrainedFlag$sample57[sample$var45] = true;
 					
 					// Set an accumulator to sum the probabilities for each possible configuration of
 					// inputs.
@@ -2232,14 +1763,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					double cv$consumerDistributionProbabilityAccumulator = 1.0;
 					
 					// Value of the variable at this index
-					if((cv$valuePos < noStates)) {
+					if((cv$valuePos < state.noStates)) {
 						// Constructing a random variable input for use later.
 						// 
 						// Value of the variable at this index
-						double var230 = current_metric_valid_bias[server][cv$valuePos];
+						double var230 = state.current_metric_valid_bias[server][cv$valuePos];
 						
-						// Substituted "sample$var196" with its value "sample$var45".
-						cv$accumulatedConsumerProbabilities = (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var45][server][0]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY);
+																		// Substituted "sample$var196" with its value "sample$var45".
+						cv$accumulatedConsumerProbabilities = (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var45][server][0]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY);
 						
 						// Recorded the probability of reaching sample task 241 with the current configuration.
 						// 
@@ -2271,33 +1802,33 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// 
 				// Guard to check that at most one copy of the code is executed for a given random
 				// variable instance.
-				boolean[][][] guard$sample57gaussian255 = guard$sample57gaussian255$global[threadID$cv$sample$var45];
-				for(int server = 0; server < noServers; server += 1) {
-					// Substituted "sample$var196" with its value "sample$var45".
-					if(metric_valid_g[sample$var45][server][0])
+				boolean[][][] guard$sample57gaussian255 = scratch.guard$sample57gaussian255$global[threadID$cv$sample$var45];
+				for(int server = 0; server < state.noServers; server += 1) {
+															// Substituted "sample$var196" with its value "sample$var45".
+					if(state.metric_valid_g[sample$var45][server][0])
 						// Set the flags to false
 						// 
-						// Substituted "sample$var196" with its value "sample$var45".
+																		// Substituted "sample$var196" with its value "sample$var45".
 						guard$sample57gaussian255[sample$var45][server][0] = false;
 				}
-				for(int server = 0; server < noServers; server += 1) {
-					// Substituted "sample$var196" with its value "sample$var45".
-					if(metric_valid_g[sample$var45][server][0])
+				for(int server = 0; server < state.noServers; server += 1) {
+															// Substituted "sample$var196" with its value "sample$var45".
+					if(state.metric_valid_g[sample$var45][server][0])
 						// Set the flags to false
 						// 
-						// Substituted "sample$var196" with its value "sample$var45".
+																		// Substituted "sample$var196" with its value "sample$var45".
 						guard$sample57gaussian255[sample$var45][server][0] = false;
 				}
-				for(int server = 0; server < noServers; server += 1) {
-					// Substituted "sample$var196" with its value "sample$var45".
-					if((metric_valid_g[sample$var45][server][0] && !guard$sample57gaussian255[sample$var45][server][0])) {
+				for(int server = 0; server < state.noServers; server += 1) {
+															// Substituted "sample$var196" with its value "sample$var45".
+					if((state.metric_valid_g[sample$var45][server][0] && !guard$sample57gaussian255[sample$var45][server][0])) {
 						// The body will execute, so should not be executed again
 						// 
-						// Substituted "sample$var196" with its value "sample$var45".
+																		// Substituted "sample$var196" with its value "sample$var45".
 						guard$sample57gaussian255[sample$var45][server][0] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample57[sample$var45] = true;
+						state.constrainedFlag$sample57[sample$var45] = true;
 						
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -2308,18 +1839,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((cv$valuePos < noStates)) {
+						if((cv$valuePos < state.noStates)) {
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							double var243 = current_metric_var[server][cv$valuePos];
+							double var243 = state.current_metric_var[server][cv$valuePos];
 							
-							// Substituted "sample$var196" with its value "sample$var45".
+																					// Substituted "sample$var196" with its value "sample$var45".
 							// 
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
+							cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var45][server][0] - state.current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 							
 							// Recorded the probability of reaching sample task 256 with the current configuration.
 							// 
@@ -2345,16 +1876,16 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						}
 					}
 				}
-				for(int server = 0; server < noServers; server += 1) {
-					// Substituted "sample$var196" with its value "sample$var45".
-					if((metric_valid_g[sample$var45][server][0] && !guard$sample57gaussian255[sample$var45][server][0])) {
+				for(int server = 0; server < state.noServers; server += 1) {
+															// Substituted "sample$var196" with its value "sample$var45".
+					if((state.metric_valid_g[sample$var45][server][0] && !guard$sample57gaussian255[sample$var45][server][0])) {
 						// The body will execute, so should not be executed again
 						// 
-						// Substituted "sample$var196" with its value "sample$var45".
+																		// Substituted "sample$var196" with its value "sample$var45".
 						guard$sample57gaussian255[sample$var45][server][0] = true;
 						
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample57[sample$var45] = true;
+						state.constrainedFlag$sample57[sample$var45] = true;
 						
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
@@ -2365,18 +1896,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						double cv$consumerDistributionProbabilityAccumulator = 1.0;
 						
 						// Value of the variable at this index
-						if((cv$valuePos < noStates)) {
+						if((cv$valuePos < state.noStates)) {
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							double var243 = current_metric_var[server][cv$valuePos];
+							double var243 = state.current_metric_var[server][cv$valuePos];
 							
-							// Substituted "sample$var196" with its value "sample$var45".
+																					// Substituted "sample$var196" with its value "sample$var45".
 							// 
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][0] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
+							cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var45][server][0] - state.current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 							
 							// Recorded the probability of reaching sample task 256 with the current configuration.
 							// 
@@ -2405,16 +1936,16 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((!fixedFlag$sample76 && (1 < length$metric[sample$var45][0]))) {
+			if((!state.fixedFlag$sample76 && (1 < state.length$metric[sample$var45][0]))) {
 				// Looking for a path between Sample 57 and consumer Categorical 73.
 				// Processing sample task 76 of consumer random variable null.
 				// 
 				// A local array to hold the accumulated distributions of the sample tasks for each
 				// configuration of distributions.
-				double[] cv$accumulatedConsumerDistributions = cv$distributionAccumulator$var73[threadID$cv$sample$var45];
+				double[] cv$accumulatedConsumerDistributions = scratch.cv$distributionAccumulator$var73[threadID$cv$sample$var45];
 				
 				// Zero all the elements in the distribution accumulator
-				for(int cv$i = 0; cv$i < noStates; cv$i += 1)
+				for(int cv$i = 0; cv$i < state.noStates; cv$i += 1)
 					cv$accumulatedConsumerDistributions[cv$i] = 0.0;
 				
 				// Zero an accumulator to track the probabilities reached.
@@ -2424,34 +1955,34 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// the output of Sample task 57.
 				// 
 				// Value of the variable at this index
-				if((cv$valuePos < noStates)) {
+				if((cv$valuePos < state.noStates)) {
 					// Record the reached distribution.
 					// 
 					// The probability of reaching the consumer with this set of consumer arguments
 					// 
-					// Add the probability of this argument configuration.
+															// Add the probability of this argument configuration.
 					// 
 					// Declare and zero an accumulator for tracking the reached source probability space.
 					cv$reachedDistributionProbability = 1.0;
 					
 					// Add the current distribution to the distribution accumulator.
 					// 
-					// Constructing a random variable input for use later.
+															// Constructing a random variable input for use later.
 					// 
-					// Value of the variable at this index
-					DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, 1.0, m[cv$valuePos], noStates);
+															// Value of the variable at this index
+					DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, 1.0, state.m[cv$valuePos], state.noStates);
 				}
 				
 				// A local copy of the samples' distribution.
 				// 
-				// Substituted "index$sample$66_2" with its value "sample$var45".
-				double[] cv$sampleDistribution = distribution$sample76[sample$var45][0];
+												// Substituted "index$sample$66_2" with its value "sample$var45".
+				double[] cv$sampleDistribution = state.distribution$sample76[sample$var45][0];
 				
 				// The overlap of the distributions so far.
 				double cv$overlap = 0.0;
 				
 				// Calculate the overlap for each element in the distribution
-				for(int cv$i = 0; cv$i < noStates; cv$i += 1) {
+				for(int cv$i = 0; cv$i < state.noStates; cv$i += 1) {
 					// Normalise the values in the calculated distribution
 					double cv$normalisedDistValue = (cv$accumulatedConsumerDistributions[cv$i] / cv$reachedDistributionProbability);
 					
@@ -2483,10 +2014,10 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Initialize a counter to track the reached distributions.
 			cv$stateProbabilityLocal[cv$valuePos] = (cv$accumulatedProbabilities + cv$accumulatedDistributionProbabilities);
 		}
-		if(constrainedFlag$sample57[sample$var45]) {
+		if(state.constrainedFlag$sample57[sample$var45]) {
 			// Set the calculated probabilities to be the distribution values, and normalize
 			// Local copy of the probability array
-			double[] cv$localProbability = distribution$sample57[sample$var45];
+			double[] cv$localProbability = state.distribution$sample57[sample$var45];
 			
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
@@ -2495,7 +2026,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Sum all the values
 			// 
-			// Initialise the max to the first element.
+			// Initialize the max to the first element.
 			double cv$lseMax = cv$stateProbabilityLocal[0];
 			
 			// Find max value.
@@ -2511,7 +2042,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Sum the values in the array.
 			else {
-				// Initialise the sum of the array elements
+				// Initialize the sum of the array elements
 				double cv$lseSum = 0.0;
 				
 				// Offset values, move to normal space, and sum.
@@ -2545,7 +2076,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// by sample task 76 drawn from Categorical 73. Inference was performed using variable
 	// marginalization.
 	private final void inferSample76(int sample$var45, int timeStep$var66, int threadID$cv$sample$var45, Rng RNG$) {
-		constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)] = false;
+		state.constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)] = false;
 		
 		// Calculate the number of states to evaluate.
 		int cv$numStates = 0;
@@ -2557,51 +2088,51 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Exploring all the possible state counts for random variable 73.
 			// 
 			// Enumerating the possible arguments for Categorical 73.
-			if(fixedFlag$sample57) {
-				int var32 = st[sample$var45][0];
+			if(state.fixedFlag$sample57) {
+				int var32 = state.st[sample$var45][0];
 				
-				// Substituted "timeStep$var66" with its value "1".
-				if(((0 <= var32) && (var32 < noStates)))
+												// Substituted "timeStep$var66" with its value "1".
+				if(((0 <= var32) && (var32 < state.noStates)))
 					// variable marginalization
 					// 
-					// cv$numStates's comment
+										// cv$numStates's comment
 					// Calculate the number of states to evaluate.
-					cv$numStates = Math.max(0, noStates);
+					cv$numStates = Math.max(0, state.noStates);
 			} else {
 				// Enumerating the possible outputs of Categorical 54.
-				if((0 < noStates))
+				if((0 < state.noStates))
 					// variable marginalization
-					cv$numStates = noStates;
+					cv$numStates = state.noStates;
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 < noStates)) {
+		if((0 < state.noStates)) {
 			int index$timeStep$13 = (timeStep$var66 - 1);
 			
-			// index$sample$2's comment
+												// index$sample$2's comment
 			// Copy of index so that its values can be safely substituted
 			// 
-			// Substituted "index$sample$12" with its value "sample$var45".
+									// Substituted "index$sample$12" with its value "sample$var45".
 			// 
-			// Substituted "index$timeStep$13" with its value "(timeStep$var66 - 1)".
+									// Substituted "index$timeStep$13" with its value "(timeStep$var66 - 1)".
 			// 
-			// Substituted "index$timeStep$13" with its value "(timeStep$var66 - 1)".
+									// Substituted "index$timeStep$13" with its value "(timeStep$var66 - 1)".
 			// 
-			// Substituted "index$timeStep$13" with its value "(timeStep$var66 - 1)".
+									// Substituted "index$timeStep$13" with its value "(timeStep$var66 - 1)".
 			// 
-			// Substituted "index$timeStep$13" with its value "(timeStep$var66 - 1)".
+									// Substituted "index$timeStep$13" with its value "(timeStep$var66 - 1)".
 			// 
-			// Substituted "index$timeStep$13" with its value "(timeStep$var66 - 1)".
+									// Substituted "index$timeStep$13" with its value "(timeStep$var66 - 1)".
 			// 
-			// Substituted "index$timeStep$13" with its value "(timeStep$var66 - 1)".
+									// Substituted "index$timeStep$13" with its value "(timeStep$var66 - 1)".
 			if(((1 <= index$timeStep$13) && !(index$timeStep$13 == timeStep$var66)))
 				// variable marginalization
-				cv$numStates = noStates;
+				cv$numStates = state.noStates;
 		}
 		
 		// Get a local reference to the scratch space.
-		double[] cv$stateProbabilityLocal = cv$var74$stateProbabilityGlobal[threadID$cv$sample$var45];
+		double[] cv$stateProbabilityLocal = scratch.cv$var74$stateProbabilityGlobal[threadID$cv$sample$var45];
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// Exploring all the possible distribution values for random variable 73 creating
 			// sample task 76.
@@ -2618,11 +2149,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Enumerating the possible arguments for Categorical 73.
 			if((1 == timeStep$var66)) {
 				// Enumerating the possible arguments for Categorical 73.
-				if(fixedFlag$sample57) {
-					int var32 = st[sample$var45][0];
+				if(state.fixedFlag$sample57) {
+					int var32 = state.st[sample$var45][0];
 					
-					// Substituted "timeStep$var66" with its value "1".
-					if(((0 <= var32) && (var32 < noStates))) {
+															// Substituted "timeStep$var66" with its value "1".
+					if(((0 <= var32) && (var32 < state.noStates))) {
 						// Record the reached probability density.
 						// 
 						// Initialize a counter to track the reached distributions.
@@ -2631,23 +2162,23 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Constructing a random variable input for use later.
 						// 
 						// Substituted "timeStep$var66" with its value "1".
-						double[] var72 = m[st[sample$var45][0]];
+						double[] var72 = state.m[state.st[sample$var45][0]];
 						
 						// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
 						// 
-						// Value of the variable at this index
-						double cv$accumulatedProbabilities = ((((cv$valuePos < noStates) && (0.0 <= var72[cv$valuePos])) && (var72[cv$valuePos] <= 1.0))?Math.log(var72[cv$valuePos]):Double.NEGATIVE_INFINITY);
+																		// Value of the variable at this index
+						double cv$accumulatedProbabilities = ((((cv$valuePos < state.noStates) && (0.0 <= var72[cv$valuePos])) && (var72[cv$valuePos] <= 1.0))?Math.log(var72[cv$valuePos]):Double.NEGATIVE_INFINITY);
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 < length$metric[sample$var45][0])) {
+						if((1 < state.length$metric[sample$var45][0])) {
 							// Looking for a path between Sample 76 and consumer Bernoulli 231.
-							for(int server = 0; server < noServers; server += 1) {
+							for(int server = 0; server < state.noServers; server += 1) {
 								// Processing sample task 241 of consumer random variable null.
 								// Mark that the sample has observed constrained data.
 								// 
 								// Substituted "timeStep$var66" with its value "1".
-								constrainedFlag$sample76[sample$var45][0] = true;
+								state.constrainedFlag$sample76[sample$var45][0] = true;
 								
 								// Set an accumulator to sum the probabilities for each possible configuration of
 								// inputs.
@@ -2658,16 +2189,16 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								double cv$consumerDistributionProbabilityAccumulator = 1.0;
 								
 								// Value of the variable at this index
-								if((cv$valuePos < noStates)) {
+								if((cv$valuePos < state.noStates)) {
 									// Constructing a random variable input for use later.
 									// 
 									// Value of the variable at this index
-									double var230 = current_metric_valid_bias[server][cv$valuePos];
+									double var230 = state.current_metric_valid_bias[server][cv$valuePos];
 									
 									// Substituted "sample$var196" with its value "sample$var45".
 									// 
 									// Substituted "timeStep$var226" with its value "1".
-									cv$accumulatedConsumerProbabilities = (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var45][server][1]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY);
+									cv$accumulatedConsumerProbabilities = (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var45][server][1]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY);
 									
 									// Recorded the probability of reaching sample task 241 with the current configuration.
 									// 
@@ -2699,12 +2230,12 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// 
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							boolean[][][] guard$sample76gaussian255 = guard$sample76gaussian255$global[threadID$cv$sample$var45];
-							for(int server = 0; server < noServers; server += 1) {
+							boolean[][][] guard$sample76gaussian255 = scratch.guard$sample76gaussian255$global[threadID$cv$sample$var45];
+							for(int server = 0; server < state.noServers; server += 1) {
 								// Substituted "sample$var196" with its value "sample$var45".
 								// 
 								// Substituted "timeStep$var226" with its value "1".
-								if(metric_valid_g[sample$var45][server][1])
+								if(state.metric_valid_g[sample$var45][server][1])
 									// Set the flags to false
 									// 
 									// Substituted "sample$var196" with its value "sample$var45".
@@ -2712,11 +2243,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Substituted "timeStep$var226" with its value "1".
 									guard$sample76gaussian255[sample$var45][server][1] = false;
 							}
-							for(int server = 0; server < noServers; server += 1) {
+							for(int server = 0; server < state.noServers; server += 1) {
 								// Substituted "sample$var196" with its value "sample$var45".
 								// 
 								// Substituted "timeStep$var226" with its value "1".
-								if(metric_valid_g[sample$var45][server][1])
+								if(state.metric_valid_g[sample$var45][server][1])
 									// Set the flags to false
 									// 
 									// Substituted "sample$var196" with its value "sample$var45".
@@ -2724,11 +2255,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Substituted "timeStep$var226" with its value "1".
 									guard$sample76gaussian255[sample$var45][server][1] = false;
 							}
-							for(int server = 0; server < noServers; server += 1) {
+							for(int server = 0; server < state.noServers; server += 1) {
 								// Substituted "sample$var196" with its value "sample$var45".
 								// 
-								// Substituted "timeStep$var226" with its value "1".
-								if((metric_valid_g[sample$var45][server][1] && !guard$sample76gaussian255[sample$var45][server][1])) {
+																								// Substituted "timeStep$var226" with its value "1".
+								if((state.metric_valid_g[sample$var45][server][1] && !guard$sample76gaussian255[sample$var45][server][1])) {
 									// The body will execute, so should not be executed again
 									// 
 									// Substituted "sample$var196" with its value "sample$var45".
@@ -2739,7 +2270,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Mark that the sample has observed constrained data.
 									// 
 									// Substituted "timeStep$var66" with its value "1".
-									constrainedFlag$sample76[sample$var45][0] = true;
+									state.constrainedFlag$sample76[sample$var45][0] = true;
 									
 									// Set an accumulator to sum the probabilities for each possible configuration of
 									// inputs.
@@ -2750,11 +2281,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									double cv$consumerDistributionProbabilityAccumulator = 1.0;
 									
 									// Value of the variable at this index
-									if((cv$valuePos < noStates)) {
+									if((cv$valuePos < state.noStates)) {
 										// Constructing a random variable input for use later.
 										// 
 										// Value of the variable at this index
-										double var243 = current_metric_var[server][cv$valuePos];
+										double var243 = state.current_metric_var[server][cv$valuePos];
 										
 										// Substituted "sample$var196" with its value "sample$var45".
 										// 
@@ -2763,7 +2294,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 										// Constructing a random variable input for use later.
 										// 
 										// Value of the variable at this index
-										cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
+										cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var45][server][1] - state.current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 										
 										// Recorded the probability of reaching sample task 256 with the current configuration.
 										// 
@@ -2789,11 +2320,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									}
 								}
 							}
-							for(int server = 0; server < noServers; server += 1) {
+							for(int server = 0; server < state.noServers; server += 1) {
 								// Substituted "sample$var196" with its value "sample$var45".
 								// 
-								// Substituted "timeStep$var226" with its value "1".
-								if((metric_valid_g[sample$var45][server][1] && !guard$sample76gaussian255[sample$var45][server][1])) {
+																								// Substituted "timeStep$var226" with its value "1".
+								if((state.metric_valid_g[sample$var45][server][1] && !guard$sample76gaussian255[sample$var45][server][1])) {
 									// The body will execute, so should not be executed again
 									// 
 									// Substituted "sample$var196" with its value "sample$var45".
@@ -2804,7 +2335,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Mark that the sample has observed constrained data.
 									// 
 									// Substituted "timeStep$var66" with its value "1".
-									constrainedFlag$sample76[sample$var45][0] = true;
+									state.constrainedFlag$sample76[sample$var45][0] = true;
 									
 									// Set an accumulator to sum the probabilities for each possible configuration of
 									// inputs.
@@ -2815,11 +2346,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									double cv$consumerDistributionProbabilityAccumulator = 1.0;
 									
 									// Constraints moved from conditionals in inner loops/scopes/etc.
-									if((cv$valuePos < noStates)) {
+									if((cv$valuePos < state.noStates)) {
 										// Constructing a random variable input for use later.
 										// 
 										// Value of the variable at this index
-										double var243 = current_metric_var[server][cv$valuePos];
+										double var243 = state.current_metric_var[server][cv$valuePos];
 										
 										// Substituted "sample$var196" with its value "sample$var45".
 										// 
@@ -2828,7 +2359,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 										// Constructing a random variable input for use later.
 										// 
 										// Value of the variable at this index
-										cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
+										cv$accumulatedConsumerProbabilities = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var45][server][1] - state.current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 										
 										// Recorded the probability of reaching sample task 256 with the current configuration.
 										// 
@@ -2859,38 +2390,38 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					}
 				} else {
 					// Enumerating the possible outputs of Categorical 54.
-					for(int index$sample57$22 = 0; index$sample57$22 < noStates; index$sample57$22 += 1) {
+					for(int index$sample57$22 = 0; index$sample57$22 < state.noStates; index$sample57$22 += 1) {
 						// Update the probability of sampling this value from the distribution value.
 						// 
 						// Substituted "index$sample$21" with its value "sample$var45".
-						double cv$probabilitySample57Value23 = distribution$sample57[sample$var45][index$sample57$22];
+						double cv$probabilitySample57Value23 = state.distribution$sample57[sample$var45][index$sample57$22];
 						
 						// Record the reached probability density.
 						cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample57Value23);
 						
 						// Constructing a random variable input for use later.
-						double[] var72 = m[index$sample57$22];
+						double[] var72 = state.m[index$sample57$22];
 						
 						// An accumulator to allow the value for each distribution to be constructed before
 						// it is added to the index probabilities.
 						// 
-						// Value of the variable at this index
+																		// Value of the variable at this index
 						double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample57Value23) + (((0.0 <= var72[cv$valuePos]) && (var72[cv$valuePos] <= 1.0))?Math.log(var72[cv$valuePos]):Double.NEGATIVE_INFINITY));
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 < length$metric[sample$var45][0])) {
+						if((1 < state.length$metric[sample$var45][0])) {
 							// Looking for a path between Sample 76 and consumer Bernoulli 231.
-							for(int server = 0; server < noServers; server += 1) {
+							for(int server = 0; server < state.noServers; server += 1) {
 								// Processing sample task 241 of consumer random variable null.
 								// Mark that the sample has observed constrained data.
 								// 
 								// Substituted "timeStep$var66" with its value "1".
-								constrainedFlag$sample76[sample$var45][0] = true;
+								state.constrainedFlag$sample76[sample$var45][0] = true;
 								
 								// Constructing a random variable input for use later.
 								// 
 								// Value of the variable at this index
-								double var230 = current_metric_valid_bias[server][cv$valuePos];
+								double var230 = state.current_metric_valid_bias[server][cv$valuePos];
 								
 								// A check to ensure rounding of floating point values can never result in a negative
 								// value.
@@ -2908,7 +2439,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								// Substituted "sample$var196" with its value "sample$var45".
 								// 
 								// Substituted "timeStep$var226" with its value "1".
-								cv$accumulatedProbabilities = ((((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var45][server][1]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+								cv$accumulatedProbabilities = ((((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var45][server][1]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 							}
 							
 							// Processing random variable 244.
@@ -2917,12 +2448,12 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// 
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							boolean[][][] guard$sample76gaussian255 = guard$sample76gaussian255$global[threadID$cv$sample$var45];
-							for(int server = 0; server < noServers; server += 1) {
+							boolean[][][] guard$sample76gaussian255 = scratch.guard$sample76gaussian255$global[threadID$cv$sample$var45];
+							for(int server = 0; server < state.noServers; server += 1) {
 								// Substituted "sample$var196" with its value "sample$var45".
 								// 
 								// Substituted "timeStep$var226" with its value "1".
-								if(metric_valid_g[sample$var45][server][1])
+								if(state.metric_valid_g[sample$var45][server][1])
 									// Set the flags to false
 									// 
 									// Substituted "sample$var196" with its value "sample$var45".
@@ -2930,11 +2461,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Substituted "timeStep$var226" with its value "1".
 									guard$sample76gaussian255[sample$var45][server][1] = false;
 							}
-							for(int server = 0; server < noServers; server += 1) {
+							for(int server = 0; server < state.noServers; server += 1) {
 								// Substituted "sample$var196" with its value "sample$var45".
 								// 
 								// Substituted "timeStep$var226" with its value "1".
-								if(metric_valid_g[sample$var45][server][1])
+								if(state.metric_valid_g[sample$var45][server][1])
 									// Set the flags to false
 									// 
 									// Substituted "sample$var196" with its value "sample$var45".
@@ -2942,11 +2473,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Substituted "timeStep$var226" with its value "1".
 									guard$sample76gaussian255[sample$var45][server][1] = false;
 							}
-							for(int server = 0; server < noServers; server += 1) {
+							for(int server = 0; server < state.noServers; server += 1) {
 								// Substituted "sample$var196" with its value "sample$var45".
 								// 
-								// Substituted "timeStep$var226" with its value "1".
-								if((metric_valid_g[sample$var45][server][1] && !guard$sample76gaussian255[sample$var45][server][1])) {
+																								// Substituted "timeStep$var226" with its value "1".
+								if((state.metric_valid_g[sample$var45][server][1] && !guard$sample76gaussian255[sample$var45][server][1])) {
 									// The body will execute, so should not be executed again
 									// 
 									// Substituted "sample$var196" with its value "sample$var45".
@@ -2957,12 +2488,12 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Mark that the sample has observed constrained data.
 									// 
 									// Substituted "timeStep$var66" with its value "1".
-									constrainedFlag$sample76[sample$var45][0] = true;
+									state.constrainedFlag$sample76[sample$var45][0] = true;
 									
 									// Constructing a random variable input for use later.
 									// 
 									// Value of the variable at this index
-									double var243 = current_metric_var[server][cv$valuePos];
+									double var243 = state.current_metric_var[server][cv$valuePos];
 									
 									// A check to ensure rounding of floating point values can never result in a negative
 									// value.
@@ -2986,14 +2517,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Constructing a random variable input for use later.
 									// 
 									// Value of the variable at this index
-									cv$accumulatedProbabilities = (((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+									cv$accumulatedProbabilities = (((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var45][server][1] - state.current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 								}
 							}
-							for(int server = 0; server < noServers; server += 1) {
+							for(int server = 0; server < state.noServers; server += 1) {
 								// Substituted "sample$var196" with its value "sample$var45".
 								// 
-								// Substituted "timeStep$var226" with its value "1".
-								if((metric_valid_g[sample$var45][server][1] && !guard$sample76gaussian255[sample$var45][server][1])) {
+																								// Substituted "timeStep$var226" with its value "1".
+								if((state.metric_valid_g[sample$var45][server][1] && !guard$sample76gaussian255[sample$var45][server][1])) {
 									// The body will execute, so should not be executed again
 									// 
 									// Substituted "sample$var196" with its value "sample$var45".
@@ -3004,12 +2535,12 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Mark that the sample has observed constrained data.
 									// 
 									// Substituted "timeStep$var66" with its value "1".
-									constrainedFlag$sample76[sample$var45][0] = true;
+									state.constrainedFlag$sample76[sample$var45][0] = true;
 									
 									// Constructing a random variable input for use later.
 									// 
 									// Value of the variable at this index
-									double var243 = current_metric_var[server][cv$valuePos];
+									double var243 = state.current_metric_var[server][cv$valuePos];
 									
 									// A check to ensure rounding of floating point values can never result in a negative
 									// value.
@@ -3033,7 +2564,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Constructing a random variable input for use later.
 									// 
 									// Value of the variable at this index
-									cv$accumulatedProbabilities = (((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][1] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+									cv$accumulatedProbabilities = (((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var45][server][1] - state.current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 								}
 							}
 						}
@@ -3054,48 +2585,48 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			}
 			int index$timeStep$30 = (timeStep$var66 - 1);
 			
-			// index$sample$2's comment
+												// index$sample$2's comment
 			// Copy of index so that its values can be safely substituted
 			// 
-			// Substituted "index$sample$29" with its value "sample$var45".
+									// Substituted "index$sample$29" with its value "sample$var45".
 			// 
-			// Substituted "index$timeStep$30" with its value "(timeStep$var66 - 1)".
+									// Substituted "index$timeStep$30" with its value "(timeStep$var66 - 1)".
 			// 
-			// Substituted "index$timeStep$30" with its value "(timeStep$var66 - 1)".
+									// Substituted "index$timeStep$30" with its value "(timeStep$var66 - 1)".
 			// 
-			// Substituted "index$timeStep$30" with its value "(timeStep$var66 - 1)".
+									// Substituted "index$timeStep$30" with its value "(timeStep$var66 - 1)".
 			// 
-			// Substituted "index$timeStep$30" with its value "(timeStep$var66 - 1)".
+									// Substituted "index$timeStep$30" with its value "(timeStep$var66 - 1)".
 			// 
-			// Substituted "index$timeStep$30" with its value "(timeStep$var66 - 1)".
+									// Substituted "index$timeStep$30" with its value "(timeStep$var66 - 1)".
 			// 
-			// Substituted "index$timeStep$30" with its value "(timeStep$var66 - 1)".
+									// Substituted "index$timeStep$30" with its value "(timeStep$var66 - 1)".
 			if(((1 <= index$timeStep$30) && !(index$timeStep$30 == timeStep$var66))) {
 				// Enumerating the possible outputs of Categorical 73.
-				for(int index$sample76$31 = 0; index$sample76$31 < noStates; index$sample76$31 += 1) {
+				for(int index$sample76$31 = 0; index$sample76$31 < state.noStates; index$sample76$31 += 1) {
 					// Update the probability of sampling this value from the distribution value.
 					// 
 					// Substituted "index$sample$29" with its value "sample$var45".
-					double cv$probabilitySample76Value32 = distribution$sample76[sample$var45][(index$timeStep$30 - 1)][index$sample76$31];
+					double cv$probabilitySample76Value32 = state.distribution$sample76[sample$var45][(index$timeStep$30 - 1)][index$sample76$31];
 					
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + cv$probabilitySample76Value32);
 					
 					// Constructing a random variable input for use later.
-					double[] var72 = m[index$sample76$31];
+					double[] var72 = state.m[index$sample76$31];
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
 					// 
-					// Value of the variable at this index
+															// Value of the variable at this index
 					double cv$accumulatedProbabilities = (Math.log(cv$probabilitySample76Value32) + (((0.0 <= var72[cv$valuePos]) && (var72[cv$valuePos] <= 1.0))?Math.log(var72[cv$valuePos]):Double.NEGATIVE_INFINITY));
-					for(int server = 0; server < noServers; server += 1) {
+					for(int server = 0; server < state.noServers; server += 1) {
 						// Processing sample task 241 of consumer random variable null.
 						// Mark that the sample has observed constrained data.
-						constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)] = true;
+						state.constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)] = true;
 						
 						// Constructing a random variable input for use later.
-						double var230 = current_metric_valid_bias[server][index$sample76$31];
+						double var230 = state.current_metric_valid_bias[server][index$sample76$31];
 						
 						// A check to ensure rounding of floating point values can never result in a negative
 						// value.
@@ -3110,8 +2641,8 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Set an accumulator to sum the probabilities for each possible configuration of
 						// inputs.
 						// 
-						// Substituted "sample$var196" with its value "sample$var45".
-						cv$accumulatedProbabilities = ((((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var45][server][timeStep$var66]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+																		// Substituted "sample$var196" with its value "sample$var45".
+						cv$accumulatedProbabilities = ((((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var45][server][timeStep$var66]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 					}
 					
 					// Processing random variable 244.
@@ -3120,38 +2651,38 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// 
 					// Guard to check that at most one copy of the code is executed for a given random
 					// variable instance.
-					boolean[][][] guard$sample76gaussian255 = guard$sample76gaussian255$global[threadID$cv$sample$var45];
-					for(int server = 0; server < noServers; server += 1) {
-						// Substituted "sample$var196" with its value "sample$var45".
-						if(metric_valid_g[sample$var45][server][timeStep$var66])
+					boolean[][][] guard$sample76gaussian255 = scratch.guard$sample76gaussian255$global[threadID$cv$sample$var45];
+					for(int server = 0; server < state.noServers; server += 1) {
+																		// Substituted "sample$var196" with its value "sample$var45".
+						if(state.metric_valid_g[sample$var45][server][timeStep$var66])
 							// Set the flags to false
 							// 
-							// Substituted "sample$var196" with its value "sample$var45".
+																					// Substituted "sample$var196" with its value "sample$var45".
 							guard$sample76gaussian255[sample$var45][server][timeStep$var66] = false;
 					}
-					for(int server = 0; server < noServers; server += 1) {
-						// Substituted "sample$var196" with its value "sample$var45".
-						if(metric_valid_g[sample$var45][server][timeStep$var66])
+					for(int server = 0; server < state.noServers; server += 1) {
+																		// Substituted "sample$var196" with its value "sample$var45".
+						if(state.metric_valid_g[sample$var45][server][timeStep$var66])
 							// Set the flags to false
 							// 
-							// Substituted "sample$var196" with its value "sample$var45".
+																					// Substituted "sample$var196" with its value "sample$var45".
 							guard$sample76gaussian255[sample$var45][server][timeStep$var66] = false;
 					}
-					for(int server = 0; server < noServers; server += 1) {
-						// Substituted "sample$var196" with its value "sample$var45".
-						if((metric_valid_g[sample$var45][server][timeStep$var66] && !guard$sample76gaussian255[sample$var45][server][timeStep$var66])) {
+					for(int server = 0; server < state.noServers; server += 1) {
+																		// Substituted "sample$var196" with its value "sample$var45".
+						if((state.metric_valid_g[sample$var45][server][timeStep$var66] && !guard$sample76gaussian255[sample$var45][server][timeStep$var66])) {
 							// The body will execute, so should not be executed again
 							// 
-							// Substituted "sample$var196" with its value "sample$var45".
+																					// Substituted "sample$var196" with its value "sample$var45".
 							guard$sample76gaussian255[sample$var45][server][timeStep$var66] = true;
 							
 							// Mark that the sample has observed constrained data.
-							constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)] = true;
+							state.constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)] = true;
 							
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							double var243 = current_metric_var[server][cv$valuePos];
+							double var243 = state.current_metric_var[server][cv$valuePos];
 							
 							// A check to ensure rounding of floating point values can never result in a negative
 							// value.
@@ -3168,29 +2699,29 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
-							// Substituted "sample$var196" with its value "sample$var45".
+																					// Substituted "sample$var196" with its value "sample$var45".
 							// 
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							cv$accumulatedProbabilities = (((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][timeStep$var66] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var45][server][timeStep$var66] - state.current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 						}
 					}
-					for(int server = 0; server < noServers; server += 1) {
-						// Substituted "sample$var196" with its value "sample$var45".
-						if((metric_valid_g[sample$var45][server][timeStep$var66] && !guard$sample76gaussian255[sample$var45][server][timeStep$var66])) {
+					for(int server = 0; server < state.noServers; server += 1) {
+																		// Substituted "sample$var196" with its value "sample$var45".
+						if((state.metric_valid_g[sample$var45][server][timeStep$var66] && !guard$sample76gaussian255[sample$var45][server][timeStep$var66])) {
 							// The body will execute, so should not be executed again
 							// 
-							// Substituted "sample$var196" with its value "sample$var45".
+																					// Substituted "sample$var196" with its value "sample$var45".
 							guard$sample76gaussian255[sample$var45][server][timeStep$var66] = true;
 							
 							// Mark that the sample has observed constrained data.
-							constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)] = true;
+							state.constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)] = true;
 							
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							double var243 = current_metric_var[server][cv$valuePos];
+							double var243 = state.current_metric_var[server][cv$valuePos];
 							
 							// A check to ensure rounding of floating point values can never result in a negative
 							// value.
@@ -3207,12 +2738,12 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Set an accumulator to sum the probabilities for each possible configuration of
 							// inputs.
 							// 
-							// Substituted "sample$var196" with its value "sample$var45".
+																					// Substituted "sample$var196" with its value "sample$var45".
 							// 
 							// Constructing a random variable input for use later.
 							// 
 							// Value of the variable at this index
-							cv$accumulatedProbabilities = (((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var45][server][timeStep$var66] - current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+							cv$accumulatedProbabilities = (((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var45][server][timeStep$var66] - state.current_metric_mean[server][cv$valuePos]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 						}
 					}
 					
@@ -3230,14 +2761,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			}
 			int index$timeStep$265_3 = (timeStep$var66 + 1);
-			if((index$timeStep$265_3 < length$metric[sample$var45][0])) {
+			if((index$timeStep$265_3 < state.length$metric[sample$var45][0])) {
 				// Processing sample task 76 of consumer random variable null.
 				// A local array to hold the accumulated distributions of the sample tasks for each
 				// configuration of distributions.
-				double[] cv$accumulatedConsumerDistributions = cv$distributionAccumulator$var73[threadID$cv$sample$var45];
+				double[] cv$accumulatedConsumerDistributions = scratch.cv$distributionAccumulator$var73[threadID$cv$sample$var45];
 				
 				// Zero all the elements in the distribution accumulator
-				for(int cv$i = 0; cv$i < noStates; cv$i += 1)
+				for(int cv$i = 0; cv$i < state.noStates; cv$i += 1)
 					cv$accumulatedConsumerDistributions[cv$i] = 0.0;
 				
 				// Zero an accumulator to track the probabilities reached.
@@ -3251,65 +2782,65 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Looking for a path between Sample 76 and consumer Categorical 73.
 				// 
 				// Value of the variable at this index
-				if((cv$valuePos < noStates)) {
+				if((cv$valuePos < state.noStates)) {
 					// Declare and zero an accumulator for tracking the reached source probability space.
 					double scopeVariable$reachedSourceProbability = 0.0;
 					
 					// Enumerating the possible arguments for Categorical 73.
 					if((1 == timeStep$var66)) {
 						// Enumerating the possible arguments for Categorical 73.
-						if(fixedFlag$sample57) {
-							int index$var32$276_1 = st[sample$var45][0];
+						if(state.fixedFlag$sample57) {
+							int index$var32$276_1 = state.st[sample$var45][0];
 							
-							// Substituted "timeStep$var66" with its value "1".
-							if(((0 <= index$var32$276_1) && (index$var32$276_1 < noStates)))
+																					// Substituted "timeStep$var66" with its value "1".
+							if(((0 <= index$var32$276_1) && (index$var32$276_1 < state.noStates)))
 								// Add the probability of this argument configuration.
 								// 
 								// Declare and zero an accumulator for tracking the reached source probability space.
 								scopeVariable$reachedSourceProbability = 1.0;
 						} else {
 							// Enumerating the possible outputs of Categorical 54.
-							for(int index$sample57$272 = 0; index$sample57$272 < noStates; index$sample57$272 += 1)
+							for(int index$sample57$272 = 0; index$sample57$272 < state.noStates; index$sample57$272 += 1)
 								// Add the probability of this argument configuration.
 								// 
-								// cv$probabilitySample57Value273's comment
+																// cv$probabilitySample57Value273's comment
 								// Update the probability of sampling this value from the distribution value.
 								// 
 								// Substituted "index$sample$271" with its value "sample$var45".
-								scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample57[sample$var45][index$sample57$272]);
+								scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + state.distribution$sample57[sample$var45][index$sample57$272]);
 						}
 					}
 					int index$timeStep$280 = (timeStep$var66 - 1);
 					
-					// index$timeStep$267's comment
+																				// index$timeStep$267's comment
 					// Copy of index so that its values can be safely substituted
 					// 
-					// index$sample$268's comment
+																				// index$sample$268's comment
 					// Copy of index so that its values can be safely substituted
 					// 
 					// Substituted "index$sample$265_2" with its value "sample$var45".
 					// 
-					// Substituted "index$timeStep$265_3" with its value "(timeStep$var66 + 1)".
+															// Substituted "index$timeStep$265_3" with its value "(timeStep$var66 + 1)".
 					// 
-					// Substituted "index$timeStep$265_3" with its value "(timeStep$var66 + 1)".
+															// Substituted "index$timeStep$265_3" with its value "(timeStep$var66 + 1)".
 					// 
-					// Substituted "index$timeStep$265_3" with its value "(timeStep$var66 + 1)".
+															// Substituted "index$timeStep$265_3" with its value "(timeStep$var66 + 1)".
 					// 
-					// Substituted "index$timeStep$265_3" with its value "(timeStep$var66 + 1)".
+															// Substituted "index$timeStep$265_3" with its value "(timeStep$var66 + 1)".
 					// 
-					// Substituted "index$timeStep$265_3" with its value "(timeStep$var66 + 1)".
+															// Substituted "index$timeStep$265_3" with its value "(timeStep$var66 + 1)".
 					// 
-					// Substituted "index$timeStep$265_3" with its value "(timeStep$var66 + 1)".
+															// Substituted "index$timeStep$265_3" with its value "(timeStep$var66 + 1)".
 					if((((1 <= index$timeStep$280) && !(index$timeStep$280 == timeStep$var66)) && !(index$timeStep$280 == index$timeStep$265_3))) {
 						// Enumerating the possible outputs of Categorical 73.
-						for(int index$sample76$281 = 0; index$sample76$281 < noStates; index$sample76$281 += 1)
+						for(int index$sample76$281 = 0; index$sample76$281 < state.noStates; index$sample76$281 += 1)
 							// Add the probability of this argument configuration.
 							// 
-							// cv$probabilitySample76Value282's comment
+														// cv$probabilitySample76Value282's comment
 							// Update the probability of sampling this value from the distribution value.
 							// 
 							// Substituted "index$sample$279" with its value "sample$var45".
-							scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + distribution$sample76[sample$var45][(index$timeStep$280 - 1)][index$sample76$281]);
+							scopeVariable$reachedSourceProbability = (scopeVariable$reachedSourceProbability + state.distribution$sample76[sample$var45][(index$timeStep$280 - 1)][index$sample76$281]);
 					}
 					
 					// Record the reached distribution.
@@ -3321,26 +2852,26 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					
 					// Add the current distribution to the distribution accumulator.
 					// 
-					// Constructing a random variable input for use later.
+															// Constructing a random variable input for use later.
 					// 
 					// Processing random variable 73.
 					// 
 					// Looking for a path between Sample 76 and consumer Categorical 73.
 					// 
 					// Value of the variable at this index
-					DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, scopeVariable$reachedSourceProbability, m[cv$valuePos], noStates);
+					DistributionSampling.addProbabilityDistributionCategorical(cv$accumulatedConsumerDistributions, scopeVariable$reachedSourceProbability, state.m[cv$valuePos], state.noStates);
 				}
 				
 				// A local copy of the samples' distribution.
 				// 
 				// Substituted "index$sample$265_2" with its value "sample$var45".
-				double[] cv$sampleDistribution = distribution$sample76[sample$var45][(index$timeStep$265_3 - 1)];
+				double[] cv$sampleDistribution = state.distribution$sample76[sample$var45][(index$timeStep$265_3 - 1)];
 				
 				// The overlap of the distributions so far.
 				double cv$overlap = 0.0;
 				
 				// Calculate the overlap for each element in the distribution
-				for(int cv$i = 0; cv$i < noStates; cv$i += 1) {
+				for(int cv$i = 0; cv$i < state.noStates; cv$i += 1) {
 					// Normalise the values in the calculated distribution
 					double cv$normalisedDistValue = (cv$accumulatedConsumerDistributions[cv$i] / cv$reachedDistributionProbability);
 					
@@ -3368,10 +2899,10 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Save the calculated index value into the array of index value probabilities
 			cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue + cv$accumulatedDistributionProbabilities) - Math.log(cv$reachedDistributionSourceRV));
 		}
-		if(constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)]) {
+		if(state.constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)]) {
 			// Set the calculated probabilities to be the distribution values, and normalize
 			// Local copy of the probability array
-			double[] cv$localProbability = distribution$sample76[sample$var45][(timeStep$var66 - 1)];
+			double[] cv$localProbability = state.distribution$sample76[sample$var45][(timeStep$var66 - 1)];
 			
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
@@ -3380,7 +2911,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Sum all the values
 			// 
-			// Initialise the max to the first element.
+			// Initialize the max to the first element.
 			double cv$lseMax = cv$stateProbabilityLocal[0];
 			
 			// Find max value.
@@ -3396,7 +2927,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Sum the values in the array.
 			else {
-				// Initialise the sum of the array elements
+				// Initialize the sum of the array elements
 				double cv$lseSum = 0.0;
 				
 				// Offset values, move to normal space, and sum.
@@ -3431,16 +2962,16 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityDistribution$sample241() {
 		// Determine if we need to calculate the values for sample task 241 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample241) {
+		if(!state.fixedProbFlag$sample241) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int server = 0; server < state.noServers; server += 1) {
+					for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
 						// An accumulator for log probabilities.
 						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 						
@@ -3451,16 +2982,16 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// values.
 						// 
 						// The sample value to calculate the probability of generating
-						boolean cv$sampleValue = metric_valid_g[sample$var196][server][timeStep$var226];
+						boolean cv$sampleValue = state.metric_valid_g[sample$var196][server][timeStep$var226];
 						
 						// Enumerating the possible arguments for Bernoulli 231.
 						if((0 == timeStep$var226)) {
 							// Enumerating the possible arguments for Bernoulli 231.
-							if(fixedFlag$sample57) {
-								int var183 = st[sample$var196][0];
-								if(((0 <= var183) && (var183 < noStates))) {
+							if(state.fixedFlag$sample57) {
+								int var183 = state.st[sample$var196][0];
+								if(((0 <= var183) && (var183 < state.noStates))) {
 									// Substituted "timeStep$var226" with its value "0".
-									double var230 = current_metric_valid_bias[server][st[sample$var196][0]];
+									double var230 = state.current_metric_valid_bias[server][state.st[sample$var196][0]];
 									
 									// Store the value of the function call, so the function call is only made once.
 									cv$distributionAccumulator = (((0.0 <= var230) && (var230 <= 1.0))?Math.log((cv$sampleValue?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY);
@@ -3472,12 +3003,12 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								}
 							} else {
 								// Enumerating the possible outputs of Categorical 54.
-								for(int index$sample57$4 = 0; index$sample57$4 < noStates; index$sample57$4 += 1) {
+								for(int index$sample57$4 = 0; index$sample57$4 < state.noStates; index$sample57$4 += 1) {
 									// Update the probability of sampling this value from the distribution value.
 									// 
 									// Substituted "sample$var45" with its value "sample$var196".
-									double cv$probabilitySample57Value5 = distribution$sample57[sample$var196][index$sample57$4];
-									double var230 = current_metric_valid_bias[server][index$sample57$4];
+									double cv$probabilitySample57Value5 = state.distribution$sample57[sample$var196][index$sample57$4];
+									double var230 = state.current_metric_valid_bias[server][index$sample57$4];
 									
 									// Store the value of the function call, so the function call is only made once.
 									double cv$weightedProbability = (Math.log(cv$probabilitySample57Value5) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((cv$sampleValue?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
@@ -3502,10 +3033,10 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Enumerating the possible arguments for Bernoulli 231.
 						if((1 <= timeStep$var226)) {
 							// Enumerating the possible arguments for Bernoulli 231.
-							if(fixedFlag$sample76) {
-								int var183 = st[sample$var196][timeStep$var226];
-								if(((0 <= var183) && (var183 < noStates))) {
-									double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
+							if(state.fixedFlag$sample76) {
+								int var183 = state.st[sample$var196][timeStep$var226];
+								if(((0 <= var183) && (var183 < state.noStates))) {
+									double var230 = state.current_metric_valid_bias[server][state.st[sample$var196][timeStep$var226]];
 									
 									// Store the value of the function call, so the function call is only made once.
 									double cv$weightedProbability = (((0.0 <= var230) && (var230 <= 1.0))?Math.log((cv$sampleValue?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY);
@@ -3526,12 +3057,12 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								}
 							} else {
 								// Enumerating the possible outputs of Categorical 73.
-								for(int index$sample76$13 = 0; index$sample76$13 < noStates; index$sample76$13 += 1) {
+								for(int index$sample76$13 = 0; index$sample76$13 < state.noStates; index$sample76$13 += 1) {
 									// Update the probability of sampling this value from the distribution value.
 									// 
-									// Substituted "sample$var45" with its value "sample$var196".
-									double cv$probabilitySample76Value14 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][index$sample76$13];
-									double var230 = current_metric_valid_bias[server][index$sample76$13];
+																											// Substituted "sample$var45" with its value "sample$var196".
+									double cv$probabilitySample76Value14 = state.distribution$sample76[sample$var196][(timeStep$var226 - 1)][index$sample76$13];
+									double var230 = state.current_metric_valid_bias[server][index$sample76$13];
 									
 									// Store the value of the function call, so the function call is only made once.
 									double cv$weightedProbability = (Math.log(cv$probabilitySample76Value14) + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((cv$sampleValue?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
@@ -3577,7 +3108,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$var232 = cv$sampleAccumulator;
+				state.logProbability$var232 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -3585,7 +3116,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$sampleAccumulator);
+			state.logProbability$metric_valid_inner = (state.logProbability$metric_valid_inner + cv$sampleAccumulator);
 			
 			// Update the variable probability
 			// 
@@ -3593,7 +3124,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleAccumulator);
+			state.logProbability$metric_valid_g = (state.logProbability$metric_valid_g + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -3601,17 +3132,17 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample241 = ((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample190);
+			state.fixedProbFlag$sample241 = ((state.fixedFlag$sample57 && state.fixedFlag$sample76) && state.fixedFlag$sample190);
 		} else {
 			// Using cached values.
 			// 
@@ -3620,20 +3151,20 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + logProbability$var232);
+			state.logProbability$metric_valid_inner = (state.logProbability$metric_valid_inner + state.logProbability$var232);
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$metric_valid_g = (logProbability$metric_valid_g + logProbability$var232);
+			state.logProbability$metric_valid_g = (state.logProbability$metric_valid_g + state.logProbability$var232);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var232);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var232);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var232);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var232);
 		}
 	}
 
@@ -3642,17 +3173,17 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityDistribution$sample256() {
 		// Determine if we need to calculate the values for sample task 256 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample256) {
+		if(!state.fixedProbFlag$sample256) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						if(metric_valid_g[sample$var196][server][timeStep$var226]) {
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int server = 0; server < state.noServers; server += 1) {
+					for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+						if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
 							// An accumulator for log probabilities.
 							double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 							
@@ -3663,25 +3194,25 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// values.
 							// 
 							// The sample value to calculate the probability of generating
-							double cv$sampleValue = var245[sample$var196][server][timeStep$var226];
+							double cv$sampleValue = state.var245[sample$var196][server][timeStep$var226];
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							if((0 == timeStep$var226)) {
 								// Enumerating the possible arguments for Gaussian 244.
 								// 
 								// Enumerating the possible arguments for Gaussian 244.
-								if(fixedFlag$sample57) {
+								if(state.fixedFlag$sample57) {
 									// Constraints moved from conditionals in inner loops/scopes/etc.
-									if((0 <= st[sample$var196][0])) {
-										int var129 = st[sample$var196][0];
-										if(((0 <= var129) && (var129 < noStates))) {
+									if((0 <= state.st[sample$var196][0])) {
+										int var129 = state.st[sample$var196][0];
+										if(((0 <= var129) && (var129 < state.noStates))) {
 											// Substituted "timeStep$var226" with its value "0".
-											double var243 = current_metric_var[server][st[sample$var196][0]];
+											double var243 = state.current_metric_var[server][state.st[sample$var196][0]];
 											
 											// Store the value of the function call, so the function call is only made once.
 											// 
 											// Substituted "timeStep$var226" with its value "0".
-											cv$distributionAccumulator = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][st[sample$var196][0]]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
+											cv$distributionAccumulator = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - state.current_metric_mean[server][state.st[sample$var196][0]]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 											
 											// Add the probability of this distribution configuration to the accumulator.
 											// 
@@ -3691,15 +3222,15 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									}
 								} else {
 									// Enumerating the possible outputs of Categorical 54.
-									for(int index$sample57$4 = 0; index$sample57$4 < noStates; index$sample57$4 += 1) {
+									for(int index$sample57$4 = 0; index$sample57$4 < state.noStates; index$sample57$4 += 1) {
 										// Update the probability of sampling this value from the distribution value.
 										// 
 										// Substituted "sample$var45" with its value "sample$var196".
-										double cv$probabilitySample57Value5 = distribution$sample57[sample$var196][index$sample57$4];
-										double var243 = current_metric_var[server][index$sample57$4];
+										double cv$probabilitySample57Value5 = state.distribution$sample57[sample$var196][index$sample57$4];
+										double var243 = state.current_metric_var[server][index$sample57$4];
 										
 										// Store the value of the function call, so the function call is only made once.
-										double cv$weightedProbability = (Math.log(cv$probabilitySample57Value5) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][index$sample57$4]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
+										double cv$weightedProbability = (Math.log(cv$probabilitySample57Value5) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - state.current_metric_mean[server][index$sample57$4]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
 										
 										// Add the probability of this sample task to the distribution accumulator.
 										if((cv$weightedProbability < cv$distributionAccumulator))
@@ -3721,15 +3252,15 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Enumerating the possible arguments for Gaussian 244.
 							if((1 <= timeStep$var226)) {
 								// Enumerating the possible arguments for Gaussian 244.
-								if(fixedFlag$sample76) {
+								if(state.fixedFlag$sample76) {
 									// Constraints moved from conditionals in inner loops/scopes/etc.
-									if((0 <= st[sample$var196][timeStep$var226])) {
-										int var129 = st[sample$var196][timeStep$var226];
-										if(((0 <= var129) && (var129 < noStates))) {
-											double var243 = current_metric_var[server][st[sample$var196][timeStep$var226]];
+									if((0 <= state.st[sample$var196][timeStep$var226])) {
+										int var129 = state.st[sample$var196][timeStep$var226];
+										if(((0 <= var129) && (var129 < state.noStates))) {
+											double var243 = state.current_metric_var[server][state.st[sample$var196][timeStep$var226]];
 											
 											// Store the value of the function call, so the function call is only made once.
-											double cv$weightedProbability = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][st[sample$var196][timeStep$var226]]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
+											double cv$weightedProbability = ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY);
 											
 											// Add the probability of this sample task to the distribution accumulator.
 											if((cv$weightedProbability < cv$distributionAccumulator))
@@ -3748,15 +3279,15 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									}
 								} else {
 									// Enumerating the possible outputs of Categorical 73.
-									for(int index$sample76$49 = 0; index$sample76$49 < noStates; index$sample76$49 += 1) {
+									for(int index$sample76$49 = 0; index$sample76$49 < state.noStates; index$sample76$49 += 1) {
 										// Update the probability of sampling this value from the distribution value.
 										// 
-										// Substituted "sample$var45" with its value "sample$var196".
-										double cv$probabilitySample76Value50 = distribution$sample76[sample$var196][(timeStep$var226 - 1)][index$sample76$49];
-										double var243 = current_metric_var[server][index$sample76$49];
+																														// Substituted "sample$var45" with its value "sample$var196".
+										double cv$probabilitySample76Value50 = state.distribution$sample76[sample$var196][(timeStep$var226 - 1)][index$sample76$49];
+										double var243 = state.current_metric_var[server][index$sample76$49];
 										
 										// Store the value of the function call, so the function call is only made once.
-										double cv$weightedProbability = (Math.log(cv$probabilitySample76Value50) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - current_metric_mean[server][index$sample76$49]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
+										double cv$weightedProbability = (Math.log(cv$probabilitySample76Value50) + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((cv$sampleValue - state.current_metric_mean[server][index$sample76$49]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
 										
 										// Add the probability of this sample task to the distribution accumulator.
 										if((cv$weightedProbability < cv$distributionAccumulator))
@@ -3800,7 +3331,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$var245 = cv$sampleAccumulator;
+				state.logProbability$var245 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -3808,7 +3339,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$metric_g = (logProbability$metric_g + cv$sampleAccumulator);
+			state.logProbability$metric_g = (state.logProbability$metric_g + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -3816,17 +3347,17 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample256 = (((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample134) && fixedFlag$sample162);
+			state.fixedProbFlag$sample256 = (((state.fixedFlag$sample57 && state.fixedFlag$sample76) && state.fixedFlag$sample134) && state.fixedFlag$sample162);
 		} else {
 			// Using cached values.
 			// 
@@ -3835,15 +3366,15 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$metric_g = (logProbability$metric_g + logProbability$var245);
+			state.logProbability$metric_g = (state.logProbability$metric_g + state.logProbability$var245);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var245);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var245);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var245);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var245);
 		}
 	}
 
@@ -3852,19 +3383,19 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityDistribution$sample57() {
 		// Determine if we need to calculate the values for sample task 57 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample57) {
+		if(!state.fixedProbFlag$sample57) {
 			// Update the probability if the distribution is fixed to a specific value. If it
 			// is not the value is implicitly log(1.0) so has no effect.
-			if(fixedFlag$sample57) {
+			if(state.fixedFlag$sample57) {
 				// Generating probabilities for sample task
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
 				
 				// A guard to check if the sample value is ever reached.
 				boolean cv$sampleReached = false;
-				for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+				for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = st[sample$var45][0];
+					int cv$sampleValue = state.st[sample$var45][0];
 					
 					// Record that the sample was reached.
 					cv$sampleReached = true;
@@ -3882,7 +3413,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// An accumulator for log probabilities.
 					// 
 					// Store the value of the function call, so the function call is only made once.
-					cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+					cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= state.initialStateDistribution[cv$sampleValue])) && (state.initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(state.initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 				}
 				
 				// Only update the sample if it was reached, otherwise the NaN will be
@@ -3894,7 +3425,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// of all instances of the random variable.
 					// 
 					// Accumulator for probabilities of instances of the random variable
-					logProbability$var55 = cv$sampleAccumulator;
+					state.logProbability$var55 = cv$sampleAccumulator;
 				
 				// Update the variable probability
 				// 
@@ -3902,7 +3433,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$st = (logProbability$st + cv$sampleAccumulator);
+				state.logProbability$st = (state.logProbability$st + cv$sampleAccumulator);
 				
 				// Add probability to model
 				// 
@@ -3910,19 +3441,19 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+				state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 				
 				// Now the probability is calculated store if it can be cached or if it needs to be
 				// recalculated next time.
 				// 
 				// Substituted "fixedFlag$sample57" with its value "true".
-				fixedProbFlag$sample57 = fixedFlag$sample20;
+				state.fixedProbFlag$sample57 = state.fixedFlag$sample20;
 			}
 		} else {
 			// Using cached values.
@@ -3930,22 +3461,22 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
-			if(fixedFlag$sample57)
+			if(state.fixedFlag$sample57)
 				// Update the variable probability
 				// 
 				// Variable declaration of cv$accumulator moved.
-				logProbability$st = (logProbability$st + logProbability$var55);
+				state.logProbability$st = (state.logProbability$st + state.logProbability$var55);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var55);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var55);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample57)
+			if(state.fixedFlag$sample57)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var55);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var55);
 		}
 	}
 
@@ -3954,18 +3485,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityDistribution$sample76() {
 		// Determine if we need to calculate the values for sample task 76 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample76) {
+		if(!state.fixedProbFlag$sample76) {
 			// Update the probability if the distribution is fixed to a specific value. If it
 			// is not the value is implicitly log(1.0) so has no effect.
-			if(fixedFlag$sample76) {
+			if(state.fixedFlag$sample76) {
 				// Generating probabilities for sample task
 				// Accumulator for sample probabilities for a specific instance of the random variable.
 				double cv$sampleAccumulator = 0.0;
 				
 				// A guard to check if the sample value is ever reached.
 				boolean cv$sampleReached = false;
-				for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-					for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+				for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+					for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 						// An accumulator for log probabilities.
 						double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 						
@@ -3973,21 +3504,21 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						double cv$probabilityReached = 0.0;
 						
 						// The sample value to calculate the probability of generating
-						int cv$sampleValue = st[sample$var45][timeStep$var66];
+						int cv$sampleValue = state.st[sample$var45][timeStep$var66];
 						
 						// Enumerating the possible arguments for Categorical 73.
 						if((1 == timeStep$var66)) {
 							// Enumerating the possible arguments for Categorical 73.
-							if(fixedFlag$sample57) {
-								int var32 = st[sample$var45][0];
+							if(state.fixedFlag$sample57) {
+								int var32 = state.st[sample$var45][0];
 								
-								// Substituted "timeStep$var66" with its value "1".
-								if(((0 <= var32) && (var32 < noStates))) {
+																								// Substituted "timeStep$var66" with its value "1".
+								if(((0 <= var32) && (var32 < state.noStates))) {
 									// Substituted "timeStep$var66" with its value "1".
-									double[] var72 = m[st[sample$var45][0]];
+									double[] var72 = state.m[state.st[sample$var45][0]];
 									
 									// Store the value of the function call, so the function call is only made once.
-									cv$distributionAccumulator = (((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+									cv$distributionAccumulator = (((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 									
 									// Add the probability of this distribution configuration to the accumulator.
 									// 
@@ -3996,15 +3527,15 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								}
 							} else {
 								// Enumerating the possible outputs of Categorical 54.
-								for(int index$sample57$6 = 0; index$sample57$6 < noStates; index$sample57$6 += 1) {
+								for(int index$sample57$6 = 0; index$sample57$6 < state.noStates; index$sample57$6 += 1) {
 									// Update the probability of sampling this value from the distribution value.
 									// 
 									// Substituted "index$sample$5" with its value "sample$var45".
-									double cv$probabilitySample57Value7 = distribution$sample57[sample$var45][index$sample57$6];
-									double[] var72 = m[index$sample57$6];
+									double cv$probabilitySample57Value7 = state.distribution$sample57[sample$var45][index$sample57$6];
+									double[] var72 = state.m[index$sample57$6];
 									
 									// Store the value of the function call, so the function call is only made once.
-									double cv$weightedProbability = (Math.log(cv$probabilitySample57Value7) + (((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+									double cv$weightedProbability = (Math.log(cv$probabilitySample57Value7) + (((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 									
 									// Add the probability of this sample task to the distribution accumulator.
 									if((cv$weightedProbability < cv$distributionAccumulator))
@@ -4027,12 +3558,12 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// 
 						// Substituted "index$timeStep$13_2" with its value "(timeStep$var66 - 1)".
 						if((2 <= timeStep$var66)) {
-							int var32 = st[sample$var45][(timeStep$var66 - 1)];
-							if(((0 <= var32) && (var32 < noStates))) {
-								double[] var72 = m[st[sample$var45][(timeStep$var66 - 1)]];
+							int var32 = state.st[sample$var45][(timeStep$var66 - 1)];
+							if(((0 <= var32) && (var32 < state.noStates))) {
+								double[] var72 = state.m[state.st[sample$var45][(timeStep$var66 - 1)]];
 								
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY);
+								double cv$weightedProbability = (((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY);
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -4073,7 +3604,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// of all instances of the random variable.
 					// 
 					// Accumulator for probabilities of instances of the random variable
-					logProbability$var74 = cv$sampleAccumulator;
+					state.logProbability$var74 = cv$sampleAccumulator;
 				
 				// Update the variable probability
 				// 
@@ -4081,7 +3612,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$st = (logProbability$st + cv$sampleAccumulator);
+				state.logProbability$st = (state.logProbability$st + cv$sampleAccumulator);
 				
 				// Add probability to model
 				// 
@@ -4089,19 +3620,19 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+				state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 				
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 				
 				// Now the probability is calculated store if it can be cached or if it needs to be
 				// recalculated next time.
 				// 
 				// Substituted "fixedFlag$sample76" with its value "true".
-				fixedProbFlag$sample76 = (fixedFlag$sample33 && fixedFlag$sample57);
+				state.fixedProbFlag$sample76 = (state.fixedFlag$sample33 && state.fixedFlag$sample57);
 			}
 		} else {
 			// Using cached values.
@@ -4109,22 +3640,22 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Updating random variable and model probabilities using cached probabilities for
 			// this sample
 			// Make sure all the inputs have been fixed so the variable is not a distribution.
-			if(fixedFlag$sample76)
+			if(state.fixedFlag$sample76)
 				// Update the variable probability
 				// 
 				// Variable declaration of cv$accumulator moved.
-				logProbability$st = (logProbability$st + logProbability$var74);
+				state.logProbability$st = (state.logProbability$st + state.logProbability$var74);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var74);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var74);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample76)
+			if(state.fixedFlag$sample76)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var74);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var74);
 		}
 	}
 
@@ -4133,17 +3664,17 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityValue$sample134() {
 		// Determine if we need to calculate the values for sample task 134 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample134) {
+		if(!state.fixedProbFlag$sample134) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var119 = 0; var119 < noServers; var119 += 1) {
-				for(int var129 = 0; var129 < noStates; var129 += 1) {
+			for(int var119 = 0; var119 < state.noServers; var119 += 1) {
+				for(int var129 = 0; var129 < state.noStates; var129 += 1) {
 					// The sample value to calculate the probability of generating
-					double cv$sampleValue = current_metric_mean[var119][var129];
+					double cv$sampleValue = state.current_metric_mean[var119][var129];
 					
 					// Record that the sample was reached.
 					cv$sampleReached = true;
@@ -4161,7 +3692,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// An accumulator for log probabilities.
 					// 
 					// Store the value of the function call, so the function call is only made once.
-					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < (double)max_metric))?(-Math.log(max_metric)):Double.NEGATIVE_INFINITY));
+					cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= cv$sampleValue) && (cv$sampleValue < (double)state.max_metric))?(-Math.log(state.max_metric)):Double.NEGATIVE_INFINITY));
 				}
 			}
 			
@@ -4169,7 +3700,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var130 = cv$sampleAccumulator;
+				state.logProbability$var130 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -4177,7 +3708,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$current_metric_mean = (logProbability$current_metric_mean + cv$sampleAccumulator);
+			state.logProbability$current_metric_mean = (state.logProbability$current_metric_mean + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -4185,20 +3716,20 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample134)
+			if(state.fixedFlag$sample134)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample134 = fixedFlag$sample134;
+			state.fixedProbFlag$sample134 = state.fixedFlag$sample134;
 		} else {
 			// Using cached values.
 			// 
@@ -4207,18 +3738,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$current_metric_mean = (logProbability$current_metric_mean + logProbability$var130);
+			state.logProbability$current_metric_mean = (state.logProbability$current_metric_mean + state.logProbability$var130);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var130);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var130);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample134)
+			if(state.fixedFlag$sample134)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var130);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var130);
 		}
 	}
 
@@ -4227,15 +3758,15 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityValue$sample162() {
 		// Determine if we need to calculate the values for sample task 162 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample162) {
+		if(!state.fixedProbFlag$sample162) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var146 = 0; var146 < noServers; var146 += 1) {
-				for(int var156 = 0; var156 < noStates; var156 += 1) {
+			for(int var146 = 0; var146 < state.noServers; var146 += 1) {
+				for(int var156 = 0; var156 < state.noStates; var156 += 1) {
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 					
@@ -4254,7 +3785,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// Store the value of the function call, so the function call is only made once.
 					// 
 					// The sample value to calculate the probability of generating
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityInverseGamma(current_metric_var[var146][var156], 1.0, 1.0));
+					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityInverseGamma(state.current_metric_var[var146][var156], 1.0, 1.0));
 				}
 			}
 			
@@ -4262,7 +3793,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var157 = cv$sampleAccumulator;
+				state.logProbability$var157 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -4270,7 +3801,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$current_metric_var = (logProbability$current_metric_var + cv$sampleAccumulator);
+			state.logProbability$current_metric_var = (state.logProbability$current_metric_var + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -4278,20 +3809,20 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample162)
+			if(state.fixedFlag$sample162)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample162 = fixedFlag$sample162;
+			state.fixedProbFlag$sample162 = state.fixedFlag$sample162;
 		} else {
 			// Using cached values.
 			// 
@@ -4300,18 +3831,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$current_metric_var = (logProbability$current_metric_var + logProbability$var157);
+			state.logProbability$current_metric_var = (state.logProbability$current_metric_var + state.logProbability$var157);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var157);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var157);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample162)
+			if(state.fixedFlag$sample162)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var157);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var157);
 		}
 	}
 
@@ -4320,15 +3851,15 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityValue$sample190() {
 		// Determine if we need to calculate the values for sample task 190 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample190) {
+		if(!state.fixedProbFlag$sample190) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var173 = 0; var173 < noServers; var173 += 1) {
-				for(int var183 = 0; var183 < noStates; var183 += 1) {
+			for(int var173 = 0; var173 < state.noServers; var173 += 1) {
+				for(int var183 = 0; var183 < state.noStates; var183 += 1) {
 					// Record that the sample was reached.
 					cv$sampleReached = true;
 					
@@ -4347,7 +3878,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// Store the value of the function call, so the function call is only made once.
 					// 
 					// The sample value to calculate the probability of generating
-					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(current_metric_valid_bias[var173][var183], 1.0, 1.0));
+					cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityBeta(state.current_metric_valid_bias[var173][var183], 1.0, 1.0));
 				}
 			}
 			
@@ -4355,7 +3886,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var184 = cv$sampleAccumulator;
+				state.logProbability$var184 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -4363,7 +3894,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$current_metric_valid_bias = (logProbability$current_metric_valid_bias + cv$sampleAccumulator);
+			state.logProbability$current_metric_valid_bias = (state.logProbability$current_metric_valid_bias + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -4371,20 +3902,20 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample190)
+			if(state.fixedFlag$sample190)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample190 = fixedFlag$sample190;
+			state.fixedProbFlag$sample190 = state.fixedFlag$sample190;
 		} else {
 			// Using cached values.
 			// 
@@ -4393,18 +3924,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$current_metric_valid_bias = (logProbability$current_metric_valid_bias + logProbability$var184);
+			state.logProbability$current_metric_valid_bias = (state.logProbability$current_metric_valid_bias + state.logProbability$var184);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var184);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var184);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample190)
+			if(state.fixedFlag$sample190)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var184);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var184);
 		}
 	}
 
@@ -4413,7 +3944,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityValue$sample20() {
 		// Determine if we need to calculate the values for sample task 20 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample20) {
+		if(!state.fixedProbFlag$sample20) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -4438,10 +3969,10 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Store the value of the function call, so the function call is only made once.
 			// 
 			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(initialStateDistribution, v, noStates);
+			double cv$distributionAccumulator = DistributionSampling.logProbabilityDirichlet(state.initialStateDistribution, state.v, state.noStates);
 			
 			// Store the sample task probability
-			logProbability$initialStateDistribution = cv$distributionAccumulator;
+			state.logProbability$initialStateDistribution = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -4457,11 +3988,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample20)
+			if(state.fixedFlag$sample20)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -4474,11 +4005,11 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample20 = fixedFlag$sample20;
+			state.fixedProbFlag$sample20 = state.fixedFlag$sample20;
 		} else {
 			// Using cached values.
 			// 
@@ -4487,13 +4018,13 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$initialStateDistribution);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$initialStateDistribution);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample20)
+			if(state.fixedFlag$sample20)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$initialStateDistribution);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$initialStateDistribution);
 		}
 	}
 
@@ -4502,17 +4033,17 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityValue$sample241() {
 		// Determine if we need to calculate the values for sample task 241 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample241) {
+		if(!state.fixedProbFlag$sample241) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						double var230 = current_metric_valid_bias[server][st[sample$var196][timeStep$var226]];
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int server = 0; server < state.noServers; server += 1) {
+					for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+						double var230 = state.current_metric_valid_bias[server][state.st[sample$var196][timeStep$var226]];
 						
 						// Record that the sample was reached.
 						cv$sampleReached = true;
@@ -4532,7 +4063,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						// Store the value of the function call, so the function call is only made once.
 						// 
 						// The sample value to calculate the probability of generating
-						cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
+						cv$sampleAccumulator = (cv$sampleAccumulator + (((0.0 <= var230) && (var230 <= 1.0))?Math.log((state.metric_valid_g[sample$var196][server][timeStep$var226]?var230:(1.0 - var230))):Double.NEGATIVE_INFINITY));
 					}
 				}
 			}
@@ -4546,7 +4077,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$var232 = cv$sampleAccumulator;
+				state.logProbability$var232 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -4554,7 +4085,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + cv$sampleAccumulator);
+			state.logProbability$metric_valid_inner = (state.logProbability$metric_valid_inner + cv$sampleAccumulator);
 			
 			// Update the variable probability
 			// 
@@ -4562,7 +4093,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$metric_valid_g = (logProbability$metric_valid_g + cv$sampleAccumulator);
+			state.logProbability$metric_valid_g = (state.logProbability$metric_valid_g + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -4570,17 +4101,17 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample241 = ((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample190);
+			state.fixedProbFlag$sample241 = ((state.fixedFlag$sample57 && state.fixedFlag$sample76) && state.fixedFlag$sample190);
 		} else {
 			// Using cached values.
 			// 
@@ -4589,20 +4120,20 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$metric_valid_inner = (logProbability$metric_valid_inner + logProbability$var232);
+			state.logProbability$metric_valid_inner = (state.logProbability$metric_valid_inner + state.logProbability$var232);
 			
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$metric_valid_g = (logProbability$metric_valid_g + logProbability$var232);
+			state.logProbability$metric_valid_g = (state.logProbability$metric_valid_g + state.logProbability$var232);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var232);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var232);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var232);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var232);
 		}
 	}
 
@@ -4611,18 +4142,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityValue$sample256() {
 		// Determine if we need to calculate the values for sample task 256 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample256) {
+		if(!state.fixedProbFlag$sample256) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var196 = 0; sample$var196 < noSamples; sample$var196 += 1) {
-				for(int server = 0; server < noServers; server += 1) {
-					for(int timeStep$var226 = 0; timeStep$var226 < length$metric[sample$var196][0]; timeStep$var226 += 1) {
-						if(metric_valid_g[sample$var196][server][timeStep$var226]) {
-							double var243 = current_metric_var[server][st[sample$var196][timeStep$var226]];
+			for(int sample$var196 = 0; sample$var196 < state.noSamples; sample$var196 += 1) {
+				for(int server = 0; server < state.noServers; server += 1) {
+					for(int timeStep$var226 = 0; timeStep$var226 < state.length$metric[sample$var196][0]; timeStep$var226 += 1) {
+						if(state.metric_valid_g[sample$var196][server][timeStep$var226]) {
+							double var243 = state.current_metric_var[server][state.st[sample$var196][timeStep$var226]];
 							
 							// Record that the sample was reached.
 							cv$sampleReached = true;
@@ -4642,7 +4173,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 							// Store the value of the function call, so the function call is only made once.
 							// 
 							// The sample value to calculate the probability of generating
-							cv$sampleAccumulator = (cv$sampleAccumulator + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((var245[sample$var196][server][timeStep$var226] - current_metric_mean[server][st[sample$var196][timeStep$var226]]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
+							cv$sampleAccumulator = (cv$sampleAccumulator + ((0.0 < var243)?(DistributionSampling.logProbabilityGaussian(((state.var245[sample$var196][server][timeStep$var226] - state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]]) / Math.sqrt(var243))) - (Math.log(var243) * 0.5)):Double.NEGATIVE_INFINITY));
 						}
 					}
 				}
@@ -4657,7 +4188,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$var245 = cv$sampleAccumulator;
+				state.logProbability$var245 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -4665,7 +4196,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$metric_g = (logProbability$metric_g + cv$sampleAccumulator);
+			state.logProbability$metric_g = (state.logProbability$metric_g + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -4673,17 +4204,17 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// Add the probability of this instance of the random variable to the probability
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample256 = (((fixedFlag$sample57 && fixedFlag$sample76) && fixedFlag$sample134) && fixedFlag$sample162);
+			state.fixedProbFlag$sample256 = (((state.fixedFlag$sample57 && state.fixedFlag$sample76) && state.fixedFlag$sample134) && state.fixedFlag$sample162);
 		} else {
 			// Using cached values.
 			// 
@@ -4692,15 +4223,15 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$metric_g = (logProbability$metric_g + logProbability$var245);
+			state.logProbability$metric_g = (state.logProbability$metric_g + state.logProbability$var245);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var245);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var245);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$var245);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var245);
 		}
 	}
 
@@ -4709,14 +4240,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityValue$sample33() {
 		// Determine if we need to calculate the values for sample task 33 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample33) {
+		if(!state.fixedProbFlag$sample33) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var32 = 0; var32 < noStates; var32 += 1) {
+			for(int var32 = 0; var32 < state.noStates; var32 += 1) {
 				// Record that the sample was reached.
 				cv$sampleReached = true;
 				
@@ -4735,14 +4266,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// Store the value of the function call, so the function call is only made once.
 				// 
 				// The sample value to calculate the probability of generating
-				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(m[var32], v, noStates));
+				cv$sampleAccumulator = (cv$sampleAccumulator + DistributionSampling.logProbabilityDirichlet(state.m[var32], state.v, state.noStates));
 			}
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var33 = cv$sampleAccumulator;
+				state.logProbability$var33 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -4750,7 +4281,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$m = (logProbability$m + cv$sampleAccumulator);
+			state.logProbability$m = (state.logProbability$m + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -4758,20 +4289,20 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample33)
+			if(state.fixedFlag$sample33)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample33 = fixedFlag$sample33;
+			state.fixedProbFlag$sample33 = state.fixedFlag$sample33;
 		} else {
 			// Using cached values.
 			// 
@@ -4780,18 +4311,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$m = (logProbability$m + logProbability$var33);
+			state.logProbability$m = (state.logProbability$m + state.logProbability$var33);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var33);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var33);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample33)
+			if(state.fixedFlag$sample33)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var33);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var33);
 		}
 	}
 
@@ -4800,16 +4331,16 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityValue$sample57() {
 		// Determine if we need to calculate the values for sample task 57 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample57) {
+		if(!state.fixedProbFlag$sample57) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
 				// The sample value to calculate the probability of generating
-				int cv$sampleValue = st[sample$var45][0];
+				int cv$sampleValue = state.st[sample$var45][0];
 				
 				// Record that the sample was reached.
 				cv$sampleReached = true;
@@ -4827,7 +4358,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// An accumulator for log probabilities.
 				// 
 				// Store the value of the function call, so the function call is only made once.
-				cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= initialStateDistribution[cv$sampleValue])) && (initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+				cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= state.initialStateDistribution[cv$sampleValue])) && (state.initialStateDistribution[cv$sampleValue] <= 1.0))?Math.log(state.initialStateDistribution[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 			}
 			
 			// Only update the sample if it was reached, otherwise the NaN will be
@@ -4839,7 +4370,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$var55 = cv$sampleAccumulator;
+				state.logProbability$var55 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -4847,7 +4378,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$st = (logProbability$st + cv$sampleAccumulator);
+			state.logProbability$st = (state.logProbability$st + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -4855,20 +4386,20 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample57)
+			if(state.fixedFlag$sample57)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample57 = (fixedFlag$sample57 && fixedFlag$sample20);
+			state.fixedProbFlag$sample57 = (state.fixedFlag$sample57 && state.fixedFlag$sample20);
 		} else {
 			// Using cached values.
 			// 
@@ -4877,18 +4408,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$st = (logProbability$st + logProbability$var55);
+			state.logProbability$st = (state.logProbability$st + state.logProbability$var55);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var55);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var55);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample57)
+			if(state.fixedFlag$sample57)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var55);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var55);
 		}
 	}
 
@@ -4897,18 +4428,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	private final void logProbabilityValue$sample76() {
 		// Determine if we need to calculate the values for sample task 76 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample76) {
+		if(!state.fixedProbFlag$sample76) {
 			// Generating probabilities for sample task
 			// Accumulator for sample probabilities for a specific instance of the random variable.
 			double cv$sampleAccumulator = 0.0;
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int sample$var45 = 0; sample$var45 < noSamples; sample$var45 += 1) {
-				for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+			for(int sample$var45 = 0; sample$var45 < state.noSamples; sample$var45 += 1) {
+				for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = st[sample$var45][timeStep$var66];
-					double[] var72 = m[st[sample$var45][(timeStep$var66 - 1)]];
+					int cv$sampleValue = state.st[sample$var45][timeStep$var66];
+					double[] var72 = state.m[state.st[sample$var45][(timeStep$var66 - 1)]];
 					
 					// Record that the sample was reached.
 					cv$sampleReached = true;
@@ -4926,7 +4457,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					// An accumulator for log probabilities.
 					// 
 					// Store the value of the function call, so the function call is only made once.
-					cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noStates)) && (0 < noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+					cv$sampleAccumulator = (cv$sampleAccumulator + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noStates)) && (0 < state.noStates)) && (0.0 <= var72[cv$sampleValue])) && (var72[cv$sampleValue] <= 1.0))?Math.log(var72[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 				}
 			}
 			
@@ -4939,7 +4470,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$var74 = cv$sampleAccumulator;
+				state.logProbability$var74 = cv$sampleAccumulator;
 			
 			// Update the variable probability
 			// 
@@ -4947,7 +4478,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$st = (logProbability$st + cv$sampleAccumulator);
+			state.logProbability$st = (state.logProbability$st + cv$sampleAccumulator);
 			
 			// Add probability to model
 			// 
@@ -4955,20 +4486,20 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// of all instances of the random variable.
 			// 
 			// Accumulator for probabilities of instances of the random variable
-			logProbability$$model = (logProbability$$model + cv$sampleAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$sampleAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample76)
+			if(state.fixedFlag$sample76)
 				// Add the probability of this instance of the random variable to the probability
 				// of all instances of the random variable.
 				// 
 				// Accumulator for probabilities of instances of the random variable
-				logProbability$$evidence = (logProbability$$evidence + cv$sampleAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$sampleAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample76 = ((fixedFlag$sample76 && fixedFlag$sample33) && fixedFlag$sample57);
+			state.fixedProbFlag$sample76 = ((state.fixedFlag$sample76 && state.fixedFlag$sample33) && state.fixedFlag$sample57);
 		} else {
 			// Using cached values.
 			// 
@@ -4977,21 +4508,23 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			// Update the variable probability
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$st = (logProbability$st + logProbability$var74);
+			state.logProbability$st = (state.logProbability$st + state.logProbability$var74);
 			
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$var74);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$var74);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample76)
+			if(state.fixedFlag$sample76)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$var74);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$var74);
 		}
 	}
 
+<<<<<<< Upstream, based on origin/Adding_types_to_variables_descriptions_so_that_global_local_and_scratch_accesses_can_be_separated
+<<<<<<< Upstream, based on origin/Adding_types_to_variables_descriptions_so_that_global_local_and_scratch_accesses_can_be_separated
 <<<<<<< Renaming_functions
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 134 drawn from Uniform 108. Inference was performed using Metropolis-Hastings.
@@ -6815,7 +6348,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Sum all the values
 			// 
-			// Initialise the max to the first element.
+			// Initialize the max to the first element.
 			double cv$lseMax = cv$stateProbabilityLocal[0];
 			
 			// Find max value.
@@ -6831,7 +6364,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Sum the values in the array.
 			else {
-				// Initialise the sum of the array elements
+				// Initialize the sum of the array elements
 				double cv$lseSum = 0.0;
 				
 				// Offset values, move to normal space, and sum.
@@ -7700,7 +7233,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Sum all the values
 			// 
-			// Initialise the max to the first element.
+			// Initialize the max to the first element.
 			double cv$lseMax = cv$stateProbabilityLocal[0];
 			
 			// Find max value.
@@ -7716,7 +7249,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			
 			// Sum the values in the array.
 			else {
-				// Initialise the sum of the array elements
+				// Initialize the sum of the array elements
 				double cv$lseSum = 0.0;
 				
 				// Offset values, move to normal space, and sum.
@@ -7748,6 +7281,130 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 =======
 >>>>>>> 36e6d3b Restructuring naming and renaming functions, this does result in them changing location in the generated source. This is done to allow the addition of unconstrained variables to be completed by adding in the methods to sample the unconstrained values.
+=======
+	// Method to allocate space for model inputs and outputs.
+	@Override
+	public final void allocate() {
+		// Constructor for v
+		v = new double[noStates];
+		
+		// If initialStateDistribution has not been set already allocate space.
+		if(!fixedFlag$sample20)
+			// Constructor for initialStateDistribution
+			initialStateDistribution = new double[noStates];
+		
+		// If m has not been set already allocate space.
+		if(!fixedFlag$sample33) {
+			// Constructor for m
+			m = new double[noStates][];
+			for(int var32 = 0; var32 < noStates; var32 += 1)
+				m[var32] = new double[noStates];
+		}
+		
+		// If st has not been set already allocate space.
+		if((!fixedFlag$sample57 || !fixedFlag$sample76)) {
+			// Constructor for st
+			st = new int[length$metric.length][];
+			for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1)
+				st[sample$var45] = new int[length$metric[sample$var45][0]];
+		}
+		
+		// Constructor for metric_g
+		metric_g = new double[length$metric.length][][];
+		for(int var90 = 0; var90 < length$metric.length; var90 += 1)
+			metric_g[var90] = new double[length$metric[0].length][];
+		for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
+			for(int server = 0; server < length$metric[0].length; server += 1)
+				metric_g[sample$var196][server] = new double[length$metric[sample$var196][0]];
+		}
+		
+		// Constructor for metric_valid_g
+		metric_valid_g = new boolean[length$metric.length][][];
+		for(int var103 = 0; var103 < length$metric.length; var103 += 1)
+			metric_valid_g[var103] = new boolean[length$metric[0].length][];
+		for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
+			for(int server = 0; server < length$metric[0].length; server += 1)
+				metric_valid_g[sample$var196][server] = new boolean[length$metric[sample$var196][0]];
+		}
+		
+		// If current_metric_mean has not been set already allocate space.
+		if(!fixedFlag$sample134) {
+			// Constructor for current_metric_mean
+			current_metric_mean = new double[length$metric[0].length][];
+			for(int var119 = 0; var119 < length$metric[0].length; var119 += 1)
+				current_metric_mean[var119] = new double[noStates];
+		}
+		
+		// If current_metric_var has not been set already allocate space.
+		if(!fixedFlag$sample162) {
+			// Constructor for current_metric_var
+			current_metric_var = new double[length$metric[0].length][];
+			for(int var146 = 0; var146 < length$metric[0].length; var146 += 1)
+				current_metric_var[var146] = new double[noStates];
+		}
+		
+		// If current_metric_valid_bias has not been set already allocate space.
+		if(!fixedFlag$sample190) {
+			// Constructor for current_metric_valid_bias
+			current_metric_valid_bias = new double[length$metric[0].length][];
+			for(int var173 = 0; var173 < length$metric[0].length; var173 += 1)
+				current_metric_valid_bias[var173] = new double[noStates];
+		}
+		
+		// Constructor for var245
+		var245 = new double[length$metric.length][][];
+		for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
+			double[][] subarray$0 = new double[length$metric[0].length][];
+			var245[sample$var196] = subarray$0;
+			for(int server = 0; server < length$metric[0].length; server += 1)
+				subarray$0[server] = new double[length$metric[sample$var196][0]];
+		}
+		
+		// Constructor for distribution$sample76
+		distribution$sample76 = new double[length$metric.length][][];
+		for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1) {
+			double[][] subarray$0 = new double[(length$metric[sample$var45][0] - 1)][];
+			distribution$sample76[sample$var45] = subarray$0;
+			for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
+				subarray$0[(timeStep$var66 - 1)] = new double[noStates];
+		}
+		
+		// Constructor for distribution$sample57
+		distribution$sample57 = new double[length$metric.length][];
+		for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1)
+			distribution$sample57[sample$var45] = new double[noStates];
+		
+		// Constructor for constrainedFlag$sample190
+		constrainedFlag$sample190 = new boolean[length$metric[0].length][];
+		for(int var173 = 0; var173 < length$metric[0].length; var173 += 1)
+			constrainedFlag$sample190[var173] = new boolean[noStates];
+		
+		// Constructor for constrainedFlag$sample76
+		constrainedFlag$sample76 = new boolean[length$metric.length][];
+		for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1)
+			constrainedFlag$sample76[sample$var45] = new boolean[(length$metric[sample$var45][0] - 1)];
+		
+		// Constructor for constrainedFlag$sample57
+		constrainedFlag$sample57 = new boolean[length$metric.length];
+		
+		// Constructor for constrainedFlag$sample134
+		constrainedFlag$sample134 = new boolean[length$metric[0].length][];
+		for(int var119 = 0; var119 < length$metric[0].length; var119 += 1)
+			constrainedFlag$sample134[var119] = new boolean[noStates];
+		
+		// Constructor for constrainedFlag$sample162
+		constrainedFlag$sample162 = new boolean[length$metric[0].length][];
+		for(int var146 = 0; var146 < length$metric[0].length; var146 += 1)
+			constrainedFlag$sample162[var146] = new boolean[noStates];
+		
+		// Constructor for constrainedFlag$sample33
+		constrainedFlag$sample33 = new boolean[noStates];
+		
+		// Allocate scratch space
+		allocateScratch();
+	}
+
+>>>>>>> 0cb92c4 Adding in a class to hold just the state. This will be worked on further as the code generation progresses. Commit before adding inner classes to the outer classes. Updating output class structure checkpoint Checkpoint in the restructuring of the output classes to increase the shared code. Finished restructuring the classes, time to start using inner classes. Updates to tree structure Changing the structure of get field so that it can be used to get other types of field, read for getting data out of the scratch and model data classes. Removing unused imports Adding nodes to allow fields in an object ot be set. Moving rng package so that we can add other internal only variable types. Updates to the handling of transformations. Moving from sets to lists of generics Updating the structure of inner class. Changing the passing of fields to sub classes. Updating class structure
 	// Method to allocate space temporary variables used by the inference methods. Allocating
 	// here prevents repeated allocation and deallocation, and makes the code more amenable
 	// to GPU execution.
@@ -7889,187 +7546,67 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			guard$sample76gaussian255$global[cv$index] = new boolean[cv$max_sample$var196][cv$max_server][cv$max_timeStep$var226];
 	}
 
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Constructor for v
-		v = new double[noStates];
-		
-		// If initialStateDistribution has not been set already allocate space.
-		if(!fixedFlag$sample20)
-			// Constructor for initialStateDistribution
-			initialStateDistribution = new double[noStates];
-		
-		// If m has not been set already allocate space.
-		if(!fixedFlag$sample33) {
-			// Constructor for m
-			m = new double[noStates][];
-			for(int var32 = 0; var32 < noStates; var32 += 1)
-				m[var32] = new double[noStates];
-		}
-		
-		// If st has not been set already allocate space.
-		if((!fixedFlag$sample57 || !fixedFlag$sample76)) {
-			// Constructor for st
-			st = new int[length$metric.length][];
-			for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1)
-				st[sample$var45] = new int[length$metric[sample$var45][0]];
-		}
-		
-		// Constructor for metric_g
-		metric_g = new double[length$metric.length][][];
-		for(int var90 = 0; var90 < length$metric.length; var90 += 1)
-			metric_g[var90] = new double[length$metric[0].length][];
-		for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-			for(int server = 0; server < length$metric[0].length; server += 1)
-				metric_g[sample$var196][server] = new double[length$metric[sample$var196][0]];
-		}
-		
-		// Constructor for metric_valid_g
-		metric_valid_g = new boolean[length$metric.length][][];
-		for(int var103 = 0; var103 < length$metric.length; var103 += 1)
-			metric_valid_g[var103] = new boolean[length$metric[0].length][];
-		for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-			for(int server = 0; server < length$metric[0].length; server += 1)
-				metric_valid_g[sample$var196][server] = new boolean[length$metric[sample$var196][0]];
-		}
-		
-		// If current_metric_mean has not been set already allocate space.
-		if(!fixedFlag$sample134) {
-			// Constructor for current_metric_mean
-			current_metric_mean = new double[length$metric[0].length][];
-			for(int var119 = 0; var119 < length$metric[0].length; var119 += 1)
-				current_metric_mean[var119] = new double[noStates];
-		}
-		
-		// If current_metric_var has not been set already allocate space.
-		if(!fixedFlag$sample162) {
-			// Constructor for current_metric_var
-			current_metric_var = new double[length$metric[0].length][];
-			for(int var146 = 0; var146 < length$metric[0].length; var146 += 1)
-				current_metric_var[var146] = new double[noStates];
-		}
-		
-		// If current_metric_valid_bias has not been set already allocate space.
-		if(!fixedFlag$sample190) {
-			// Constructor for current_metric_valid_bias
-			current_metric_valid_bias = new double[length$metric[0].length][];
-			for(int var173 = 0; var173 < length$metric[0].length; var173 += 1)
-				current_metric_valid_bias[var173] = new double[noStates];
-		}
-		
-		// Constructor for var245
-		var245 = new double[length$metric.length][][];
-		for(int sample$var196 = 0; sample$var196 < length$metric.length; sample$var196 += 1) {
-			double[][] subarray$0 = new double[length$metric[0].length][];
-			var245[sample$var196] = subarray$0;
-			for(int server = 0; server < length$metric[0].length; server += 1)
-				subarray$0[server] = new double[length$metric[sample$var196][0]];
-		}
-		
-		// Constructor for distribution$sample76
-		distribution$sample76 = new double[length$metric.length][][];
-		for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1) {
-			double[][] subarray$0 = new double[(length$metric[sample$var45][0] - 1)][];
-			distribution$sample76[sample$var45] = subarray$0;
-			for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
-				subarray$0[(timeStep$var66 - 1)] = new double[noStates];
-		}
-		
-		// Constructor for distribution$sample57
-		distribution$sample57 = new double[length$metric.length][];
-		for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1)
-			distribution$sample57[sample$var45] = new double[noStates];
-		
-		// Constructor for constrainedFlag$sample190
-		constrainedFlag$sample190 = new boolean[length$metric[0].length][];
-		for(int var173 = 0; var173 < length$metric[0].length; var173 += 1)
-			constrainedFlag$sample190[var173] = new boolean[noStates];
-		
-		// Constructor for constrainedFlag$sample76
-		constrainedFlag$sample76 = new boolean[length$metric.length][];
-		for(int sample$var45 = 0; sample$var45 < length$metric.length; sample$var45 += 1)
-			constrainedFlag$sample76[sample$var45] = new boolean[(length$metric[sample$var45][0] - 1)];
-		
-		// Constructor for constrainedFlag$sample57
-		constrainedFlag$sample57 = new boolean[length$metric.length];
-		
-		// Constructor for constrainedFlag$sample134
-		constrainedFlag$sample134 = new boolean[length$metric[0].length][];
-		for(int var119 = 0; var119 < length$metric[0].length; var119 += 1)
-			constrainedFlag$sample134[var119] = new boolean[noStates];
-		
-		// Constructor for constrainedFlag$sample162
-		constrainedFlag$sample162 = new boolean[length$metric[0].length][];
-		for(int var146 = 0; var146 < length$metric[0].length; var146 += 1)
-			constrainedFlag$sample162[var146] = new boolean[noStates];
-		
-		// Constructor for constrainedFlag$sample33
-		constrainedFlag$sample33 = new boolean[noStates];
-		
-		// Allocate scratch space
-		allocateScratch();
-	}
-
+=======
+>>>>>>> 599badf Starting to add scratch the correct way. Adding a transformation to rewrite trees with accesses to scratch space. This will want changing so that we pass in a transformer rather than a series of flags at the end. Adding scratch state to the model. Changes that are only related to the addition of inner classes to hold the state. More adding state Updates to state location Adding state and scratch classes
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, state.initialStateDistribution);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample33)
+		if(!state.fixedFlag$sample33)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noStates, 1,
+			parallelFor(state.RNG$, 0, state.noStates, 1,
 				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var32]);
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.noStates, state.m[var32]);
 				}
 			);
 
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-						if(!fixedFlag$sample57)
-							st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
+						if(!state.fixedFlag$sample57)
+							state.st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$1, state.initialStateDistribution, state.noStates);
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!fixedFlag$sample76) {
-							int[] var67 = st[sample$var45];
-							for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
-								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+						if(!state.fixedFlag$sample76) {
+							int[] var67 = state.st[sample$var45];
+							for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1)
+								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, state.m[state.st[sample$var45][(timeStep$var66 - 1)]], state.noStates);
 						}
 					}
 			}
 		);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample134)
+		if(!state.fixedFlag$sample134)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var119, int forEnd$var119, int threadID$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var119 = forStart$var119; var119 < forEnd$var119; var119 += 1) {
-							double[] var120 = current_metric_mean[var119];
+							double[] var120 = state.current_metric_mean[var119];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1)
-											var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
+											var120[var129] = ((double)state.max_metric * DistributionSampling.sampleUniform(RNG$2));
 								}
 							);
 						}
@@ -8078,18 +7615,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample162)
+		if(!state.fixedFlag$sample162)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var146, int forEnd$var146, int threadID$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var146 = forStart$var146; var146 < forEnd$var146; var146 += 1) {
-							double[] var147 = current_metric_var[var146];
+							double[] var147 = state.current_metric_var[var146];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
@@ -8104,18 +7641,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample190)
+		if(!state.fixedFlag$sample190)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var173, int forEnd$var173, int threadID$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var173 = forStart$var173; var173 < forEnd$var173; var173 += 1) {
-							double[] var174 = current_metric_valid_bias[var173];
+							double[] var174 = state.current_metric_valid_bias[var173];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
@@ -8130,7 +7667,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$index$sample$var196, int forEnd$index$sample$var196, int threadID$index$sample$var196, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -8138,10 +7675,10 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					for(int index$sample$var196 = forStart$index$sample$var196; index$sample$var196 < forEnd$index$sample$var196; index$sample$var196 += 1) {
 						int sample$var196 = index$sample$var196;
 						int threadID$sample$var196 = threadID$index$sample$var196;
-						double[][] var211 = metric_g[sample$var196];
+						double[][] var211 = state.metric_g[sample$var196];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noServers, 1,
+						parallelFor(RNG$1, 0, state.noServers, 1,
 							(int forStart$index$server, int forEnd$index$server, int threadID$index$server, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
@@ -8149,20 +7686,20 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									for(int index$server = forStart$index$server; index$server < forEnd$index$server; index$server += 1) {
 										int server = index$server;
 										int threadID$server = threadID$index$server;
-										boolean[] metric_valid_inner = metric_valid_g[sample$var196][server];
+										boolean[] metric_valid_inner = state.metric_valid_g[sample$var196][server];
 										double[] metric_inner = var211[server];
 										
 										//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-										parallelFor(RNG$2, 0, length$metric[sample$var196][0], 1,
+										parallelFor(RNG$2, 0, state.length$metric[sample$var196][0], 1,
 											(int forStart$timeStep$var226, int forEnd$timeStep$var226, int threadID$timeStep$var226, org.sandwood.random.internal.Rng RNG$3) -> { 
 												
 													// Inner loop for running batches of iterations, each batch has its own random number
 													// generator.
 													for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1) {
-														metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
+														metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, state.current_metric_valid_bias[server][state.st[sample$var196][timeStep$var226]]);
 														if(metric_valid_inner[timeStep$var226]) {
-															var245[sample$var196][server][timeStep$var226] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$3)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
-															metric_inner[timeStep$var226] = var245[sample$var196][server][timeStep$var226];
+															state.var245[sample$var196][server][timeStep$var226] = ((Math.sqrt(state.current_metric_var[server][state.st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$3)) + state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]]);
+															metric_inner[timeStep$var226] = state.var245[sample$var196][server][timeStep$var226];
 														}
 													}
 											}
@@ -8180,47 +7717,47 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, state.initialStateDistribution);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample33)
+		if(!state.fixedFlag$sample33)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noStates, 1,
+			parallelFor(state.RNG$, 0, state.noStates, 1,
 				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var32]);
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.noStates, state.m[var32]);
 				}
 			);
 
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!fixedFlag$sample57) {
+						if(!state.fixedFlag$sample57) {
 							// Create local copy of variable probabilities.
-							double[] cv$distribution$sample57 = distribution$sample57[sample$var45];
-							for(int index$var54 = 0; index$var54 < noStates; index$var54 += 1)
+							double[] cv$distribution$sample57 = state.distribution$sample57[sample$var45];
+							for(int index$var54 = 0; index$var54 < state.noStates; index$var54 += 1)
 								// Save the probability of each value
 								// 
 								// Probability for this value
-								cv$distribution$sample57[index$var54] = (((0.0 <= initialStateDistribution[index$var54]) && (initialStateDistribution[index$var54] <= 1.0))?initialStateDistribution[index$var54]:0.0);
+								cv$distribution$sample57[index$var54] = (((0.0 <= state.initialStateDistribution[index$var54]) && (state.initialStateDistribution[index$var54] <= 1.0))?state.initialStateDistribution[index$var54]:0.0);
 						}
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!fixedFlag$sample76) {
-							for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
+						if(!state.fixedFlag$sample76) {
+							for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
 								// Create local copy of variable probabilities.
-								double[] cv$distribution$sample76 = distribution$sample76[sample$var45][(timeStep$var66 - 1)];
-								for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1)
+								double[] cv$distribution$sample76 = state.distribution$sample76[sample$var45][(timeStep$var66 - 1)];
+								for(int index$var73 = 0; index$var73 < state.noStates; index$var73 += 1)
 									// Zero the probability of each value
 									cv$distribution$sample76[index$var73] = 0.0;
 								
@@ -8231,26 +7768,26 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									// Iterate through possible values for var73's arguments.
 									// 
 									// Enumerating the possible arguments for Categorical 73.
-									if(fixedFlag$sample57) {
-										int var32 = st[sample$var45][0];
+									if(state.fixedFlag$sample57) {
+										int var32 = state.st[sample$var45][0];
 										
-										// Substituted "timeStep$var66" with its value "1".
-										if(((0 <= var32) && (var32 < noStates))) {
+																														// Substituted "timeStep$var66" with its value "1".
+										if(((0 <= var32) && (var32 < state.noStates))) {
 											// Substituted "timeStep$var66" with its value "1".
-											double[] var72 = m[st[sample$var45][0]];
-											for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1)
+											double[] var72 = state.m[state.st[sample$var45][0]];
+											for(int index$var73 = 0; index$var73 < state.noStates; index$var73 += 1)
 												// Save the probability of each value
 												cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (((0.0 <= var72[index$var73]) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0));
 										}
 									} else {
 										// Enumerating the possible outputs of Categorical 54.
-										for(int index$sample57$3 = 0; index$sample57$3 < noStates; index$sample57$3 += 1) {
+										for(int index$sample57$3 = 0; index$sample57$3 < state.noStates; index$sample57$3 += 1) {
 											// Update the probability of sampling this value from the distribution value.
 											// 
 											// Substituted "index$sample$2" with its value "sample$var45".
-											double cv$probabilitySample57Value4 = distribution$sample57[sample$var45][index$sample57$3];
-											double[] var72 = m[index$sample57$3];
-											for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1)
+											double cv$probabilitySample57Value4 = state.distribution$sample57[sample$var45][index$sample57$3];
+											double[] var72 = state.m[index$sample57$3];
+											for(int index$var73 = 0; index$var73 < state.noStates; index$var73 += 1)
 												// Save the probability of each value
 												cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (cv$probabilitySample57Value4 * (((0.0 <= var72[index$var73]) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0)));
 										}
@@ -8263,13 +7800,13 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								// Substituted "index$sample$10" with its value "sample$var45".
 								if((1 <= index$timeStep$11)) {
 									// Enumerating the possible outputs of Categorical 73.
-									for(int index$sample76$12 = 0; index$sample76$12 < noStates; index$sample76$12 += 1) {
+									for(int index$sample76$12 = 0; index$sample76$12 < state.noStates; index$sample76$12 += 1) {
 										// Update the probability of sampling this value from the distribution value.
 										// 
 										// Substituted "index$sample$10" with its value "sample$var45".
-										double cv$probabilitySample76Value13 = distribution$sample76[sample$var45][(index$timeStep$11 - 1)][index$sample76$12];
-										double[] var72 = m[index$sample76$12];
-										for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1)
+										double cv$probabilitySample76Value13 = state.distribution$sample76[sample$var45][(index$timeStep$11 - 1)][index$sample76$12];
+										double[] var72 = state.m[index$sample76$12];
+										for(int index$var73 = 0; index$var73 < state.noStates; index$var73 += 1)
 											// Save the probability of each value
 											cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] + (cv$probabilitySample76Value13 * (((0.0 <= var72[index$var73]) && (var72[index$var73] <= 1.0))?var72[index$var73]:0.0)));
 									}
@@ -8277,10 +7814,10 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								
 								// Sum the values in the array
 								double cv$var73$sum = 0.0;
-								for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1)
+								for(int index$var73 = 0; index$var73 < state.noStates; index$var73 += 1)
 									// sum the probability of each value
 									cv$var73$sum = (cv$var73$sum + cv$distribution$sample76[index$var73]);
-								for(int index$var73 = 0; index$var73 < noStates; index$var73 += 1)
+								for(int index$var73 = 0; index$var73 < state.noStates; index$var73 += 1)
 									// Normalise the probability of each value
 									cv$distribution$sample76[index$var73] = (cv$distribution$sample76[index$var73] / cv$var73$sum);
 							}
@@ -8290,24 +7827,24 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample134)
+		if(!state.fixedFlag$sample134)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var119, int forEnd$var119, int threadID$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var119 = forStart$var119; var119 < forEnd$var119; var119 += 1) {
-							double[] var120 = current_metric_mean[var119];
+							double[] var120 = state.current_metric_mean[var119];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1)
-											var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
+											var120[var129] = ((double)state.max_metric * DistributionSampling.sampleUniform(RNG$2));
 								}
 							);
 						}
@@ -8316,18 +7853,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample162)
+		if(!state.fixedFlag$sample162)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var146, int forEnd$var146, int threadID$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var146 = forStart$var146; var146 < forEnd$var146; var146 += 1) {
-							double[] var147 = current_metric_var[var146];
+							double[] var147 = state.current_metric_var[var146];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
@@ -8342,18 +7879,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample190)
+		if(!state.fixedFlag$sample190)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var173, int forEnd$var173, int threadID$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var173 = forStart$var173; var173 < forEnd$var173; var173 += 1) {
-							double[] var174 = current_metric_valid_bias[var173];
+							double[] var174 = state.current_metric_valid_bias[var173];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
@@ -8372,62 +7909,62 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, state.initialStateDistribution);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample33)
+		if(!state.fixedFlag$sample33)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noStates, 1,
+			parallelFor(state.RNG$, 0, state.noStates, 1,
 				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var32]);
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.noStates, state.m[var32]);
 				}
 			);
 
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-						if(!fixedFlag$sample57)
-							st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
+						if(!state.fixedFlag$sample57)
+							state.st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$1, state.initialStateDistribution, state.noStates);
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!fixedFlag$sample76) {
-							int[] var67 = st[sample$var45];
-							for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
-								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+						if(!state.fixedFlag$sample76) {
+							int[] var67 = state.st[sample$var45];
+							for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1)
+								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, state.m[state.st[sample$var45][(timeStep$var66 - 1)]], state.noStates);
 						}
 					}
 			}
 		);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample134)
+		if(!state.fixedFlag$sample134)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var119, int forEnd$var119, int threadID$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var119 = forStart$var119; var119 < forEnd$var119; var119 += 1) {
-							double[] var120 = current_metric_mean[var119];
+							double[] var120 = state.current_metric_mean[var119];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1)
-											var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
+											var120[var129] = ((double)state.max_metric * DistributionSampling.sampleUniform(RNG$2));
 								}
 							);
 						}
@@ -8436,18 +7973,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample162)
+		if(!state.fixedFlag$sample162)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var146, int forEnd$var146, int threadID$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var146 = forStart$var146; var146 < forEnd$var146; var146 += 1) {
-							double[] var147 = current_metric_var[var146];
+							double[] var147 = state.current_metric_var[var146];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
@@ -8462,18 +7999,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample190)
+		if(!state.fixedFlag$sample190)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var173, int forEnd$var173, int threadID$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var173 = forStart$var173; var173 < forEnd$var173; var173 += 1) {
-							double[] var174 = current_metric_valid_bias[var173];
+							double[] var174 = state.current_metric_valid_bias[var173];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
@@ -8488,7 +8025,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$index$sample$var196, int forEnd$index$sample$var196, int threadID$index$sample$var196, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -8496,10 +8033,10 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					for(int index$sample$var196 = forStart$index$sample$var196; index$sample$var196 < forEnd$index$sample$var196; index$sample$var196 += 1) {
 						int sample$var196 = index$sample$var196;
 						int threadID$sample$var196 = threadID$index$sample$var196;
-						double[][] var211 = metric_g[sample$var196];
+						double[][] var211 = state.metric_g[sample$var196];
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noServers, 1,
+						parallelFor(RNG$1, 0, state.noServers, 1,
 							(int forStart$index$server, int forEnd$index$server, int threadID$index$server, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
@@ -8507,20 +8044,20 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 									for(int index$server = forStart$index$server; index$server < forEnd$index$server; index$server += 1) {
 										int server = index$server;
 										int threadID$server = threadID$index$server;
-										boolean[] metric_valid_inner = metric_valid_g[sample$var196][server];
+										boolean[] metric_valid_inner = state.metric_valid_g[sample$var196][server];
 										double[] metric_inner = var211[server];
 										
 										//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-										parallelFor(RNG$2, 0, length$metric[sample$var196][0], 1,
+										parallelFor(RNG$2, 0, state.length$metric[sample$var196][0], 1,
 											(int forStart$timeStep$var226, int forEnd$timeStep$var226, int threadID$timeStep$var226, org.sandwood.random.internal.Rng RNG$3) -> { 
 												
 													// Inner loop for running batches of iterations, each batch has its own random number
 													// generator.
 													for(int timeStep$var226 = forStart$timeStep$var226; timeStep$var226 < forEnd$timeStep$var226; timeStep$var226 += 1) {
-														metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, current_metric_valid_bias[server][st[sample$var196][timeStep$var226]]);
+														metric_valid_inner[timeStep$var226] = DistributionSampling.sampleBernoulli(RNG$3, state.current_metric_valid_bias[server][state.st[sample$var196][timeStep$var226]]);
 														if(metric_valid_inner[timeStep$var226]) {
-															var245[sample$var196][server][timeStep$var226] = ((Math.sqrt(current_metric_var[server][st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$3)) + current_metric_mean[server][st[sample$var196][timeStep$var226]]);
-															metric_inner[timeStep$var226] = var245[sample$var196][server][timeStep$var226];
+															state.var245[sample$var196][server][timeStep$var226] = ((Math.sqrt(state.current_metric_var[server][state.st[sample$var196][timeStep$var226]]) * DistributionSampling.sampleGaussian(RNG$3)) + state.current_metric_mean[server][state.st[sample$var196][timeStep$var226]]);
+															metric_inner[timeStep$var226] = state.var245[sample$var196][server][timeStep$var226];
 														}
 													}
 											}
@@ -8537,62 +8074,62 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, state.initialStateDistribution);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample33)
+		if(!state.fixedFlag$sample33)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noStates, 1,
+			parallelFor(state.RNG$, 0, state.noStates, 1,
 				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var32]);
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.noStates, state.m[var32]);
 				}
 			);
 
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-						if(!fixedFlag$sample57)
-							st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
+						if(!state.fixedFlag$sample57)
+							state.st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$1, state.initialStateDistribution, state.noStates);
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!fixedFlag$sample76) {
-							int[] var67 = st[sample$var45];
-							for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
-								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+						if(!state.fixedFlag$sample76) {
+							int[] var67 = state.st[sample$var45];
+							for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1)
+								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, state.m[state.st[sample$var45][(timeStep$var66 - 1)]], state.noStates);
 						}
 					}
 			}
 		);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample134)
+		if(!state.fixedFlag$sample134)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var119, int forEnd$var119, int threadID$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var119 = forStart$var119; var119 < forEnd$var119; var119 += 1) {
-							double[] var120 = current_metric_mean[var119];
+							double[] var120 = state.current_metric_mean[var119];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1)
-											var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
+											var120[var129] = ((double)state.max_metric * DistributionSampling.sampleUniform(RNG$2));
 								}
 							);
 						}
@@ -8601,18 +8138,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample162)
+		if(!state.fixedFlag$sample162)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var146, int forEnd$var146, int threadID$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var146 = forStart$var146; var146 < forEnd$var146; var146 += 1) {
-							double[] var147 = current_metric_var[var146];
+							double[] var147 = state.current_metric_var[var146];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
@@ -8627,18 +8164,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample190)
+		if(!state.fixedFlag$sample190)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var173, int forEnd$var173, int threadID$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var173 = forStart$var173; var173 < forEnd$var173; var173 += 1) {
-							double[] var174 = current_metric_valid_bias[var173];
+							double[] var174 = state.current_metric_valid_bias[var173];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
@@ -8658,62 +8195,62 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample20)
-			DistributionSampling.sampleDirichlet(RNG$, v, noStates, initialStateDistribution);
+		if(!state.fixedFlag$sample20)
+			DistributionSampling.sampleDirichlet(state.RNG$, state.v, state.noStates, state.initialStateDistribution);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample33)
+		if(!state.fixedFlag$sample33)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noStates, 1,
+			parallelFor(state.RNG$, 0, state.noStates, 1,
 				(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1)
-							DistributionSampling.sampleDirichlet(RNG$1, v, noStates, m[var32]);
+							DistributionSampling.sampleDirichlet(RNG$1, state.v, state.noStates, state.m[var32]);
 				}
 			);
 
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-						if(!fixedFlag$sample57)
-							st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$1, initialStateDistribution, noStates);
+						if(!state.fixedFlag$sample57)
+							state.st[sample$var45][0] = DistributionSampling.sampleCategorical(RNG$1, state.initialStateDistribution, state.noStates);
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if(!fixedFlag$sample76) {
-							int[] var67 = st[sample$var45];
-							for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
-								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, m[st[sample$var45][(timeStep$var66 - 1)]], noStates);
+						if(!state.fixedFlag$sample76) {
+							int[] var67 = state.st[sample$var45];
+							for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1)
+								var67[timeStep$var66] = DistributionSampling.sampleCategorical(RNG$1, state.m[state.st[sample$var45][(timeStep$var66 - 1)]], state.noStates);
 						}
 					}
 			}
 		);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample134)
+		if(!state.fixedFlag$sample134)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var119, int forEnd$var119, int threadID$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var119 = forStart$var119; var119 < forEnd$var119; var119 += 1) {
-							double[] var120 = current_metric_mean[var119];
+							double[] var120 = state.current_metric_mean[var119];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
 										// generator.
 										for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1)
-											var120[var129] = ((double)max_metric * DistributionSampling.sampleUniform(RNG$2));
+											var120[var129] = ((double)state.max_metric * DistributionSampling.sampleUniform(RNG$2));
 								}
 							);
 						}
@@ -8722,18 +8259,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample162)
+		if(!state.fixedFlag$sample162)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var146, int forEnd$var146, int threadID$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var146 = forStart$var146; var146 < forEnd$var146; var146 += 1) {
-							double[] var147 = current_metric_var[var146];
+							double[] var147 = state.current_metric_var[var146];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
@@ -8748,18 +8285,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample190)
+		if(!state.fixedFlag$sample190)
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noServers, 1,
+			parallelFor(state.RNG$, 0, state.noServers, 1,
 				(int forStart$var173, int forEnd$var173, int threadID$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int var173 = forStart$var173; var173 < forEnd$var173; var173 += 1) {
-							double[] var174 = current_metric_valid_bias[var173];
+							double[] var174 = state.current_metric_valid_bias[var173];
 							
 							//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-							parallelFor(RNG$1, 0, noStates, 1,
+							parallelFor(RNG$1, 0, state.noStates, 1,
 								(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 									
 										// Inner loop for running batches of iterations, each batch has its own random number
@@ -8778,14 +8315,14 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample20)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample20)
 				inferSample20();
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample33)
+			if(!state.fixedFlag$sample33)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-				parallelFor(RNG$, 0, noStates, 1,
+				parallelFor(state.RNG$, 0, state.noStates, 1,
 					(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 						
 							// Inner loop for running batches of iterations, each batch has its own random number
@@ -8797,18 +8334,18 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noSamples, 1,
+			parallelFor(state.RNG$, 0, state.noSamples, 1,
 				(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-							if(!fixedFlag$sample57)
+							if(!state.fixedFlag$sample57)
 								inferSample57(sample$var45, threadID$sample$var45, RNG$1);
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
-							if(!fixedFlag$sample76) {
-								for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1)
+							if(!state.fixedFlag$sample76) {
+								for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1)
 									inferSample76(sample$var45, timeStep$var66, threadID$sample$var45, RNG$1);
 							}
 						}
@@ -8816,9 +8353,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 			);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample134)
+			if(!state.fixedFlag$sample134)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-				parallelFor(RNG$, 0, noServers, 1,
+				parallelFor(state.RNG$, 0, state.noServers, 1,
 					(int forStart$index$var119, int forEnd$index$var119, int threadID$index$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 						
 							// Inner loop for running batches of iterations, each batch has its own random number
@@ -8828,7 +8365,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								int threadID$var119 = threadID$index$var119;
 								
 								//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-								parallelFor(RNG$1, 0, noStates, 1,
+								parallelFor(RNG$1, 0, state.noStates, 1,
 									(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 										
 											// Inner loop for running batches of iterations, each batch has its own random number
@@ -8843,9 +8380,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample162)
+			if(!state.fixedFlag$sample162)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-				parallelFor(RNG$, 0, noServers, 1,
+				parallelFor(state.RNG$, 0, state.noServers, 1,
 					(int forStart$index$var146, int forEnd$index$var146, int threadID$index$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 						
 							// Inner loop for running batches of iterations, each batch has its own random number
@@ -8855,7 +8392,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								int threadID$var146 = threadID$index$var146;
 								
 								//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-								parallelFor(RNG$1, 0, noStates, 1,
+								parallelFor(RNG$1, 0, state.noStates, 1,
 									(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 										
 											// Inner loop for running batches of iterations, each batch has its own random number
@@ -8870,9 +8407,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample190)
+			if(!state.fixedFlag$sample190)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-				parallelFor(RNG$, 0, noServers, 1,
+				parallelFor(state.RNG$, 0, state.noServers, 1,
 					(int forStart$index$var173, int forEnd$index$var173, int threadID$index$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 						
 							// Inner loop for running batches of iterations, each batch has its own random number
@@ -8882,7 +8419,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								int threadID$var173 = threadID$index$var173;
 								
 								//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-								parallelFor(RNG$1, 0, noStates, 1,
+								parallelFor(RNG$1, 0, state.noStates, 1,
 									(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 										
 											// Inner loop for running batches of iterations, each batch has its own random number
@@ -8899,9 +8436,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Infer the samples in reverse chronological order.
 		else {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample190)
+			if(!state.fixedFlag$sample190)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-				parallelFor(RNG$, 0, noServers, 1,
+				parallelFor(state.RNG$, 0, state.noServers, 1,
 					(int forStart$index$var173, int forEnd$index$var173, int threadID$index$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 						
 							// Inner loop for running batches of iterations, each batch has its own random number
@@ -8911,7 +8448,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								int threadID$var173 = threadID$index$var173;
 								
 								//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-								parallelFor(RNG$1, 0, noStates, 1,
+								parallelFor(RNG$1, 0, state.noStates, 1,
 									(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 										
 											// Inner loop for running batches of iterations, each batch has its own random number
@@ -8926,9 +8463,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample162)
+			if(!state.fixedFlag$sample162)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-				parallelFor(RNG$, 0, noServers, 1,
+				parallelFor(state.RNG$, 0, state.noServers, 1,
 					(int forStart$index$var146, int forEnd$index$var146, int threadID$index$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 						
 							// Inner loop for running batches of iterations, each batch has its own random number
@@ -8938,7 +8475,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								int threadID$var146 = threadID$index$var146;
 								
 								//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-								parallelFor(RNG$1, 0, noStates, 1,
+								parallelFor(RNG$1, 0, state.noStates, 1,
 									(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 										
 											// Inner loop for running batches of iterations, each batch has its own random number
@@ -8953,9 +8490,9 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample134)
+			if(!state.fixedFlag$sample134)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-				parallelFor(RNG$, 0, noServers, 1,
+				parallelFor(state.RNG$, 0, state.noServers, 1,
 					(int forStart$index$var119, int forEnd$index$var119, int threadID$index$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 						
 							// Inner loop for running batches of iterations, each batch has its own random number
@@ -8965,7 +8502,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 								int threadID$var119 = threadID$index$var119;
 								
 								//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-								parallelFor(RNG$1, 0, noStates, 1,
+								parallelFor(RNG$1, 0, state.noStates, 1,
 									(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 										
 											// Inner loop for running batches of iterations, each batch has its own random number
@@ -8980,27 +8517,27 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 
 			
 			//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-			parallelFor(RNG$, 0, noSamples, 1,
+			parallelFor(state.RNG$, 0, state.noSamples, 1,
 				(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 					
 						// Inner loop for running batches of iterations, each batch has its own random number
 						// generator.
 						for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
-							if(!fixedFlag$sample76) {
-								for(int timeStep$var66 = (length$metric[sample$var45][0] - 1); timeStep$var66 >= 1; timeStep$var66 -= 1)
+							if(!state.fixedFlag$sample76) {
+								for(int timeStep$var66 = (state.length$metric[sample$var45][0] - 1); timeStep$var66 >= 1; timeStep$var66 -= 1)
 									inferSample76(sample$var45, timeStep$var66, threadID$sample$var45, RNG$1);
 							}
-							if(!fixedFlag$sample57)
+							if(!state.fixedFlag$sample57)
 								inferSample57(sample$var45, threadID$sample$var45, RNG$1);
 						}
 				}
 			);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(!fixedFlag$sample33)
+			if(!state.fixedFlag$sample33)
 				//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-				parallelFor(RNG$, 0, noStates, 1,
+				parallelFor(state.RNG$, 0, state.noStates, 1,
 					(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 						
 							// Inner loop for running batches of iterations, each batch has its own random number
@@ -9010,39 +8547,39 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					}
 				);
 
-			if(!fixedFlag$sample20)
+			if(!state.fixedFlag$sample20)
 				inferSample20();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample20)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample20)
 			drawValueSample20();
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noStates, 1,
+		parallelFor(state.RNG$, 0, state.noStates, 1,
 			(int forStart$var32, int forEnd$var32, int threadID$var32, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int var32 = forStart$var32; var32 < forEnd$var32; var32 += 1) {
-						if(!constrainedFlag$sample33[var32])
+						if(!state.constrainedFlag$sample33[var32])
 							drawValueSample33(var32, threadID$var32, RNG$1);
 					}
 			}
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noSamples, 1,
+		parallelFor(state.RNG$, 0, state.noSamples, 1,
 			(int forStart$sample$var45, int forEnd$sample$var45, int threadID$sample$var45, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
 					// generator.
 					for(int sample$var45 = forStart$sample$var45; sample$var45 < forEnd$sample$var45; sample$var45 += 1) {
-						if(!constrainedFlag$sample57[sample$var45])
+						if(!state.constrainedFlag$sample57[sample$var45])
 							drawValueSample57(sample$var45, threadID$sample$var45, RNG$1);
-						for(int timeStep$var66 = 1; timeStep$var66 < length$metric[sample$var45][0]; timeStep$var66 += 1) {
-							if(!constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)])
+						for(int timeStep$var66 = 1; timeStep$var66 < state.length$metric[sample$var45][0]; timeStep$var66 += 1) {
+							if(!state.constrainedFlag$sample76[sample$var45][(timeStep$var66 - 1)])
 								drawValueSample76(sample$var45, timeStep$var66, threadID$sample$var45, RNG$1);
 						}
 					}
@@ -9050,7 +8587,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$index$var119, int forEnd$index$var119, int threadID$index$var119, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -9060,13 +8597,13 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						int threadID$var119 = threadID$index$var119;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var129, int forEnd$var129, int threadID$var129, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var129 = forStart$var129; var129 < forEnd$var129; var129 += 1) {
-										if(!constrainedFlag$sample134[var119][var129])
+										if(!state.constrainedFlag$sample134[var119][var129])
 											drawValueSample134(var119, var129, threadID$var129, RNG$2);
 									}
 							}
@@ -9076,7 +8613,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$index$var146, int forEnd$index$var146, int threadID$index$var146, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -9086,13 +8623,13 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						int threadID$var146 = threadID$index$var146;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var156, int forEnd$var156, int threadID$var156, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var156 = forStart$var156; var156 < forEnd$var156; var156 += 1) {
-										if(!constrainedFlag$sample162[var146][var156])
+										if(!state.constrainedFlag$sample162[var146][var156])
 											drawValueSample162(var146, var156, threadID$var156, RNG$2);
 									}
 							}
@@ -9102,7 +8639,7 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		);
 		
 		//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-		parallelFor(RNG$, 0, noServers, 1,
+		parallelFor(state.RNG$, 0, state.noServers, 1,
 			(int forStart$index$var173, int forEnd$index$var173, int threadID$index$var173, org.sandwood.random.internal.Rng RNG$1) -> { 
 				
 					// Inner loop for running batches of iterations, each batch has its own random number
@@ -9112,13 +8649,13 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 						int threadID$var173 = threadID$index$var173;
 						
 						//  Outer loop for dispatching multiple batches of iterations to execute in parallel
-						parallelFor(RNG$1, 0, noStates, 1,
+						parallelFor(RNG$1, 0, state.noStates, 1,
 							(int forStart$var183, int forEnd$var183, int threadID$var183, org.sandwood.random.internal.Rng RNG$2) -> { 
 								
 									// Inner loop for running batches of iterations, each batch has its own random number
 									// generator.
 									for(int var183 = forStart$var183; var183 < forEnd$var183; var183 += 1) {
-										if(!constrainedFlag$sample190[var173][var183])
+										if(!state.constrainedFlag$sample190[var173][var183])
 											drawValueSample190(var173, var183, threadID$var183, RNG$2);
 									}
 							}
@@ -9136,80 +8673,80 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample20)
-			logProbability$initialStateDistribution = Double.NaN;
-		logProbability$m = 0.0;
-		if(!fixedProbFlag$sample33)
-			logProbability$var33 = Double.NaN;
-		logProbability$st = 0.0;
-		if(!fixedProbFlag$sample57)
-			logProbability$var55 = Double.NaN;
-		if(!fixedProbFlag$sample76)
-			logProbability$var74 = Double.NaN;
-		logProbability$current_metric_mean = 0.0;
-		if(!fixedProbFlag$sample134)
-			logProbability$var130 = Double.NaN;
-		logProbability$current_metric_var = 0.0;
-		if(!fixedProbFlag$sample162)
-			logProbability$var157 = Double.NaN;
-		logProbability$current_metric_valid_bias = 0.0;
-		if(!fixedProbFlag$sample190)
-			logProbability$var184 = Double.NaN;
-		logProbability$metric_valid_inner = 0.0;
-		logProbability$metric_valid_g = 0.0;
-		if(!fixedProbFlag$sample241)
-			logProbability$var232 = Double.NaN;
-		logProbability$metric_g = 0.0;
-		if(!fixedProbFlag$sample256)
-			logProbability$var245 = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample20)
+			state.logProbability$initialStateDistribution = Double.NaN;
+		state.logProbability$m = 0.0;
+		if(!state.fixedProbFlag$sample33)
+			state.logProbability$var33 = Double.NaN;
+		state.logProbability$st = 0.0;
+		if(!state.fixedProbFlag$sample57)
+			state.logProbability$var55 = Double.NaN;
+		if(!state.fixedProbFlag$sample76)
+			state.logProbability$var74 = Double.NaN;
+		state.logProbability$current_metric_mean = 0.0;
+		if(!state.fixedProbFlag$sample134)
+			state.logProbability$var130 = Double.NaN;
+		state.logProbability$current_metric_var = 0.0;
+		if(!state.fixedProbFlag$sample162)
+			state.logProbability$var157 = Double.NaN;
+		state.logProbability$current_metric_valid_bias = 0.0;
+		if(!state.fixedProbFlag$sample190)
+			state.logProbability$var184 = Double.NaN;
+		state.logProbability$metric_valid_inner = 0.0;
+		state.logProbability$metric_valid_g = 0.0;
+		if(!state.fixedProbFlag$sample241)
+			state.logProbability$var232 = Double.NaN;
+		state.logProbability$metric_g = 0.0;
+		if(!state.fixedProbFlag$sample256)
+			state.logProbability$var245 = Double.NaN;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		noSamples = length$metric.length;
-		for(int var16 = 0; var16 < noStates; var16 += 1)
-			v[var16] = 0.1;
-		noServers = length$metric[0].length;
+		state.noSamples = state.length$metric.length;
+		for(int var16 = 0; var16 < state.noStates; var16 += 1)
+			state.v[var16] = 0.1;
+		state.noServers = state.length$metric[0].length;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample190$1 = 0; index$constrainedFlag$sample190$1 < constrainedFlag$sample190.length; index$constrainedFlag$sample190$1 += 1) {
-			boolean[] cv$constrainedFlag$sample190$1 = constrainedFlag$sample190[index$constrainedFlag$sample190$1];
+		for(int index$constrainedFlag$sample190$1 = 0; index$constrainedFlag$sample190$1 < state.constrainedFlag$sample190.length; index$constrainedFlag$sample190$1 += 1) {
+			boolean[] cv$constrainedFlag$sample190$1 = state.constrainedFlag$sample190[index$constrainedFlag$sample190$1];
 			for(int index$constrainedFlag$sample190$2 = 0; index$constrainedFlag$sample190$2 < cv$constrainedFlag$sample190$1.length; index$constrainedFlag$sample190$2 += 1)
 				cv$constrainedFlag$sample190$1[index$constrainedFlag$sample190$2] = true;
 		}
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample76$1 = 0; index$constrainedFlag$sample76$1 < constrainedFlag$sample76.length; index$constrainedFlag$sample76$1 += 1) {
-			boolean[] cv$constrainedFlag$sample76$1 = constrainedFlag$sample76[index$constrainedFlag$sample76$1];
+		for(int index$constrainedFlag$sample76$1 = 0; index$constrainedFlag$sample76$1 < state.constrainedFlag$sample76.length; index$constrainedFlag$sample76$1 += 1) {
+			boolean[] cv$constrainedFlag$sample76$1 = state.constrainedFlag$sample76[index$constrainedFlag$sample76$1];
 			for(int index$constrainedFlag$sample76$2 = 0; index$constrainedFlag$sample76$2 < cv$constrainedFlag$sample76$1.length; index$constrainedFlag$sample76$2 += 1)
 				cv$constrainedFlag$sample76$1[index$constrainedFlag$sample76$2] = true;
 		}
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample57$1 = 0; index$constrainedFlag$sample57$1 < constrainedFlag$sample57.length; index$constrainedFlag$sample57$1 += 1)
-			constrainedFlag$sample57[index$constrainedFlag$sample57$1] = true;
+		for(int index$constrainedFlag$sample57$1 = 0; index$constrainedFlag$sample57$1 < state.constrainedFlag$sample57.length; index$constrainedFlag$sample57$1 += 1)
+			state.constrainedFlag$sample57[index$constrainedFlag$sample57$1] = true;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample134$1 = 0; index$constrainedFlag$sample134$1 < constrainedFlag$sample134.length; index$constrainedFlag$sample134$1 += 1) {
-			boolean[] cv$constrainedFlag$sample134$1 = constrainedFlag$sample134[index$constrainedFlag$sample134$1];
+		for(int index$constrainedFlag$sample134$1 = 0; index$constrainedFlag$sample134$1 < state.constrainedFlag$sample134.length; index$constrainedFlag$sample134$1 += 1) {
+			boolean[] cv$constrainedFlag$sample134$1 = state.constrainedFlag$sample134[index$constrainedFlag$sample134$1];
 			for(int index$constrainedFlag$sample134$2 = 0; index$constrainedFlag$sample134$2 < cv$constrainedFlag$sample134$1.length; index$constrainedFlag$sample134$2 += 1)
 				cv$constrainedFlag$sample134$1[index$constrainedFlag$sample134$2] = true;
 		}
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample162$1 = 0; index$constrainedFlag$sample162$1 < constrainedFlag$sample162.length; index$constrainedFlag$sample162$1 += 1) {
-			boolean[] cv$constrainedFlag$sample162$1 = constrainedFlag$sample162[index$constrainedFlag$sample162$1];
+		for(int index$constrainedFlag$sample162$1 = 0; index$constrainedFlag$sample162$1 < state.constrainedFlag$sample162.length; index$constrainedFlag$sample162$1 += 1) {
+			boolean[] cv$constrainedFlag$sample162$1 = state.constrainedFlag$sample162[index$constrainedFlag$sample162$1];
 			for(int index$constrainedFlag$sample162$2 = 0; index$constrainedFlag$sample162$2 < cv$constrainedFlag$sample162$1.length; index$constrainedFlag$sample162$2 += 1)
 				cv$constrainedFlag$sample162$1[index$constrainedFlag$sample162$2] = true;
 		}
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample33$1 = 0; index$constrainedFlag$sample33$1 < constrainedFlag$sample33.length; index$constrainedFlag$sample33$1 += 1)
-			constrainedFlag$sample33[index$constrainedFlag$sample33$1] = true;
+		for(int index$constrainedFlag$sample33$1 = 0; index$constrainedFlag$sample33$1 < state.constrainedFlag$sample33.length; index$constrainedFlag$sample33$1 += 1)
+			state.constrainedFlag$sample33[index$constrainedFlag$sample33$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -9219,15 +8756,15 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample20)
+		if(state.fixedFlag$sample20)
 			logProbabilityValue$sample20();
-		if(fixedFlag$sample33)
+		if(state.fixedFlag$sample33)
 			logProbabilityValue$sample33();
-		if(fixedFlag$sample134)
+		if(state.fixedFlag$sample134)
 			logProbabilityValue$sample134();
-		if(fixedFlag$sample162)
+		if(state.fixedFlag$sample162)
 			logProbabilityValue$sample162();
-		if(fixedFlag$sample190)
+		if(state.fixedFlag$sample190)
 			logProbabilityValue$sample190();
 		logProbabilityValue$sample241();
 		logProbabilityValue$sample256();
@@ -9290,10 +8827,10 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 		// Propagating values back from observations into the models intermediate variables.
 		{
 			// Deep copy between arrays
-			int cv$length1 = metric_valid_g.length;
+			int cv$length1 = state.metric_valid_g.length;
 			for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
-				boolean[][] cv$source2 = metric_valid[cv$index1];
-				boolean[][] cv$target2 = metric_valid_g[cv$index1];
+				boolean[][] cv$source2 = state.metric_valid[cv$index1];
+				boolean[][] cv$target2 = state.metric_valid_g[cv$index1];
 				int cv$length2 = cv$target2.length;
 				for(int cv$index2 = 0; cv$index2 < cv$length2; cv$index2 += 1) {
 					boolean[] cv$source3 = cv$source2[cv$index2];
@@ -9304,10 +8841,10 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 				}
 			}
 		}
-		int cv$length1 = metric_g.length;
+		int cv$length1 = state.metric_g.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1) {
-			double[][] cv$source2 = metric[cv$index1];
-			double[][] cv$target2 = metric_g[cv$index1];
+			double[][] cv$source2 = state.metric[cv$index1];
+			double[][] cv$target2 = state.metric_g[cv$index1];
 			int cv$length2 = cv$target2.length;
 			for(int cv$index2 = 0; cv$index2 < cv$length2; cv$index2 += 1) {
 				double[] cv$source3 = cv$source2[cv$index2];
@@ -9317,12 +8854,12 @@ final class HMMMetrics4$MultiThreadCPU extends org.sandwood.runtime.internal.mod
 					cv$target3[cv$index3] = cv$source3[cv$index3];
 			}
 		}
-		for(int sample$var196 = (noSamples - 1); sample$var196 >= 0; sample$var196 -= 1) {
-			for(int server = (noServers - 1); server >= 0; server -= 1) {
-				for(int timeStep$var226 = (length$metric[sample$var196][0] - 1); timeStep$var226 >= 0; timeStep$var226 -= 1) {
-					if(metric_valid_g[sample$var196][server][timeStep$var226])
+		for(int sample$var196 = (state.noSamples - 1); sample$var196 >= 0; sample$var196 -= 1) {
+			for(int server = (state.noServers - 1); server >= 0; server -= 1) {
+				for(int timeStep$var226 = (state.length$metric[sample$var196][0] - 1); timeStep$var226 >= 0; timeStep$var226 -= 1) {
+					if(state.metric_valid_g[sample$var196][server][timeStep$var226])
 						// Substituted "metric_inner" with its value "metric_g[sample$var196][server]".
-						var245[sample$var196][server][timeStep$var226] = metric_g[sample$var196][server][timeStep$var226];
+						state.var245[sample$var196][server][timeStep$var226] = state.metric_g[sample$var196][server][timeStep$var226];
 				}
 			}
 		}

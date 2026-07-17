@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -16,6 +16,8 @@ import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.RandomVariableType;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType.Type;
+import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
+import org.sandwood.compiler.dataflowGraph.variables.scalarVariables.DoubleVariable;
 import org.sandwood.compiler.exceptions.CompilerException;
 import org.sandwood.compiler.trees.outputTree.OutputFunctionCallReturn;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
@@ -207,7 +209,8 @@ public class TransRVFunctionCallReturn<X extends Variable<X>> extends TransTreeR
                 } else if(source == VariableType.Binomial) {
                     tree = (TransTreeReturn<X>) args[2];
                 } else if(source == VariableType.Categorical) {
-                    tree = (TransTreeReturn<X>) getIntField(args[1], "length");
+                    TransTreeReturn<ArrayVariable<DoubleVariable>> probs = (TransTreeReturn<ArrayVariable<DoubleVariable>>) args[1];
+                    tree = (TransTreeReturn<X>) getField(probs, ArrayVariable.lengthName);
                 } else if(source == VariableType.Cauchy) {
                     tree = (TransTreeReturn<X>) constant(Double.POSITIVE_INFINITY);
                 } else if(source == VariableType.Dirichlet) {

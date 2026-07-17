@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2025, Oracle and/or its affiliates
  * 
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -12,7 +12,7 @@ package org.sandwood.compiler.tests.parser;
  * A model for the fairness work.
  */
 public model AlternativeModelMK2(/** The number of observed samples */int observedSampleCount, int observedPositiveCount)  {
-    /** a bias to see how like values are to be collected. */	
+    /** A bias to see how likely values are to be collected. */	
 	double bias = beta(1.0, 1.0).sample();
 		
 	//Construct a binomial

@@ -1,777 +1,81 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.TerminalVariables$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.TerminalVariables.State;
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements TerminalVariables$CoreInterface {
-	
-	// Declare the variables for the model.
-	private double[][][][][] a;
-	private int c1;
-	private int c10;
-	private int c11;
-	private int c12;
-	private int c2;
-	private int c3;
-	private int c4;
-	private int c5;
-	private int c6;
-	private int c7;
-	private int c8;
-	private int c9;
-	private double[][] conditionals;
-	private boolean constrainedFlag$sample47 = true;
-	private boolean constrainedFlag$sample52 = true;
-	private boolean constrainedFlag$sample55 = true;
-	private boolean constrainedFlag$sample57 = true;
-	private boolean constrainedFlag$sample62 = true;
-	private boolean constrainedFlag$sample67 = true;
-	private boolean constrainedFlag$sample72 = true;
-	private double[] cv$var45$stateProbabilityGlobal;
-	private double[] cv$var50$stateProbabilityGlobal;
-	private double[] cv$var53$stateProbabilityGlobal;
-	private double[] cv$var55$stateProbabilityGlobal;
-	private double[] cv$var60$stateProbabilityGlobal;
-	private double[] cv$var65$stateProbabilityGlobal;
-	private double[] cv$var70$stateProbabilityGlobal;
-	private int evidence;
-	private boolean fixedFlag$sample47 = false;
-	private boolean fixedFlag$sample52 = false;
-	private boolean fixedFlag$sample55 = false;
-	private boolean fixedFlag$sample57 = false;
-	private boolean fixedFlag$sample60 = false;
-	private boolean fixedFlag$sample62 = false;
-	private boolean fixedFlag$sample636 = false;
-	private boolean fixedFlag$sample65 = false;
-	private boolean fixedFlag$sample67 = false;
-	private boolean fixedFlag$sample70 = false;
-	private boolean fixedFlag$sample72 = false;
-	private boolean fixedFlag$sample75 = false;
-	private boolean fixedProbFlag$sample47 = false;
-	private boolean fixedProbFlag$sample50 = false;
-	private boolean fixedProbFlag$sample52 = false;
-	private boolean fixedProbFlag$sample55 = false;
-	private boolean fixedProbFlag$sample57 = false;
-	private boolean fixedProbFlag$sample60 = false;
-	private boolean fixedProbFlag$sample62 = false;
-	private boolean fixedProbFlag$sample636 = false;
-	private boolean fixedProbFlag$sample65 = false;
-	private boolean fixedProbFlag$sample67 = false;
-	private boolean fixedProbFlag$sample70 = false;
-	private boolean fixedProbFlag$sample72 = false;
-	private boolean fixedProbFlag$sample75 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$c1;
-	private double logProbability$c10;
-	private double logProbability$c11;
-	private double logProbability$c12;
-	private double logProbability$c2;
-	private double logProbability$c3;
-	private double logProbability$c4;
-	private double logProbability$c5;
-	private double logProbability$c6;
-	private double logProbability$c7;
-	private double logProbability$c8;
-	private double logProbability$c9;
-	private double logProbability$terminalVariable;
-	private double[] priors;
-	private boolean system$gibbsForward = true;
-	private int terminalVariable;
-
-	public TerminalVariables$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for a.
-	@Override
-	public final double[][][][][] get$a() {
-		return a;
-	}
-
-	// Getter for c1.
-	@Override
-	public final int get$c1() {
-		return c1;
-	}
-
-	// Setter for c1.
-	@Override
-	public final void set$c1(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c1 including if probabilities need to be
-		// updated.
-		c1 = cv$value;
-		
-		// Unset the fixed probability flag for sample 47 as it depends on c1.
-		fixedProbFlag$sample47 = false;
-		
-		// Unset the fixed probability flag for sample 50 as it depends on c1.
-		fixedProbFlag$sample50 = false;
-		
-		// Unset the fixed probability flag for sample 636 as it depends on c1.
-		fixedProbFlag$sample636 = false;
-	}
-
-	// Getter for c10.
-	@Override
-	public final int get$c10() {
-		return c10;
-	}
-
-	// Setter for c10.
-	@Override
-	public final void set$c10(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c10 including if probabilities need to be
-		// updated.
-		c10 = cv$value;
-		
-		// Unset the fixed probability flag for sample 70 as it depends on c10.
-		fixedProbFlag$sample70 = false;
-	}
-
-	// Getter for c11.
-	@Override
-	public final int get$c11() {
-		return c11;
-	}
-
-	// Setter for c11.
-	@Override
-	public final void set$c11(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c11 including if probabilities need to be
-		// updated.
-		c11 = cv$value;
-		
-		// Unset the fixed probability flag for sample 72 as it depends on c11.
-		fixedProbFlag$sample72 = false;
-		
-		// Unset the fixed probability flag for sample 75 as it depends on c11.
-		fixedProbFlag$sample75 = false;
-	}
-
-	// Getter for c12.
-	@Override
-	public final int get$c12() {
-		return c12;
-	}
-
-	// Setter for c12.
-	@Override
-	public final void set$c12(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c12 including if probabilities need to be
-		// updated.
-		c12 = cv$value;
-		
-		// Unset the fixed probability flag for sample 75 as it depends on c12.
-		fixedProbFlag$sample75 = false;
-	}
-
-	// Getter for c2.
-	@Override
-	public final int get$c2() {
-		return c2;
-	}
-
-	// Getter for c3.
-	@Override
-	public final int get$c3() {
-		return c3;
-	}
-
-	// Setter for c3.
-	@Override
-	public final void set$c3(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c3 including if probabilities need to be
-		// updated.
-		c3 = cv$value;
-		
-		// Unset the fixed probability flag for sample 52 as it depends on c3.
-		fixedProbFlag$sample52 = false;
-		
-		// Unset the fixed probability flag for sample 55 as it depends on c3.
-		fixedProbFlag$sample55 = false;
-	}
-
-	// Getter for c4.
-	@Override
-	public final int get$c4() {
-		return c4;
-	}
-
-	// Setter for c4.
-	@Override
-	public final void set$c4(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c4 including if probabilities need to be
-		// updated.
-		c4 = cv$value;
-		
-		// Unset the fixed probability flag for sample 55 as it depends on c4.
-		fixedProbFlag$sample55 = false;
-		
-		// Unset the fixed probability flag for sample 636 as it depends on c4.
-		fixedProbFlag$sample636 = false;
-	}
-
-	// Getter for c5.
-	@Override
-	public final int get$c5() {
-		return c5;
-	}
-
-	// Setter for c5.
-	@Override
-	public final void set$c5(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c5 including if probabilities need to be
-		// updated.
-		c5 = cv$value;
-		
-		// Unset the fixed probability flag for sample 57 as it depends on c5.
-		fixedProbFlag$sample57 = false;
-		
-		// Unset the fixed probability flag for sample 60 as it depends on c5.
-		fixedProbFlag$sample60 = false;
-		
-		// Unset the fixed probability flag for sample 636 as it depends on c5.
-		fixedProbFlag$sample636 = false;
-	}
-
-	// Getter for c6.
-	@Override
-	public final int get$c6() {
-		return c6;
-	}
-
-	// Setter for c6.
-	@Override
-	public final void set$c6(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c6 including if probabilities need to be
-		// updated.
-		c6 = cv$value;
-		
-		// Unset the fixed probability flag for sample 60 as it depends on c6.
-		fixedProbFlag$sample60 = false;
-	}
-
-	// Getter for c7.
-	@Override
-	public final int get$c7() {
-		return c7;
-	}
-
-	// Setter for c7.
-	@Override
-	public final void set$c7(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c7 including if probabilities need to be
-		// updated.
-		c7 = cv$value;
-		
-		// Unset the fixed probability flag for sample 62 as it depends on c7.
-		fixedProbFlag$sample62 = false;
-		
-		// Unset the fixed probability flag for sample 65 as it depends on c7.
-		fixedProbFlag$sample65 = false;
-	}
-
-	// Getter for c8.
-	@Override
-	public final int get$c8() {
-		return c8;
-	}
-
-	// Setter for c8.
-	@Override
-	public final void set$c8(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c8 including if probabilities need to be
-		// updated.
-		c8 = cv$value;
-		
-		// Unset the fixed probability flag for sample 65 as it depends on c8.
-		fixedProbFlag$sample65 = false;
-	}
-
-	// Getter for c9.
-	@Override
-	public final int get$c9() {
-		return c9;
-	}
-
-	// Setter for c9.
-	@Override
-	public final void set$c9(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c9 including if probabilities need to be
-		// updated.
-		c9 = cv$value;
-		
-		// Unset the fixed probability flag for sample 67 as it depends on c9.
-		fixedProbFlag$sample67 = false;
-		
-		// Unset the fixed probability flag for sample 70 as it depends on c9.
-		fixedProbFlag$sample70 = false;
-		
-		// Unset the fixed probability flag for sample 636 as it depends on c9.
-		fixedProbFlag$sample636 = false;
-	}
-
-	// Getter for conditionals.
-	@Override
-	public final double[][] get$conditionals() {
-		return conditionals;
-	}
-
-	// Getter for evidence.
-	@Override
-	public final int get$evidence() {
-		return evidence;
-	}
-
-	// Setter for evidence.
-	@Override
-	public final void set$evidence(int cv$value, boolean allocated$) {
-		evidence = cv$value;
-	}
-
-	// Getter for fixedFlag$sample47.
-	@Override
-	public final boolean get$fixedFlag$sample47() {
-		return fixedFlag$sample47;
-	}
-
-	// Setter for fixedFlag$sample47.
-	@Override
-	public final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample47 including if probabilities
-		// need to be updated.
-		fixedFlag$sample47 = cv$value;
-		
-		// Substituted "fixedFlag$sample47" with its value "cv$value".
-		constrainedFlag$sample47 = (cv$value || constrainedFlag$sample47);
-		
-		// Should the probability of sample 47 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample47" with its value "cv$value".
-		fixedProbFlag$sample47 = (cv$value && fixedProbFlag$sample47);
-		
-		// Should the probability of sample 50 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample47" with its value "cv$value".
-		fixedProbFlag$sample50 = (cv$value && fixedProbFlag$sample50);
-		
-		// Should the probability of sample 636 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample47" with its value "cv$value".
-		fixedProbFlag$sample636 = (cv$value && fixedProbFlag$sample636);
-	}
-
-	// Getter for fixedFlag$sample52.
-	@Override
-	public final boolean get$fixedFlag$sample52() {
-		return fixedFlag$sample52;
-	}
-
-	// Setter for fixedFlag$sample52.
-	@Override
-	public final void set$fixedFlag$sample52(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample52 including if probabilities
-		// need to be updated.
-		fixedFlag$sample52 = cv$value;
-		
-		// Substituted "fixedFlag$sample52" with its value "cv$value".
-		constrainedFlag$sample52 = (cv$value || constrainedFlag$sample52);
-		
-		// Should the probability of sample 52 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample52" with its value "cv$value".
-		fixedProbFlag$sample52 = (cv$value && fixedProbFlag$sample52);
-		
-		// Should the probability of sample 55 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample52" with its value "cv$value".
-		fixedProbFlag$sample55 = (cv$value && fixedProbFlag$sample55);
-	}
-
-	// Getter for fixedFlag$sample55.
-	@Override
-	public final boolean get$fixedFlag$sample55() {
-		return fixedFlag$sample55;
-	}
-
-	// Setter for fixedFlag$sample55.
-	@Override
-	public final void set$fixedFlag$sample55(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample55 including if probabilities
-		// need to be updated.
-		fixedFlag$sample55 = cv$value;
-		
-		// Substituted "fixedFlag$sample55" with its value "cv$value".
-		constrainedFlag$sample55 = (cv$value || constrainedFlag$sample55);
-		
-		// Should the probability of sample 55 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample55" with its value "cv$value".
-		fixedProbFlag$sample55 = (cv$value && fixedProbFlag$sample55);
-		
-		// Should the probability of sample 636 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample55" with its value "cv$value".
-		fixedProbFlag$sample636 = (cv$value && fixedProbFlag$sample636);
-	}
-
-	// Getter for fixedFlag$sample57.
-	@Override
-	public final boolean get$fixedFlag$sample57() {
-		return fixedFlag$sample57;
-	}
-
-	// Setter for fixedFlag$sample57.
-	@Override
-	public final void set$fixedFlag$sample57(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample57 including if probabilities
-		// need to be updated.
-		fixedFlag$sample57 = cv$value;
-		
-		// Substituted "fixedFlag$sample57" with its value "cv$value".
-		constrainedFlag$sample57 = (cv$value || constrainedFlag$sample57);
-		
-		// Should the probability of sample 57 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample57" with its value "cv$value".
-		fixedProbFlag$sample57 = (cv$value && fixedProbFlag$sample57);
-		
-		// Should the probability of sample 60 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample57" with its value "cv$value".
-		fixedProbFlag$sample60 = (cv$value && fixedProbFlag$sample60);
-		
-		// Should the probability of sample 636 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample57" with its value "cv$value".
-		fixedProbFlag$sample636 = (cv$value && fixedProbFlag$sample636);
-	}
-
-	// Getter for fixedFlag$sample60.
-	@Override
-	public final boolean get$fixedFlag$sample60() {
-		return fixedFlag$sample60;
-	}
-
-	// Setter for fixedFlag$sample60.
-	@Override
-	public final void set$fixedFlag$sample60(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample60 including if probabilities
-		// need to be updated.
-		fixedFlag$sample60 = cv$value;
-		
-		// Should the probability of sample 60 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample60" with its value "cv$value".
-		fixedProbFlag$sample60 = (cv$value && fixedProbFlag$sample60);
-	}
-
-	// Getter for fixedFlag$sample62.
-	@Override
-	public final boolean get$fixedFlag$sample62() {
-		return fixedFlag$sample62;
-	}
-
-	// Setter for fixedFlag$sample62.
-	@Override
-	public final void set$fixedFlag$sample62(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample62 including if probabilities
-		// need to be updated.
-		fixedFlag$sample62 = cv$value;
-		
-		// Substituted "fixedFlag$sample62" with its value "cv$value".
-		constrainedFlag$sample62 = (cv$value || constrainedFlag$sample62);
-		
-		// Should the probability of sample 62 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample62" with its value "cv$value".
-		fixedProbFlag$sample62 = (cv$value && fixedProbFlag$sample62);
-		
-		// Should the probability of sample 65 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample62" with its value "cv$value".
-		fixedProbFlag$sample65 = (cv$value && fixedProbFlag$sample65);
-	}
-
-	// Getter for fixedFlag$sample636.
-	@Override
-	public final boolean get$fixedFlag$sample636() {
-		return fixedFlag$sample636;
-	}
-
-	// Setter for fixedFlag$sample636.
-	@Override
-	public final void set$fixedFlag$sample636(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample636 including if probabilities
-		// need to be updated.
-		fixedFlag$sample636 = cv$value;
-		
-		// Should the probability of sample 636 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample636" with its value "cv$value".
-		fixedProbFlag$sample636 = (cv$value && fixedProbFlag$sample636);
-	}
-
-	// Getter for fixedFlag$sample65.
-	@Override
-	public final boolean get$fixedFlag$sample65() {
-		return fixedFlag$sample65;
-	}
-
-	// Setter for fixedFlag$sample65.
-	@Override
-	public final void set$fixedFlag$sample65(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample65 including if probabilities
-		// need to be updated.
-		fixedFlag$sample65 = cv$value;
-		
-		// Should the probability of sample 65 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample65" with its value "cv$value".
-		fixedProbFlag$sample65 = (cv$value && fixedProbFlag$sample65);
-	}
-
-	// Getter for fixedFlag$sample67.
-	@Override
-	public final boolean get$fixedFlag$sample67() {
-		return fixedFlag$sample67;
-	}
-
-	// Setter for fixedFlag$sample67.
-	@Override
-	public final void set$fixedFlag$sample67(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample67 including if probabilities
-		// need to be updated.
-		fixedFlag$sample67 = cv$value;
-		
-		// Substituted "fixedFlag$sample67" with its value "cv$value".
-		constrainedFlag$sample67 = (cv$value || constrainedFlag$sample67);
-		
-		// Should the probability of sample 67 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample67" with its value "cv$value".
-		fixedProbFlag$sample67 = (cv$value && fixedProbFlag$sample67);
-		
-		// Should the probability of sample 70 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample67" with its value "cv$value".
-		fixedProbFlag$sample70 = (cv$value && fixedProbFlag$sample70);
-		
-		// Should the probability of sample 636 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample67" with its value "cv$value".
-		fixedProbFlag$sample636 = (cv$value && fixedProbFlag$sample636);
-	}
-
-	// Getter for fixedFlag$sample70.
-	@Override
-	public final boolean get$fixedFlag$sample70() {
-		return fixedFlag$sample70;
-	}
-
-	// Setter for fixedFlag$sample70.
-	@Override
-	public final void set$fixedFlag$sample70(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample70 including if probabilities
-		// need to be updated.
-		fixedFlag$sample70 = cv$value;
-		
-		// Should the probability of sample 70 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample70" with its value "cv$value".
-		fixedProbFlag$sample70 = (cv$value && fixedProbFlag$sample70);
-	}
-
-	// Getter for fixedFlag$sample72.
-	@Override
-	public final boolean get$fixedFlag$sample72() {
-		return fixedFlag$sample72;
-	}
-
-	// Setter for fixedFlag$sample72.
-	@Override
-	public final void set$fixedFlag$sample72(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample72 including if probabilities
-		// need to be updated.
-		fixedFlag$sample72 = cv$value;
-		
-		// Substituted "fixedFlag$sample72" with its value "cv$value".
-		constrainedFlag$sample72 = (cv$value || constrainedFlag$sample72);
-		
-		// Should the probability of sample 72 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample72" with its value "cv$value".
-		fixedProbFlag$sample72 = (cv$value && fixedProbFlag$sample72);
-		
-		// Should the probability of sample 75 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample72" with its value "cv$value".
-		fixedProbFlag$sample75 = (cv$value && fixedProbFlag$sample75);
-	}
-
-	// Getter for fixedFlag$sample75.
-	@Override
-	public final boolean get$fixedFlag$sample75() {
-		return fixedFlag$sample75;
-	}
-
-	// Setter for fixedFlag$sample75.
-	@Override
-	public final void set$fixedFlag$sample75(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample75 including if probabilities
-		// need to be updated.
-		fixedFlag$sample75 = cv$value;
-		
-		// Should the probability of sample 75 be set to fixed. This will only every change
-		// the flag to false.
-		// 
-		// Substituted "fixedFlag$sample75" with its value "cv$value".
-		fixedProbFlag$sample75 = (cv$value && fixedProbFlag$sample75);
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$c1.
-	@Override
-	public final double get$logProbability$c1() {
-		return logProbability$c1;
-	}
-
-	// Getter for logProbability$c10.
-	@Override
-	public final double get$logProbability$c10() {
-		return logProbability$c10;
-	}
-
-	// Getter for logProbability$c11.
-	@Override
-	public final double get$logProbability$c11() {
-		return logProbability$c11;
-	}
-
-	// Getter for logProbability$c12.
-	@Override
-	public final double get$logProbability$c12() {
-		return logProbability$c12;
-	}
-
-	// Getter for logProbability$c2.
-	@Override
-	public final double get$logProbability$c2() {
-		return logProbability$c2;
-	}
-
-	// Getter for logProbability$c3.
-	@Override
-	public final double get$logProbability$c3() {
-		return logProbability$c3;
-	}
-
-	// Getter for logProbability$c4.
-	@Override
-	public final double get$logProbability$c4() {
-		return logProbability$c4;
-	}
-
-	// Getter for logProbability$c5.
-	@Override
-	public final double get$logProbability$c5() {
-		return logProbability$c5;
-	}
-
-	// Getter for logProbability$c6.
-	@Override
-	public final double get$logProbability$c6() {
-		return logProbability$c6;
-	}
-
-	// Getter for logProbability$c7.
-	@Override
-	public final double get$logProbability$c7() {
-		return logProbability$c7;
-	}
-
-	// Getter for logProbability$c8.
-	@Override
-	public final double get$logProbability$c8() {
-		return logProbability$c8;
-	}
-
-	// Getter for logProbability$c9.
-	@Override
-	public final double get$logProbability$c9() {
-		return logProbability$c9;
-	}
-
-	// Getter for logProbability$terminalVariable.
-	@Override
-	public final double get$logProbability$terminalVariable() {
-		return logProbability$terminalVariable;
-	}
-
-	// Getter for priors.
-	@Override
-	public final double[] get$priors() {
-		return priors;
-	}
-
-	// Getter for terminalVariable.
-	@Override
-	public final int get$terminalVariable() {
-		return terminalVariable;
-	}
-
-	// Setter for terminalVariable.
-	@Override
-	public final void set$terminalVariable(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of terminalVariable including if probabilities
-		// need to be updated.
-		terminalVariable = cv$value;
-		
-		// Unset the fixed probability flag for sample 636 as it depends on terminalVariable.
-		fixedProbFlag$sample636 = false;
+final class TerminalVariables$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
+
+		// Declare the scratch variables for the model.
+		double[] cv$var45$stateProbabilityGlobal;
+		double[] cv$var50$stateProbabilityGlobal;
+		double[] cv$var53$stateProbabilityGlobal;
+		double[] cv$var55$stateProbabilityGlobal;
+		double[] cv$var60$stateProbabilityGlobal;
+		double[] cv$var65$stateProbabilityGlobal;
+		double[] cv$var70$stateProbabilityGlobal;
+
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for cv$var45$stateProbabilityGlobal
+			// 
+			// Allocation of cv$var45$stateProbabilityGlobal for single threaded execution
+			cv$var45$stateProbabilityGlobal = new double[2];
+			
+			// Constructor for cv$var50$stateProbabilityGlobal
+			// 
+			// Allocation of cv$var50$stateProbabilityGlobal for single threaded execution
+			cv$var50$stateProbabilityGlobal = new double[2];
+			
+			// Allocation of cv$var53$stateProbabilityGlobal for single threaded execution
+			// 
+			// Test if the input to putTask 44 is larger than the current values.
+			cv$var53$stateProbabilityGlobal = new double[2];
+			
+			// Constructor for cv$var55$stateProbabilityGlobal
+			// 
+			// Allocation of cv$var55$stateProbabilityGlobal for single threaded execution
+			cv$var55$stateProbabilityGlobal = new double[2];
+			
+			// Constructor for cv$var60$stateProbabilityGlobal
+			// 
+			// Allocation of cv$var60$stateProbabilityGlobal for single threaded execution
+			cv$var60$stateProbabilityGlobal = new double[2];
+			
+			// Constructor for cv$var65$stateProbabilityGlobal
+			// 
+			// Allocation of cv$var65$stateProbabilityGlobal for single threaded execution
+			cv$var65$stateProbabilityGlobal = new double[2];
+			
+			// Constructor for cv$var70$stateProbabilityGlobal
+			// 
+			// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
+			cv$var70$stateProbabilityGlobal = new double[2];
+		}
+	}
+
+
+	public TerminalVariables$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample47
 	private final void drawValueSample47() {
-		c1 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c1 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample52
 	private final void drawValueSample52() {
-		c3 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c3 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample55
@@ -780,18 +84,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		int lengthCV$conditionals$53_3 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 == c3))
+		if((0 == state.c3))
 			lengthCV$conditionals$53_3 = 2;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == c3))
+		if((1 == state.c3))
 			lengthCV$conditionals$53_3 = 2;
-		c4 = DistributionSampling.sampleCategorical(RNG$, conditionals[c3], lengthCV$conditionals$53_3);
+		state.c4 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c3], lengthCV$conditionals$53_3);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample57
 	private final void drawValueSample57() {
-		c5 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c5 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample60
@@ -800,18 +104,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		int lengthCV$conditionals$58_1 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 == c5))
+		if((0 == state.c5))
 			lengthCV$conditionals$58_1 = 2;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == c5))
+		if((1 == state.c5))
 			lengthCV$conditionals$58_1 = 2;
-		c6 = DistributionSampling.sampleCategorical(RNG$, conditionals[c5], lengthCV$conditionals$58_1);
+		state.c6 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c5], lengthCV$conditionals$58_1);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample62
 	private final void drawValueSample62() {
-		c7 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c7 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample636
@@ -820,111 +124,111 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		int lengthCV$var601$634_4 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 == c5)) {
+		if((0 == state.c5)) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c9)) {
+			if((0 == state.c9)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c1)) {
+				if((0 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_4 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_4 = 5;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c1)) {
+				if((1 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_4 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_4 = 5;
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c9)) {
+			if((1 == state.c9)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c1)) {
+				if((0 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_4 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_4 = 5;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c1)) {
+				if((1 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_4 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_4 = 5;
 				}
 			}
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == c5)) {
+		if((1 == state.c5)) {
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c9)) {
+			if((0 == state.c9)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c1)) {
+				if((0 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_4 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_4 = 5;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c1)) {
+				if((1 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_4 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_4 = 5;
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c9)) {
+			if((1 == state.c9)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c1)) {
+				if((0 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_4 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_4 = 5;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c1)) {
+				if((1 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_4 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_4 = 5;
 				}
 			}
 		}
-		terminalVariable = DistributionSampling.sampleCategorical(RNG$, a[c5][c9][c1][c4], lengthCV$var601$634_4);
+		state.terminalVariable = DistributionSampling.sampleCategorical(state.RNG$, state.a[state.c5][state.c9][state.c1][state.c4], lengthCV$var601$634_4);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample65
@@ -933,18 +237,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		int lengthCV$conditionals$63_1 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 == c7))
+		if((0 == state.c7))
 			lengthCV$conditionals$63_1 = 2;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == c7))
+		if((1 == state.c7))
 			lengthCV$conditionals$63_1 = 2;
-		c8 = DistributionSampling.sampleCategorical(RNG$, conditionals[c7], lengthCV$conditionals$63_1);
+		state.c8 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c7], lengthCV$conditionals$63_1);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample67
 	private final void drawValueSample67() {
-		c9 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c9 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample70
@@ -953,18 +257,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		int lengthCV$conditionals$68_1 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 == c9))
+		if((0 == state.c9))
 			lengthCV$conditionals$68_1 = 2;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == c9))
+		if((1 == state.c9))
 			lengthCV$conditionals$68_1 = 2;
-		c10 = DistributionSampling.sampleCategorical(RNG$, conditionals[c9], lengthCV$conditionals$68_1);
+		state.c10 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c9], lengthCV$conditionals$68_1);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample72
 	private final void drawValueSample72() {
-		c11 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c11 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample75
@@ -973,37 +277,37 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		int lengthCV$conditionals$73_1 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 == c11))
+		if((0 == state.c11))
 			lengthCV$conditionals$73_1 = 2;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == c11))
+		if((1 == state.c11))
 			lengthCV$conditionals$73_1 = 2;
-		c12 = DistributionSampling.sampleCategorical(RNG$, conditionals[c11], lengthCV$conditionals$73_1);
+		state.c12 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c11], lengthCV$conditionals$73_1);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 47 drawn from Categorical 44. Inference was performed using variable
 	// marginalization.
 	private final void inferSample47() {
-		constrainedFlag$sample47 = false;
+		state.constrainedFlag$sample47 = false;
 		{
 			// Write out the new value of the sample.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
-			c1 = 0;
+			state.c1 = 0;
 			
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample47 = true;
+			state.constrainedFlag$sample47 = true;
 			
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
-			double[] var46 = conditionals[0];
+			double[] var46 = state.conditionals[0];
 			
 			// Variable declaration of cv$accumulatedProbabilities moved.
 			// Declaration comment was:
@@ -1012,9 +316,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			// 
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -1027,41 +331,41 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
+									// Substituted "cv$valuePos" with its value "0".
 			// 
 			// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			double cv$accumulatedProbabilities = ((((((0.0 <= c2) && (c2 < 2)) && (0.0 <= var46[c2])) && (var46[c2] <= 1.0))?Math.log(var46[c2]):Double.NEGATIVE_INFINITY) + (((0.0 <= priors[0]) && (priors[0] <= 1.0))?Math.log(priors[0]):Double.NEGATIVE_INFINITY));
+			double cv$accumulatedProbabilities = ((((((0.0 <= state.c2) && (state.c2 < 2)) && (0.0 <= var46[state.c2])) && (var46[state.c2] <= 1.0))?Math.log(var46[state.c2]):Double.NEGATIVE_INFINITY) + (((0.0 <= state.priors[0]) && (state.priors[0] <= 1.0))?Math.log(state.priors[0]):Double.NEGATIVE_INFINITY));
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(fixedFlag$sample636) {
+			if(state.fixedFlag$sample636) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample47 = true;
+				state.constrainedFlag$sample47 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
 				// Value of the variable at this index
 				// 
 				// Substituted "cv$valuePos" with its value "0".
-				double[] var602 = a[c5][c9][0][c4];
+				double[] var602 = state.a[state.c5][state.c9][0][state.c4];
 				
 				// Allocate a local variable to hold the length of the array.
 				int lengthCV$var601$634_0 = -1;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c5)) {
+				if((0 == state.c5)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c9)) {
+					if((0 == state.c9)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						// 
 						// Value of the variable at this index
 						// 
 						// Substituted "cv$valuePos" with its value "0".
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_0 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1069,18 +373,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 						// Value of the variable at this index
 						// 
 						// Substituted "cv$valuePos" with its value "0".
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_0 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c9)) {
+					if((1 == state.c9)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						// 
 						// Value of the variable at this index
 						// 
 						// Substituted "cv$valuePos" with its value "0".
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_0 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1088,21 +392,21 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 						// Value of the variable at this index
 						// 
 						// Substituted "cv$valuePos" with its value "0".
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_0 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c5)) {
+				if((1 == state.c5)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c9)) {
+					if((0 == state.c9)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						// 
 						// Value of the variable at this index
 						// 
 						// Substituted "cv$valuePos" with its value "0".
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_0 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1110,18 +414,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 						// Value of the variable at this index
 						// 
 						// Substituted "cv$valuePos" with its value "0".
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_0 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c9)) {
+					if((1 == state.c9)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						// 
 						// Value of the variable at this index
 						// 
 						// Substituted "cv$valuePos" with its value "0".
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_0 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1129,7 +433,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 						// Value of the variable at this index
 						// 
 						// Substituted "cv$valuePos" with its value "0".
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_0 = 5;
 					}
 				}
@@ -1146,17 +450,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
-			cv$var45$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
+			scratch.cv$var45$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		
 		// Write out the new value of the sample.
@@ -1164,17 +468,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		c1 = 1;
+		state.c1 = 1;
 		
 		// Mark that the sample has observed constrained data.
-		constrainedFlag$sample47 = true;
+		state.constrainedFlag$sample47 = true;
 		
 		// Constructing a random variable input for use later.
 		// 
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		double[] var46 = conditionals[1];
+		double[] var46 = state.conditionals[1];
 		
 		// Variable declaration of cv$accumulatedProbabilities moved.
 		// Declaration comment was:
@@ -1183,9 +487,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
+						// Substituted "cv$valuePos" with its value "1".
 		// 
 		// A check to ensure rounding of floating point values can never result in a negative
 		// value.
@@ -1198,41 +502,41 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
+						// Substituted "cv$valuePos" with its value "1".
 		// 
 		// Variable declaration of cv$accumulatedConsumerProbabilities moved.
 		// Declaration comment was:
 		// Set an accumulator to sum the probabilities for each possible configuration of
 		// inputs.
-		double cv$accumulatedProbabilities = ((((((0.0 <= c2) && (c2 < 2)) && (0.0 <= var46[c2])) && (var46[c2] <= 1.0))?Math.log(var46[c2]):Double.NEGATIVE_INFINITY) + (((0.0 <= priors[1]) && (priors[1] <= 1.0))?Math.log(priors[1]):Double.NEGATIVE_INFINITY));
+		double cv$accumulatedProbabilities = ((((((0.0 <= state.c2) && (state.c2 < 2)) && (0.0 <= var46[state.c2])) && (var46[state.c2] <= 1.0))?Math.log(var46[state.c2]):Double.NEGATIVE_INFINITY) + (((0.0 <= state.priors[1]) && (state.priors[1] <= 1.0))?Math.log(state.priors[1]):Double.NEGATIVE_INFINITY));
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(fixedFlag$sample636) {
+		if(state.fixedFlag$sample636) {
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample47 = true;
+			state.constrainedFlag$sample47 = true;
 			
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			double[] var602 = a[c5][c9][1][c4];
+			double[] var602 = state.a[state.c5][state.c9][1][state.c4];
 			
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$var601$634_0 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5)) {
+			if((0 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					// 
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_0 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1240,18 +544,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_0 = 5;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					// 
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_0 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1259,21 +563,21 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_0 = 5;
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5)) {
+			if((1 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					// 
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_0 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1281,18 +585,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_0 = 5;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					// 
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_0 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -1300,7 +604,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_0 = 5;
 				}
 			}
@@ -1317,17 +621,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = (((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		}
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		cv$var45$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
+		scratch.cv$var45$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
 		
 		// This value is not used before it is set again, so removing the value declaration.
 		// 
@@ -1339,12 +643,12 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Initialize the max to the first element.
 		// 
 		// Get a local reference to the scratch space.
-		double cv$lseMax = cv$var45$stateProbabilityGlobal[0];
+		double cv$lseMax = scratch.cv$var45$stateProbabilityGlobal[0];
 		
 		// Unrolled loop
 		// 
 		// Get a local reference to the scratch space.
-		double cv$lseElementValue = cv$var45$stateProbabilityGlobal[1];
+		double cv$lseElementValue = scratch.cv$var45$stateProbabilityGlobal[1];
 		if((cv$lseMax < cv$lseElementValue))
 			cv$lseMax = cv$lseElementValue;
 		
@@ -1363,71 +667,71 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Get a local reference to the scratch space.
 			// 
 			// Initialize the sum of the array elements
-			cv$logSum = (Math.log((Math.exp((cv$var45$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var45$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+			cv$logSum = (Math.log((Math.exp((scratch.cv$var45$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((scratch.cv$var45$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 		
 		// If all the sum is zero, just share the probability evenly.
 		if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 			// Unrolled loop
-			// Get a local reference to the scratch space.
-			cv$var45$stateProbabilityGlobal[0] = 0.5;
+									// Get a local reference to the scratch space.
+			scratch.cv$var45$stateProbabilityGlobal[0] = 0.5;
 			
-			// Get a local reference to the scratch space.
-			cv$var45$stateProbabilityGlobal[1] = 0.5;
+									// Get a local reference to the scratch space.
+			scratch.cv$var45$stateProbabilityGlobal[1] = 0.5;
 		} else {
 			// Unrolled loop
-			// Get a local reference to the scratch space.
-			cv$var45$stateProbabilityGlobal[0] = Math.exp((cv$var45$stateProbabilityGlobal[0] - cv$logSum));
+									// Get a local reference to the scratch space.
+			scratch.cv$var45$stateProbabilityGlobal[0] = Math.exp((scratch.cv$var45$stateProbabilityGlobal[0] - cv$logSum));
 			
-			// Get a local reference to the scratch space.
-			cv$var45$stateProbabilityGlobal[1] = Math.exp((cv$var45$stateProbabilityGlobal[1] - cv$logSum));
+									// Get a local reference to the scratch space.
+			scratch.cv$var45$stateProbabilityGlobal[1] = Math.exp((scratch.cv$var45$stateProbabilityGlobal[1] - cv$logSum));
 		}
 		
 		// Set array values that are not computed for the input to negative infinity.
 		// 
-		// Get a local reference to the scratch space.
-		for(int cv$indexName = 2; cv$indexName < cv$var45$stateProbabilityGlobal.length; cv$indexName += 1)
+						// Get a local reference to the scratch space.
+		for(int cv$indexName = 2; cv$indexName < scratch.cv$var45$stateProbabilityGlobal.length; cv$indexName += 1)
 			// Get a local reference to the scratch space.
-			cv$var45$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+			scratch.cv$var45$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 		
 		// Write out the new value of the sample.
 		// 
-		// cv$numStates's comment
+								// cv$numStates's comment
 		// variable marginalization
-		c1 = DistributionSampling.sampleCategorical(RNG$, cv$var45$stateProbabilityGlobal, 2);
+		state.c1 = DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var45$stateProbabilityGlobal, 2);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
 	// by sample task 52 drawn from Categorical 49. Inference was performed using variable
 	// marginalization.
 	private final void inferSample52() {
-		constrainedFlag$sample52 = false;
+		state.constrainedFlag$sample52 = false;
 		{
 			// Write out the new value of the sample.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
-			c3 = 0;
+			state.c3 = 0;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
-			double cv$accumulatedProbabilities = (((0.0 <= priors[0]) && (priors[0] <= 1.0))?Math.log(priors[0]):Double.NEGATIVE_INFINITY);
+									// Substituted "cv$valuePos" with its value "0".
+			double cv$accumulatedProbabilities = (((0.0 <= state.priors[0]) && (state.priors[0] <= 1.0))?Math.log(state.priors[0]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((fixedFlag$sample55 || constrainedFlag$sample55)) {
+			if((state.fixedFlag$sample55 || state.constrainedFlag$sample55)) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample52 = true;
+				state.constrainedFlag$sample52 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
 				// Value of the variable at this index
 				// 
 				// Substituted "cv$valuePos" with its value "0".
-				double[] var51 = conditionals[0];
+				double[] var51 = state.conditionals[0];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -1441,17 +745,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = ((((((0.0 <= c4) && (c4 < 2)) && (0.0 <= var51[c4])) && (var51[c4] <= 1.0))?Math.log(var51[c4]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((((0.0 <= state.c4) && (state.c4 < 2)) && (0.0 <= var51[state.c4])) && (var51[state.c4] <= 1.0))?Math.log(var51[state.c4]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
-			cv$var50$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
+			scratch.cv$var50$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		
 		// Write out the new value of the sample.
@@ -1459,27 +763,27 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		c3 = 1;
+		state.c3 = 1;
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
-		double cv$accumulatedProbabilities = (((0.0 <= priors[1]) && (priors[1] <= 1.0))?Math.log(priors[1]):Double.NEGATIVE_INFINITY);
+						// Substituted "cv$valuePos" with its value "1".
+		double cv$accumulatedProbabilities = (((0.0 <= state.priors[1]) && (state.priors[1] <= 1.0))?Math.log(state.priors[1]):Double.NEGATIVE_INFINITY);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((fixedFlag$sample55 || constrainedFlag$sample55)) {
+		if((state.fixedFlag$sample55 || state.constrainedFlag$sample55)) {
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample52 = true;
+			state.constrainedFlag$sample52 = true;
 			
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			double[] var51 = conditionals[1];
+			double[] var51 = state.conditionals[1];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -1493,18 +797,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = ((((((0.0 <= c4) && (c4 < 2)) && (0.0 <= var51[c4])) && (var51[c4] <= 1.0))?Math.log(var51[c4]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = ((((((0.0 <= state.c4) && (state.c4 < 2)) && (0.0 <= var51[state.c4])) && (var51[state.c4] <= 1.0))?Math.log(var51[state.c4]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		}
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		cv$var50$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
-		if(constrainedFlag$sample52) {
+		scratch.cv$var50$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
+		if(state.constrainedFlag$sample52) {
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
@@ -1515,12 +819,12 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Initialize the max to the first element.
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseMax = cv$var50$stateProbabilityGlobal[0];
+			double cv$lseMax = scratch.cv$var50$stateProbabilityGlobal[0];
 			
 			// Unrolled loop
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var50$stateProbabilityGlobal[1];
+			double cv$lseElementValue = scratch.cv$var50$stateProbabilityGlobal[1];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 			
@@ -1539,37 +843,37 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Get a local reference to the scratch space.
 				// 
 				// Initialize the sum of the array elements
-				cv$logSum = (Math.log((Math.exp((cv$var50$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var50$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+				cv$logSum = (Math.log((Math.exp((scratch.cv$var50$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((scratch.cv$var50$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 			
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
-				cv$var50$stateProbabilityGlobal[0] = 0.5;
+												// Get a local reference to the scratch space.
+				scratch.cv$var50$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
-				cv$var50$stateProbabilityGlobal[1] = 0.5;
+												// Get a local reference to the scratch space.
+				scratch.cv$var50$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
-				cv$var50$stateProbabilityGlobal[0] = Math.exp((cv$var50$stateProbabilityGlobal[0] - cv$logSum));
+												// Get a local reference to the scratch space.
+				scratch.cv$var50$stateProbabilityGlobal[0] = Math.exp((scratch.cv$var50$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
-				cv$var50$stateProbabilityGlobal[1] = Math.exp((cv$var50$stateProbabilityGlobal[1] - cv$logSum));
+												// Get a local reference to the scratch space.
+				scratch.cv$var50$stateProbabilityGlobal[1] = Math.exp((scratch.cv$var50$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 2; cv$indexName < cv$var50$stateProbabilityGlobal.length; cv$indexName += 1)
+									// Get a local reference to the scratch space.
+			for(int cv$indexName = 2; cv$indexName < scratch.cv$var50$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var50$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				scratch.cv$var50$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
-			c3 = DistributionSampling.sampleCategorical(RNG$, cv$var50$stateProbabilityGlobal, 2);
+			state.c3 = DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var50$stateProbabilityGlobal, 2);
 		}
 	}
 
@@ -1577,17 +881,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// by sample task 55 drawn from Categorical 52. Inference was performed using variable
 	// marginalization.
 	private final void inferSample55() {
-		constrainedFlag$sample55 = false;
+		state.constrainedFlag$sample55 = false;
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$53_1 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 == c3))
+		if((0 == state.c3))
 			lengthCV$conditionals$53_1 = 2;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == c3))
+		if((1 == state.c3))
 			lengthCV$conditionals$53_1 = 2;
 		
 		// Variable declaration of cv$numStates moved.
@@ -1596,111 +900,111 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// 
 		// variable marginalization
 		// 
-		// cv$numStates's comment
+				// cv$numStates's comment
 		// Calculate the number of states to evaluate.
 		int cv$numStates = Math.max(0, lengthCV$conditionals$53_1);
 		for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 			// Write out the new value of the sample.
 			// 
 			// Value of the variable at this index
-			c4 = cv$valuePos;
+			state.c4 = cv$valuePos;
 			
 			// Constructing a random variable input for use later.
-			double[] var51 = conditionals[c3];
+			double[] var51 = state.conditionals[state.c3];
 			
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$53_2 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c3))
+			if((0 == state.c3))
 				lengthCV$conditionals$53_2 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c3))
+			if((1 == state.c3))
 				lengthCV$conditionals$53_2 = 2;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			double cv$accumulatedProbabilities = (((((cv$valuePos < lengthCV$conditionals$53_2) && (0 < lengthCV$conditionals$53_2)) && (0.0 <= var51[cv$valuePos])) && (var51[cv$valuePos] <= 1.0))?Math.log(var51[cv$valuePos]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(fixedFlag$sample636) {
+			if(state.fixedFlag$sample636) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample55 = true;
+				state.constrainedFlag$sample55 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
 				// Value of the variable at this index
-				double[] var602 = a[c5][c9][c1][cv$valuePos];
+				double[] var602 = state.a[state.c5][state.c9][state.c1][cv$valuePos];
 				
 				// Allocate a local variable to hold the length of the array.
 				int lengthCV$var601$634_1 = -1;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c5)) {
+				if((0 == state.c5)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c9)) {
+					if((0 == state.c9)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c1)) {
+						if((0 == state.c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 						}
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c1)) {
+						if((1 == state.c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 						}
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c9)) {
+					if((1 == state.c9)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c1)) {
+						if((0 == state.c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 						}
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c1)) {
+						if((1 == state.c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 						}
@@ -1708,68 +1012,68 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c5)) {
+				if((1 == state.c5)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c9)) {
+					if((0 == state.c9)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c1)) {
+						if((0 == state.c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 						}
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c1)) {
+						if((1 == state.c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 						}
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c9)) {
+					if((1 == state.c9)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c1)) {
+						if((0 == state.c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 						}
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c1)) {
+						if((1 == state.c1)) {
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((0 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 							
 							// Constraints moved from conditionals in inner loops/scopes/etc.
 							// 
-							// Value of the variable at this index
+																					// Value of the variable at this index
 							if((1 == cv$valuePos))
 								lengthCV$var601$634_1 = 5;
 						}
@@ -1788,19 +1092,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_1)) && (0 < lengthCV$var601$634_1)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_1)) && (0 < lengthCV$var601$634_1)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
 			// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
-			cv$var53$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
+			scratch.cv$var53$stateProbabilityGlobal[cv$valuePos] = cv$accumulatedProbabilities;
 		}
-		if(constrainedFlag$sample55) {
+		if(state.constrainedFlag$sample55) {
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
@@ -1811,12 +1115,12 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Initialize the max to the first element.
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseMax = cv$var53$stateProbabilityGlobal[0];
+			double cv$lseMax = scratch.cv$var53$stateProbabilityGlobal[0];
 			
 			// Find max value.
 			for(int cv$lseIndex = 1; cv$lseIndex < cv$numStates; cv$lseIndex += 1) {
 				// Get a local reference to the scratch space.
-				double cv$lseElementValue = cv$var53$stateProbabilityGlobal[cv$lseIndex];
+				double cv$lseElementValue = scratch.cv$var53$stateProbabilityGlobal[cv$lseIndex];
 				if((cv$lseMax < cv$lseElementValue))
 					cv$lseMax = cv$lseElementValue;
 			}
@@ -1833,7 +1137,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Offset values, move to normal space, and sum.
 				for(int cv$lseIndex = 0; cv$lseIndex < cv$numStates; cv$lseIndex += 1)
 					// Get a local reference to the scratch space.
-					cv$lseSum = (cv$lseSum + Math.exp((cv$var53$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
+					cv$lseSum = (cv$lseSum + Math.exp((scratch.cv$var53$stateProbabilityGlobal[cv$lseIndex] - cv$lseMax)));
 				
 				// Increment the value of the target, moving the value back into log space.
 				// 
@@ -1846,25 +1150,25 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
 					// Get a local reference to the scratch space.
-					cv$var53$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
+					scratch.cv$var53$stateProbabilityGlobal[cv$indexName] = (1.0 / cv$numStates);
 			} else {
 				// Normalize log space values and move to normal space
 				for(int cv$indexName = 0; cv$indexName < cv$numStates; cv$indexName += 1)
-					// Get a local reference to the scratch space.
-					cv$var53$stateProbabilityGlobal[cv$indexName] = Math.exp((cv$var53$stateProbabilityGlobal[cv$indexName] - cv$logSum));
+															// Get a local reference to the scratch space.
+					scratch.cv$var53$stateProbabilityGlobal[cv$indexName] = Math.exp((scratch.cv$var53$stateProbabilityGlobal[cv$indexName] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
 			// Get a local reference to the scratch space.
-			for(int cv$indexName = cv$numStates; cv$indexName < cv$var53$stateProbabilityGlobal.length; cv$indexName += 1)
+			for(int cv$indexName = cv$numStates; cv$indexName < scratch.cv$var53$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var53$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				scratch.cv$var53$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
 			// Get a local reference to the scratch space.
-			c4 = DistributionSampling.sampleCategorical(RNG$, cv$var53$stateProbabilityGlobal, cv$numStates);
+			state.c4 = DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var53$stateProbabilityGlobal, cv$numStates);
 		}
 	}
 
@@ -1872,34 +1176,34 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// by sample task 57 drawn from Categorical 54. Inference was performed using variable
 	// marginalization.
 	private final void inferSample57() {
-		constrainedFlag$sample57 = false;
+		state.constrainedFlag$sample57 = false;
 		{
 			// Write out the new value of the sample.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
-			c5 = 0;
+			state.c5 = 0;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
-			double cv$accumulatedProbabilities = (((0.0 <= priors[0]) && (priors[0] <= 1.0))?Math.log(priors[0]):Double.NEGATIVE_INFINITY);
+									// Substituted "cv$valuePos" with its value "0".
+			double cv$accumulatedProbabilities = (((0.0 <= state.priors[0]) && (state.priors[0] <= 1.0))?Math.log(state.priors[0]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(fixedFlag$sample60) {
+			if(state.fixedFlag$sample60) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample57 = true;
+				state.constrainedFlag$sample57 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
 				// Value of the variable at this index
 				// 
 				// Substituted "cv$valuePos" with its value "0".
-				double[] var56 = conditionals[0];
+				double[] var56 = state.conditionals[0];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -1913,70 +1217,70 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = ((((((0.0 <= c6) && (c6 < 2)) && (0.0 <= var56[c6])) && (var56[c6] <= 1.0))?Math.log(var56[c6]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((((0.0 <= state.c6) && (state.c6 < 2)) && (0.0 <= var56[state.c6])) && (var56[state.c6] <= 1.0))?Math.log(var56[state.c6]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(fixedFlag$sample636) {
+			if(state.fixedFlag$sample636) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample57 = true;
+				state.constrainedFlag$sample57 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
 				// Value of the variable at this index
 				// 
 				// Substituted "cv$valuePos" with its value "0".
-				double[] var602 = a[0][c9][c1][c4];
+				double[] var602 = state.a[0][state.c9][state.c1][state.c4];
 				
 				// Allocate a local variable to hold the length of the array.
 				int lengthCV$var601$634_2 = -1;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_2 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_2 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_2 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_2 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_2 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_2 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_2 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_2 = 5;
 					}
 				}
@@ -1993,17 +1297,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
-			cv$var55$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
+			scratch.cv$var55$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		
 		// Write out the new value of the sample.
@@ -2011,27 +1315,27 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		c5 = 1;
+		state.c5 = 1;
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
-		double cv$accumulatedProbabilities = (((0.0 <= priors[1]) && (priors[1] <= 1.0))?Math.log(priors[1]):Double.NEGATIVE_INFINITY);
+						// Substituted "cv$valuePos" with its value "1".
+		double cv$accumulatedProbabilities = (((0.0 <= state.priors[1]) && (state.priors[1] <= 1.0))?Math.log(state.priors[1]):Double.NEGATIVE_INFINITY);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(fixedFlag$sample60) {
+		if(state.fixedFlag$sample60) {
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample57 = true;
+			state.constrainedFlag$sample57 = true;
 			
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			double[] var56 = conditionals[1];
+			double[] var56 = state.conditionals[1];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -2045,70 +1349,70 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = ((((((0.0 <= c6) && (c6 < 2)) && (0.0 <= var56[c6])) && (var56[c6] <= 1.0))?Math.log(var56[c6]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = ((((((0.0 <= state.c6) && (state.c6 < 2)) && (0.0 <= var56[state.c6])) && (var56[state.c6] <= 1.0))?Math.log(var56[state.c6]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(fixedFlag$sample636) {
+		if(state.fixedFlag$sample636) {
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample57 = true;
+			state.constrainedFlag$sample57 = true;
 			
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			double[] var602 = a[1][c9][c1][c4];
+			double[] var602 = state.a[1][state.c9][state.c1][state.c4];
 			
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$var601$634_2 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c9)) {
+			if((0 == state.c9)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c1)) {
+				if((0 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_2 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_2 = 5;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c1)) {
+				if((1 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_2 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_2 = 5;
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c9)) {
+			if((1 == state.c9)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c1)) {
+				if((0 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_2 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_2 = 5;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c1)) {
+				if((1 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_2 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_2 = 5;
 				}
 			}
@@ -2125,18 +1429,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = (((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		}
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		cv$var55$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
-		if(constrainedFlag$sample57) {
+		scratch.cv$var55$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
+		if(state.constrainedFlag$sample57) {
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
@@ -2147,12 +1451,12 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Initialize the max to the first element.
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseMax = cv$var55$stateProbabilityGlobal[0];
+			double cv$lseMax = scratch.cv$var55$stateProbabilityGlobal[0];
 			
 			// Unrolled loop
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var55$stateProbabilityGlobal[1];
+			double cv$lseElementValue = scratch.cv$var55$stateProbabilityGlobal[1];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 			
@@ -2171,37 +1475,37 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Get a local reference to the scratch space.
 				// 
 				// Initialize the sum of the array elements
-				cv$logSum = (Math.log((Math.exp((cv$var55$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var55$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+				cv$logSum = (Math.log((Math.exp((scratch.cv$var55$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((scratch.cv$var55$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 			
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
-				cv$var55$stateProbabilityGlobal[0] = 0.5;
+												// Get a local reference to the scratch space.
+				scratch.cv$var55$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
-				cv$var55$stateProbabilityGlobal[1] = 0.5;
+												// Get a local reference to the scratch space.
+				scratch.cv$var55$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
-				cv$var55$stateProbabilityGlobal[0] = Math.exp((cv$var55$stateProbabilityGlobal[0] - cv$logSum));
+												// Get a local reference to the scratch space.
+				scratch.cv$var55$stateProbabilityGlobal[0] = Math.exp((scratch.cv$var55$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
-				cv$var55$stateProbabilityGlobal[1] = Math.exp((cv$var55$stateProbabilityGlobal[1] - cv$logSum));
+												// Get a local reference to the scratch space.
+				scratch.cv$var55$stateProbabilityGlobal[1] = Math.exp((scratch.cv$var55$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 2; cv$indexName < cv$var55$stateProbabilityGlobal.length; cv$indexName += 1)
+									// Get a local reference to the scratch space.
+			for(int cv$indexName = 2; cv$indexName < scratch.cv$var55$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var55$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				scratch.cv$var55$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
-			c5 = DistributionSampling.sampleCategorical(RNG$, cv$var55$stateProbabilityGlobal, 2);
+			state.c5 = DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var55$stateProbabilityGlobal, 2);
 		}
 	}
 
@@ -2209,34 +1513,34 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// by sample task 62 drawn from Categorical 59. Inference was performed using variable
 	// marginalization.
 	private final void inferSample62() {
-		constrainedFlag$sample62 = false;
+		state.constrainedFlag$sample62 = false;
 		{
 			// Write out the new value of the sample.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
-			c7 = 0;
+			state.c7 = 0;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
-			double cv$accumulatedProbabilities = (((0.0 <= priors[0]) && (priors[0] <= 1.0))?Math.log(priors[0]):Double.NEGATIVE_INFINITY);
+									// Substituted "cv$valuePos" with its value "0".
+			double cv$accumulatedProbabilities = (((0.0 <= state.priors[0]) && (state.priors[0] <= 1.0))?Math.log(state.priors[0]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(fixedFlag$sample65) {
+			if(state.fixedFlag$sample65) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample62 = true;
+				state.constrainedFlag$sample62 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
 				// Value of the variable at this index
 				// 
 				// Substituted "cv$valuePos" with its value "0".
-				double[] var61 = conditionals[0];
+				double[] var61 = state.conditionals[0];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -2250,17 +1554,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = ((((((0.0 <= c8) && (c8 < 2)) && (0.0 <= var61[c8])) && (var61[c8] <= 1.0))?Math.log(var61[c8]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((((0.0 <= state.c8) && (state.c8 < 2)) && (0.0 <= var61[state.c8])) && (var61[state.c8] <= 1.0))?Math.log(var61[state.c8]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
-			cv$var60$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
+			scratch.cv$var60$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		
 		// Write out the new value of the sample.
@@ -2268,27 +1572,27 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		c7 = 1;
+		state.c7 = 1;
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
-		double cv$accumulatedProbabilities = (((0.0 <= priors[1]) && (priors[1] <= 1.0))?Math.log(priors[1]):Double.NEGATIVE_INFINITY);
+						// Substituted "cv$valuePos" with its value "1".
+		double cv$accumulatedProbabilities = (((0.0 <= state.priors[1]) && (state.priors[1] <= 1.0))?Math.log(state.priors[1]):Double.NEGATIVE_INFINITY);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(fixedFlag$sample65) {
+		if(state.fixedFlag$sample65) {
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample62 = true;
+			state.constrainedFlag$sample62 = true;
 			
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			double[] var61 = conditionals[1];
+			double[] var61 = state.conditionals[1];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -2302,18 +1606,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = ((((((0.0 <= c8) && (c8 < 2)) && (0.0 <= var61[c8])) && (var61[c8] <= 1.0))?Math.log(var61[c8]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = ((((((0.0 <= state.c8) && (state.c8 < 2)) && (0.0 <= var61[state.c8])) && (var61[state.c8] <= 1.0))?Math.log(var61[state.c8]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		}
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		cv$var60$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
-		if(constrainedFlag$sample62) {
+		scratch.cv$var60$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
+		if(state.constrainedFlag$sample62) {
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
@@ -2324,12 +1628,12 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Initialize the max to the first element.
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseMax = cv$var60$stateProbabilityGlobal[0];
+			double cv$lseMax = scratch.cv$var60$stateProbabilityGlobal[0];
 			
 			// Unrolled loop
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var60$stateProbabilityGlobal[1];
+			double cv$lseElementValue = scratch.cv$var60$stateProbabilityGlobal[1];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 			
@@ -2348,37 +1652,37 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Get a local reference to the scratch space.
 				// 
 				// Initialize the sum of the array elements
-				cv$logSum = (Math.log((Math.exp((cv$var60$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var60$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+				cv$logSum = (Math.log((Math.exp((scratch.cv$var60$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((scratch.cv$var60$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 			
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
-				cv$var60$stateProbabilityGlobal[0] = 0.5;
+												// Get a local reference to the scratch space.
+				scratch.cv$var60$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
-				cv$var60$stateProbabilityGlobal[1] = 0.5;
+												// Get a local reference to the scratch space.
+				scratch.cv$var60$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
-				cv$var60$stateProbabilityGlobal[0] = Math.exp((cv$var60$stateProbabilityGlobal[0] - cv$logSum));
+												// Get a local reference to the scratch space.
+				scratch.cv$var60$stateProbabilityGlobal[0] = Math.exp((scratch.cv$var60$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
-				cv$var60$stateProbabilityGlobal[1] = Math.exp((cv$var60$stateProbabilityGlobal[1] - cv$logSum));
+												// Get a local reference to the scratch space.
+				scratch.cv$var60$stateProbabilityGlobal[1] = Math.exp((scratch.cv$var60$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 2; cv$indexName < cv$var60$stateProbabilityGlobal.length; cv$indexName += 1)
+									// Get a local reference to the scratch space.
+			for(int cv$indexName = 2; cv$indexName < scratch.cv$var60$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var60$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				scratch.cv$var60$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
-			c7 = DistributionSampling.sampleCategorical(RNG$, cv$var60$stateProbabilityGlobal, 2);
+			state.c7 = DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var60$stateProbabilityGlobal, 2);
 		}
 	}
 
@@ -2386,34 +1690,34 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// by sample task 67 drawn from Categorical 64. Inference was performed using variable
 	// marginalization.
 	private final void inferSample67() {
-		constrainedFlag$sample67 = false;
+		state.constrainedFlag$sample67 = false;
 		{
 			// Write out the new value of the sample.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
-			c9 = 0;
+			state.c9 = 0;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
-			double cv$accumulatedProbabilities = (((0.0 <= priors[0]) && (priors[0] <= 1.0))?Math.log(priors[0]):Double.NEGATIVE_INFINITY);
+									// Substituted "cv$valuePos" with its value "0".
+			double cv$accumulatedProbabilities = (((0.0 <= state.priors[0]) && (state.priors[0] <= 1.0))?Math.log(state.priors[0]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(fixedFlag$sample70) {
+			if(state.fixedFlag$sample70) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample67 = true;
+				state.constrainedFlag$sample67 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
 				// Value of the variable at this index
 				// 
 				// Substituted "cv$valuePos" with its value "0".
-				double[] var66 = conditionals[0];
+				double[] var66 = state.conditionals[0];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -2427,59 +1731,59 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = ((((((0.0 <= c10) && (c10 < 2)) && (0.0 <= var66[c10])) && (var66[c10] <= 1.0))?Math.log(var66[c10]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((((0.0 <= state.c10) && (state.c10 < 2)) && (0.0 <= var66[state.c10])) && (var66[state.c10] <= 1.0))?Math.log(var66[state.c10]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(fixedFlag$sample636) {
+			if(state.fixedFlag$sample636) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample67 = true;
+				state.constrainedFlag$sample67 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
 				// Value of the variable at this index
 				// 
 				// Substituted "cv$valuePos" with its value "0".
-				double[] var602 = a[c5][0][c1][c4];
+				double[] var602 = state.a[state.c5][0][state.c1][state.c4];
 				
 				// Allocate a local variable to hold the length of the array.
 				int lengthCV$var601$634_3 = -1;
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c5)) {
+				if((0 == state.c5)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_3 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_3 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_3 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_3 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c5)) {
+				if((1 == state.c5)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						// 
 						// Value of the variable at this index
 						// 
 						// Substituted "cv$valuePos" with its value "0".
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_3 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2487,18 +1791,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 						// Value of the variable at this index
 						// 
 						// Substituted "cv$valuePos" with its value "0".
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_3 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
 						// 
 						// Value of the variable at this index
 						// 
 						// Substituted "cv$valuePos" with its value "0".
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_3 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2506,7 +1810,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 						// Value of the variable at this index
 						// 
 						// Substituted "cv$valuePos" with its value "0".
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_3 = 5;
 					}
 				}
@@ -2523,17 +1827,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = (((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = (((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
-			cv$var65$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
+			scratch.cv$var65$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		
 		// Write out the new value of the sample.
@@ -2541,27 +1845,27 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		c9 = 1;
+		state.c9 = 1;
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
-		double cv$accumulatedProbabilities = (((0.0 <= priors[1]) && (priors[1] <= 1.0))?Math.log(priors[1]):Double.NEGATIVE_INFINITY);
+						// Substituted "cv$valuePos" with its value "1".
+		double cv$accumulatedProbabilities = (((0.0 <= state.priors[1]) && (state.priors[1] <= 1.0))?Math.log(state.priors[1]):Double.NEGATIVE_INFINITY);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(fixedFlag$sample70) {
+		if(state.fixedFlag$sample70) {
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample67 = true;
+			state.constrainedFlag$sample67 = true;
 			
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			double[] var66 = conditionals[1];
+			double[] var66 = state.conditionals[1];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -2575,34 +1879,34 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = ((((((0.0 <= c10) && (c10 < 2)) && (0.0 <= var66[c10])) && (var66[c10] <= 1.0))?Math.log(var66[c10]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = ((((((0.0 <= state.c10) && (state.c10 < 2)) && (0.0 <= var66[state.c10])) && (var66[state.c10] <= 1.0))?Math.log(var66[state.c10]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(fixedFlag$sample636) {
+		if(state.fixedFlag$sample636) {
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample67 = true;
+			state.constrainedFlag$sample67 = true;
 			
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			double[] var602 = a[c5][1][c1][c4];
+			double[] var602 = state.a[state.c5][1][state.c1][state.c4];
 			
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$var601$634_3 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5)) {
+			if((0 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c1)) {
+				if((0 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					// 
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_3 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2610,18 +1914,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_3 = 5;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c1)) {
+				if((1 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					// 
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_3 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2629,21 +1933,21 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_3 = 5;
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5)) {
+			if((1 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c1)) {
+				if((0 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					// 
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_3 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2651,18 +1955,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_3 = 5;
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c1)) {
+				if((1 == state.c1)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
 					// 
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((0 == c4))
+					if((0 == state.c4))
 						lengthCV$var601$634_3 = 5;
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
@@ -2670,7 +1974,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Value of the variable at this index
 					// 
 					// Substituted "cv$valuePos" with its value "1".
-					if((1 == c4))
+					if((1 == state.c4))
 						lengthCV$var601$634_3 = 5;
 				}
 			}
@@ -2687,18 +1991,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = (((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = (((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		}
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		cv$var65$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
-		if(constrainedFlag$sample67) {
+		scratch.cv$var65$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
+		if(state.constrainedFlag$sample67) {
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
@@ -2709,12 +2013,12 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Initialize the max to the first element.
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseMax = cv$var65$stateProbabilityGlobal[0];
+			double cv$lseMax = scratch.cv$var65$stateProbabilityGlobal[0];
 			
 			// Unrolled loop
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var65$stateProbabilityGlobal[1];
+			double cv$lseElementValue = scratch.cv$var65$stateProbabilityGlobal[1];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 			
@@ -2733,37 +2037,37 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Get a local reference to the scratch space.
 				// 
 				// Initialize the sum of the array elements
-				cv$logSum = (Math.log((Math.exp((cv$var65$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var65$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+				cv$logSum = (Math.log((Math.exp((scratch.cv$var65$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((scratch.cv$var65$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 			
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
-				cv$var65$stateProbabilityGlobal[0] = 0.5;
+												// Get a local reference to the scratch space.
+				scratch.cv$var65$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
-				cv$var65$stateProbabilityGlobal[1] = 0.5;
+												// Get a local reference to the scratch space.
+				scratch.cv$var65$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
-				cv$var65$stateProbabilityGlobal[0] = Math.exp((cv$var65$stateProbabilityGlobal[0] - cv$logSum));
+												// Get a local reference to the scratch space.
+				scratch.cv$var65$stateProbabilityGlobal[0] = Math.exp((scratch.cv$var65$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
-				cv$var65$stateProbabilityGlobal[1] = Math.exp((cv$var65$stateProbabilityGlobal[1] - cv$logSum));
+												// Get a local reference to the scratch space.
+				scratch.cv$var65$stateProbabilityGlobal[1] = Math.exp((scratch.cv$var65$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 2; cv$indexName < cv$var65$stateProbabilityGlobal.length; cv$indexName += 1)
+									// Get a local reference to the scratch space.
+			for(int cv$indexName = 2; cv$indexName < scratch.cv$var65$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var65$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				scratch.cv$var65$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
-			c9 = DistributionSampling.sampleCategorical(RNG$, cv$var65$stateProbabilityGlobal, 2);
+			state.c9 = DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var65$stateProbabilityGlobal, 2);
 		}
 	}
 
@@ -2771,34 +2075,34 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// by sample task 72 drawn from Categorical 69. Inference was performed using variable
 	// marginalization.
 	private final void inferSample72() {
-		constrainedFlag$sample72 = false;
+		state.constrainedFlag$sample72 = false;
 		{
 			// Write out the new value of the sample.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "0".
-			c11 = 0;
+			state.c11 = 0;
 			
 			// An accumulator to allow the value for each distribution to be constructed before
 			// it is added to the index probabilities.
 			// 
-			// Value of the variable at this index
+									// Value of the variable at this index
 			// 
-			// Substituted "cv$valuePos" with its value "0".
-			double cv$accumulatedProbabilities = (((0.0 <= priors[0]) && (priors[0] <= 1.0))?Math.log(priors[0]):Double.NEGATIVE_INFINITY);
+									// Substituted "cv$valuePos" with its value "0".
+			double cv$accumulatedProbabilities = (((0.0 <= state.priors[0]) && (state.priors[0] <= 1.0))?Math.log(state.priors[0]):Double.NEGATIVE_INFINITY);
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if(fixedFlag$sample75) {
+			if(state.fixedFlag$sample75) {
 				// Mark that the sample has observed constrained data.
-				constrainedFlag$sample72 = true;
+				state.constrainedFlag$sample72 = true;
 				
 				// Constructing a random variable input for use later.
 				// 
 				// Value of the variable at this index
 				// 
 				// Substituted "cv$valuePos" with its value "0".
-				double[] var71 = conditionals[0];
+				double[] var71 = state.conditionals[0];
 				
 				// A check to ensure rounding of floating point values can never result in a negative
 				// value.
@@ -2812,17 +2116,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Declaration comment was:
 				// Set an accumulator to sum the probabilities for each possible configuration of
 				// inputs.
-				cv$accumulatedProbabilities = ((((((0.0 <= c12) && (c12 < 2)) && (0.0 <= var71[c12])) && (var71[c12] <= 1.0))?Math.log(var71[c12]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+				cv$accumulatedProbabilities = ((((((0.0 <= state.c12) && (state.c12 < 2)) && (0.0 <= var71[state.c12])) && (var71[state.c12] <= 1.0))?Math.log(var71[state.c12]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 			}
 			
 			// Save the calculated index value into the array of index value probabilities
 			// 
-			// Get a local reference to the scratch space.
+									// Get a local reference to the scratch space.
 			// 
-			// Record the reached probability density.
+									// Record the reached probability density.
 			// 
 			// Initialize a counter to track the reached distributions.
-			cv$var70$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
+			scratch.cv$var70$stateProbabilityGlobal[0] = cv$accumulatedProbabilities;
 		}
 		
 		// Write out the new value of the sample.
@@ -2830,27 +2134,27 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Value of the variable at this index
 		// 
 		// Substituted "cv$valuePos" with its value "1".
-		c11 = 1;
+		state.c11 = 1;
 		
 		// An accumulator to allow the value for each distribution to be constructed before
 		// it is added to the index probabilities.
 		// 
-		// Value of the variable at this index
+						// Value of the variable at this index
 		// 
-		// Substituted "cv$valuePos" with its value "1".
-		double cv$accumulatedProbabilities = (((0.0 <= priors[1]) && (priors[1] <= 1.0))?Math.log(priors[1]):Double.NEGATIVE_INFINITY);
+						// Substituted "cv$valuePos" with its value "1".
+		double cv$accumulatedProbabilities = (((0.0 <= state.priors[1]) && (state.priors[1] <= 1.0))?Math.log(state.priors[1]):Double.NEGATIVE_INFINITY);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(fixedFlag$sample75) {
+		if(state.fixedFlag$sample75) {
 			// Mark that the sample has observed constrained data.
-			constrainedFlag$sample72 = true;
+			state.constrainedFlag$sample72 = true;
 			
 			// Constructing a random variable input for use later.
 			// 
 			// Value of the variable at this index
 			// 
 			// Substituted "cv$valuePos" with its value "1".
-			double[] var71 = conditionals[1];
+			double[] var71 = state.conditionals[1];
 			
 			// A check to ensure rounding of floating point values can never result in a negative
 			// value.
@@ -2864,18 +2168,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Declaration comment was:
 			// Set an accumulator to sum the probabilities for each possible configuration of
 			// inputs.
-			cv$accumulatedProbabilities = ((((((0.0 <= c12) && (c12 < 2)) && (0.0 <= var71[c12])) && (var71[c12] <= 1.0))?Math.log(var71[c12]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
+			cv$accumulatedProbabilities = ((((((0.0 <= state.c12) && (state.c12 < 2)) && (0.0 <= var71[state.c12])) && (var71[state.c12] <= 1.0))?Math.log(var71[state.c12]):Double.NEGATIVE_INFINITY) + cv$accumulatedProbabilities);
 		}
 		
 		// Save the calculated index value into the array of index value probabilities
 		// 
-		// Get a local reference to the scratch space.
+						// Get a local reference to the scratch space.
 		// 
-		// Record the reached probability density.
+						// Record the reached probability density.
 		// 
 		// Initialize a counter to track the reached distributions.
-		cv$var70$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
-		if(constrainedFlag$sample72) {
+		scratch.cv$var70$stateProbabilityGlobal[1] = cv$accumulatedProbabilities;
+		if(state.constrainedFlag$sample72) {
 			// This value is not used before it is set again, so removing the value declaration.
 			// 
 			// The sum of all the probabilities in log space
@@ -2886,12 +2190,12 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Initialize the max to the first element.
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseMax = cv$var70$stateProbabilityGlobal[0];
+			double cv$lseMax = scratch.cv$var70$stateProbabilityGlobal[0];
 			
 			// Unrolled loop
 			// 
 			// Get a local reference to the scratch space.
-			double cv$lseElementValue = cv$var70$stateProbabilityGlobal[1];
+			double cv$lseElementValue = scratch.cv$var70$stateProbabilityGlobal[1];
 			if((cv$lseMax < cv$lseElementValue))
 				cv$lseMax = cv$lseElementValue;
 			
@@ -2910,37 +2214,37 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Get a local reference to the scratch space.
 				// 
 				// Initialize the sum of the array elements
-				cv$logSum = (Math.log((Math.exp((cv$var70$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((cv$var70$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
+				cv$logSum = (Math.log((Math.exp((scratch.cv$var70$stateProbabilityGlobal[0] - cv$lseMax)) + Math.exp((scratch.cv$var70$stateProbabilityGlobal[1] - cv$lseMax)))) + cv$lseMax);
 			
 			// If all the sum is zero, just share the probability evenly.
 			if((cv$logSum == Double.NEGATIVE_INFINITY)) {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
-				cv$var70$stateProbabilityGlobal[0] = 0.5;
+												// Get a local reference to the scratch space.
+				scratch.cv$var70$stateProbabilityGlobal[0] = 0.5;
 				
-				// Get a local reference to the scratch space.
-				cv$var70$stateProbabilityGlobal[1] = 0.5;
+												// Get a local reference to the scratch space.
+				scratch.cv$var70$stateProbabilityGlobal[1] = 0.5;
 			} else {
 				// Unrolled loop
-				// Get a local reference to the scratch space.
-				cv$var70$stateProbabilityGlobal[0] = Math.exp((cv$var70$stateProbabilityGlobal[0] - cv$logSum));
+												// Get a local reference to the scratch space.
+				scratch.cv$var70$stateProbabilityGlobal[0] = Math.exp((scratch.cv$var70$stateProbabilityGlobal[0] - cv$logSum));
 				
-				// Get a local reference to the scratch space.
-				cv$var70$stateProbabilityGlobal[1] = Math.exp((cv$var70$stateProbabilityGlobal[1] - cv$logSum));
+												// Get a local reference to the scratch space.
+				scratch.cv$var70$stateProbabilityGlobal[1] = Math.exp((scratch.cv$var70$stateProbabilityGlobal[1] - cv$logSum));
 			}
 			
 			// Set array values that are not computed for the input to negative infinity.
 			// 
-			// Get a local reference to the scratch space.
-			for(int cv$indexName = 2; cv$indexName < cv$var70$stateProbabilityGlobal.length; cv$indexName += 1)
+									// Get a local reference to the scratch space.
+			for(int cv$indexName = 2; cv$indexName < scratch.cv$var70$stateProbabilityGlobal.length; cv$indexName += 1)
 				// Get a local reference to the scratch space.
-				cv$var70$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
+				scratch.cv$var70$stateProbabilityGlobal[cv$indexName] = Double.NEGATIVE_INFINITY;
 			
 			// Write out the new value of the sample.
 			// 
-			// cv$numStates's comment
+												// cv$numStates's comment
 			// variable marginalization
-			c11 = DistributionSampling.sampleCategorical(RNG$, cv$var70$stateProbabilityGlobal, 2);
+			state.c11 = DistributionSampling.sampleCategorical(state.RNG$, scratch.cv$var70$stateProbabilityGlobal, 2);
 		}
 	}
 
@@ -2949,7 +2253,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample47() {
 		// Determine if we need to calculate the values for sample task 47 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample47) {
+		if(!state.fixedProbFlag$sample47) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -2959,7 +2263,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -2973,11 +2277,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((((0.0 <= c1) && (c1 < 2)) && (0.0 <= priors[c1])) && (priors[c1] <= 1.0))?Math.log(priors[c1]):Double.NEGATIVE_INFINITY);
+									// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = (((((0.0 <= state.c1) && (state.c1 < 2)) && (0.0 <= state.priors[state.c1])) && (state.priors[state.c1] <= 1.0))?Math.log(state.priors[state.c1]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$c1 = cv$distributionAccumulator;
+			state.logProbability$c1 = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -2993,11 +2297,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample47)
+			if(state.fixedFlag$sample47)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -3010,11 +2314,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample47 = fixedFlag$sample47;
+			state.fixedProbFlag$sample47 = state.fixedFlag$sample47;
 		} else {
 			// Using cached values.
 			// 
@@ -3023,13 +2327,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$c1);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$c1);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample47)
+			if(state.fixedFlag$sample47)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$c1);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$c1);
 		}
 	}
 
@@ -3038,19 +2342,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample50() {
 		// Determine if we need to calculate the values for sample task 50 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample50) {
+		if(!state.fixedProbFlag$sample50) {
 			// Generating probabilities for sample task
-			double[] var46 = conditionals[c1];
+			double[] var46 = state.conditionals[state.c1];
 			
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$48_1 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c1))
+			if((0 == state.c1))
 				lengthCV$conditionals$48_1 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c1))
+			if((1 == state.c1))
 				lengthCV$conditionals$48_1 = 2;
 			
 			// Variable declaration of cv$distributionAccumulator moved.
@@ -3061,7 +2365,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3075,11 +2379,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = ((((((0.0 <= c2) && (c2 < lengthCV$conditionals$48_1)) && (0 < lengthCV$conditionals$48_1)) && (0.0 <= var46[c2])) && (var46[c2] <= 1.0))?Math.log(var46[c2]):Double.NEGATIVE_INFINITY);
+									// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = ((((((0.0 <= state.c2) && (state.c2 < lengthCV$conditionals$48_1)) && (0 < lengthCV$conditionals$48_1)) && (0.0 <= var46[state.c2])) && (var46[state.c2] <= 1.0))?Math.log(var46[state.c2]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$c2 = cv$distributionAccumulator;
+			state.logProbability$c2 = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -3095,7 +2399,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// Variable declaration of cv$accumulator moved.
 			// Declaration comment was:
@@ -3109,11 +2413,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample50 = fixedFlag$sample47;
+			state.fixedProbFlag$sample50 = state.fixedFlag$sample47;
 		} else {
 			// Using cached values.
 			// 
@@ -3122,10 +2426,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$c2);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$c2);
 			
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$evidence = (logProbability$$evidence + logProbability$c2);
+			state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$c2);
 		}
 	}
 
@@ -3134,7 +2438,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample52() {
 		// Determine if we need to calculate the values for sample task 52 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample52) {
+		if(!state.fixedProbFlag$sample52) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -3144,7 +2448,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3158,11 +2462,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((((0.0 <= c3) && (c3 < 2)) && (0.0 <= priors[c3])) && (priors[c3] <= 1.0))?Math.log(priors[c3]):Double.NEGATIVE_INFINITY);
+									// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = (((((0.0 <= state.c3) && (state.c3 < 2)) && (0.0 <= state.priors[state.c3])) && (state.priors[state.c3] <= 1.0))?Math.log(state.priors[state.c3]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$c3 = cv$distributionAccumulator;
+			state.logProbability$c3 = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -3178,11 +2482,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample52)
+			if(state.fixedFlag$sample52)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -3195,11 +2499,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample52 = fixedFlag$sample52;
+			state.fixedProbFlag$sample52 = state.fixedFlag$sample52;
 		} else {
 			// Using cached values.
 			// 
@@ -3208,13 +2512,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$c3);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$c3);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample52)
+			if(state.fixedFlag$sample52)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$c3);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$c3);
 		}
 	}
 
@@ -3223,19 +2527,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample55() {
 		// Determine if we need to calculate the values for sample task 55 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample55) {
+		if(!state.fixedProbFlag$sample55) {
 			// Generating probabilities for sample task
-			double[] var51 = conditionals[c3];
+			double[] var51 = state.conditionals[state.c3];
 			
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$53_4 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c3))
+			if((0 == state.c3))
 				lengthCV$conditionals$53_4 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c3))
+			if((1 == state.c3))
 				lengthCV$conditionals$53_4 = 2;
 			
 			// Variable declaration of cv$distributionAccumulator moved.
@@ -3246,7 +2550,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3260,11 +2564,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = ((((((0.0 <= c4) && (c4 < lengthCV$conditionals$53_4)) && (0 < lengthCV$conditionals$53_4)) && (0.0 <= var51[c4])) && (var51[c4] <= 1.0))?Math.log(var51[c4]):Double.NEGATIVE_INFINITY);
+									// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = ((((((0.0 <= state.c4) && (state.c4 < lengthCV$conditionals$53_4)) && (0 < lengthCV$conditionals$53_4)) && (0.0 <= var51[state.c4])) && (var51[state.c4] <= 1.0))?Math.log(var51[state.c4]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$c4 = cv$distributionAccumulator;
+			state.logProbability$c4 = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -3280,11 +2584,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample55)
+			if(state.fixedFlag$sample55)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -3297,11 +2601,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample55 = (fixedFlag$sample55 && fixedFlag$sample52);
+			state.fixedProbFlag$sample55 = (state.fixedFlag$sample55 && state.fixedFlag$sample52);
 		} else {
 			// Using cached values.
 			// 
@@ -3310,13 +2614,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$c4);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$c4);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample55)
+			if(state.fixedFlag$sample55)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$c4);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$c4);
 		}
 	}
 
@@ -3325,7 +2629,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample57() {
 		// Determine if we need to calculate the values for sample task 57 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample57) {
+		if(!state.fixedProbFlag$sample57) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -3335,7 +2639,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3349,11 +2653,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((((0.0 <= c5) && (c5 < 2)) && (0.0 <= priors[c5])) && (priors[c5] <= 1.0))?Math.log(priors[c5]):Double.NEGATIVE_INFINITY);
+									// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = (((((0.0 <= state.c5) && (state.c5 < 2)) && (0.0 <= state.priors[state.c5])) && (state.priors[state.c5] <= 1.0))?Math.log(state.priors[state.c5]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$c5 = cv$distributionAccumulator;
+			state.logProbability$c5 = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -3369,11 +2673,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample57)
+			if(state.fixedFlag$sample57)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -3386,11 +2690,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample57 = fixedFlag$sample57;
+			state.fixedProbFlag$sample57 = state.fixedFlag$sample57;
 		} else {
 			// Using cached values.
 			// 
@@ -3399,13 +2703,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$c5);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$c5);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample57)
+			if(state.fixedFlag$sample57)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$c5);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$c5);
 		}
 	}
 
@@ -3414,19 +2718,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample60() {
 		// Determine if we need to calculate the values for sample task 60 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample60) {
+		if(!state.fixedProbFlag$sample60) {
 			// Generating probabilities for sample task
-			double[] var56 = conditionals[c5];
+			double[] var56 = state.conditionals[state.c5];
 			
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$58_2 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5))
+			if((0 == state.c5))
 				lengthCV$conditionals$58_2 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5))
+			if((1 == state.c5))
 				lengthCV$conditionals$58_2 = 2;
 			
 			// Variable declaration of cv$distributionAccumulator moved.
@@ -3437,7 +2741,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3451,11 +2755,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = ((((((0.0 <= c6) && (c6 < lengthCV$conditionals$58_2)) && (0 < lengthCV$conditionals$58_2)) && (0.0 <= var56[c6])) && (var56[c6] <= 1.0))?Math.log(var56[c6]):Double.NEGATIVE_INFINITY);
+									// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = ((((((0.0 <= state.c6) && (state.c6 < lengthCV$conditionals$58_2)) && (0 < lengthCV$conditionals$58_2)) && (0.0 <= var56[state.c6])) && (var56[state.c6] <= 1.0))?Math.log(var56[state.c6]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$c6 = cv$distributionAccumulator;
+			state.logProbability$c6 = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -3471,11 +2775,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample60)
+			if(state.fixedFlag$sample60)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -3488,11 +2792,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample60 = (fixedFlag$sample60 && fixedFlag$sample57);
+			state.fixedProbFlag$sample60 = (state.fixedFlag$sample60 && state.fixedFlag$sample57);
 		} else {
 			// Using cached values.
 			// 
@@ -3501,13 +2805,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$c6);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$c6);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample60)
+			if(state.fixedFlag$sample60)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$c6);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$c6);
 		}
 	}
 
@@ -3516,7 +2820,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample62() {
 		// Determine if we need to calculate the values for sample task 62 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample62) {
+		if(!state.fixedProbFlag$sample62) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -3526,7 +2830,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3540,11 +2844,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((((0.0 <= c7) && (c7 < 2)) && (0.0 <= priors[c7])) && (priors[c7] <= 1.0))?Math.log(priors[c7]):Double.NEGATIVE_INFINITY);
+									// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = (((((0.0 <= state.c7) && (state.c7 < 2)) && (0.0 <= state.priors[state.c7])) && (state.priors[state.c7] <= 1.0))?Math.log(state.priors[state.c7]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$c7 = cv$distributionAccumulator;
+			state.logProbability$c7 = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -3560,11 +2864,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample62)
+			if(state.fixedFlag$sample62)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -3577,11 +2881,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample62 = fixedFlag$sample62;
+			state.fixedProbFlag$sample62 = state.fixedFlag$sample62;
 		} else {
 			// Using cached values.
 			// 
@@ -3590,13 +2894,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$c7);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$c7);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample62)
+			if(state.fixedFlag$sample62)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$c7);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$c7);
 		}
 	}
 
@@ -3605,114 +2909,114 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample636() {
 		// Determine if we need to calculate the values for sample task 636 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample636) {
+		if(!state.fixedProbFlag$sample636) {
 			// Generating probabilities for sample task
-			double[] var602 = a[c5][c9][c1][c4];
+			double[] var602 = state.a[state.c5][state.c9][state.c1][state.c4];
 			
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$var601$634_5 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5)) {
+			if((0 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_5 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_5 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_5 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_5 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_5 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_5 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_5 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_5 = 5;
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5)) {
+			if((1 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_5 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_5 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_5 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_5 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_5 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_5 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_5 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_5 = 5;
 					}
 				}
@@ -3726,7 +3030,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3740,11 +3044,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_5)) && (0 < lengthCV$var601$634_5)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY);
+									// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_5)) && (0 < lengthCV$var601$634_5)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$terminalVariable = cv$distributionAccumulator;
+			state.logProbability$terminalVariable = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -3760,11 +3064,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample636)
+			if(state.fixedFlag$sample636)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -3777,11 +3081,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample636 = ((((fixedFlag$sample636 && fixedFlag$sample47) && fixedFlag$sample55) && fixedFlag$sample57) && fixedFlag$sample67);
+			state.fixedProbFlag$sample636 = ((((state.fixedFlag$sample636 && state.fixedFlag$sample47) && state.fixedFlag$sample55) && state.fixedFlag$sample57) && state.fixedFlag$sample67);
 		} else {
 			// Using cached values.
 			// 
@@ -3790,13 +3094,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$terminalVariable);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$terminalVariable);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample636)
+			if(state.fixedFlag$sample636)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$terminalVariable);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$terminalVariable);
 		}
 	}
 
@@ -3805,19 +3109,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample65() {
 		// Determine if we need to calculate the values for sample task 65 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample65) {
+		if(!state.fixedProbFlag$sample65) {
 			// Generating probabilities for sample task
-			double[] var61 = conditionals[c7];
+			double[] var61 = state.conditionals[state.c7];
 			
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$63_2 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c7))
+			if((0 == state.c7))
 				lengthCV$conditionals$63_2 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c7))
+			if((1 == state.c7))
 				lengthCV$conditionals$63_2 = 2;
 			
 			// Variable declaration of cv$distributionAccumulator moved.
@@ -3828,7 +3132,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3842,11 +3146,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = ((((((0.0 <= c8) && (c8 < lengthCV$conditionals$63_2)) && (0 < lengthCV$conditionals$63_2)) && (0.0 <= var61[c8])) && (var61[c8] <= 1.0))?Math.log(var61[c8]):Double.NEGATIVE_INFINITY);
+									// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = ((((((0.0 <= state.c8) && (state.c8 < lengthCV$conditionals$63_2)) && (0 < lengthCV$conditionals$63_2)) && (0.0 <= var61[state.c8])) && (var61[state.c8] <= 1.0))?Math.log(var61[state.c8]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$c8 = cv$distributionAccumulator;
+			state.logProbability$c8 = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -3862,11 +3166,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample65)
+			if(state.fixedFlag$sample65)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -3879,11 +3183,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample65 = (fixedFlag$sample65 && fixedFlag$sample62);
+			state.fixedProbFlag$sample65 = (state.fixedFlag$sample65 && state.fixedFlag$sample62);
 		} else {
 			// Using cached values.
 			// 
@@ -3892,13 +3196,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$c8);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$c8);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample65)
+			if(state.fixedFlag$sample65)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$c8);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$c8);
 		}
 	}
 
@@ -3907,7 +3211,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample67() {
 		// Determine if we need to calculate the values for sample task 67 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample67) {
+		if(!state.fixedProbFlag$sample67) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -3917,7 +3221,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -3931,11 +3235,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((((0.0 <= c9) && (c9 < 2)) && (0.0 <= priors[c9])) && (priors[c9] <= 1.0))?Math.log(priors[c9]):Double.NEGATIVE_INFINITY);
+									// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = (((((0.0 <= state.c9) && (state.c9 < 2)) && (0.0 <= state.priors[state.c9])) && (state.priors[state.c9] <= 1.0))?Math.log(state.priors[state.c9]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$c9 = cv$distributionAccumulator;
+			state.logProbability$c9 = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -3951,11 +3255,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample67)
+			if(state.fixedFlag$sample67)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -3968,11 +3272,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample67 = fixedFlag$sample67;
+			state.fixedProbFlag$sample67 = state.fixedFlag$sample67;
 		} else {
 			// Using cached values.
 			// 
@@ -3981,13 +3285,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$c9);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$c9);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample67)
+			if(state.fixedFlag$sample67)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$c9);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$c9);
 		}
 	}
 
@@ -3996,19 +3300,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample70() {
 		// Determine if we need to calculate the values for sample task 70 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample70) {
+		if(!state.fixedProbFlag$sample70) {
 			// Generating probabilities for sample task
-			double[] var66 = conditionals[c9];
+			double[] var66 = state.conditionals[state.c9];
 			
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$68_2 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c9))
+			if((0 == state.c9))
 				lengthCV$conditionals$68_2 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c9))
+			if((1 == state.c9))
 				lengthCV$conditionals$68_2 = 2;
 			
 			// Variable declaration of cv$distributionAccumulator moved.
@@ -4019,7 +3323,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -4033,11 +3337,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = ((((((0.0 <= c10) && (c10 < lengthCV$conditionals$68_2)) && (0 < lengthCV$conditionals$68_2)) && (0.0 <= var66[c10])) && (var66[c10] <= 1.0))?Math.log(var66[c10]):Double.NEGATIVE_INFINITY);
+									// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = ((((((0.0 <= state.c10) && (state.c10 < lengthCV$conditionals$68_2)) && (0 < lengthCV$conditionals$68_2)) && (0.0 <= var66[state.c10])) && (var66[state.c10] <= 1.0))?Math.log(var66[state.c10]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$c10 = cv$distributionAccumulator;
+			state.logProbability$c10 = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -4053,11 +3357,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample70)
+			if(state.fixedFlag$sample70)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -4070,11 +3374,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample70 = (fixedFlag$sample70 && fixedFlag$sample67);
+			state.fixedProbFlag$sample70 = (state.fixedFlag$sample70 && state.fixedFlag$sample67);
 		} else {
 			// Using cached values.
 			// 
@@ -4083,13 +3387,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$c10);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$c10);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample70)
+			if(state.fixedFlag$sample70)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$c10);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$c10);
 		}
 	}
 
@@ -4098,7 +3402,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample72() {
 		// Determine if we need to calculate the values for sample task 72 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample72) {
+		if(!state.fixedProbFlag$sample72) {
 			// Generating probabilities for sample task
 			// Variable declaration of cv$distributionAccumulator moved.
 			// Declaration comment was:
@@ -4108,7 +3412,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -4122,11 +3426,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = (((((0.0 <= c11) && (c11 < 2)) && (0.0 <= priors[c11])) && (priors[c11] <= 1.0))?Math.log(priors[c11]):Double.NEGATIVE_INFINITY);
+									// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = (((((0.0 <= state.c11) && (state.c11 < 2)) && (0.0 <= state.priors[state.c11])) && (state.priors[state.c11] <= 1.0))?Math.log(state.priors[state.c11]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$c11 = cv$distributionAccumulator;
+			state.logProbability$c11 = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -4142,11 +3446,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample72)
+			if(state.fixedFlag$sample72)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -4159,11 +3463,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample72 = fixedFlag$sample72;
+			state.fixedProbFlag$sample72 = state.fixedFlag$sample72;
 		} else {
 			// Using cached values.
 			// 
@@ -4172,13 +3476,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$c11);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$c11);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample72)
+			if(state.fixedFlag$sample72)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$c11);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$c11);
 		}
 	}
 
@@ -4187,19 +3491,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample75() {
 		// Determine if we need to calculate the values for sample task 75 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample75) {
+		if(!state.fixedProbFlag$sample75) {
 			// Generating probabilities for sample task
-			double[] var71 = conditionals[c11];
+			double[] var71 = state.conditionals[state.c11];
 			
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$73_2 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c11))
+			if((0 == state.c11))
 				lengthCV$conditionals$73_2 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c11))
+			if((1 == state.c11))
 				lengthCV$conditionals$73_2 = 2;
 			
 			// Variable declaration of cv$distributionAccumulator moved.
@@ -4210,7 +3514,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
+									// The sample value to calculate the probability of generating
 			// 
 			// Scale the probability relative to the observed distribution space.
 			// 
@@ -4224,11 +3528,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// 
 			// Store the value of the function call, so the function call is only made once.
 			// 
-			// The sample value to calculate the probability of generating
-			double cv$distributionAccumulator = ((((((0.0 <= c12) && (c12 < lengthCV$conditionals$73_2)) && (0 < lengthCV$conditionals$73_2)) && (0.0 <= var71[c12])) && (var71[c12] <= 1.0))?Math.log(var71[c12]):Double.NEGATIVE_INFINITY);
+									// The sample value to calculate the probability of generating
+			double cv$distributionAccumulator = ((((((0.0 <= state.c12) && (state.c12 < lengthCV$conditionals$73_2)) && (0 < lengthCV$conditionals$73_2)) && (0.0 <= var71[state.c12])) && (var71[state.c12] <= 1.0))?Math.log(var71[state.c12]):Double.NEGATIVE_INFINITY);
 			
 			// Store the sample task probability
-			logProbability$c12 = cv$distributionAccumulator;
+			state.logProbability$c12 = cv$distributionAccumulator;
 			
 			// Add probability to model
 			// 
@@ -4244,11 +3548,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add the probability of this sample task to the sample task accumulator.
 			// 
 			// Accumulator for sample probabilities for a specific instance of the random variable.
-			logProbability$$model = (logProbability$$model + cv$distributionAccumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$distributionAccumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample75)
+			if(state.fixedFlag$sample75)
 				// Variable declaration of cv$accumulator moved.
 				// Declaration comment was:
 				// Accumulator for probabilities of instances of the random variable
@@ -4261,11 +3565,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Add the probability of this sample task to the sample task accumulator.
 				// 
 				// Accumulator for sample probabilities for a specific instance of the random variable.
-				logProbability$$evidence = (logProbability$$evidence + cv$distributionAccumulator);
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$distributionAccumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample75 = (fixedFlag$sample75 && fixedFlag$sample72);
+			state.fixedProbFlag$sample75 = (state.fixedFlag$sample75 && state.fixedFlag$sample72);
 		} else {
 			// Using cached values.
 			// 
@@ -4274,334 +3578,230 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// Add probability to model
 			// 
 			// Variable declaration of cv$accumulator moved.
-			logProbability$$model = (logProbability$$model + logProbability$c12);
+			state.logProbability$$model = (state.logProbability$$model + state.logProbability$c12);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample75)
+			if(state.fixedFlag$sample75)
 				// Variable declaration of cv$accumulator moved.
-				logProbability$$evidence = (logProbability$$evidence + logProbability$c12);
+				state.logProbability$$evidence = (state.logProbability$$evidence + state.logProbability$c12);
 		}
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var45$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var45$stateProbabilityGlobal for single threaded execution
-		cv$var45$stateProbabilityGlobal = new double[2];
-		
-		// Constructor for cv$var50$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var50$stateProbabilityGlobal for single threaded execution
-		cv$var50$stateProbabilityGlobal = new double[2];
-		
-		// Allocation of cv$var53$stateProbabilityGlobal for single threaded execution
-		// 
-		// Test if the input to putTask 44 is larger than the current values.
-		cv$var53$stateProbabilityGlobal = new double[2];
-		
-		// Constructor for cv$var55$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var55$stateProbabilityGlobal for single threaded execution
-		cv$var55$stateProbabilityGlobal = new double[2];
-		
-		// Constructor for cv$var60$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var60$stateProbabilityGlobal for single threaded execution
-		cv$var60$stateProbabilityGlobal = new double[2];
-		
-		// Constructor for cv$var65$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var65$stateProbabilityGlobal for single threaded execution
-		cv$var65$stateProbabilityGlobal = new double[2];
-		
-		// Constructor for cv$var70$stateProbabilityGlobal
-		// 
-		// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
-		cv$var70$stateProbabilityGlobal = new double[2];
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Constructor for priors
-		priors = new double[2];
-		
-		// Constructor for conditionals
-		conditionals = new double[2][];
-		conditionals[0] = new double[2];
-		conditionals[1] = new double[2];
-		
-		// Constructor for a
-		a = new double[2][][][][];
-		double[][][][] subarray$0 = new double[2][][][];
-		a[0] = subarray$0;
-		double[][][] subarray$1 = new double[2][][];
-		subarray$0[0] = subarray$1;
-		double[][] subarray$2 = new double[2][];
-		subarray$1[0] = subarray$2;
-		subarray$2[0] = new double[5];
-		subarray$2[1] = new double[5];
-		double[][] subarray$3 = new double[2][];
-		subarray$1[1] = subarray$3;
-		subarray$3[0] = new double[5];
-		subarray$3[1] = new double[5];
-		double[][][] subarray$4 = new double[2][][];
-		subarray$0[1] = subarray$4;
-		double[][] subarray$5 = new double[2][];
-		subarray$4[0] = subarray$5;
-		subarray$5[0] = new double[5];
-		subarray$5[1] = new double[5];
-		double[][] subarray$6 = new double[2][];
-		subarray$4[1] = subarray$6;
-		subarray$6[0] = new double[5];
-		subarray$6[1] = new double[5];
-		double[][][][] subarray$7 = new double[2][][][];
-		a[1] = subarray$7;
-		double[][][] subarray$8 = new double[2][][];
-		subarray$7[0] = subarray$8;
-		double[][] subarray$9 = new double[2][];
-		subarray$8[0] = subarray$9;
-		subarray$9[0] = new double[5];
-		subarray$9[1] = new double[5];
-		double[][] subarray$10 = new double[2][];
-		subarray$8[1] = subarray$10;
-		subarray$10[0] = new double[5];
-		subarray$10[1] = new double[5];
-		double[][][] subarray$11 = new double[2][][];
-		subarray$7[1] = subarray$11;
-		double[][] subarray$12 = new double[2][];
-		subarray$11[0] = subarray$12;
-		subarray$12[0] = new double[5];
-		subarray$12[1] = new double[5];
-		double[][] subarray$13 = new double[2][];
-		subarray$11[1] = subarray$13;
-		subarray$13[0] = new double[5];
-		subarray$13[1] = new double[5];
-		
-		// Allocate scratch space
-		allocateScratch();
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample47)
-			c1 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample47)
+			state.c1 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$48_2 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 == c1))
+		if((0 == state.c1))
 			lengthCV$conditionals$48_2 = 2;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == c1))
+		if((1 == state.c1))
 			lengthCV$conditionals$48_2 = 2;
-		c2 = DistributionSampling.sampleCategorical(RNG$, conditionals[c1], lengthCV$conditionals$48_2);
-		if(!fixedFlag$sample52)
-			c3 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c2 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c1], lengthCV$conditionals$48_2);
+		if(!state.fixedFlag$sample52)
+			state.c3 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample55) {
+		if(!state.fixedFlag$sample55) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$53_5 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c3))
+			if((0 == state.c3))
 				lengthCV$conditionals$53_5 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c3))
+			if((1 == state.c3))
 				lengthCV$conditionals$53_5 = 2;
-			c4 = DistributionSampling.sampleCategorical(RNG$, conditionals[c3], lengthCV$conditionals$53_5);
+			state.c4 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c3], lengthCV$conditionals$53_5);
 		}
-		if(!fixedFlag$sample57)
-			c5 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample57)
+			state.c5 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample60) {
+		if(!state.fixedFlag$sample60) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$58_3 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5))
+			if((0 == state.c5))
 				lengthCV$conditionals$58_3 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5))
+			if((1 == state.c5))
 				lengthCV$conditionals$58_3 = 2;
-			c6 = DistributionSampling.sampleCategorical(RNG$, conditionals[c5], lengthCV$conditionals$58_3);
+			state.c6 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c5], lengthCV$conditionals$58_3);
 		}
-		if(!fixedFlag$sample62)
-			c7 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample62)
+			state.c7 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample65) {
+		if(!state.fixedFlag$sample65) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$63_3 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c7))
+			if((0 == state.c7))
 				lengthCV$conditionals$63_3 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c7))
+			if((1 == state.c7))
 				lengthCV$conditionals$63_3 = 2;
-			c8 = DistributionSampling.sampleCategorical(RNG$, conditionals[c7], lengthCV$conditionals$63_3);
+			state.c8 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c7], lengthCV$conditionals$63_3);
 		}
-		if(!fixedFlag$sample67)
-			c9 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample67)
+			state.c9 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample70) {
+		if(!state.fixedFlag$sample70) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$68_3 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c9))
+			if((0 == state.c9))
 				lengthCV$conditionals$68_3 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c9))
+			if((1 == state.c9))
 				lengthCV$conditionals$68_3 = 2;
-			c10 = DistributionSampling.sampleCategorical(RNG$, conditionals[c9], lengthCV$conditionals$68_3);
+			state.c10 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c9], lengthCV$conditionals$68_3);
 		}
-		if(!fixedFlag$sample72)
-			c11 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample72)
+			state.c11 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample75) {
+		if(!state.fixedFlag$sample75) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$73_3 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c11))
+			if((0 == state.c11))
 				lengthCV$conditionals$73_3 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c11))
+			if((1 == state.c11))
 				lengthCV$conditionals$73_3 = 2;
-			c12 = DistributionSampling.sampleCategorical(RNG$, conditionals[c11], lengthCV$conditionals$73_3);
+			state.c12 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c11], lengthCV$conditionals$73_3);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample636) {
+		if(!state.fixedFlag$sample636) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$var601$634_6 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5)) {
+			if((0 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_6 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_6 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_6 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_6 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_6 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_6 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_6 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_6 = 5;
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5)) {
+			if((1 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_6 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_6 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_6 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_6 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_6 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_6 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_6 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_6 = 5;
 					}
 				}
 			}
-			terminalVariable = DistributionSampling.sampleCategorical(RNG$, a[c5][c9][c1][c4], lengthCV$var601$634_6);
+			state.terminalVariable = DistributionSampling.sampleCategorical(state.RNG$, state.a[state.c5][state.c9][state.c1][state.c4], lengthCV$var601$634_6);
 		}
 	}
 
@@ -4610,205 +3810,205 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample47)
-			c1 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
-		if(!fixedFlag$sample52)
-			c3 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample47)
+			state.c1 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
+		if(!state.fixedFlag$sample52)
+			state.c3 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample55) {
+		if(!state.fixedFlag$sample55) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$53_9 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c3))
+			if((0 == state.c3))
 				lengthCV$conditionals$53_9 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c3))
+			if((1 == state.c3))
 				lengthCV$conditionals$53_9 = 2;
-			c4 = DistributionSampling.sampleCategorical(RNG$, conditionals[c3], lengthCV$conditionals$53_9);
+			state.c4 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c3], lengthCV$conditionals$53_9);
 		}
-		if(!fixedFlag$sample57)
-			c5 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample57)
+			state.c5 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample60) {
+		if(!state.fixedFlag$sample60) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$58_7 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5))
+			if((0 == state.c5))
 				lengthCV$conditionals$58_7 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5))
+			if((1 == state.c5))
 				lengthCV$conditionals$58_7 = 2;
-			c6 = DistributionSampling.sampleCategorical(RNG$, conditionals[c5], lengthCV$conditionals$58_7);
+			state.c6 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c5], lengthCV$conditionals$58_7);
 		}
-		if(!fixedFlag$sample62)
-			c7 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample62)
+			state.c7 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample65) {
+		if(!state.fixedFlag$sample65) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$63_7 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c7))
+			if((0 == state.c7))
 				lengthCV$conditionals$63_7 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c7))
+			if((1 == state.c7))
 				lengthCV$conditionals$63_7 = 2;
-			c8 = DistributionSampling.sampleCategorical(RNG$, conditionals[c7], lengthCV$conditionals$63_7);
+			state.c8 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c7], lengthCV$conditionals$63_7);
 		}
-		if(!fixedFlag$sample67)
-			c9 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample67)
+			state.c9 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample70) {
+		if(!state.fixedFlag$sample70) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$68_7 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c9))
+			if((0 == state.c9))
 				lengthCV$conditionals$68_7 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c9))
+			if((1 == state.c9))
 				lengthCV$conditionals$68_7 = 2;
-			c10 = DistributionSampling.sampleCategorical(RNG$, conditionals[c9], lengthCV$conditionals$68_7);
+			state.c10 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c9], lengthCV$conditionals$68_7);
 		}
-		if(!fixedFlag$sample72)
-			c11 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample72)
+			state.c11 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample75) {
+		if(!state.fixedFlag$sample75) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$73_7 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c11))
+			if((0 == state.c11))
 				lengthCV$conditionals$73_7 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c11))
+			if((1 == state.c11))
 				lengthCV$conditionals$73_7 = 2;
-			c12 = DistributionSampling.sampleCategorical(RNG$, conditionals[c11], lengthCV$conditionals$73_7);
+			state.c12 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c11], lengthCV$conditionals$73_7);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample636) {
+		if(!state.fixedFlag$sample636) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$var601$634_10 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5)) {
+			if((0 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_10 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_10 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_10 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_10 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_10 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_10 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_10 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_10 = 5;
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5)) {
+			if((1 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_10 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_10 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_10 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_10 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_10 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_10 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_10 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_10 = 5;
 					}
 				}
 			}
-			terminalVariable = DistributionSampling.sampleCategorical(RNG$, a[c5][c9][c1][c4], lengthCV$var601$634_10);
+			state.terminalVariable = DistributionSampling.sampleCategorical(state.RNG$, state.a[state.c5][state.c9][state.c1][state.c4], lengthCV$var601$634_10);
 		}
 	}
 
@@ -4816,217 +4016,217 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample47)
-			c1 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample47)
+			state.c1 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$48_3 = -1;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((0 == c1))
+		if((0 == state.c1))
 			lengthCV$conditionals$48_3 = 2;
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if((1 == c1))
+		if((1 == state.c1))
 			lengthCV$conditionals$48_3 = 2;
-		c2 = DistributionSampling.sampleCategorical(RNG$, conditionals[c1], lengthCV$conditionals$48_3);
-		if(!fixedFlag$sample52)
-			c3 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c2 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c1], lengthCV$conditionals$48_3);
+		if(!state.fixedFlag$sample52)
+			state.c3 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample55) {
+		if(!state.fixedFlag$sample55) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$53_6 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c3))
+			if((0 == state.c3))
 				lengthCV$conditionals$53_6 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c3))
+			if((1 == state.c3))
 				lengthCV$conditionals$53_6 = 2;
-			c4 = DistributionSampling.sampleCategorical(RNG$, conditionals[c3], lengthCV$conditionals$53_6);
+			state.c4 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c3], lengthCV$conditionals$53_6);
 		}
-		if(!fixedFlag$sample57)
-			c5 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample57)
+			state.c5 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample60) {
+		if(!state.fixedFlag$sample60) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$58_4 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5))
+			if((0 == state.c5))
 				lengthCV$conditionals$58_4 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5))
+			if((1 == state.c5))
 				lengthCV$conditionals$58_4 = 2;
-			c6 = DistributionSampling.sampleCategorical(RNG$, conditionals[c5], lengthCV$conditionals$58_4);
+			state.c6 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c5], lengthCV$conditionals$58_4);
 		}
-		if(!fixedFlag$sample62)
-			c7 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample62)
+			state.c7 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample65) {
+		if(!state.fixedFlag$sample65) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$63_4 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c7))
+			if((0 == state.c7))
 				lengthCV$conditionals$63_4 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c7))
+			if((1 == state.c7))
 				lengthCV$conditionals$63_4 = 2;
-			c8 = DistributionSampling.sampleCategorical(RNG$, conditionals[c7], lengthCV$conditionals$63_4);
+			state.c8 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c7], lengthCV$conditionals$63_4);
 		}
-		if(!fixedFlag$sample67)
-			c9 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample67)
+			state.c9 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample70) {
+		if(!state.fixedFlag$sample70) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$68_4 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c9))
+			if((0 == state.c9))
 				lengthCV$conditionals$68_4 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c9))
+			if((1 == state.c9))
 				lengthCV$conditionals$68_4 = 2;
-			c10 = DistributionSampling.sampleCategorical(RNG$, conditionals[c9], lengthCV$conditionals$68_4);
+			state.c10 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c9], lengthCV$conditionals$68_4);
 		}
-		if(!fixedFlag$sample72)
-			c11 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample72)
+			state.c11 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample75) {
+		if(!state.fixedFlag$sample75) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$73_4 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c11))
+			if((0 == state.c11))
 				lengthCV$conditionals$73_4 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c11))
+			if((1 == state.c11))
 				lengthCV$conditionals$73_4 = 2;
-			c12 = DistributionSampling.sampleCategorical(RNG$, conditionals[c11], lengthCV$conditionals$73_4);
+			state.c12 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c11], lengthCV$conditionals$73_4);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample636) {
+		if(!state.fixedFlag$sample636) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$var601$634_7 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5)) {
+			if((0 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_7 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_7 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_7 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_7 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_7 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_7 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_7 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_7 = 5;
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5)) {
+			if((1 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_7 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_7 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_7 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_7 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_7 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_7 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_7 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_7 = 5;
 					}
 				}
 			}
-			terminalVariable = DistributionSampling.sampleCategorical(RNG$, a[c5][c9][c1][c4], lengthCV$var601$634_7);
+			state.terminalVariable = DistributionSampling.sampleCategorical(state.RNG$, state.a[state.c5][state.c9][state.c1][state.c4], lengthCV$var601$634_7);
 		}
 	}
 
@@ -5034,205 +4234,205 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample47)
-			c1 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
-		if(!fixedFlag$sample52)
-			c3 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample47)
+			state.c1 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
+		if(!state.fixedFlag$sample52)
+			state.c3 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample55) {
+		if(!state.fixedFlag$sample55) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$53_7 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c3))
+			if((0 == state.c3))
 				lengthCV$conditionals$53_7 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c3))
+			if((1 == state.c3))
 				lengthCV$conditionals$53_7 = 2;
-			c4 = DistributionSampling.sampleCategorical(RNG$, conditionals[c3], lengthCV$conditionals$53_7);
+			state.c4 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c3], lengthCV$conditionals$53_7);
 		}
-		if(!fixedFlag$sample57)
-			c5 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample57)
+			state.c5 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample60) {
+		if(!state.fixedFlag$sample60) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$58_5 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5))
+			if((0 == state.c5))
 				lengthCV$conditionals$58_5 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5))
+			if((1 == state.c5))
 				lengthCV$conditionals$58_5 = 2;
-			c6 = DistributionSampling.sampleCategorical(RNG$, conditionals[c5], lengthCV$conditionals$58_5);
+			state.c6 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c5], lengthCV$conditionals$58_5);
 		}
-		if(!fixedFlag$sample62)
-			c7 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample62)
+			state.c7 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample65) {
+		if(!state.fixedFlag$sample65) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$63_5 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c7))
+			if((0 == state.c7))
 				lengthCV$conditionals$63_5 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c7))
+			if((1 == state.c7))
 				lengthCV$conditionals$63_5 = 2;
-			c8 = DistributionSampling.sampleCategorical(RNG$, conditionals[c7], lengthCV$conditionals$63_5);
+			state.c8 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c7], lengthCV$conditionals$63_5);
 		}
-		if(!fixedFlag$sample67)
-			c9 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample67)
+			state.c9 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample70) {
+		if(!state.fixedFlag$sample70) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$68_5 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c9))
+			if((0 == state.c9))
 				lengthCV$conditionals$68_5 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c9))
+			if((1 == state.c9))
 				lengthCV$conditionals$68_5 = 2;
-			c10 = DistributionSampling.sampleCategorical(RNG$, conditionals[c9], lengthCV$conditionals$68_5);
+			state.c10 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c9], lengthCV$conditionals$68_5);
 		}
-		if(!fixedFlag$sample72)
-			c11 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample72)
+			state.c11 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample75) {
+		if(!state.fixedFlag$sample75) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$73_5 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c11))
+			if((0 == state.c11))
 				lengthCV$conditionals$73_5 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c11))
+			if((1 == state.c11))
 				lengthCV$conditionals$73_5 = 2;
-			c12 = DistributionSampling.sampleCategorical(RNG$, conditionals[c11], lengthCV$conditionals$73_5);
+			state.c12 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c11], lengthCV$conditionals$73_5);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample636) {
+		if(!state.fixedFlag$sample636) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$var601$634_8 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5)) {
+			if((0 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_8 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_8 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_8 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_8 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_8 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_8 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_8 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_8 = 5;
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5)) {
+			if((1 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_8 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_8 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_8 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_8 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_8 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_8 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_8 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_8 = 5;
 					}
 				}
 			}
-			terminalVariable = DistributionSampling.sampleCategorical(RNG$, a[c5][c9][c1][c4], lengthCV$var601$634_8);
+			state.terminalVariable = DistributionSampling.sampleCategorical(state.RNG$, state.a[state.c5][state.c9][state.c1][state.c4], lengthCV$var601$634_8);
 		}
 	}
 
@@ -5241,205 +4441,205 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample47)
-			c1 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
-		if(!fixedFlag$sample52)
-			c3 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample47)
+			state.c1 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
+		if(!state.fixedFlag$sample52)
+			state.c3 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample55) {
+		if(!state.fixedFlag$sample55) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$53_8 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c3))
+			if((0 == state.c3))
 				lengthCV$conditionals$53_8 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c3))
+			if((1 == state.c3))
 				lengthCV$conditionals$53_8 = 2;
-			c4 = DistributionSampling.sampleCategorical(RNG$, conditionals[c3], lengthCV$conditionals$53_8);
+			state.c4 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c3], lengthCV$conditionals$53_8);
 		}
-		if(!fixedFlag$sample57)
-			c5 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample57)
+			state.c5 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample60) {
+		if(!state.fixedFlag$sample60) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$58_6 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5))
+			if((0 == state.c5))
 				lengthCV$conditionals$58_6 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5))
+			if((1 == state.c5))
 				lengthCV$conditionals$58_6 = 2;
-			c6 = DistributionSampling.sampleCategorical(RNG$, conditionals[c5], lengthCV$conditionals$58_6);
+			state.c6 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c5], lengthCV$conditionals$58_6);
 		}
-		if(!fixedFlag$sample62)
-			c7 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample62)
+			state.c7 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample65) {
+		if(!state.fixedFlag$sample65) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$63_6 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c7))
+			if((0 == state.c7))
 				lengthCV$conditionals$63_6 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c7))
+			if((1 == state.c7))
 				lengthCV$conditionals$63_6 = 2;
-			c8 = DistributionSampling.sampleCategorical(RNG$, conditionals[c7], lengthCV$conditionals$63_6);
+			state.c8 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c7], lengthCV$conditionals$63_6);
 		}
-		if(!fixedFlag$sample67)
-			c9 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample67)
+			state.c9 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample70) {
+		if(!state.fixedFlag$sample70) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$68_6 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c9))
+			if((0 == state.c9))
 				lengthCV$conditionals$68_6 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c9))
+			if((1 == state.c9))
 				lengthCV$conditionals$68_6 = 2;
-			c10 = DistributionSampling.sampleCategorical(RNG$, conditionals[c9], lengthCV$conditionals$68_6);
+			state.c10 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c9], lengthCV$conditionals$68_6);
 		}
-		if(!fixedFlag$sample72)
-			c11 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample72)
+			state.c11 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample75) {
+		if(!state.fixedFlag$sample75) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$conditionals$73_6 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c11))
+			if((0 == state.c11))
 				lengthCV$conditionals$73_6 = 2;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c11))
+			if((1 == state.c11))
 				lengthCV$conditionals$73_6 = 2;
-			c12 = DistributionSampling.sampleCategorical(RNG$, conditionals[c11], lengthCV$conditionals$73_6);
+			state.c12 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c11], lengthCV$conditionals$73_6);
 		}
 		
 		// Constraints moved from conditionals in inner loops/scopes/etc.
-		if(!fixedFlag$sample636) {
+		if(!state.fixedFlag$sample636) {
 			// Allocate a local variable to hold the length of the array.
 			int lengthCV$var601$634_9 = -1;
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((0 == c5)) {
+			if((0 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_9 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_9 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_9 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_9 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_9 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_9 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_9 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_9 = 5;
 					}
 				}
 			}
 			
 			// Constraints moved from conditionals in inner loops/scopes/etc.
-			if((1 == c5)) {
+			if((1 == state.c5)) {
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((0 == c9)) {
+				if((0 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_9 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_9 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_9 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_9 = 5;
 					}
 				}
 				
 				// Constraints moved from conditionals in inner loops/scopes/etc.
-				if((1 == c9)) {
+				if((1 == state.c9)) {
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((0 == c1)) {
+					if((0 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_9 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_9 = 5;
 					}
 					
 					// Constraints moved from conditionals in inner loops/scopes/etc.
-					if((1 == c1)) {
+					if((1 == state.c1)) {
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((0 == c4))
+						if((0 == state.c4))
 							lengthCV$var601$634_9 = 5;
 						
 						// Constraints moved from conditionals in inner loops/scopes/etc.
-						if((1 == c4))
+						if((1 == state.c4))
 							lengthCV$var601$634_9 = 5;
 					}
 				}
 			}
-			terminalVariable = DistributionSampling.sampleCategorical(RNG$, a[c5][c9][c1][c4], lengthCV$var601$634_9);
+			state.terminalVariable = DistributionSampling.sampleCategorical(state.RNG$, state.a[state.c5][state.c9][state.c1][state.c4], lengthCV$var601$634_9);
 		}
 	}
 
@@ -5447,65 +4647,65 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample47)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample47)
 				inferSample47();
-			if(!fixedFlag$sample52)
+			if(!state.fixedFlag$sample52)
 				inferSample52();
-			if(!fixedFlag$sample55)
+			if(!state.fixedFlag$sample55)
 				inferSample55();
-			if(!fixedFlag$sample57)
+			if(!state.fixedFlag$sample57)
 				inferSample57();
-			if(!fixedFlag$sample62)
+			if(!state.fixedFlag$sample62)
 				inferSample62();
-			if(!fixedFlag$sample67)
+			if(!state.fixedFlag$sample67)
 				inferSample67();
-			if(!fixedFlag$sample72)
+			if(!state.fixedFlag$sample72)
 				inferSample72();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample72)
+			if(!state.fixedFlag$sample72)
 				inferSample72();
-			if(!fixedFlag$sample67)
+			if(!state.fixedFlag$sample67)
 				inferSample67();
-			if(!fixedFlag$sample62)
+			if(!state.fixedFlag$sample62)
 				inferSample62();
-			if(!fixedFlag$sample57)
+			if(!state.fixedFlag$sample57)
 				inferSample57();
-			if(!fixedFlag$sample55)
+			if(!state.fixedFlag$sample55)
 				inferSample55();
-			if(!fixedFlag$sample52)
+			if(!state.fixedFlag$sample52)
 				inferSample52();
-			if(!fixedFlag$sample47)
+			if(!state.fixedFlag$sample47)
 				inferSample47();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample47)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample47)
 			drawValueSample47();
-		if(!constrainedFlag$sample52)
+		if(!state.constrainedFlag$sample52)
 			drawValueSample52();
-		if(!constrainedFlag$sample55)
+		if(!state.constrainedFlag$sample55)
 			drawValueSample55();
-		if(!constrainedFlag$sample57)
+		if(!state.constrainedFlag$sample57)
 			drawValueSample57();
-		if(!fixedFlag$sample60)
+		if(!state.fixedFlag$sample60)
 			drawValueSample60();
-		if(!constrainedFlag$sample62)
+		if(!state.constrainedFlag$sample62)
 			drawValueSample62();
-		if(!fixedFlag$sample65)
+		if(!state.fixedFlag$sample65)
 			drawValueSample65();
-		if(!constrainedFlag$sample67)
+		if(!state.constrainedFlag$sample67)
 			drawValueSample67();
-		if(!fixedFlag$sample70)
+		if(!state.fixedFlag$sample70)
 			drawValueSample70();
-		if(!constrainedFlag$sample72)
+		if(!state.constrainedFlag$sample72)
 			drawValueSample72();
-		if(!fixedFlag$sample75)
+		if(!state.fixedFlag$sample75)
 			drawValueSample75();
-		if(!fixedFlag$sample636)
+		if(!state.fixedFlag$sample636)
 			drawValueSample636();
 	}
 
@@ -5517,49 +4717,49 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample47)
-			logProbability$c1 = Double.NaN;
-		if(!fixedProbFlag$sample50)
-			logProbability$c2 = Double.NaN;
-		if(!fixedProbFlag$sample52)
-			logProbability$c3 = Double.NaN;
-		if(!fixedProbFlag$sample55)
-			logProbability$c4 = Double.NaN;
-		if(!fixedProbFlag$sample57)
-			logProbability$c5 = Double.NaN;
-		if(!fixedProbFlag$sample60)
-			logProbability$c6 = Double.NaN;
-		if(!fixedProbFlag$sample62)
-			logProbability$c7 = Double.NaN;
-		if(!fixedProbFlag$sample65)
-			logProbability$c8 = Double.NaN;
-		if(!fixedProbFlag$sample67)
-			logProbability$c9 = Double.NaN;
-		if(!fixedProbFlag$sample70)
-			logProbability$c10 = Double.NaN;
-		if(!fixedProbFlag$sample72)
-			logProbability$c11 = Double.NaN;
-		if(!fixedProbFlag$sample75)
-			logProbability$c12 = Double.NaN;
-		if(!fixedProbFlag$sample636)
-			logProbability$terminalVariable = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample47)
+			state.logProbability$c1 = Double.NaN;
+		if(!state.fixedProbFlag$sample50)
+			state.logProbability$c2 = Double.NaN;
+		if(!state.fixedProbFlag$sample52)
+			state.logProbability$c3 = Double.NaN;
+		if(!state.fixedProbFlag$sample55)
+			state.logProbability$c4 = Double.NaN;
+		if(!state.fixedProbFlag$sample57)
+			state.logProbability$c5 = Double.NaN;
+		if(!state.fixedProbFlag$sample60)
+			state.logProbability$c6 = Double.NaN;
+		if(!state.fixedProbFlag$sample62)
+			state.logProbability$c7 = Double.NaN;
+		if(!state.fixedProbFlag$sample65)
+			state.logProbability$c8 = Double.NaN;
+		if(!state.fixedProbFlag$sample67)
+			state.logProbability$c9 = Double.NaN;
+		if(!state.fixedProbFlag$sample70)
+			state.logProbability$c10 = Double.NaN;
+		if(!state.fixedProbFlag$sample72)
+			state.logProbability$c11 = Double.NaN;
+		if(!state.fixedProbFlag$sample75)
+			state.logProbability$c12 = Double.NaN;
+		if(!state.fixedProbFlag$sample636)
+			state.logProbability$terminalVariable = Double.NaN;
 	}
 
 	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		priors[0] = 0.01;
-		priors[1] = 0.99;
-		double[] var15 = conditionals[0];
+		state.priors[0] = 0.01;
+		state.priors[1] = 0.99;
+		double[] var15 = state.conditionals[0];
 		var15[0] = 1.0;
 		var15[1] = 0.0;
-		double[] var30 = conditionals[1];
+		double[] var30 = state.conditionals[1];
 		var30[0] = 0.0;
 		var30[1] = 1.0;
-		double[][][][] var77 = a[0];
+		double[][][][] var77 = state.a[0];
 		double[][][] var79 = var77[0];
 		double[][] var81 = var79[0];
 		double[] var83 = var81[0];
@@ -5614,7 +4814,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		var296[2] = 0.0;
 		var296[3] = 0.0;
 		var296[4] = 0.0;
-		double[][][][] var335 = a[1];
+		double[][][][] var335 = state.a[1];
 		double[][][] var337 = var335[0];
 		double[][] var339 = var337[0];
 		double[] var341 = var339[0];
@@ -5678,30 +4878,30 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample47)
+		if(state.fixedFlag$sample47)
 			logProbabilityValue$sample47();
 		logProbabilityValue$sample50();
-		if(fixedFlag$sample52)
+		if(state.fixedFlag$sample52)
 			logProbabilityValue$sample52();
-		if(fixedFlag$sample55)
+		if(state.fixedFlag$sample55)
 			logProbabilityValue$sample55();
-		if(fixedFlag$sample57)
+		if(state.fixedFlag$sample57)
 			logProbabilityValue$sample57();
-		if(fixedFlag$sample60)
+		if(state.fixedFlag$sample60)
 			logProbabilityValue$sample60();
-		if(fixedFlag$sample62)
+		if(state.fixedFlag$sample62)
 			logProbabilityValue$sample62();
-		if(fixedFlag$sample65)
+		if(state.fixedFlag$sample65)
 			logProbabilityValue$sample65();
-		if(fixedFlag$sample67)
+		if(state.fixedFlag$sample67)
 			logProbabilityValue$sample67();
-		if(fixedFlag$sample70)
+		if(state.fixedFlag$sample70)
 			logProbabilityValue$sample70();
-		if(fixedFlag$sample72)
+		if(state.fixedFlag$sample72)
 			logProbabilityValue$sample72();
-		if(fixedFlag$sample75)
+		if(state.fixedFlag$sample75)
 			logProbabilityValue$sample75();
-		if(fixedFlag$sample636)
+		if(state.fixedFlag$sample636)
 			logProbabilityValue$sample636();
 	}
 
@@ -5768,7 +4968,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	@Override
 	public final void propagateObservedValues() {
 		// Propagating values back from observations into the models intermediate variables.
-		c2 = evidence;
+		state.c2 = state.evidence;
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are

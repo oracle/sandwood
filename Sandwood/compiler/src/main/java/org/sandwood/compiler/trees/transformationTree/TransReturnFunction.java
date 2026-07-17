@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -19,6 +19,8 @@ import org.sandwood.compiler.trees.ArgDesc;
 import org.sandwood.compiler.trees.Visibility;
 import org.sandwood.compiler.trees.outputTree.OutputFunction;
 import org.sandwood.compiler.trees.outputTree.OutputTree;
+import org.sandwood.compiler.trees.transformationTree.TransTree.TreeLocation;
+import org.sandwood.compiler.trees.transformationTree.transformers.Transformer;
 import org.sandwood.compiler.trees.transformationTree.util.KnownValuesTrans;
 
 public class TransReturnFunction<A extends Variable<A>> extends TransFunction<TransTreeReturn<A>> {
@@ -31,9 +33,9 @@ public class TransReturnFunction<A extends Variable<A>> extends TransFunction<Tr
     }
 
     @Override
-    public OutputFunction toOutputTree(ExecutionType target) {
-        return OutputTree.returnFunction(visibility, returnType, name, args, body.toOutputTreeReturn(target), override,
-                comment);
+    public OutputFunction toOutputTree(TreeLocation treeLocation, ExecutionType target) {
+        return OutputTree.returnFunction(visibility, returnType, name, args,
+                body.toOutputTreeReturn(localRng(args), treeLocation, target), override, comment);
     }
 
     @Override
@@ -46,7 +48,13 @@ public class TransReturnFunction<A extends Variable<A>> extends TransFunction<Tr
     @Override
     protected TransFunction<?> applyConstants(Map<VariableDescription<?>, TransTreeReturn<?>> constants) {
         KnownValuesTrans newKnownValues = knownValues.applyOptimisations(args, constants);
-        TransTreeReturn<A> newBody = body.applyOptimisations(args, constants, newKnownValues);
+        TransTreeReturn<A> newBody = body.applyConstants(constants);
         return TransTree.returnFunction(visibility, returnType, name, args, newBody, override, comment, newKnownValues);
+    }
+
+    @Override
+    protected TransFunction<?> applyTransformation(Transformer t) {
+        TransTreeReturn<A> newBody = t.transform(body);
+        return TransTree.returnFunction(visibility, returnType, name, args, newBody, override, comment, knownValues);
     }
 }

@@ -31,7 +31,6 @@ import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.DFType;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
-import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.ScratchVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
@@ -72,8 +71,8 @@ public class DirichletToCategoricalMultinomial extends
 
     private static final LocalVariableDescription<ArrayVariable<DoubleVariable>> countNameLocal = VariableNames
             .localCalcVarName("countLocal", VariableType.arrayType(VariableType.DoubleVariable), true);
-    private static final LocalVariableDescription<IntVariable> arrayLength = VariableNames.localCalcVarName("arrayLength",
-            VariableType.IntVariable, true);
+    private static final LocalVariableDescription<IntVariable> arrayLength = VariableNames
+            .localCalcVarName("arrayLength", VariableType.IntVariable, true);
     private static final LocalVariableDescription<IntVariable> loopIndex = VariableNames.localCalcVarName("loopIndex",
             VariableType.IntVariable, true);
 
@@ -154,8 +153,8 @@ public class DirichletToCategoricalMultinomial extends
         } else if(type == VariableType.Multinomial) {
             // Save the reference to the sample value for efficient access.
             IRTreeReturn<ArrayVariable<IntVariable>> sampleValue = (IRTreeReturn<ArrayVariable<IntVariable>>) current;
-            LocalVariableDescription<ArrayVariable<IntVariable>> sampleValueName = VariableNames.localCalcVarName("sampleValue",
-                    sampleValue.getOutputType(), true);
+            LocalVariableDescription<ArrayVariable<IntVariable>> sampleValueName = VariableNames
+                    .localCalcVarName("sampleValue", sampleValue.getOutputType(), true);
             info.compilationCtx.addTreeToScope(GlobalScope.scope,
                     initializeVariable(sampleValueName, sampleValue, Tree.NoComment));
 

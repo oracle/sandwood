@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2025, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -24,7 +24,6 @@ import org.sandwood.compiler.dataflowGraph.tasks.NumberProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.sandwoodOperators.ForTask;
 import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable.OuterArrayDesc;
@@ -157,7 +156,7 @@ public class GetNumberTask<A extends NumberVariable<A>> extends GetTask<A> imple
                 // If the index is drawn from a random variable check all possible values.
                 IRTreeReturn<IntVariable> start = IRTree.max(IRTree.constant(0), index.getMin(compilationCtx));
                 IRTreeReturn<IntVariable> end = IRTree.min(
-                        IRTree.getIntField(array.getForwardIR(compilationCtx), "length"),
+                        ArrayVariable.getLengthTree(array.getForwardIR(compilationCtx)),
                         IRTree.addII(index.getMax(compilationCtx), IRTree.constant(1)));
                 LocalVariableDescription<IntVariable> indexDesc = VariableNames.localCalcVarName(output, "maxIndex",
                         VariableType.IntVariable);
@@ -210,8 +209,8 @@ public class GetNumberTask<A extends NumberVariable<A>> extends GetTask<A> imple
 
         IRTreeReturn<ArrayVariable<ArrayVariable<B>>> outerArrayTree = getInputArrayTree(outerArray, substitutions, tag,
                 id - 1, compilationCtx);
-        LocalVariableDescription<ArrayVariable<B>> innerName = VariableNames.localCalcVarName(output, tag + "Array" + id,
-                array.getType());
+        LocalVariableDescription<ArrayVariable<B>> innerName = VariableNames.localCalcVarName(output,
+                tag + "Array" + id, array.getType());
         IntVariable arrayIndex = desc.getIndex();
         Scope arrayScope = desc.getScope();
 
@@ -223,7 +222,7 @@ public class GetNumberTask<A extends NumberVariable<A>> extends GetTask<A> imple
             // Get index bounds
             IRTreeReturn<IntVariable> startTree = IRTree.max(IRTree.constant(0), index.getMin(compilationCtx));
             IRTreeReturn<IntVariable> endTree = IRTree.min(
-                    IRTree.getIntField(array.getForwardIR(compilationCtx), "length"),
+                    ArrayVariable.getLengthTree(array.getForwardIR(compilationCtx)),
                     IRTree.addII(index.getMax(compilationCtx), IRTree.constant(1)));
 
             // Construct local value names to hold them

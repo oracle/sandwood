@@ -40,7 +40,6 @@ import org.sandwood.compiler.dataflowGraph.tasks.DataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.ProducingDataflowTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.DistributionSampleTask;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
-import org.sandwood.compiler.dataflowGraph.variables.GlobalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.ScratchVariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.Variable;
@@ -439,8 +438,8 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                                         /*
                                          * Construct the arguments for the consumer random variable. If we could apply
                                          * the distributions before the sample task is fixed this could be moved further
-                                         * out and run only once. However, as in the future there may be distributions in
-                                         * the sample trace that is not possible, so it is placed here with the
+                                         * out and run only once. However, as in the future there may be distributions
+                                         * in the sample trace that is not possible, so it is placed here with the
                                          * expectation that the optimisation phase can move shared values out where
                                          * appropriate.
                                          */
@@ -682,8 +681,8 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
 
         ScopeConstructor dConsumerAllArgs = c.applyDistributedArguments(1).applyDistributedArguments(2);
 
-        LocalVariableDescription<DoubleVariable> reachedSourceName = VariableNames.scopeVarName("reachedSourceProbability",
-                VariableType.DoubleVariable);
+        LocalVariableDescription<DoubleVariable> reachedSourceName = VariableNames
+                .scopeVarName("reachedSourceProbability", VariableType.DoubleVariable);
         dConsumerAllArgs.addTree((TreeBuilderInfo info) -> info.compilationCtx.addTreeToScope(GlobalScope.scope,
                 initializeVariable(reachedSourceName, constant(0.0),
                         "Declare and zero an accumulator for tracking the reached source probability space.")));
@@ -835,8 +834,8 @@ public abstract class InferenceGeneratorBase<A extends Variable<A>, B extends Ra
                 scopes.get(scopes.size() - 1), funcData.compilationCtx);
     }
 
-    protected <V extends Variable<V>> void createScratchClassField(ScratchVariableDescription<V> fieldName, IRTreeVoid allocator,
-            FunctionData<A, B, S> funcData) {
+    protected <V extends Variable<V>> void createScratchClassField(ScratchVariableDescription<V> fieldName,
+            IRTreeVoid allocator, FunctionData<A, B, S> funcData) {
         List<Scope> scopes = funcData.sampleDesc.scopes;
         FunctionUtils.createScratchClassField(fieldName, allocator, funcData.isSerial, scopes.get(scopes.size() - 1),
                 funcData.compilationCtx);

@@ -220,6 +220,12 @@ public class SandwoodParser
       else {
           String comment = t.specialToken.image;
           comment = StringUtil.normalizeNewLines(comment);
+          // Remove the prefix
+          comment = comment.replaceAll("^/\\*\\* *\n? *\\*? *", "");
+          // remove the postfix
+          comment = comment.replaceAll("\n? *\\*/", "");
+          // Change any new lines, removing leading *s if they are there
+          comment = comment.replaceAll("\n *\\*? *", "\n");
           comment = StringUtil.escapeSpecialCharacters(comment);
           return comment;
     }
@@ -246,10 +252,6 @@ public class SandwoodParser
   private String location(Token start, Token end) {
     return "location(" + start.beginLine + ", " + start.beginColumn +
          ", " + end.endLine + ", " + end.endColumn + ")";
-  }
-
-  private String location(TokenMap t) {
-    return location(t, t);
   }
 
   private String location(TokenMap start, TokenMap end) {

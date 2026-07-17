@@ -26,11 +26,11 @@ import javax.tools.ToolProvider;
 
 import org.sandwood.compiler.compilation.util.SandwoodCompileError;
 import org.sandwood.compiler.exceptions.CompilerException;
-import org.sandwood.compiler.trees.outputTree.OutputSandwoodClass;
+import org.sandwood.compiler.trees.outputTree.OutputSandwoodOuterClass;
 
 public class JavadocBuilder {
 
-    public static List<SandwoodCompileError> buildJavadoc(List<OutputSandwoodClass> classes,
+    public static List<SandwoodCompileError> buildJavadoc(List<OutputSandwoodOuterClass> classes,
             InputStream[] supportingSources, String targetDir) throws IOException {
         File tempDir = Files.createTempDirectory(null).toFile();
 
@@ -89,7 +89,7 @@ public class JavadocBuilder {
      * @return An array listing the locations of all the files.
      * @throws IOException
      */
-    private static String[] toFiles(List<OutputSandwoodClass> classes, File targetDirFile) throws IOException {
+    private static String[] toFiles(List<OutputSandwoodOuterClass> classes, File targetDirFile) throws IOException {
         String targetDir = targetDirFile.getAbsolutePath();
         int noFiles = classes.size();
         String[] files = new String[noFiles];

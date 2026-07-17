@@ -38,7 +38,6 @@ import org.sandwood.compiler.compilation.FunctionType;
 import org.sandwood.compiler.dataflowGraph.scopes.GlobalScope;
 import org.sandwood.compiler.dataflowGraph.tasks.returnTasks.SampleTask;
 import org.sandwood.compiler.dataflowGraph.variables.LocalVariableDescription;
-import org.sandwood.compiler.dataflowGraph.variables.VariableDescription;
 import org.sandwood.compiler.dataflowGraph.variables.VariableType;
 import org.sandwood.compiler.dataflowGraph.variables.arrayVariable.ArrayVariable;
 import org.sandwood.compiler.dataflowGraph.variables.randomVariables.Dirichlet;
@@ -59,14 +58,14 @@ public class MetropolisHastingsDirichletFunctions extends MetropolisHastingsArra
             .localCalcVarName("proposedDifference", VariableType.DoubleVariable, true);
     private static final LocalVariableDescription<DoubleVariable> rebalanceValue = VariableNames
             .localCalcVarName("rebalanceValue", VariableType.DoubleVariable, true);
-    private static final LocalVariableDescription<IntVariable> indexToChange = VariableNames.localCalcVarName("indexToChange",
-            VariableType.IntVariable, true);
-    private static final LocalVariableDescription<DoubleVariable> movementRatio = VariableNames.localCalcVarName("movementRatio",
-            VariableType.DoubleVariable, true);
+    private static final LocalVariableDescription<IntVariable> indexToChange = VariableNames
+            .localCalcVarName("indexToChange", VariableType.IntVariable, true);
+    private static final LocalVariableDescription<DoubleVariable> movementRatio = VariableNames
+            .localCalcVarName("movementRatio", VariableType.DoubleVariable, true);
     private static final LocalVariableDescription<IntVariable> loopIndex = VariableNames.localCalcVarName("loopIndex",
             VariableType.IntVariable, true);
-    private static final LocalVariableDescription<IntVariable> arrayLength = VariableNames.localCalcVarName("arrayLength",
-            VariableType.IntVariable, true);
+    private static final LocalVariableDescription<IntVariable> arrayLength = VariableNames
+            .localCalcVarName("arrayLength", VariableType.IntVariable, true);
     private static final LocalVariableDescription<DoubleVariable> tempValue = VariableNames.localCalcVarName("temp",
             VariableType.DoubleVariable, true);
 

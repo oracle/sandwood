@@ -2535,7 +2535,7 @@ class Vulcano2012basicDG$SingleThreadCPU extends org.sandwood.runtime.internal.m
 		system$gibbsForward = !system$gibbsForward;
 	}
 
-	// Method for initialising the model into a valid state before commencing inference
+	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeConstants() {

@@ -1,719 +1,95 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.TerminalVariables$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.TerminalVariables.State;
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements TerminalVariables$CoreInterface {
-	
-	// Declare the variables for the model.
-	private double[][][][][] a;
-	private int c1;
-	private int c10;
-	private int c11;
-	private int c12;
-	private int c2;
-	private int c3;
-	private int c4;
-	private int c5;
-	private int c6;
-	private int c7;
-	private int c8;
-	private int c9;
-	private double[][] conditionals;
-	private boolean constrainedFlag$sample47 = true;
-	private boolean constrainedFlag$sample52 = true;
-	private boolean constrainedFlag$sample55 = true;
-	private boolean constrainedFlag$sample57 = true;
-	private boolean constrainedFlag$sample62 = true;
-	private boolean constrainedFlag$sample67 = true;
-	private boolean constrainedFlag$sample72 = true;
-	private double[] cv$var45$stateProbabilityGlobal;
-	private double[] cv$var50$stateProbabilityGlobal;
-	private double[] cv$var53$stateProbabilityGlobal;
-	private double[] cv$var55$stateProbabilityGlobal;
-	private double[] cv$var60$stateProbabilityGlobal;
-	private double[] cv$var65$stateProbabilityGlobal;
-	private double[] cv$var70$stateProbabilityGlobal;
-	private int evidence;
-	private boolean fixedFlag$sample47 = false;
-	private boolean fixedFlag$sample52 = false;
-	private boolean fixedFlag$sample55 = false;
-	private boolean fixedFlag$sample57 = false;
-	private boolean fixedFlag$sample60 = false;
-	private boolean fixedFlag$sample62 = false;
-	private boolean fixedFlag$sample636 = false;
-	private boolean fixedFlag$sample65 = false;
-	private boolean fixedFlag$sample67 = false;
-	private boolean fixedFlag$sample70 = false;
-	private boolean fixedFlag$sample72 = false;
-	private boolean fixedFlag$sample75 = false;
-	private boolean fixedProbFlag$sample47 = false;
-	private boolean fixedProbFlag$sample50 = false;
-	private boolean fixedProbFlag$sample52 = false;
-	private boolean fixedProbFlag$sample55 = false;
-	private boolean fixedProbFlag$sample57 = false;
-	private boolean fixedProbFlag$sample60 = false;
-	private boolean fixedProbFlag$sample62 = false;
-	private boolean fixedProbFlag$sample636 = false;
-	private boolean fixedProbFlag$sample65 = false;
-	private boolean fixedProbFlag$sample67 = false;
-	private boolean fixedProbFlag$sample70 = false;
-	private boolean fixedProbFlag$sample72 = false;
-	private boolean fixedProbFlag$sample75 = false;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$c1;
-	private double logProbability$c10;
-	private double logProbability$c11;
-	private double logProbability$c12;
-	private double logProbability$c2;
-	private double logProbability$c3;
-	private double logProbability$c4;
-	private double logProbability$c5;
-	private double logProbability$c6;
-	private double logProbability$c7;
-	private double logProbability$c8;
-	private double logProbability$c9;
-	private double logProbability$terminalVariable;
-	private double[] priors;
-	private boolean system$gibbsForward = true;
-	private int terminalVariable;
-
-	public TerminalVariables$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
-
-	// Getter for a.
-	@Override
-	public final double[][][][][] get$a() {
-		return a;
-	}
-
-	// Getter for c1.
-	@Override
-	public final int get$c1() {
-		return c1;
-	}
-
-	// Setter for c1.
-	@Override
-	public final void set$c1(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c1 including if probabilities need to be
-		// updated.
-		c1 = cv$value;
-		
-		// Unset the fixed probability flag for sample 47 as it depends on c1.
-		fixedProbFlag$sample47 = false;
-		
-		// Unset the fixed probability flag for sample 50 as it depends on c1.
-		fixedProbFlag$sample50 = false;
-		
-		// Unset the fixed probability flag for sample 636 as it depends on c1.
-		fixedProbFlag$sample636 = false;
-	}
-
-	// Getter for c10.
-	@Override
-	public final int get$c10() {
-		return c10;
-	}
-
-	// Setter for c10.
-	@Override
-	public final void set$c10(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c10 including if probabilities need to be
-		// updated.
-		c10 = cv$value;
-		
-		// Unset the fixed probability flag for sample 70 as it depends on c10.
-		fixedProbFlag$sample70 = false;
-	}
-
-	// Getter for c11.
-	@Override
-	public final int get$c11() {
-		return c11;
-	}
-
-	// Setter for c11.
-	@Override
-	public final void set$c11(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c11 including if probabilities need to be
-		// updated.
-		c11 = cv$value;
-		
-		// Unset the fixed probability flag for sample 72 as it depends on c11.
-		fixedProbFlag$sample72 = false;
-		
-		// Unset the fixed probability flag for sample 75 as it depends on c11.
-		fixedProbFlag$sample75 = false;
-	}
-
-	// Getter for c12.
-	@Override
-	public final int get$c12() {
-		return c12;
-	}
-
-	// Setter for c12.
-	@Override
-	public final void set$c12(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c12 including if probabilities need to be
-		// updated.
-		c12 = cv$value;
-		
-		// Unset the fixed probability flag for sample 75 as it depends on c12.
-		fixedProbFlag$sample75 = false;
-	}
-
-	// Getter for c2.
-	@Override
-	public final int get$c2() {
-		return c2;
-	}
-
-	// Getter for c3.
-	@Override
-	public final int get$c3() {
-		return c3;
-	}
-
-	// Setter for c3.
-	@Override
-	public final void set$c3(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c3 including if probabilities need to be
-		// updated.
-		c3 = cv$value;
-		
-		// Unset the fixed probability flag for sample 52 as it depends on c3.
-		fixedProbFlag$sample52 = false;
-		
-		// Unset the fixed probability flag for sample 55 as it depends on c3.
-		fixedProbFlag$sample55 = false;
-	}
-
-	// Getter for c4.
-	@Override
-	public final int get$c4() {
-		return c4;
-	}
-
-	// Setter for c4.
-	@Override
-	public final void set$c4(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c4 including if probabilities need to be
-		// updated.
-		c4 = cv$value;
-		
-		// Unset the fixed probability flag for sample 55 as it depends on c4.
-		fixedProbFlag$sample55 = false;
-		
-		// Unset the fixed probability flag for sample 636 as it depends on c4.
-		fixedProbFlag$sample636 = false;
-	}
-
-	// Getter for c5.
-	@Override
-	public final int get$c5() {
-		return c5;
-	}
-
-	// Setter for c5.
-	@Override
-	public final void set$c5(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c5 including if probabilities need to be
-		// updated.
-		c5 = cv$value;
-		
-		// Unset the fixed probability flag for sample 57 as it depends on c5.
-		fixedProbFlag$sample57 = false;
-		
-		// Unset the fixed probability flag for sample 60 as it depends on c5.
-		fixedProbFlag$sample60 = false;
-		
-		// Unset the fixed probability flag for sample 636 as it depends on c5.
-		fixedProbFlag$sample636 = false;
-	}
-
-	// Getter for c6.
-	@Override
-	public final int get$c6() {
-		return c6;
-	}
-
-	// Setter for c6.
-	@Override
-	public final void set$c6(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c6 including if probabilities need to be
-		// updated.
-		c6 = cv$value;
-		
-		// Unset the fixed probability flag for sample 60 as it depends on c6.
-		fixedProbFlag$sample60 = false;
-	}
-
-	// Getter for c7.
-	@Override
-	public final int get$c7() {
-		return c7;
-	}
-
-	// Setter for c7.
-	@Override
-	public final void set$c7(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c7 including if probabilities need to be
-		// updated.
-		c7 = cv$value;
-		
-		// Unset the fixed probability flag for sample 62 as it depends on c7.
-		fixedProbFlag$sample62 = false;
-		
-		// Unset the fixed probability flag for sample 65 as it depends on c7.
-		fixedProbFlag$sample65 = false;
-	}
-
-	// Getter for c8.
-	@Override
-	public final int get$c8() {
-		return c8;
-	}
-
-	// Setter for c8.
-	@Override
-	public final void set$c8(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c8 including if probabilities need to be
-		// updated.
-		c8 = cv$value;
-		
-		// Unset the fixed probability flag for sample 65 as it depends on c8.
-		fixedProbFlag$sample65 = false;
-	}
-
-	// Getter for c9.
-	@Override
-	public final int get$c9() {
-		return c9;
-	}
-
-	// Setter for c9.
-	@Override
-	public final void set$c9(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of c9 including if probabilities need to be
-		// updated.
-		c9 = cv$value;
-		
-		// Unset the fixed probability flag for sample 67 as it depends on c9.
-		fixedProbFlag$sample67 = false;
-		
-		// Unset the fixed probability flag for sample 70 as it depends on c9.
-		fixedProbFlag$sample70 = false;
-		
-		// Unset the fixed probability flag for sample 636 as it depends on c9.
-		fixedProbFlag$sample636 = false;
-	}
-
-	// Getter for conditionals.
-	@Override
-	public final double[][] get$conditionals() {
-		return conditionals;
-	}
-
-	// Getter for evidence.
-	@Override
-	public final int get$evidence() {
-		return evidence;
-	}
-
-	// Setter for evidence.
-	@Override
-	public final void set$evidence(int cv$value, boolean allocated$) {
-		evidence = cv$value;
-	}
-
-	// Getter for fixedFlag$sample47.
-	@Override
-	public final boolean get$fixedFlag$sample47() {
-		return fixedFlag$sample47;
-	}
-
-	// Setter for fixedFlag$sample47.
-	@Override
-	public final void set$fixedFlag$sample47(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample47 including if probabilities
-		// need to be updated.
-		fixedFlag$sample47 = cv$value;
-		constrainedFlag$sample47 = (fixedFlag$sample47 || constrainedFlag$sample47);
-		
-		// Should the probability of sample 47 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample47 = (fixedFlag$sample47 && fixedProbFlag$sample47);
-		
-		// Should the probability of sample 50 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample50 = (fixedFlag$sample47 && fixedProbFlag$sample50);
-		
-		// Should the probability of sample 636 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample636 = (fixedFlag$sample47 && fixedProbFlag$sample636);
-	}
-
-	// Getter for fixedFlag$sample52.
-	@Override
-	public final boolean get$fixedFlag$sample52() {
-		return fixedFlag$sample52;
-	}
-
-	// Setter for fixedFlag$sample52.
-	@Override
-	public final void set$fixedFlag$sample52(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample52 including if probabilities
-		// need to be updated.
-		fixedFlag$sample52 = cv$value;
-		constrainedFlag$sample52 = (fixedFlag$sample52 || constrainedFlag$sample52);
-		
-		// Should the probability of sample 52 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample52 = (fixedFlag$sample52 && fixedProbFlag$sample52);
-		
-		// Should the probability of sample 55 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample55 = (fixedFlag$sample52 && fixedProbFlag$sample55);
-	}
-
-	// Getter for fixedFlag$sample55.
-	@Override
-	public final boolean get$fixedFlag$sample55() {
-		return fixedFlag$sample55;
-	}
-
-	// Setter for fixedFlag$sample55.
-	@Override
-	public final void set$fixedFlag$sample55(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample55 including if probabilities
-		// need to be updated.
-		fixedFlag$sample55 = cv$value;
-		constrainedFlag$sample55 = (fixedFlag$sample55 || constrainedFlag$sample55);
-		
-		// Should the probability of sample 55 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample55 = (fixedFlag$sample55 && fixedProbFlag$sample55);
-		
-		// Should the probability of sample 636 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample636 = (fixedFlag$sample55 && fixedProbFlag$sample636);
-	}
-
-	// Getter for fixedFlag$sample57.
-	@Override
-	public final boolean get$fixedFlag$sample57() {
-		return fixedFlag$sample57;
-	}
-
-	// Setter for fixedFlag$sample57.
-	@Override
-	public final void set$fixedFlag$sample57(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample57 including if probabilities
-		// need to be updated.
-		fixedFlag$sample57 = cv$value;
-		constrainedFlag$sample57 = (fixedFlag$sample57 || constrainedFlag$sample57);
-		
-		// Should the probability of sample 57 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample57 = (fixedFlag$sample57 && fixedProbFlag$sample57);
-		
-		// Should the probability of sample 60 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample60 = (fixedFlag$sample57 && fixedProbFlag$sample60);
-		
-		// Should the probability of sample 636 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample636 = (fixedFlag$sample57 && fixedProbFlag$sample636);
-	}
-
-	// Getter for fixedFlag$sample60.
-	@Override
-	public final boolean get$fixedFlag$sample60() {
-		return fixedFlag$sample60;
-	}
-
-	// Setter for fixedFlag$sample60.
-	@Override
-	public final void set$fixedFlag$sample60(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample60 including if probabilities
-		// need to be updated.
-		fixedFlag$sample60 = cv$value;
-		
-		// Should the probability of sample 60 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample60 = (fixedFlag$sample60 && fixedProbFlag$sample60);
-	}
-
-	// Getter for fixedFlag$sample62.
-	@Override
-	public final boolean get$fixedFlag$sample62() {
-		return fixedFlag$sample62;
-	}
-
-	// Setter for fixedFlag$sample62.
-	@Override
-	public final void set$fixedFlag$sample62(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample62 including if probabilities
-		// need to be updated.
-		fixedFlag$sample62 = cv$value;
-		constrainedFlag$sample62 = (fixedFlag$sample62 || constrainedFlag$sample62);
-		
-		// Should the probability of sample 62 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample62 = (fixedFlag$sample62 && fixedProbFlag$sample62);
-		
-		// Should the probability of sample 65 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample65 = (fixedFlag$sample62 && fixedProbFlag$sample65);
-	}
-
-	// Getter for fixedFlag$sample636.
-	@Override
-	public final boolean get$fixedFlag$sample636() {
-		return fixedFlag$sample636;
-	}
-
-	// Setter for fixedFlag$sample636.
-	@Override
-	public final void set$fixedFlag$sample636(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample636 including if probabilities
-		// need to be updated.
-		fixedFlag$sample636 = cv$value;
-		
-		// Should the probability of sample 636 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample636 = (fixedFlag$sample636 && fixedProbFlag$sample636);
-	}
-
-	// Getter for fixedFlag$sample65.
-	@Override
-	public final boolean get$fixedFlag$sample65() {
-		return fixedFlag$sample65;
-	}
-
-	// Setter for fixedFlag$sample65.
-	@Override
-	public final void set$fixedFlag$sample65(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample65 including if probabilities
-		// need to be updated.
-		fixedFlag$sample65 = cv$value;
-		
-		// Should the probability of sample 65 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample65 = (fixedFlag$sample65 && fixedProbFlag$sample65);
-	}
-
-	// Getter for fixedFlag$sample67.
-	@Override
-	public final boolean get$fixedFlag$sample67() {
-		return fixedFlag$sample67;
-	}
-
-	// Setter for fixedFlag$sample67.
-	@Override
-	public final void set$fixedFlag$sample67(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample67 including if probabilities
-		// need to be updated.
-		fixedFlag$sample67 = cv$value;
-		constrainedFlag$sample67 = (fixedFlag$sample67 || constrainedFlag$sample67);
-		
-		// Should the probability of sample 67 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample67 = (fixedFlag$sample67 && fixedProbFlag$sample67);
-		
-		// Should the probability of sample 70 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample70 = (fixedFlag$sample67 && fixedProbFlag$sample70);
-		
-		// Should the probability of sample 636 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample636 = (fixedFlag$sample67 && fixedProbFlag$sample636);
-	}
-
-	// Getter for fixedFlag$sample70.
-	@Override
-	public final boolean get$fixedFlag$sample70() {
-		return fixedFlag$sample70;
-	}
-
-	// Setter for fixedFlag$sample70.
-	@Override
-	public final void set$fixedFlag$sample70(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample70 including if probabilities
-		// need to be updated.
-		fixedFlag$sample70 = cv$value;
-		
-		// Should the probability of sample 70 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample70 = (fixedFlag$sample70 && fixedProbFlag$sample70);
-	}
-
-	// Getter for fixedFlag$sample72.
-	@Override
-	public final boolean get$fixedFlag$sample72() {
-		return fixedFlag$sample72;
-	}
-
-	// Setter for fixedFlag$sample72.
-	@Override
-	public final void set$fixedFlag$sample72(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample72 including if probabilities
-		// need to be updated.
-		fixedFlag$sample72 = cv$value;
-		constrainedFlag$sample72 = (fixedFlag$sample72 || constrainedFlag$sample72);
-		
-		// Should the probability of sample 72 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample72 = (fixedFlag$sample72 && fixedProbFlag$sample72);
-		
-		// Should the probability of sample 75 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample75 = (fixedFlag$sample72 && fixedProbFlag$sample75);
-	}
-
-	// Getter for fixedFlag$sample75.
-	@Override
-	public final boolean get$fixedFlag$sample75() {
-		return fixedFlag$sample75;
-	}
-
-	// Setter for fixedFlag$sample75.
-	@Override
-	public final void set$fixedFlag$sample75(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample75 including if probabilities
-		// need to be updated.
-		fixedFlag$sample75 = cv$value;
-		
-		// Should the probability of sample 75 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample75 = (fixedFlag$sample75 && fixedProbFlag$sample75);
-	}
-
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
-
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$c1.
-	@Override
-	public final double get$logProbability$c1() {
-		return logProbability$c1;
-	}
-
-	// Getter for logProbability$c10.
-	@Override
-	public final double get$logProbability$c10() {
-		return logProbability$c10;
-	}
-
-	// Getter for logProbability$c11.
-	@Override
-	public final double get$logProbability$c11() {
-		return logProbability$c11;
-	}
-
-	// Getter for logProbability$c12.
-	@Override
-	public final double get$logProbability$c12() {
-		return logProbability$c12;
-	}
-
-	// Getter for logProbability$c2.
-	@Override
-	public final double get$logProbability$c2() {
-		return logProbability$c2;
-	}
-
-	// Getter for logProbability$c3.
-	@Override
-	public final double get$logProbability$c3() {
-		return logProbability$c3;
-	}
-
-	// Getter for logProbability$c4.
-	@Override
-	public final double get$logProbability$c4() {
-		return logProbability$c4;
-	}
-
-	// Getter for logProbability$c5.
-	@Override
-	public final double get$logProbability$c5() {
-		return logProbability$c5;
-	}
-
-	// Getter for logProbability$c6.
-	@Override
-	public final double get$logProbability$c6() {
-		return logProbability$c6;
-	}
-
-	// Getter for logProbability$c7.
-	@Override
-	public final double get$logProbability$c7() {
-		return logProbability$c7;
-	}
-
-	// Getter for logProbability$c8.
-	@Override
-	public final double get$logProbability$c8() {
-		return logProbability$c8;
-	}
-
-	// Getter for logProbability$c9.
-	@Override
-	public final double get$logProbability$c9() {
-		return logProbability$c9;
-	}
-
-	// Getter for logProbability$terminalVariable.
-	@Override
-	public final double get$logProbability$terminalVariable() {
-		return logProbability$terminalVariable;
-	}
-
-	// Getter for priors.
-	@Override
-	public final double[] get$priors() {
-		return priors;
-	}
-
-	// Getter for terminalVariable.
-	@Override
-	public final int get$terminalVariable() {
-		return terminalVariable;
-	}
-
-	// Setter for terminalVariable.
-	@Override
-	public final void set$terminalVariable(int cv$value, boolean allocated$) {
-		// Set flags for all the side effects of terminalVariable including if probabilities
-		// need to be updated.
-		terminalVariable = cv$value;
-		
-		// Unset the fixed probability flag for sample 636 as it depends on terminalVariable.
-		fixedProbFlag$sample636 = false;
+final class TerminalVariables$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
+
+		// Declare the scratch variables for the model.
+		double[] cv$var45$stateProbabilityGlobal;
+		double[] cv$var50$stateProbabilityGlobal;
+		double[] cv$var53$stateProbabilityGlobal;
+		double[] cv$var55$stateProbabilityGlobal;
+		double[] cv$var60$stateProbabilityGlobal;
+		double[] cv$var65$stateProbabilityGlobal;
+		double[] cv$var70$stateProbabilityGlobal;
+
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Allocate scratch space.
+			// Constructor for cv$var45$stateProbabilityGlobal
+			{
+				// Allocation of cv$var45$stateProbabilityGlobal for single threaded execution
+				cv$var45$stateProbabilityGlobal = new double[2];
+			}
+			
+			// Constructor for cv$var50$stateProbabilityGlobal
+			{
+				// Allocation of cv$var50$stateProbabilityGlobal for single threaded execution
+				cv$var50$stateProbabilityGlobal = new double[2];
+			}
+			
+			// Constructor for cv$var53$stateProbabilityGlobal
+			{
+				// Variable to record the maximum value of Task Get 53. Initially set to the value
+				// of putTask 28.
+				int cv$var43$max = 2;
+				
+				// Test if the input to putTask 44 is larger than the current values.
+				cv$var43$max = Math.max(cv$var43$max, 2);
+				
+				// Allocation of cv$var53$stateProbabilityGlobal for single threaded execution
+				cv$var53$stateProbabilityGlobal = new double[cv$var43$max];
+			}
+			
+			// Constructor for cv$var55$stateProbabilityGlobal
+			{
+				// Allocation of cv$var55$stateProbabilityGlobal for single threaded execution
+				cv$var55$stateProbabilityGlobal = new double[2];
+			}
+			
+			// Constructor for cv$var60$stateProbabilityGlobal
+			{
+				// Allocation of cv$var60$stateProbabilityGlobal for single threaded execution
+				cv$var60$stateProbabilityGlobal = new double[2];
+			}
+			
+			// Constructor for cv$var65$stateProbabilityGlobal
+			{
+				// Allocation of cv$var65$stateProbabilityGlobal for single threaded execution
+				cv$var65$stateProbabilityGlobal = new double[2];
+			}
+			
+			// Constructor for cv$var70$stateProbabilityGlobal
+			{
+				// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
+				cv$var70$stateProbabilityGlobal = new double[2];
+			}
+		}
+	}
+
+
+	public TerminalVariables$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample47
 	private final void drawValueSample47() {
-		c1 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c1 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample52
 	private final void drawValueSample52() {
-		c3 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c3 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample55
@@ -726,7 +102,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 51.
 		{
 			{
-				if((0 == c3))
+				if((0 == state.c3))
 					lengthCV$conditionals$53_3 = 2;
 			}
 		}
@@ -734,16 +110,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 51.
 		{
 			{
-				if((1 == c3))
+				if((1 == state.c3))
 					lengthCV$conditionals$53_3 = 2;
 			}
 		}
-		c4 = DistributionSampling.sampleCategorical(RNG$, conditionals[c3], lengthCV$conditionals$53_3);
+		state.c4 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c3], lengthCV$conditionals$53_3);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample57
 	private final void drawValueSample57() {
-		c5 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c5 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample60
@@ -756,7 +132,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 56.
 		{
 			{
-				if((0 == c5))
+				if((0 == state.c5))
 					lengthCV$conditionals$58_1 = 2;
 			}
 		}
@@ -764,16 +140,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 56.
 		{
 			{
-				if((1 == c5))
+				if((1 == state.c5))
 					lengthCV$conditionals$58_1 = 2;
 			}
 		}
-		c6 = DistributionSampling.sampleCategorical(RNG$, conditionals[c5], lengthCV$conditionals$58_1);
+		state.c6 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c5], lengthCV$conditionals$58_1);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample62
 	private final void drawValueSample62() {
-		c7 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c7 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample636
@@ -786,10 +162,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 110 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4))
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -800,10 +176,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 138 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4))
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -814,10 +190,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 172 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4))
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -828,10 +204,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 201 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4))
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -842,10 +218,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 242 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4))
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -856,10 +232,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 271 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4))
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -870,10 +246,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 306 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4))
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -884,10 +260,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 337 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4))
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -898,10 +274,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 383 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4))
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -912,10 +288,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 412 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4))
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -926,10 +302,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 446 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4))
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -940,10 +316,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 475 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4))
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -954,10 +330,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 518 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4))
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -968,10 +344,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 549 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4))
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -982,10 +358,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 586 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4))
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
@@ -996,17 +372,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 617 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4))
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4))
 								lengthCV$var601$634_4 = 5;
 						}
 					}
 				}
 			}
 		}
-		terminalVariable = DistributionSampling.sampleCategorical(RNG$, a[c5][c9][c1][c4], lengthCV$var601$634_4);
+		state.terminalVariable = DistributionSampling.sampleCategorical(state.RNG$, state.a[state.c5][state.c9][state.c1][state.c4], lengthCV$var601$634_4);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample65
@@ -1019,7 +395,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 61.
 		{
 			{
-				if((0 == c7))
+				if((0 == state.c7))
 					lengthCV$conditionals$63_1 = 2;
 			}
 		}
@@ -1027,16 +403,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 61.
 		{
 			{
-				if((1 == c7))
+				if((1 == state.c7))
 					lengthCV$conditionals$63_1 = 2;
 			}
 		}
-		c8 = DistributionSampling.sampleCategorical(RNG$, conditionals[c7], lengthCV$conditionals$63_1);
+		state.c8 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c7], lengthCV$conditionals$63_1);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample67
 	private final void drawValueSample67() {
-		c9 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c9 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample70
@@ -1049,7 +425,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 66.
 		{
 			{
-				if((0 == c9))
+				if((0 == state.c9))
 					lengthCV$conditionals$68_1 = 2;
 			}
 		}
@@ -1057,16 +433,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 66.
 		{
 			{
-				if((1 == c9))
+				if((1 == state.c9))
 					lengthCV$conditionals$68_1 = 2;
 			}
 		}
-		c10 = DistributionSampling.sampleCategorical(RNG$, conditionals[c9], lengthCV$conditionals$68_1);
+		state.c10 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c9], lengthCV$conditionals$68_1);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample72
 	private final void drawValueSample72() {
-		c11 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c11 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample75
@@ -1079,7 +455,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 71.
 		{
 			{
-				if((0 == c11))
+				if((0 == state.c11))
 					lengthCV$conditionals$73_1 = 2;
 			}
 		}
@@ -1087,11 +463,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 71.
 		{
 			{
-				if((1 == c11))
+				if((1 == state.c11))
 					lengthCV$conditionals$73_1 = 2;
 			}
 		}
-		c12 = DistributionSampling.sampleCategorical(RNG$, conditionals[c11], lengthCV$conditionals$73_1);
+		state.c12 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c11], lengthCV$conditionals$73_1);
 	}
 
 	// Method to perform the inference steps to calculate new values for the samples generated
@@ -1099,7 +475,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// marginalization.
 	private final void inferSample47() {
 		if(true) {
-			constrainedFlag$sample47 = false;
+			state.constrainedFlag$sample47 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -1109,7 +485,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var45$stateProbabilityGlobal;
+			double[] cv$stateProbabilityLocal = scratch.cv$var45$stateProbabilityGlobal;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -1128,14 +504,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$currentValue = cv$valuePos;
 				
 				// Write out the new value of the sample.
-				c1 = cv$currentValue;
+				state.c1 = cv$currentValue;
 				{
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < 2)) && (0 < 2)) && (0.0 <= priors[cv$currentValue])) && (priors[cv$currentValue] <= 1.0))?Math.log(priors[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < 2)) && (0 < 2)) && (0.0 <= state.priors[cv$currentValue])) && (state.priors[cv$currentValue] <= 1.0))?Math.log(state.priors[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 47.
 					{
@@ -1150,7 +526,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 										boolean cv$sampleConstrained = true;
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample47 = true;
+											state.constrainedFlag$sample47 = true;
 											
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -1165,7 +541,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 														{
 															{
 																// Constructing a random variable input for use later.
-																double[] var46 = conditionals[traceTempVariable$c1$1_1];
+																double[] var46 = state.conditionals[traceTempVariable$c1$1_1];
 																
 																// Allocate a local variable to hold the length of the array.
 																int lengthCV$conditionals$48_0 = -1;
@@ -1189,14 +565,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																}
 																
 																// Record the probability of sample task 50 generating output with current configuration.
-																if(((Math.log(1.0) + ((((((0.0 <= c2) && (c2 < lengthCV$conditionals$48_0)) && (0 < lengthCV$conditionals$48_0)) && (0.0 <= var46[c2])) && (var46[c2] <= 1.0))?Math.log(var46[c2]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= c2) && (c2 < lengthCV$conditionals$48_0)) && (0 < lengthCV$conditionals$48_0)) && (0.0 <= var46[c2])) && (var46[c2] <= 1.0))?Math.log(var46[c2]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + ((((((0.0 <= state.c2) && (state.c2 < lengthCV$conditionals$48_0)) && (0 < lengthCV$conditionals$48_0)) && (0.0 <= var46[state.c2])) && (var46[state.c2] <= 1.0))?Math.log(var46[state.c2]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.c2) && (state.c2 < lengthCV$conditionals$48_0)) && (0 < lengthCV$conditionals$48_0)) && (0.0 <= var46[state.c2])) && (var46[state.c2] <= 1.0))?Math.log(var46[state.c2]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= c2) && (c2 < lengthCV$conditionals$48_0)) && (0 < lengthCV$conditionals$48_0)) && (0.0 <= var46[c2])) && (var46[c2] <= 1.0))?Math.log(var46[c2]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.c2) && (state.c2 < lengthCV$conditionals$48_0)) && (0 < lengthCV$conditionals$48_0)) && (0.0 <= var46[state.c2])) && (var46[state.c2] <= 1.0))?Math.log(var46[state.c2]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= c2) && (c2 < lengthCV$conditionals$48_0)) && (0 < lengthCV$conditionals$48_0)) && (0.0 <= var46[c2])) && (var46[c2] <= 1.0))?Math.log(var46[c2]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= c2) && (c2 < lengthCV$conditionals$48_0)) && (0 < lengthCV$conditionals$48_0)) && (0.0 <= var46[c2])) && (var46[c2] <= 1.0))?Math.log(var46[c2]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.c2) && (state.c2 < lengthCV$conditionals$48_0)) && (0 < lengthCV$conditionals$48_0)) && (0.0 <= var46[state.c2])) && (var46[state.c2] <= 1.0))?Math.log(var46[state.c2]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.c2) && (state.c2 < lengthCV$conditionals$48_0)) && (0 < lengthCV$conditionals$48_0)) && (0.0 <= var46[state.c2])) && (var46[state.c2] <= 1.0))?Math.log(var46[state.c2]):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 50 with the current configuration.
@@ -1239,10 +615,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 								{
 									{
 										// Flag recording if this sample task of the consuming random variable is constrained.
-										boolean cv$sampleConstrained = fixedFlag$sample636;
+										boolean cv$sampleConstrained = state.fixedFlag$sample636;
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample47 = true;
+											state.constrainedFlag$sample47 = true;
 											
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -1257,7 +633,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 														{
 															{
 																// Constructing a random variable input for use later.
-																double[] var602 = a[c5][c9][traceTempVariable$c1$6_1][c4];
+																double[] var602 = state.a[state.c5][state.c9][traceTempVariable$c1$6_1][state.c4];
 																
 																// Allocate a local variable to hold the length of the array.
 																int lengthCV$var601$634_0 = -1;
@@ -1267,10 +643,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 110 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((0 == c9)) {
+																		if((0 == state.c5)) {
+																			if((0 == state.c9)) {
 																				if((0 == traceTempVariable$c1$6_1)) {
-																					if((0 == c4))
+																					if((0 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1281,10 +657,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 138 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((0 == c9)) {
+																		if((0 == state.c5)) {
+																			if((0 == state.c9)) {
 																				if((0 == traceTempVariable$c1$6_1)) {
-																					if((1 == c4))
+																					if((1 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1295,10 +671,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 172 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((0 == c9)) {
+																		if((0 == state.c5)) {
+																			if((0 == state.c9)) {
 																				if((1 == traceTempVariable$c1$6_1)) {
-																					if((0 == c4))
+																					if((0 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1309,10 +685,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 201 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((0 == c9)) {
+																		if((0 == state.c5)) {
+																			if((0 == state.c9)) {
 																				if((1 == traceTempVariable$c1$6_1)) {
-																					if((1 == c4))
+																					if((1 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1323,10 +699,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 242 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((1 == c9)) {
+																		if((0 == state.c5)) {
+																			if((1 == state.c9)) {
 																				if((0 == traceTempVariable$c1$6_1)) {
-																					if((0 == c4))
+																					if((0 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1337,10 +713,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 271 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((1 == c9)) {
+																		if((0 == state.c5)) {
+																			if((1 == state.c9)) {
 																				if((0 == traceTempVariable$c1$6_1)) {
-																					if((1 == c4))
+																					if((1 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1351,10 +727,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 306 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((1 == c9)) {
+																		if((0 == state.c5)) {
+																			if((1 == state.c9)) {
 																				if((1 == traceTempVariable$c1$6_1)) {
-																					if((0 == c4))
+																					if((0 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1365,10 +741,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 337 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((1 == c9)) {
+																		if((0 == state.c5)) {
+																			if((1 == state.c9)) {
 																				if((1 == traceTempVariable$c1$6_1)) {
-																					if((1 == c4))
+																					if((1 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1379,10 +755,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 383 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((0 == c9)) {
+																		if((1 == state.c5)) {
+																			if((0 == state.c9)) {
 																				if((0 == traceTempVariable$c1$6_1)) {
-																					if((0 == c4))
+																					if((0 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1393,10 +769,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 412 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((0 == c9)) {
+																		if((1 == state.c5)) {
+																			if((0 == state.c9)) {
 																				if((0 == traceTempVariable$c1$6_1)) {
-																					if((1 == c4))
+																					if((1 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1407,10 +783,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 446 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((0 == c9)) {
+																		if((1 == state.c5)) {
+																			if((0 == state.c9)) {
 																				if((1 == traceTempVariable$c1$6_1)) {
-																					if((0 == c4))
+																					if((0 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1421,10 +797,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 475 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((0 == c9)) {
+																		if((1 == state.c5)) {
+																			if((0 == state.c9)) {
 																				if((1 == traceTempVariable$c1$6_1)) {
-																					if((1 == c4))
+																					if((1 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1435,10 +811,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 518 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((1 == c9)) {
+																		if((1 == state.c5)) {
+																			if((1 == state.c9)) {
 																				if((0 == traceTempVariable$c1$6_1)) {
-																					if((0 == c4))
+																					if((0 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1449,10 +825,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 549 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((1 == c9)) {
+																		if((1 == state.c5)) {
+																			if((1 == state.c9)) {
 																				if((0 == traceTempVariable$c1$6_1)) {
-																					if((1 == c4))
+																					if((1 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1463,10 +839,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 586 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((1 == c9)) {
+																		if((1 == state.c5)) {
+																			if((1 == state.c9)) {
 																				if((1 == traceTempVariable$c1$6_1)) {
-																					if((0 == c4))
+																					if((0 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1477,10 +853,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 617 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((1 == c9)) {
+																		if((1 == state.c5)) {
+																			if((1 == state.c9)) {
 																				if((1 == traceTempVariable$c1$6_1)) {
-																					if((1 == c4))
+																					if((1 == state.c4))
 																						lengthCV$var601$634_0 = 5;
 																				}
 																			}
@@ -1489,14 +865,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																}
 																
 																// Record the probability of sample task 636 generating output with current configuration.
-																if(((Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_0)) && (0 < lengthCV$var601$634_0)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 636 with the current configuration.
@@ -1545,7 +921,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample47) {
+			if(state.constrainedFlag$sample47) {
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
 				
@@ -1595,7 +971,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 				
 				// Write out the new value of the sample.
-				c1 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
+				state.c1 = DistributionSampling.sampleCategorical(state.RNG$, cv$stateProbabilityLocal, cv$numStates);
 			}
 		}
 	}
@@ -1605,7 +981,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// marginalization.
 	private final void inferSample52() {
 		if(true) {
-			constrainedFlag$sample52 = false;
+			state.constrainedFlag$sample52 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -1615,7 +991,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var50$stateProbabilityGlobal;
+			double[] cv$stateProbabilityLocal = scratch.cv$var50$stateProbabilityGlobal;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -1634,14 +1010,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$currentValue = cv$valuePos;
 				
 				// Write out the new value of the sample.
-				c3 = cv$currentValue;
+				state.c3 = cv$currentValue;
 				{
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < 2)) && (0 < 2)) && (0.0 <= priors[cv$currentValue])) && (priors[cv$currentValue] <= 1.0))?Math.log(priors[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < 2)) && (0 < 2)) && (0.0 <= state.priors[cv$currentValue])) && (state.priors[cv$currentValue] <= 1.0))?Math.log(state.priors[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 52.
 					{
@@ -1653,10 +1029,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 								{
 									{
 										// Flag recording if this sample task of the consuming random variable is constrained.
-										boolean cv$sampleConstrained = (fixedFlag$sample55 || constrainedFlag$sample55);
+										boolean cv$sampleConstrained = (state.fixedFlag$sample55 || state.constrainedFlag$sample55);
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample52 = true;
+											state.constrainedFlag$sample52 = true;
 											
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -1671,7 +1047,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 														{
 															{
 																// Constructing a random variable input for use later.
-																double[] var51 = conditionals[traceTempVariable$c3$1_1];
+																double[] var51 = state.conditionals[traceTempVariable$c3$1_1];
 																
 																// Allocate a local variable to hold the length of the array.
 																int lengthCV$conditionals$53_0 = -1;
@@ -1695,14 +1071,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																}
 																
 																// Record the probability of sample task 55 generating output with current configuration.
-																if(((Math.log(1.0) + ((((((0.0 <= c4) && (c4 < lengthCV$conditionals$53_0)) && (0 < lengthCV$conditionals$53_0)) && (0.0 <= var51[c4])) && (var51[c4] <= 1.0))?Math.log(var51[c4]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= c4) && (c4 < lengthCV$conditionals$53_0)) && (0 < lengthCV$conditionals$53_0)) && (0.0 <= var51[c4])) && (var51[c4] <= 1.0))?Math.log(var51[c4]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + ((((((0.0 <= state.c4) && (state.c4 < lengthCV$conditionals$53_0)) && (0 < lengthCV$conditionals$53_0)) && (0.0 <= var51[state.c4])) && (var51[state.c4] <= 1.0))?Math.log(var51[state.c4]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.c4) && (state.c4 < lengthCV$conditionals$53_0)) && (0 < lengthCV$conditionals$53_0)) && (0.0 <= var51[state.c4])) && (var51[state.c4] <= 1.0))?Math.log(var51[state.c4]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= c4) && (c4 < lengthCV$conditionals$53_0)) && (0 < lengthCV$conditionals$53_0)) && (0.0 <= var51[c4])) && (var51[c4] <= 1.0))?Math.log(var51[c4]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.c4) && (state.c4 < lengthCV$conditionals$53_0)) && (0 < lengthCV$conditionals$53_0)) && (0.0 <= var51[state.c4])) && (var51[state.c4] <= 1.0))?Math.log(var51[state.c4]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= c4) && (c4 < lengthCV$conditionals$53_0)) && (0 < lengthCV$conditionals$53_0)) && (0.0 <= var51[c4])) && (var51[c4] <= 1.0))?Math.log(var51[c4]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= c4) && (c4 < lengthCV$conditionals$53_0)) && (0 < lengthCV$conditionals$53_0)) && (0.0 <= var51[c4])) && (var51[c4] <= 1.0))?Math.log(var51[c4]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.c4) && (state.c4 < lengthCV$conditionals$53_0)) && (0 < lengthCV$conditionals$53_0)) && (0.0 <= var51[state.c4])) && (var51[state.c4] <= 1.0))?Math.log(var51[state.c4]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.c4) && (state.c4 < lengthCV$conditionals$53_0)) && (0 < lengthCV$conditionals$53_0)) && (0.0 <= var51[state.c4])) && (var51[state.c4] <= 1.0))?Math.log(var51[state.c4]):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 55 with the current configuration.
@@ -1751,7 +1127,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample52) {
+			if(state.constrainedFlag$sample52) {
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
 				
@@ -1801,7 +1177,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 				
 				// Write out the new value of the sample.
-				c3 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
+				state.c3 = DistributionSampling.sampleCategorical(state.RNG$, cv$stateProbabilityLocal, cv$numStates);
 			}
 		}
 	}
@@ -1811,7 +1187,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// marginalization.
 	private final void inferSample55() {
 		if(true) {
-			constrainedFlag$sample55 = false;
+			state.constrainedFlag$sample55 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -1824,7 +1200,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Looking for a path between Put 28 and consumer double[] 51.
 				{
 					{
-						if((0 == c3))
+						if((0 == state.c3))
 							lengthCV$conditionals$53_1 = 2;
 					}
 				}
@@ -1832,7 +1208,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Looking for a path between Put 44 and consumer double[] 51.
 				{
 					{
-						if((1 == c3))
+						if((1 == state.c3))
 							lengthCV$conditionals$53_1 = 2;
 					}
 				}
@@ -1842,7 +1218,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var53$stateProbabilityGlobal;
+			double[] cv$stateProbabilityLocal = scratch.cv$var53$stateProbabilityGlobal;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -1861,13 +1237,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$currentValue = cv$valuePos;
 				
 				// Write out the new value of the sample.
-				c4 = cv$currentValue;
+				state.c4 = cv$currentValue;
 				{
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 					
 					// Constructing a random variable input for use later.
-					double[] var51 = conditionals[c3];
+					double[] var51 = state.conditionals[state.c3];
 					
 					// Allocate a local variable to hold the length of the array.
 					int lengthCV$conditionals$53_2 = -1;
@@ -1877,7 +1253,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Looking for a path between Put 28 and consumer double[] 51.
 					{
 						{
-							if((0 == c3))
+							if((0 == state.c3))
 								lengthCV$conditionals$53_2 = 2;
 						}
 					}
@@ -1885,7 +1261,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					// Looking for a path between Put 44 and consumer double[] 51.
 					{
 						{
-							if((1 == c3))
+							if((1 == state.c3))
 								lengthCV$conditionals$53_2 = 2;
 						}
 					}
@@ -1904,10 +1280,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 								{
 									{
 										// Flag recording if this sample task of the consuming random variable is constrained.
-										boolean cv$sampleConstrained = fixedFlag$sample636;
+										boolean cv$sampleConstrained = state.fixedFlag$sample636;
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample55 = true;
+											state.constrainedFlag$sample55 = true;
 											
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -1922,7 +1298,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 														{
 															{
 																// Constructing a random variable input for use later.
-																double[] var602 = a[c5][c9][c1][traceTempVariable$c4$5_1];
+																double[] var602 = state.a[state.c5][state.c9][state.c1][traceTempVariable$c4$5_1];
 																
 																// Allocate a local variable to hold the length of the array.
 																int lengthCV$var601$634_1 = -1;
@@ -1932,9 +1308,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 110 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((0 == c9)) {
-																				if((0 == c1)) {
+																		if((0 == state.c5)) {
+																			if((0 == state.c9)) {
+																				if((0 == state.c1)) {
 																					if((0 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -1946,9 +1322,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 138 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((0 == c9)) {
-																				if((0 == c1)) {
+																		if((0 == state.c5)) {
+																			if((0 == state.c9)) {
+																				if((0 == state.c1)) {
 																					if((1 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -1960,9 +1336,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 172 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((0 == c9)) {
-																				if((1 == c1)) {
+																		if((0 == state.c5)) {
+																			if((0 == state.c9)) {
+																				if((1 == state.c1)) {
 																					if((0 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -1974,9 +1350,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 201 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((0 == c9)) {
-																				if((1 == c1)) {
+																		if((0 == state.c5)) {
+																			if((0 == state.c9)) {
+																				if((1 == state.c1)) {
 																					if((1 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -1988,9 +1364,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 242 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((1 == c9)) {
-																				if((0 == c1)) {
+																		if((0 == state.c5)) {
+																			if((1 == state.c9)) {
+																				if((0 == state.c1)) {
 																					if((0 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -2002,9 +1378,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 271 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((1 == c9)) {
-																				if((0 == c1)) {
+																		if((0 == state.c5)) {
+																			if((1 == state.c9)) {
+																				if((0 == state.c1)) {
 																					if((1 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -2016,9 +1392,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 306 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((1 == c9)) {
-																				if((1 == c1)) {
+																		if((0 == state.c5)) {
+																			if((1 == state.c9)) {
+																				if((1 == state.c1)) {
 																					if((0 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -2030,9 +1406,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 337 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
-																			if((1 == c9)) {
-																				if((1 == c1)) {
+																		if((0 == state.c5)) {
+																			if((1 == state.c9)) {
+																				if((1 == state.c1)) {
 																					if((1 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -2044,9 +1420,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 383 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((0 == c9)) {
-																				if((0 == c1)) {
+																		if((1 == state.c5)) {
+																			if((0 == state.c9)) {
+																				if((0 == state.c1)) {
 																					if((0 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -2058,9 +1434,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 412 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((0 == c9)) {
-																				if((0 == c1)) {
+																		if((1 == state.c5)) {
+																			if((0 == state.c9)) {
+																				if((0 == state.c1)) {
 																					if((1 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -2072,9 +1448,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 446 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((0 == c9)) {
-																				if((1 == c1)) {
+																		if((1 == state.c5)) {
+																			if((0 == state.c9)) {
+																				if((1 == state.c1)) {
 																					if((0 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -2086,9 +1462,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 475 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((0 == c9)) {
-																				if((1 == c1)) {
+																		if((1 == state.c5)) {
+																			if((0 == state.c9)) {
+																				if((1 == state.c1)) {
 																					if((1 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -2100,9 +1476,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 518 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((1 == c9)) {
-																				if((0 == c1)) {
+																		if((1 == state.c5)) {
+																			if((1 == state.c9)) {
+																				if((0 == state.c1)) {
 																					if((0 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -2114,9 +1490,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 549 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((1 == c9)) {
-																				if((0 == c1)) {
+																		if((1 == state.c5)) {
+																			if((1 == state.c9)) {
+																				if((0 == state.c1)) {
 																					if((1 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -2128,9 +1504,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 586 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((1 == c9)) {
-																				if((1 == c1)) {
+																		if((1 == state.c5)) {
+																			if((1 == state.c9)) {
+																				if((1 == state.c1)) {
 																					if((0 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -2142,9 +1518,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 617 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
-																			if((1 == c9)) {
-																				if((1 == c1)) {
+																		if((1 == state.c5)) {
+																			if((1 == state.c9)) {
+																				if((1 == state.c1)) {
 																					if((1 == traceTempVariable$c4$5_1))
 																						lengthCV$var601$634_1 = 5;
 																				}
@@ -2154,14 +1530,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																}
 																
 																// Record the probability of sample task 636 generating output with current configuration.
-																if(((Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_1)) && (0 < lengthCV$var601$634_1)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_1)) && (0 < lengthCV$var601$634_1)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_1)) && (0 < lengthCV$var601$634_1)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_1)) && (0 < lengthCV$var601$634_1)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_1)) && (0 < lengthCV$var601$634_1)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_1)) && (0 < lengthCV$var601$634_1)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_1)) && (0 < lengthCV$var601$634_1)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_1)) && (0 < lengthCV$var601$634_1)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_1)) && (0 < lengthCV$var601$634_1)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_1)) && (0 < lengthCV$var601$634_1)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 636 with the current configuration.
@@ -2210,7 +1586,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample55) {
+			if(state.constrainedFlag$sample55) {
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
 				
@@ -2260,7 +1636,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 				
 				// Write out the new value of the sample.
-				c4 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
+				state.c4 = DistributionSampling.sampleCategorical(state.RNG$, cv$stateProbabilityLocal, cv$numStates);
 			}
 		}
 	}
@@ -2270,7 +1646,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// marginalization.
 	private final void inferSample57() {
 		if(true) {
-			constrainedFlag$sample57 = false;
+			state.constrainedFlag$sample57 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -2280,7 +1656,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var55$stateProbabilityGlobal;
+			double[] cv$stateProbabilityLocal = scratch.cv$var55$stateProbabilityGlobal;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -2299,14 +1675,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$currentValue = cv$valuePos;
 				
 				// Write out the new value of the sample.
-				c5 = cv$currentValue;
+				state.c5 = cv$currentValue;
 				{
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < 2)) && (0 < 2)) && (0.0 <= priors[cv$currentValue])) && (priors[cv$currentValue] <= 1.0))?Math.log(priors[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < 2)) && (0 < 2)) && (0.0 <= state.priors[cv$currentValue])) && (state.priors[cv$currentValue] <= 1.0))?Math.log(state.priors[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 57.
 					{
@@ -2318,10 +1694,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 								{
 									{
 										// Flag recording if this sample task of the consuming random variable is constrained.
-										boolean cv$sampleConstrained = fixedFlag$sample60;
+										boolean cv$sampleConstrained = state.fixedFlag$sample60;
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample57 = true;
+											state.constrainedFlag$sample57 = true;
 											
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -2336,7 +1712,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 														{
 															{
 																// Constructing a random variable input for use later.
-																double[] var56 = conditionals[traceTempVariable$c5$1_1];
+																double[] var56 = state.conditionals[traceTempVariable$c5$1_1];
 																
 																// Allocate a local variable to hold the length of the array.
 																int lengthCV$conditionals$58_0 = -1;
@@ -2360,14 +1736,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																}
 																
 																// Record the probability of sample task 60 generating output with current configuration.
-																if(((Math.log(1.0) + ((((((0.0 <= c6) && (c6 < lengthCV$conditionals$58_0)) && (0 < lengthCV$conditionals$58_0)) && (0.0 <= var56[c6])) && (var56[c6] <= 1.0))?Math.log(var56[c6]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= c6) && (c6 < lengthCV$conditionals$58_0)) && (0 < lengthCV$conditionals$58_0)) && (0.0 <= var56[c6])) && (var56[c6] <= 1.0))?Math.log(var56[c6]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + ((((((0.0 <= state.c6) && (state.c6 < lengthCV$conditionals$58_0)) && (0 < lengthCV$conditionals$58_0)) && (0.0 <= var56[state.c6])) && (var56[state.c6] <= 1.0))?Math.log(var56[state.c6]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.c6) && (state.c6 < lengthCV$conditionals$58_0)) && (0 < lengthCV$conditionals$58_0)) && (0.0 <= var56[state.c6])) && (var56[state.c6] <= 1.0))?Math.log(var56[state.c6]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= c6) && (c6 < lengthCV$conditionals$58_0)) && (0 < lengthCV$conditionals$58_0)) && (0.0 <= var56[c6])) && (var56[c6] <= 1.0))?Math.log(var56[c6]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.c6) && (state.c6 < lengthCV$conditionals$58_0)) && (0 < lengthCV$conditionals$58_0)) && (0.0 <= var56[state.c6])) && (var56[state.c6] <= 1.0))?Math.log(var56[state.c6]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= c6) && (c6 < lengthCV$conditionals$58_0)) && (0 < lengthCV$conditionals$58_0)) && (0.0 <= var56[c6])) && (var56[c6] <= 1.0))?Math.log(var56[c6]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= c6) && (c6 < lengthCV$conditionals$58_0)) && (0 < lengthCV$conditionals$58_0)) && (0.0 <= var56[c6])) && (var56[c6] <= 1.0))?Math.log(var56[c6]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.c6) && (state.c6 < lengthCV$conditionals$58_0)) && (0 < lengthCV$conditionals$58_0)) && (0.0 <= var56[state.c6])) && (var56[state.c6] <= 1.0))?Math.log(var56[state.c6]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.c6) && (state.c6 < lengthCV$conditionals$58_0)) && (0 < lengthCV$conditionals$58_0)) && (0.0 <= var56[state.c6])) && (var56[state.c6] <= 1.0))?Math.log(var56[state.c6]):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 60 with the current configuration.
@@ -2410,10 +1786,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 								{
 									{
 										// Flag recording if this sample task of the consuming random variable is constrained.
-										boolean cv$sampleConstrained = fixedFlag$sample636;
+										boolean cv$sampleConstrained = state.fixedFlag$sample636;
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample57 = true;
+											state.constrainedFlag$sample57 = true;
 											
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -2428,7 +1804,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 														{
 															{
 																// Constructing a random variable input for use later.
-																double[] var602 = a[traceTempVariable$c5$6_1][c9][c1][c4];
+																double[] var602 = state.a[traceTempVariable$c5$6_1][state.c9][state.c1][state.c4];
 																
 																// Allocate a local variable to hold the length of the array.
 																int lengthCV$var601$634_2 = -1;
@@ -2439,9 +1815,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((0 == traceTempVariable$c5$6_1)) {
-																			if((0 == c9)) {
-																				if((0 == c1)) {
-																					if((0 == c4))
+																			if((0 == state.c9)) {
+																				if((0 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2453,9 +1829,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((0 == traceTempVariable$c5$6_1)) {
-																			if((0 == c9)) {
-																				if((0 == c1)) {
-																					if((1 == c4))
+																			if((0 == state.c9)) {
+																				if((0 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2467,9 +1843,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((0 == traceTempVariable$c5$6_1)) {
-																			if((0 == c9)) {
-																				if((1 == c1)) {
-																					if((0 == c4))
+																			if((0 == state.c9)) {
+																				if((1 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2481,9 +1857,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((0 == traceTempVariable$c5$6_1)) {
-																			if((0 == c9)) {
-																				if((1 == c1)) {
-																					if((1 == c4))
+																			if((0 == state.c9)) {
+																				if((1 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2495,9 +1871,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((0 == traceTempVariable$c5$6_1)) {
-																			if((1 == c9)) {
-																				if((0 == c1)) {
-																					if((0 == c4))
+																			if((1 == state.c9)) {
+																				if((0 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2509,9 +1885,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((0 == traceTempVariable$c5$6_1)) {
-																			if((1 == c9)) {
-																				if((0 == c1)) {
-																					if((1 == c4))
+																			if((1 == state.c9)) {
+																				if((0 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2523,9 +1899,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((0 == traceTempVariable$c5$6_1)) {
-																			if((1 == c9)) {
-																				if((1 == c1)) {
-																					if((0 == c4))
+																			if((1 == state.c9)) {
+																				if((1 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2537,9 +1913,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((0 == traceTempVariable$c5$6_1)) {
-																			if((1 == c9)) {
-																				if((1 == c1)) {
-																					if((1 == c4))
+																			if((1 == state.c9)) {
+																				if((1 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2551,9 +1927,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((1 == traceTempVariable$c5$6_1)) {
-																			if((0 == c9)) {
-																				if((0 == c1)) {
-																					if((0 == c4))
+																			if((0 == state.c9)) {
+																				if((0 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2565,9 +1941,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((1 == traceTempVariable$c5$6_1)) {
-																			if((0 == c9)) {
-																				if((0 == c1)) {
-																					if((1 == c4))
+																			if((0 == state.c9)) {
+																				if((0 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2579,9 +1955,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((1 == traceTempVariable$c5$6_1)) {
-																			if((0 == c9)) {
-																				if((1 == c1)) {
-																					if((0 == c4))
+																			if((0 == state.c9)) {
+																				if((1 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2593,9 +1969,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((1 == traceTempVariable$c5$6_1)) {
-																			if((0 == c9)) {
-																				if((1 == c1)) {
-																					if((1 == c4))
+																			if((0 == state.c9)) {
+																				if((1 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2607,9 +1983,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((1 == traceTempVariable$c5$6_1)) {
-																			if((1 == c9)) {
-																				if((0 == c1)) {
-																					if((0 == c4))
+																			if((1 == state.c9)) {
+																				if((0 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2621,9 +1997,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((1 == traceTempVariable$c5$6_1)) {
-																			if((1 == c9)) {
-																				if((0 == c1)) {
-																					if((1 == c4))
+																			if((1 == state.c9)) {
+																				if((0 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2635,9 +2011,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((1 == traceTempVariable$c5$6_1)) {
-																			if((1 == c9)) {
-																				if((1 == c1)) {
-																					if((0 == c4))
+																			if((1 == state.c9)) {
+																				if((1 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2649,9 +2025,9 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																{
 																	{
 																		if((1 == traceTempVariable$c5$6_1)) {
-																			if((1 == c9)) {
-																				if((1 == c1)) {
-																					if((1 == c4))
+																			if((1 == state.c9)) {
+																				if((1 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_2 = 5;
 																				}
 																			}
@@ -2660,14 +2036,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																}
 																
 																// Record the probability of sample task 636 generating output with current configuration.
-																if(((Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_2)) && (0 < lengthCV$var601$634_2)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 636 with the current configuration.
@@ -2716,7 +2092,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample57) {
+			if(state.constrainedFlag$sample57) {
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
 				
@@ -2766,7 +2142,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 				
 				// Write out the new value of the sample.
-				c5 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
+				state.c5 = DistributionSampling.sampleCategorical(state.RNG$, cv$stateProbabilityLocal, cv$numStates);
 			}
 		}
 	}
@@ -2776,7 +2152,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// marginalization.
 	private final void inferSample62() {
 		if(true) {
-			constrainedFlag$sample62 = false;
+			state.constrainedFlag$sample62 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -2786,7 +2162,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var60$stateProbabilityGlobal;
+			double[] cv$stateProbabilityLocal = scratch.cv$var60$stateProbabilityGlobal;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -2805,14 +2181,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$currentValue = cv$valuePos;
 				
 				// Write out the new value of the sample.
-				c7 = cv$currentValue;
+				state.c7 = cv$currentValue;
 				{
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < 2)) && (0 < 2)) && (0.0 <= priors[cv$currentValue])) && (priors[cv$currentValue] <= 1.0))?Math.log(priors[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < 2)) && (0 < 2)) && (0.0 <= state.priors[cv$currentValue])) && (state.priors[cv$currentValue] <= 1.0))?Math.log(state.priors[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 62.
 					{
@@ -2824,10 +2200,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 								{
 									{
 										// Flag recording if this sample task of the consuming random variable is constrained.
-										boolean cv$sampleConstrained = fixedFlag$sample65;
+										boolean cv$sampleConstrained = state.fixedFlag$sample65;
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample62 = true;
+											state.constrainedFlag$sample62 = true;
 											
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -2842,7 +2218,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 														{
 															{
 																// Constructing a random variable input for use later.
-																double[] var61 = conditionals[traceTempVariable$c7$1_1];
+																double[] var61 = state.conditionals[traceTempVariable$c7$1_1];
 																
 																// Allocate a local variable to hold the length of the array.
 																int lengthCV$conditionals$63_0 = -1;
@@ -2866,14 +2242,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																}
 																
 																// Record the probability of sample task 65 generating output with current configuration.
-																if(((Math.log(1.0) + ((((((0.0 <= c8) && (c8 < lengthCV$conditionals$63_0)) && (0 < lengthCV$conditionals$63_0)) && (0.0 <= var61[c8])) && (var61[c8] <= 1.0))?Math.log(var61[c8]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= c8) && (c8 < lengthCV$conditionals$63_0)) && (0 < lengthCV$conditionals$63_0)) && (0.0 <= var61[c8])) && (var61[c8] <= 1.0))?Math.log(var61[c8]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + ((((((0.0 <= state.c8) && (state.c8 < lengthCV$conditionals$63_0)) && (0 < lengthCV$conditionals$63_0)) && (0.0 <= var61[state.c8])) && (var61[state.c8] <= 1.0))?Math.log(var61[state.c8]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.c8) && (state.c8 < lengthCV$conditionals$63_0)) && (0 < lengthCV$conditionals$63_0)) && (0.0 <= var61[state.c8])) && (var61[state.c8] <= 1.0))?Math.log(var61[state.c8]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= c8) && (c8 < lengthCV$conditionals$63_0)) && (0 < lengthCV$conditionals$63_0)) && (0.0 <= var61[c8])) && (var61[c8] <= 1.0))?Math.log(var61[c8]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.c8) && (state.c8 < lengthCV$conditionals$63_0)) && (0 < lengthCV$conditionals$63_0)) && (0.0 <= var61[state.c8])) && (var61[state.c8] <= 1.0))?Math.log(var61[state.c8]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= c8) && (c8 < lengthCV$conditionals$63_0)) && (0 < lengthCV$conditionals$63_0)) && (0.0 <= var61[c8])) && (var61[c8] <= 1.0))?Math.log(var61[c8]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= c8) && (c8 < lengthCV$conditionals$63_0)) && (0 < lengthCV$conditionals$63_0)) && (0.0 <= var61[c8])) && (var61[c8] <= 1.0))?Math.log(var61[c8]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.c8) && (state.c8 < lengthCV$conditionals$63_0)) && (0 < lengthCV$conditionals$63_0)) && (0.0 <= var61[state.c8])) && (var61[state.c8] <= 1.0))?Math.log(var61[state.c8]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.c8) && (state.c8 < lengthCV$conditionals$63_0)) && (0 < lengthCV$conditionals$63_0)) && (0.0 <= var61[state.c8])) && (var61[state.c8] <= 1.0))?Math.log(var61[state.c8]):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 65 with the current configuration.
@@ -2922,7 +2298,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample62) {
+			if(state.constrainedFlag$sample62) {
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
 				
@@ -2972,7 +2348,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 				
 				// Write out the new value of the sample.
-				c7 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
+				state.c7 = DistributionSampling.sampleCategorical(state.RNG$, cv$stateProbabilityLocal, cv$numStates);
 			}
 		}
 	}
@@ -2982,7 +2358,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// marginalization.
 	private final void inferSample67() {
 		if(true) {
-			constrainedFlag$sample67 = false;
+			state.constrainedFlag$sample67 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -2992,7 +2368,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var65$stateProbabilityGlobal;
+			double[] cv$stateProbabilityLocal = scratch.cv$var65$stateProbabilityGlobal;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -3011,14 +2387,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$currentValue = cv$valuePos;
 				
 				// Write out the new value of the sample.
-				c9 = cv$currentValue;
+				state.c9 = cv$currentValue;
 				{
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < 2)) && (0 < 2)) && (0.0 <= priors[cv$currentValue])) && (priors[cv$currentValue] <= 1.0))?Math.log(priors[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < 2)) && (0 < 2)) && (0.0 <= state.priors[cv$currentValue])) && (state.priors[cv$currentValue] <= 1.0))?Math.log(state.priors[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 67.
 					{
@@ -3030,10 +2406,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 								{
 									{
 										// Flag recording if this sample task of the consuming random variable is constrained.
-										boolean cv$sampleConstrained = fixedFlag$sample70;
+										boolean cv$sampleConstrained = state.fixedFlag$sample70;
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample67 = true;
+											state.constrainedFlag$sample67 = true;
 											
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -3048,7 +2424,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 														{
 															{
 																// Constructing a random variable input for use later.
-																double[] var66 = conditionals[traceTempVariable$c9$1_1];
+																double[] var66 = state.conditionals[traceTempVariable$c9$1_1];
 																
 																// Allocate a local variable to hold the length of the array.
 																int lengthCV$conditionals$68_0 = -1;
@@ -3072,14 +2448,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																}
 																
 																// Record the probability of sample task 70 generating output with current configuration.
-																if(((Math.log(1.0) + ((((((0.0 <= c10) && (c10 < lengthCV$conditionals$68_0)) && (0 < lengthCV$conditionals$68_0)) && (0.0 <= var66[c10])) && (var66[c10] <= 1.0))?Math.log(var66[c10]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= c10) && (c10 < lengthCV$conditionals$68_0)) && (0 < lengthCV$conditionals$68_0)) && (0.0 <= var66[c10])) && (var66[c10] <= 1.0))?Math.log(var66[c10]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + ((((((0.0 <= state.c10) && (state.c10 < lengthCV$conditionals$68_0)) && (0 < lengthCV$conditionals$68_0)) && (0.0 <= var66[state.c10])) && (var66[state.c10] <= 1.0))?Math.log(var66[state.c10]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.c10) && (state.c10 < lengthCV$conditionals$68_0)) && (0 < lengthCV$conditionals$68_0)) && (0.0 <= var66[state.c10])) && (var66[state.c10] <= 1.0))?Math.log(var66[state.c10]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= c10) && (c10 < lengthCV$conditionals$68_0)) && (0 < lengthCV$conditionals$68_0)) && (0.0 <= var66[c10])) && (var66[c10] <= 1.0))?Math.log(var66[c10]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.c10) && (state.c10 < lengthCV$conditionals$68_0)) && (0 < lengthCV$conditionals$68_0)) && (0.0 <= var66[state.c10])) && (var66[state.c10] <= 1.0))?Math.log(var66[state.c10]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= c10) && (c10 < lengthCV$conditionals$68_0)) && (0 < lengthCV$conditionals$68_0)) && (0.0 <= var66[c10])) && (var66[c10] <= 1.0))?Math.log(var66[c10]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= c10) && (c10 < lengthCV$conditionals$68_0)) && (0 < lengthCV$conditionals$68_0)) && (0.0 <= var66[c10])) && (var66[c10] <= 1.0))?Math.log(var66[c10]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.c10) && (state.c10 < lengthCV$conditionals$68_0)) && (0 < lengthCV$conditionals$68_0)) && (0.0 <= var66[state.c10])) && (var66[state.c10] <= 1.0))?Math.log(var66[state.c10]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.c10) && (state.c10 < lengthCV$conditionals$68_0)) && (0 < lengthCV$conditionals$68_0)) && (0.0 <= var66[state.c10])) && (var66[state.c10] <= 1.0))?Math.log(var66[state.c10]):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 70 with the current configuration.
@@ -3122,10 +2498,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 								{
 									{
 										// Flag recording if this sample task of the consuming random variable is constrained.
-										boolean cv$sampleConstrained = fixedFlag$sample636;
+										boolean cv$sampleConstrained = state.fixedFlag$sample636;
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample67 = true;
+											state.constrainedFlag$sample67 = true;
 											
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -3140,7 +2516,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 														{
 															{
 																// Constructing a random variable input for use later.
-																double[] var602 = a[c5][traceTempVariable$c9$6_1][c1][c4];
+																double[] var602 = state.a[state.c5][traceTempVariable$c9$6_1][state.c1][state.c4];
 																
 																// Allocate a local variable to hold the length of the array.
 																int lengthCV$var601$634_3 = -1;
@@ -3150,10 +2526,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 110 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
+																		if((0 == state.c5)) {
 																			if((0 == traceTempVariable$c9$6_1)) {
-																				if((0 == c1)) {
-																					if((0 == c4))
+																				if((0 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3164,10 +2540,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 138 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
+																		if((0 == state.c5)) {
 																			if((0 == traceTempVariable$c9$6_1)) {
-																				if((0 == c1)) {
-																					if((1 == c4))
+																				if((0 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3178,10 +2554,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 172 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
+																		if((0 == state.c5)) {
 																			if((0 == traceTempVariable$c9$6_1)) {
-																				if((1 == c1)) {
-																					if((0 == c4))
+																				if((1 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3192,10 +2568,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 201 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
+																		if((0 == state.c5)) {
 																			if((0 == traceTempVariable$c9$6_1)) {
-																				if((1 == c1)) {
-																					if((1 == c4))
+																				if((1 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3206,10 +2582,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 242 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
+																		if((0 == state.c5)) {
 																			if((1 == traceTempVariable$c9$6_1)) {
-																				if((0 == c1)) {
-																					if((0 == c4))
+																				if((0 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3220,10 +2596,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 271 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
+																		if((0 == state.c5)) {
 																			if((1 == traceTempVariable$c9$6_1)) {
-																				if((0 == c1)) {
-																					if((1 == c4))
+																				if((0 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3234,10 +2610,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 306 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
+																		if((0 == state.c5)) {
 																			if((1 == traceTempVariable$c9$6_1)) {
-																				if((1 == c1)) {
-																					if((0 == c4))
+																				if((1 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3248,10 +2624,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 337 and consumer double[] 602.
 																{
 																	{
-																		if((0 == c5)) {
+																		if((0 == state.c5)) {
 																			if((1 == traceTempVariable$c9$6_1)) {
-																				if((1 == c1)) {
-																					if((1 == c4))
+																				if((1 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3262,10 +2638,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 383 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
+																		if((1 == state.c5)) {
 																			if((0 == traceTempVariable$c9$6_1)) {
-																				if((0 == c1)) {
-																					if((0 == c4))
+																				if((0 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3276,10 +2652,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 412 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
+																		if((1 == state.c5)) {
 																			if((0 == traceTempVariable$c9$6_1)) {
-																				if((0 == c1)) {
-																					if((1 == c4))
+																				if((0 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3290,10 +2666,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 446 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
+																		if((1 == state.c5)) {
 																			if((0 == traceTempVariable$c9$6_1)) {
-																				if((1 == c1)) {
-																					if((0 == c4))
+																				if((1 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3304,10 +2680,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 475 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
+																		if((1 == state.c5)) {
 																			if((0 == traceTempVariable$c9$6_1)) {
-																				if((1 == c1)) {
-																					if((1 == c4))
+																				if((1 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3318,10 +2694,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 518 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
+																		if((1 == state.c5)) {
 																			if((1 == traceTempVariable$c9$6_1)) {
-																				if((0 == c1)) {
-																					if((0 == c4))
+																				if((0 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3332,10 +2708,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 549 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
+																		if((1 == state.c5)) {
 																			if((1 == traceTempVariable$c9$6_1)) {
-																				if((0 == c1)) {
-																					if((1 == c4))
+																				if((0 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3346,10 +2722,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 586 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
+																		if((1 == state.c5)) {
 																			if((1 == traceTempVariable$c9$6_1)) {
-																				if((1 == c1)) {
-																					if((0 == c4))
+																				if((1 == state.c1)) {
+																					if((0 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3360,10 +2736,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																// Looking for a path between Put 617 and consumer double[] 602.
 																{
 																	{
-																		if((1 == c5)) {
+																		if((1 == state.c5)) {
 																			if((1 == traceTempVariable$c9$6_1)) {
-																				if((1 == c1)) {
-																					if((1 == c4))
+																				if((1 == state.c1)) {
+																					if((1 == state.c4))
 																						lengthCV$var601$634_3 = 5;
 																				}
 																			}
@@ -3372,14 +2748,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																}
 																
 																// Record the probability of sample task 636 generating output with current configuration.
-																if(((Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= terminalVariable) && (terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[terminalVariable])) && (var602[terminalVariable] <= 1.0))?Math.log(var602[terminalVariable]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.terminalVariable) && (state.terminalVariable < lengthCV$var601$634_3)) && (0 < lengthCV$var601$634_3)) && (0.0 <= var602[state.terminalVariable])) && (var602[state.terminalVariable] <= 1.0))?Math.log(var602[state.terminalVariable]):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 636 with the current configuration.
@@ -3428,7 +2804,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample67) {
+			if(state.constrainedFlag$sample67) {
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
 				
@@ -3478,7 +2854,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 				
 				// Write out the new value of the sample.
-				c9 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
+				state.c9 = DistributionSampling.sampleCategorical(state.RNG$, cv$stateProbabilityLocal, cv$numStates);
 			}
 		}
 	}
@@ -3488,7 +2864,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// marginalization.
 	private final void inferSample72() {
 		if(true) {
-			constrainedFlag$sample72 = false;
+			state.constrainedFlag$sample72 = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -3498,7 +2874,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			}
 			
 			// Get a local reference to the scratch space.
-			double[] cv$stateProbabilityLocal = cv$var70$stateProbabilityGlobal;
+			double[] cv$stateProbabilityLocal = scratch.cv$var70$stateProbabilityGlobal;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
 				// Initialize the summed probabilities to 0.
 				double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
@@ -3517,14 +2893,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				cv$currentValue = cv$valuePos;
 				
 				// Write out the new value of the sample.
-				c11 = cv$currentValue;
+				state.c11 = cv$currentValue;
 				{
 					// Record the reached probability density.
 					cv$reachedDistributionSourceRV = (cv$reachedDistributionSourceRV + 1.0);
 					
 					// An accumulator to allow the value for each distribution to be constructed before
 					// it is added to the index probabilities.
-					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < 2)) && (0 < 2)) && (0.0 <= priors[cv$currentValue])) && (priors[cv$currentValue] <= 1.0))?Math.log(priors[cv$currentValue]):Double.NEGATIVE_INFINITY));
+					double cv$accumulatedProbabilities = (Math.log(1.0) + ((((((0.0 <= cv$currentValue) && (cv$currentValue < 2)) && (0 < 2)) && (0.0 <= state.priors[cv$currentValue])) && (state.priors[cv$currentValue] <= 1.0))?Math.log(state.priors[cv$currentValue]):Double.NEGATIVE_INFINITY));
 					
 					// Processing random variable 72.
 					{
@@ -3536,10 +2912,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 								{
 									{
 										// Flag recording if this sample task of the consuming random variable is constrained.
-										boolean cv$sampleConstrained = fixedFlag$sample75;
+										boolean cv$sampleConstrained = state.fixedFlag$sample75;
 										if(cv$sampleConstrained) {
 											// Mark that the sample has observed constrained data.
-											constrainedFlag$sample72 = true;
+											state.constrainedFlag$sample72 = true;
 											
 											// Set an accumulator to sum the probabilities for each possible configuration of
 											// inputs.
@@ -3554,7 +2930,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 														{
 															{
 																// Constructing a random variable input for use later.
-																double[] var71 = conditionals[traceTempVariable$c11$1_1];
+																double[] var71 = state.conditionals[traceTempVariable$c11$1_1];
 																
 																// Allocate a local variable to hold the length of the array.
 																int lengthCV$conditionals$73_0 = -1;
@@ -3578,14 +2954,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 																}
 																
 																// Record the probability of sample task 75 generating output with current configuration.
-																if(((Math.log(1.0) + ((((((0.0 <= c12) && (c12 < lengthCV$conditionals$73_0)) && (0 < lengthCV$conditionals$73_0)) && (0.0 <= var71[c12])) && (var71[c12] <= 1.0))?Math.log(var71[c12]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= c12) && (c12 < lengthCV$conditionals$73_0)) && (0 < lengthCV$conditionals$73_0)) && (0.0 <= var71[c12])) && (var71[c12] <= 1.0))?Math.log(var71[c12]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																if(((Math.log(1.0) + ((((((0.0 <= state.c12) && (state.c12 < lengthCV$conditionals$73_0)) && (0 < lengthCV$conditionals$73_0)) && (0.0 <= var71[state.c12])) && (var71[state.c12] <= 1.0))?Math.log(var71[state.c12]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																	cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.c12) && (state.c12 < lengthCV$conditionals$73_0)) && (0 < lengthCV$conditionals$73_0)) && (0.0 <= var71[state.c12])) && (var71[state.c12] <= 1.0))?Math.log(var71[state.c12]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																else {
 																	// If the second value is -infinity.
 																	if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= c12) && (c12 < lengthCV$conditionals$73_0)) && (0 < lengthCV$conditionals$73_0)) && (0.0 <= var71[c12])) && (var71[c12] <= 1.0))?Math.log(var71[c12]):Double.NEGATIVE_INFINITY));
+																		cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.c12) && (state.c12 < lengthCV$conditionals$73_0)) && (0 < lengthCV$conditionals$73_0)) && (0.0 <= var71[state.c12])) && (var71[state.c12] <= 1.0))?Math.log(var71[state.c12]):Double.NEGATIVE_INFINITY));
 																	else
-																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= c12) && (c12 < lengthCV$conditionals$73_0)) && (0 < lengthCV$conditionals$73_0)) && (0.0 <= var71[c12])) && (var71[c12] <= 1.0))?Math.log(var71[c12]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= c12) && (c12 < lengthCV$conditionals$73_0)) && (0 < lengthCV$conditionals$73_0)) && (0.0 <= var71[c12])) && (var71[c12] <= 1.0))?Math.log(var71[c12]):Double.NEGATIVE_INFINITY)));
+																		cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.c12) && (state.c12 < lengthCV$conditionals$73_0)) && (0 < lengthCV$conditionals$73_0)) && (0.0 <= var71[state.c12])) && (var71[state.c12] <= 1.0))?Math.log(var71[state.c12]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.c12) && (state.c12 < lengthCV$conditionals$73_0)) && (0 < lengthCV$conditionals$73_0)) && (0.0 <= var71[state.c12])) && (var71[state.c12] <= 1.0))?Math.log(var71[state.c12]):Double.NEGATIVE_INFINITY)));
 																}
 																
 																// Recorded the probability of reaching sample task 75 with the current configuration.
@@ -3634,7 +3010,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				// Save the calculated index value into the array of index value probabilities
 				cv$stateProbabilityLocal[cv$valuePos] = ((cv$stateProbabilityValue - Math.log(cv$reachedDistributionSourceRV)) + cv$accumulatedDistributionProbabilities);
 			}
-			if(constrainedFlag$sample72) {
+			if(state.constrainedFlag$sample72) {
 				// The sum of all the probabilities in log space
 				double cv$logSum = 0.0;
 				
@@ -3684,7 +3060,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 					cv$stateProbabilityLocal[cv$indexName] = Double.NEGATIVE_INFINITY;
 				
 				// Write out the new value of the sample.
-				c11 = DistributionSampling.sampleCategorical(RNG$, cv$stateProbabilityLocal, cv$numStates);
+				state.c11 = DistributionSampling.sampleCategorical(state.RNG$, cv$stateProbabilityLocal, cv$numStates);
 			}
 		}
 	}
@@ -3694,7 +3070,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample47() {
 		// Determine if we need to calculate the values for sample task 47 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample47) {
+		if(!state.fixedProbFlag$sample47) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -3710,11 +3086,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = c1;
+					int cv$sampleValue = state.c1;
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < 2)) && (0 < 2)) && (0.0 <= priors[cv$sampleValue])) && (priors[cv$sampleValue] <= 1.0))?Math.log(priors[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < 2)) && (0 < 2)) && (0.0 <= state.priors[cv$sampleValue])) && (state.priors[cv$sampleValue] <= 1.0))?Math.log(state.priors[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -3749,19 +3125,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$c1 = cv$sampleProbability;
+			state.logProbability$c1 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample47)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample47)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample47 = fixedFlag$sample47;
+			state.fixedProbFlag$sample47 = state.fixedFlag$sample47;
 		} else {
 			// Using cached values.
 			// 
@@ -3769,17 +3145,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$c1;
+			double cv$sampleValue = state.logProbability$c1;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample47)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample47)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -3788,7 +3164,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample50() {
 		// Determine if we need to calculate the values for sample task 50 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample50) {
+		if(!state.fixedProbFlag$sample50) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -3804,10 +3180,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = c2;
+					int cv$sampleValue = state.c2;
 					{
 						{
-							double[] var46 = conditionals[c1];
+							double[] var46 = state.conditionals[state.c1];
 							
 							// Allocate a local variable to hold the length of the array.
 							int lengthCV$conditionals$48_1 = -1;
@@ -3817,7 +3193,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 28 and consumer double[] 46.
 							{
 								{
-									if((0 == c1))
+									if((0 == state.c1))
 										lengthCV$conditionals$48_1 = 2;
 								}
 							}
@@ -3825,7 +3201,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 44 and consumer double[] 46.
 							{
 								{
-									if((1 == c1))
+									if((1 == state.c1))
 										lengthCV$conditionals$48_1 = 2;
 								}
 							}
@@ -3866,15 +3242,15 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$c2 = cv$sampleProbability;
+			state.logProbability$c2 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample50 = fixedFlag$sample47;
+			state.fixedProbFlag$sample50 = state.fixedFlag$sample47;
 		} else {
 			// Using cached values.
 			// 
@@ -3882,13 +3258,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$c2;
+			double cv$sampleValue = state.logProbability$c2;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -3897,7 +3273,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample52() {
 		// Determine if we need to calculate the values for sample task 52 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample52) {
+		if(!state.fixedProbFlag$sample52) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -3913,11 +3289,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = c3;
+					int cv$sampleValue = state.c3;
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < 2)) && (0 < 2)) && (0.0 <= priors[cv$sampleValue])) && (priors[cv$sampleValue] <= 1.0))?Math.log(priors[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < 2)) && (0 < 2)) && (0.0 <= state.priors[cv$sampleValue])) && (state.priors[cv$sampleValue] <= 1.0))?Math.log(state.priors[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -3952,19 +3328,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$c3 = cv$sampleProbability;
+			state.logProbability$c3 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample52)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample52)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample52 = fixedFlag$sample52;
+			state.fixedProbFlag$sample52 = state.fixedFlag$sample52;
 		} else {
 			// Using cached values.
 			// 
@@ -3972,17 +3348,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$c3;
+			double cv$sampleValue = state.logProbability$c3;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample52)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample52)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -3991,7 +3367,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample55() {
 		// Determine if we need to calculate the values for sample task 55 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample55) {
+		if(!state.fixedProbFlag$sample55) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -4007,10 +3383,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = c4;
+					int cv$sampleValue = state.c4;
 					{
 						{
-							double[] var51 = conditionals[c3];
+							double[] var51 = state.conditionals[state.c3];
 							
 							// Allocate a local variable to hold the length of the array.
 							int lengthCV$conditionals$53_4 = -1;
@@ -4020,7 +3396,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 28 and consumer double[] 51.
 							{
 								{
-									if((0 == c3))
+									if((0 == state.c3))
 										lengthCV$conditionals$53_4 = 2;
 								}
 							}
@@ -4028,7 +3404,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 44 and consumer double[] 51.
 							{
 								{
-									if((1 == c3))
+									if((1 == state.c3))
 										lengthCV$conditionals$53_4 = 2;
 								}
 							}
@@ -4069,19 +3445,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$c4 = cv$sampleProbability;
+			state.logProbability$c4 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample55)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample55)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample55 = (fixedFlag$sample55 && fixedFlag$sample52);
+			state.fixedProbFlag$sample55 = (state.fixedFlag$sample55 && state.fixedFlag$sample52);
 		} else {
 			// Using cached values.
 			// 
@@ -4089,17 +3465,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$c4;
+			double cv$sampleValue = state.logProbability$c4;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample55)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample55)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -4108,7 +3484,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample57() {
 		// Determine if we need to calculate the values for sample task 57 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample57) {
+		if(!state.fixedProbFlag$sample57) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -4124,11 +3500,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = c5;
+					int cv$sampleValue = state.c5;
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < 2)) && (0 < 2)) && (0.0 <= priors[cv$sampleValue])) && (priors[cv$sampleValue] <= 1.0))?Math.log(priors[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < 2)) && (0 < 2)) && (0.0 <= state.priors[cv$sampleValue])) && (state.priors[cv$sampleValue] <= 1.0))?Math.log(state.priors[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -4163,19 +3539,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$c5 = cv$sampleProbability;
+			state.logProbability$c5 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample57)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample57)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample57 = fixedFlag$sample57;
+			state.fixedProbFlag$sample57 = state.fixedFlag$sample57;
 		} else {
 			// Using cached values.
 			// 
@@ -4183,17 +3559,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$c5;
+			double cv$sampleValue = state.logProbability$c5;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample57)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample57)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -4202,7 +3578,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample60() {
 		// Determine if we need to calculate the values for sample task 60 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample60) {
+		if(!state.fixedProbFlag$sample60) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -4218,10 +3594,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = c6;
+					int cv$sampleValue = state.c6;
 					{
 						{
-							double[] var56 = conditionals[c5];
+							double[] var56 = state.conditionals[state.c5];
 							
 							// Allocate a local variable to hold the length of the array.
 							int lengthCV$conditionals$58_2 = -1;
@@ -4231,7 +3607,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 28 and consumer double[] 56.
 							{
 								{
-									if((0 == c5))
+									if((0 == state.c5))
 										lengthCV$conditionals$58_2 = 2;
 								}
 							}
@@ -4239,7 +3615,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 44 and consumer double[] 56.
 							{
 								{
-									if((1 == c5))
+									if((1 == state.c5))
 										lengthCV$conditionals$58_2 = 2;
 								}
 							}
@@ -4280,19 +3656,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$c6 = cv$sampleProbability;
+			state.logProbability$c6 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample60)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample60)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample60 = (fixedFlag$sample60 && fixedFlag$sample57);
+			state.fixedProbFlag$sample60 = (state.fixedFlag$sample60 && state.fixedFlag$sample57);
 		} else {
 			// Using cached values.
 			// 
@@ -4300,17 +3676,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$c6;
+			double cv$sampleValue = state.logProbability$c6;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample60)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample60)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -4319,7 +3695,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample62() {
 		// Determine if we need to calculate the values for sample task 62 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample62) {
+		if(!state.fixedProbFlag$sample62) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -4335,11 +3711,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = c7;
+					int cv$sampleValue = state.c7;
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < 2)) && (0 < 2)) && (0.0 <= priors[cv$sampleValue])) && (priors[cv$sampleValue] <= 1.0))?Math.log(priors[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < 2)) && (0 < 2)) && (0.0 <= state.priors[cv$sampleValue])) && (state.priors[cv$sampleValue] <= 1.0))?Math.log(state.priors[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -4374,19 +3750,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$c7 = cv$sampleProbability;
+			state.logProbability$c7 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample62)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample62)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample62 = fixedFlag$sample62;
+			state.fixedProbFlag$sample62 = state.fixedFlag$sample62;
 		} else {
 			// Using cached values.
 			// 
@@ -4394,17 +3770,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$c7;
+			double cv$sampleValue = state.logProbability$c7;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample62)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample62)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -4413,7 +3789,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample636() {
 		// Determine if we need to calculate the values for sample task 636 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample636) {
+		if(!state.fixedProbFlag$sample636) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -4429,10 +3805,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = terminalVariable;
+					int cv$sampleValue = state.terminalVariable;
 					{
 						{
-							double[] var602 = a[c5][c9][c1][c4];
+							double[] var602 = state.a[state.c5][state.c9][state.c1][state.c4];
 							
 							// Allocate a local variable to hold the length of the array.
 							int lengthCV$var601$634_5 = -1;
@@ -4442,10 +3818,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 110 and consumer double[] 602.
 							{
 								{
-									if((0 == c5)) {
-										if((0 == c9)) {
-											if((0 == c1)) {
-												if((0 == c4))
+									if((0 == state.c5)) {
+										if((0 == state.c9)) {
+											if((0 == state.c1)) {
+												if((0 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4456,10 +3832,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 138 and consumer double[] 602.
 							{
 								{
-									if((0 == c5)) {
-										if((0 == c9)) {
-											if((0 == c1)) {
-												if((1 == c4))
+									if((0 == state.c5)) {
+										if((0 == state.c9)) {
+											if((0 == state.c1)) {
+												if((1 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4470,10 +3846,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 172 and consumer double[] 602.
 							{
 								{
-									if((0 == c5)) {
-										if((0 == c9)) {
-											if((1 == c1)) {
-												if((0 == c4))
+									if((0 == state.c5)) {
+										if((0 == state.c9)) {
+											if((1 == state.c1)) {
+												if((0 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4484,10 +3860,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 201 and consumer double[] 602.
 							{
 								{
-									if((0 == c5)) {
-										if((0 == c9)) {
-											if((1 == c1)) {
-												if((1 == c4))
+									if((0 == state.c5)) {
+										if((0 == state.c9)) {
+											if((1 == state.c1)) {
+												if((1 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4498,10 +3874,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 242 and consumer double[] 602.
 							{
 								{
-									if((0 == c5)) {
-										if((1 == c9)) {
-											if((0 == c1)) {
-												if((0 == c4))
+									if((0 == state.c5)) {
+										if((1 == state.c9)) {
+											if((0 == state.c1)) {
+												if((0 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4512,10 +3888,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 271 and consumer double[] 602.
 							{
 								{
-									if((0 == c5)) {
-										if((1 == c9)) {
-											if((0 == c1)) {
-												if((1 == c4))
+									if((0 == state.c5)) {
+										if((1 == state.c9)) {
+											if((0 == state.c1)) {
+												if((1 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4526,10 +3902,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 306 and consumer double[] 602.
 							{
 								{
-									if((0 == c5)) {
-										if((1 == c9)) {
-											if((1 == c1)) {
-												if((0 == c4))
+									if((0 == state.c5)) {
+										if((1 == state.c9)) {
+											if((1 == state.c1)) {
+												if((0 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4540,10 +3916,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 337 and consumer double[] 602.
 							{
 								{
-									if((0 == c5)) {
-										if((1 == c9)) {
-											if((1 == c1)) {
-												if((1 == c4))
+									if((0 == state.c5)) {
+										if((1 == state.c9)) {
+											if((1 == state.c1)) {
+												if((1 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4554,10 +3930,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 383 and consumer double[] 602.
 							{
 								{
-									if((1 == c5)) {
-										if((0 == c9)) {
-											if((0 == c1)) {
-												if((0 == c4))
+									if((1 == state.c5)) {
+										if((0 == state.c9)) {
+											if((0 == state.c1)) {
+												if((0 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4568,10 +3944,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 412 and consumer double[] 602.
 							{
 								{
-									if((1 == c5)) {
-										if((0 == c9)) {
-											if((0 == c1)) {
-												if((1 == c4))
+									if((1 == state.c5)) {
+										if((0 == state.c9)) {
+											if((0 == state.c1)) {
+												if((1 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4582,10 +3958,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 446 and consumer double[] 602.
 							{
 								{
-									if((1 == c5)) {
-										if((0 == c9)) {
-											if((1 == c1)) {
-												if((0 == c4))
+									if((1 == state.c5)) {
+										if((0 == state.c9)) {
+											if((1 == state.c1)) {
+												if((0 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4596,10 +3972,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 475 and consumer double[] 602.
 							{
 								{
-									if((1 == c5)) {
-										if((0 == c9)) {
-											if((1 == c1)) {
-												if((1 == c4))
+									if((1 == state.c5)) {
+										if((0 == state.c9)) {
+											if((1 == state.c1)) {
+												if((1 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4610,10 +3986,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 518 and consumer double[] 602.
 							{
 								{
-									if((1 == c5)) {
-										if((1 == c9)) {
-											if((0 == c1)) {
-												if((0 == c4))
+									if((1 == state.c5)) {
+										if((1 == state.c9)) {
+											if((0 == state.c1)) {
+												if((0 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4624,10 +4000,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 549 and consumer double[] 602.
 							{
 								{
-									if((1 == c5)) {
-										if((1 == c9)) {
-											if((0 == c1)) {
-												if((1 == c4))
+									if((1 == state.c5)) {
+										if((1 == state.c9)) {
+											if((0 == state.c1)) {
+												if((1 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4638,10 +4014,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 586 and consumer double[] 602.
 							{
 								{
-									if((1 == c5)) {
-										if((1 == c9)) {
-											if((1 == c1)) {
-												if((0 == c4))
+									if((1 == state.c5)) {
+										if((1 == state.c9)) {
+											if((1 == state.c1)) {
+												if((0 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4652,10 +4028,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 617 and consumer double[] 602.
 							{
 								{
-									if((1 == c5)) {
-										if((1 == c9)) {
-											if((1 == c1)) {
-												if((1 == c4))
+									if((1 == state.c5)) {
+										if((1 == state.c9)) {
+											if((1 == state.c1)) {
+												if((1 == state.c4))
 													lengthCV$var601$634_5 = 5;
 											}
 										}
@@ -4699,19 +4075,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$terminalVariable = cv$sampleProbability;
+			state.logProbability$terminalVariable = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample636)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample636)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample636 = ((((fixedFlag$sample636 && fixedFlag$sample47) && fixedFlag$sample55) && fixedFlag$sample57) && fixedFlag$sample67);
+			state.fixedProbFlag$sample636 = ((((state.fixedFlag$sample636 && state.fixedFlag$sample47) && state.fixedFlag$sample55) && state.fixedFlag$sample57) && state.fixedFlag$sample67);
 		} else {
 			// Using cached values.
 			// 
@@ -4719,17 +4095,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$terminalVariable;
+			double cv$sampleValue = state.logProbability$terminalVariable;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample636)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample636)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -4738,7 +4114,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample65() {
 		// Determine if we need to calculate the values for sample task 65 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample65) {
+		if(!state.fixedProbFlag$sample65) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -4754,10 +4130,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = c8;
+					int cv$sampleValue = state.c8;
 					{
 						{
-							double[] var61 = conditionals[c7];
+							double[] var61 = state.conditionals[state.c7];
 							
 							// Allocate a local variable to hold the length of the array.
 							int lengthCV$conditionals$63_2 = -1;
@@ -4767,7 +4143,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 28 and consumer double[] 61.
 							{
 								{
-									if((0 == c7))
+									if((0 == state.c7))
 										lengthCV$conditionals$63_2 = 2;
 								}
 							}
@@ -4775,7 +4151,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 44 and consumer double[] 61.
 							{
 								{
-									if((1 == c7))
+									if((1 == state.c7))
 										lengthCV$conditionals$63_2 = 2;
 								}
 							}
@@ -4816,19 +4192,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$c8 = cv$sampleProbability;
+			state.logProbability$c8 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample65)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample65)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample65 = (fixedFlag$sample65 && fixedFlag$sample62);
+			state.fixedProbFlag$sample65 = (state.fixedFlag$sample65 && state.fixedFlag$sample62);
 		} else {
 			// Using cached values.
 			// 
@@ -4836,17 +4212,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$c8;
+			double cv$sampleValue = state.logProbability$c8;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample65)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample65)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -4855,7 +4231,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample67() {
 		// Determine if we need to calculate the values for sample task 67 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample67) {
+		if(!state.fixedProbFlag$sample67) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -4871,11 +4247,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = c9;
+					int cv$sampleValue = state.c9;
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < 2)) && (0 < 2)) && (0.0 <= priors[cv$sampleValue])) && (priors[cv$sampleValue] <= 1.0))?Math.log(priors[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < 2)) && (0 < 2)) && (0.0 <= state.priors[cv$sampleValue])) && (state.priors[cv$sampleValue] <= 1.0))?Math.log(state.priors[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -4910,19 +4286,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$c9 = cv$sampleProbability;
+			state.logProbability$c9 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample67)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample67)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample67 = fixedFlag$sample67;
+			state.fixedProbFlag$sample67 = state.fixedFlag$sample67;
 		} else {
 			// Using cached values.
 			// 
@@ -4930,17 +4306,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$c9;
+			double cv$sampleValue = state.logProbability$c9;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample67)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample67)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -4949,7 +4325,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample70() {
 		// Determine if we need to calculate the values for sample task 70 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample70) {
+		if(!state.fixedProbFlag$sample70) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -4965,10 +4341,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = c10;
+					int cv$sampleValue = state.c10;
 					{
 						{
-							double[] var66 = conditionals[c9];
+							double[] var66 = state.conditionals[state.c9];
 							
 							// Allocate a local variable to hold the length of the array.
 							int lengthCV$conditionals$68_2 = -1;
@@ -4978,7 +4354,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 28 and consumer double[] 66.
 							{
 								{
-									if((0 == c9))
+									if((0 == state.c9))
 										lengthCV$conditionals$68_2 = 2;
 								}
 							}
@@ -4986,7 +4362,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 44 and consumer double[] 66.
 							{
 								{
-									if((1 == c9))
+									if((1 == state.c9))
 										lengthCV$conditionals$68_2 = 2;
 								}
 							}
@@ -5027,19 +4403,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$c10 = cv$sampleProbability;
+			state.logProbability$c10 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample70)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample70)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample70 = (fixedFlag$sample70 && fixedFlag$sample67);
+			state.fixedProbFlag$sample70 = (state.fixedFlag$sample70 && state.fixedFlag$sample67);
 		} else {
 			// Using cached values.
 			// 
@@ -5047,17 +4423,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$c10;
+			double cv$sampleValue = state.logProbability$c10;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample70)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample70)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -5066,7 +4442,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample72() {
 		// Determine if we need to calculate the values for sample task 72 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample72) {
+		if(!state.fixedProbFlag$sample72) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -5082,11 +4458,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = c11;
+					int cv$sampleValue = state.c11;
 					{
 						{
 							// Store the value of the function call, so the function call is only made once.
-							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < 2)) && (0 < 2)) && (0.0 <= priors[cv$sampleValue])) && (priors[cv$sampleValue] <= 1.0))?Math.log(priors[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+							double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < 2)) && (0 < 2)) && (0.0 <= state.priors[cv$sampleValue])) && (state.priors[cv$sampleValue] <= 1.0))?Math.log(state.priors[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 							
 							// Add the probability of this sample task to the distribution accumulator.
 							if((cv$weightedProbability < cv$distributionAccumulator))
@@ -5121,19 +4497,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$c11 = cv$sampleProbability;
+			state.logProbability$c11 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample72)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample72)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample72 = fixedFlag$sample72;
+			state.fixedProbFlag$sample72 = state.fixedFlag$sample72;
 		} else {
 			// Using cached values.
 			// 
@@ -5141,17 +4517,17 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$c11;
+			double cv$sampleValue = state.logProbability$c11;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample72)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample72)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -5160,7 +4536,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	private final void logProbabilityValue$sample75() {
 		// Determine if we need to calculate the values for sample task 75 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample75) {
+		if(!state.fixedProbFlag$sample75) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -5176,10 +4552,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			{
 				{
 					// The sample value to calculate the probability of generating
-					int cv$sampleValue = c12;
+					int cv$sampleValue = state.c12;
 					{
 						{
-							double[] var71 = conditionals[c11];
+							double[] var71 = state.conditionals[state.c11];
 							
 							// Allocate a local variable to hold the length of the array.
 							int lengthCV$conditionals$73_2 = -1;
@@ -5189,7 +4565,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 28 and consumer double[] 71.
 							{
 								{
-									if((0 == c11))
+									if((0 == state.c11))
 										lengthCV$conditionals$73_2 = 2;
 								}
 							}
@@ -5197,7 +4573,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 							// Looking for a path between Put 44 and consumer double[] 71.
 							{
 								{
-									if((1 == c11))
+									if((1 == state.c11))
 										lengthCV$conditionals$73_2 = 2;
 								}
 							}
@@ -5238,19 +4614,19 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Store the sample task probability
-			logProbability$c12 = cv$sampleProbability;
+			state.logProbability$c12 = cv$sampleProbability;
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample75)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample75)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample75 = (fixedFlag$sample75 && fixedFlag$sample72);
+			state.fixedProbFlag$sample75 = (state.fixedFlag$sample75 && state.fixedFlag$sample72);
 		} else {
 			// Using cached values.
 			// 
@@ -5258,149 +4634,25 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 			// this sample
 			double cv$accumulator = 0.0;
 			double cv$rvAccumulator = 0.0;
-			double cv$sampleValue = logProbability$c12;
+			double cv$sampleValue = state.logProbability$c12;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample75)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample75)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Allocate scratch space.
-		// Constructor for cv$var45$stateProbabilityGlobal
-		{
-			// Allocation of cv$var45$stateProbabilityGlobal for single threaded execution
-			cv$var45$stateProbabilityGlobal = new double[2];
-		}
-		
-		// Constructor for cv$var50$stateProbabilityGlobal
-		{
-			// Allocation of cv$var50$stateProbabilityGlobal for single threaded execution
-			cv$var50$stateProbabilityGlobal = new double[2];
-		}
-		
-		// Constructor for cv$var53$stateProbabilityGlobal
-		{
-			// Variable to record the maximum value of Task Get 53. Initially set to the value
-			// of putTask 28.
-			int cv$var43$max = 2;
-			
-			// Test if the input to putTask 44 is larger than the current values.
-			cv$var43$max = Math.max(cv$var43$max, 2);
-			
-			// Allocation of cv$var53$stateProbabilityGlobal for single threaded execution
-			cv$var53$stateProbabilityGlobal = new double[cv$var43$max];
-		}
-		
-		// Constructor for cv$var55$stateProbabilityGlobal
-		{
-			// Allocation of cv$var55$stateProbabilityGlobal for single threaded execution
-			cv$var55$stateProbabilityGlobal = new double[2];
-		}
-		
-		// Constructor for cv$var60$stateProbabilityGlobal
-		{
-			// Allocation of cv$var60$stateProbabilityGlobal for single threaded execution
-			cv$var60$stateProbabilityGlobal = new double[2];
-		}
-		
-		// Constructor for cv$var65$stateProbabilityGlobal
-		{
-			// Allocation of cv$var65$stateProbabilityGlobal for single threaded execution
-			cv$var65$stateProbabilityGlobal = new double[2];
-		}
-		
-		// Constructor for cv$var70$stateProbabilityGlobal
-		{
-			// Allocation of cv$var70$stateProbabilityGlobal for single threaded execution
-			cv$var70$stateProbabilityGlobal = new double[2];
-		}
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// Constructor for priors
-		{
-			priors = new double[2];
-		}
-		
-		// Constructor for conditionals
-		{
-			conditionals = new double[2][];
-			conditionals[0] = new double[2];
-			conditionals[1] = new double[2];
-		}
-		
-		// Constructor for a
-		{
-			a = new double[2][][][][];
-			double[][][][] subarray$0 = new double[2][][][];
-			a[0] = subarray$0;
-			double[][][] subarray$1 = new double[2][][];
-			subarray$0[0] = subarray$1;
-			double[][] subarray$2 = new double[2][];
-			subarray$1[0] = subarray$2;
-			subarray$2[0] = new double[5];
-			subarray$2[1] = new double[5];
-			double[][] subarray$3 = new double[2][];
-			subarray$1[1] = subarray$3;
-			subarray$3[0] = new double[5];
-			subarray$3[1] = new double[5];
-			double[][][] subarray$4 = new double[2][][];
-			subarray$0[1] = subarray$4;
-			double[][] subarray$5 = new double[2][];
-			subarray$4[0] = subarray$5;
-			subarray$5[0] = new double[5];
-			subarray$5[1] = new double[5];
-			double[][] subarray$6 = new double[2][];
-			subarray$4[1] = subarray$6;
-			subarray$6[0] = new double[5];
-			subarray$6[1] = new double[5];
-			double[][][][] subarray$7 = new double[2][][][];
-			a[1] = subarray$7;
-			double[][][] subarray$8 = new double[2][][];
-			subarray$7[0] = subarray$8;
-			double[][] subarray$9 = new double[2][];
-			subarray$8[0] = subarray$9;
-			subarray$9[0] = new double[5];
-			subarray$9[1] = new double[5];
-			double[][] subarray$10 = new double[2][];
-			subarray$8[1] = subarray$10;
-			subarray$10[0] = new double[5];
-			subarray$10[1] = new double[5];
-			double[][][] subarray$11 = new double[2][][];
-			subarray$7[1] = subarray$11;
-			double[][] subarray$12 = new double[2][];
-			subarray$11[0] = subarray$12;
-			subarray$12[0] = new double[5];
-			subarray$12[1] = new double[5];
-			double[][] subarray$13 = new double[2][];
-			subarray$11[1] = subarray$13;
-			subarray$13[0] = new double[5];
-			subarray$13[1] = new double[5];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		if(!fixedFlag$sample47)
-			c1 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample47)
+			state.c1 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$48_2 = -1;
@@ -5410,7 +4662,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 46.
 		{
 			{
-				if((0 == c1))
+				if((0 == state.c1))
 					lengthCV$conditionals$48_2 = 2;
 			}
 		}
@@ -5418,13 +4670,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 46.
 		{
 			{
-				if((1 == c1))
+				if((1 == state.c1))
 					lengthCV$conditionals$48_2 = 2;
 			}
 		}
-		c2 = DistributionSampling.sampleCategorical(RNG$, conditionals[c1], lengthCV$conditionals$48_2);
-		if(!fixedFlag$sample52)
-			c3 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c2 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c1], lengthCV$conditionals$48_2);
+		if(!state.fixedFlag$sample52)
+			state.c3 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$53_5 = -1;
@@ -5434,8 +4686,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 51.
 		{
 			{
-				if((0 == c3)) {
-					if(!fixedFlag$sample55)
+				if((0 == state.c3)) {
+					if(!state.fixedFlag$sample55)
 						lengthCV$conditionals$53_5 = 2;
 				}
 			}
@@ -5444,16 +4696,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 51.
 		{
 			{
-				if((1 == c3)) {
-					if(!fixedFlag$sample55)
+				if((1 == state.c3)) {
+					if(!state.fixedFlag$sample55)
 						lengthCV$conditionals$53_5 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample55)
-			c4 = DistributionSampling.sampleCategorical(RNG$, conditionals[c3], lengthCV$conditionals$53_5);
-		if(!fixedFlag$sample57)
-			c5 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample55)
+			state.c4 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c3], lengthCV$conditionals$53_5);
+		if(!state.fixedFlag$sample57)
+			state.c5 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$58_3 = -1;
@@ -5463,8 +4715,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 56.
 		{
 			{
-				if((0 == c5)) {
-					if(!fixedFlag$sample60)
+				if((0 == state.c5)) {
+					if(!state.fixedFlag$sample60)
 						lengthCV$conditionals$58_3 = 2;
 				}
 			}
@@ -5473,16 +4725,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 56.
 		{
 			{
-				if((1 == c5)) {
-					if(!fixedFlag$sample60)
+				if((1 == state.c5)) {
+					if(!state.fixedFlag$sample60)
 						lengthCV$conditionals$58_3 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample60)
-			c6 = DistributionSampling.sampleCategorical(RNG$, conditionals[c5], lengthCV$conditionals$58_3);
-		if(!fixedFlag$sample62)
-			c7 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample60)
+			state.c6 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c5], lengthCV$conditionals$58_3);
+		if(!state.fixedFlag$sample62)
+			state.c7 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$63_3 = -1;
@@ -5492,8 +4744,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 61.
 		{
 			{
-				if((0 == c7)) {
-					if(!fixedFlag$sample65)
+				if((0 == state.c7)) {
+					if(!state.fixedFlag$sample65)
 						lengthCV$conditionals$63_3 = 2;
 				}
 			}
@@ -5502,16 +4754,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 61.
 		{
 			{
-				if((1 == c7)) {
-					if(!fixedFlag$sample65)
+				if((1 == state.c7)) {
+					if(!state.fixedFlag$sample65)
 						lengthCV$conditionals$63_3 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample65)
-			c8 = DistributionSampling.sampleCategorical(RNG$, conditionals[c7], lengthCV$conditionals$63_3);
-		if(!fixedFlag$sample67)
-			c9 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample65)
+			state.c8 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c7], lengthCV$conditionals$63_3);
+		if(!state.fixedFlag$sample67)
+			state.c9 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$68_3 = -1;
@@ -5521,8 +4773,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 66.
 		{
 			{
-				if((0 == c9)) {
-					if(!fixedFlag$sample70)
+				if((0 == state.c9)) {
+					if(!state.fixedFlag$sample70)
 						lengthCV$conditionals$68_3 = 2;
 				}
 			}
@@ -5531,16 +4783,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 66.
 		{
 			{
-				if((1 == c9)) {
-					if(!fixedFlag$sample70)
+				if((1 == state.c9)) {
+					if(!state.fixedFlag$sample70)
 						lengthCV$conditionals$68_3 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample70)
-			c10 = DistributionSampling.sampleCategorical(RNG$, conditionals[c9], lengthCV$conditionals$68_3);
-		if(!fixedFlag$sample72)
-			c11 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample70)
+			state.c10 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c9], lengthCV$conditionals$68_3);
+		if(!state.fixedFlag$sample72)
+			state.c11 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$73_3 = -1;
@@ -5550,8 +4802,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 71.
 		{
 			{
-				if((0 == c11)) {
-					if(!fixedFlag$sample75)
+				if((0 == state.c11)) {
+					if(!state.fixedFlag$sample75)
 						lengthCV$conditionals$73_3 = 2;
 				}
 			}
@@ -5560,14 +4812,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 71.
 		{
 			{
-				if((1 == c11)) {
-					if(!fixedFlag$sample75)
+				if((1 == state.c11)) {
+					if(!state.fixedFlag$sample75)
 						lengthCV$conditionals$73_3 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample75)
-			c12 = DistributionSampling.sampleCategorical(RNG$, conditionals[c11], lengthCV$conditionals$73_3);
+		if(!state.fixedFlag$sample75)
+			state.c12 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c11], lengthCV$conditionals$73_3);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$var601$634_6 = -1;
@@ -5577,11 +4829,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 110 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5593,11 +4845,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 138 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5609,11 +4861,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 172 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5625,11 +4877,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 201 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5641,11 +4893,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 242 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5657,11 +4909,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 271 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5673,11 +4925,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 306 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5689,11 +4941,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 337 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5705,11 +4957,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 383 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5721,11 +4973,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 412 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5737,11 +4989,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 446 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5753,11 +5005,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 475 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5769,11 +5021,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 518 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5785,11 +5037,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 549 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5801,11 +5053,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 586 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5817,11 +5069,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 617 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_6 = 5;
 							}
 						}
@@ -5829,8 +5081,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				}
 			}
 		}
-		if(!fixedFlag$sample636)
-			terminalVariable = DistributionSampling.sampleCategorical(RNG$, a[c5][c9][c1][c4], lengthCV$var601$634_6);
+		if(!state.fixedFlag$sample636)
+			state.terminalVariable = DistributionSampling.sampleCategorical(state.RNG$, state.a[state.c5][state.c9][state.c1][state.c4], lengthCV$var601$634_6);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -5838,10 +5090,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		if(!fixedFlag$sample47)
-			c1 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
-		if(!fixedFlag$sample52)
-			c3 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample47)
+			state.c1 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
+		if(!state.fixedFlag$sample52)
+			state.c3 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$53_9 = -1;
@@ -5851,8 +5103,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 51.
 		{
 			{
-				if((0 == c3)) {
-					if(!fixedFlag$sample55)
+				if((0 == state.c3)) {
+					if(!state.fixedFlag$sample55)
 						lengthCV$conditionals$53_9 = 2;
 				}
 			}
@@ -5861,16 +5113,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 51.
 		{
 			{
-				if((1 == c3)) {
-					if(!fixedFlag$sample55)
+				if((1 == state.c3)) {
+					if(!state.fixedFlag$sample55)
 						lengthCV$conditionals$53_9 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample55)
-			c4 = DistributionSampling.sampleCategorical(RNG$, conditionals[c3], lengthCV$conditionals$53_9);
-		if(!fixedFlag$sample57)
-			c5 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample55)
+			state.c4 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c3], lengthCV$conditionals$53_9);
+		if(!state.fixedFlag$sample57)
+			state.c5 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$58_7 = -1;
@@ -5880,8 +5132,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 56.
 		{
 			{
-				if((0 == c5)) {
-					if(!fixedFlag$sample60)
+				if((0 == state.c5)) {
+					if(!state.fixedFlag$sample60)
 						lengthCV$conditionals$58_7 = 2;
 				}
 			}
@@ -5890,16 +5142,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 56.
 		{
 			{
-				if((1 == c5)) {
-					if(!fixedFlag$sample60)
+				if((1 == state.c5)) {
+					if(!state.fixedFlag$sample60)
 						lengthCV$conditionals$58_7 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample60)
-			c6 = DistributionSampling.sampleCategorical(RNG$, conditionals[c5], lengthCV$conditionals$58_7);
-		if(!fixedFlag$sample62)
-			c7 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample60)
+			state.c6 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c5], lengthCV$conditionals$58_7);
+		if(!state.fixedFlag$sample62)
+			state.c7 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$63_7 = -1;
@@ -5909,8 +5161,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 61.
 		{
 			{
-				if((0 == c7)) {
-					if(!fixedFlag$sample65)
+				if((0 == state.c7)) {
+					if(!state.fixedFlag$sample65)
 						lengthCV$conditionals$63_7 = 2;
 				}
 			}
@@ -5919,16 +5171,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 61.
 		{
 			{
-				if((1 == c7)) {
-					if(!fixedFlag$sample65)
+				if((1 == state.c7)) {
+					if(!state.fixedFlag$sample65)
 						lengthCV$conditionals$63_7 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample65)
-			c8 = DistributionSampling.sampleCategorical(RNG$, conditionals[c7], lengthCV$conditionals$63_7);
-		if(!fixedFlag$sample67)
-			c9 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample65)
+			state.c8 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c7], lengthCV$conditionals$63_7);
+		if(!state.fixedFlag$sample67)
+			state.c9 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$68_7 = -1;
@@ -5938,8 +5190,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 66.
 		{
 			{
-				if((0 == c9)) {
-					if(!fixedFlag$sample70)
+				if((0 == state.c9)) {
+					if(!state.fixedFlag$sample70)
 						lengthCV$conditionals$68_7 = 2;
 				}
 			}
@@ -5948,16 +5200,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 66.
 		{
 			{
-				if((1 == c9)) {
-					if(!fixedFlag$sample70)
+				if((1 == state.c9)) {
+					if(!state.fixedFlag$sample70)
 						lengthCV$conditionals$68_7 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample70)
-			c10 = DistributionSampling.sampleCategorical(RNG$, conditionals[c9], lengthCV$conditionals$68_7);
-		if(!fixedFlag$sample72)
-			c11 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample70)
+			state.c10 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c9], lengthCV$conditionals$68_7);
+		if(!state.fixedFlag$sample72)
+			state.c11 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$73_7 = -1;
@@ -5967,8 +5219,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 71.
 		{
 			{
-				if((0 == c11)) {
-					if(!fixedFlag$sample75)
+				if((0 == state.c11)) {
+					if(!state.fixedFlag$sample75)
 						lengthCV$conditionals$73_7 = 2;
 				}
 			}
@@ -5977,14 +5229,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 71.
 		{
 			{
-				if((1 == c11)) {
-					if(!fixedFlag$sample75)
+				if((1 == state.c11)) {
+					if(!state.fixedFlag$sample75)
 						lengthCV$conditionals$73_7 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample75)
-			c12 = DistributionSampling.sampleCategorical(RNG$, conditionals[c11], lengthCV$conditionals$73_7);
+		if(!state.fixedFlag$sample75)
+			state.c12 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c11], lengthCV$conditionals$73_7);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$var601$634_10 = -1;
@@ -5994,11 +5246,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 110 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6010,11 +5262,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 138 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6026,11 +5278,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 172 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6042,11 +5294,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 201 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6058,11 +5310,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 242 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6074,11 +5326,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 271 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6090,11 +5342,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 306 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6106,11 +5358,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 337 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6122,11 +5374,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 383 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6138,11 +5390,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 412 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6154,11 +5406,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 446 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6170,11 +5422,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 475 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6186,11 +5438,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 518 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6202,11 +5454,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 549 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6218,11 +5470,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 586 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6234,11 +5486,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 617 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_10 = 5;
 							}
 						}
@@ -6246,16 +5498,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				}
 			}
 		}
-		if(!fixedFlag$sample636)
-			terminalVariable = DistributionSampling.sampleCategorical(RNG$, a[c5][c9][c1][c4], lengthCV$var601$634_10);
+		if(!state.fixedFlag$sample636)
+			state.terminalVariable = DistributionSampling.sampleCategorical(state.RNG$, state.a[state.c5][state.c9][state.c1][state.c4], lengthCV$var601$634_10);
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		if(!fixedFlag$sample47)
-			c1 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample47)
+			state.c1 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$48_3 = -1;
@@ -6265,7 +5517,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 46.
 		{
 			{
-				if((0 == c1))
+				if((0 == state.c1))
 					lengthCV$conditionals$48_3 = 2;
 			}
 		}
@@ -6273,13 +5525,13 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 46.
 		{
 			{
-				if((1 == c1))
+				if((1 == state.c1))
 					lengthCV$conditionals$48_3 = 2;
 			}
 		}
-		c2 = DistributionSampling.sampleCategorical(RNG$, conditionals[c1], lengthCV$conditionals$48_3);
-		if(!fixedFlag$sample52)
-			c3 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		state.c2 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c1], lengthCV$conditionals$48_3);
+		if(!state.fixedFlag$sample52)
+			state.c3 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$53_6 = -1;
@@ -6289,8 +5541,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 51.
 		{
 			{
-				if((0 == c3)) {
-					if(!fixedFlag$sample55)
+				if((0 == state.c3)) {
+					if(!state.fixedFlag$sample55)
 						lengthCV$conditionals$53_6 = 2;
 				}
 			}
@@ -6299,16 +5551,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 51.
 		{
 			{
-				if((1 == c3)) {
-					if(!fixedFlag$sample55)
+				if((1 == state.c3)) {
+					if(!state.fixedFlag$sample55)
 						lengthCV$conditionals$53_6 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample55)
-			c4 = DistributionSampling.sampleCategorical(RNG$, conditionals[c3], lengthCV$conditionals$53_6);
-		if(!fixedFlag$sample57)
-			c5 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample55)
+			state.c4 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c3], lengthCV$conditionals$53_6);
+		if(!state.fixedFlag$sample57)
+			state.c5 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$58_4 = -1;
@@ -6318,8 +5570,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 56.
 		{
 			{
-				if((0 == c5)) {
-					if(!fixedFlag$sample60)
+				if((0 == state.c5)) {
+					if(!state.fixedFlag$sample60)
 						lengthCV$conditionals$58_4 = 2;
 				}
 			}
@@ -6328,16 +5580,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 56.
 		{
 			{
-				if((1 == c5)) {
-					if(!fixedFlag$sample60)
+				if((1 == state.c5)) {
+					if(!state.fixedFlag$sample60)
 						lengthCV$conditionals$58_4 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample60)
-			c6 = DistributionSampling.sampleCategorical(RNG$, conditionals[c5], lengthCV$conditionals$58_4);
-		if(!fixedFlag$sample62)
-			c7 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample60)
+			state.c6 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c5], lengthCV$conditionals$58_4);
+		if(!state.fixedFlag$sample62)
+			state.c7 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$63_4 = -1;
@@ -6347,8 +5599,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 61.
 		{
 			{
-				if((0 == c7)) {
-					if(!fixedFlag$sample65)
+				if((0 == state.c7)) {
+					if(!state.fixedFlag$sample65)
 						lengthCV$conditionals$63_4 = 2;
 				}
 			}
@@ -6357,16 +5609,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 61.
 		{
 			{
-				if((1 == c7)) {
-					if(!fixedFlag$sample65)
+				if((1 == state.c7)) {
+					if(!state.fixedFlag$sample65)
 						lengthCV$conditionals$63_4 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample65)
-			c8 = DistributionSampling.sampleCategorical(RNG$, conditionals[c7], lengthCV$conditionals$63_4);
-		if(!fixedFlag$sample67)
-			c9 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample65)
+			state.c8 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c7], lengthCV$conditionals$63_4);
+		if(!state.fixedFlag$sample67)
+			state.c9 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$68_4 = -1;
@@ -6376,8 +5628,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 66.
 		{
 			{
-				if((0 == c9)) {
-					if(!fixedFlag$sample70)
+				if((0 == state.c9)) {
+					if(!state.fixedFlag$sample70)
 						lengthCV$conditionals$68_4 = 2;
 				}
 			}
@@ -6386,16 +5638,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 66.
 		{
 			{
-				if((1 == c9)) {
-					if(!fixedFlag$sample70)
+				if((1 == state.c9)) {
+					if(!state.fixedFlag$sample70)
 						lengthCV$conditionals$68_4 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample70)
-			c10 = DistributionSampling.sampleCategorical(RNG$, conditionals[c9], lengthCV$conditionals$68_4);
-		if(!fixedFlag$sample72)
-			c11 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample70)
+			state.c10 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c9], lengthCV$conditionals$68_4);
+		if(!state.fixedFlag$sample72)
+			state.c11 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$73_4 = -1;
@@ -6405,8 +5657,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 71.
 		{
 			{
-				if((0 == c11)) {
-					if(!fixedFlag$sample75)
+				if((0 == state.c11)) {
+					if(!state.fixedFlag$sample75)
 						lengthCV$conditionals$73_4 = 2;
 				}
 			}
@@ -6415,14 +5667,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 71.
 		{
 			{
-				if((1 == c11)) {
-					if(!fixedFlag$sample75)
+				if((1 == state.c11)) {
+					if(!state.fixedFlag$sample75)
 						lengthCV$conditionals$73_4 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample75)
-			c12 = DistributionSampling.sampleCategorical(RNG$, conditionals[c11], lengthCV$conditionals$73_4);
+		if(!state.fixedFlag$sample75)
+			state.c12 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c11], lengthCV$conditionals$73_4);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$var601$634_7 = -1;
@@ -6432,11 +5684,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 110 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6448,11 +5700,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 138 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6464,11 +5716,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 172 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6480,11 +5732,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 201 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6496,11 +5748,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 242 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6512,11 +5764,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 271 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6528,11 +5780,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 306 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6544,11 +5796,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 337 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6560,11 +5812,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 383 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6576,11 +5828,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 412 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6592,11 +5844,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 446 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6608,11 +5860,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 475 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6624,11 +5876,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 518 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6640,11 +5892,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 549 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6656,11 +5908,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 586 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6672,11 +5924,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 617 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_7 = 5;
 							}
 						}
@@ -6684,18 +5936,18 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				}
 			}
 		}
-		if(!fixedFlag$sample636)
-			terminalVariable = DistributionSampling.sampleCategorical(RNG$, a[c5][c9][c1][c4], lengthCV$var601$634_7);
+		if(!state.fixedFlag$sample636)
+			state.terminalVariable = DistributionSampling.sampleCategorical(state.RNG$, state.a[state.c5][state.c9][state.c1][state.c4], lengthCV$var601$634_7);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		if(!fixedFlag$sample47)
-			c1 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
-		if(!fixedFlag$sample52)
-			c3 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample47)
+			state.c1 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
+		if(!state.fixedFlag$sample52)
+			state.c3 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$53_7 = -1;
@@ -6705,8 +5957,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 51.
 		{
 			{
-				if((0 == c3)) {
-					if(!fixedFlag$sample55)
+				if((0 == state.c3)) {
+					if(!state.fixedFlag$sample55)
 						lengthCV$conditionals$53_7 = 2;
 				}
 			}
@@ -6715,16 +5967,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 51.
 		{
 			{
-				if((1 == c3)) {
-					if(!fixedFlag$sample55)
+				if((1 == state.c3)) {
+					if(!state.fixedFlag$sample55)
 						lengthCV$conditionals$53_7 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample55)
-			c4 = DistributionSampling.sampleCategorical(RNG$, conditionals[c3], lengthCV$conditionals$53_7);
-		if(!fixedFlag$sample57)
-			c5 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample55)
+			state.c4 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c3], lengthCV$conditionals$53_7);
+		if(!state.fixedFlag$sample57)
+			state.c5 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$58_5 = -1;
@@ -6734,8 +5986,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 56.
 		{
 			{
-				if((0 == c5)) {
-					if(!fixedFlag$sample60)
+				if((0 == state.c5)) {
+					if(!state.fixedFlag$sample60)
 						lengthCV$conditionals$58_5 = 2;
 				}
 			}
@@ -6744,16 +5996,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 56.
 		{
 			{
-				if((1 == c5)) {
-					if(!fixedFlag$sample60)
+				if((1 == state.c5)) {
+					if(!state.fixedFlag$sample60)
 						lengthCV$conditionals$58_5 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample60)
-			c6 = DistributionSampling.sampleCategorical(RNG$, conditionals[c5], lengthCV$conditionals$58_5);
-		if(!fixedFlag$sample62)
-			c7 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample60)
+			state.c6 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c5], lengthCV$conditionals$58_5);
+		if(!state.fixedFlag$sample62)
+			state.c7 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$63_5 = -1;
@@ -6763,8 +6015,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 61.
 		{
 			{
-				if((0 == c7)) {
-					if(!fixedFlag$sample65)
+				if((0 == state.c7)) {
+					if(!state.fixedFlag$sample65)
 						lengthCV$conditionals$63_5 = 2;
 				}
 			}
@@ -6773,16 +6025,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 61.
 		{
 			{
-				if((1 == c7)) {
-					if(!fixedFlag$sample65)
+				if((1 == state.c7)) {
+					if(!state.fixedFlag$sample65)
 						lengthCV$conditionals$63_5 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample65)
-			c8 = DistributionSampling.sampleCategorical(RNG$, conditionals[c7], lengthCV$conditionals$63_5);
-		if(!fixedFlag$sample67)
-			c9 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample65)
+			state.c8 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c7], lengthCV$conditionals$63_5);
+		if(!state.fixedFlag$sample67)
+			state.c9 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$68_5 = -1;
@@ -6792,8 +6044,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 66.
 		{
 			{
-				if((0 == c9)) {
-					if(!fixedFlag$sample70)
+				if((0 == state.c9)) {
+					if(!state.fixedFlag$sample70)
 						lengthCV$conditionals$68_5 = 2;
 				}
 			}
@@ -6802,16 +6054,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 66.
 		{
 			{
-				if((1 == c9)) {
-					if(!fixedFlag$sample70)
+				if((1 == state.c9)) {
+					if(!state.fixedFlag$sample70)
 						lengthCV$conditionals$68_5 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample70)
-			c10 = DistributionSampling.sampleCategorical(RNG$, conditionals[c9], lengthCV$conditionals$68_5);
-		if(!fixedFlag$sample72)
-			c11 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample70)
+			state.c10 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c9], lengthCV$conditionals$68_5);
+		if(!state.fixedFlag$sample72)
+			state.c11 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$73_5 = -1;
@@ -6821,8 +6073,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 71.
 		{
 			{
-				if((0 == c11)) {
-					if(!fixedFlag$sample75)
+				if((0 == state.c11)) {
+					if(!state.fixedFlag$sample75)
 						lengthCV$conditionals$73_5 = 2;
 				}
 			}
@@ -6831,14 +6083,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 71.
 		{
 			{
-				if((1 == c11)) {
-					if(!fixedFlag$sample75)
+				if((1 == state.c11)) {
+					if(!state.fixedFlag$sample75)
 						lengthCV$conditionals$73_5 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample75)
-			c12 = DistributionSampling.sampleCategorical(RNG$, conditionals[c11], lengthCV$conditionals$73_5);
+		if(!state.fixedFlag$sample75)
+			state.c12 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c11], lengthCV$conditionals$73_5);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$var601$634_8 = -1;
@@ -6848,11 +6100,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 110 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -6864,11 +6116,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 138 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -6880,11 +6132,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 172 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -6896,11 +6148,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 201 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -6912,11 +6164,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 242 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -6928,11 +6180,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 271 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -6944,11 +6196,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 306 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -6960,11 +6212,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 337 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -6976,11 +6228,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 383 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -6992,11 +6244,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 412 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -7008,11 +6260,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 446 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -7024,11 +6276,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 475 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -7040,11 +6292,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 518 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -7056,11 +6308,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 549 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -7072,11 +6324,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 586 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -7088,11 +6340,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 617 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_8 = 5;
 							}
 						}
@@ -7100,8 +6352,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				}
 			}
 		}
-		if(!fixedFlag$sample636)
-			terminalVariable = DistributionSampling.sampleCategorical(RNG$, a[c5][c9][c1][c4], lengthCV$var601$634_8);
+		if(!state.fixedFlag$sample636)
+			state.terminalVariable = DistributionSampling.sampleCategorical(state.RNG$, state.a[state.c5][state.c9][state.c1][state.c4], lengthCV$var601$634_8);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -7109,10 +6361,10 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		if(!fixedFlag$sample47)
-			c1 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
-		if(!fixedFlag$sample52)
-			c3 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample47)
+			state.c1 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
+		if(!state.fixedFlag$sample52)
+			state.c3 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$53_8 = -1;
@@ -7122,8 +6374,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 51.
 		{
 			{
-				if((0 == c3)) {
-					if(!fixedFlag$sample55)
+				if((0 == state.c3)) {
+					if(!state.fixedFlag$sample55)
 						lengthCV$conditionals$53_8 = 2;
 				}
 			}
@@ -7132,16 +6384,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 51.
 		{
 			{
-				if((1 == c3)) {
-					if(!fixedFlag$sample55)
+				if((1 == state.c3)) {
+					if(!state.fixedFlag$sample55)
 						lengthCV$conditionals$53_8 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample55)
-			c4 = DistributionSampling.sampleCategorical(RNG$, conditionals[c3], lengthCV$conditionals$53_8);
-		if(!fixedFlag$sample57)
-			c5 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample55)
+			state.c4 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c3], lengthCV$conditionals$53_8);
+		if(!state.fixedFlag$sample57)
+			state.c5 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$58_6 = -1;
@@ -7151,8 +6403,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 56.
 		{
 			{
-				if((0 == c5)) {
-					if(!fixedFlag$sample60)
+				if((0 == state.c5)) {
+					if(!state.fixedFlag$sample60)
 						lengthCV$conditionals$58_6 = 2;
 				}
 			}
@@ -7161,16 +6413,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 56.
 		{
 			{
-				if((1 == c5)) {
-					if(!fixedFlag$sample60)
+				if((1 == state.c5)) {
+					if(!state.fixedFlag$sample60)
 						lengthCV$conditionals$58_6 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample60)
-			c6 = DistributionSampling.sampleCategorical(RNG$, conditionals[c5], lengthCV$conditionals$58_6);
-		if(!fixedFlag$sample62)
-			c7 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample60)
+			state.c6 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c5], lengthCV$conditionals$58_6);
+		if(!state.fixedFlag$sample62)
+			state.c7 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$63_6 = -1;
@@ -7180,8 +6432,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 61.
 		{
 			{
-				if((0 == c7)) {
-					if(!fixedFlag$sample65)
+				if((0 == state.c7)) {
+					if(!state.fixedFlag$sample65)
 						lengthCV$conditionals$63_6 = 2;
 				}
 			}
@@ -7190,16 +6442,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 61.
 		{
 			{
-				if((1 == c7)) {
-					if(!fixedFlag$sample65)
+				if((1 == state.c7)) {
+					if(!state.fixedFlag$sample65)
 						lengthCV$conditionals$63_6 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample65)
-			c8 = DistributionSampling.sampleCategorical(RNG$, conditionals[c7], lengthCV$conditionals$63_6);
-		if(!fixedFlag$sample67)
-			c9 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample65)
+			state.c8 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c7], lengthCV$conditionals$63_6);
+		if(!state.fixedFlag$sample67)
+			state.c9 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$68_6 = -1;
@@ -7209,8 +6461,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 66.
 		{
 			{
-				if((0 == c9)) {
-					if(!fixedFlag$sample70)
+				if((0 == state.c9)) {
+					if(!state.fixedFlag$sample70)
 						lengthCV$conditionals$68_6 = 2;
 				}
 			}
@@ -7219,16 +6471,16 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 66.
 		{
 			{
-				if((1 == c9)) {
-					if(!fixedFlag$sample70)
+				if((1 == state.c9)) {
+					if(!state.fixedFlag$sample70)
 						lengthCV$conditionals$68_6 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample70)
-			c10 = DistributionSampling.sampleCategorical(RNG$, conditionals[c9], lengthCV$conditionals$68_6);
-		if(!fixedFlag$sample72)
-			c11 = DistributionSampling.sampleCategorical(RNG$, priors, 2);
+		if(!state.fixedFlag$sample70)
+			state.c10 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c9], lengthCV$conditionals$68_6);
+		if(!state.fixedFlag$sample72)
+			state.c11 = DistributionSampling.sampleCategorical(state.RNG$, state.priors, 2);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$conditionals$73_6 = -1;
@@ -7238,8 +6490,8 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 28 and consumer double[] 71.
 		{
 			{
-				if((0 == c11)) {
-					if(!fixedFlag$sample75)
+				if((0 == state.c11)) {
+					if(!state.fixedFlag$sample75)
 						lengthCV$conditionals$73_6 = 2;
 				}
 			}
@@ -7248,14 +6500,14 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 44 and consumer double[] 71.
 		{
 			{
-				if((1 == c11)) {
-					if(!fixedFlag$sample75)
+				if((1 == state.c11)) {
+					if(!state.fixedFlag$sample75)
 						lengthCV$conditionals$73_6 = 2;
 				}
 			}
 		}
-		if(!fixedFlag$sample75)
-			c12 = DistributionSampling.sampleCategorical(RNG$, conditionals[c11], lengthCV$conditionals$73_6);
+		if(!state.fixedFlag$sample75)
+			state.c12 = DistributionSampling.sampleCategorical(state.RNG$, state.conditionals[state.c11], lengthCV$conditionals$73_6);
 		
 		// Allocate a local variable to hold the length of the array.
 		int lengthCV$var601$634_9 = -1;
@@ -7265,11 +6517,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 110 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7281,11 +6533,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 138 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7297,11 +6549,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 172 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7313,11 +6565,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 201 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7329,11 +6581,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 242 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7345,11 +6597,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 271 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7361,11 +6613,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 306 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7377,11 +6629,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 337 and consumer double[] 602.
 		{
 			{
-				if((0 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((0 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7393,11 +6645,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 383 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7409,11 +6661,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 412 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7425,11 +6677,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 446 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7441,11 +6693,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 475 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((0 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((0 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7457,11 +6709,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 518 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7473,11 +6725,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 549 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((0 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((0 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7489,11 +6741,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 586 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((0 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((0 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7505,11 +6757,11 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// Looking for a path between Put 617 and consumer double[] 602.
 		{
 			{
-				if((1 == c5)) {
-					if((1 == c9)) {
-						if((1 == c1)) {
-							if((1 == c4)) {
-								if(!fixedFlag$sample636)
+				if((1 == state.c5)) {
+					if((1 == state.c9)) {
+						if((1 == state.c1)) {
+							if((1 == state.c4)) {
+								if(!state.fixedFlag$sample636)
 									lengthCV$var601$634_9 = 5;
 							}
 						}
@@ -7517,73 +6769,73 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 				}
 			}
 		}
-		if(!fixedFlag$sample636)
-			terminalVariable = DistributionSampling.sampleCategorical(RNG$, a[c5][c9][c1][c4], lengthCV$var601$634_9);
+		if(!state.fixedFlag$sample636)
+			state.terminalVariable = DistributionSampling.sampleCategorical(state.RNG$, state.a[state.c5][state.c9][state.c1][state.c4], lengthCV$var601$634_9);
 	}
 
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			if(!fixedFlag$sample47)
+		if(state.system$gibbsForward) {
+			if(!state.fixedFlag$sample47)
 				inferSample47();
-			if(!fixedFlag$sample52)
+			if(!state.fixedFlag$sample52)
 				inferSample52();
-			if(!fixedFlag$sample55)
+			if(!state.fixedFlag$sample55)
 				inferSample55();
-			if(!fixedFlag$sample57)
+			if(!state.fixedFlag$sample57)
 				inferSample57();
-			if(!fixedFlag$sample62)
+			if(!state.fixedFlag$sample62)
 				inferSample62();
-			if(!fixedFlag$sample67)
+			if(!state.fixedFlag$sample67)
 				inferSample67();
-			if(!fixedFlag$sample72)
+			if(!state.fixedFlag$sample72)
 				inferSample72();
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			if(!fixedFlag$sample72)
+			if(!state.fixedFlag$sample72)
 				inferSample72();
-			if(!fixedFlag$sample67)
+			if(!state.fixedFlag$sample67)
 				inferSample67();
-			if(!fixedFlag$sample62)
+			if(!state.fixedFlag$sample62)
 				inferSample62();
-			if(!fixedFlag$sample57)
+			if(!state.fixedFlag$sample57)
 				inferSample57();
-			if(!fixedFlag$sample55)
+			if(!state.fixedFlag$sample55)
 				inferSample55();
-			if(!fixedFlag$sample52)
+			if(!state.fixedFlag$sample52)
 				inferSample52();
-			if(!fixedFlag$sample47)
+			if(!state.fixedFlag$sample47)
 				inferSample47();
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		if(!constrainedFlag$sample47)
+		state.system$gibbsForward = !state.system$gibbsForward;
+		if(!state.constrainedFlag$sample47)
 			drawValueSample47();
-		if(!constrainedFlag$sample52)
+		if(!state.constrainedFlag$sample52)
 			drawValueSample52();
-		if(!constrainedFlag$sample55)
+		if(!state.constrainedFlag$sample55)
 			drawValueSample55();
-		if(!constrainedFlag$sample57)
+		if(!state.constrainedFlag$sample57)
 			drawValueSample57();
-		if(!fixedFlag$sample60)
+		if(!state.fixedFlag$sample60)
 			drawValueSample60();
-		if(!constrainedFlag$sample62)
+		if(!state.constrainedFlag$sample62)
 			drawValueSample62();
-		if(!fixedFlag$sample65)
+		if(!state.fixedFlag$sample65)
 			drawValueSample65();
-		if(!constrainedFlag$sample67)
+		if(!state.constrainedFlag$sample67)
 			drawValueSample67();
-		if(!fixedFlag$sample70)
+		if(!state.fixedFlag$sample70)
 			drawValueSample70();
-		if(!constrainedFlag$sample72)
+		if(!state.constrainedFlag$sample72)
 			drawValueSample72();
-		if(!fixedFlag$sample75)
+		if(!state.fixedFlag$sample75)
 			drawValueSample75();
-		if(!fixedFlag$sample636)
+		if(!state.fixedFlag$sample636)
 			drawValueSample636();
 	}
 
@@ -7595,49 +6847,49 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		if(!fixedProbFlag$sample47)
-			logProbability$c1 = Double.NaN;
-		if(!fixedProbFlag$sample50)
-			logProbability$c2 = Double.NaN;
-		if(!fixedProbFlag$sample52)
-			logProbability$c3 = Double.NaN;
-		if(!fixedProbFlag$sample55)
-			logProbability$c4 = Double.NaN;
-		if(!fixedProbFlag$sample57)
-			logProbability$c5 = Double.NaN;
-		if(!fixedProbFlag$sample60)
-			logProbability$c6 = Double.NaN;
-		if(!fixedProbFlag$sample62)
-			logProbability$c7 = Double.NaN;
-		if(!fixedProbFlag$sample65)
-			logProbability$c8 = Double.NaN;
-		if(!fixedProbFlag$sample67)
-			logProbability$c9 = Double.NaN;
-		if(!fixedProbFlag$sample70)
-			logProbability$c10 = Double.NaN;
-		if(!fixedProbFlag$sample72)
-			logProbability$c11 = Double.NaN;
-		if(!fixedProbFlag$sample75)
-			logProbability$c12 = Double.NaN;
-		if(!fixedProbFlag$sample636)
-			logProbability$terminalVariable = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		if(!state.fixedProbFlag$sample47)
+			state.logProbability$c1 = Double.NaN;
+		if(!state.fixedProbFlag$sample50)
+			state.logProbability$c2 = Double.NaN;
+		if(!state.fixedProbFlag$sample52)
+			state.logProbability$c3 = Double.NaN;
+		if(!state.fixedProbFlag$sample55)
+			state.logProbability$c4 = Double.NaN;
+		if(!state.fixedProbFlag$sample57)
+			state.logProbability$c5 = Double.NaN;
+		if(!state.fixedProbFlag$sample60)
+			state.logProbability$c6 = Double.NaN;
+		if(!state.fixedProbFlag$sample62)
+			state.logProbability$c7 = Double.NaN;
+		if(!state.fixedProbFlag$sample65)
+			state.logProbability$c8 = Double.NaN;
+		if(!state.fixedProbFlag$sample67)
+			state.logProbability$c9 = Double.NaN;
+		if(!state.fixedProbFlag$sample70)
+			state.logProbability$c10 = Double.NaN;
+		if(!state.fixedProbFlag$sample72)
+			state.logProbability$c11 = Double.NaN;
+		if(!state.fixedProbFlag$sample75)
+			state.logProbability$c12 = Double.NaN;
+		if(!state.fixedProbFlag$sample636)
+			state.logProbability$terminalVariable = Double.NaN;
 	}
 
 	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		priors[0] = 0.01;
-		priors[1] = 0.99;
-		double[] var15 = conditionals[0];
+		state.priors[0] = 0.01;
+		state.priors[1] = 0.99;
+		double[] var15 = state.conditionals[0];
 		var15[0] = 1.0;
 		var15[1] = 0.0;
-		double[] var30 = conditionals[1];
+		double[] var30 = state.conditionals[1];
 		var30[0] = 0.0;
 		var30[1] = 1.0;
-		double[][][][] var77 = a[0];
+		double[][][][] var77 = state.a[0];
 		double[][][] var79 = var77[0];
 		double[][] var81 = var79[0];
 		double[] var83 = var81[0];
@@ -7692,7 +6944,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		var296[2] = 0.0;
 		var296[3] = 0.0;
 		var296[4] = 0.0;
-		double[][][][] var335 = a[1];
+		double[][][][] var335 = state.a[1];
 		double[][][] var337 = var335[0];
 		double[][] var339 = var337[0];
 		double[] var341 = var339[0];
@@ -7756,30 +7008,30 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample47)
+		if(state.fixedFlag$sample47)
 			logProbabilityValue$sample47();
 		logProbabilityValue$sample50();
-		if(fixedFlag$sample52)
+		if(state.fixedFlag$sample52)
 			logProbabilityValue$sample52();
-		if(fixedFlag$sample55)
+		if(state.fixedFlag$sample55)
 			logProbabilityValue$sample55();
-		if(fixedFlag$sample57)
+		if(state.fixedFlag$sample57)
 			logProbabilityValue$sample57();
-		if(fixedFlag$sample60)
+		if(state.fixedFlag$sample60)
 			logProbabilityValue$sample60();
-		if(fixedFlag$sample62)
+		if(state.fixedFlag$sample62)
 			logProbabilityValue$sample62();
-		if(fixedFlag$sample65)
+		if(state.fixedFlag$sample65)
 			logProbabilityValue$sample65();
-		if(fixedFlag$sample67)
+		if(state.fixedFlag$sample67)
 			logProbabilityValue$sample67();
-		if(fixedFlag$sample70)
+		if(state.fixedFlag$sample70)
 			logProbabilityValue$sample70();
-		if(fixedFlag$sample72)
+		if(state.fixedFlag$sample72)
 			logProbabilityValue$sample72();
-		if(fixedFlag$sample75)
+		if(state.fixedFlag$sample75)
 			logProbabilityValue$sample75();
-		if(fixedFlag$sample636)
+		if(state.fixedFlag$sample636)
 			logProbabilityValue$sample636();
 	}
 
@@ -7845,7 +7097,7 @@ final class TerminalVariables$SingleThreadCPU extends org.sandwood.runtime.inter
 	// Method to propagate observed values back into the model.
 	@Override
 	public final void propagateObservedValues() {
-		c2 = evidence;
+		state.c2 = state.evidence;
 	}
 
 	// A method to set array values that depend on the output of a sample task, but are

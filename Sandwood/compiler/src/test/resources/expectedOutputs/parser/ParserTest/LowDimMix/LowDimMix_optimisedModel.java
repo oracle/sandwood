@@ -1,61 +1,417 @@
 package org.sandwood.compiler.tests.parser;
 
-import org.sandwood.runtime.model.Model;
-import org.sandwood.runtime.model.ExecutionTarget;
-import org.sandwood.runtime.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import java.util.HashMap;
+import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
-
-import java.util.Map;
-import java.util.HashMap;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.ModelInternal;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
+import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import org.sandwood.runtime.model.ExecutionTarget;
+import org.sandwood.runtime.model.variables.*;
 
 /**
-  * Class representing the Sandwood model LowDimMix This is the class that
-  * all user interactions with the model should occur through.
-  */
-public final class LowDimMix extends Model {
+ * Class representing the Sandwood model LowDimMix This is the class that all user
+ * interactions with the model should occur through.
+ */
+public final class LowDimMix extends ModelInternal<LowDimMix.State> {
+	final class State extends CoreModelState {
 
-    private LowDimMix$CoreInterface system$c = new LowDimMix$SingleThreadCPU(ExecutionTarget.singleThread);
+		// Declare the variables for the model.
+		int N;
+		boolean[] component;
+		boolean[] constrainedFlag$sample101;
+		boolean[] constrainedFlag$sample20;
+		boolean[] constrainedFlag$sample83;
+		boolean constrainedFlag$sample88 = true;
+		boolean fixedFlag$sample101 = false;
+		boolean fixedFlag$sample20 = false;
+		boolean fixedFlag$sample83 = false;
+		boolean fixedFlag$sample88 = false;
+		boolean fixedProbFlag$sample101 = false;
+		boolean fixedProbFlag$sample138 = false;
+		boolean fixedProbFlag$sample20 = false;
+		boolean fixedProbFlag$sample83 = false;
+		boolean fixedProbFlag$sample88 = false;
+		int length$yObserved;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$component;
+		double logProbability$componentDistribution;
+		double logProbability$mu;
+		double logProbability$rawMu;
+		double[] logProbability$sample138;
+		double[] logProbability$sample20;
+		double logProbability$sigma;
+		double logProbability$theta;
+		double logProbability$var79;
+		double logProbability$var97;
+		double logProbability$y;
+		double[] mu;
+		double[] rawMu;
+		double[] sigma;
+		boolean system$gibbsForward = true;
+		double theta;
+		double[] y;
+		double[] yObserved;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// If rawMu has not been set already allocate space.
+			if(!fixedFlag$sample20)
+				// Constructor for rawMu
+				rawMu = new double[2];
+			
+			// Constructor for mu
+			mu = new double[2];
+			
+			// If sigma has not been set already allocate space.
+			if(!fixedFlag$sample83)
+				// Constructor for sigma
+				sigma = new double[2];
+			
+			// If component has not been set already allocate space.
+			if(!fixedFlag$sample101)
+				// Constructor for component
+				component = new boolean[length$yObserved];
+			
+			// Constructor for y
+			y = new double[length$yObserved];
+			
+			// Constructor for constrainedFlag$sample101
+			constrainedFlag$sample101 = new boolean[length$yObserved];
+			
+			// Constructor for constrainedFlag$sample20
+			constrainedFlag$sample20 = new boolean[2];
+			
+			// Constructor for constrainedFlag$sample83
+			constrainedFlag$sample83 = new boolean[2];
+			
+			// Constructor for logProbability$sample20
+			logProbability$sample20 = new double[2];
+			
+			// Constructor for logProbability$sample138
+			logProbability$sample138 = new double[length$yObserved];
+		}
+
+		// Getter for N.
+		final int get$N() {
+			return N;
+		}
+
+		// Getter for component.
+		final boolean[] get$component() {
+			return component;
+		}
+
+		// Setter for component.
+		final void set$component(boolean[] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of component including if probabilities need
+			// to be updated.
+			component = cv$value;
+			
+			// Unset the fixed probability flag for sample 101 as it depends on component.
+			fixedProbFlag$sample101 = false;
+			
+			// Unset the fixed probability flag for sample 138 as it depends on component.
+			fixedProbFlag$sample138 = false;
+		}
+
+		// Getter for fixedFlag$sample101.
+		final boolean get$fixedFlag$sample101() {
+			return fixedFlag$sample101;
+		}
+
+		// Setter for fixedFlag$sample101.
+		final void set$fixedFlag$sample101(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample101 including if probabilities
+			// need to be updated.
+			fixedFlag$sample101 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample101$1 = 0; index$constrainedFlag$sample101$1 < constrainedFlag$sample101.length; index$constrainedFlag$sample101$1 += 1)
+					// Substituted "fixedFlag$sample101" with its value "cv$value".
+					constrainedFlag$sample101[index$constrainedFlag$sample101$1] = cv$value;
+			}
+			
+			// Should the probability of sample 101 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample101" with its value "cv$value".
+			fixedProbFlag$sample101 = (cv$value && fixedProbFlag$sample101);
+			
+			// Should the probability of sample 138 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample101" with its value "cv$value".
+			fixedProbFlag$sample138 = (cv$value && fixedProbFlag$sample138);
+		}
+
+		// Getter for fixedFlag$sample20.
+		final boolean get$fixedFlag$sample20() {
+			return fixedFlag$sample20;
+		}
+
+		// Setter for fixedFlag$sample20.
+		final void set$fixedFlag$sample20(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample20 including if probabilities
+			// need to be updated.
+			fixedFlag$sample20 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample20$1 = 0; index$constrainedFlag$sample20$1 < constrainedFlag$sample20.length; index$constrainedFlag$sample20$1 += 1)
+					// Substituted "fixedFlag$sample20" with its value "cv$value".
+					constrainedFlag$sample20[index$constrainedFlag$sample20$1] = cv$value;
+			}
+			
+			// Should the probability of sample 20 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample20" with its value "cv$value".
+			fixedProbFlag$sample20 = (cv$value && fixedProbFlag$sample20);
+			
+			// Should the probability of sample 138 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample20" with its value "cv$value".
+			fixedProbFlag$sample138 = (cv$value && fixedProbFlag$sample138);
+		}
+
+		// Getter for fixedFlag$sample83.
+		final boolean get$fixedFlag$sample83() {
+			return fixedFlag$sample83;
+		}
+
+		// Setter for fixedFlag$sample83.
+		final void set$fixedFlag$sample83(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample83 including if probabilities
+			// need to be updated.
+			fixedFlag$sample83 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample83$1 = 0; index$constrainedFlag$sample83$1 < constrainedFlag$sample83.length; index$constrainedFlag$sample83$1 += 1)
+					// Substituted "fixedFlag$sample83" with its value "cv$value".
+					constrainedFlag$sample83[index$constrainedFlag$sample83$1] = cv$value;
+			}
+			
+			// Should the probability of sample 83 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample83" with its value "cv$value".
+			fixedProbFlag$sample83 = (cv$value && fixedProbFlag$sample83);
+			
+			// Should the probability of sample 138 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample83" with its value "cv$value".
+			fixedProbFlag$sample138 = (cv$value && fixedProbFlag$sample138);
+		}
+
+		// Getter for fixedFlag$sample88.
+		final boolean get$fixedFlag$sample88() {
+			return fixedFlag$sample88;
+		}
+
+		// Setter for fixedFlag$sample88.
+		final void set$fixedFlag$sample88(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample88 including if probabilities
+			// need to be updated.
+			fixedFlag$sample88 = cv$value;
+			
+			// Substituted "fixedFlag$sample88" with its value "cv$value".
+			constrainedFlag$sample88 = (cv$value || constrainedFlag$sample88);
+			
+			// Should the probability of sample 88 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample88" with its value "cv$value".
+			fixedProbFlag$sample88 = (cv$value && fixedProbFlag$sample88);
+			
+			// Should the probability of sample 101 be set to fixed. This will only every change
+			// the flag to false.
+			// 
+			// Substituted "fixedFlag$sample88" with its value "cv$value".
+			fixedProbFlag$sample101 = (cv$value && fixedProbFlag$sample101);
+		}
+
+		// Getter for length$yObserved.
+		final int get$length$yObserved() {
+			return length$yObserved;
+		}
+
+		// Setter for length$yObserved.
+		final void set$length$yObserved(int cv$value, boolean allocated$) {
+			length$yObserved = cv$value;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$component.
+		final double get$logProbability$component() {
+			return logProbability$component;
+		}
+
+		// Getter for logProbability$componentDistribution.
+		final double get$logProbability$componentDistribution() {
+			return logProbability$componentDistribution;
+		}
+
+		// Getter for logProbability$mu.
+		final double get$logProbability$mu() {
+			return logProbability$mu;
+		}
+
+		// Getter for logProbability$rawMu.
+		final double get$logProbability$rawMu() {
+			return logProbability$rawMu;
+		}
+
+		// Getter for logProbability$sigma.
+		final double get$logProbability$sigma() {
+			return logProbability$sigma;
+		}
+
+		// Getter for logProbability$theta.
+		final double get$logProbability$theta() {
+			return logProbability$theta;
+		}
+
+		// Getter for logProbability$y.
+		final double get$logProbability$y() {
+			return logProbability$y;
+		}
+
+		// Getter for mu.
+		final double[] get$mu() {
+			return mu;
+		}
+
+		// Getter for rawMu.
+		final double[] get$rawMu() {
+			return rawMu;
+		}
+
+		// Setter for rawMu.
+		final void set$rawMu(double[] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of rawMu including if probabilities need to
+			// be updated.
+			rawMu = cv$value;
+			
+			// Unset the fixed probability flag for sample 20 as it depends on rawMu.
+			fixedProbFlag$sample20 = false;
+			
+			// Unset the fixed probability flag for sample 138 as it depends on rawMu.
+			fixedProbFlag$sample138 = false;
+		}
+
+		// Getter for sigma.
+		final double[] get$sigma() {
+			return sigma;
+		}
+
+		// Setter for sigma.
+		final void set$sigma(double[] cv$value, boolean allocated$) {
+			// Set flags for all the side effects of sigma including if probabilities need to
+			// be updated.
+			sigma = cv$value;
+			
+			// Unset the fixed probability flag for sample 83 as it depends on sigma.
+			fixedProbFlag$sample83 = false;
+			
+			// Unset the fixed probability flag for sample 138 as it depends on sigma.
+			fixedProbFlag$sample138 = false;
+		}
+
+		// Getter for theta.
+		final double get$theta() {
+			return theta;
+		}
+
+		// Setter for theta.
+		final void set$theta(double cv$value, boolean allocated$) {
+			// Set flags for all the side effects of theta including if probabilities need to
+			// be updated.
+			theta = cv$value;
+			
+			// Unset the fixed probability flag for sample 88 as it depends on theta.
+			fixedProbFlag$sample88 = false;
+			
+			// Unset the fixed probability flag for sample 101 as it depends on theta.
+			fixedProbFlag$sample101 = false;
+		}
+
+		// Getter for y.
+		final double[] get$y() {
+			return y;
+		}
+
+		// Getter for yObserved.
+		final double[] get$yObserved() {
+			return yObserved;
+		}
+
+		// Setter for yObserved.
+		final void set$yObserved(double[] cv$value, boolean allocated$) {
+			yObserved = cv$value;
+		}
+	}
 
     private final ComputedBooleanArrayInternal $component = new ComputedBooleanArrayInternal(this, "component", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public boolean[] getValue() { return system$c.get$component(); }
+        public boolean[] getValue() { return state.get$component(); }
 
         @Override
         protected void setValueInternal(boolean[] value) {
-            system$c.set$component(value, allocated);
+            state.set$component(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$component(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$component(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample101(fixed, allocated);
+                state.set$fixedFlag$sample101(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample101())
+            if(state.get$fixedFlag$sample101())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing component of type boolean[] from the Sandwood model 
-     */
+	/**
+	 * Computed variable representing component of type boolean[] from the Sandwood model.
+	 */
     public final ComputedBooleanArray component = $component;
 
     private final ComputedDoubleArrayInternal $mu = new ComputedDoubleArrayInternal(this, "mu", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$mu(); }
+        public double[] getValue() { return state.get$mu(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -66,134 +422,126 @@ public final class LowDimMix extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$mu(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$mu(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample20(fixed, allocated);
+                state.set$fixedFlag$sample20(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample20())
+            if(state.get$fixedFlag$sample20())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing mu of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing mu of type double[] from the Sandwood model. */
     public final ComputedDoubleArray mu = $mu;
 
     private final ComputedDoubleArrayInternal $rawMu = new ComputedDoubleArrayInternal(this, "rawMu", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$rawMu(); }
+        public double[] getValue() { return state.get$rawMu(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$rawMu(value, allocated);
+            state.set$rawMu(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$rawMu(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$rawMu(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample20(fixed, allocated);
+                state.set$fixedFlag$sample20(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample20())
+            if(state.get$fixedFlag$sample20())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing rawMu of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing rawMu of type double[] from the Sandwood model. */
     public final ComputedDoubleArray rawMu = $rawMu;
 
     private final ComputedDoubleArrayInternal $sigma = new ComputedDoubleArrayInternal(this, "sigma", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$sigma(); }
+        public double[] getValue() { return state.get$sigma(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$sigma(value, allocated);
+            state.set$sigma(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$sigma(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$sigma(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample83(fixed, allocated);
+                state.set$fixedFlag$sample83(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample83())
+            if(state.get$fixedFlag$sample83())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing sigma of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing sigma of type double[] from the Sandwood model. */
     public final ComputedDoubleArray sigma = $sigma;
 
     private final ComputedDoubleInternal $theta = new ComputedDoubleInternal(this, "theta", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$theta(); }
+        public double getValue() { return state.get$theta(); }
 
         @Override
         protected void setValueInternal(double value) {
-            system$c.set$theta(value, allocated);
+            state.set$theta(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$theta(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$theta(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample88(fixed, allocated);
+                state.set$fixedFlag$sample88(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample88())
+            if(state.get$fixedFlag$sample88())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing theta of type double from the Sandwood model 
-     */
+	/** Computed variable representing theta of type double from the Sandwood model. */
     public final ComputedDouble theta = $theta;
 
     private final ComputedDoubleArrayInternal $y = new ComputedDoubleArrayInternal(this, "y", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$y(); }
+        public double[] getValue() { return state.get$y(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -204,7 +552,7 @@ public final class LowDimMix extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$y(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$y(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -217,9 +565,7 @@ public final class LowDimMix extends Model {
         }
     };
 
-    /**
-     * Computed variable representing y of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing y of type double[] from the Sandwood model. */
     public final ComputedDoubleArray y = $y;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
@@ -230,30 +576,30 @@ public final class LowDimMix extends Model {
         @Override
         public double[] getValue() {
             synchronized(model) {
-                return system$c.get$yObserved();
+                return state.get$yObserved();
             }
         }
 
         @Override
         public void setValueInternal(double[] value) {
-            system$c.set$yObserved(value, allocated);
-            system$c.set$length$yObserved(value.length, allocated);
+            state.set$yObserved(value, allocated);
+            state.set$length$yObserved(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$yObserved(shape, allocated);
+            state.set$length$yObserved(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$yObserved();
+            return state.get$length$yObserved();
         }
     };
 
-    /**
-     * Observed variable representing yObserved of type double[] from the Sandwood model 
-     */
+	/**
+	 * Observed variable representing yObserved of type double[] from the Sandwood model.
+	 */
     public final ObservedDoubleArrayShapeable yObserved = $yObserved;
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
@@ -261,23 +607,20 @@ public final class LowDimMix extends Model {
     private final RandomVariableInternal $componentDistribution = new RandomVariableInternal(this, "componentDistribution", ProbabilityType.UNSKIPPABLE) {
         @Override
         public double getCurrentLogProbability() {
-            return system$c.get$logProbability$componentDistribution();
+            return state.get$logProbability$componentDistribution();
         }
     };
 
-    /**
-     * Random variable representing componentDistribution from the Sandwood model 
-     */
+	/** Random variable representing componentDistribution from the Sandwood model. */
     public final RandomVariable componentDistribution = $componentDistribution;
 
     private HasProbabilityInternal[] $probabilityVariables = {$component, $mu, $rawMu, $sigma, $theta, $y, $componentDistribution};
 
-    //Constructors
-    /**
-     * A constructor for a model where no variable values are set.
-     */
+    // Constructors
+	/** A constructor for a model where no variable values are set. */
     public LowDimMix() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("component", $component);
         $computedVariables.put("mu", $mu);
@@ -288,124 +631,92 @@ public final class LowDimMix extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("yObserved", $yObserved);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
-    }
-    /**
-      * A constructor to set all the required values in the model to infer values. These
-      * will be values in an untrained model so this will only generate values from the
-      * default distributions described in the model.
-      * @param yObservedShape An integer array describing the shape of variable yObserved to use in the model when generating results.
-      */
 
+        LowDimMix$SingleThreadCPU core = new LowDimMix$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+    }
+
+	/**
+	 * A constructor to set all the required values in the model to infer values. These
+	 * will be values in an untrained model so this will only generate values from the
+	 * default distributions described in the model.
+	 * @param yObservedShape An integer array describing the shape of variable yObserved
+	 *                       to use in the model when generating results.
+	 */
     public LowDimMix(int yObservedShape) {
         this();
         this.$yObserved.setShape(yObservedShape);
     }
-    /**
-      * A constructor to set all the required values in the model to infer the model
-      * parameters, or to generate probabilities for the model.
-      * @param yObserved The value to set yObserved to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer the model parameters,
+	 * or to generate probabilities for the model.
+	 * @param yObserved The value to set yObserved to.
+	 */
     public LowDimMix(double[] yObserved) {
         this();
         this.yObserved.setValue(yObserved);
     }
     
     @Override
-    protected LowDimMix$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        LowDimMix$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new LowDimMix$SingleThreadCPU(target);
-                break;
+                return new LowDimMix$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new LowDimMix$MultiThreadCPU(target);
-                break;
+                return new LowDimMix$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
     }
 
-    private void transferData(LowDimMix$CoreInterface oldCore, LowDimMix$CoreInterface newCore) {
-
-        //Observed arrays
-        if(yObserved.isSet()) {
-            newCore.set$yObserved(oldCore.get$yObserved(), false);
-            newCore.set$length$yObserved(oldCore.get$length$yObserved(), false);
-        }
-        else if(yObserved.shapeSet())
-            newCore.set$length$yObserved(oldCore.get$length$yObserved(), false);
-
-        //ComputedVariables
-        if($component.isSet())
-            newCore.set$component(oldCore.get$component(), false);
-        if($rawMu.isSet())
-            newCore.set$rawMu(oldCore.get$rawMu(), false);
-        if($sigma.isSet())
-            newCore.set$sigma(oldCore.get$sigma(), false);
-        if($theta.isSet())
-            newCore.set$theta(oldCore.get$theta(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample101(oldCore.get$fixedFlag$sample101(), false);
-        newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20(), false);
-        newCore.set$fixedFlag$sample83(oldCore.get$fixedFlag$sample83(), false);
-        newCore.set$fixedFlag$sample88(oldCore.get$fixedFlag$sample88(), false);
-    }
-
-    /**
-     * A class to hold all the values required to perform a value inference on the model.
-     */
+	/**
+	 * A class to hold all the values required to perform a value inference on the model.
+	 */
     public static class InferValueInputs {
-        /** Field holding the shape of model input yObserved */
+		/** Field holding the shape of model input yObserved */
         public final int yObservedShape;
 
-        /**
-          * A constructor taking all the values required to set up the model to infer variables.
-          * @param yObservedShape An integer array describing the shape of variable yObserved to use in the model when generating results.
-          */
+		/**
+		 * A constructor taking all the values required to set up the model to infer variables.
+		 * @param yObservedShape An integer array describing the shape of variable yObserved
+		 *                       to use in the model when generating results.
+		 */
         public InferValueInputs(int yObservedShape) {
             this.yObservedShape = yObservedShape;
         }
     }
 
-    /**
-     * A class to hold all the inputs for the model. It can be used to parameterize inference of the model probabilities
-     * and probability calculations.
-     */
+	/**
+	 * A class to hold all the inputs for the model. It can be used to parameterize inference
+	 * of the model probabilities and probability calculations.
+	 */
     public static class AllInputs {
-        /** Field holding the value of model input yObserved */
+		/** Field holding the value of model input yObserved */
         public final double[] yObserved;
 
-        /**
-          * A constructor to take all the required values by the model to infer the model
-          * parameters, or to generate probabilities for the model.
-          * @param yObserved The value to set yObserved to.
-          */
+		/**
+		 * A constructor to take all the required values by the model to infer the model parameters,
+		 * or to generate probabilities for the model.
+		 * @param yObserved The value to set yObserved to.
+		 */
         public AllInputs(double[] yObserved) {
             this.yObserved = yObserved;
         }
     }
-
-    /**
-     * A class to hold all the outputs from the model after an infer values step.
-     */
+	/** A class to hold all the outputs from the model after an infer values step. */
     public static class InferredValueOutputs {
-        /** Field holding the value of component after a convention execution step.*/
+		/** Field holding the value of component after a convention execution step. */
         public final boolean[] component;
-        /** Field holding the value of mu after a convention execution step.*/
+		/** Field holding the value of mu after a convention execution step. */
         public final double[] mu;
-        /** Field holding the value of rawMu after a convention execution step.*/
+		/** Field holding the value of rawMu after a convention execution step. */
         public final double[] rawMu;
-        /** Field holding the value of sigma after a convention execution step.*/
+		/** Field holding the value of sigma after a convention execution step. */
         public final double[] sigma;
-        /** Field holding the value of theta after a convention execution step.*/
+		/** Field holding the value of theta after a convention execution step. */
         public final double theta;
-        /** Field holding the value of y after a convention execution step.*/
+		/** Field holding the value of y after a convention execution step. */
         public final double[] y;
 
         InferredValueOutputs(LowDimMix system$model) {
@@ -418,24 +729,25 @@ public final class LowDimMix extends Model {
         }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class LogProbabilities {
         private final double $logModelProbability;
-        /** Field holding the log probability of random variable componentDistribution */
+		/** Field holding the log probability of random variable componentDistribution */
         public final double componentDistribution;
-        /** Field holding the log probability of computed variable component */
+		/** Field holding the log probability of computed variable component */
         public final double component;
-        /** Field holding the log probability of computed variable mu */
+		/** Field holding the log probability of computed variable mu */
         public final double mu;
-        /** Field holding the log probability of computed variable rawMu */
+		/** Field holding the log probability of computed variable rawMu */
         public final double rawMu;
-        /** Field holding the log probability of computed variable sigma */
+		/** Field holding the log probability of computed variable sigma */
         public final double sigma;
-        /** Field holding the log probability of computed variable theta */
+		/** Field holding the log probability of computed variable theta */
         public final double theta;
-        /** Field holding the log probability of computed variable y */
+		/** Field holding the log probability of computed variable y */
         public final double y;
 
         LogProbabilities(LowDimMix system$model) {
@@ -449,29 +761,32 @@ public final class LowDimMix extends Model {
             this.y = system$model.y.getLogProbability();
         }
 
-        /** Method to return log probability of the whole model 
-         *  @return The log probability of the whole model. */
+		/**
+		 * Method to return log probability of the whole model
+		 * @return The log probability of the whole model.
+		 */
         public double getModelProbability() { return $logModelProbability; }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class Probabilities {
         private final double $modelProbability;
-        /** Field holding the probability of random variable componentDistribution */
+		/** Field holding the probability of random variable componentDistribution */
         public final double componentDistribution;
-        /** Field holding the probability of computed variable component */
+		/** Field holding the probability of computed variable component */
         public final double component;
-        /** Field holding the probability of computed variable mu */
+		/** Field holding the probability of computed variable mu */
         public final double mu;
-        /** Field holding the probability of computed variable rawMu */
+		/** Field holding the probability of computed variable rawMu */
         public final double rawMu;
-        /** Field holding the probability of computed variable sigma */
+		/** Field holding the probability of computed variable sigma */
         public final double sigma;
-        /** Field holding the probability of computed variable theta */
+		/** Field holding the probability of computed variable theta */
         public final double theta;
-        /** Field holding the probability of computed variable y */
+		/** Field holding the probability of computed variable y */
         public final double y;
 
         Probabilities(LowDimMix system$model) {
@@ -485,24 +800,24 @@ public final class LowDimMix extends Model {
             this.y = system$model.y.getProbability();
         }
 
-        /** Method to return probability of the whole model 
-         *  @return The probability of the whole model. */
+		/**
+		 * Method to return probability of the whole model
+		 * @return The probability of the whole model.
+		 */
         public double getModelProbability() { return $modelProbability; }
     }
 
-    /**
-     * A class to hold all the outputs from the model after an infer model call.
-     */
+	/** A class to hold all the outputs from the model after an infer model call. */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of component after an infer model call. */
+		/** Field holding the MAP or Sample value of component after an infer model call. */
         public final boolean[][] component;
-        /** Field holding the MAP or Sample value of mu after an infer model call. */
+		/** Field holding the MAP or Sample value of mu after an infer model call. */
         public final double[][] mu;
-        /** Field holding the MAP or Sample value of rawMu after an infer model call. */
+		/** Field holding the MAP or Sample value of rawMu after an infer model call. */
         public final double[][] rawMu;
-        /** Field holding the MAP or Sample value of sigma after an infer model call. */
+		/** Field holding the MAP or Sample value of sigma after an infer model call. */
         public final double[][] sigma;
-        /** Field holding the MAP or Sample value of theta after an infer model call. */
+		/** Field holding the MAP or Sample value of theta after an infer model call. */
         public final double[] theta;
 
         InferredModelOutputs(LowDimMix system$model) {
@@ -514,119 +829,138 @@ public final class LowDimMix extends Model {
         }
     }
 
-    /**
-     * Perform a single pass generating values from the model.
-     * @param inputs An object containing the parameters required to run inference on the model.
-     * @return An object containing the values computed by the inference step.
-     */
+	/**
+	 * Perform a single pass generating values from the model.
+	 * @param inputs An object containing the parameters required to run inference on
+	 *               the model.
+	 * @return An object containing the values computed by the inference step.
+	 */
     public InferredValueOutputs execute(InferValueInputs inputs) {
         this.$yObserved.setShape(inputs.yObservedShape);
         execute();
         return new InferredValueOutputs(this);
     }
 
-    /**
-     * Infer the values of the different elements of the model.
-     * @param iterations The number of iterations to perform when inferring the values.
-     * @param inputs An object containing the parameters required to generate the model parameters.
-     * @return An object containing the computed values for the model.
-     */
+	/**
+	 * Infer the values of the different elements of the model.
+	 * @param iterations The number of iterations to perform when inferring the values.
+	 * @param inputs An object containing the parameters required to generate the model
+	 *               parameters.
+	 * @return An object containing the computed values for the model.
+	 */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
         this.$yObserved.setValue(inputs.yObserved);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
 
-    /**
-     * Generate the probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
         this.$yObserved.setValue(inputs.yObserved);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.$yObserved.setValue(inputs.yObserved);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.$yObserved.setValue(inputs.yObserved);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
 
-    /**
-     * Generate the log probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the log probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
         this.$yObserved.setValue(inputs.yObserved);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.$yObserved.setValue(inputs.yObserved);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.$yObserved.setValue(inputs.yObserved);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }
 }
-//END OF CODE

@@ -1,203 +1,52 @@
 package org.sandwood.compiler.tests.parser;
 
+import org.sandwood.compiler.tests.parser.DiscreteChoice$SingleThreadCPU.Scratch;
+import org.sandwood.compiler.tests.parser.DiscreteChoice.State;
+import org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU;
+import org.sandwood.runtime.internal.model.state.CoreModelScratch;
 import org.sandwood.runtime.internal.numericTools.DistributionSampling;
 import org.sandwood.runtime.model.ExecutionTarget;
 
-final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal.model.CoreModelSingleThreadCPU implements DiscreteChoice$CoreInterface {
-	
-	// Declare the variables for the model.
-	private int[] ObsChoices;
-	private int[] choices;
-	private boolean[] constrainedFlag$sample24;
-	private double[] exped;
-	private boolean fixedFlag$sample24 = false;
-	private boolean fixedProbFlag$sample24 = false;
-	private boolean fixedProbFlag$sample78 = false;
-	private boolean[] guard$sample24put65$global;
-	private double logProbability$$evidence;
-	private double logProbability$$model;
-	private double logProbability$choices;
-	private double logProbability$exped;
-	private double logProbability$prob;
-	private double[] logProbability$sample24;
-	private double logProbability$sum;
-	private double logProbability$ut;
-	private double logProbability$var77;
-	private int noObs;
-	private int noProducts;
-	private double[] prob;
-	private double sum;
-	private boolean system$gibbsForward = true;
-	private double[] ut;
+final class DiscreteChoice$SingleThreadCPU extends CoreModelSingleThreadCPU<State, Scratch> {
+	final class Scratch implements CoreModelScratch {
 
-	public DiscreteChoice$SingleThreadCPU(ExecutionTarget target) {
-		super(target);
-	}
+		// Declare the scratch variables for the model.
+		boolean[] guard$sample24put65$global;
 
-	// Getter for ObsChoices.
-	@Override
-	public final int[] get$ObsChoices() {
-		return ObsChoices;
-	}
-
-	// Setter for ObsChoices.
-	@Override
-	public final void set$ObsChoices(int[] cv$value, boolean allocated$) {
-		ObsChoices = cv$value;
-	}
-
-	// Getter for choices.
-	@Override
-	public final int[] get$choices() {
-		return choices;
-	}
-
-	// Getter for exped.
-	@Override
-	public final double[] get$exped() {
-		return exped;
-	}
-
-	// Getter for fixedFlag$sample24.
-	@Override
-	public final boolean get$fixedFlag$sample24() {
-		return fixedFlag$sample24;
-	}
-
-	// Setter for fixedFlag$sample24.
-	@Override
-	public final void set$fixedFlag$sample24(boolean cv$value, boolean allocated$) {
-		// Set flags for all the side effects of fixedFlag$sample24 including if probabilities
-		// need to be updated.
-		fixedFlag$sample24 = cv$value;
-		
-		// If the model has been allocated update the constraints flags
-		if(allocated$) {
-			// Set all the values in the array
-			for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
-				constrainedFlag$sample24[index$constrainedFlag$sample24$1] = fixedFlag$sample24;
+		// Method to allocate space temporary variables used by the inference methods. Allocating
+		// here prevents repeated allocation and deallocation, and makes the code more amenable
+		// to GPU execution.
+		@Override
+		public final void allocateScratch() {
+			// Calculate the largest index of i that is possible and allocate an array to hold
+			// the guard for each of these.
+			int cv$max_i$var61 = 0;
+			cv$max_i$var61 = Math.max(cv$max_i$var61, ((state.noProducts - 0) / 1));
+			
+			// Allocation of guard$sample24put65$global for single threaded execution
+			guard$sample24put65$global = new boolean[cv$max_i$var61];
 		}
-		
-		// Should the probability of sample 24 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample24 = (fixedFlag$sample24 && fixedProbFlag$sample24);
-		
-		// Should the probability of sample 78 be set to fixed. This will only every change
-		// the flag to false.
-		fixedProbFlag$sample78 = (fixedFlag$sample24 && fixedProbFlag$sample78);
 	}
 
-	// Getter for logProbability$$evidence.
-	@Override
-	public final double get$logProbability$$evidence() {
-		return logProbability$$evidence;
-	}
 
-	// Getter for the probability of logProbability$$model.
-	@Override
-	public final double getCurrentLogProbability() {
-		return logProbability$$model;
-	}
-
-	// Getter for logProbability$choices.
-	@Override
-	public final double get$logProbability$choices() {
-		return logProbability$choices;
-	}
-
-	// Getter for logProbability$exped.
-	@Override
-	public final double get$logProbability$exped() {
-		return logProbability$exped;
-	}
-
-	// Getter for logProbability$prob.
-	@Override
-	public final double get$logProbability$prob() {
-		return logProbability$prob;
-	}
-
-	// Getter for logProbability$sum.
-	@Override
-	public final double get$logProbability$sum() {
-		return logProbability$sum;
-	}
-
-	// Getter for logProbability$ut.
-	@Override
-	public final double get$logProbability$ut() {
-		return logProbability$ut;
-	}
-
-	// Getter for noObs.
-	@Override
-	public final int get$noObs() {
-		return noObs;
-	}
-
-	// Setter for noObs.
-	@Override
-	public final void set$noObs(int cv$value, boolean allocated$) {
-		noObs = cv$value;
-	}
-
-	// Getter for noProducts.
-	@Override
-	public final int get$noProducts() {
-		return noProducts;
-	}
-
-	// Setter for noProducts.
-	@Override
-	public final void set$noProducts(int cv$value, boolean allocated$) {
-		noProducts = cv$value;
-	}
-
-	// Getter for prob.
-	@Override
-	public final double[] get$prob() {
-		return prob;
-	}
-
-	// Getter for sum.
-	@Override
-	public final double get$sum() {
-		return sum;
-	}
-
-	// Getter for ut.
-	@Override
-	public final double[] get$ut() {
-		return ut;
-	}
-
-	// Setter for ut.
-	@Override
-	public final void set$ut(double[] cv$value, boolean allocated$) {
-		// Set flags for all the side effects of ut including if probabilities need to be
-		// updated.
-		ut = cv$value;
-		
-		// Unset the fixed probability flag for sample 24 as it depends on ut.
-		fixedProbFlag$sample24 = false;
-		
-		// Unset the fixed probability flag for sample 78 as it depends on ut.
-		fixedProbFlag$sample78 = false;
+	public DiscreteChoice$SingleThreadCPU(State state, ExecutionTarget target) {
+		super(state, target);
+		scratch = new Scratch();
 	}
 
 	// Pick a value from the distribution for the unconditioned variable from sample24
 	private final void drawValueSample24(int i$var18) {
-		ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		state.ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		
 		// Guards to ensure that exped is only updated when there is a valid path.
 		// 
 		// Looking for a path between Sample 24 and consumer double[] 39.
 		{
 			{
-				for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+				for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 					if((i$var18 == i$var36)) {
 						{
-							exped[i$var36] = Math.exp(ut[i$var36]);
+							state.exped[i$var36] = Math.exp(state.ut[i$var36]);
 						}
 					}
 				}
@@ -209,9 +58,9 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 		// Looking for a path between Sample 24 and consumer double 50.
 		{
 			{
-				for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+				for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 					if((i$var18 == i$var36)) {
-						if(((0 <= i$var36) && (i$var36 < noProducts))) {
+						if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
 							{
 								// Reduction of array exped
 								// 
@@ -221,12 +70,12 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 								double reduceVar$sum$3 = 0.0;
 								
 								// For each index in the array to be reduced
-								for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+								for(int cv$reduction44Index = 0; cv$reduction44Index < state.noProducts; cv$reduction44Index += 1) {
 									// Set the left hand term of the reduction function to the return variable value.
 									double i$var47 = reduceVar$sum$3;
 									
 									// Set the right hand term to a value from the array exped
-									double j = exped[cv$reduction44Index];
+									double j = state.exped[cv$reduction44Index];
 									
 									// Execute the reduction function, saving the result into the return value.
 									// 
@@ -235,7 +84,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 								}
 								
 								// Write out the new sample value.
-								sum = reduceVar$sum$3;
+								state.sum = reduceVar$sum$3;
 							}
 						}
 					}
@@ -249,12 +98,12 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 		{
 			// Guard to check that at most one copy of the code is executed for a given random
 			// variable instance.
-			boolean[] guard$sample24put65 = guard$sample24put65$global;
+			boolean[] guard$sample24put65 = scratch.guard$sample24put65$global;
 			{
-				for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+				for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 					if((i$var18 == i$var36)) {
-						if(((0 <= i$var36) && (i$var36 < noProducts))) {
-							for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+						if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
+							for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1)
 								// Set the flags to false
 								guard$sample24put65[((i$var61 - 0) / 1)] = false;
 						}
@@ -262,9 +111,9 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 				}
 			}
 			{
-				for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+				for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 					if((i$var18 == i$var36)) {
-						for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+						for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 							if((i$var36 == i$var61))
 								// Set the flags to false
 								guard$sample24put65[((i$var61 - 0) / 1)] = false;
@@ -273,15 +122,15 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 				}
 			}
 			{
-				for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+				for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 					if((i$var18 == i$var36)) {
-						if(((0 <= i$var36) && (i$var36 < noProducts))) {
-							for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+						if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
+							for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 								if(!guard$sample24put65[((i$var61 - 0) / 1)]) {
 									// The body will execute, so should not be executed again
 									guard$sample24put65[((i$var61 - 0) / 1)] = true;
 									{
-										prob[i$var61] = (exped[i$var61] / sum);
+										state.prob[i$var61] = (state.exped[i$var61] / state.sum);
 									}
 								}
 							}
@@ -290,15 +139,15 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 				}
 			}
 			{
-				for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+				for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 					if((i$var18 == i$var36)) {
-						for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+						for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 							if((i$var36 == i$var61)) {
 								if(!guard$sample24put65[((i$var61 - 0) / 1)]) {
 									// The body will execute, so should not be executed again
 									guard$sample24put65[((i$var61 - 0) / 1)] = true;
 									{
-										prob[i$var61] = (exped[i$var61] / sum);
+										state.prob[i$var61] = (state.exped[i$var61] / state.sum);
 									}
 								}
 							}
@@ -313,7 +162,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 	// by sample task 24 drawn from Gaussian 23. Inference was performed using Metropolis-Hastings.
 	private final void inferSample24(int i$var18) {
 		if(true) {
-			constrainedFlag$sample24[((i$var18 - 1) / 1)] = false;
+			state.constrainedFlag$sample24[((i$var18 - 1) / 1)] = false;
 			
 			// Calculate the number of states to evaluate.
 			int cv$numStates = 0;
@@ -323,7 +172,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 			}
 			
 			// The original value of the sample
-			double cv$originalValue = ut[i$var18];
+			double cv$originalValue = state.ut[i$var18];
 			
 			// The probability of the random variable generating the originally sampled value
 			double cv$originalProbability = 0.0;
@@ -336,12 +185,12 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 				cv$var = (0.1 * 0.1);
 			
 			// The proposed new value for the sample
-			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(RNG$)) + cv$originalValue);
+			double cv$proposedValue = ((Math.sqrt(cv$var) * DistributionSampling.sampleGaussian(state.RNG$)) + cv$originalValue);
 			
 			// The probability of the random variable generating the new sample value.
 			double cv$proposedProbability = 0.0;
 			for(int cv$valuePos = 0; cv$valuePos < cv$numStates; cv$valuePos += 1) {
-				if((constrainedFlag$sample24[((i$var18 - 1) / 1)] || (cv$valuePos == 0))) {
+				if((state.constrainedFlag$sample24[((i$var18 - 1) / 1)] || (cv$valuePos == 0))) {
 					// Initialize the summed probabilities to 0.
 					double cv$stateProbabilityValue = Double.NEGATIVE_INFINITY;
 					
@@ -370,7 +219,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 						{
 							{
 								{
-									ut[i$var18] = cv$currentValue;
+									state.ut[i$var18] = cv$currentValue;
 								}
 							}
 						}
@@ -380,10 +229,10 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 						// Looking for a path between Sample 24 and consumer double[] 39.
 						{
 							{
-								for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+								for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 									if((i$var18 == i$var36)) {
 										{
-											exped[i$var36] = Math.exp(ut[i$var36]);
+											state.exped[i$var36] = Math.exp(state.ut[i$var36]);
 										}
 									}
 								}
@@ -395,9 +244,9 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 						// Looking for a path between Sample 24 and consumer double 50.
 						{
 							{
-								for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+								for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 									if((i$var18 == i$var36)) {
-										if(((0 <= i$var36) && (i$var36 < noProducts))) {
+										if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
 											{
 												// Reduction of array exped
 												// 
@@ -407,12 +256,12 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 												double reduceVar$sum$0 = 0.0;
 												
 												// For each index in the array to be reduced
-												for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+												for(int cv$reduction44Index = 0; cv$reduction44Index < state.noProducts; cv$reduction44Index += 1) {
 													// Set the left hand term of the reduction function to the return variable value.
 													double i$var47 = reduceVar$sum$0;
 													
 													// Set the right hand term to a value from the array exped
-													double j = exped[cv$reduction44Index];
+													double j = state.exped[cv$reduction44Index];
 													
 													// Execute the reduction function, saving the result into the return value.
 													// 
@@ -421,7 +270,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 												}
 												
 												// Write out the new sample value.
-												sum = reduceVar$sum$0;
+												state.sum = reduceVar$sum$0;
 											}
 										}
 									}
@@ -435,12 +284,12 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 						{
 							// Guard to check that at most one copy of the code is executed for a given random
 							// variable instance.
-							boolean[] guard$sample24put65 = guard$sample24put65$global;
+							boolean[] guard$sample24put65 = scratch.guard$sample24put65$global;
 							{
-								for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+								for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 									if((i$var18 == i$var36)) {
-										if(((0 <= i$var36) && (i$var36 < noProducts))) {
-											for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+										if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
+											for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1)
 												// Set the flags to false
 												guard$sample24put65[((i$var61 - 0) / 1)] = false;
 										}
@@ -448,9 +297,9 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 								}
 							}
 							{
-								for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+								for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 									if((i$var18 == i$var36)) {
-										for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+										for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 											if((i$var36 == i$var61))
 												// Set the flags to false
 												guard$sample24put65[((i$var61 - 0) / 1)] = false;
@@ -459,15 +308,15 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 								}
 							}
 							{
-								for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+								for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 									if((i$var18 == i$var36)) {
-										if(((0 <= i$var36) && (i$var36 < noProducts))) {
-											for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+										if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
+											for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 												if(!guard$sample24put65[((i$var61 - 0) / 1)]) {
 													// The body will execute, so should not be executed again
 													guard$sample24put65[((i$var61 - 0) / 1)] = true;
 													{
-														prob[i$var61] = (exped[i$var61] / sum);
+														state.prob[i$var61] = (state.exped[i$var61] / state.sum);
 													}
 												}
 											}
@@ -476,15 +325,15 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 								}
 							}
 							{
-								for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+								for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 									if((i$var18 == i$var36)) {
-										for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+										for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 											if((i$var36 == i$var61)) {
 												if(!guard$sample24put65[((i$var61 - 0) / 1)]) {
 													// The body will execute, so should not be executed again
 													guard$sample24put65[((i$var61 - 0) / 1)] = true;
 													{
-														prob[i$var61] = (exped[i$var61] / sum);
+														state.prob[i$var61] = (state.exped[i$var61] / state.sum);
 													}
 												}
 											}
@@ -511,11 +360,11 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 								boolean guard$sample24categorical66 = false;
 								{
 									double traceTempVariable$var37$8_1 = cv$currentValue;
-									for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+									for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 										if((i$var18 == i$var36)) {
 											double traceTempVariable$i$8_3 = Math.exp(traceTempVariable$var37$8_1);
-											if(((0 <= i$var36) && (i$var36 < noProducts))) {
-												if((0 < noProducts)) {
+											if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
+												if((0 < state.noProducts)) {
 													// Reduction of array exped
 													// 
 													// A generated name to prevent name collisions if the reduction is implemented more
@@ -529,19 +378,19 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 														double i$var47 = reduceVar$sum$1;
 														
 														// Set the right hand term to a value from the array exped
-														double j = exped[cv$reduction242Index];
+														double j = state.exped[cv$reduction242Index];
 														
 														// Execute the reduction function, saving the result into the return value.
 														// 
 														// Copy the result of the reduction into the variable returned by the reduction.
 														reduceVar$sum$1 = (i$var47 + j);
 													}
-													for(int cv$reduction242Index = (i$var36 + 1); cv$reduction242Index < noProducts; cv$reduction242Index += 1) {
+													for(int cv$reduction242Index = (i$var36 + 1); cv$reduction242Index < state.noProducts; cv$reduction242Index += 1) {
 														// Set the left hand term of the reduction function to the return variable value.
 														double i$var47 = reduceVar$sum$1;
 														
 														// Set the right hand term to a value from the array exped
-														double j = exped[cv$reduction242Index];
+														double j = state.exped[cv$reduction242Index];
 														
 														// Execute the reduction function, saving the result into the return value.
 														// 
@@ -561,12 +410,12 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 														// Processing sample task 78 of consumer random variable null.
 														{
 															{
-																for(int var76 = 0; var76 < noObs; var76 += 1) {
+																for(int var76 = 0; var76 < state.noObs; var76 += 1) {
 																	// Flag recording if this sample task of the consuming random variable is constrained.
 																	boolean cv$sampleConstrained = true;
 																	if(cv$sampleConstrained) {
 																		// Mark that the sample has observed constrained data.
-																		constrainedFlag$sample24[((i$var18 - 1) / 1)] = true;
+																		state.constrainedFlag$sample24[((i$var18 - 1) / 1)] = true;
 																		
 																		// Set an accumulator to sum the probabilities for each possible configuration of
 																		// inputs.
@@ -581,14 +430,14 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 																					{
 																						{
 																							// Record the probability of sample task 78 generating output with current configuration.
-																							if(((Math.log(1.0) + ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(1.0) + ((((((0.0 <= state.choices[var76]) && (state.choices[var76] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[state.choices[var76]])) && (state.prob[state.choices[var76]] <= 1.0))?Math.log(state.prob[state.choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.choices[var76]) && (state.choices[var76] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[state.choices[var76]])) && (state.prob[state.choices[var76]] <= 1.0))?Math.log(state.prob[state.choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								// If the second value is -infinity.
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY));
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.choices[var76]) && (state.choices[var76] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[state.choices[var76]])) && (state.prob[state.choices[var76]] <= 1.0))?Math.log(state.prob[state.choices[var76]]):Double.NEGATIVE_INFINITY));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.choices[var76]) && (state.choices[var76] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[state.choices[var76]])) && (state.prob[state.choices[var76]] <= 1.0))?Math.log(state.prob[state.choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.choices[var76]) && (state.choices[var76] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[state.choices[var76]])) && (state.prob[state.choices[var76]] <= 1.0))?Math.log(state.prob[state.choices[var76]]):Double.NEGATIVE_INFINITY)));
 																							}
 																							
 																							// Recorded the probability of reaching sample task 78 with the current configuration.
@@ -626,10 +475,10 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 								}
 								{
 									double traceTempVariable$var37$9_1 = cv$currentValue;
-									for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+									for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 										if((i$var18 == i$var36)) {
 											double traceTempVariable$var62$9_3 = Math.exp(traceTempVariable$var37$9_1);
-											for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+											for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 												if((i$var36 == i$var61)) {
 													if(!guard$sample24categorical66) {
 														// The body will execute, so should not be executed again
@@ -638,12 +487,12 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 														// Processing sample task 78 of consumer random variable null.
 														{
 															{
-																for(int var76 = 0; var76 < noObs; var76 += 1) {
+																for(int var76 = 0; var76 < state.noObs; var76 += 1) {
 																	// Flag recording if this sample task of the consuming random variable is constrained.
 																	boolean cv$sampleConstrained = true;
 																	if(cv$sampleConstrained) {
 																		// Mark that the sample has observed constrained data.
-																		constrainedFlag$sample24[((i$var18 - 1) / 1)] = true;
+																		state.constrainedFlag$sample24[((i$var18 - 1) / 1)] = true;
 																		
 																		// Set an accumulator to sum the probabilities for each possible configuration of
 																		// inputs.
@@ -658,14 +507,14 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 																					{
 																						{
 																							// Record the probability of sample task 78 generating output with current configuration.
-																							if(((Math.log(1.0) + ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
-																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
+																							if(((Math.log(1.0) + ((((((0.0 <= state.choices[var76]) && (state.choices[var76] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[state.choices[var76]])) && (state.prob[state.choices[var76]] <= 1.0))?Math.log(state.prob[state.choices[var76]]):Double.NEGATIVE_INFINITY)) < cv$accumulatedConsumerProbabilities))
+																								cv$accumulatedConsumerProbabilities = (Math.log((Math.exp(((Math.log(1.0) + ((((((0.0 <= state.choices[var76]) && (state.choices[var76] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[state.choices[var76]])) && (state.prob[state.choices[var76]] <= 1.0))?Math.log(state.prob[state.choices[var76]]):Double.NEGATIVE_INFINITY)) - cv$accumulatedConsumerProbabilities)) + 1)) + cv$accumulatedConsumerProbabilities);
 																							else {
 																								// If the second value is -infinity.
 																								if((cv$accumulatedConsumerProbabilities == Double.NEGATIVE_INFINITY))
-																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY));
+																									cv$accumulatedConsumerProbabilities = (Math.log(1.0) + ((((((0.0 <= state.choices[var76]) && (state.choices[var76] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[state.choices[var76]])) && (state.prob[state.choices[var76]] <= 1.0))?Math.log(state.prob[state.choices[var76]]):Double.NEGATIVE_INFINITY));
 																								else
-																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= choices[var76]) && (choices[var76] < noProducts)) && (0 < noProducts)) && (0.0 <= prob[choices[var76]])) && (prob[choices[var76]] <= 1.0))?Math.log(prob[choices[var76]]):Double.NEGATIVE_INFINITY)));
+																									cv$accumulatedConsumerProbabilities = (Math.log((Math.exp((cv$accumulatedConsumerProbabilities - (Math.log(1.0) + ((((((0.0 <= state.choices[var76]) && (state.choices[var76] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[state.choices[var76]])) && (state.prob[state.choices[var76]] <= 1.0))?Math.log(state.prob[state.choices[var76]]):Double.NEGATIVE_INFINITY)))) + 1)) + (Math.log(1.0) + ((((((0.0 <= state.choices[var76]) && (state.choices[var76] < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[state.choices[var76]])) && (state.prob[state.choices[var76]] <= 1.0))?Math.log(state.prob[state.choices[var76]]):Double.NEGATIVE_INFINITY)));
 																							}
 																							
 																							// Recorded the probability of reaching sample task 78 with the current configuration.
@@ -732,7 +581,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 					// to be less than or equal as otherwise if the proposed value is not possible and
 					// the random value is 0 an impossible value will be accepted.
 					if((cv$valuePos == 1)) {
-						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(RNG$))))) || Double.isNaN(cv$ratio))) {
+						if(((cv$ratio <= Math.log((0.0 + ((1.0 - 0.0) * DistributionSampling.sampleUniform(state.RNG$))))) || Double.isNaN(cv$ratio))) {
 							// If it is not revert the changes.
 							// 
 							// Set the sample value
@@ -744,7 +593,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 							{
 								{
 									{
-										ut[i$var18] = var24;
+										state.ut[i$var18] = var24;
 									}
 								}
 							}
@@ -754,10 +603,10 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 							// Looking for a path between Sample 24 and consumer double[] 39.
 							{
 								{
-									for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+									for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 										if((i$var18 == i$var36)) {
 											{
-												exped[i$var36] = Math.exp(ut[i$var36]);
+												state.exped[i$var36] = Math.exp(state.ut[i$var36]);
 											}
 										}
 									}
@@ -769,9 +618,9 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 							// Looking for a path between Sample 24 and consumer double 50.
 							{
 								{
-									for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+									for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 										if((i$var18 == i$var36)) {
-											if(((0 <= i$var36) && (i$var36 < noProducts))) {
+											if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
 												{
 													// Reduction of array exped
 													// 
@@ -781,12 +630,12 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 													double reduceVar$sum$2 = 0.0;
 													
 													// For each index in the array to be reduced
-													for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+													for(int cv$reduction44Index = 0; cv$reduction44Index < state.noProducts; cv$reduction44Index += 1) {
 														// Set the left hand term of the reduction function to the return variable value.
 														double i$var47 = reduceVar$sum$2;
 														
 														// Set the right hand term to a value from the array exped
-														double j = exped[cv$reduction44Index];
+														double j = state.exped[cv$reduction44Index];
 														
 														// Execute the reduction function, saving the result into the return value.
 														// 
@@ -795,7 +644,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 													}
 													
 													// Write out the new sample value.
-													sum = reduceVar$sum$2;
+													state.sum = reduceVar$sum$2;
 												}
 											}
 										}
@@ -809,12 +658,12 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 							{
 								// Guard to check that at most one copy of the code is executed for a given random
 								// variable instance.
-								boolean[] guard$sample24put65 = guard$sample24put65$global;
+								boolean[] guard$sample24put65 = scratch.guard$sample24put65$global;
 								{
-									for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+									for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 										if((i$var18 == i$var36)) {
-											if(((0 <= i$var36) && (i$var36 < noProducts))) {
-												for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
+											if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
+												for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1)
 													// Set the flags to false
 													guard$sample24put65[((i$var61 - 0) / 1)] = false;
 											}
@@ -822,9 +671,9 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 									}
 								}
 								{
-									for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+									for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 										if((i$var18 == i$var36)) {
-											for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+											for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 												if((i$var36 == i$var61))
 													// Set the flags to false
 													guard$sample24put65[((i$var61 - 0) / 1)] = false;
@@ -833,15 +682,15 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 									}
 								}
 								{
-									for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+									for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 										if((i$var18 == i$var36)) {
-											if(((0 <= i$var36) && (i$var36 < noProducts))) {
-												for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+											if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
+												for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 													if(!guard$sample24put65[((i$var61 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample24put65[((i$var61 - 0) / 1)] = true;
 														{
-															prob[i$var61] = (exped[i$var61] / sum);
+															state.prob[i$var61] = (state.exped[i$var61] / state.sum);
 														}
 													}
 												}
@@ -850,15 +699,15 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 									}
 								}
 								{
-									for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+									for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 										if((i$var18 == i$var36)) {
-											for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+											for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 												if((i$var36 == i$var61)) {
 													if(!guard$sample24put65[((i$var61 - 0) / 1)]) {
 														// The body will execute, so should not be executed again
 														guard$sample24put65[((i$var61 - 0) / 1)] = true;
 														{
-															prob[i$var61] = (exped[i$var61] / sum);
+															state.prob[i$var61] = (state.exped[i$var61] / state.sum);
 														}
 													}
 												}
@@ -879,7 +728,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 	private final void logProbabilityValue$sample24() {
 		// Determine if we need to calculate the values for sample task 24 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample24) {
+		if(!state.fixedProbFlag$sample24) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -889,7 +738,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
+			for(int i$var18 = 1; i$var18 < state.noProducts; i$var18 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -898,7 +747,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 				{
 					{
 						// The sample value to calculate the probability of generating
-						double cv$sampleValue = ut[i$var18];
+						double cv$sampleValue = state.ut[i$var18];
 						{
 							{
 								double var21 = 0.0;
@@ -942,7 +791,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 				// erroneously over written.
 				if(cv$sampleReached)
 					// Store the sample task probability
-					logProbability$sample24[((i$var18 - 1) / 1)] = cv$sampleProbability;
+					state.logProbability$sample24[((i$var18 - 1) / 1)] = cv$sampleProbability;
 				
 				// Guard to ensure that exped is only updated once for this probability.
 				boolean cv$guard$exped = false;
@@ -959,7 +808,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Looking for a path between Sample 24 and consumer double[] 39.
 				{
 					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+						for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 							if((i$var18 == i$var36)) {
 								// If the probability of the variable has not already been updated
 								if(!cv$guard$exped) {
@@ -967,7 +816,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 									cv$guard$exped = true;
 									
 									// Update the variable probability
-									logProbability$exped = (logProbability$exped + cv$sampleProbability);
+									state.logProbability$exped = (state.logProbability$exped + cv$sampleProbability);
 								}
 							}
 						}
@@ -977,16 +826,16 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Looking for a path between Sample 24 and consumer double 50.
 				{
 					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+						for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 							if((i$var18 == i$var36)) {
-								if(((0 <= i$var36) && (i$var36 < noProducts))) {
+								if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
 									// If the probability of the variable has not already been updated
 									if(!cv$guard$sum) {
 										// Set the guard so the update is only applied once.
 										cv$guard$sum = true;
 										
 										// Update the variable probability
-										logProbability$sum = (logProbability$sum + cv$sampleProbability);
+										state.logProbability$sum = (state.logProbability$sum + cv$sampleProbability);
 									}
 								}
 							}
@@ -997,17 +846,17 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Looking for a path between Sample 24 and consumer double[] 64.
 				{
 					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+						for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 							if((i$var18 == i$var36)) {
-								if(((0 <= i$var36) && (i$var36 < noProducts))) {
-									for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+								if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
+									for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 										// If the probability of the variable has not already been updated
 										if(!cv$guard$prob) {
 											// Set the guard so the update is only applied once.
 											cv$guard$prob = true;
 											
 											// Update the variable probability
-											logProbability$prob = (logProbability$prob + cv$sampleProbability);
+											state.logProbability$prob = (state.logProbability$prob + cv$sampleProbability);
 										}
 									}
 								}
@@ -1015,9 +864,9 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 						}
 					}
 					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+						for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 							if((i$var18 == i$var36)) {
-								for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+								for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 									if((i$var36 == i$var61)) {
 										// If the probability of the variable has not already been updated
 										if(!cv$guard$prob) {
@@ -1025,7 +874,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 											cv$guard$prob = true;
 											
 											// Update the variable probability
-											logProbability$prob = (logProbability$prob + cv$sampleProbability);
+											state.logProbability$prob = (state.logProbability$prob + cv$sampleProbability);
 										}
 									}
 								}
@@ -1040,19 +889,19 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 			cv$accumulator = (cv$accumulator + cv$sampleAccumulator);
 			
 			// Update the variable probability
-			logProbability$ut = (logProbability$ut + cv$accumulator);
+			state.logProbability$ut = (state.logProbability$ut + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample24)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample24)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample24 = fixedFlag$sample24;
+			state.fixedProbFlag$sample24 = state.fixedFlag$sample24;
 		} else {
 			// Using cached values.
 			// 
@@ -1063,8 +912,8 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-				double cv$sampleValue = logProbability$sample24[((i$var18 - 1) / 1)];
+			for(int i$var18 = 1; i$var18 < state.noProducts; i$var18 += 1) {
+				double cv$sampleValue = state.logProbability$sample24[((i$var18 - 1) / 1)];
 				cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 				
 				// Record that the sample was reached.
@@ -1085,7 +934,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Looking for a path between Sample 24 and consumer double[] 39.
 				{
 					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+						for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 							if((i$var18 == i$var36)) {
 								// If the probability of the variable has not already been updated
 								if(!cv$guard$exped) {
@@ -1093,7 +942,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 									cv$guard$exped = true;
 									
 									// Update the variable probability
-									logProbability$exped = (logProbability$exped + cv$sampleValue);
+									state.logProbability$exped = (state.logProbability$exped + cv$sampleValue);
 								}
 							}
 						}
@@ -1103,16 +952,16 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Looking for a path between Sample 24 and consumer double 50.
 				{
 					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+						for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 							if((i$var18 == i$var36)) {
-								if(((0 <= i$var36) && (i$var36 < noProducts))) {
+								if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
 									// If the probability of the variable has not already been updated
 									if(!cv$guard$sum) {
 										// Set the guard so the update is only applied once.
 										cv$guard$sum = true;
 										
 										// Update the variable probability
-										logProbability$sum = (logProbability$sum + cv$sampleValue);
+										state.logProbability$sum = (state.logProbability$sum + cv$sampleValue);
 									}
 								}
 							}
@@ -1123,17 +972,17 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 				// Looking for a path between Sample 24 and consumer double[] 64.
 				{
 					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+						for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 							if((i$var18 == i$var36)) {
-								if(((0 <= i$var36) && (i$var36 < noProducts))) {
-									for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+								if(((0 <= i$var36) && (i$var36 < state.noProducts))) {
+									for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 										// If the probability of the variable has not already been updated
 										if(!cv$guard$prob) {
 											// Set the guard so the update is only applied once.
 											cv$guard$prob = true;
 											
 											// Update the variable probability
-											logProbability$prob = (logProbability$prob + cv$sampleValue);
+											state.logProbability$prob = (state.logProbability$prob + cv$sampleValue);
 										}
 									}
 								}
@@ -1141,9 +990,9 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 						}
 					}
 					{
-						for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
+						for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
 							if((i$var18 == i$var36)) {
-								for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
+								for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
 									if((i$var36 == i$var61)) {
 										// If the probability of the variable has not already been updated
 										if(!cv$guard$prob) {
@@ -1151,7 +1000,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 											cv$guard$prob = true;
 											
 											// Update the variable probability
-											logProbability$prob = (logProbability$prob + cv$sampleValue);
+											state.logProbability$prob = (state.logProbability$prob + cv$sampleValue);
 										}
 									}
 								}
@@ -1163,15 +1012,15 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$ut = (logProbability$ut + cv$accumulator);
+			state.logProbability$ut = (state.logProbability$ut + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
 			
 			// If this value is fixed, add it to the probability of this model producing the fixed
 			// values
-			if(fixedFlag$sample24)
-				logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			if(state.fixedFlag$sample24)
+				state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
 	}
 
@@ -1180,7 +1029,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 	private final void logProbabilityValue$sample78() {
 		// Determine if we need to calculate the values for sample task 78 or if we should
 		// just use cached values.
-		if(!fixedProbFlag$sample78) {
+		if(!state.fixedProbFlag$sample78) {
 			// Generating probabilities for sample task
 			// Accumulator for probabilities of instances of the random variable
 			double cv$accumulator = 0.0;
@@ -1190,7 +1039,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var76 = 0; var76 < noObs; var76 += 1) {
+			for(int var76 = 0; var76 < state.noObs; var76 += 1) {
 				// An accumulator for log probabilities.
 				double cv$distributionAccumulator = Double.NEGATIVE_INFINITY;
 				
@@ -1199,11 +1048,11 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 				{
 					{
 						// The sample value to calculate the probability of generating
-						int cv$sampleValue = choices[var76];
+						int cv$sampleValue = state.choices[var76];
 						{
 							{
 								// Store the value of the function call, so the function call is only made once.
-								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < noProducts)) && (0 < noProducts)) && (0.0 <= prob[cv$sampleValue])) && (prob[cv$sampleValue] <= 1.0))?Math.log(prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
+								double cv$weightedProbability = (Math.log(1.0) + ((((((0.0 <= cv$sampleValue) && (cv$sampleValue < state.noProducts)) && (0 < state.noProducts)) && (0.0 <= state.prob[cv$sampleValue])) && (state.prob[cv$sampleValue] <= 1.0))?Math.log(state.prob[cv$sampleValue]):Double.NEGATIVE_INFINITY));
 								
 								// Add the probability of this sample task to the distribution accumulator.
 								if((cv$weightedProbability < cv$distributionAccumulator))
@@ -1245,18 +1094,18 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 			// erroneously over written.
 			if(cv$sampleReached)
 				// Store the random variable instance probability
-				logProbability$var77 = cv$sampleAccumulator;
+				state.logProbability$var77 = cv$sampleAccumulator;
 			
 			// Update the variable probability
-			logProbability$choices = (logProbability$choices + cv$accumulator);
+			state.logProbability$choices = (state.logProbability$choices + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 			
 			// Now the probability is calculated store if it can be cached or if it needs to be
 			// recalculated next time.
-			fixedProbFlag$sample78 = fixedFlag$sample24;
+			state.fixedProbFlag$sample78 = state.fixedFlag$sample24;
 		} else {
 			// Using cached values.
 			// 
@@ -1267,86 +1116,32 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 			
 			// A guard to check if the sample value is ever reached.
 			boolean cv$sampleReached = false;
-			for(int var76 = 0; var76 < noObs; var76 += 1)
+			for(int var76 = 0; var76 < state.noObs; var76 += 1)
 				// Record that the sample was reached.
 				cv$sampleReached = true;
-			double cv$sampleValue = logProbability$var77;
+			double cv$sampleValue = state.logProbability$var77;
 			cv$rvAccumulator = (cv$rvAccumulator + cv$sampleValue);
 			cv$accumulator = (cv$accumulator + cv$rvAccumulator);
 			
 			// Update the variable probability
-			logProbability$choices = (logProbability$choices + cv$accumulator);
+			state.logProbability$choices = (state.logProbability$choices + cv$accumulator);
 			
 			// Add probability to model
-			logProbability$$model = (logProbability$$model + cv$accumulator);
-			logProbability$$evidence = (logProbability$$evidence + cv$accumulator);
+			state.logProbability$$model = (state.logProbability$$model + cv$accumulator);
+			state.logProbability$$evidence = (state.logProbability$$evidence + cv$accumulator);
 		}
-	}
-
-	// Method to allocate space temporary variables used by the inference methods. Allocating
-	// here prevents repeated allocation and deallocation, and makes the code more amenable
-	// to GPU execution.
-	@Override
-	public final void allocateScratch() {
-		// Calculate the largest index of i that is possible and allocate an array to hold
-		// the guard for each of these.
-		int cv$max_i$var61 = 0;
-		cv$max_i$var61 = Math.max(cv$max_i$var61, ((noProducts - 0) / 1));
-		
-		// Allocation of guard$sample24put65$global for single threaded execution
-		guard$sample24put65$global = new boolean[cv$max_i$var61];
-	}
-
-	// Method to allocate space for model inputs and outputs.
-	@Override
-	public final void allocator() {
-		// If ut has not been set already allocate space.
-		if(!fixedFlag$sample24) {
-			// Constructor for ut
-			{
-				ut = new double[noProducts];
-			}
-		}
-		
-		// Constructor for exped
-		{
-			exped = new double[noProducts];
-		}
-		
-		// Constructor for prob
-		{
-			prob = new double[noProducts];
-		}
-		
-		// Constructor for choices
-		{
-			choices = new int[noObs];
-		}
-		
-		// Constructor for constrainedFlag$sample24
-		{
-			constrainedFlag$sample24 = new boolean[((((noProducts - 1) - 1) / 1) + 1)];
-		}
-		
-		// Constructor for logProbability$sample24
-		{
-			logProbability$sample24 = new double[((((noProducts - 1) - 1) / 1) + 1)];
-		}
-		
-		// Allocate scratch space
-		allocateScratch();
 	}
 
 	// Method to execute the model code conventionally.
 	@Override
 	public final void forwardGeneration() {
-		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-			if(!fixedFlag$sample24)
-				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int i$var18 = 1; i$var18 < state.noProducts; i$var18 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-			if(!fixedFlag$sample24)
-				exped[i$var36] = Math.exp(ut[i$var36]);
+		for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.exped[i$var36] = Math.exp(state.ut[i$var36]);
 		}
 		
 		// Reduction of array exped
@@ -1357,26 +1152,26 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 		double reduceVar$sum$4 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+		for(int cv$reduction44Index = 0; cv$reduction44Index < state.noProducts; cv$reduction44Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double i$var47 = reduceVar$sum$4;
 			
 			// Set the right hand term to a value from the array exped
-			double j = exped[cv$reduction44Index];
+			double j = state.exped[cv$reduction44Index];
 			
 			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample24)
+			if(!state.fixedFlag$sample24)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$sum$4 = (i$var47 + j);
 		}
-		if(!fixedFlag$sample24)
-			sum = reduceVar$sum$4;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-			if(!fixedFlag$sample24)
-				prob[i$var61] = (exped[i$var61] / sum);
+		if(!state.fixedFlag$sample24)
+			state.sum = reduceVar$sum$4;
+		for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.prob[i$var61] = (state.exped[i$var61] / state.sum);
 		}
-		for(int var76 = 0; var76 < noObs; var76 += 1)
-			choices[var76] = DistributionSampling.sampleCategorical(RNG$, prob, noProducts);
+		for(int var76 = 0; var76 < state.noObs; var76 += 1)
+			state.choices[var76] = DistributionSampling.sampleCategorical(state.RNG$, state.prob, state.noProducts);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
@@ -1384,12 +1179,12 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 	// and stored.
 	@Override
 	public final void forwardGenerationDistributionsNoOutputsPrime() {
-		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-			if(!fixedFlag$sample24)
-				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int i$var18 = 1; i$var18 < state.noProducts; i$var18 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1)
-			exped[i$var36] = Math.exp(ut[i$var36]);
+		for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1)
+			state.exped[i$var36] = Math.exp(state.ut[i$var36]);
 		
 		// Reduction of array exped
 		// 
@@ -1399,33 +1194,33 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 		double reduceVar$sum$8 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+		for(int cv$reduction44Index = 0; cv$reduction44Index < state.noProducts; cv$reduction44Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double i$var47 = reduceVar$sum$8;
 			
 			// Set the right hand term to a value from the array exped
-			double j = exped[cv$reduction44Index];
+			double j = state.exped[cv$reduction44Index];
 			
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			reduceVar$sum$8 = (i$var47 + j);
 		}
-		sum = reduceVar$sum$8;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
-			prob[i$var61] = (exped[i$var61] / sum);
+		state.sum = reduceVar$sum$8;
+		for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1)
+			state.prob[i$var61] = (state.exped[i$var61] / state.sum);
 	}
 
 	// Method to execute the model code conventionally with priming of fixed intermediate
 	// variables.
 	@Override
 	public final void forwardGenerationPrime() {
-		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-			if(!fixedFlag$sample24)
-				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int i$var18 = 1; i$var18 < state.noProducts; i$var18 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1)
-			exped[i$var36] = Math.exp(ut[i$var36]);
+		for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1)
+			state.exped[i$var36] = Math.exp(state.ut[i$var36]);
 		
 		// Reduction of array exped
 		// 
@@ -1435,36 +1230,36 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 		double reduceVar$sum$5 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+		for(int cv$reduction44Index = 0; cv$reduction44Index < state.noProducts; cv$reduction44Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double i$var47 = reduceVar$sum$5;
 			
 			// Set the right hand term to a value from the array exped
-			double j = exped[cv$reduction44Index];
+			double j = state.exped[cv$reduction44Index];
 			
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			reduceVar$sum$5 = (i$var47 + j);
 		}
-		sum = reduceVar$sum$5;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
-			prob[i$var61] = (exped[i$var61] / sum);
-		for(int var76 = 0; var76 < noObs; var76 += 1)
-			choices[var76] = DistributionSampling.sampleCategorical(RNG$, prob, noProducts);
+		state.sum = reduceVar$sum$5;
+		for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1)
+			state.prob[i$var61] = (state.exped[i$var61] / state.sum);
+		for(int var76 = 0; var76 < state.noObs; var76 += 1)
+			state.choices[var76] = DistributionSampling.sampleCategorical(state.RNG$, state.prob, state.noProducts);
 	}
 
 	// Method to execute the model code conventionally, excluding the elements that generate
 	// observed values. Distributions are collapsed to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputs() {
-		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-			if(!fixedFlag$sample24)
-				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int i$var18 = 1; i$var18 < state.noProducts; i$var18 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1) {
-			if(!fixedFlag$sample24)
-				exped[i$var36] = Math.exp(ut[i$var36]);
+		for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.exped[i$var36] = Math.exp(state.ut[i$var36]);
 		}
 		
 		// Reduction of array exped
@@ -1475,23 +1270,23 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 		double reduceVar$sum$6 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+		for(int cv$reduction44Index = 0; cv$reduction44Index < state.noProducts; cv$reduction44Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double i$var47 = reduceVar$sum$6;
 			
 			// Set the right hand term to a value from the array exped
-			double j = exped[cv$reduction44Index];
+			double j = state.exped[cv$reduction44Index];
 			
 			// Execute the reduction function, saving the result into the return value.
-			if(!fixedFlag$sample24)
+			if(!state.fixedFlag$sample24)
 				// Copy the result of the reduction into the variable returned by the reduction.
 				reduceVar$sum$6 = (i$var47 + j);
 		}
-		if(!fixedFlag$sample24)
-			sum = reduceVar$sum$6;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1) {
-			if(!fixedFlag$sample24)
-				prob[i$var61] = (exped[i$var61] / sum);
+		if(!state.fixedFlag$sample24)
+			state.sum = reduceVar$sum$6;
+		for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.prob[i$var61] = (state.exped[i$var61] / state.sum);
 		}
 	}
 
@@ -1500,12 +1295,12 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 	// to single values.
 	@Override
 	public final void forwardGenerationValuesNoOutputsPrime() {
-		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-			if(!fixedFlag$sample24)
-				ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(RNG$)) + 0.0);
+		for(int i$var18 = 1; i$var18 < state.noProducts; i$var18 += 1) {
+			if(!state.fixedFlag$sample24)
+				state.ut[i$var18] = ((Math.sqrt(10.0) * DistributionSampling.sampleGaussian(state.RNG$)) + 0.0);
 		}
-		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1)
-			exped[i$var36] = Math.exp(ut[i$var36]);
+		for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1)
+			state.exped[i$var36] = Math.exp(state.ut[i$var36]);
 		
 		// Reduction of array exped
 		// 
@@ -1515,45 +1310,45 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 		double reduceVar$sum$7 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+		for(int cv$reduction44Index = 0; cv$reduction44Index < state.noProducts; cv$reduction44Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double i$var47 = reduceVar$sum$7;
 			
 			// Set the right hand term to a value from the array exped
-			double j = exped[cv$reduction44Index];
+			double j = state.exped[cv$reduction44Index];
 			
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			reduceVar$sum$7 = (i$var47 + j);
 		}
-		sum = reduceVar$sum$7;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
-			prob[i$var61] = (exped[i$var61] / sum);
+		state.sum = reduceVar$sum$7;
+		for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1)
+			state.prob[i$var61] = (state.exped[i$var61] / state.sum);
 	}
 
 	// Method to execute one round of Gibbs sampling.
 	@Override
 	public final void gibbsRound() {
 		// Infer the samples in chronological order.
-		if(system$gibbsForward) {
-			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-				if(!fixedFlag$sample24)
+		if(state.system$gibbsForward) {
+			for(int i$var18 = 1; i$var18 < state.noProducts; i$var18 += 1) {
+				if(!state.fixedFlag$sample24)
 					inferSample24(i$var18);
 			}
 		}
 		// Infer the samples in reverse chronological order.
 		else {
-			for(int i$var18 = (noProducts - ((((noProducts - 1) - 1) % 1) + 1)); i$var18 >= ((1 - 1) + 1); i$var18 -= 1) {
-				if(!fixedFlag$sample24)
+			for(int i$var18 = (state.noProducts - ((((state.noProducts - 1) - 1) % 1) + 1)); i$var18 >= ((1 - 1) + 1); i$var18 -= 1) {
+				if(!state.fixedFlag$sample24)
 					inferSample24(i$var18);
 			}
 		}
 		
 		// Reverse the direction of execution for the next iteration
-		system$gibbsForward = !system$gibbsForward;
-		for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1) {
-			if(!constrainedFlag$sample24[((i$var18 - 1) / 1)])
+		state.system$gibbsForward = !state.system$gibbsForward;
+		for(int i$var18 = 1; i$var18 < state.noProducts; i$var18 += 1) {
+			if(!state.constrainedFlag$sample24[((i$var18 - 1) / 1)])
 				drawValueSample24(i$var18);
 		}
 	}
@@ -1566,30 +1361,30 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 		// them to be reconstructed by the probability calls for each sample. Sample probabilities
 		// are only reset for samples that are not fixed at a value that has already been
 		// calculated.
-		logProbability$$model = 0.0;
-		logProbability$$evidence = 0.0;
-		logProbability$ut = 0.0;
-		logProbability$exped = 0.0;
-		logProbability$sum = 0.0;
-		logProbability$prob = 0.0;
-		if(!fixedProbFlag$sample24) {
-			for(int i$var18 = 1; i$var18 < noProducts; i$var18 += 1)
-				logProbability$sample24[((i$var18 - 1) / 1)] = Double.NaN;
+		state.logProbability$$model = 0.0;
+		state.logProbability$$evidence = 0.0;
+		state.logProbability$ut = 0.0;
+		state.logProbability$exped = 0.0;
+		state.logProbability$sum = 0.0;
+		state.logProbability$prob = 0.0;
+		if(!state.fixedProbFlag$sample24) {
+			for(int i$var18 = 1; i$var18 < state.noProducts; i$var18 += 1)
+				state.logProbability$sample24[((i$var18 - 1) / 1)] = Double.NaN;
 		}
-		logProbability$choices = 0.0;
-		if(!fixedProbFlag$sample78)
-			logProbability$var77 = Double.NaN;
+		state.logProbability$choices = 0.0;
+		if(!state.fixedProbFlag$sample78)
+			state.logProbability$var77 = Double.NaN;
 	}
 
 	// Method for initializing the model into a valid state before commencing inference
 	// etc.
 	@Override
 	public final void initializeModel() {
-		ut[0] = 0.0;
+		state.ut[0] = 0.0;
 		
 		// Set all the values in the array
-		for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
-			constrainedFlag$sample24[index$constrainedFlag$sample24$1] = true;
+		for(int index$constrainedFlag$sample24$1 = 0; index$constrainedFlag$sample24$1 < state.constrainedFlag$sample24.length; index$constrainedFlag$sample24$1 += 1)
+			state.constrainedFlag$sample24[index$constrainedFlag$sample24$1] = true;
 	}
 
 	// Construct the evidence probabilities.
@@ -1599,7 +1394,7 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 		initializeLogProbabilityFields();
 		
 		// Call each method in turn to generate the new probability values.
-		if(fixedFlag$sample24)
+		if(state.fixedFlag$sample24)
 			logProbabilityValue$sample24();
 		logProbabilityValue$sample78();
 	}
@@ -1645,8 +1440,8 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 	@Override
 	public final void propagateObservedValues() {
 		// Deep copy between arrays
-		int[] cv$source1 = ObsChoices;
-		int[] cv$target1 = choices;
+		int[] cv$source1 = state.ObsChoices;
+		int[] cv$target1 = state.choices;
 		int cv$length1 = cv$target1.length;
 		for(int cv$index1 = 0; cv$index1 < cv$length1; cv$index1 += 1)
 			cv$target1[cv$index1] = cv$source1[cv$index1];
@@ -1658,8 +1453,8 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 	// as part of this process.
 	@Override
 	public final void setIntermediates() {
-		for(int i$var36 = 0; i$var36 < noProducts; i$var36 += 1)
-			exped[i$var36] = Math.exp(ut[i$var36]);
+		for(int i$var36 = 0; i$var36 < state.noProducts; i$var36 += 1)
+			state.exped[i$var36] = Math.exp(state.ut[i$var36]);
 		
 		// Reduction of array exped
 		// 
@@ -1669,21 +1464,21 @@ final class DiscreteChoice$SingleThreadCPU extends org.sandwood.runtime.internal
 		double reduceVar$sum$9 = 0.0;
 		
 		// For each index in the array to be reduced
-		for(int cv$reduction44Index = 0; cv$reduction44Index < noProducts; cv$reduction44Index += 1) {
+		for(int cv$reduction44Index = 0; cv$reduction44Index < state.noProducts; cv$reduction44Index += 1) {
 			// Set the left hand term of the reduction function to the return variable value.
 			double i$var47 = reduceVar$sum$9;
 			
 			// Set the right hand term to a value from the array exped
-			double j = exped[cv$reduction44Index];
+			double j = state.exped[cv$reduction44Index];
 			
 			// Execute the reduction function, saving the result into the return value.
 			// 
 			// Copy the result of the reduction into the variable returned by the reduction.
 			reduceVar$sum$9 = (i$var47 + j);
 		}
-		sum = reduceVar$sum$9;
-		for(int i$var61 = 0; i$var61 < noProducts; i$var61 += 1)
-			prob[i$var61] = (exped[i$var61] / sum);
+		state.sum = reduceVar$sum$9;
+		for(int i$var61 = 0; i$var61 < state.noProducts; i$var61 += 1)
+			state.prob[i$var61] = (state.exped[i$var61] / state.sum);
 	}
 
 	@Override

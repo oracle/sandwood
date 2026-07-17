@@ -1,27 +1,178 @@
 package org.sandwood.compiler.tests.parser;
 
-import org.sandwood.runtime.model.Model;
-import org.sandwood.runtime.model.ExecutionTarget;
-import org.sandwood.runtime.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import java.util.HashMap;
+import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
-
-import java.util.Map;
-import java.util.HashMap;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.ModelInternal;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
+import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import org.sandwood.runtime.model.ExecutionTarget;
+import org.sandwood.runtime.model.variables.*;
 
 /**
-  * Class representing the Sandwood model ParallelMK1 This is the class that
-  * all user interactions with the model should occur through.
-  */
-public final class ParallelMK1 extends Model {
+ * Class representing the Sandwood model ParallelMK1 This is the class that all user
+ * interactions with the model should occur through.
+ */
+public final class ParallelMK1 extends ModelInternal<ParallelMK1.State> {
+	final class State extends CoreModelState {
 
-    private ParallelMK1$CoreInterface system$c = new ParallelMK1$SingleThreadCPU(ExecutionTarget.singleThread);
+		// Declare the variables for the model.
+		boolean[] constrainedFlag$sample20;
+		boolean fixedFlag$sample20 = false;
+		boolean fixedProbFlag$sample20 = false;
+		boolean fixedProbFlag$sample24 = false;
+		double[] generated;
+		double[] indirection;
+		int length$observed;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$generated;
+		double logProbability$indirection;
+		double logProbability$sample;
+		double[] logProbability$sample20;
+		double[] logProbability$sample24;
+		double[] observed;
+		double[] sample;
+		boolean system$gibbsForward = true;
+
+		// Method to allocate space for model inputs and outputs.
+		@Override
+		public final void allocate() {
+			// Constructor for generated
+			{
+				generated = new double[length$observed];
+			}
+			
+			// Constructor for indirection
+			{
+				indirection = new double[length$observed];
+			}
+			
+			// If sample has not been set already allocate space.
+			if(!fixedFlag$sample20) {
+				// Constructor for sample
+				{
+					sample = new double[((((length$observed - 1) - 0) / 1) + 1)];
+				}
+			}
+			
+			// Constructor for constrainedFlag$sample20
+			{
+				constrainedFlag$sample20 = new boolean[((((length$observed - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for logProbability$sample20
+			{
+				logProbability$sample20 = new double[((((length$observed - 1) - 0) / 1) + 1)];
+			}
+			
+			// Constructor for logProbability$sample24
+			{
+				logProbability$sample24 = new double[((((length$observed - 1) - 0) / 1) + 1)];
+			}
+		}
+
+		// Getter for fixedFlag$sample20.
+		final boolean get$fixedFlag$sample20() {
+			return fixedFlag$sample20;
+		}
+
+		// Setter for fixedFlag$sample20.
+		final void set$fixedFlag$sample20(boolean cv$value, boolean allocated$) {
+			// Set flags for all the side effects of fixedFlag$sample20 including if probabilities
+			// need to be updated.
+			fixedFlag$sample20 = cv$value;
+			
+			// If the model has been allocated update the constraints flags
+			if(allocated$) {
+				// Set all the values in the array
+				for(int index$constrainedFlag$sample20$1 = 0; index$constrainedFlag$sample20$1 < constrainedFlag$sample20.length; index$constrainedFlag$sample20$1 += 1)
+					constrainedFlag$sample20[index$constrainedFlag$sample20$1] = fixedFlag$sample20;
+			}
+			
+			// Should the probability of sample 20 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample20 = (fixedFlag$sample20 && fixedProbFlag$sample20);
+			
+			// Should the probability of sample 24 be set to fixed. This will only every change
+			// the flag to false.
+			fixedProbFlag$sample24 = (fixedFlag$sample20 && fixedProbFlag$sample24);
+		}
+
+		// Getter for generated.
+		final double[] get$generated() {
+			return generated;
+		}
+
+		// Getter for indirection.
+		final double[] get$indirection() {
+			return indirection;
+		}
+
+		// Setter for indirection.
+		final void set$indirection(double[] cv$value, boolean allocated$) {
+			indirection = cv$value;
+		}
+
+		// Getter for length$observed.
+		final int get$length$observed() {
+			return length$observed;
+		}
+
+		// Setter for length$observed.
+		final void set$length$observed(int cv$value, boolean allocated$) {
+			length$observed = cv$value;
+		}
+
+		// Getter for logProbability$$evidence.
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		// Getter for the probability of logProbability$$model.
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		// Getter for logProbability$generated.
+		final double get$logProbability$generated() {
+			return logProbability$generated;
+		}
+
+		// Getter for logProbability$indirection.
+		final double get$logProbability$indirection() {
+			return logProbability$indirection;
+		}
+
+		// Getter for observed.
+		final double[] get$observed() {
+			return observed;
+		}
+
+		// Setter for observed.
+		final void set$observed(double[] cv$value, boolean allocated$) {
+			observed = cv$value;
+		}
+
+		// Getter for sample.
+		final double[] get$sample() {
+			return sample;
+		}
+
+		// Setter for sample.
+		final void set$sample(double[] cv$value, boolean allocated$) {
+			sample = cv$value;
+		}
+	}
 
     private final ComputedDoubleArrayInternal $generated = new ComputedDoubleArrayInternal(this, "generated", false, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$generated(); }
+        public double[] getValue() { return state.get$generated(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -32,7 +183,7 @@ public final class ParallelMK1 extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$generated(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$generated(); }
 
         @Override
         public void setFixed(boolean fixed) {
@@ -45,52 +196,52 @@ public final class ParallelMK1 extends Model {
         }
     };
 
-    /**
-     * Computed variable representing generated of type double[] from the Sandwood model 
-     */
+	/**
+	 * Computed variable representing generated of type double[] from the Sandwood model.
+	 */
     public final ComputedDoubleArray generated = $generated;
 
     private final ComputedDoubleArrayInternal $indirection = new ComputedDoubleArrayInternal(this, "indirection", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$indirection(); }
+        public double[] getValue() { return state.get$indirection(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$indirection(value, allocated);
+            state.set$indirection(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$indirection(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$indirection(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample20(fixed, allocated);
+                state.set$fixedFlag$sample20(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample20())
+            if(state.get$fixedFlag$sample20())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing indirection of type double[] from the Sandwood model 
-     */
+	/**
+	 * Computed variable representing indirection of type double[] from the Sandwood model.
+	 */
     public final ComputedDoubleArray indirection = $indirection;
 
     private final ComputedDoubleArrayInternal $sample = new ComputedDoubleArrayInternal(this, "sample", true, true, true, ProbabilityType.SKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$sample(); }
+        public double[] getValue() { return state.get$sample(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$sample(value, allocated);
+            state.set$sample(value, allocated);
             intermediatesPrimed = false;
         }
 
@@ -116,42 +267,41 @@ public final class ParallelMK1 extends Model {
         @Override
         public double[] getValue() {
             synchronized(model) {
-                return system$c.get$observed();
+                return state.get$observed();
             }
         }
 
         @Override
         public void setValueInternal(double[] value) {
-            system$c.set$observed(value, allocated);
-            system$c.set$length$observed(value.length, allocated);
+            state.set$observed(value, allocated);
+            state.set$length$observed(value.length, allocated);
         }
 
         @Override
         public void setShapeInternal(int shape) {
-            system$c.set$length$observed(shape, allocated);
+            state.set$length$observed(shape, allocated);
         }
 
         @Override
         public int getShape() {
-            return system$c.get$length$observed();
+            return state.get$length$observed();
         }
     };
 
-    /**
-     * Observed variable representing observed of type double[] from the Sandwood model 
-     */
+	/**
+	 * Observed variable representing observed of type double[] from the Sandwood model.
+	 */
     public final ObservedDoubleArrayShapeable observed = $observed;
 
     private Map<String, ObservedVariableInternal> $regularObservedValues = new HashMap<>();
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
     private HasProbabilityInternal[] $probabilityVariables = {$generated, $indirection};
 
-    //Constructors
-    /**
-     * A constructor for a model where no variable values are set.
-     */
+    // Constructors
+	/** A constructor for a model where no variable values are set. */
     public ParallelMK1() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("generated", $generated);
         $computedVariables.put("indirection", $indirection);
@@ -159,109 +309,84 @@ public final class ParallelMK1 extends Model {
 
         //Observed array fields
         $shapedObservedValues.put("observed", $observed);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
-    }
-    /**
-      * A constructor to set all the required values in the model to infer values. These
-      * will be values in an untrained model so this will only generate values from the
-      * default distributions described in the model.
-      * @param observedShape An integer array describing the shape of variable observed to use in the model when generating results.
-      */
 
+        ParallelMK1$SingleThreadCPU core = new ParallelMK1$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+    }
+
+	/**
+	 * A constructor to set all the required values in the model to infer values. These
+	 * will be values in an untrained model so this will only generate values from the
+	 * default distributions described in the model.
+	 * @param observedShape An integer array describing the shape of variable observed
+	 *                      to use in the model when generating results.
+	 */
     public ParallelMK1(int observedShape) {
         this();
         this.$observed.setShape(observedShape);
     }
-    /**
-      * A constructor to set all the required values in the model to infer the model
-      * parameters, or to generate probabilities for the model.
-      * @param observed The value to set observed to.
-      */
 
+	/**
+	 * A constructor to set all the required values in the model to infer the model parameters,
+	 * or to generate probabilities for the model.
+	 * @param observed The value to set observed to.
+	 */
     public ParallelMK1(double[] observed) {
         this();
         this.observed.setValue(observed);
     }
     
     @Override
-    protected ParallelMK1$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        ParallelMK1$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new ParallelMK1$SingleThreadCPU(target);
-                break;
+                return new ParallelMK1$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new ParallelMK1$MultiThreadCPU(target);
-                break;
+                return new ParallelMK1$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
     }
 
-    private void transferData(ParallelMK1$CoreInterface oldCore, ParallelMK1$CoreInterface newCore) {
-
-        //Observed arrays
-        if(observed.isSet()) {
-            newCore.set$observed(oldCore.get$observed(), false);
-            newCore.set$length$observed(oldCore.get$length$observed(), false);
-        }
-        else if(observed.shapeSet())
-            newCore.set$length$observed(oldCore.get$length$observed(), false);
-
-        //ComputedVariables
-        if($indirection.isSet())
-            newCore.set$indirection(oldCore.get$indirection(), false);
-        if($sample.isSet())
-            newCore.set$sample(oldCore.get$sample(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample20(oldCore.get$fixedFlag$sample20(), false);
-    }
-
-    /**
-     * A class to hold all the values required to perform a value inference on the model.
-     */
+	/**
+	 * A class to hold all the values required to perform a value inference on the model.
+	 */
     public static class InferValueInputs {
-        /** Field holding the shape of model input observed */
+		/** Field holding the shape of model input observed */
         public final int observedShape;
 
-        /**
-          * A constructor taking all the values required to set up the model to infer variables.
-          * @param observedShape An integer array describing the shape of variable observed to use in the model when generating results.
-          */
+		/**
+		 * A constructor taking all the values required to set up the model to infer variables.
+		 * @param observedShape An integer array describing the shape of variable observed
+		 *                      to use in the model when generating results.
+		 */
         public InferValueInputs(int observedShape) {
             this.observedShape = observedShape;
         }
     }
 
-    /**
-     * A class to hold all the inputs for the model. It can be used to parameterize inference of the model probabilities
-     * and probability calculations.
-     */
+	/**
+	 * A class to hold all the inputs for the model. It can be used to parameterize inference
+	 * of the model probabilities and probability calculations.
+	 */
     public static class AllInputs {
-        /** Field holding the value of model input observed */
+		/** Field holding the value of model input observed */
         public final double[] observed;
 
-        /**
-          * A constructor to take all the required values by the model to infer the model
-          * parameters, or to generate probabilities for the model.
-          * @param observed The value to set observed to.
-          */
+		/**
+		 * A constructor to take all the required values by the model to infer the model parameters,
+		 * or to generate probabilities for the model.
+		 * @param observed The value to set observed to.
+		 */
         public AllInputs(double[] observed) {
             this.observed = observed;
         }
     }
-
-    /**
-     * A class to hold all the outputs from the model after an infer values step.
-     */
+	/** A class to hold all the outputs from the model after an infer values step. */
     public static class InferredValueOutputs {
-        /** Field holding the value of generated after a convention execution step.*/
+		/** Field holding the value of generated after a convention execution step. */
         public final double[] generated;
-        /** Field holding the value of indirection after a convention execution step.*/
+		/** Field holding the value of indirection after a convention execution step. */
         public final double[] indirection;
 
         InferredValueOutputs(ParallelMK1 system$model) {
@@ -270,14 +395,15 @@ public final class ParallelMK1 extends Model {
         }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class LogProbabilities {
         private final double $logModelProbability;
-        /** Field holding the log probability of computed variable generated */
+		/** Field holding the log probability of computed variable generated */
         public final double generated;
-        /** Field holding the log probability of computed variable indirection */
+		/** Field holding the log probability of computed variable indirection */
         public final double indirection;
 
         LogProbabilities(ParallelMK1 system$model) {
@@ -286,19 +412,22 @@ public final class ParallelMK1 extends Model {
             this.indirection = system$model.indirection.getLogProbability();
         }
 
-        /** Method to return log probability of the whole model 
-         *  @return The log probability of the whole model. */
+		/**
+		 * Method to return log probability of the whole model
+		 * @return The log probability of the whole model.
+		 */
         public double getModelProbability() { return $logModelProbability; }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class Probabilities {
         private final double $modelProbability;
-        /** Field holding the probability of computed variable generated */
+		/** Field holding the probability of computed variable generated */
         public final double generated;
-        /** Field holding the probability of computed variable indirection */
+		/** Field holding the probability of computed variable indirection */
         public final double indirection;
 
         Probabilities(ParallelMK1 system$model) {
@@ -307,16 +436,16 @@ public final class ParallelMK1 extends Model {
             this.indirection = system$model.indirection.getProbability();
         }
 
-        /** Method to return probability of the whole model 
-         *  @return The probability of the whole model. */
+		/**
+		 * Method to return probability of the whole model
+		 * @return The probability of the whole model.
+		 */
         public double getModelProbability() { return $modelProbability; }
     }
 
-    /**
-     * A class to hold all the outputs from the model after an infer model call.
-     */
+	/** A class to hold all the outputs from the model after an infer model call. */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of indirection after an infer model call. */
+		/** Field holding the MAP or Sample value of indirection after an infer model call. */
         public final double[][] indirection;
 
         InferredModelOutputs(ParallelMK1 system$model) {
@@ -324,119 +453,138 @@ public final class ParallelMK1 extends Model {
         }
     }
 
-    /**
-     * Perform a single pass generating values from the model.
-     * @param inputs An object containing the parameters required to run inference on the model.
-     * @return An object containing the values computed by the inference step.
-     */
+	/**
+	 * Perform a single pass generating values from the model.
+	 * @param inputs An object containing the parameters required to run inference on
+	 *               the model.
+	 * @return An object containing the values computed by the inference step.
+	 */
     public InferredValueOutputs execute(InferValueInputs inputs) {
         this.$observed.setShape(inputs.observedShape);
         execute();
         return new InferredValueOutputs(this);
     }
 
-    /**
-     * Infer the values of the different elements of the model.
-     * @param iterations The number of iterations to perform when inferring the values.
-     * @param inputs An object containing the parameters required to generate the model parameters.
-     * @return An object containing the computed values for the model.
-     */
+	/**
+	 * Infer the values of the different elements of the model.
+	 * @param iterations The number of iterations to perform when inferring the values.
+	 * @param inputs An object containing the parameters required to generate the model
+	 *               parameters.
+	 * @return An object containing the computed values for the model.
+	 */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
         this.$observed.setValue(inputs.observed);
         inferValues(iterations);
         return new InferredModelOutputs(this);
     }
 
-    /**
-     * Generate the probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
         this.$observed.setValue(inputs.observed);
         inferProbabilities(iterations);
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.$observed.setValue(inputs.observed);
         inferProbabilities(variance, initialIterations);
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.$observed.setValue(inputs.observed);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new Probabilities(this);
     }
 
-    /**
-     * Generate the log probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the log probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
         this.$observed.setValue(inputs.observed);
         inferProbabilities(iterations);
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.$observed.setValue(inputs.observed);
         inferProbabilities(variance, initialIterations);
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.$observed.setValue(inputs.observed);
         inferProbabilities(variance, initialIterations, maxIterations);
         return new LogProbabilities(this);
     }
 }
-//END OF CODE

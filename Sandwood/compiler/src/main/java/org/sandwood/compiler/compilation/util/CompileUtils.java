@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2024, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -35,7 +35,7 @@ import org.sandwood.compiler.names.PackageName;
 import org.sandwood.compiler.srcTools.sourceToSource.Location;
 import org.sandwood.compiler.srcTools.sourceToSource.ParseException;
 import org.sandwood.compiler.srcTools.sourceToSource.TokenMapping;
-import org.sandwood.compiler.trees.outputTree.OutputSandwoodClass;
+import org.sandwood.compiler.trees.outputTree.OutputSandwoodOuterClass;
 
 public class CompileUtils {
     /**
@@ -64,18 +64,18 @@ public class CompileUtils {
         }
     }
 
-    public static DiagnosticCollector<JavaFileObject> compileToJava(List<OutputSandwoodClass> classes)
+    public static DiagnosticCollector<JavaFileObject> compileToJava(List<OutputSandwoodOuterClass> classes)
             throws IOException {
         return compileToJava(new CompilationOptions(), classes);
     }
 
     public static DiagnosticCollector<JavaFileObject> compileToJava(CompilationOptions opts,
-            List<OutputSandwoodClass> classes) throws IOException {
+            List<OutputSandwoodOuterClass> classes) throws IOException {
 
         final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         List<JavaSourceFromString> compilationUnits = new ArrayList<>();
 
-        for(OutputSandwoodClass c:classes) {
+        for(OutputSandwoodOuterClass c:classes) {
             StringBuilder sb = new StringBuilder();
             c.toJava(sb);
             PackageName packageName = c.getPackage();
@@ -332,7 +332,8 @@ public class CompileUtils {
     private static String getSource(String filename, Location loc, List<String> modelPaths) throws IOException {
         File file = new File(filename);
         if(!file.exists()) {
-            //If the file does not exist check if it exists in one of the model paths, i.e. it is not the full filename.
+            // If the file does not exist check if it exists in one of the model paths, i.e. it is not the full
+            // filename.
             for(String modelPath:modelPaths) {
                 file = new File(modelPath.equals("") ? filename : modelPath + File.separator + filename);
                 if(file.exists())

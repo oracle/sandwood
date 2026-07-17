@@ -1,27 +1,213 @@
 package org.sandwood.compiler.tests.parser;
 
-import org.sandwood.runtime.model.Model;
-import org.sandwood.runtime.model.ExecutionTarget;
-import org.sandwood.runtime.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.*;
-import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import java.util.HashMap;
+import java.util.Map;
 import org.sandwood.common.exceptions.SandwoodException;
 import org.sandwood.runtime.exceptions.SandwoodRuntimeException;
-
-import java.util.Map;
-import java.util.HashMap;
+import org.sandwood.runtime.internal.model.CoreModelBase;
+import org.sandwood.runtime.internal.model.ModelInternal;
+import org.sandwood.runtime.internal.model.state.CoreModelState;
+import org.sandwood.runtime.internal.model.variables.*;
+import org.sandwood.runtime.internal.model.variables.probability.ProbabilityType;
+import org.sandwood.runtime.model.ExecutionTarget;
+import org.sandwood.runtime.model.variables.*;
 
 /**
-  * Class representing the Sandwood model Vulcano2012basic This is the class that
-  * all user interactions with the model should occur through.
-  */
-public final class Vulcano2012basic extends Model {
+ * Class representing the Sandwood model Vulcano2012basic This is the class that all
+ * user interactions with the model should occur through.
+ */
+public final class Vulcano2012basic extends ModelInternal<Vulcano2012basic.State> {
+	final class State extends CoreModelState {
+int[][] Avail;
+		int[][] ObsSales;
+		int[][] Sales;
+		int T;
+		boolean[] constrainedFlag$sample26;
+		double[] exped;
+		double[] expedNorm;
+		boolean fixedFlag$sample26 = false;
+		boolean fixedProbFlag$sample157 = false;
+		boolean fixedProbFlag$sample26 = false;
+		double logProbability$$evidence;
+		double logProbability$$model;
+		double logProbability$Sales;
+		double logProbability$exped;
+		double logProbability$expedNorm;
+		double[] logProbability$sample157;
+		double[] logProbability$sample26;
+		double logProbability$sum;
+		double logProbability$ut;
+		int noProducts;
+		double r;
+		int[] sales_sum;
+		double sum;
+		boolean system$gibbsForward = true;
+		double[] ut;
+		double[][] weekly_rates;
+		double[][] weekly_ut;
 
-    private Vulcano2012basic$CoreInterface system$c = new Vulcano2012basic$SingleThreadCPU(ExecutionTarget.singleThread);
+		@Override
+		public final void allocate() {
+			if(!fixedFlag$sample26) {
+				{
+					ut = new double[noProducts];
+				}
+			}
+			{
+				exped = new double[noProducts];
+			}
+			{
+				expedNorm = new double[noProducts];
+			}
+			{
+				sales_sum = new int[T];
+			}
+			{
+				Sales = new int[T][];
+				for(int var100 = 0; var100 < T; var100 += 1)
+					Sales[var100] = new int[noProducts];
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+					Sales[t$var112] = new int[noProducts];
+			}
+			{
+				weekly_rates = new double[((((T - 1) - 0) / 1) + 1)][];
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+					weekly_rates[((t$var112 - 0) / 1)] = new double[noProducts];
+			}
+			{
+				weekly_ut = new double[((((T - 1) - 0) / 1) + 1)][];
+				for(int t$var112 = 0; t$var112 < T; t$var112 += 1)
+					weekly_ut[((t$var112 - 0) / 1)] = new double[noProducts];
+			}
+			{
+				constrainedFlag$sample26 = new boolean[((((noProducts - 1) - 1) / 1) + 1)];
+			}
+			{
+				logProbability$sample26 = new double[((((noProducts - 1) - 1) / 1) + 1)];
+			}
+			{
+				logProbability$sample157 = new double[((((T - 1) - 0) / 1) + 1)];
+			}
+		}
+
+		final int[][] get$Avail() {
+			return Avail;
+		}
+
+		final void set$Avail(int[][] cv$value, boolean allocated$) {
+			Avail = cv$value;
+		}
+
+		final int[][] get$ObsSales() {
+			return ObsSales;
+		}
+
+		final void set$ObsSales(int[][] cv$value, boolean allocated$) {
+			ObsSales = cv$value;
+		}
+
+		final int[][] get$Sales() {
+			return Sales;
+		}
+
+		final int get$T() {
+			return T;
+		}
+
+		final void set$T(int cv$value, boolean allocated$) {
+			T = cv$value;
+		}
+
+		final double[] get$exped() {
+			return exped;
+		}
+
+		final double[] get$expedNorm() {
+			return expedNorm;
+		}
+
+		final boolean get$fixedFlag$sample26() {
+			return fixedFlag$sample26;
+		}
+
+		final void set$fixedFlag$sample26(boolean cv$value, boolean allocated$) {
+			fixedFlag$sample26 = cv$value;
+			if(allocated$) {
+				for(int index$constrainedFlag$sample26$1 = 0; index$constrainedFlag$sample26$1 < constrainedFlag$sample26.length; index$constrainedFlag$sample26$1 += 1)
+					constrainedFlag$sample26[index$constrainedFlag$sample26$1] = fixedFlag$sample26;
+			}
+			fixedProbFlag$sample26 = (fixedFlag$sample26 && fixedProbFlag$sample26);
+			fixedProbFlag$sample157 = (fixedFlag$sample26 && fixedProbFlag$sample157);
+		}
+
+		@Override
+		public final double get$logProbability$$evidence() {
+			return logProbability$$evidence;
+		}
+
+		@Override
+		public final double getCurrentLogProbability() {
+			return logProbability$$model;
+		}
+
+		final double get$logProbability$Sales() {
+			return logProbability$Sales;
+		}
+
+		final double get$logProbability$exped() {
+			return logProbability$exped;
+		}
+
+		final double get$logProbability$expedNorm() {
+			return logProbability$expedNorm;
+		}
+
+		final double get$logProbability$sum() {
+			return logProbability$sum;
+		}
+
+		final double get$logProbability$ut() {
+			return logProbability$ut;
+		}
+
+		final int get$noProducts() {
+			return noProducts;
+		}
+
+		final void set$noProducts(int cv$value, boolean allocated$) {
+			noProducts = cv$value;
+		}
+
+		final double get$r() {
+			return r;
+		}
+
+		final void set$r(double cv$value, boolean allocated$) {
+			r = cv$value;
+		}
+
+		final int[] get$sales_sum() {
+			return sales_sum;
+		}
+
+		final double get$sum() {
+			return sum;
+		}
+
+		final double[] get$ut() {
+			return ut;
+		}
+
+		final void set$ut(double[] cv$value, boolean allocated$) {
+			ut = cv$value;
+			fixedProbFlag$sample26 = false;
+			fixedProbFlag$sample157 = false;
+		}
+	}
 
     private final ComputedObjectArrayInternal<int[]> $Sales = new ComputedObjectArrayInternal<int[]>(this, "Sales", false, true, false, ProbabilityType.UNSKIPPABLE, org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
-        public int[][] getValue() { return system$c.get$Sales(); }
+        public int[][] getValue() { return state.get$Sales(); }
 
         @Override
         protected void setValueInternal(int[][] value) {}
@@ -32,7 +218,7 @@ public final class Vulcano2012basic extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$Sales(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$Sales(); }
 
         @Override
         public int[][][] constructArray(int iterations) {
@@ -50,14 +236,12 @@ public final class Vulcano2012basic extends Model {
         }
     };
 
-    /**
-     * Computed variable representing Sales of type int[][] from the Sandwood model 
-     */
+	/** Computed variable representing Sales of type int[][] from the Sandwood model. */
     public final ComputedObjectArray<int[]> Sales = $Sales;
 
     private final ComputedDoubleArrayInternal $exped = new ComputedDoubleArrayInternal(this, "exped", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$exped(); }
+        public double[] getValue() { return state.get$exped(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -68,32 +252,30 @@ public final class Vulcano2012basic extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$exped(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$exped(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample26(fixed, allocated);
+                state.set$fixedFlag$sample26(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample26())
+            if(state.get$fixedFlag$sample26())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing exped of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing exped of type double[] from the Sandwood model. */
     public final ComputedDoubleArray exped = $exped;
 
     private final ComputedDoubleArrayInternal $expedNorm = new ComputedDoubleArrayInternal(this, "expedNorm", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$expedNorm(); }
+        public double[] getValue() { return state.get$expedNorm(); }
 
         @Override
         protected void setValueInternal(double[] value) {}
@@ -104,32 +286,32 @@ public final class Vulcano2012basic extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$expedNorm(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$expedNorm(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample26(fixed, allocated);
+                state.set$fixedFlag$sample26(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample26())
+            if(state.get$fixedFlag$sample26())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing expedNorm of type double[] from the Sandwood model 
-     */
+	/**
+	 * Computed variable representing expedNorm of type double[] from the Sandwood model.
+	 */
     public final ComputedDoubleArray expedNorm = $expedNorm;
 
     private final ComputedDoubleInternal $sum = new ComputedDoubleInternal(this, "sum", false, false, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double getValue() { return system$c.get$sum(); }
+        public double getValue() { return state.get$sum(); }
 
         @Override
         protected void setValueInternal(double value) {}
@@ -140,61 +322,57 @@ public final class Vulcano2012basic extends Model {
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$sum(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$sum(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample26(fixed, allocated);
+                state.set$fixedFlag$sample26(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample26())
+            if(state.get$fixedFlag$sample26())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing sum of type double from the Sandwood model 
-     */
+	/** Computed variable representing sum of type double from the Sandwood model. */
     public final ComputedDouble sum = $sum;
 
     private final ComputedDoubleArrayInternal $ut = new ComputedDoubleArrayInternal(this, "ut", true, true, false, ProbabilityType.UNSKIPPABLE) {
         @Override
-        public double[] getValue() { return system$c.get$ut(); }
+        public double[] getValue() { return state.get$ut(); }
 
         @Override
         protected void setValueInternal(double[] value) {
-            system$c.set$ut(value, allocated);
+            state.set$ut(value, allocated);
             intermediatesPrimed = false;
         }
 
         @Override
-        public double getCurrentLogProbability() { return system$c.get$logProbability$ut(); }
+        public double getCurrentLogProbability() { return state.get$logProbability$ut(); }
 
         @Override
         public void setFixed(boolean fixed) {
             synchronized(model) {
-                system$c.set$fixedFlag$sample26(fixed, allocated);
+                state.set$fixedFlag$sample26(fixed, allocated);
             }
         }
 
         @Override
         public Immutability isFixed() {
-            if(system$c.get$fixedFlag$sample26())
+            if(state.get$fixedFlag$sample26())
                 return Immutability.FIXED;
             else
                 return Immutability.FREE;
         }
     };
 
-    /**
-     * Computed variable representing ut of type double[] from the Sandwood model 
-     */
+	/** Computed variable representing ut of type double[] from the Sandwood model. */
     public final ComputedDoubleArray ut = $ut;
 
 	private Map<String, ComputedVariableInternal> $computedVariables = new HashMap<>();
@@ -203,85 +381,77 @@ public final class Vulcano2012basic extends Model {
         @Override
         public int[][] getValue() {
             synchronized(model) {
-                return system$c.get$Avail();
+                return state.get$Avail();
             }
         }
 
         @Override
-        protected void setValueInternal(int[][] value) { system$c.set$Avail(value, allocated); }
+        protected void setValueInternal(int[][] value) { state.set$Avail(value, allocated); }
     };
 
-    /**
-     * Observed variable representing Avail of type int[][] from the Sandwood model 
-     */
+	/** Observed variable representing Avail of type int[][] from the Sandwood model. */
     public final ObservedObjectArray<int[]> Avail = $Avail;
 
     private final ObservedObjectArrayInternal<int[]> $ObsSales = new ObservedObjectArrayInternal<int[]>(this, "ObsSales", org.sandwood.runtime.internal.model.util.BaseType.INT, 2) {
         @Override
         public int[][] getValue() {
             synchronized(model) {
-                return system$c.get$ObsSales();
+                return state.get$ObsSales();
             }
         }
 
         @Override
-        protected void setValueInternal(int[][] value) { system$c.set$ObsSales(value, allocated); }
+        protected void setValueInternal(int[][] value) { state.set$ObsSales(value, allocated); }
     };
 
-    /**
-     * Observed variable representing ObsSales of type int[][] from the Sandwood model 
-     */
+	/**
+	 * Observed variable representing ObsSales of type int[][] from the Sandwood model.
+	 */
     public final ObservedObjectArray<int[]> ObsSales = $ObsSales;
 
     private final ObservedIntegerInternal $T = new ObservedIntegerInternal(this, "T") {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$T();
+                return state.get$T();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$T(value, allocated); }
+        protected void setValueInternal(int value) { state.set$T(value, allocated); }
     };
 
-    /**
-     * Observed variable representing T of type int from the Sandwood model 
-     */
+	/** Observed variable representing T of type int from the Sandwood model. */
     public final ObservedInteger T = $T;
 
     private final ObservedIntegerInternal $noProducts = new ObservedIntegerInternal(this, "noProducts") {
         @Override
         public int getValue() {
             synchronized(model) {
-                return system$c.get$noProducts();
+                return state.get$noProducts();
             }
         }
 
         @Override
-        protected void setValueInternal(int value) { system$c.set$noProducts(value, allocated); }
+        protected void setValueInternal(int value) { state.set$noProducts(value, allocated); }
     };
 
-    /**
-     * Observed variable representing noProducts of type int from the Sandwood model 
-     */
+	/** Observed variable representing noProducts of type int from the Sandwood model. */
     public final ObservedInteger noProducts = $noProducts;
 
     private final ObservedDoubleInternal $r = new ObservedDoubleInternal(this, "r") {
         @Override
         public double getValue() {
             synchronized(model) {
-                return system$c.get$r();
+                return state.get$r();
             }
         }
 
         @Override
-        protected void setValueInternal(double value) { system$c.set$r(value, allocated); }
+        protected void setValueInternal(double value) { state.set$r(value, allocated); }
     };
 
-    /**
-     * Observed variable representing r of type double from the Sandwood model 
-     */
+	/** Observed variable representing r of type double from the Sandwood model. */
     public final ObservedDouble r = $r;
 
     private Map<String, ObservedVariableInternal> $modelInputs = new HashMap<>();
@@ -290,12 +460,11 @@ public final class Vulcano2012basic extends Model {
     private Map<String, ObservedVariableShapeableInternal<?>> $shapedObservedValues = new HashMap<>();
     private HasProbabilityInternal[] $probabilityVariables = {$Sales, $exped, $expedNorm, $sum, $ut};
 
-    //Constructors
-    /**
-     * A constructor for a model where no variable values are set.
-     */
+    // Constructors
+	/** A constructor for a model where no variable values are set. */
     public Vulcano2012basic() {
         super();
+        state = new State();
         //ComputedVariable
         $computedVariables.put("Sales", $Sales);
         $computedVariables.put("exped", $exped);
@@ -309,18 +478,20 @@ public final class Vulcano2012basic extends Model {
         $modelInputs.put("T", $T);
         $modelInputs.put("noProducts", $noProducts);
         $modelInputs.put("r", $r);
-        init(system$c, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
-    }
-    /**
-      * A constructor to set all the required values in the model to infer the model
-      * parameters, or to generate probabilities for the model.
-      * @param noProducts The value to set noProducts to.
-      * @param T The value to set T to.
-      * @param ObsSales The value to set ObsSales to.
-      * @param Avail The value to set Avail to.
-      * @param r The value to set r to.
-      */
 
+        Vulcano2012basic$SingleThreadCPU core = new Vulcano2012basic$SingleThreadCPU(state, ExecutionTarget.singleThread);
+        init(core, $modelInputs, $regularObservedValues, $shapedObservedValues, $computedVariables, $probabilityVariables);
+    }
+
+	/**
+	 * A constructor to set all the required values in the model to infer the model parameters,
+	 * or to generate probabilities for the model.
+	 * @param noProducts The value to set noProducts to.
+	 * @param T The value to set T to
+	 * @param ObsSales The value to set ObsSales to
+	 * @param Avail The value to set Avail to
+	 * @param r The value to set r to
+	 */
     public Vulcano2012basic(int noProducts, int T, int[][] ObsSales, int[][] Avail, double r) {
         this();
         this.noProducts.setValue(noProducts);
@@ -331,67 +502,40 @@ public final class Vulcano2012basic extends Model {
     }
     
     @Override
-    protected Vulcano2012basic$CoreInterface setExecutionTargetInternal(ExecutionTarget target) {
-        Vulcano2012basic$CoreInterface newCore;
+    protected CoreModelBase<State,?> setExecutionTargetInternal(ExecutionTarget target) {
         switch(target.executionType) {
             case SingleThreadCPU:
-                newCore = new Vulcano2012basic$SingleThreadCPU(target);
-                break;
+                return new Vulcano2012basic$SingleThreadCPU(state, target);
             case MultiThreadCPU:
-                newCore = new Vulcano2012basic$MultiThreadCPU(target);
-                break;
+                return new Vulcano2012basic$MultiThreadCPU(state, target);
             default:
                 throw new SandwoodException("Unsupported execution type: " + target);
         }
-        transferData(system$c, newCore);
-        system$c = newCore;
-        return newCore;
     }
 
-    private void transferData(Vulcano2012basic$CoreInterface oldCore, Vulcano2012basic$CoreInterface newCore) {
-        //Model inputs
-        if(Avail.isSet())
-            newCore.set$Avail(oldCore.get$Avail(), false);
-        if(ObsSales.isSet())
-            newCore.set$ObsSales(oldCore.get$ObsSales(), false);
-        if(T.isSet())
-            newCore.set$T(oldCore.get$T(), false);
-        if(noProducts.isSet())
-            newCore.set$noProducts(oldCore.get$noProducts(), false);
-        if(r.isSet())
-            newCore.set$r(oldCore.get$r(), false);
-
-        //ComputedVariables
-        if($ut.isSet())
-            newCore.set$ut(oldCore.get$ut(), false);
-
-        //Set fixed flags
-        newCore.set$fixedFlag$sample26(oldCore.get$fixedFlag$sample26(), false);
-    }
-
-    /**
-     * A class to hold all the values required to perform a value inference on the model.
-     */
+	/**
+	 * A class to hold all the values required to perform a value inference on the model.
+	 */
     public static class InferValueInputs {
-        /** Field holding the value of model input noProducts */
+		/** Field holding the value of model input noProducts */
         public final int noProducts;
-        /** Field holding the value of model input T */
+		/** Field holding the value of model input T */
         public final int T;
-        /** Field holding the value of model input ObsSales */
+		/** Field holding the value of model input ObsSales */
         public final int[][] ObsSales;
-        /** Field holding the value of model input Avail */
+		/** Field holding the value of model input Avail */
         public final int[][] Avail;
-        /** Field holding the value of model input r */
+		/** Field holding the value of model input r */
         public final double r;
 
-        /**
-          * A constructor taking all the values required to set up the model to infer variables.
-          * @param noProducts The value to set noProducts to.
-          * @param T The value to set T to.
-          * @param ObsSales The value to set ObsSales to.
-          * @param Avail The value to set Avail to.
-          * @param r The value to set r to.
-          */
+		/**
+		 * A constructor taking all the values required to set up the model to infer variables.
+		 * @param noProducts The value to set noProducts to.
+		 * @param T The value to set T to.
+		 * @param ObsSales The value to set ObsSales to.
+		 * @param Avail The value to set Avail to.
+		 * @param r The value to set r to.
+		 */
         public InferValueInputs(int noProducts, int T, int[][] ObsSales, int[][] Avail, double r) {
             this.Avail = Avail;
             this.ObsSales = ObsSales;
@@ -401,31 +545,31 @@ public final class Vulcano2012basic extends Model {
         }
     }
 
-    /**
-     * A class to hold all the inputs for the model. It can be used to parameterize inference of the model probabilities
-     * and probability calculations.
-     */
+	/**
+	 * A class to hold all the inputs for the model. It can be used to parameterize inference
+	 * of the model probabilities and probability calculations.
+	 */
     public static class AllInputs {
-        /** Field holding the value of model input noProducts */
+		/** Field holding the value of model input noProducts */
         public final int noProducts;
-        /** Field holding the value of model input T */
+		/** Field holding the value of model input T */
         public final int T;
-        /** Field holding the value of model input ObsSales */
+		/** Field holding the value of model input ObsSales */
         public final int[][] ObsSales;
-        /** Field holding the value of model input Avail */
+		/** Field holding the value of model input Avail */
         public final int[][] Avail;
-        /** Field holding the value of model input r */
+		/** Field holding the value of model input r */
         public final double r;
 
-        /**
-          * A constructor to take all the required values by the model to infer the model
-          * parameters, or to generate probabilities for the model.
-          * @param noProducts The value to set noProducts to.
-          * @param T The value to set T to.
-          * @param ObsSales The value to set ObsSales to.
-          * @param Avail The value to set Avail to.
-          * @param r The value to set r to.
-          */
+		/**
+		 * A constructor to take all the required values by the model to infer the model parameters,
+		 * or to generate probabilities for the model.
+		 * @param noProducts The value to set noProducts to.
+		 * @param T The value to set T to.
+		 * @param ObsSales The value to set ObsSales to.
+		 * @param Avail The value to set Avail to.
+		 * @param r The value to set r to.
+		 */
         public AllInputs(int noProducts, int T, int[][] ObsSales, int[][] Avail, double r) {
             this.noProducts = noProducts;
             this.T = T;
@@ -434,20 +578,17 @@ public final class Vulcano2012basic extends Model {
             this.r = r;
         }
     }
-
-    /**
-     * A class to hold all the outputs from the model after an infer values step.
-     */
+	/** A class to hold all the outputs from the model after an infer values step. */
     public static class InferredValueOutputs {
-        /** Field holding the value of Sales after a convention execution step.*/
+		/** Field holding the value of Sales after a convention execution step. */
         public final int[][] Sales;
-        /** Field holding the value of exped after a convention execution step.*/
+		/** Field holding the value of exped after a convention execution step. */
         public final double[] exped;
-        /** Field holding the value of expedNorm after a convention execution step.*/
+		/** Field holding the value of expedNorm after a convention execution step. */
         public final double[] expedNorm;
-        /** Field holding the value of sum after a convention execution step.*/
+		/** Field holding the value of sum after a convention execution step. */
         public final double sum;
-        /** Field holding the value of ut after a convention execution step.*/
+		/** Field holding the value of ut after a convention execution step. */
         public final double[] ut;
 
         InferredValueOutputs(Vulcano2012basic system$model) {
@@ -459,20 +600,21 @@ public final class Vulcano2012basic extends Model {
         }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class LogProbabilities {
         private final double $logModelProbability;
-        /** Field holding the log probability of computed variable Sales */
+		/** Field holding the log probability of computed variable Sales */
         public final double Sales;
-        /** Field holding the log probability of computed variable exped */
+		/** Field holding the log probability of computed variable exped */
         public final double exped;
-        /** Field holding the log probability of computed variable expedNorm */
+		/** Field holding the log probability of computed variable expedNorm */
         public final double expedNorm;
-        /** Field holding the log probability of computed variable sum */
+		/** Field holding the log probability of computed variable sum */
         public final double sum;
-        /** Field holding the log probability of computed variable ut */
+		/** Field holding the log probability of computed variable ut */
         public final double ut;
 
         LogProbabilities(Vulcano2012basic system$model) {
@@ -484,25 +626,28 @@ public final class Vulcano2012basic extends Model {
             this.ut = system$model.ut.getLogProbability();
         }
 
-        /** Method to return log probability of the whole model 
-         *  @return The log probability of the whole model. */
+		/**
+		 * Method to return log probability of the whole model
+		 * @return The log probability of the whole model.
+		 */
         public double getModelProbability() { return $logModelProbability; }
     }
 
-    /**
-     * A class to hold all the probabilities from the model after a generate probabilities step.
-     */
+	/**
+	 * A class to hold all the probabilities from the model after a generate probabilities
+	 * step.
+	 */
     public static class Probabilities {
         private final double $modelProbability;
-        /** Field holding the probability of computed variable Sales */
+		/** Field holding the probability of computed variable Sales */
         public final double Sales;
-        /** Field holding the probability of computed variable exped */
+		/** Field holding the probability of computed variable exped */
         public final double exped;
-        /** Field holding the probability of computed variable expedNorm */
+		/** Field holding the probability of computed variable expedNorm */
         public final double expedNorm;
-        /** Field holding the probability of computed variable sum */
+		/** Field holding the probability of computed variable sum */
         public final double sum;
-        /** Field holding the probability of computed variable ut */
+		/** Field holding the probability of computed variable ut */
         public final double ut;
 
         Probabilities(Vulcano2012basic system$model) {
@@ -514,22 +659,22 @@ public final class Vulcano2012basic extends Model {
             this.ut = system$model.ut.getProbability();
         }
 
-        /** Method to return probability of the whole model 
-         *  @return The probability of the whole model. */
+		/**
+		 * Method to return probability of the whole model
+		 * @return The probability of the whole model.
+		 */
         public double getModelProbability() { return $modelProbability; }
     }
 
-    /**
-     * A class to hold all the outputs from the model after an infer model call.
-     */
+	/** A class to hold all the outputs from the model after an infer model call. */
     public static class InferredModelOutputs {
-        /** Field holding the MAP or Sample value of exped after an infer model call. */
+		/** Field holding the MAP or Sample value of exped after an infer model call. */
         public final double[][] exped;
-        /** Field holding the MAP or Sample value of expedNorm after an infer model call. */
+		/** Field holding the MAP or Sample value of expedNorm after an infer model call. */
         public final double[][] expedNorm;
-        /** Field holding the MAP or Sample value of sum after an infer model call. */
+		/** Field holding the MAP or Sample value of sum after an infer model call. */
         public final double[] sum;
-        /** Field holding the MAP or Sample value of ut after an infer model call. */
+		/** Field holding the MAP or Sample value of ut after an infer model call. */
         public final double[][] ut;
 
         InferredModelOutputs(Vulcano2012basic system$model) {
@@ -540,11 +685,12 @@ public final class Vulcano2012basic extends Model {
         }
     }
 
-    /**
-     * Perform a single pass generating values from the model.
-     * @param inputs An object containing the parameters required to run inference on the model.
-     * @return An object containing the values computed by the inference step.
-     */
+	/**
+	 * Perform a single pass generating values from the model.
+	 * @param inputs An object containing the parameters required to run inference on
+	 *               the model.
+	 * @return An object containing the values computed by the inference step.
+	 */
     public InferredValueOutputs execute(InferValueInputs inputs) {
         this.Avail.setValue(inputs.Avail);
         this.ObsSales.setValue(inputs.ObsSales);
@@ -555,12 +701,13 @@ public final class Vulcano2012basic extends Model {
         return new InferredValueOutputs(this);
     }
 
-    /**
-     * Infer the values of the different elements of the model.
-     * @param iterations The number of iterations to perform when inferring the values.
-     * @param inputs An object containing the parameters required to generate the model parameters.
-     * @return An object containing the computed values for the model.
-     */
+	/**
+	 * Infer the values of the different elements of the model.
+	 * @param iterations The number of iterations to perform when inferring the values.
+	 * @param inputs An object containing the parameters required to generate the model
+	 *               parameters.
+	 * @return An object containing the computed values for the model.
+	 */
     public InferredModelOutputs inferValues(int iterations, AllInputs inputs) {
         this.Avail.setValue(inputs.Avail);
         this.ObsSales.setValue(inputs.ObsSales);
@@ -571,12 +718,13 @@ public final class Vulcano2012basic extends Model {
         return new InferredModelOutputs(this);
     }
 
-    /**
-     * Generate the probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(int iterations, AllInputs inputs) {
         this.Avail.setValue(inputs.Avail);
         this.ObsSales.setValue(inputs.ObsSales);
@@ -587,16 +735,19 @@ public final class Vulcano2012basic extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.Avail.setValue(inputs.Avail);
         this.ObsSales.setValue(inputs.ObsSales);
@@ -607,18 +758,23 @@ public final class Vulcano2012basic extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Calculate the probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the probability of each variable and the overall model. This method will
+	 * iterate until the variance of the overall model drops below the value provide for
+	 * variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public Probabilities inferProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.Avail.setValue(inputs.Avail);
         this.ObsSales.setValue(inputs.ObsSales);
@@ -629,12 +785,13 @@ public final class Vulcano2012basic extends Model {
         return new Probabilities(this);
     }
 
-    /**
-     * Generate the log probabilities of the different elements of the model.
-     * @param iterations How many iterations should be used to generate these values?
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Generate the log probabilities of the different elements of the model.
+	 * @param iterations How many iterations should be used to generate these values?
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(int iterations, AllInputs inputs) {
         this.Avail.setValue(inputs.Avail);
         this.ObsSales.setValue(inputs.ObsSales);
@@ -645,16 +802,19 @@ public final class Vulcano2012basic extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, AllInputs inputs) {
         this.Avail.setValue(inputs.Avail);
         this.ObsSales.setValue(inputs.ObsSales);
@@ -665,18 +825,23 @@ public final class Vulcano2012basic extends Model {
         return new LogProbabilities(this);
     }
 
-    /**
-     * Calculate the log probability of each variable and the overall model. This method
-     * will iterate until the variance of the overall model drops below the value provide 
-     * for variance, or the maximum number of iterations is reached.
-     * @param variance The maximum variance in the models overall probability.
-     * @param initialIterations The number of iterations to use to start with. Having too low a value here can result in
-     * premature termination as the model may not have enough runs to estimate the variance accurately.
-     * @param maxIterations The maximum number of iterations a that can be used to calculate the probabilities. If the model has not
-     * converged by this point the calculation will terminate anyway, and the result generated so far will be returned.
-     * @param inputs An object containing the parameters required to generate the probabilities of the model.
-     * @return An object containing the computed probabilities for the model.
-     */
+	/**
+	 * Calculate the log probability of each variable and the overall model. This method
+	 * will iterate until the variance of the overall model drops below the value provide
+	 * for variance, or the maximum number of iterations is reached.
+	 * @param variance The maximum variance in the models overall probability.
+	 * @param initialIterations The number of iterations to use to start with. Having
+	 *                          too low a value here can result in premature termination
+	 *                          as the model may not have enough runs to estimate the
+	 *                          variance accurately.
+	 * @param maxIterations The maximum number of iterations a that can be used to calculate
+	 *                      the probabilities. If the model has not converged by this
+	 *                      point the calculation will terminate anyway, and the result
+	 *                      generated so far will be returned.
+	 * @param inputs An object containing the parameters required to generate the probabilities
+	 *               of the model.
+	 * @return An object containing the computed probabilities for the model.
+	 */
     public LogProbabilities inferLogProbabilities(double variance, int initialIterations, int maxIterations, AllInputs inputs) {
         this.Avail.setValue(inputs.Avail);
         this.ObsSales.setValue(inputs.ObsSales);
@@ -687,4 +852,3 @@ public final class Vulcano2012basic extends Model {
         return new LogProbabilities(this);
     }
 }
-//END OF CODE

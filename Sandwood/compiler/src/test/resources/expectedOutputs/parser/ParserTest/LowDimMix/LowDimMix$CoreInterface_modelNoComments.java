@@ -1,6 +1,8 @@
 package org.sandwood.compiler.tests.parser;
 
-interface LowDimMix$CoreInterface extends org.sandwood.runtime.internal.model.CoreModel {
+import org.sandwood.runtime.internal.model.CoreModel;
+
+interface LowDimMix$CoreInterface extends CoreModel {
 	public int get$N();
 	public boolean[] get$component();
 	public void set$component(boolean[] cv$value, boolean allocated$);

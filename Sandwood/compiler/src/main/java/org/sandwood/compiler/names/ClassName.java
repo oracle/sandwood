@@ -1,7 +1,7 @@
 /*
  * Sandwood
  *
- * Copyright (c) 2019-2023, Oracle and/or its affiliates
+ * Copyright (c) 2019-2026, Oracle and/or its affiliates
  *
  * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
@@ -12,19 +12,41 @@ import org.sandwood.common.execution.ExecutionType;
 import org.sandwood.compiler.exceptions.CompilerException;
 
 public class ClassName extends Name {
-    protected static final String coreBase = "org.sandwood.runtime.internal.model.CoreModel";
+    public static final ClassName coreBase = new ClassName("org.sandwood.runtime.internal.model.CoreModel", true);
 
-    protected ClassName(String name) {
+    public static final ClassName wrapperBase = new ClassName("org.sandwood.runtime.internal.model.ModelInternal", true);
+    public static final ClassName scratchClass = new ClassName("Scratch", false);
+    public static final ClassName scratchInterface = new ClassName(
+            "org.sandwood.runtime.internal.model.state.CoreModelScratch", true);
+    public static final ClassName stateClass = new ClassName("State", false);
+    public static final ClassName stateClassBase = new ClassName(
+            "org.sandwood.runtime.internal.model.state.CoreModelState", true);
+
+    public final boolean useInImport;
+
+    public ClassName(String name, boolean useInImport) {
         super(name);
         if(name == null)
             throw new CompilerException("Set null class name.");
+        this.useInImport = useInImport;
     }
 
     public static ClassName coreBase(ExecutionType target) {
-        return new ClassName(coreBase + target);
+        return new ClassName(coreBase.getName() + target, true);
     }
 
-    public static ClassName coreBase() {
-        return new ClassName(coreBase);
+    public static ClassName dereferencedName(String name) {
+        return new ClassName(name, false);
+    }
+
+    public static ClassName QualifiedName(PackageName packageName, ClassName outerClassName, ClassName InnerClassName) {
+        if(packageName.isEmpty())
+            return new ClassName(outerClassName + "." + InnerClassName, false);
+        else
+            return new ClassName(packageName + "." + outerClassName + "." + InnerClassName, true);
+    }
+
+    public static ClassName QualifiedName(ClassName outerClassName, ClassName InnerClassName) {
+        return new ClassName(outerClassName + "." + InnerClassName, false);
     }
 }
